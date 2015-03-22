@@ -1,0 +1,15 @@
+{
+  "name": "ipfs-firefox-addon",
+  "title": "IPFS Gateway Redirect",
+  "id": "ipfs-firefox-addon@lidel.org",
+  "description": "Simple Firefox addon that enables access to IPFS resources via local HTTP gateway",
+  "author": "Marcin Rataj",
+  "version": "0.1.0",
+  "license": "CC0",
+  "homepage": "https://github.com/lidel/ipfs-firefox-addon",
+  "icon": "data/icon-on-64.png",
+  "main": "index.js",
+  "engines": {
+      "firefox": ">=36.0"
+  }
+}
