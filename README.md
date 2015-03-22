@@ -1,13 +1,18 @@
 # ipfs-firefox-addon
 
-![screenshot v0.1.0](screenshot.png)
+Simple Firefox addon that enables access to IPFS resources via local HTTP gateway.
 
-Simple Firefox addon that enables access to IPFS resources via local HTTP gateway
+![screenshot v0.1.0](screenshot.png?1)
+
 
 Right now it just replaces requests to `http://gateway.ipfs.io/(.*)` with `http://127.0.0.1:8080/$1`.
 Clicking on the addon icon toggles redirection.
 
 If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead.
+
+### Install
+
+Addon was not submitted to Mozilla yet, but one can install the [latest release from Github](https://github.com/lidel/ipfs-firefox-addon/releases/latest).
 
 ### TODO
 
