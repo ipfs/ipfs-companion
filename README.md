@@ -10,9 +10,11 @@ Clicking on the addon icon toggles redirection.
 
 If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead.
 
-### Install
+### How to install
 
-Addon was not submitted to Mozilla yet, but one can install the [latest release from Github](https://github.com/lidel/ipfs-firefox-addon/releases/latest).
+The easiest way is to install from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/).
+
+One can also choose to manually install [the latest .xpi from Github](https://github.com/lidel/ipfs-firefox-addon/releases/latest).
 
 ### TODO
 
