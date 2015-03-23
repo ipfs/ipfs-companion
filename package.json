@@ -2,13 +2,36 @@
   "name": "ipfs-firefox-addon",
   "title": "IPFS Gateway Redirect",
   "id": "ipfs-firefox-addon@lidel.org",
-  "description": "Simple Firefox addon that enables access to IPFS resources via local HTTP gateway",
+  "description": "Access IPFS resources using custom HTTP gateway",
   "author": "Marcin Rataj",
   "version": "0.1.0",
   "license": "CC0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "icon": "data/icon-on-64.png",
   "main": "index.js",
+  "preferences": [
+    {
+      "name": "useCustomGatewayRoot",
+      "title": "Use custom HTTP Gateway",
+      "type": "bool",
+      "value": true,
+      "hidden": true
+    },
+    {
+      "name": "customGatewayRoot",
+      "title": "Custom HTTP Gateway",
+      "description": "Address of a custom HTTP Gateway, usually one provided by local IPFS daemon",
+      "type": "string",
+      "value": "http://127.0.0.1:8080"
+    },
+    {
+      "name": "publicGatewayFallback",
+      "title": "Enable Permanent HTTP Fallback",
+      "description": "Route IPFS protocol requests to the public gateway (gateway.ipfs.io) when custom redirect is disabled",
+      "type": "bool",
+      "value": true
+    }
+  ],
   "engines": {
     "firefox": ">=36.0"
   },

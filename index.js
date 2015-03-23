@@ -5,6 +5,7 @@ var {
   ToggleButton
 } = require('sdk/ui/button/toggle');
 var events = require('sdk/system/events');
+var prefs = require('sdk/simple-prefs').prefs;
 var iOService = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
 var version = require('./package.json').version;
 var addonTitle = require('./package.json').title;
@@ -39,7 +40,7 @@ exports.main = function(options, callbacks) {
       '32': './icon-on-32.png',
       '64': './icon-on-64.png'
     },
-    checked: true,
+    checked: prefs.useCustomGatewayRoot,
     onChange: function(state) {
       // we want a global flag
       this.state('window', null);
@@ -47,23 +48,32 @@ exports.main = function(options, callbacks) {
 
       // update GUI to reflect toggled state
       if (state.checked) {
+        prefs.useCustomGatewayRoot = true;
         button.state(button, enabledState);
       } else {
+        prefs.useCustomGatewayRoot = false;
         button.state(button, disabledState);
       }
+      console.log('Use custom IPFS Gateway: ' + prefs.useCustomGatewayRoot);
     }
 
   });
   // enabled by default
-  button.state(button, enabledState);
+  if (prefs.useCustomGatewayRoot) {
+    button.state(button, enabledState);
+  } else {
+    button.state(button, disabledState);
+  }
 
   function listener(event) {
     var channel = event.subject.QueryInterface(Ci.nsIHttpChannel);
     if (channel.URI.host == 'gateway.ipfs.io') {
-      if (button.checked) {
+      console.log('Initiated IPFS channel. Use custom IPFS Gateway: ' + prefs.useCustomGatewayRoot);
+      if (prefs.useCustomGatewayRoot) {
+        console.log('Custom IPFS Gateway: ' + prefs.customGatewayRoot);
         var requestURL = channel.URI.spec;
-        var localGatewayURL = requestURL.replace(/gateway.ipfs.io/i, '127.0.0.1:8080');
-        channel.redirectTo(iOService.newURI(localGatewayURL, null, null));
+        var customGatewayURL = requestURL.replace(/.*gateway.ipfs.io/i, prefs.customGatewayRoot);
+        channel.redirectTo(iOService.newURI(customGatewayURL, null, null));
       }
 
       // some free metrics
