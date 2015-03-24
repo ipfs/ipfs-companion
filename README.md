@@ -17,12 +17,6 @@ The easiest way is to install from [addons.mozilla.org](https://addons.mozilla.o
 
 One can also choose to manually install [the latest .xpi from Github](https://github.com/lidel/ipfs-firefox-addon/releases/latest).
 
-### TODO
-
-- add option to use custom host/port instead of default `127.0.0.1:8080`
-- add support for `ipfs://` protocol and other common notations (starting with ones proposed by ipfs-chrome-extension)
-
-
 ### LICENSE
 
 Addon is released under [CC0](LICENSE). IPFS logo belongs to the http://ipfs.io project.
