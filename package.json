@@ -11,18 +11,23 @@
   "main": "index.js",
   "preferences": [
     {
-      "name": "useCustomGatewayRoot",
-      "title": "Use custom HTTP Gateway",
+      "name": "useCustomGateway",
+      "title": "Use Custom Gateway",
       "type": "bool",
       "value": true,
       "hidden": true
     },
     {
-      "name": "customGatewayRoot",
-      "title": "Custom HTTP Gateway",
-      "description": "URL of the custom HTTP Gateway root (eg. provided by local IPFS daemon)",
+      "name": "customGatewayHost",
+      "title": "Custom IPFS Gateway Host",
       "type": "string",
-      "value": "http://127.0.0.1:8080/ipfs/"
+      "value": "127.0.0.1"
+    },
+    {
+      "name": "customGatewayPort",
+      "title": "Custom IPFS Gateway Port",
+      "type": "integer",
+      "value": 8080
     }
   ],
   "engines": {
