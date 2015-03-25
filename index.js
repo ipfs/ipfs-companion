@@ -26,29 +26,13 @@ function httpGatewayRoot() {
 
 function httpGatewayListener(event) {
   let channel = event.subject.QueryInterface(Ci.nsIHttpChannel);
-  let uri = channel.URI.spec;
-  let requestToPublicGateway = uri.startsWith(PUBLIC_GATEWAY_URI.spec);
-  let requestToCustomGateway = !requestToPublicGateway && uri.startsWith(prefs.customGatewayRoot);
-  if (requestToPublicGateway || requestToCustomGateway) {
-    console.info('Detected request to IPFS HTTP Gateway: ' + channel.URI.spec);
-    let gatewayRoot = requestToPublicGateway ? PUBLIC_GATEWAY_URI.spec : prefs.customGatewayRoot;
-    let customURI = ioservice.newURI(uri.replace(gatewayRoot, IPFS_SCHEME + ':'), null, null);
-    if (requestToPublicGateway) {
-      // redirect request to custom gateway
-      console.info('Redirecting to: ' + customURI.spec);
-      channel.redirectTo(customURI);
-    } else {
-      //console.info('Redirecting to: ' + customURI.spec);
-      //channel.redirectTo(customURI);
-      //console.info('Swapping URL in GUI to: ' + customURI.spec);
-      // already using custom gateway, just set protocol in GUI
-      // channel.originalURI = customURI;
-    }
-
-    // TODO: move to own function
-    // some free metrics
-    //channel.setRequestHeader('x-ipfs-firefox-addon-version', version, false);
-    //channel.setRequestHeader('x-ipfs-firefox-addon-state', button.checked, false);
+  let requestToPublicGateway = channel.URI.spec.startsWith(PUBLIC_GATEWAY_URI.spec);
+  if (requestToPublicGateway && prefs.useCustomGatewayRoot) {
+    console.info('Detected request to public HTTP gateway: ' + channel.URI.spec);
+    let uri = ioservice.newURI(channel.URI.spec.replace(PUBLIC_GATEWAY_URI.spec, prefs.customGatewayRoot), null, null);
+    console.info('Redirecting to custom HTTP gateway: ' + uri.spec);
+    channel.setRequestHeader('x-ipfs-firefox-addon-version', version, false);
+    channel.redirectTo(uri);
   }
 }
 
@@ -65,32 +49,38 @@ IpfsProtocolHandler.prototype = Object.freeze({
     return false;
   },
 
-  protocolFlags: Ci.nsIProtocolHandler.URI_LOADABLE_BY_ANYONE,
+  protocolFlags: Ci.nsIProtocolHandler.URI_NOAUTH |
+    Ci.nsIProtocolHandler.ALLOWS_PROXY_HTTP |
+    Ci.nsIProtocolHandler.URI_LOADABLE_BY_ANYONE,
 
   newURI: function(aSpec, aOriginCharset, aBaseURI) {
     // presence of aBaseURI means a dependent resource or a relative link
-    // and we need to return http URI
+    // and we need to return correct http URI
     if (aBaseURI && aBaseURI.scheme == IPFS_SCHEME) {
-      let httpBaseURI = ioservice.newURI(httpGatewayRoot()+aBaseURI.path, null, null);
-      console.info('IPFS.newURI/httpBaseURI:  ' + aBaseURI.spec);
-      return ioservice.newURI(aSpec, aOriginCharset, httpBaseURI);
+      //console.log('newURI/aSpec: ' + aSpec);
+      //console.log('newURI/aBaseURI.spec: ' + aBaseURI.spec);
+      let httpBaseURI = ioservice.newURI(PUBLIC_GATEWAY_URI.spec + aBaseURI.path, null, null);
+      //console.log('newURI/httpBaseURI.spec: ' + httpBaseURI.spec);
+      let newURI = ioservice.newURI(aSpec, aOriginCharset, httpBaseURI);
+      //console.log('newURI/newURI.spec: ' + newURI.spec);
+      return newURI;
     }
-
     let uri = Cc['@mozilla.org/network/simple-uri;1'].createInstance(Ci.nsIURI);
-
     uri.spec = aSpec;
-
+    //uri.spec = (aBaseURI === null) ? aSpec : PUBLIC_GATEWAY_URI.resolve(aSpec);
     return uri;
   },
 
   newChannel: function(aURI) {
-    let spec = httpGatewayRoot() + aURI.path;
-    let channel = ioservice.newChannel(spec, aURI.originCharset, null);
-    console.info('IPFS.newChannel/input.spec:  ' + aURI.spec);
-    console.info('IPFS.newChannel/return.spec:  ' + spec);
+    console.info('Detected request using IPFS protocol hadler: ' + aURI.spec);
+    let genericHttpLocation = PUBLIC_GATEWAY_URI.spec + aURI.path;
+    let channel = ioservice.newChannel(genericHttpLocation, aURI.originCharset, null);
+    console.info('Request routed to HTTP gateway:  ' + genericHttpLocation);
 
-    // keep nice protocol URL in GUI :-)
-    channel.originalURI = aURI;
+    // line below would keep nice protocol URL in GUI
+    // but is disabled for now due to issues like
+    // https://github.com/lidel/ipfs-firefox-addon/issues/3
+    //channel.originalURI = aURI;
 
     return channel;
   },
@@ -118,13 +108,13 @@ IpfsProtocolHandler.prototype = Object.freeze({
 
 });
 
-function enableIpfsSupport() {
-  IpfsProtocolHandler.prototype.factory.register();
+function enableHttpGatewayRedirect() {
+  prefs.useCustomGatewayRoot = true;
   events.on('http-on-modify-request', httpGatewayListener);
 }
 
-function disableIpfsSupport() {
-  IpfsProtocolHandler.prototype.factory.unregister();
+function disableHttpGatewayRedirect() {
+  prefs.useCustomGatewayRoot = false;
   events.off('http-on-modify-request', httpGatewayListener);
 }
 
@@ -166,15 +156,13 @@ exports.main = function(options, callbacks) {
 
       // update GUI to reflect toggled state
       if (this.checked) {
-        enableIpfsSupport();
-        prefs.useCustomGatewayRoot = true;
+        enableHttpGatewayRedirect();
         button.state(button, enabledState);
       } else {
-        disableIpfsSupport();
-        prefs.useCustomGatewayRoot = false;
+        disableHttpGatewayRedirect();
         button.state(button, disabledState);
       }
-      console.info('Use custom IPFS Gateway: ' + prefs.useCustomGatewayRoot);
+      console.info('ipfs.prefs.useCustomGatewayRoot: ' + prefs.useCustomGatewayRoot);
     }
 
   });
@@ -184,12 +172,14 @@ exports.main = function(options, callbacks) {
     button.state(button, disabledState);
   }
 
-  enableIpfsSupport();
+  enableHttpGatewayRedirect();
+  IpfsProtocolHandler.prototype.factory.register();
   console.log('Addon ' + addonTitle + ' loaded.');
 };
 
 exports.onUnload = function(reason) {
-  disableIpfsSupport();
+  disableHttpGatewayRedirect();
+  IpfsProtocolHandler.prototype.factory.unregister();
   console.log('Addon ' + addonTitle + ' unloaded: ' + reason);
 };
 
