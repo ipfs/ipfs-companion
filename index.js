@@ -50,25 +50,24 @@ IpfsProtocolHandler.prototype = Object.freeze({
   },
 
   protocolFlags: Ci.nsIProtocolHandler.URI_NOAUTH |
-    Ci.nsIProtocolHandler.ALLOWS_PROXY_HTTP |
     Ci.nsIProtocolHandler.URI_LOADABLE_BY_ANYONE,
 
   newURI: function(aSpec, aOriginCharset, aBaseURI) {
     // presence of aBaseURI means a dependent resource or a relative link
     // and we need to return correct http URI
-    if (aBaseURI && aBaseURI.scheme == IPFS_SCHEME) {
-      //console.log('newURI/aSpec: ' + aSpec);
-      //console.log('newURI/aBaseURI.spec: ' + aBaseURI.spec);
+    if (aBaseURI && aBaseURI.scheme == this.scheme) {
       let httpBaseURI = ioservice.newURI(PUBLIC_GATEWAY_URI.spec + aBaseURI.path, null, null);
-      //console.log('newURI/httpBaseURI.spec: ' + httpBaseURI.spec);
       let newURI = ioservice.newURI(aSpec, aOriginCharset, httpBaseURI);
-      //console.log('newURI/newURI.spec: ' + newURI.spec);
       return newURI;
     }
+    /* Left for future use (if we enable channel.originalURI in newChannel method)
     let uri = Cc['@mozilla.org/network/simple-uri;1'].createInstance(Ci.nsIURI);
     uri.spec = aSpec;
-    //uri.spec = (aBaseURI === null) ? aSpec : PUBLIC_GATEWAY_URI.resolve(aSpec);
     return uri;
+    */
+    let ipfsPath = aSpec.replace(/^ipfs:/,'');
+    let newURI = ioservice.newURI(PUBLIC_GATEWAY_URI.spec + ipfsPath, aOriginCharset, null);
+    return newURI;
   },
 
   newChannel: function(aURI) {
@@ -90,7 +89,6 @@ IpfsProtocolHandler.prototype = Object.freeze({
       if (aOuter) {
         throw Cr.NS_ERROR_NO_AGGREGATION;
       }
-      //return (new IpfsProtocolHandler()).QueryInterface(aIID);
       return new IpfsProtocolHandler();
     },
     register: function() {
