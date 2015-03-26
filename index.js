@@ -17,6 +17,26 @@ const PUBLIC_GATEWAY_URI = ioservice.newURI('http://gateway.ipfs.io', null, null
 
 var CUSTOM_GATEWAY_URI;
 
+const enabledButton = {
+  icon: {
+    '16': './icon-on-16.png',
+    '32': './icon-on-32.png',
+    '64': './icon-on-64.png'
+  },
+  badge: 'ON',
+  badgeColor: '#4A9EA1'
+};
+
+const disabledButton = {
+  icon: {
+    '16': './icon-off-16.png',
+    '32': './icon-off-32.png',
+    '64': './icon-off-64.png'
+  },
+  badge: 'OFF',
+  badgeColor: '#8C8C8C'
+};
+
 
 function httpGatewayListener(event) {
   let channel = event.subject.QueryInterface(Ci.nsIHttpChannel);
@@ -113,40 +133,23 @@ function reloadCachedProperties(changedProperty) {
   CUSTOM_GATEWAY_URI = ioservice.newURI('http://' + prefs.customGatewayHost + ':' + prefs.customGatewayPort, null, null);
 }
 
-function enableHttpGatewayRedirect() {
+function enableHttpGatewayRedirect(button) {
   reloadCachedProperties();
   prefs.useCustomGateway = true;
   events.on('http-on-modify-request', httpGatewayListener);
   require('sdk/simple-prefs').on('', reloadCachedProperties);
+  if (button) button.state(button, enabledButton);
 }
 
-function disableHttpGatewayRedirect() {
+function disableHttpGatewayRedirect(button) {
   prefs.useCustomGateway = false;
   events.off('http-on-modify-request', httpGatewayListener);
   require('sdk/simple-prefs').removeListener('', reloadCachedProperties);
+  if (button) button.state(button, disabledButton);
 }
 
 exports.main = function(options, callbacks) {
 
-  const enabledState = {
-    icon: {
-      '16': './icon-on-16.png',
-      '32': './icon-on-32.png',
-      '64': './icon-on-64.png'
-    },
-    badge: 'ON',
-    badgeColor: '#4A9EA1'
-  };
-
-  const disabledState = {
-    icon: {
-      '16': './icon-off-16.png',
-      '32': './icon-off-32.png',
-      '64': './icon-off-64.png'
-    },
-    badge: 'OFF',
-    badgeColor: '#8C8C8C'
-  };
 
   var button = ToggleButton({
     id: 'ipfs-gateway-status',
@@ -164,23 +167,16 @@ exports.main = function(options, callbacks) {
 
       // update GUI to reflect toggled state
       if (this.checked) {
-        enableHttpGatewayRedirect();
-        button.state(button, enabledState);
+        enableHttpGatewayRedirect(button);
       } else {
-        disableHttpGatewayRedirect();
-        button.state(button, disabledState);
+        disableHttpGatewayRedirect(button);
       }
       console.info('ipfs.prefs.useCustomGateway: ' + prefs.useCustomGateway);
     }
 
   });
-  if (button.checked) {
-    button.state(button, enabledState);
-  } else {
-    button.state(button, disabledState);
-  }
 
-  enableHttpGatewayRedirect();
+  enableHttpGatewayRedirect(button);
   IpfsProtocolHandler.prototype.factory.register();
   console.log('Addon ' + addonTitle + ' loaded.');
 };
