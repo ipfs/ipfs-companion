@@ -6,8 +6,9 @@ var {
 } = require('sdk/ui/button/toggle');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 var ioservice = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
-var events = require('sdk/system/events');
 var prefs = require('sdk/simple-prefs').prefs;
+var cm = require('sdk/context-menu');
+var clipboard = require('sdk/clipboard');
 
 const version = require('./package.json').version;
 const addonTitle = require('./package.json').title;
@@ -37,19 +38,46 @@ const disabledButton = {
   badgeColor: '#8C8C8C'
 };
 
-
-function httpGatewayListener(event) {
-  let channel = event.subject.QueryInterface(Ci.nsIHttpChannel);
-  let httpUrl = channel.URI.spec;
-  let ipfs = httpUrl.startsWith(PUBLIC_GATEWAY_URI.spec + IPFS_SCHEME);
-  if (ipfs && prefs.useCustomGateway) {
-    console.info('Detected HTTP request to the public gateway: ' + channel.URI.spec);
-    let uri = ioservice.newURI(httpUrl.replace(PUBLIC_GATEWAY_URI.spec, CUSTOM_GATEWAY_URI.spec), null, null);
-    console.info('Redirecting to custom gateway: ' + uri.spec);
-    channel.setRequestHeader('x-ipfs-firefox-addon-version', version, false);
-    channel.redirectTo(uri);
-  }
+function copyPublicGatewayLink() {
+  let ipfsURI = Cc['@mozilla.org/appshell/window-mediator;1']
+    .getService(Ci.nsIWindowMediator)
+    .getMostRecentWindow('navigator:browser')
+    .getBrowser().currentURI.spec;
+  clipboard.set(ipfsURI.replace(CUSTOM_GATEWAY_URI.spec, PUBLIC_GATEWAY_URI.spec));
 }
+
+var menuItem = cm.Item({
+  label: 'Copy IPFS link at ' + PUBLIC_GATEWAY_URI.host,
+  contentScript: 'self.on("click", self.postMessage);',
+  onMessage: copyPublicGatewayLink
+});
+
+var ipfsRequestObserver = {
+  observe: function(subject, topic, data) {
+    if (topic == 'http-on-modify-request') {
+      let channel = subject.QueryInterface(Ci.nsIHttpChannel);
+      let httpUrl = channel.URI.spec;
+      let ipfs = httpUrl.startsWith(PUBLIC_GATEWAY_URI.spec + IPFS_SCHEME);
+      if (ipfs && prefs.useCustomGateway) {
+        console.info('Detected HTTP request to the public gateway: ' + channel.URI.spec);
+        let uri = ioservice.newURI(httpUrl.replace(PUBLIC_GATEWAY_URI.spec, CUSTOM_GATEWAY_URI.spec), null, null);
+        console.info('Redirecting to custom gateway: ' + uri.spec);
+        channel.setRequestHeader('x-ipfs-firefox-addon-version', version, false);
+        channel.redirectTo(uri);
+      }
+    }
+  },
+  get observerService() {
+    return Cc['@mozilla.org/observer-service;1'].getService(Ci.nsIObserverService);
+  },
+  register: function() {
+    this.observerService.addObserver(this, 'http-on-modify-request', false);
+  },
+
+  unregister: function() {
+    this.observerService.removeObserver(this, 'http-on-modify-request');
+  }
+};
 
 function IpfsProtocolHandler() {}
 IpfsProtocolHandler.prototype = Object.freeze({
@@ -118,32 +146,36 @@ IpfsProtocolHandler.prototype = Object.freeze({
       let m = Cm.QueryInterface(Ci.nsIComponentRegistrar);
       let p = IpfsProtocolHandler.prototype;
       m.registerFactory(p.classID, p.classDescription, p.contractID, this);
-      console.info('IPFS Protocol Handler registered.');
+      //console.info('IPFS Protocol Handler registered.');
     },
     unregister: function() {
       let m = Cm.QueryInterface(Ci.nsIComponentRegistrar);
       m.unregisterFactory(IpfsProtocolHandler.prototype.classID, this);
-      console.info('IPFS Protocol Handler unregistered.');
+      //console.info('IPFS Protocol Handler unregistered.');
     },
   }),
 
 });
 
 function reloadCachedProperties(changedProperty) {
+  if (CUSTOM_GATEWAY_URI) {
+    menuItem.context.remove(cm.URLContext(CUSTOM_GATEWAY_URI.spec + IPFS_SCHEME + '*'));
+  }
   CUSTOM_GATEWAY_URI = ioservice.newURI('http://' + prefs.customGatewayHost + ':' + prefs.customGatewayPort, null, null);
+  menuItem.context.add(cm.URLContext(CUSTOM_GATEWAY_URI.spec + IPFS_SCHEME + '*'));
 }
 
 function enableHttpGatewayRedirect(button) {
   reloadCachedProperties();
   prefs.useCustomGateway = true;
-  events.on('http-on-modify-request', httpGatewayListener);
+  ipfsRequestObserver.register();
   require('sdk/simple-prefs').on('', reloadCachedProperties);
   if (button) button.state(button, enabledButton);
 }
 
 function disableHttpGatewayRedirect(button) {
   prefs.useCustomGateway = false;
-  events.off('http-on-modify-request', httpGatewayListener);
+  ipfsRequestObserver.unregister();
   require('sdk/simple-prefs').removeListener('', reloadCachedProperties);
   if (button) button.state(button, disabledButton);
 }
@@ -171,20 +203,21 @@ exports.main = function(options, callbacks) {
       } else {
         disableHttpGatewayRedirect(button);
       }
-      console.info('ipfs.prefs.useCustomGateway: ' + prefs.useCustomGateway);
+      //console.info('prefs.useCustomGateway: ' + prefs.useCustomGateway);
     }
 
   });
 
+
   enableHttpGatewayRedirect(button);
   IpfsProtocolHandler.prototype.factory.register();
-  console.log('Addon ' + addonTitle + ' loaded.');
+  //console.log('Addon ' + addonTitle + ' loaded.');
 };
 
 exports.onUnload = function(reason) {
   IpfsProtocolHandler.prototype.factory.unregister();
   disableHttpGatewayRedirect();
-  console.log('Addon ' + addonTitle + ' unloaded: ' + reason);
+  //console.log('Addon ' + addonTitle + ' unloaded: ' + reason);
 };
 
 
