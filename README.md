@@ -1,5 +1,7 @@
 # ipfs-firefox-addon
 
+[![Build Status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg)](https://travis-ci.org/lidel/ipfs-firefox-addon)
+
 Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 
 If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead.
