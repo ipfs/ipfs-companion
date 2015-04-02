@@ -1,7 +1,8 @@
 module.exports = function(grunt) {
+  var paths = ['*.js', 'lib/*.js', 'test/*.js'];
   grunt.initConfig({
     jshint: {
-      all: ['*.js', 'test/**/*.js'],
+      all: paths,
       options: {
         'jquery': true,
         'quotmark': 'single',
@@ -13,7 +14,7 @@ module.exports = function(grunt) {
       },
     },
     jsbeautifier: {
-      files: ['*.js', 'test/*.js'],
+      files: paths,
       options: {
         js: {
           indentSize: 2,

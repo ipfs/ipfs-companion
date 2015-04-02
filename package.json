@@ -8,7 +8,7 @@
   "license": "CC0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "icon": "data/icon-on-64.png",
-  "main": "index.js",
+  "main": "lib/main.js",
   "preferences": [
     {
       "name": "useCustomGateway",
