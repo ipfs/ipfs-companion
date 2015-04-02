@@ -10,4 +10,4 @@ language: node_js
       - DISPLAY=':99.0'
 
 
-    script: cfx test
+    script: cfx test --verbose
