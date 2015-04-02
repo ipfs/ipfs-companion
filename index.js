@@ -9,6 +9,7 @@ var ioservice = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOServi
 var prefs = require('sdk/simple-prefs').prefs;
 var cm = require('sdk/context-menu');
 var clipboard = require('sdk/clipboard');
+var l10n = require('sdk/l10n').get;
 
 const version = require('./package.json').version;
 const addonTitle = require('./package.json').title;
@@ -58,12 +59,14 @@ var ipfsRequestObserver = {
       let channel = subject.QueryInterface(Ci.nsIHttpChannel);
       let httpUrl = channel.URI.spec;
       let ipfs = httpUrl.startsWith(PUBLIC_GATEWAY_URI.spec + IPFS_SCHEME);
-      if (ipfs && prefs.useCustomGateway) {
-        console.info('Detected HTTP request to the public gateway: ' + channel.URI.spec);
-        let uri = ioservice.newURI(httpUrl.replace(PUBLIC_GATEWAY_URI.spec, CUSTOM_GATEWAY_URI.spec), null, null);
-        console.info('Redirecting to custom gateway: ' + uri.spec);
+      if (ipfs) {
         channel.setRequestHeader('x-ipfs-firefox-addon-version', version, false);
-        channel.redirectTo(uri);
+        if (prefs.useCustomGateway) {
+          console.info('Detected HTTP request to the public gateway: ' + channel.URI.spec);
+          let uri = ioservice.newURI(httpUrl.replace(PUBLIC_GATEWAY_URI.spec, CUSTOM_GATEWAY_URI.spec), null, null);
+          console.info('Redirecting to custom gateway: ' + uri.spec);
+          channel.redirectTo(uri);
+        }
       }
     }
   },
@@ -185,7 +188,7 @@ exports.main = function(options, callbacks) {
 
   var button = ToggleButton({
     id: 'ipfs-gateway-status',
-    label: 'IPFS Gateway Redirect',
+    label: l10n('toggle_button_label'),
     icon: {
       '16': './icon-on-16.png',
       '32': './icon-on-32.png',
