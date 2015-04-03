@@ -4,9 +4,8 @@ before_script:
     - curl -sq https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/addon-sdk-1.17.tar.gz -o sdk.tar.gz
     - tar zxvf sdk.tar.gz
     - cd addon-sdk*
-    - curl -qs https://gist.githubusercontent.com/lidel/903e75fb41af51935e7b/raw/9ecabbea6b5fac260057e7be08336f8681f8f04b/core.js > lib/sdk/l10n/json/core.js
     - . bin/activate
     - cd ..
 env:
     - DISPLAY=':99.0'
-script: cfx test --verbose
+script: bash test/cfx_test_workaround_for_1103385.sh
