@@ -23,13 +23,22 @@ module.exports = function(grunt) {
           endWithNewline: true,
         },
       }
+    },
+    run: {
+      cfx_test: {
+        cmd: 'bash',
+        args: ['test/cfx_test_workaround_for_1103385.sh'],
+      },
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsbeautifier');
+  grunt.loadNpmTasks('grunt-run');
 
   grunt.registerTask('default', ['jsbeautifier', 'jshint']);
+  grunt.registerTask('travis', ['jshint', 'run:cfx_test']);
+  //script: grunt travis --verbose
 
 };
 // vim:ts=2:sw=2:et:
