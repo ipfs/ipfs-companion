@@ -2,6 +2,7 @@ language: node_js
 before_script:
     - sudo $(which npm) install -g grunt
     - sudo $(which npm) install -g grunt-cli
+    - sudo $(which npm) install -g mozilla-download
     - sudo $(which npm) install grunt-run
     - sudo $(which npm) install grunt-contrib-jshint
     - curl -sq https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/addon-sdk-1.17.tar.gz -o sdk.tar.gz
@@ -9,7 +10,10 @@ before_script:
     - cd addon-sdk*
     - . bin/activate
     - cd ..
+    - mozilla-download --branch nightly -c prerelease --host ftp.mozilla.org firefox_nightly_prerelease
     - sh -e /etc/init.d/xvfb start
 env:
     - DISPLAY=':99.0'
-script: grunt travis --verbose
+script:
+    - ls -R .
+    - grunt travis --verbose
