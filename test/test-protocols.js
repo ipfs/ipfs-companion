@@ -2,14 +2,6 @@ var proto = require('./protocols.js');
 var gw = require('./gateways.js');
 const pubGwUri = gw.publicUri();
 
-let {
-  before
-} = require('sdk/test/utils');
-before(exports, function(name, assert) { // jshint unused:false
-  // reset redirect state before each test
-  gw.enableHttpGatewayRedirect(button);
-});
-
 exports['test ipfsScheme'] = function(assert) {
   assert.equal(proto.ipfsScheme, 'ipfs', 'handler scheme');
 };

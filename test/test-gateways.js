@@ -4,14 +4,6 @@ const tabs = require('sdk/tabs');
 const path = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/example#/ipfs/QmSsNVuALPa1TW1GDahup8fFDqo95iFyPE7E6HpqDivw3p/readme.md';
 const button = gui.toggleButton;
 
-let {
-  before
-} = require('sdk/test/utils');
-before(exports, function(name, assert) { // jshint unused:false
-  // reset redirect state before each test
-  gw.enableHttpGatewayRedirect(button);
-});
-
 exports['test enabled redirect'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
   gw.enableHttpGatewayRedirect(button);
