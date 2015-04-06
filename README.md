@@ -23,6 +23,8 @@ The easiest way is to install from [addons.mozilla.org](https://addons.mozilla.o
 
 One can also choose to manually install [the latest .xpi from Github](https://github.com/lidel/ipfs-firefox-addon/releases/latest).
 
+Please read [SECURITY.md](https://github.com/lidel/ipfs-firefox-addon/blob/master/SECURITY.md) if you want to perform quick security audit BEFORE installation.
+
 ### LICENSE
 
 Addon is released under [CC0](LICENSE). IPFS logo belongs to the http://ipfs.io project.
