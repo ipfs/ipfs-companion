@@ -1,3 +1,5 @@
+'use strict';
+
 exports['test dummy'] = function(assert) {
   assert.pass('Unit test running!');
 };

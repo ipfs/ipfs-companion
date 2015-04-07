@@ -1,3 +1,5 @@
+'use strict';
+
 var gw = require('./gateways.js');
 var gui = require('./gui.js');
 const tabs = require('sdk/tabs');

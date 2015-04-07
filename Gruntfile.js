@@ -11,6 +11,11 @@ module.exports = function(grunt) {
         'latedef': true,
         'unused': true,
         'moz': true,
+        '-W097': true, // global strict
+        'predef':[
+          'exports',
+          'require',
+          ],
       },
     },
     jsbeautifier: {
