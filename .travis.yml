@@ -1,17 +1,36 @@
 language: node_js
+env:
+    global:
+        - DISPLAY=':99.0'
+        - FIREFOX_BIN='./firefox/firefox'
+    matrix:
+        - FIREFOX_RELEASE='30.0'
+        - FIREFOX_RELEASE='31.0'
+        - FIREFOX_RELEASE='32.0'
+        - FIREFOX_RELEASE='33.0'
+        - FIREFOX_RELEASE='34.0'
+        - FIREFOX_RELEASE='35.0'
+        - FIREFOX_RELEASE='36.0'
+        - FIREFOX_RELEASE='latest-esr'
+        - FIREFOX_RELEASE='latest'
+        - FIREFOX_RELEASE='latest-beta'
 before_script:
-    - sudo $(which npm) install -g grunt
-    - sudo $(which npm) install -g grunt-cli
-    - sudo $(which npm) install grunt-run
-    - sudo $(which npm) install grunt-contrib-jshint
+    - npm install grunt -g
+    - npm install grunt-cli -g
+    - npm install grunt-run
+    - npm install grunt-contrib-jshint
+    - sudo apt-get update -qq
+    - sudo apt-get install -y python-pip
+    - sudo pip install mozdownload
+    - mozdownload -t release -v $FIREFOX_RELEASE
+    - tar -xf *firefox*.tar.bz2
+    - ls -lh
     - curl -sq https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/addon-sdk-1.17.tar.gz -o sdk.tar.gz
     - tar zxf sdk.tar.gz
     - cd addon-sdk*
     - . bin/activate
     - cd ..
     - sh -e /etc/init.d/xvfb start
-env:
-    - DISPLAY=':99.0'
 script:
     - grunt travis --verbose
     - cfx xpi

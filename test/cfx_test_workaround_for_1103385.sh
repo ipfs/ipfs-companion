@@ -1,5 +1,5 @@
 #!/bin/bash
-CFX_OUT=$(cfx test --verbose 2>&1 | tee >(cat - >&2)  ; (exit ${PIPESTATUS[0]}))
+CFX_OUT=$(cfx -b $FIREFOX_BIN test --verbose 2>&1 | tee >(cat - >&2)  ; (exit ${PIPESTATUS[0]}))
 RESULT=$?
 TOTAL=$(echo $CFX_OUT | sed -n 's/.* \([0-9]\+\) tests passed.*/\1/p')
 PASSED=$(echo $CFX_OUT | sed -n 's/.* \([0-9]\+\) of [0-9]\+ tests passed.*/\1/p')
