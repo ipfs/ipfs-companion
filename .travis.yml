@@ -4,14 +4,14 @@ env:
         - DISPLAY=':99.0'
         - FIREFOX_BIN='./firefox/firefox'
     matrix:
-        - FIREFOX_RELEASE='30.0'
-        - FIREFOX_RELEASE='31.0'
-        - FIREFOX_RELEASE='32.0'
+        #- FIREFOX_RELEASE='30.0'
+        #- FIREFOX_RELEASE='31.0'
+        #- FIREFOX_RELEASE='32.0'
         - FIREFOX_RELEASE='33.0'
         - FIREFOX_RELEASE='34.0'
         - FIREFOX_RELEASE='35.0'
         - FIREFOX_RELEASE='36.0'
-        - FIREFOX_RELEASE='latest-esr'
+        #- FIREFOX_RELEASE='latest-esr'
         - FIREFOX_RELEASE='latest'
         - FIREFOX_RELEASE='latest-beta'
 before_script:
