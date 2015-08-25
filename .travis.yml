@@ -1,36 +1,64 @@
 language: node_js
+sudo: false
+addons:
+    apt:
+        packages:
+            - python-pip
 env:
     global:
         - DISPLAY=':99.0'
         - FIREFOX_BIN='./firefox/firefox'
     matrix:
-        #- FIREFOX_RELEASE='30.0'
-        #- FIREFOX_RELEASE='31.0'
-        #- FIREFOX_RELEASE='32.0'
-        - FIREFOX_RELEASE='33.0'
-        #- FIREFOX_RELEASE='34.0'
-        #- FIREFOX_RELEASE='35.0'
-        #- FIREFOX_RELEASE='36.0'
-        #- FIREFOX_RELEASE='latest-esr'
         - FIREFOX_RELEASE='latest'
+        - FIREFOX_RELEASE='latest-esr'
         - FIREFOX_RELEASE='latest-beta'
+        - FIREFOX_RELEASE='30.0'
+        - FIREFOX_RELEASE='31.0'
+        - FIREFOX_RELEASE='32.0'
+        - FIREFOX_RELEASE='33.0'
+        - FIREFOX_RELEASE='34.0.5'
+        - FIREFOX_RELEASE='35.0'
+        - FIREFOX_RELEASE='36.0'
+        - FIREFOX_RELEASE='37.0'
+        - FIREFOX_RELEASE='38.0'
+        - FIREFOX_RELEASE='39.0'
+        - FIREFOX_RELEASE='40.0'
+matrix:
+    fast_finish: true
+    allow_failures:
+        #- env: FIREFOX_RELEASE='latest'
+        - env: FIREFOX_RELEASE='latest-esr'
+        - env: FIREFOX_RELEASE='latest-beta'
+        - env: FIREFOX_RELEASE='30.0'
+        - env: FIREFOX_RELEASE='31.0'
+        - env: FIREFOX_RELEASE='32.0'
+        - env: FIREFOX_RELEASE='33.0'
+        - env: FIREFOX_RELEASE='34.0.5'
+        - env: FIREFOX_RELEASE='35.0'
+        - env: FIREFOX_RELEASE='36.0'
+        - env: FIREFOX_RELEASE='37.0'
+        - env: FIREFOX_RELEASE='38.0'
+        - env: FIREFOX_RELEASE='39.0'
+        - env: FIREFOX_RELEASE='40.0'
+cache:
+    directories:
+        - $HOME/cache
 before_script:
     - npm install grunt -g
     - npm install grunt-cli -g
     - npm install grunt-run
     - npm install grunt-contrib-jshint
-    - sudo apt-get update -qq
-    - sudo apt-get install -y python-pip
-    - sudo pip install mozdownload
-    - mozdownload -t release -v $FIREFOX_RELEASE
-    - tar -xf *firefox*.tar.bz2
-    - ls -lh
-    - curl -sq https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/addon-sdk-1.17.tar.gz -o sdk.tar.gz
-    - tar zxf sdk.tar.gz
-    - cd addon-sdk*
-    - . bin/activate
-    - cd ..
+    - pip install --user mozdownload
+    - rm -rf $HOME/cache/latest*
+    - ls -R $HOME/cache
+    - mkdir -p $HOME/cache/$FIREFOX_RELEASE
+    - test -f $HOME/cache/$FIREFOX_RELEASE/*firefox*.tar.bz2 || $HOME/.local/bin/mozdownload -t release -v $FIREFOX_RELEASE -d $HOME/cache/$FIREFOX_RELEASE/
+    - tar xf $HOME/cache/$FIREFOX_RELEASE/*firefox*.tar.bz2
+    - test -f $HOME/cache/sdk.tar.gz || curl -sq https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/addon-sdk-1.17.tar.gz -o $HOME/cache/sdk.tar.gz
+    - tar zxf $HOME/cache/sdk.tar.gz
+    - cd addon-sdk* && . bin/activate && cd ..
     - sh -e /etc/init.d/xvfb start
 script:
-    - grunt travis --verbose
+    - bash test/cfx_test_workaround_for_1103385.sh
     - cfx xpi
+    - grunt jshint
