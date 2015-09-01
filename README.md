@@ -1,5 +1,6 @@
 # ipfs-firefox-addon
 
+[![Latest release](https://img.shields.io/github/release/lidel/ipfs-firefox-addon.svg)](https://github.com/lidel/ipfs-firefox-addon/releases/latest)
 [![Build Status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg)](https://travis-ci.org/lidel/ipfs-firefox-addon)
 
 Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
