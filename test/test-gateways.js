@@ -7,11 +7,51 @@ const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/';
 const ipnsPath = 'ipns/ipfs.git.sexy/';
 const button = gui.toggleButton;
 
-exports['test enabled /ipfs/ redirect'] = function(assert, done) {
+exports['test enabled /ipfs/ redirect (old http gw)'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
   gw.enableHttpGatewayRedirect(button);
+  // HTTP
   tabs.open({
-    url: gw.publicUri().spec + ipfsPath,
+    url: 'http://gateway.ipfs.io/' + ipfsPath,
+    onReady: function onReady(tab) {
+      assert.equal(tab.url, gw.customUri().spec + ipfsPath, 'expected redirect');
+      tab.close(done);
+    }
+  });
+};
+
+exports['test enabled /ipfs/ redirect (old https gw)'] = function(assert, done) {
+  // open Public Gateway URL and check if it gets redirected to gw.customUri()
+  gw.enableHttpGatewayRedirect(button);
+  // HTTPS
+  tabs.open({
+    url: 'https://gateway.ipfs.io/' + ipfsPath,
+    onReady: function onReady(tab) {
+      assert.equal(tab.url, gw.customUri().spec + ipfsPath, 'expected redirect');
+      tab.close(done);
+    }
+  });
+};
+
+exports['test enabled /ipfs/ redirect (http gw)'] = function(assert, done) {
+  // open Public Gateway URL and check if it gets redirected to gw.customUri()
+  gw.enableHttpGatewayRedirect(button);
+  // HTTP
+  tabs.open({
+    url: 'http://ipfs.io/' + ipfsPath,
+    onReady: function onReady(tab) {
+      assert.equal(tab.url, gw.customUri().spec + ipfsPath, 'expected redirect');
+      tab.close(done);
+    }
+  });
+};
+
+exports['test enabled /ipfs/ redirect (https gw)'] = function(assert, done) {
+  // open Public Gateway URL and check if it gets redirected to gw.customUri()
+  gw.enableHttpGatewayRedirect(button);
+  // HTTPS
+  tabs.open({
+    url: 'https://ipfs.io/' + ipfsPath,
     onReady: function onReady(tab) {
       assert.equal(tab.url, gw.customUri().spec + ipfsPath, 'expected redirect');
       tab.close(done);
