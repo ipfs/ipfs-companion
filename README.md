@@ -12,8 +12,8 @@ If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://githu
 ### Features
 
 - clicking on the addon icon toggles redirection
-- requests to `http://gateway.ipfs.io/(ipfs|ipns)/$RESOURCE`  
-  are replaced with `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
+- requests to `https?://(gateway.|)ipfs.io/(ipfs|ipns)/$RESOURCE`  
+  are replaced with one to `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
 - custom gateway host and port can be changed at   
   `about:addons` → Extensions → IPFS Gateway Redirect → Preferences
 - requests to custom protocols are routed to the active gateway (public or custom):
