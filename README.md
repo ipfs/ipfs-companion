@@ -12,15 +12,17 @@ If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://githu
 ### Features
 
 - clicking on the addon icon toggles redirection
-- requests to `https?://(gateway.|)ipfs.io/(ipfs|ipns)/$RESOURCE`  
-  are replaced with one to `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
+- requests to `https?://<public_gateway>/(ipfs|ipns)/$RESOURCE`  
+  are replaced with `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
 - custom gateway host and port can be changed at   
   `about:addons` → Extensions → IPFS Gateway Redirect → Preferences
+- list of public gateways can be customized too,  
+  default is `ipfs.io` with second being the legacy `gateway.ipfs.io`
 - requests to custom protocols are routed to the active gateway (public or custom):
    - `(ipfs|ipns):$RESOURCE`
    - `(ipfs|ipns)://$RESOURCE` 
 - context menu under right click on a page from custom gateway   
-  contains an option to copy shareable link to resource in public gateway
+  contains an option to copy shareable link to resource at default public gateway (first one on the list)
 
 ### How to install
 
