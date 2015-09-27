@@ -12,34 +12,26 @@ env:
         - FIREFOX_RELEASE='latest'
         - FIREFOX_RELEASE='latest-esr'
         - FIREFOX_RELEASE='latest-beta'
-        - FIREFOX_RELEASE='30.0'
-        - FIREFOX_RELEASE='31.0'
-        - FIREFOX_RELEASE='32.0'
-        - FIREFOX_RELEASE='33.0'
-        - FIREFOX_RELEASE='34.0.5'
         - FIREFOX_RELEASE='35.0'
         - FIREFOX_RELEASE='36.0'
         - FIREFOX_RELEASE='37.0'
         - FIREFOX_RELEASE='38.0'
         - FIREFOX_RELEASE='39.0'
         - FIREFOX_RELEASE='40.0'
+        - FIREFOX_RELEASE='41.0'
 matrix:
     fast_finish: true
     allow_failures:
         #- env: FIREFOX_RELEASE='latest'
+        #- env: FIREFOX_RELEASE='latest-beta'
         - env: FIREFOX_RELEASE='latest-esr'
-        - env: FIREFOX_RELEASE='latest-beta'
-        - env: FIREFOX_RELEASE='30.0'
-        - env: FIREFOX_RELEASE='31.0'
-        - env: FIREFOX_RELEASE='32.0'
-        - env: FIREFOX_RELEASE='33.0'
-        - env: FIREFOX_RELEASE='34.0.5'
         - env: FIREFOX_RELEASE='35.0'
         - env: FIREFOX_RELEASE='36.0'
         - env: FIREFOX_RELEASE='37.0'
         - env: FIREFOX_RELEASE='38.0'
         - env: FIREFOX_RELEASE='39.0'
         - env: FIREFOX_RELEASE='40.0'
+        - env: FIREFOX_RELEASE='41.0'
 cache:
     directories:
         - $HOME/cache
