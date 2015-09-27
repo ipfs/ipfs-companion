@@ -30,7 +30,7 @@ If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://githu
 The easiest way is to install from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/).   
 It will guarantee automatic updates to version reviewed by Mozilla community. 
 
-One can also choose to manually install [the latest .xpi from Github](https://github.com/lidel/ipfs-firefox-addon/releases/latest) (no automatic updates).
+It is also possible to manually build XPI from [the latest relase sources](https://github.com/lidel/ipfs-firefox-addon/releases/latest), however offical Firefox builds do not accept unsigned XPIs anymore.
 
 Please read [SECURITY.md](https://github.com/lidel/ipfs-firefox-addon/blob/master/SECURITY.md) if you want to perform quick security audit BEFORE installation.
 
