@@ -4,7 +4,7 @@
   "id": "ipfs-firefox-addon@lidel.org",
   "description": "Access IPFS resources via custom HTTP2IPFS gateway",
   "author": "Marcin Rataj",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "CC0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "icon": "data/icon-on-64.png",

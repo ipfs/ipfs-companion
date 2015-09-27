@@ -7,7 +7,7 @@ Firefox addon that provides transparent access to IPFS resources via local HTTP2
 
 If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead.
 
-![screenshot v0.2.0](screenshot.png)
+![screenshot v1.2.0](screenshot.png)
 
 ### Features
 
@@ -19,10 +19,11 @@ If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://githu
 - list of public gateways can be customized too,  
   default is `ipfs.io` with second being the legacy `gateway.ipfs.io`
 - requests to custom protocols are routed to the active gateway (public or custom):
-   - `(ipfs|ipns):$RESOURCE`
-   - `(ipfs|ipns)://$RESOURCE` 
+   - `(ipfs|ipns):/*$RESOURCE`
+   - `fs:/*(ipfs|ipns)/$RESOURCE`
 - context menu under right click on a page from custom gateway   
-  contains an option to copy shareable link to resource at default public gateway (first one on the list)
+  contains options to copy canonical IPFS address    
+  and a shareable URL to a resource at a default public gateway (first one on the list)
 
 ### How to install
 
