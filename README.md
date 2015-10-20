@@ -34,6 +34,27 @@ It is also possible to manually build XPI from [the latest relase sources](https
 
 Please read [SECURITY.md](https://github.com/lidel/ipfs-firefox-addon/blob/master/SECURITY.md) if you want to perform quick security audit BEFORE installation.
 
+### TROUBLESHOOTING
+
+#### Rule to work with NoScript with ABE enabled
+
+By default [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks this addon by blocking assets loaded from IPFS Gateway running on localhost.    
+To make it work, one needs to extend the SYSTEM Rulset and prepend it with IPFS whitelist:
+
+```
+# Enable IPFS redirect to LOCAL
+Site ^http://127.0.0.1:8080/(ipfs|ipns)*
+Anonymize
+
+# Prevent Internet sites from requesting LAN resources.
+Site LOCAL
+Accept from LOCAL
+Deny
+```
+
+Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
+
+
 ### LICENSE
 
 [IPFS logo](https://github.com/ipfs/logo) belongs to [The IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a>.
