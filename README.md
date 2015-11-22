@@ -5,7 +5,7 @@
 
 Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 
-If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead.
+(If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead)
 
 ![screenshot v1.2.0](screenshot.png)
 
@@ -27,8 +27,11 @@ If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://githu
 
 ### How to install
 
-The easiest way is to install from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/).   
-It will guarantee automatic updates to version reviewed by Mozilla community. 
+The easiest way is to get it from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/):
+
+[![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
+
+It will guarantee automatic updates to the latest version reviewed by Mozilla community. 
 
 It is also possible to manually build XPI from [the latest relase sources](https://github.com/lidel/ipfs-firefox-addon/releases/latest), however offical Firefox builds do not accept unsigned XPIs anymore.
 
