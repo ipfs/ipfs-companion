@@ -21,7 +21,7 @@
       "name": "publicGatewayHosts",
       "title": "List of public gateways",
       "type": "string",
-      "value": "ipfs.io gateway.ipfs.io"
+      "value": "ipfs.io gateway.ipfs.io ipfs.pics"
     },
     {
       "name": "customGatewayHost",
