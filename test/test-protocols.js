@@ -1,5 +1,5 @@
-var proto = require('./protocols.js');
-var gw = require('./gateways.js');
+var proto = require('../lib/protocols.js');
+var gw = require('../lib/gateways.js');
 const pubGwUri = gw.publicUri();
 const ipfsPath = 'QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/example#/ipfs/QmSsNVuALPa1TW1GDahup8fFDqo95iFyPE7E6HpqDivw3p/readme.md';
 const ipnsPath = 'ipfs.git.sexy';

@@ -30,9 +30,9 @@ module.exports = function(grunt) {
       }
     },
     run: {
-      cfx_test: {
-        cmd: 'bash',
-        args: ['test/cfx_test_workaround_for_1103385.sh'],
+      jpm_test: {
+        cmd: 'jpm',
+        args: ['test'],
       },
     }
   });
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-run');
 
   grunt.registerTask('default', ['jsbeautifier', 'jshint']);
-  grunt.registerTask('travis', ['jshint', 'run:cfx_test']);
+  grunt.registerTask('travis', ['jshint', 'run:jpm_test']);
   //script: grunt travis --verbose
 
 };

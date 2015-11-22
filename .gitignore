@@ -1,3 +1,6 @@
-ipfs-firefox-addon.xpi
+*.xpi
+vendor
+_vendor
 node_modules
 firefox
+cache

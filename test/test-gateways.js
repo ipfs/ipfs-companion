@@ -1,7 +1,7 @@
 'use strict';
 
-var gw = require('./gateways.js');
-var gui = require('./gui.js');
+var gw = require('../lib/gateways.js');
+var gui = require('../lib/gui.js');
 const tabs = require('sdk/tabs');
 const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/';
 const ipnsPath = 'ipns/ipfs.git.sexy/';

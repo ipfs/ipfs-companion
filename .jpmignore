@@ -1,0 +1,16 @@
+.git
+vendor*
+_vendor*
+node_modules
+firefox*
+.gitignore
+.jpmignore
+test/
+.travis.yml
+Gruntfile.js
+README.md
+SECURITY.md
+LICENSE
+screenshot.png
+*.xpi
+cache

@@ -10,47 +10,33 @@ env:
         - FIREFOX_BIN='./firefox/firefox'
     matrix:
         - FIREFOX_RELEASE='latest'
-        - FIREFOX_RELEASE='latest-esr'
-        - FIREFOX_RELEASE='latest-beta'
-        - FIREFOX_RELEASE='35.0'
-        - FIREFOX_RELEASE='36.0'
-        - FIREFOX_RELEASE='37.0'
-        - FIREFOX_RELEASE='38.0'
-        - FIREFOX_RELEASE='39.0'
-        - FIREFOX_RELEASE='40.0'
-        - FIREFOX_RELEASE='41.0'
+        - FIREFOX_RELEASE='beta-latest'
+        - FIREFOX_RELEASE='esr-latest'
 matrix:
     fast_finish: true
     allow_failures:
         #- env: FIREFOX_RELEASE='latest'
-        #- env: FIREFOX_RELEASE='latest-beta'
-        - env: FIREFOX_RELEASE='latest-esr'
-        - env: FIREFOX_RELEASE='35.0'
-        - env: FIREFOX_RELEASE='36.0'
-        - env: FIREFOX_RELEASE='37.0'
-        - env: FIREFOX_RELEASE='38.0'
-        - env: FIREFOX_RELEASE='39.0'
-        - env: FIREFOX_RELEASE='40.0'
-        - env: FIREFOX_RELEASE='41.0'
+        #- env: FIREFOX_RELEASE='beta-latest'
+        - env: FIREFOX_RELEASE='esr-latest'
 cache:
     directories:
         - $HOME/cache
 before_script:
+    - npm install jpm -g
     - npm install grunt -g
     - npm install grunt-cli -g
     - npm install grunt-run
     - npm install grunt-contrib-jshint
-    - pip install --user mozdownload
-    - rm -rf $HOME/cache/latest*
+    - pip install --user 'requests[security]'
+    - pip install --user 'mozdownload'
+    - rm -rf $HOME/cache/*latest*
     - ls -R $HOME/cache
     - mkdir -p $HOME/cache/$FIREFOX_RELEASE
+    - echo $FIREFOX_RELEASE | grep -v latest || wget -O $HOME/cache/$FIREFOX_RELEASE/firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - test -f $HOME/cache/$FIREFOX_RELEASE/*firefox*.tar.bz2 || $HOME/.local/bin/mozdownload -t release -v $FIREFOX_RELEASE -d $HOME/cache/$FIREFOX_RELEASE/
     - tar xf $HOME/cache/$FIREFOX_RELEASE/*firefox*.tar.bz2
-    - test -f $HOME/cache/sdk.tar.gz || curl -sq https://ftp.mozilla.org/pub/mozilla.org/labs/jetpack/addon-sdk-1.17.tar.gz -o $HOME/cache/sdk.tar.gz
-    - tar zxf $HOME/cache/sdk.tar.gz
-    - cd addon-sdk* && . bin/activate && cd ..
     - sh -e /etc/init.d/xvfb start
+    - ls -R $HOME
 script:
-    - bash test/cfx_test_workaround_for_1103385.sh
-    - cfx xpi
+    - bash test/workaround_for_bug_1103385.sh
     - grunt jshint

@@ -1,5 +1,5 @@
-var gui = require('./gui.js');
-var gw = require('./gateways.js');
+var gui = require('../lib/gui.js');
+var gw = require('../lib/gateways.js');
 var prefs = require('sdk/simple-prefs').prefs;
 const button = gui.toggleButton;
 
