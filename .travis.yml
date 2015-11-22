@@ -3,7 +3,7 @@ sudo: false
 addons:
     apt:
         packages:
-            - python-pip
+            - aria2
 env:
     global:
         - DISPLAY=':99.0'
@@ -27,16 +27,9 @@ before_script:
     - npm install grunt-cli -g
     - npm install grunt-run
     - npm install grunt-contrib-jshint
-    - pip install --user 'requests[security]'
-    - pip install --user 'mozdownload'
-    - rm -rf $HOME/cache/*latest*
-    - ls -R $HOME/cache
-    - mkdir -p $HOME/cache/$FIREFOX_RELEASE
-    - echo $FIREFOX_RELEASE | grep -v latest || wget -O $HOME/cache/$FIREFOX_RELEASE/firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-    - test -f $HOME/cache/$FIREFOX_RELEASE/*firefox*.tar.bz2 || $HOME/.local/bin/mozdownload -t release -v $FIREFOX_RELEASE -d $HOME/cache/$FIREFOX_RELEASE/
-    - tar xf $HOME/cache/$FIREFOX_RELEASE/*firefox*.tar.bz2
+    - aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+    - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
-    - ls -R $HOME
 script:
     - bash test/workaround_for_bug_1103385.sh
     - grunt jshint
