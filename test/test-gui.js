@@ -9,13 +9,12 @@ exports['test toggleButton attributes'] = function(assert) {
 };
 
 exports['test disabled toggleButton'] = function(assert) {
-  gw.enableHttpGatewayRedirect(button);
-  gw.disableHttpGatewayRedirect(button);
+  gw.toggle(false);
   assert.equal(button.checked, prefs.useCustomGateway, 'state after gw.disableHttpGatewayRedirect()');
 };
 
 exports['test enabled toggleButton'] = function(assert) {
-  gw.enableHttpGatewayRedirect(button);
+  gw.toggle(true);
   assert.equal(button.checked, prefs.useCustomGateway, 'state after gw.enableHttpGatewayRedirect()');
 };
 

@@ -4,8 +4,8 @@ module.exports = function(grunt) {
     jshint: {
       all: paths,
       options: {
+        'esnext': true,
         'jquery': true,
-        'quotmark': 'single',
         'white': true,
         'indent': 2,
         'latedef': true,
