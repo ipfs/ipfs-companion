@@ -1,15 +1,16 @@
 'use strict';
 
 var gw = require('../lib/gateways.js');
-var gui = require('../lib/gui.js');
+
+require('../lib/redirects.js');
+
 const tabs = require('sdk/tabs');
 const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/';
 const ipnsPath = 'ipns/ipfs.git.sexy/';
-const button = gui.toggleButton;
 
 exports['test enabled /ipfs/ redirect (old http gw)'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
-  gw.enableHttpGatewayRedirect(button);
+  gw.toggle(true);
   // HTTP
   tabs.open({
     url: 'http://gateway.ipfs.io/' + ipfsPath,
@@ -22,7 +23,7 @@ exports['test enabled /ipfs/ redirect (old http gw)'] = function(assert, done) {
 
 exports['test enabled /ipfs/ redirect (old https gw)'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
-  gw.enableHttpGatewayRedirect(button);
+  gw.toggle(true);
   // HTTPS
   tabs.open({
     url: 'https://gateway.ipfs.io/' + ipfsPath,
@@ -35,7 +36,7 @@ exports['test enabled /ipfs/ redirect (old https gw)'] = function(assert, done) 
 
 exports['test enabled /ipfs/ redirect (http gw)'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
-  gw.enableHttpGatewayRedirect(button);
+  gw.toggle(true);
   // HTTP
   tabs.open({
     url: 'http://ipfs.io/' + ipfsPath,
@@ -48,7 +49,7 @@ exports['test enabled /ipfs/ redirect (http gw)'] = function(assert, done) {
 
 exports['test enabled /ipfs/ redirect (https gw)'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
-  gw.enableHttpGatewayRedirect(button);
+  gw.toggle(true);
   // HTTPS
   tabs.open({
     url: 'https://ipfs.io/' + ipfsPath,
@@ -61,8 +62,7 @@ exports['test enabled /ipfs/ redirect (https gw)'] = function(assert, done) {
 
 exports['test disabled /ipfs/ redirect'] = function(assert, done) {
   // same check, but with disabled redirection
-  gw.enableHttpGatewayRedirect(button);
-  gw.disableHttpGatewayRedirect(button);
+  gw.toggle(false);
   tabs.open({
     url: gw.publicUri().spec + ipfsPath,
     onReady: function onReady(tab) {
@@ -74,7 +74,7 @@ exports['test disabled /ipfs/ redirect'] = function(assert, done) {
 
 exports['test enabled /ipns/ redirect'] = function(assert, done) {
   // open Public Gateway URL and check if it gets redirected to gw.customUri()
-  gw.enableHttpGatewayRedirect(button);
+  gw.toggle(true);
   tabs.open({
     url: gw.publicUri().spec + ipnsPath,
     onReady: function onReady(tab) {
@@ -86,8 +86,7 @@ exports['test enabled /ipns/ redirect'] = function(assert, done) {
 
 exports['test disabled /ipns/ redirect'] = function(assert, done) {
   // same check, but with disabled redirection
-  gw.enableHttpGatewayRedirect(button);
-  gw.disableHttpGatewayRedirect(button);
+  gw.toggle(false);
   tabs.open({
     url: gw.publicUri().spec + ipnsPath,
     onReady: function onReady(tab) {
