@@ -34,6 +34,12 @@
       "title": "Custom IPFS Gateway Port",
       "type": "integer",
       "value": 8080
+    },
+    {
+      "name": "customApiPort",
+      "title": "Custom IPFS API Port",
+      "type": "integer",
+      "value": 5001
     }
   ],
   "permissions": {
