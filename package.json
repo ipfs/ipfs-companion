@@ -40,6 +40,22 @@
       "title": "Custom IPFS API Port",
       "type": "integer",
       "value": 5001
+    },
+    {
+      "name": "rewriteAs",
+      "type": "menulist",
+      "title": "Rewrite IPFS URIs in the UI as",
+      "value": "gateway",
+      "options": [
+        {
+          "value": "gateway",
+          "label": "Public Gateway"
+        },
+        {
+          "value": "fs",
+          "label": "fs:/ip(f|n)s/..."
+        }
+      ]
     }
   ],
   "permissions": {
