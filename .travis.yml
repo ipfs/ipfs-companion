@@ -1,4 +1,6 @@
 language: node_js
+node_js:
+    - "0.12"
 sudo: false
 addons:
     apt:
@@ -31,5 +33,6 @@ before_script:
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
 script:
-    - bash test/workaround_for_bug_1103385.sh
+    #- bash test/workaround_for_bug_1103385.sh
+    - jpm -b $FIREFOX_BIN test --verbose
     - grunt jshint
