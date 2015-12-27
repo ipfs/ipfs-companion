@@ -1,22 +1,9 @@
 module.exports = function(grunt) {
+  require('load-grunt-tasks')(grunt);
   var paths = ['*.js', 'lib/*.js', 'test/*.js'];
   grunt.initConfig({
-    jshint: {
-      all: paths,
-      options: {
-        'esnext': true,
-        'jquery': true,
-        'white': true,
-        'indent': 2,
-        'latedef': true,
-        'unused': true,
-        'moz': true,
-        '-W097': true, // global strict
-        'predef': [
-          'exports',
-          'require',
-        ],
-      },
+    eslint: {
+      target: paths
     },
     jsbeautifier: {
       files: paths,
@@ -25,25 +12,23 @@ module.exports = function(grunt) {
           indentSize: 2,
           indentChar: ' ',
           indentWithTabs: false,
-          endWithNewline: true,
-        },
+          endWithNewline: true
+        }
       }
     },
     run: {
       jpm_test: {
         cmd: 'jpm',
-        args: ['-b', process.env.FIREFOX_BIN || 'firefox', 'test'],
-      },
+        args: ['-b', process.env.FIREFOX_BIN || 'firefox', 'test']
+      }
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-run');
 
-  grunt.registerTask('default', ['jsbeautifier', 'jshint']);
-  grunt.registerTask('travis', ['jshint', 'run:jpm_test']);
-  //script: grunt travis --verbose
+  grunt.registerTask('travis', ['run:jpm_test', 'eslint']);
+  grunt.registerTask('default', ['jsbeautifier', 'travis']);
 
 };
 // vim:ts=2:sw=2:et:

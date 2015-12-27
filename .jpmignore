@@ -8,9 +8,10 @@ firefox*
 test/
 .travis.yml
 Gruntfile.js
-README.md
-SECURITY.md
+*.md
 LICENSE
 screenshot.png
 *.xpi
 cache
+.eslintrc*
+*.log

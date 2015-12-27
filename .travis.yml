@@ -24,15 +24,13 @@ cache:
     directories:
         - $HOME/cache
 before_script:
-    - npm install jpm -g
     - npm install grunt -g
     - npm install grunt-cli -g
-    - npm install grunt-run
-    - npm install grunt-contrib-jshint
+    - npm install
     - aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
 script:
     #- bash test/workaround_for_bug_1103385.sh
-    - jpm -b $FIREFOX_BIN test --verbose
-    - grunt jshint
+    - npm run jpm
+    - npm run eslint

@@ -6,11 +6,11 @@ const ipnsPath = 'ipfs.git.sexy';
 
 const ipfsHandler = proto.ipfs.createInstance();
 const ipnsHandler = proto.ipns.createInstance();
-const fsHandler   = proto.fs.createInstance();
+const fsHandler = proto.fs.createInstance();
 
 const webIpfsHandler = proto['web+ipfs'].createInstance();
 const webIpnsHandler = proto['web+ipns'].createInstance();
-const webFsHandler   = proto['web+fs'].createInstance();
+const webFsHandler = proto['web+fs'].createInstance();
 
 exports['test ipfs: scheme'] = function(assert) {
   assert.equal(ipfsHandler.scheme, 'ipfs', 'handler scheme');
