@@ -32,7 +32,7 @@ module.exports = function(grunt) {
     run: {
       jpm_test: {
         cmd: 'jpm',
-        args: ['test'],
+        args: ['-b', process.env.FIREFOX_BIN || 'firefox', 'test'],
       },
     }
   });

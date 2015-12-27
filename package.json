@@ -9,6 +9,10 @@
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "icon": "data/icon-on-64.png",
   "main": "lib/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lidel/ipfs-firefox-addon.git"
+  },
   "preferences": [
     {
       "name": "useCustomGateway",
@@ -47,6 +51,9 @@
   },
   "engines": {
     "firefox": ">=38.0"
+  },
+  "scripts": {
+      "test": "grunt travis"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
