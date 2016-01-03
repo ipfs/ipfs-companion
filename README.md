@@ -57,6 +57,10 @@ Deny
 
 Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
 
+### CONTRIBUTING
+
+See [CONTRIBUTING](CONTRIBUTING.md)
+
 
 ### LICENSE
 
