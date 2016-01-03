@@ -44,6 +44,12 @@
       "title": "Custom IPFS API Port",
       "type": "integer",
       "value": 5001
+    },
+    {
+      "name": "linkify",
+      "title": "make plaintext IPFS links clickable",
+      "type": "bool",
+      "value": false
     }
   ],
   "permissions": {
