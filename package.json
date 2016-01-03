@@ -18,8 +18,7 @@
       "name": "useCustomGateway",
       "title": "Use Custom Gateway",
       "type": "bool",
-      "value": true,
-      "hidden": true
+      "value": true
     },
     {
       "name": "publicGatewayHosts",
@@ -47,7 +46,7 @@
     },
     {
       "name": "linkify",
-      "title": "make plaintext IPFS links clickable",
+      "title": "Extended IPFS Link Support",
       "type": "bool",
       "value": false
     }
