@@ -3,7 +3,7 @@
 const tabs = require('sdk/tabs');
 const parent = require('sdk/remote/parent');
 const self = require('sdk/self');
-const testpage = self.data.url('test.html');
+const testpage = self.data.url('linkify-demo.html');
 
 require("../lib/rewrite-pages.js");
 parent.remoteRequire("resource://ipfs-firefox-addon-at-lidel-dot-org/lib/rewrite-pages.js");
