@@ -1,21 +1,10 @@
 {
     "rules": {
-        "indent": [
-            1,
-            2
-        ],
-        "quotes": [
-            1,
-            "single"
-        ],
-        "linebreak-style": [
-            1,
-            "unix"
-        ],
-        "semi": [
-            1,
-            "always"
-        ]
+        "indent": [1,2],
+        "quotes": [1,"single"],
+        "linebreak-style": [1,"unix"],
+        "no-console": 1,
+        "semi": [1,"always"]
     },
     "env": {
         "es6": true,
