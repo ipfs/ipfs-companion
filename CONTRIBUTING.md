@@ -26,6 +26,7 @@ Setting it up is easy. To install all dependencies run:
 
 
 ```bash
+npm install jpm grunt grunt-cli -g
 npm install
 
 ```

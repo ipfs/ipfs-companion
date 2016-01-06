@@ -1,4 +1,3 @@
-
 var gui = require('../lib/gui.js');
 var gw = require('../lib/gateways.js');
 

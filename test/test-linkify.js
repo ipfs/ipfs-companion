@@ -23,7 +23,7 @@ exports["test link processing, plain text conversion"] = function(assert, done) 
         `
       });
       worker.port.on("test result", (msg) => {
-        assert.equal(msg.numLinks|0, 4, 'number of linkified plaintext chunks');
+        assert.equal(msg.numLinks | 0, 4, 'number of linkified plaintext chunks');
         assert.equal(msg.relativeScheme, "fs:", 'relative ipfs reference rewritten to fs: scheme');
 
         tab.close(done);

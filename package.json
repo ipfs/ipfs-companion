@@ -60,7 +60,7 @@
   "scripts": {
     "jpm": "grunt run:jpm_test",
     "eslint": "grunt eslint",
-    "test": "grunt travis"
+    "test": "grunt default"
   },
   "devDependencies": {
     "eslint": "^1.10.3",

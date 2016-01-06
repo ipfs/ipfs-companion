@@ -1,48 +1,63 @@
 <html>
-<head>
-  <meta charset="utf-8">
-  <style type="text/css" media="all">
-    body {
-      background: url('icon-off-64.png') no-repeat right 1em top 1em;
-    }
-    p > img {
-      vertical-align: middle;
-    }
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0.25em;
-    }
-    li {
-      background: rgba(238, 238, 238, 0.5);
-      cursor: pointer;
-      padding: 0.5em;
-    }
-    li:hover {
-      background: rgba(133, 222, 222, 0.75);
-      color: #111;
-    }
-    li:active {
-      background: rgba(74, 158, 161, 0.8);
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-  <p><img src="icon-on-16.png"/>&nbsp;<strong data-l10n-id="panel_header"></strong></p>
-  <ul>
-    <li id="toggle-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect"></li>
-    <li id="open-webui" data-l10n-id="panel_open-webui"></li>
-  </ul>
 
-  <div id="ipfs-only">
-    <p><img src="icon-on-16.png"/>&nbsp;<strong data-l10n-id="panel_ipfs-only-header"></strong></p>
+<head>
+    <meta charset="utf-8">
+    <style type="text/css" media="all">
+    body {
+        background: url('icon-off-64.png') no-repeat right 1em top 1em;
+    }
+    
+    p > img {
+        vertical-align: middle;
+    }
+    
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0.25em;
+    }
+    
+    li {
+        background: rgba(238, 238, 238, 0.5);
+        cursor: pointer;
+        padding: 0.5em;
+    }
+    
+    li:hover {
+        background: rgba(133, 222, 222, 0.75);
+        color: #111;
+    }
+    
+    li:active {
+        background: rgba(74, 158, 161, 0.8);
+        color: #fff;
+    }
+
+    </style>
+</head>
+
+<body>
+    <p>
+        <img src="icon-on-16.png" />&nbsp;
+        <strong data-l10n-id="panel_header"></strong>
+    </p>
     <ul>
-      <li id="pin-current-ipfs-address"   data-l10n-id="panel_pin-current-ipfs-address"></li>
-      <li id="copy-current-ipfs-address"  data-l10n-id="panel_copy-current-ipfs-address"></li>
-      <li id="copy-current-public-gw-url" data-l10n-id="panel_copy-current-public-gw-url"></li>
+        <li id="toggle-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect"></li>
+        <li id="open-webui" data-l10n-id="panel_open-webui"></li>
     </ul>
-  </div>
+
+    <div id="ipfs-only">
+        <p>
+            <img src="icon-on-16.png" />&nbsp;
+            <strong data-l10n-id="panel_ipfs-only-header"></strong>
+        </p>
+        <ul>
+            <li id="pin-current-ipfs-address" data-l10n-id="panel_pin-current-ipfs-address"></li>
+            <li id="copy-current-ipfs-address" data-l10n-id="panel_copy-current-ipfs-address"></li>
+            <li id="copy-current-public-gw-url" data-l10n-id="panel_copy-current-public-gw-url"></li>
+        </ul>
+    </div>
 
 </body>
+
 </html>

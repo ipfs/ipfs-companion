@@ -1,20 +1,51 @@
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
-  var paths = ['*.js', 'lib/*.js', 'test/*.js'];
+  var jsPaths = ['*.js', 'lib/**.js', 'test/**.js', 'data/**.js'];
   grunt.initConfig({
     eslint: {
-      target: paths
+      target: jsPaths
     },
     jsbeautifier: {
-      files: paths,
+      files: ['data/**.html', 'data/**.css'].concat(jsPaths),
       options: {
         js: {
-          indentSize: 2,
+          braceStyle: 'collapse',
+          breakChainedMethods: false,
+          e4x: false,
+          evalCode: false,
           indentChar: ' ',
+          indentLevel: 0,
+          indentSize: 2,
           indentWithTabs: false,
+          jslintHappy: false,
+          keepArrayIndentation: false,
+          keepFunctionIndentation: false,
+          maxPreserveNewlines: 10,
+          preserveNewlines: true,
+          spaceBeforeConditional: true,
+          spaceInParen: false,
+          unescapeStrings: false,
+          wrapLineLength: 0,
           endWithNewline: true
+        },
+        html: {
+          braceStyle: 'collapse',
+          indentSize: 4,
+          indentChar: ' ',
+          indentScripts: 'keep',
+          indentWithTabs: false,
+          maxPreserveNewlines: 10,
+          preserveNewlines: true,
+          unformatted: ['a', 'sub', 'sup', 'b', 'i', 'u'],
+          wrapLineLength: 0,
+          endWithNewline: true
+        },
+        css: {
+          indentSize: 4,
+          indentChar: ' '
         }
       }
+
     },
     run: {
       jpm_test: {
