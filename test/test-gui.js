@@ -24,8 +24,8 @@ exports['test toggleButtonPanel default state'] = function(assert) {
 };
 exports['test toggleButton & Panel onClick state'] = function(assert) {
   assert.equal(panel.isShowing, false, 'panel should be hidden by default');
-  button.click();
   /* TODO
+  button.click();
   console.log('after click');
   console.log(panel.isShowing);
   assert.equal(panel.isShowing, true, 'panel should be displayed after toggleButton click event');
