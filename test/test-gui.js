@@ -7,14 +7,14 @@ var panel = gui.toggleButtonPanel;
 // BUTTON BADGE
 exports['test default toggleButton attributes'] = function(assert) {
   assert.equal(button.id, 'ipfs-gateway-status', 'button id');
-  assert.equal(button.badge, gw.isEnabled() ? 'ON' : 'OFF', 'default badge follows prefs.useCustomGateway');
+  assert.equal(button.badge, gw.redirectEnabled ? 'ON' : 'OFF', 'default badge follows prefs.useCustomGateway');
 };
 exports['test disabled toggleButton'] = function(assert) {
-  gw.toggle(false);
+  gw.redirectEnabled = false;
   assert.equal(button.badge, 'OFF', 'badge for prefs.useCustomGateway=false');
 };
 exports['test enabled toggleButton'] = function(assert) {
-  gw.toggle(true);
+  gw.redirectEnabled = true;
   assert.equal(button.badge, 'ON', 'badge for prefs.useCustomGateway=false');
 };
 
