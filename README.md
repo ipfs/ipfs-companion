@@ -7,23 +7,26 @@ Firefox addon that provides transparent access to IPFS resources via local HTTP2
 
 (If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead)
 
-![screenshot v1.2.0](screenshot.png)
+![screenshot of v1.4.0](screenshot.png)
 
 ### Features
 
-- Clicking on the addon icon toggles redirection
+- Clicking on the addon icon displays menu with useful operations
+  - Toggle redirection to custom gateway (ON by default)
+  - Open WebUI (eg. go-ipfs daemon running at the custom gateway)
+  - Additionally, on pages loaded from IPFS:
+    - Pin IPFS Resource (via go-ipfs API)
+    - Copy canonical IPFS address
+    - Copy shareable URL to resource at a default public gateway (first one on public gateway list)
 - Requests to `https?://<public_gateway>/(ipfs|ipns)/$RESOURCE`  
   are replaced with `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
-- Custom gateway host and port can be changed at   
+- Custom Gateway's host and ports can be changed at   
   `about:addons` → Extensions → IPFS Gateway Redirect → Preferences
 - List of public gateways can be customized too,  
   default is `ipfs.io` with second being the legacy `gateway.ipfs.io`
-- Requests made via custom protocols are routed to the active gateway (public or custom):
-   - `(ipfs|ipns):/*$RESOURCE`
-   - `fs:/*(ipfs|ipns)/$RESOURCE`
-- Context menu under right click on a page from custom gateway:   
-  - Copy canonical IPFS address    
-  - Copy shareable URL to resource at a default public gateway (first one on public gateway list)
+- Requests made via popular custom protocols are routed to the active gateway (public or custom):
+   - `[web+](ipfs|ipns):/*$RESOURCE`
+   - `[web+]fs:/*(ipfs|ipns)/$RESOURCE`
 
 ### How to install
 
