@@ -18,6 +18,7 @@ function forwardClickEvent(eventName) {
 // always visible
 forwardClickEvent('toggle-gateway-redirect');
 forwardClickEvent('open-webui');
+forwardClickEvent('open-preferences');
 
 // ipfs-only
 forwardClickEvent('pin-current-ipfs-address');
