@@ -9,7 +9,7 @@ Required steps:
 
 1. Download XPI package in version that is to be verified
 2. Checkout sources of the [same tag](https://github.com/lidel/ipfs-firefox-addon/tags)
-2. Build XPI package from sources using `cfx xpi` command from [Addon SDK](https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Installation).    
+2. Build XPI package from sources using `jpm xpi` command (`npm install jpm -g`).    
    As a result, you will have two XPI files which are in fact just ZIPs with different extension.   
 3. Unzip contents and compare manually or use handy one-liners below.
 
