@@ -52,6 +52,10 @@ exports['test newURI(web+ipfs://<path>)'] = function (assert) {
   var newURI = webIpfsHandler.newURI('web+ipfs://' + ipfsPath, 'utf8', null)
   assert.equal(newURI.spec, pubGwUri.spec + 'ipfs/' + ipfsPath, 'newURI spec')
 }
+exports['test newURI(ipfs:/ipfs/<path>)'] = function (assert) {
+  var newURI = ipfsHandler.newURI('ipfs:/ipfs/' + ipfsPath, 'utf8', null)
+  assert.equal(newURI.spec, pubGwUri.spec + 'ipfs/' + ipfsPath, 'newURI spec')
+}
 
 exports['test newURI(ipns:<path>)'] = function (assert) {
   var newURI = ipnsHandler.newURI('ipns:' + ipnsPath, 'utf8', null)
@@ -67,6 +71,10 @@ exports['test newURI(web+ipns:<path>)'] = function (assert) {
 }
 exports['test newURI(web+ipns://<path>)'] = function (assert) {
   var newURI = webIpnsHandler.newURI('web+ipns://' + ipnsPath, 'utf8', null)
+  assert.equal(newURI.spec, pubGwUri.spec + 'ipns/' + ipnsPath, 'newURI spec')
+}
+exports['test newURI(ipns:/ipns/<path>)'] = function (assert) {
+  var newURI = ipnsHandler.newURI('ipns:/ipns/' + ipnsPath, 'utf8', null)
   assert.equal(newURI.spec, pubGwUri.spec + 'ipns/' + ipnsPath, 'newURI spec')
 }
 
