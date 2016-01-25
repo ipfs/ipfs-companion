@@ -1,12 +1,16 @@
 /* global self */
 
 // incoming
-self.port.on('show', function (ipfsResource) {
+self.port.on('show', function (context) {
   // console.log('show event received by panel.js (ipfsResource='+ipfsResource+')')
+  let isPinnable = context['isPinnable']
 
   // show/hide ipfs-only items
   document.getElementById('ipfs-only')
-    .style.display = ipfsResource ? 'block' : 'none'
+    .style.display = isPinnable ? 'block' : 'none'
+
+  // match panel size
+  self.port.emit('resize', { 'width': document.body.scrollWidth, 'height': document.body.scrollHeight })
 })
 
 // outgoing
