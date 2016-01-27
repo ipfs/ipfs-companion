@@ -1,63 +1,76 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <style type="text/css" media="all">
-    body {
-        background: url('icon-off-64.png') no-repeat right 1em top 1em;
-    }
-    
-    p > img {
-        vertical-align: middle;
-    }
-    
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0.25em;
-    }
-    
-    li {
-        background: rgba(238, 238, 238, 0.5);
-        cursor: pointer;
-        padding: 0.5em;
-    }
-    
-    li:hover {
-        background: rgba(133, 222, 222, 0.75);
-        color: #111;
-    }
-    
-    li:active {
-        background: rgba(74, 158, 161, 0.8);
-        color: #fff;
-    }
+  <meta charset="utf-8">
+  <style type="text/css" media="all">
+  body {
+    background: url('icon-off-64.png') no-repeat right 1em top 1em;
+  }
 
-    </style>
+  p > img {
+    vertical-align: middle;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0.25em;
+    background-color: rgba(222, 222, 222, 0.75);
+  }
+
+  li {
+    padding: 0.5em;
+    cursor: default;
+  }
+  li.header {
+    font-weight: bold;
+    /*background: url('icon-on-16.png') no-repeat left 0.5em top 0.5em;
+    padding-left: 2em;*/
+  }
+  li.action {
+    background: rgba(238, 238, 238, 0.5);
+    cursor: pointer;
+  }
+
+  li.action:hover {
+    background: rgba(133, 222, 222, 0.75);
+    color: #111;
+  }
+
+  li.action:active {
+    background: rgba(74, 158, 161, 0.8);
+    color: #fff;
+  }
+
+  #gateway-status > li > span:nth-of-type(2) {
+    font-weight: bold;
+    display: inline-block;
+    float: right;
+  }
+
+  </style>
 </head>
 
 <body>
-    <p>
-        <img src="icon-on-16.png" />&nbsp;
-        <strong data-l10n-id="panel_header"></strong>
-    </p>
-    <ul>
-        <li id="toggle-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect"></li>
-        <li id="open-webui" data-l10n-id="panel_open-webui"></li>
-        <li id="open-preferences" data-l10n-id="panel_open-preferences"></li>
-    </ul>
+  <ul id="gateway-status">
+    <li id="gateway-address"><span data-l10n-id="panel_status-gateway-address"></span><span id="gateway-address-val">⋯</span></li>
+    <li id="gateway-version"><span data-l10n-id="panel_status-gateway-version"></span><span id="gateway-version-val">⋯</span></li>
+    <li id="swarm-peers"><span data-l10n-id="panel_status-swarm-peers"></span><span id="swarm-peers-val">⋯</span></li>
+  </ul>
 
-    <div id="ipfs-only">
-        <p>
-            <img src="icon-on-16.png" />&nbsp;
-            <strong data-l10n-id="panel_ipfs-only-header"></strong>
-        </p>
-        <ul>
-            <li id="pin-current-ipfs-address" data-l10n-id="panel_pin-current-ipfs-address"></li>
-            <li id="copy-current-ipfs-address" data-l10n-id="panel_copy-current-ipfs-address"></li>
-            <li id="copy-current-public-gw-url" data-l10n-id="panel_copy-current-public-gw-url"></li>
-        </ul>
-    </div>
+  <ul id="operations">
+    <li class="header" data-l10n-id="panel_operations-header"></li>
+    <li class="action" id="open-webui" data-l10n-id="panel_open-webui"></li>
+    <li class="action" id="open-preferences" data-l10n-id="panel_open-preferences"></li>
+    <li class="action" id="toggle-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect"></li>
+  </ul>
+
+  <ul id="ipfs-resource-actions">
+    <li class="header" data-l10n-id="panel_ipfs-only-header"></li>
+    <li class="action" id="pin-current-ipfs-address" data-l10n-id="panel_pin-current-ipfs-address"></li>
+    <li class="action" id="copy-current-ipfs-address" data-l10n-id="panel_copy-current-ipfs-address"></li>
+    <li class="action" id="copy-current-public-gw-url" data-l10n-id="panel_copy-current-public-gw-url"></li>
+  </ul>
 
 </body>
 
