@@ -1,21 +1,18 @@
 /* global self */
+
 function getById (id) {
   return document.getElementById(id)
 }
 
 function renderGatewayAddress (prefs) {
-  if (prefs.useCustomGateway) {
-    return prefs.customGatewayHost + ':' + prefs.customGatewayPort
-  } else {
-    return 'OFF'
-  }
+  return prefs.customGatewayHost + ':' + prefs.customGatewayPort
 }
 
-function showIf(id, condition) {
+function showIf (id, condition) {
   getById(id).style.display = condition ? 'block' : 'none'
 }
 
-function setIconState(enable) {
+function setIconState (enable) {
   getById('icon').src = enable ? 'icon-on-64.png' : 'icon-off-64.png'
 }
 
@@ -32,12 +29,14 @@ self.port.on('show', function (context) {
   showIf('ipfs-resource-actions', context.isPinnable)
 
   // if custom gateway is used
+  showIf('redirect-enabled', prefs.useCustomGateway)
+  showIf('redirect-disabled', !prefs.useCustomGateway)
   showIf('enable-gateway-redirect', !prefs.useCustomGateway)
   showIf('disable-gateway-redirect', prefs.useCustomGateway)
   showIf('open-webui', prefs.useCustomGateway)
   showIf('open-webui', prefs.useCustomGateway)
-  showIf('gateway-version', prefs.useCustomGateway)
-  showIf('swarm-peers', prefs.useCustomGateway)
+  // showIf('gateway-version', prefs.useCustomGateway)
+  // showIf('swarm-peers', prefs.useCustomGateway)
   showIf('pin-current-ipfs-address', prefs.useCustomGateway)
 
   // resize panel to match size of rendered items

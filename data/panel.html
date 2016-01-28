@@ -18,6 +18,10 @@
   li {
     padding: 0.5rem;
     cursor: default;
+    display:block;
+    max-height:2rem;
+    text-overflow: ellipsis;
+    overflow: auto;
   }
   li.header {
     font-weight: bold;
@@ -70,6 +74,12 @@
 <body>
   <img src="icon-off-64.png" id="icon"/>
   <ul id="gateway-status">
+    <li id="gateway-redirect"><span data-l10n-id="panel_status-gateway-redirect"></span>
+      <span>
+        <span id="redirect-enabled" data-l10n-id="panel_status-gateway-redirect-enabled"></span>
+        <span id="redirect-disabled" data-l10n-id="panel_status-gateway-redirect-disabled"></span>
+      </span>
+    </li>
     <li id="gateway-address"><span data-l10n-id="panel_status-gateway-address"></span><span id="gateway-address-val">⋯</span></li>
     <li id="gateway-version"><span data-l10n-id="panel_status-gateway-version"></span><span id="gateway-version-val">⋯</span></li>
     <li id="swarm-peers"><span data-l10n-id="panel_status-swarm-peers"></span><span id="swarm-peers-val">⋯</span></li>
