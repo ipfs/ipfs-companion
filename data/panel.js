@@ -1,9 +1,9 @@
 /* global self */
-let getById = (id) => {
+function getById (id) {
   return document.getElementById(id)
 }
 
-let renderGatewayAddress = (prefs) => {
+function renderGatewayAddress (prefs) {
   if (prefs.useCustomGateway) {
     return prefs.customGatewayHost + ':' + prefs.customGatewayPort
   } else {
@@ -15,6 +15,10 @@ function showIf(id, condition) {
   getById(id).style.display = condition ? 'block' : 'none'
 }
 
+function setIconState(enable) {
+  getById('icon').src = enable ? 'icon-on-64.png' : 'icon-off-64.png'
+}
+
 // incoming
 self.port.on('show', function (context) {
   // console.log('show event received by panel.js (ipfsResource='+ipfsResource+')')
@@ -22,11 +26,15 @@ self.port.on('show', function (context) {
 
   // render diagnostic info
   getById('gateway-address-val').innerHTML = renderGatewayAddress(prefs)
+  setIconState(prefs.useCustomGateway)
 
   // if current page is pinnable
   showIf('ipfs-resource-actions', context.isPinnable)
 
   // if custom gateway is used
+  showIf('enable-gateway-redirect', !prefs.useCustomGateway)
+  showIf('disable-gateway-redirect', prefs.useCustomGateway)
+  showIf('open-webui', prefs.useCustomGateway)
   showIf('open-webui', prefs.useCustomGateway)
   showIf('gateway-version', prefs.useCustomGateway)
   showIf('swarm-peers', prefs.useCustomGateway)

@@ -3,9 +3,6 @@
 <head>
   <meta charset="utf-8">
   <style type="text/css" media="all">
-  body {
-    background: url('icon-off-64.png') no-repeat right 1em top 1em;
-  }
 
   p > img {
     vertical-align: middle;
@@ -14,18 +11,16 @@
   ul {
     list-style-type: none;
     margin: 0;
-    padding: 0.25em;
+    padding: 0.25rem;
     background-color: rgba(222, 222, 222, 0.75);
   }
 
   li {
-    padding: 0.5em;
+    padding: 0.5rem;
     cursor: default;
   }
   li.header {
     font-weight: bold;
-    /*background: url('icon-on-16.png') no-repeat left 0.5em top 0.5em;
-    padding-left: 2em;*/
   }
   li.action {
     background: rgba(238, 238, 238, 0.5);
@@ -42,16 +37,38 @@
     color: #fff;
   }
 
+  #gateway-status {
+    padding: 0.5rem;
+    min-height: 3em;
+  }
+  #gateway-status > li {
+    font-size: small;
+    padding: 0;
+  }
   #gateway-status > li > span:nth-of-type(2) {
     font-weight: bold;
     display: inline-block;
     float: right;
   }
-
+  #icon {
+    float: right;
+    margin-left: 1rem;
+    height: 64px;
+    width: 64px;
+  }
+  #enable-gateway-redirect {
+    font-weight: bold;
+  }
+  #enable-gateway-redirect::before {
+    content:url('icon-on-16.png');
+    vertical-align: middle;
+    padding-right: 0.5rem;
+  }
   </style>
 </head>
 
 <body>
+  <img src="icon-off-64.png" id="icon"/>
   <ul id="gateway-status">
     <li id="gateway-address"><span data-l10n-id="panel_status-gateway-address"></span><span id="gateway-address-val">⋯</span></li>
     <li id="gateway-version"><span data-l10n-id="panel_status-gateway-version"></span><span id="gateway-version-val">⋯</span></li>
@@ -62,7 +79,10 @@
     <li class="header" data-l10n-id="panel_operations-header"></li>
     <li class="action" id="open-webui" data-l10n-id="panel_open-webui"></li>
     <li class="action" id="open-preferences" data-l10n-id="panel_open-preferences"></li>
-    <li class="action" id="toggle-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect"></li>
+    <li class="action" id="toggle-gateway-redirect">
+      <span id="enable-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect-enable"></span>
+      <span id="disable-gateway-redirect" data-l10n-id="panel_toggle-gateway-redirect-disable"></span>
+    </li>
   </ul>
 
   <ul id="ipfs-resource-actions">
