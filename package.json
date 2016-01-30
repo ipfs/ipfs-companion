@@ -7,7 +7,7 @@
   "version": "1.5.0",
   "license": "CC0-1.0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
-  "icon": "data/icon-on-64.png",
+  "icon": "resource://ipfs-firefox-addon-at-lidel-dot-org/data/icon-on-64.png",
   "main": "lib/main.js",
   "repository": {
     "type": "git",
