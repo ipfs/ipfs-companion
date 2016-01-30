@@ -21,6 +21,12 @@
       "value": true
     },
     {
+      "name": "automatic",
+      "title": "Automatic Mode",
+      "type": "bool",
+      "value": false
+    },
+    {
       "name": "publicGatewayHosts",
       "title": "List of public gateways",
       "type": "string",
