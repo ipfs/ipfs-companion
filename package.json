@@ -51,6 +51,12 @@
       "value": 5001
     },
     {
+      "name": "dns",
+      "title": "Enable DNS Lookup",
+      "type": "bool",
+      "value": false
+    },
+    {
       "name": "linkify",
       "title": "Extended IPFS Link Support",
       "type": "bool",
