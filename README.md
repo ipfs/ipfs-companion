@@ -7,7 +7,7 @@
 
 Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 
-(If you are using Chrome or Chromium, check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) instead)
+(If you are using Google Chrome or Chromium check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) or [ipfs-chrome-station](https://github.com/xicombd/ipfs-chrome-station) instead)
 
 ![screenshot of v1.4.0](screenshot.png)
 
