@@ -9,26 +9,30 @@ Firefox addon that provides transparent access to IPFS resources via local HTTP2
 
 (If you are using Google Chrome or Chromium check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) or [ipfs-chrome-station](https://github.com/xicombd/ipfs-chrome-station) instead)
 
-![screenshot of v1.4.0](screenshot.png)
+![screenshot of v1.5.0](screenshot.png)
 
 ### Features
 
-- Clicking on the addon icon displays menu with useful operations
-  - Toggle redirection to custom gateway (ON by default)
+- Toolbar icon displays current IPFS peering status
+- Click on it to open IPFS actions menu
+  - Display information about custom gateway
+  - Toggle redirection to the gateway (ON by default)
   - Open WebUI (eg. go-ipfs daemon running at the custom gateway)
   - Additionally, on pages loaded from IPFS:
-    - Pin IPFS Resource (via go-ipfs API)
+    - Pin IPFS Resource (via API)
     - Copy canonical IPFS address
     - Copy shareable URL to resource at a default public gateway (first one on public gateway list)
 - Requests to `https?://<public_gateway>/(ipfs|ipns)/$RESOURCE`  
   are replaced with `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
-- Custom Gateway's host and ports can be changed at   
+- Custom Gateway address and other settings can be tweaked at   
   `about:addons` → Extensions → IPFS Gateway Redirect → Preferences
-- List of public gateways can be customized too,  
-  default is `ipfs.io` with second being the legacy `gateway.ipfs.io`
 - Requests made via popular custom protocols are routed to the active gateway (public or custom):
    - `[web+](ipfs|ipns):/*$RESOURCE`
    - `[web+]fs:/*(ipfs|ipns)/$RESOURCE`
+- Experimental features (disabled by default, use Preferences screen to enable)
+   - Automatic Mode: enable/disable redirect based on the number of peers
+   - Detect and redirect sites with [dnslink](https://github.com/jbenet/go-dnslink) to `/ipns/<fqdn>`
+   - Rewrite hrefs with `/ip(f|n)s/*` paths on every page to point to IPFS gateway. Make plaintext IPFS links clickable.
 
 ### How to install
 
