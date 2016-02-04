@@ -51,6 +51,12 @@
       "value": 5001
     },
     {
+      "name": "apiPollInterval",
+      "title": "API Poll Interval",
+      "type": "integer",
+      "value": 3000
+    },
+    {
       "name": "dns",
       "title": "Enable DNS Lookup",
       "type": "bool",
