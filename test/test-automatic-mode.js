@@ -4,7 +4,7 @@ const { setTimeout } = require('sdk/timers')
 const { prefs } = require('sdk/simple-prefs')
 const tabs = require('sdk/tabs')
 const gw = require('../lib/gateways.js')
-const autoMode = require('../lib/automatic-mode.js')
+const autoMode = require('../lib/peer-watch.js')
 
 const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/'
 

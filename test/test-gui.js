@@ -1,21 +1,23 @@
-var gui = require('../lib/gui.js')
-var gw = require('../lib/gateways.js')
+const gui = require('../lib/gui.js')
+const gw = require('../lib/gateways.js')
 
-var button = gui.toggleButton
-var panel = gui.toggleButtonPanel
+const button = gui.toggleButton
+const buttonOn = gui.toggleButtonOn
+const buttonOff = gui.toggleButtonOff
+const panel = gui.toggleButtonPanel
 
 // BUTTON BADGE
 exports['test default toggleButton attributes'] = function (assert) {
   assert.equal(button.id, 'ipfs-gateway-status', 'button id')
-  assert.equal(button.badge, gw.redirectEnabled ? 'ON' : 'OFF', 'default badge follows prefs.useCustomGateway')
+  assert.equal(button.icon['16'], gw.redirectEnabled ? buttonOn.icon['16'] : buttonOff.icon['16'], 'default badge follows prefs.useCustomGateway')
 }
 exports['test disabled toggleButton'] = function (assert) {
   gw.redirectEnabled = false
-  assert.equal(button.badge, 'OFF', 'badge for prefs.useCustomGateway=false')
+  assert.equal(button.icon['16'], buttonOff.icon['16'], 'badge for prefs.useCustomGateway=false')
 }
 exports['test enabled toggleButton'] = function (assert) {
   gw.redirectEnabled = true
-  assert.equal(button.badge, 'ON', 'badge for prefs.useCustomGateway=false')
+  assert.equal(button.icon['16'], buttonOn.icon['16'], 'badge for prefs.useCustomGateway=false')
 }
 
 // PANEL
