@@ -163,4 +163,5 @@ exports['test newURI(web+fs:///ipns/<path>)'] = function (assert) {
   assert.equal(newURI.spec, pubGwUri.spec + 'ipns/' + ipnsPath, 'newURI spec')
 }
 
+require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)

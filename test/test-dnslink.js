@@ -17,7 +17,6 @@ exports['test a redirect triggered by dnslink'] = function (assert, done) {
   dnsCache.put(fqdnWithDnslink, true) // mock: /api/v0/dns/ returned IPFS Path
   assert.equal(api.isDnslinkPresent(fqdnWithDnslink), true, 'fqdnWithDnslink should return true')
 
-  const dnsPref = prefs.dns
   prefs.dns = true
   gw.redirectEnabled = true
 
@@ -25,7 +24,6 @@ exports['test a redirect triggered by dnslink'] = function (assert, done) {
     url: openURL,
     onReady: function onReady (tab) {
       assert.equal(tab.url, expectedURL, 'expected redirect')
-      prefs.dns = dnsPref
       tab.close(done)
     }
   })
@@ -43,4 +41,5 @@ exports['test DNS Cache expiration'] = function (assert) {
   assert.equal(dnsCache.get(prefs.customGatewayHost), false, 'special key should not be dropped')
 }
 
+require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)

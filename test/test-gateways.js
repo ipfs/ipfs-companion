@@ -104,4 +104,5 @@ exports['test isPinnable helper'] = function (assert) {
   assert.equal(gw.isPinnable(gw.apiUri.spec + ipfsPath), false, 'API resources should not be pinnable')
 }
 
+require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)

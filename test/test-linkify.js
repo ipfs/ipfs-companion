@@ -32,4 +32,5 @@ exports['test link processing, plain text conversion'] = function (assert, done)
   })
 }
 
+require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)

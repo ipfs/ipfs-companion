@@ -34,4 +34,5 @@ assert.equal(panel.isShowing, true, 'panel should be displayed after toggleButto
 */
 }
 
+require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)
