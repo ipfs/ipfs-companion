@@ -23,7 +23,49 @@ exports['test a redirect triggered by dnslink'] = function (assert, done) {
   tabs.open({
     url: openURL,
     onReady: function onReady (tab) {
-      assert.equal(tab.url, expectedURL, 'expected redirect')
+      assert.equal(tab.url, expectedURL, 'expected redirect to /ipfs/<fqdn>')
+      tab.close(done)
+    }
+  })
+}
+
+exports['test a dnslink site which also runs a public gateway: a non-gateway path'] = function (assert, done) {
+  const fqdnWithDnslink = 'ipfs.io'
+  const sitePath = '/docs/examples/'
+  const openURL = 'http://' + fqdnWithDnslink + sitePath
+  const expectedURL = gw.customUri.spec + 'ipns/' + fqdnWithDnslink + sitePath
+
+  dnsCache.put(fqdnWithDnslink, true) // mock: /api/v0/dns/ returned IPFS Path
+  assert.equal(api.isDnslinkPresent(fqdnWithDnslink), true, 'fqdnWithDnslink should return true')
+
+  prefs.dns = true
+  gw.redirectEnabled = true
+
+  tabs.open({
+    url: openURL,
+    onReady: function onReady (tab) {
+      assert.equal(tab.url, expectedURL, 'expected redirect to /ipns/<fqdn>')
+      tab.close(done)
+    }
+  })
+}
+
+exports['test a dnslink site which also runs a public gateway: a gateway path'] = function (assert, done) {
+  const fqdnWithDnslink = 'ipfs.io'
+  const sitePath = 'ipfs/QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm'
+  const openURL = 'http://' + fqdnWithDnslink + '/' + sitePath
+  const expectedURL = gw.customUri.spec + sitePath
+
+  dnsCache.put(fqdnWithDnslink, true) // mock: /api/v0/dns/ returned IPFS Path
+  assert.equal(api.isDnslinkPresent(fqdnWithDnslink), true, 'fqdnWithDnslink should return true')
+
+  prefs.dns = true
+  gw.redirectEnabled = true
+
+  tabs.open({
+    url: openURL,
+    onReady: function onReady (tab) {
+      assert.equal(tab.url, expectedURL, 'expected redirect to <gw>/ipfs/<path>')
       tab.close(done)
     }
   })
