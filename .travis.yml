@@ -33,6 +33,6 @@ before_script:
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
 script:
-    #- npm run jpm
+    #- npm run jpm_test
     - bash test/run_tests_with_travisci_workaround.sh
     - npm run eslint
