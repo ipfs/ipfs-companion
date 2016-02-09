@@ -4,7 +4,7 @@
   "id": "ipfs-firefox-addon@lidel.org",
   "description": "Access IPFS resources via custom HTTP2IPFS gateway",
   "author": "Marcin Rataj",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "license": "CC0-1.0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "icon": "resource://ipfs-firefox-addon-at-lidel-dot-org/data/icon-on-64.png",
@@ -76,11 +76,19 @@
     "firefox": ">=43.0"
   },
   "scripts": {
+    "build": "standard-format -w && browserify -r is-ipfs --no-builtins -s module.exports > lib/npm/is-ipfs.js",
     "jpm_test": "grunt run:jpm_test",
     "eslint": "grunt run:eslint",
-    "test": "standard-format -w && grunt test"
+    "xpi": "jpm xpi",
+    "test": "npm run build && grunt test"
+  },
+  "jetpack": {
+    "overrides": {
+        "buffer": "sdk/io/buffer"
+    }
   },
   "devDependencies": {
+    "browserify": "^13.0.0",
     "eslint": "^2.0.0-rc.0",
     "eslint-config-standard": "^5.1.0",
     "eslint-plugin-promise": "^1.0.8",
@@ -90,5 +98,8 @@
     "jpm": "^1.0.5",
     "load-grunt-tasks": "^3.4.0",
     "standard-format": "^2.1.0"
+  },
+  "dependencies": {
+    "is-ipfs": "^0.0.4"
   }
 }

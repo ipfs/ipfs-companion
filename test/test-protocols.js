@@ -163,5 +163,19 @@ exports['test newURI(web+fs:///ipns/<path>)'] = function (assert) {
   assert.equal(newURI.spec, pubGwUri.spec + 'ipns/' + ipnsPath, 'newURI spec')
 }
 
+exports['test protocol rewrite'] = function (assert) {
+  assert.equal(proto.rewrite('ipfs:QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm'),
+    'ipfs:QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm', '#1')
+
+  assert.equal(proto.rewrite('ipns:ipfs.io'), 'ipns:ipfs.io', '#2')
+
+  assert.equal(proto.rewrite('fs:/ipns/ipfs.io'), 'fs:/ipns/ipfs.io', '#3')
+
+  assert.equal(proto.rewrite('/ipfs/QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm'),
+    'fs:/ipfs/QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm', '#4')
+
+  assert.equal(proto.rewrite('/ipfs/not-a-multihash'), '/ipfs/not-a-multihash', '#5')
+}
+
 require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)
