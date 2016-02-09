@@ -8,6 +8,7 @@ exports['test IPFS/IPNS URL and multihash detection'] = function (assert) {
 
   assert.equal(isIPFS.url('https://ipfs.io/ipfs/QmYjtig7VJQ6XsnUjqqJvj7QaMcCAwtrgNdahSiFofrE7o'), true, '#3.1')
   assert.equal(isIPFS.url('http://ipfs.io/ipfs/QmYjtig7VJQ6XsnUjqqJvj7QaMcCAwtrgNdahSiFofrE7o'), true, '#3.2')
+  assert.equal(isIPFS.url('http://ipfs.io/ipfs/QmYjtig7VJQ6XsnUjqqJvj7QaMcCAwtrgNdahSiFofrE7O'), false, '#3.3')
   assert.equal(isIPFS.url('https://ipfs.io/ipfs/github.com'), false, '#4.1')
   assert.equal(isIPFS.url('http://ipfs.io/ipfs/github.com'), false, '#4.2')
   assert.equal(isIPFS.url('https://github.com/ipfs/js-ipfs/blob/master/README.md'), false, '#5.1')
