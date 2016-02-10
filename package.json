@@ -82,9 +82,12 @@
     "xpi": "jpm xpi",
     "test": "npm run build && grunt test"
   },
+  "pre-commit": [
+    "test"
+  ],
   "jetpack": {
     "overrides": {
-        "buffer": "sdk/io/buffer"
+      "buffer": "sdk/io/buffer"
     }
   },
   "devDependencies": {
@@ -97,6 +100,7 @@
     "grunt-run": "^0.5.2",
     "jpm": "^1.0.5",
     "load-grunt-tasks": "^3.4.0",
+    "pre-commit": "^1.1.2",
     "standard-format": "^2.1.0"
   },
   "dependencies": {
