@@ -67,6 +67,12 @@
       "title": "Extended IPFS Link Support",
       "type": "bool",
       "value": false
+    },
+		{
+      "name": "fsUris",
+      "title": "[Experimental] display fs:/ URIs as-is instead of rewriting to http://",
+      "type": "bool",
+      "value": false
     }
   ],
   "permissions": {
