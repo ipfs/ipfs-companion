@@ -24,7 +24,7 @@ matrix:
         - env: FIREFOX_RELEASE='esr-latest'
 cache:
     directories:
-        - $HOME/cache
+        - node_modules
 before_script:
     - npm install grunt -g
     - npm install grunt-cli -g
