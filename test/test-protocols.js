@@ -165,7 +165,7 @@ exports['test newURI(web+fs:///ipns/<path>)'] = function (assert) {
 }
 
 exports['test protocol rewrite'] = function (assert) {
-	prefs.fsUris = true
+  prefs.fsUris = true
 
   assert.equal(proto.rewrite('ipfs:QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm'),
     'https://ipfs.io/ipfs/QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm', '#1')
