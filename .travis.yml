@@ -11,8 +11,9 @@ env:
         - DISPLAY=':99.0'
         - FIREFOX_BIN='./firefox/firefox'
     matrix:
-        - FIREFOX_RELEASE='latest'
+        - FIREFOX_RELEASE='nightly'
         - FIREFOX_RELEASE='beta-latest'
+        - FIREFOX_RELEASE='latest'
         - FIREFOX_RELEASE='44.0'
         - FIREFOX_RELEASE='43.0'
         - FIREFOX_RELEASE='esr-latest'
@@ -26,10 +27,11 @@ cache:
     directories:
         - node_modules
 before_script:
+    - npm install
     - npm install grunt -g
     - npm install grunt-cli -g
-    - npm install
-    - aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+    - test $FIREFOX_RELEASE = nightly || aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+    - test $FIREFOX_RELEASE != nightly || aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://archive.mozilla.org`curl -s https://archive.mozilla.org/pub/firefox/nightly/latest-mozilla-central/ | grep -E '/pub/firefox/nightly/latest-mozilla-central/firefox-[^\"]+.linux-x86_64.tar.bz2' -o | sort | tail -1`"
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
 script:
