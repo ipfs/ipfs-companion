@@ -83,5 +83,14 @@ exports['test DNS Cache expiration'] = function (assert) {
   assert.equal(dnsCache.get(prefs.customGatewayHost), false, 'special key should not be dropped')
 }
 
+exports['test DNS Cache purge on disable'] = function (assert) {
+  const key = 'foo.test'
+  prefs.dns = true
+  dnsCache.put(key, true)
+  assert.equal(dnsCache.get(key), true, '#1')
+  prefs.dns = false
+  assert.ok(typeof dnsCache.get(key) === 'undefined', 'disabling prefs.dns should purge dnsCache')
+}
+
 require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)
