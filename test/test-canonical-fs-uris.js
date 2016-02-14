@@ -1,21 +1,15 @@
 'use strict'
 
 const tabs = require('sdk/tabs')
-const protocols = require('../lib/protocols.js')
-const fsFactory = protocols.fs
 
-protocols.register()
-
-const fs = fsFactory.createInstance()
+const fs = require('../lib/protocols.js').fs.createInstance()
 const gw = require('../lib/gateways.js')
 const self = require('sdk/self')
 const testpage = self.data.url('linkify-demo.html')
 const sripage = 'fs:/ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#sample.md'
 const parent = require('sdk/remote/parent')
 
-const childMain = require.resolve('../lib/child-main.js')
-
-parent.remoteRequire(childMain)
+parent.remoteRequire('../lib/child-main.js', module)
 
 const {Cc, Ci} = require('chrome')
 const ioservice = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService)
@@ -38,13 +32,13 @@ exports['test newChannel'] = function (assert) {
   assert.equal(chan.originalURI.spec, 'fs:/ipns/foo', "keeps fs: URI as channel's originalURI")
 
   // double and triple slashes lead to gateway redirects, which cause CORS troubles -> check normalization
-  assert.equal(chan.URI.spec, 'https://ipfs.io/ipns/foo', 'redirect off, channel has normalized http urls')
+  assert.equal(chan.URI.spec, gw.publicUri.spec + 'ipns/foo', 'redirect off, channel has normalized http urls')
 
   gw.redirectEnabled = true
 
   chan = fs.newChannel(uri)
 
-  assert.equal(chan.URI.spec, 'http://127.0.0.1:8080/ipns/foo', 'redirect on, channel has normalized http urls')
+  assert.equal(chan.URI.spec, gw.customUri.spec + 'ipns/foo', 'redirect on, channel has normalized http urls')
 }
 
 // https://github.com/lidel/ipfs-firefox-addon/issues/3
@@ -73,8 +67,6 @@ exports['test subresource loading'] = function (assert, done) {
       })
       worker.port.on('test result', (msg) => {
         assert.equal(msg.result, true, 'subresource loaded successfully')
-
-        require('sdk/simple-prefs').prefs.fsUris = false
         tab.close(done)
       })
     }
