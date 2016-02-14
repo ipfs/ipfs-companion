@@ -30,6 +30,7 @@ exports['test newURI'] = function (assert) {
 
 exports['test newChannel'] = function (assert) {
   require('sdk/simple-prefs').prefs.fsUris = true
+	gw.redirectEnabled = false
 
   let uri = fs.newURI('fs:///ipns/foo', null, null)
   let chan = fs.newChannel(uri)
@@ -37,7 +38,13 @@ exports['test newChannel'] = function (assert) {
   assert.equal(chan.originalURI.spec, 'fs:/ipns/foo', "keeps fs: URI as channel's originalURI")
 
   // double and triple slashes lead to gateway redirects, which cause CORS troubles -> check normalization
-  assert.equal(chan.URI.spec, 'https://ipfs.io/ipns/foo', 'channel has normalized http urls')
+  assert.equal(chan.URI.spec, 'https://ipfs.io/ipns/foo', 'redirect off, channel has normalized http urls')
+
+	gw.redirectEnabled = true
+
+	chan = fs.newChannel(uri)
+
+	assert.equal(chan.URI.spec, 'http://127.0.0.1:8080/ipns/foo', 'redirect on, channel has normalized http urls')
 }
 
 // https://github.com/lidel/ipfs-firefox-addon/issues/3
