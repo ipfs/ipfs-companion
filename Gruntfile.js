@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     run: {
       jpm_test: {
         cmd: 'jpm',
-        args: ['-b', process.env.FIREFOX_BIN || 'firefox', 'test']
+        args: ['-b', process.env.FIREFOX_BIN || 'firefox', 'test', '--prefs', 'test/about-config.json']
       },
       eslint: {
         cmd: 'eslint',

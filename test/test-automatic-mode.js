@@ -8,7 +8,7 @@ const tabs = require('sdk/tabs')
 const gw = require('../lib/gateways.js')
 
 exports['test automatic mode disabling redirect when IPFS API is offline'] = function (assert, done) {
-  const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/'
+  const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/Makefile'
   prefs.apiPollInterval = 100 // faster test
   prefs.customApiPort = 59999 // change to something that will always fail
   prefs.useCustomGateway = true

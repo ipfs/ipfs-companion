@@ -55,7 +55,6 @@ exports['test subresource loading'] = function (assert, done) {
   tabs.open({
     url: testpage,
     onReady: (tab) => {
-
       // first load somehow doesn't have protocol handlers registered. so load resource:// first, then redirect to fs:/ page
       if (tab.url !== sripage) {
         tab.url = sripage

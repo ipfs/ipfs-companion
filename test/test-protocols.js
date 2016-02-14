@@ -2,7 +2,7 @@ var proto = require('../lib/protocols.js')
 var gw = require('../lib/gateways.js')
 const prefs = require('sdk/simple-prefs').prefs
 const pubGwUri = gw.publicUri
-const ipfsPath = 'QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/example#/ipfs/QmSsNVuALPa1TW1GDahup8fFDqo95iFyPE7E6HpqDivw3p/readme.md'
+const ipfsPath = 'QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/Makefile#some-hash'
 const ipnsPath = 'ipfs.git.sexy'
 
 const ipfsHandler = proto.ipfs.createInstance()

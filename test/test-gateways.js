@@ -5,7 +5,7 @@ var gw = require('../lib/gateways.js')
 require('../lib/redirects.js')
 
 const tabs = require('sdk/tabs')
-const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/'
+const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/Makefile'
 const ipnsPath = 'ipns/ipfs.git.sexy/'
 
 exports['test enabled /ipfs/ redirect (old http gw)'] = function (assert, done) {
