@@ -76,6 +76,7 @@ exports['test DNS Cache expiration'] = function (assert) {
   const key = 'foo.test'
   const value = true
   dnsCache.put(key, value, expired)
+  dnsCache.put('127.0.0.1', false, null)
   assert.equal(dnsCache.get(key), value, 'dnsCache should be a map')
   dnsCache.dropExpired()
   assert.ok(typeof dnsCache.get(key) === 'undefined', 'dnsCache.dropExpired should drop regular key')
