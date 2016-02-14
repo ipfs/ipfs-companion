@@ -1,5 +1,6 @@
 var proto = require('../lib/protocols.js')
 var gw = require('../lib/gateways.js')
+const prefs = require('sdk/simple-prefs').prefs
 const pubGwUri = gw.publicUri
 const ipfsPath = 'QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/example#/ipfs/QmSsNVuALPa1TW1GDahup8fFDqo95iFyPE7E6HpqDivw3p/readme.md'
 const ipnsPath = 'ipfs.git.sexy'
@@ -164,10 +165,12 @@ exports['test newURI(web+fs:///ipns/<path>)'] = function (assert) {
 }
 
 exports['test protocol rewrite'] = function (assert) {
-  assert.equal(proto.rewrite('ipfs:QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm'),
-    'ipfs:QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm', '#1')
+  prefs.fsUris = true
 
-  assert.equal(proto.rewrite('ipns:ipfs.io'), 'ipns:ipfs.io', '#2')
+  assert.equal(proto.rewrite('ipfs:QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm'),
+    'https://ipfs.io/ipfs/QmYHNYAaYK5hm3ZhZFx5W9H6xydKDGimjdgJMrMSdnctEm', '#1')
+
+  assert.equal(proto.rewrite('ipns:ipfs.io'), 'https://ipfs.io/ipns/ipfs.io', '#2')
 
   assert.equal(proto.rewrite('fs:/ipns/ipfs.io'), 'fs:/ipns/ipfs.io', '#3')
 

@@ -4,12 +4,14 @@ const tabs = require('sdk/tabs')
 const parent = require('sdk/remote/parent')
 const self = require('sdk/self')
 const testpage = self.data.url('linkify-demo.html')
+const prefs = require('sdk/simple-prefs').prefs
 
 require('../lib/rewrite-pages.js')
 parent.remoteRequire('resource://ipfs-firefox-addon-at-lidel-dot-org/lib/rewrite-pages.js')
 
 exports['test link processing, plain text conversion'] = function (assert, done) {
-  require('sdk/simple-prefs').prefs.linkify = true
+  prefs.linkify = true
+  prefs.fsUris = true
 
   tabs.open({
     url: testpage,
