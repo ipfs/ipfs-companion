@@ -1,12 +1,14 @@
 'use strict'
 
 const tabs = require('sdk/tabs')
+const { prefs } = require('sdk/simple-prefs')
 
 const fs = require('../lib/protocols.js').fs.createInstance()
 const gw = require('../lib/gateways.js')
 const self = require('sdk/self')
 const testpage = self.data.url('linkify-demo.html')
-const sripage = 'fs:/ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#sample.md'
+const mdownPath = 'ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#sample.md'
+const sripage = 'fs:/' + mdownPath
 const parent = require('sdk/remote/parent')
 
 parent.remoteRequire('../lib/child-main.js', module)
@@ -16,14 +18,23 @@ const ioservice = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOSer
 
 ioservice.newURI('fs:/ipns/foo', null, null)
 
+exports['test mdownPath load via http handler'] = function (assert, done) {
+  tabs.open({
+    url: gw.publicUri.spec + mdownPath,
+    onReady: (tab) => {
+      tab.close(done)
+    }
+  })
+}
+
 exports['test newURI'] = function (assert) {
-  require('sdk/simple-prefs').prefs.fsUris = true
+  prefs.fsUris = true
 
   assert.equal(fs.newURI('fs:/ipns/foo', null, null).spec, 'fs:/ipns/foo', 'keeps fs:/ uris as-is')
 }
 
 exports['test newChannel'] = function (assert) {
-  require('sdk/simple-prefs').prefs.fsUris = true
+  prefs.fsUris = true
   gw.redirectEnabled = false
 
   let uri = fs.newURI('fs:///ipns/foo', null, null)
@@ -43,7 +54,7 @@ exports['test newChannel'] = function (assert) {
 
 // https://github.com/lidel/ipfs-firefox-addon/issues/3
 exports['test subresource loading'] = function (assert, done) {
-  require('sdk/simple-prefs').prefs.fsUris = true
+  prefs.fsUris = true
   gw.redirectEnabled = false
 
   tabs.open({
@@ -52,7 +63,6 @@ exports['test subresource loading'] = function (assert, done) {
       // first load somehow doesn't have protocol handlers registered. so load resource:// first, then redirect to fs:/ page
       if (tab.url !== sripage) {
         tab.url = sripage
-        tab.reload()
         return
       }
 
