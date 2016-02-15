@@ -2,6 +2,7 @@
 
 require('../lib/peer-watch.js')
 
+const { env } = require('sdk/system/environment')
 const { setTimeout } = require('sdk/timers')
 const { prefs } = require('sdk/simple-prefs')
 const tabs = require('sdk/tabs')
@@ -9,6 +10,7 @@ const gw = require('../lib/gateways.js')
 
 exports['test automatic mode disabling redirect when IPFS API is offline'] = function (assert, done) {
   const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/Makefile'
+  const checkDelay = ('TRAVIS' in env && 'CI' in env) ? 5000 : 500
   prefs.apiPollInterval = 100 // faster test
   prefs.customApiPort = 59999 // change to something that will always fail
   prefs.useCustomGateway = true
@@ -25,7 +27,7 @@ exports['test automatic mode disabling redirect when IPFS API is offline'] = fun
         tab.close(done)
       }
     })
-  }, prefs.apiPollInterval + 500)
+  }, prefs.apiPollInterval + checkDelay)
 }
 
 require('./prefs-util.js').isolateTestCases(exports)
