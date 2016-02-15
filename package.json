@@ -70,7 +70,7 @@
     },
     {
       "name": "fsUris",
-      "title": "[Experimental] display fs:/ URIs as-is instead of rewriting to http://",
+      "title": "Keep fs: in the address bar",
       "type": "bool",
       "value": false
     }
