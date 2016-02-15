@@ -18,17 +18,13 @@ function setIconState (enable) {
   getById('icon').src = enable ? 'icon-on-64.png' : 'icon-off-64.png'
 }
 
-function setText (id, text) {
-  getById(id).textContent = text
-}
-
 // incoming
 self.port.on('show', function (context) {
   // console.log('show event received by panel.js (ipfsResource='+ipfsResource+')')
   let prefs = context.preferences
 
   // render diagnostic info
-  setText('gateway-address-val', renderGatewayAddress(prefs))
+  getById('gateway-address-val').textContent = renderGatewayAddress(prefs)
   setIconState(prefs.useCustomGateway)
 
   // if current page is pinnable
@@ -50,15 +46,15 @@ self.port.on('show', function (context) {
 })
 
 self.port.on('version', function (update) {
-  setText('gateway-version-val', update
+  getById('gateway-version-val').textContent = update
     ? update.Version + '-' + update.Commit
-    : 'n/a')
+    : 'n/a'
 })
 
 self.port.on('swarm-peers', function (update) {
-  setText('swarm-peers-val', (update && update.Strings)
+  getById('swarm-peers-val').textContent = (update && update.Strings)
     ? update.Strings.length
-    : 'n/a')
+    : 'n/a'
 })
 
 // outgoing
