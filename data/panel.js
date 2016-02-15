@@ -19,11 +19,7 @@ function setIconState (enable) {
 }
 
 function setText (id, text) {
-  const span = getById(id)
-  while (span.firstChild) {
-    span.removeChild(span.firstChild)
-  }
-  span.appendChild(document.createTextNode(text))
+  getById(id).textContent = text
 }
 
 // incoming
