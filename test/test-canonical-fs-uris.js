@@ -1,14 +1,16 @@
 'use strict'
 
-// const tabs = require('sdk/tabs')
+const { env } = require('sdk/system/environment')
+
+const tabs = require('sdk/tabs')
 const { prefs } = require('sdk/simple-prefs')
 
 const fs = require('../lib/protocols.js').fs.createInstance()
 const gw = require('../lib/gateways.js')
-// const self = require('sdk/self')
-// const testpage = self.data.url('linkify-demo.html')
-// const mdownPath = 'ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#sample.md'
-// const sripage = 'fs:/' + mdownPath
+const self = require('sdk/self')
+const testpage = self.data.url('linkify-demo.html')
+const mdownPath = 'ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#sample.md'
+const sripage = 'fs:/' + mdownPath
 const parent = require('sdk/remote/parent')
 
 parent.remoteRequire('../lib/child-main.js', module)
@@ -43,9 +45,15 @@ exports['test newChannel'] = function (assert) {
   assert.equal(chan.URI.spec, gw.customUri.spec + 'ipns/foo', 'redirect on, channel has normalized http urls')
 }
 
-// https://github.com/lidel/ipfs-firefox-addon/issues/3
-/*
 exports['test subresource loading'] = function (assert, done) {
+  // Skip test at Travis, at it often fails due to network throttling
+  // https://github.com/lidel/ipfs-firefox-addon/issues/79
+  // pre-push git hook should be enough to catch any regressions
+  if ('TRAVIS' in env && 'CI' in env) {
+    done()
+    return
+  }
+
   prefs.fsUris = true
   gw.redirectEnabled = false
 
@@ -74,7 +82,6 @@ exports['test subresource loading'] = function (assert, done) {
     }
   })
 }
-*/
 
 require('./prefs-util.js').isolateTestCases(exports)
 require('sdk/test').run(exports)
