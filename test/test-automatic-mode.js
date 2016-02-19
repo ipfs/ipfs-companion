@@ -10,7 +10,7 @@ const gw = require('../lib/gateways.js')
 
 exports['test automatic mode disabling redirect when IPFS API is offline'] = function (assert, done) {
   const ipfsPath = 'ipfs/QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D/Makefile'
-  const checkDelay = ('TRAVIS' in env && 'CI' in env) ? 30000 : 500
+  const checkDelay = ('TRAVIS' in env && 'CI' in env) ? 10000 : 500
   prefs.apiPollInterval = 100 // faster test
   prefs.customApiPort = 59999 // change to something that will always fail
   prefs.useCustomGateway = true
