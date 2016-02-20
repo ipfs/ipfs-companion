@@ -14,7 +14,6 @@ env:
         - FIREFOX_RELEASE='nightly'
         - FIREFOX_RELEASE='beta-latest'
         - FIREFOX_RELEASE='latest'
-        - FIREFOX_RELEASE='44.0'
         - FIREFOX_RELEASE='43.0'
         - FIREFOX_RELEASE='esr-latest'
 matrix:
