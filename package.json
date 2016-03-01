@@ -108,7 +108,7 @@
     "grunt": "^0.4.5",
     "grunt-run": "^0.5.2",
     "jpm": "^1.0.5",
-    "load-grunt-tasks": "^3.4.0",
+    "load-grunt-tasks": "^3.4.1",
     "pre-commit": "^1.1.2",
     "pre-push": "^0.1.1",
     "standard-format": "^2.1.0"
