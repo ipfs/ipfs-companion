@@ -99,6 +99,11 @@
       "buffer": "sdk/io/buffer"
     }
   },
+  "standard": {
+      "ignore": [
+          "lib/npm/**"
+      ]
+  },
   "devDependencies": {
     "browserify": "^13.0.0",
     "eslint": "^2.5.0",
