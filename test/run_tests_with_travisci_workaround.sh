@@ -1,5 +1,5 @@
 #!/bin/bash
-JPM_OUT=$(npm run jpm_test 2>&1 | tee >(cat - >&2)  ; (exit ${PIPESTATUS[0]}))
+JPM_OUT=$(npm run -s jpm_test 2>&1 | tee >(cat - >&2)  ; (exit ${PIPESTATUS[0]}))
 RESULT=$?
 TOTAL=$(echo $JPM_OUT | sed -n 's/.* \([0-9]\+\) tests passed.*/\1/p')
 PASSED=$(echo $JPM_OUT | sed -n 's/.* \([0-9]\+\) of [0-9]\+ tests passed.*/\1/p')

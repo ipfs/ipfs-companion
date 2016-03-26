@@ -4,7 +4,7 @@
   "id": "ipfs-firefox-addon@lidel.org",
   "description": "Access IPFS resources via custom HTTP2IPFS gateway",
   "author": "Marcin Rataj",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "license": "CC0-1.0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "icon": "resource://ipfs-firefox-addon-at-lidel-dot-org/data/icon-on-64.png",
@@ -86,7 +86,7 @@
     "jpm_test": "grunt run:jpm_test",
     "eslint": "grunt run:eslint",
     "xpi": "jpm xpi",
-    "test": "npm run build && grunt test"
+    "test": "npm run -s build && grunt test"
   },
   "pre-commit": [
     "build"
