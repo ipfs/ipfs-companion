@@ -76,6 +76,7 @@
     }
   ],
   "permissions": {
+    "private-browsing": true,
     "multiprocess": true
   },
   "engines": {
