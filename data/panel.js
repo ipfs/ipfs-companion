@@ -21,25 +21,22 @@ function setIconState (enable) {
 // incoming
 self.port.on('show', function (context) {
   // console.log('show event received by panel.js (ipfsResource='+ipfsResource+')')
-  let prefs = context.preferences
+  const {prefs, apiIsUp, isIPFS} = context
 
   // render diagnostic info
   getById('gateway-address-val').textContent = renderGatewayAddress(prefs)
   setIconState(prefs.useCustomGateway)
 
   // if current page is pinnable
-  showIf('ipfs-resource-actions', context.isPinnable)
+  showIf('ipfs-resource-actions', isIPFS)
 
   // if custom gateway is used
   showIf('redirect-enabled', prefs.useCustomGateway)
   showIf('redirect-disabled', !prefs.useCustomGateway)
-  showIf('enable-gateway-redirect', !prefs.useCustomGateway)
+  showIf('enable-gateway-redirect', apiIsUp && !prefs.useCustomGateway)
   showIf('disable-gateway-redirect', prefs.useCustomGateway)
-  showIf('open-webui', prefs.useCustomGateway)
-  showIf('open-webui', prefs.useCustomGateway)
-  // showIf('gateway-version', prefs.useCustomGateway)
-  // showIf('swarm-peers', prefs.useCustomGateway)
-  showIf('pin-current-ipfs-address', prefs.useCustomGateway)
+  showIf('open-webui', apiIsUp)
+  showIf('pin-current-ipfs-address', isIPFS && apiIsUp)
 
   // resize panel to match size of rendered items
   self.port.emit('resize', { 'width': document.body.scrollWidth, 'height': document.body.scrollHeight })

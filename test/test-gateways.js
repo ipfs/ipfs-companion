@@ -96,12 +96,12 @@ exports['test disabled /ipns/ redirect'] = function (assert, done) {
   })
 }
 
-exports['test isPinnable helper'] = function (assert) {
-  assert.equal(gw.isPinnable(gw.publicUri.spec + ipfsPath), true, 'IPFS path at public gateway should be pinnable')
-  assert.equal(gw.isPinnable(gw.customUri.spec + ipfsPath), true, 'IPFS path at custom gateway should be pinnable')
-  assert.equal(gw.isPinnable('https://fooo.bar/' + ipfsPath), true, 'Paths that look IPFS-ish should be pinnable')
-  assert.equal(gw.isPinnable('http://fooo.bar/' + ipfsPath), true, 'Paths that look IPFS-ish should be pinnable')
-  assert.equal(gw.isPinnable(gw.apiUri.spec + ipfsPath), false, 'API resources should not be pinnable')
+exports['test isIPFS helper'] = function (assert) {
+  assert.equal(gw.isIPFS(gw.publicUri.spec + ipfsPath), true, 'IPFS path at public gateway should be a positive match')
+  assert.equal(gw.isIPFS(gw.customUri.spec + ipfsPath), true, 'IPFS path at custom gateway should be a positive match')
+  assert.equal(gw.isIPFS('https://fooo.bar/' + ipfsPath), true, 'Paths that look IPFS-ish should be a positive match')
+  assert.equal(gw.isIPFS('http://fooo.bar/' + ipfsPath), true, 'Paths that look IPFS-ish should be a positive match')
+  assert.equal(gw.isIPFS(gw.apiUri.spec + ipfsPath), false, 'API resources should not be a positive match')
 }
 
 require('./prefs-util.js').isolateTestCases(exports)
