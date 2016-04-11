@@ -44,7 +44,7 @@ self.port.on('show', function (context) {
 
 self.port.on('version', function (update) {
   getById('gateway-version-val').textContent = update
-    ? update.Version + '-' + update.Commit
+    ? update.Version + (update.Commit ? ('-' + update.Commit) : '')
     : 'n/a'
 })
 
