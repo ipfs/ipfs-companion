@@ -117,7 +117,7 @@
     "load-grunt-tasks": "^3.5.0",
     "pre-commit": "^1.1.2",
     "pre-push": "^0.1.1",
-    "standard-format": "^2.1.0"
+    "standard-format": "^2.2.0"
   },
   "dependencies": {
     "is-ipfs": "^0.2.0"
