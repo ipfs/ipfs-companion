@@ -21,7 +21,7 @@ matrix:
     allow_failures:
         #- env: FIREFOX_RELEASE='latest'
         #- env: FIREFOX_RELEASE='beta-latest'
-        - env: FIREFOX_RELEASE='esr-latest'
+        #- env: FIREFOX_RELEASE='esr-latest'
 cache:
     directories:
         - node_modules
