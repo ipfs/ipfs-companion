@@ -15,7 +15,7 @@ function showIf (id, condition) {
 }
 
 function setIconState (enable) {
-  getById('icon').src = enable ? 'icon-on-64.png' : 'icon-off-64.png'
+  getById('icon').src = enable ? 'ipfs-logo-on.svg' : 'ipfs-logo-off.svg'
 }
 
 // incoming
