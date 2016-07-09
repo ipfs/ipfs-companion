@@ -1,17 +1,35 @@
-# ipfs-firefox-addon
+# ipfs-firefox-addon IPFS Gateway Redirect
+
+![screenshot of v1.5.9](screenshot.png)
 
 [![](https://img.shields.io/github/release/lidel/ipfs-firefox-addon.svg)](https://github.com/lidel/ipfs-firefox-addon/releases/latest)
 [![](https://img.shields.io/badge/mozilla-full%20review-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-blue.svg)](http://standardjs.com/)
 [![build-status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg)](https://travis-ci.org/lidel/ipfs-firefox-addon)
 
-Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
+> Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 
 (If you are using Google Chrome or Chromium check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) or [ipfs-chrome-station](https://github.com/xicombd/ipfs-chrome-station) instead)
 
-![screenshot of v1.5.9](screenshot.png)
+## Table of Contents
 
-### Features
+- [Background](#background)
+- [Features](#features)
+- [Install](#install)
+- [Contribute](#contribute)
+- [License](#license)
+
+## Background
+
+This add-on enables everyone to access ipfs.io (or any other public gateway) urls the way they were meant: from locally running IPFS daemon :-)
+
+IPFS is a new hypermedia distribution protocol, addressed by content and identities.
+IPFS enables the creation of completely distributed applications.
+It aims to make the web faster, safer, and more open.
+
+Learn more at: https://ipfs.io (It is really cool, I promise!)
+
+## Features
 
 - Toolbar icon displays current IPFS peering status
 - Click on it to open IPFS actions menu
@@ -34,15 +52,18 @@ Firefox addon that provides transparent access to IPFS resources via local HTTP2
    - Detect and redirect sites with [dnslink](https://github.com/jbenet/go-dnslink) to `/ipns/<fqdn>`
    - Rewrite hrefs with `/ip(f|n)s/*` paths on every page to point to IPFS gateway. Make plaintext IPFS links clickable.
 
-### How to install
+## Install
 
-The easiest way is to get it from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/):
+Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/):
 
 [![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
 
-It will guarantee automatic updates to the latest version reviewed by Mozilla community. 
+It will guarantee automatic updates to the latest version reviewed by Mozilla community.
 
-It is also possible to manually build XPI from [the latest relase sources](https://github.com/lidel/ipfs-firefox-addon/releases/latest), however offical Firefox builds do not accept unsigned XPIs anymore.
+### Manual Build
+
+It is also possible to manually build XPI from [the latest relase sources](https://github.com/lidel/ipfs-firefox-addon/releases/latest),
+however offical Firefox builds will not accept unsigned XPI package (only a developer version of Firefox can be used to run it).
 
 Please read [SECURITY.md](https://github.com/lidel/ipfs-firefox-addon/blob/master/SECURITY.md) if you want to perform quick security audit BEFORE installation.
 
@@ -66,12 +87,13 @@ Deny
 
 Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
 
-### CONTRIBUTING
+## Contribute
 
 See [CONTRIBUTING](CONTRIBUTING.md)
 
+PRs are welcome.
 
-### LICENSE
+## License
 
 [IPFS logo](https://github.com/ipfs/logo) belongs to [The IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a>.
 
