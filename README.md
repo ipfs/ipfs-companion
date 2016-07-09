@@ -1,4 +1,4 @@
-# ipfs-firefox-addon IPFS Gateway Redirect
+# ipfs-firefox-addon AKA “IPFS Gateway Redirect”
 
 ![screenshot of v1.5.9](screenshot.png)
 
