@@ -33,8 +33,9 @@ self.port.on('show', function (context) {
   // if custom gateway is used
   showIf('redirect-enabled', prefs.useCustomGateway)
   showIf('redirect-disabled', !prefs.useCustomGateway)
-  showIf('enable-gateway-redirect', apiIsUp && !prefs.useCustomGateway)
+  showIf('enable-gateway-redirect', !prefs.useCustomGateway)
   showIf('disable-gateway-redirect', prefs.useCustomGateway)
+  showIf('toggle-gateway-redirect', (apiIsUp && !prefs.useCustomGateway) || prefs.useCustomGateway)
   showIf('open-webui', apiIsUp)
   showIf('pin-current-ipfs-address', isIPFS && apiIsUp)
 
