@@ -108,7 +108,7 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "eslint": "^3.0.1",
-    "eslint-config-standard": "^5.3.1",
+    "eslint-config-standard": "^5.3.2",
     "eslint-plugin-promise": "^2.0.0",
     "eslint-plugin-standard": "^2.0.0",
     "grunt": "^1.0.1",
