@@ -11,8 +11,8 @@ env:
         - DISPLAY=':99.0'
         - FIREFOX_BIN='./firefox/firefox'
     matrix:
-        - FIREFOX_RELEASE='firefox-nightly-latest'
-        - FIREFOX_RELEASE='firefox-aurora-latest'
+        - FIREFOX_RELEASE='nightly-latest'
+        - FIREFOX_RELEASE='aurora-latest'
         - FIREFOX_RELEASE='latest'
         - FIREFOX_RELEASE='43.0'
         - FIREFOX_RELEASE='esr-latest'
