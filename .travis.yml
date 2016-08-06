@@ -13,7 +13,8 @@ env:
     matrix:
         - FIREFOX_RELEASE='nightly-latest'
         - FIREFOX_RELEASE='aurora-latest'
-        - FIREFOX_RELEASE='latest'
+        #- FIREFOX_RELEASE='latest'
+        - FIREFOX_RELEASE='47.0'
         - FIREFOX_RELEASE='43.0'
         - FIREFOX_RELEASE='esr-latest'
         #- FIREFOX_RELEASE='nightly'
