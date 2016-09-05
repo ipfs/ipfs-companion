@@ -1,3 +1,5 @@
+# entire test suite needs to be refactored to run WebExtension instead of legacy SDK
+
 language: node_js
 node_js:
     - "5.9"
