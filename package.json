@@ -90,10 +90,8 @@
     "test": "npm run -s build && grunt test"
   },
   "pre-commit": [
-    "build"
   ],
   "pre-push": [
-    "test"
   ],
   "jetpack": {
     "overrides": {
