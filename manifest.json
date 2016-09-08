@@ -17,13 +17,16 @@
     ],
 
     "browser_action": {
+        "browser_style": true,
         "default_icon": "icons/ipfs-logo-off.svg",
         "default_title": "IPFS Gateway Redirect",
         "default_popup": "popup/button-menu.html"
     },
 
     "web_accessible_resources": [
-        "data/linkify-demo.html"
+        "data/linkify-demo.html",
+        "icons/ipfs-logo-on.svg",
+        "icons/ipfs-logo-off.svg"
     ]
 
 }

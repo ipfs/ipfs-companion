@@ -1,0 +1,55 @@
+p > img {
+    vertical-align: middle;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0.25rem;
+}
+
+li {
+    padding: 0.5rem;
+    cursor: default;
+    display:block;
+    max-height:2rem;
+    text-overflow: ellipsis;
+    overflow: auto;
+}
+li.header {
+    font-weight: bold;
+}
+li.action {
+    color: #222;
+    background: rgba(238, 238, 238, 0.5);
+    cursor: pointer;
+}
+
+li.action:hover {
+    background: rgba(133, 222, 222, 0.75);
+    color: #000;
+}
+
+li.action:active {
+    background: rgba(74, 158, 161, 0.8);
+    color: #fff;
+}
+
+#gateway-status {
+    padding: 0.5rem;
+    min-height: 3em;
+}
+#gateway-status > li {
+    font-variant: small-caps;
+    padding: 0;
+}
+#gateway-status > li > span:nth-of-type(2) {
+    display: inline-block;
+    float: right;
+}
+
+
+#icon {
+    width: 5rem;
+    height: 5rem;
+}
