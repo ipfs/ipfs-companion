@@ -1,0 +1,122 @@
+{
+  "toggle_button_label": {
+    "message": "IPFS Gateway Redirect"
+  },
+  "useCustomGateway_title": {
+    "message": "Use Custom Gateway"
+  },
+  "useCustomGateway_description": {
+    "message": "When enabled, all requests to any of Public Gateways defined below will be sent to Custom Gateway instead."
+  },
+  "publicGatewayHosts_title": {
+    "message": "Public Gateways"
+  },
+  "publicGatewayHosts_description": {
+    "message": "List of public gateway hosts (space separated, first one is the default used for copying public URLs)"
+  },
+  "customGatewayHost_title": {
+    "message": "Custom Gateway Host"
+  },
+  "customGatewayHost_description": {
+    "message": "Most people want to use localhost (127.0.0.1)"
+  },
+  "customGatewayPort_title": {
+    "message": "Custom Gateway Port"
+  },
+  "customGatewayPort_description": {
+    "message": "HTTP2IPFS gateway service (eg. local instance of go-ipfs)"
+  },
+  "customApiPort_title": {
+    "message": "IPFS API Port"
+  },
+  "customApiPort_description": {
+    "message": "Used for pinning (on the Gateway host)"
+  },
+  "apiPollInterval_title": {
+    "message": "API Poll Interval"
+  },
+  "apiPollInterval_description": {
+    "message": "How often peer connection number is updated from API (in miliseconds)"
+  },
+  "automatic_title": {
+    "message": "Automatic Mode"
+  },
+  "automatic_description": {
+    "message": "Automatically enable/disable redirect based on the peer count."
+  },
+  "automatic_up_notification_title": {
+    "message": "IPFS is Up"
+  },
+  "automatic_up_notification_text": {
+    "message": "Redirection of IPFS requests is enabled"
+  },
+  "automatic_down_notification_title": {
+    "message": "IPFS is Down"
+  },
+  "automatic_down_notification_text": {
+    "message": "Redirection of IPFS requests is disabled"
+  },
+  "dns_title": {
+    "message": "Enable DNS Lookup"
+  },
+  "dns_description": {
+    "message": "(EXPERIMENTAL) Check if domain contains DNS TXT record with dnslink to IPFS path and redirect to it"
+  },
+  "linkify_title": {
+    "message": "Extended IPFS Link Support"
+  },
+  "linkify_description": {
+    "message": "(EXPERIMENTAL) Rewrite links to /ip(f|n)s/* paths on every page to point to IPFS gateway. Make plaintext IPFS links clickable."
+  },
+  "fsUris_title": {
+    "message": "Keep fs: in the address bar"
+  },
+  "fsUris_description": {
+    "message": "(EXPERIMENTAL) display fs:/ URIs as-is instead of rewriting to http:// (may break JS on pages)"
+  },
+  "panel_status-gateway-redirect": {
+    "message": "redirect"
+  },
+  "panel_status-gateway-redirect-enabled": {
+    "message": "enabled"
+  },
+  "panel_status-gateway-redirect-disabled": {
+    "message": "disabled"
+  },
+  "panel_status-gateway-address": {
+    "message": "gateway"
+  },
+  "panel_status-gateway-version": {
+    "message": "version"
+  },
+  "panel_status-swarm-peers": {
+    "message": "swarm peers"
+  },
+  "panel_operations-header": {
+    "message": "Operations"
+  },
+  "panel_open-webui": {
+    "message": "Open WebUI"
+  },
+  "panel_open-preferences": {
+    "message": "Open Preferences"
+  },
+  "panel_toggle-gateway-redirect-enable": {
+    "message": "Enable Gateway Redirect"
+  },
+  "panel_toggle-gateway-redirect-disable": {
+    "message": "Disable Gateway Redirect"
+  },
+  "panel_ipfs-only-header": {
+    "message": "Actions for current address"
+  },
+  "panel_pin-current-ipfs-address": {
+    "message": "Pin IPFS Resource"
+  },
+  "panel_copy-current-ipfs-address": {
+    "message": "Copy Canonical Address"
+  },
+  "panel_copy-current-public-gw-url": {
+    "message": "Copy Public Gateway URL"
+  }
+}

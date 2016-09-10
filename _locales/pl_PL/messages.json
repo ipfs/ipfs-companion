@@ -1,0 +1,122 @@
+{
+  "toggle_button_label": {
+    "message": "Przekierowanie Bramy IPFS"
+  },
+  "useCustomGateway_title": {
+    "message": "Używaj własnej bramy"
+  },
+  "useCustomGateway_description": {
+    "message": "Sprawia, że wszystkie zapytania do publicznych bram będą przekierowane do własnej, zdenifiowanej poniżej."
+  },
+  "publicGatewayHosts_title": {
+    "message": "Publiczne bramy"
+  },
+  "publicGatewayHosts_description": {
+    "message": "Lista domen do przekierowania (oddzielone spacjami, pierwsza jest domyślną, używaną przy kopiowaniu publicznych URLi)"
+  },
+  "customGatewayHost_title": {
+    "message": "Host własnej bramy"
+  },
+  "customGatewayHost_description": {
+    "message": "Zazwyczaj używany jest localhost (127.0.0.1)"
+  },
+  "customGatewayPort_title": {
+    "message": "Port własnej bramy"
+  },
+  "customGatewayPort_description": {
+    "message": "Usługa bramy HTTP2IPFS (np. z lokalnej instancji go-ipfs)"
+  },
+  "customApiPort_title": {
+    "message": "Port IPFS API"
+  },
+  "customApiPort_description": {
+    "message": "Używany do przypinania (na hoście Bramy)"
+  },
+  "apiPollInterval_title": {
+    "message": "Częstotliwość zapytań do API"
+  },
+  "apiPollInterval_description": {
+    "message": "Jak często API jest odpytywane o liczbę dostępnych węzłów (w milisekundach)"
+  },
+  "automatic_title": {
+    "message": "Tryb automatyczny"
+  },
+  "automatic_description": {
+    "message": "Automatycznie włącza/wyłącza przekierowanie na podstawie liczby połączonych węzłów."
+  },
+  "automatic_up_notification_title": {
+    "message": "IPFS jest dostępne"
+  },
+  "automatic_up_notification_text": {
+    "message": "Włączono przekierowanie"
+  },
+  "automatic_down_notification_title": {
+    "message": "IPFS jest niedostępne"
+  },
+  "automatic_down_notification_text": {
+    "message": "Wyłączono przekierowanie"
+  },
+  "dns_title": {
+    "message": "Odpytywanie DNS"
+  },
+  "dns_description": {
+    "message": "(EKSPERYMENT) Sprawdza, czy domena posiada wpis TXT w DNS z dnslink do zasobu IPFS i przekierowuje jeśli jest obecny"
+  },
+  "linkify_title": {
+    "message": "Rozszerzone wsparcie linków IPFS"
+  },
+  "linkify_description": {
+    "message": "(EKSPERYMENT) Przepisuje linki do zasobów /ip(f|n)s/* na każdej stronie tak, aby wskazywały na Bramę. Dodatkowo sprawia, że czysto-tekstowe adresy IPFS są klikalne."
+  },
+  "fsUris_title": {
+    "message": "Zachowaj fs: w pasku adresu"
+  },
+  "fsUris_description": {
+    "message": "(EXPERIMENTAL) wyświetla natywne URI fs:/ zamiast ich zamiany na http:// aktywnej bramy (może powodować błędy JS na stronach)"
+  },
+  "panel_status-gateway-redirect": {
+    "message": "przekierowanie"
+  },
+  "panel_status-gateway-redirect-enabled": {
+    "message": "włączone"
+  },
+  "panel_status-gateway-redirect-disabled": {
+    "message": "wyłączone"
+  },
+  "panel_status-gateway-address": {
+    "message": "brama"
+  },
+  "panel_status-gateway-version": {
+    "message": "wersja"
+  },
+  "panel_status-swarm-peers": {
+    "message": "połączenia"
+  },
+  "panel_operations-header": {
+    "message": "Operacje"
+  },
+  "panel_open-webui": {
+    "message": "Otwórz WebUI"
+  },
+  "panel_open-preferences": {
+    "message": "Otwórz Preferencje"
+  },
+  "panel_toggle-gateway-redirect-enable": {
+    "message": "Włącz przekierowanie"
+  },
+  "panel_toggle-gateway-redirect-disable": {
+    "message": "Wyłącz przekierowanie"
+  },
+  "panel_ipfs-only-header": {
+    "message": "Operacje dla tego zasobu"
+  },
+  "panel_pin-current-ipfs-address": {
+    "message": "Przypnij zasób IPFS"
+  },
+  "panel_copy-current-ipfs-address": {
+    "message": "Skopiuj kanoniczny adres"
+  },
+  "panel_copy-current-public-gw-url": {
+    "message": "Skopiuj URL do publicznej bramy"
+  }
+}

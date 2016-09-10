@@ -27,6 +27,7 @@
         "data/linkify-demo.html",
         "icons/ipfs-logo-on.svg",
         "icons/ipfs-logo-off.svg"
-    ]
+    ],
 
+    "default_locale": "en"
 }
