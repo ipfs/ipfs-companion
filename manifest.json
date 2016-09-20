@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "IPFS Gateway Redirect 2",
+    "name": "IPFS Gateway Redirect WX",
     "version" : "2.0.0",
 
     "description": "Access IPFS resources via custom HTTP2IPFS gateway",
@@ -21,6 +21,10 @@
         "default_icon": "icons/ipfs-logo-off.svg",
         "default_title": "IPFS Gateway Redirect",
         "default_popup": "popup/button-menu.html"
+    },
+
+    "options_ui": {
+        "page": "settings/options.html"
     },
 
     "web_accessible_resources": [
