@@ -8,10 +8,16 @@
   <body>
 
     <form>
-      <fieldset>
-        <legend>Options</legend>
-        <label>Public Gateways <input type="text" id="publicGateways" ></label><br/>
-        <button type="submit">Save</button>
+      <fieldset style="line-height: 2em; font-family: sans-serif;">
+        <legend>HTTP2IPFS Options</legend>
+
+        <label>Public Gateway Hosts <input type="text" id="publicGateways" size="40" require placeholder="List of hostnames separated with spaces"/></label><br/>
+
+        <label>Custom Gateway URL <input type="url" id="customGatewayUrl" size="40" required pattern="https?://.+"/></label><br/>
+
+        <label>Redirect to Custom Gateway  <input type="checkbox" id="useCustomGateway" /></label><br/>
+
+        <button type="submit" style="float:right;font-size:large">Save Options</button>
       </fieldset>
     </form>
 
