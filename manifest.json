@@ -10,11 +10,16 @@
     },
 
     "permissions": [
+        "<all_urls>",
         "notifications",
         "storage",
         "webRequest",
         "webRequestBlocking"
     ],
+
+    "background": {
+        "page": "background/init.html"
+    },
 
     "browser_action": {
         "browser_style": true,
@@ -24,7 +29,7 @@
     },
 
     "options_ui": {
-        "page": "settings/options.html"
+        "page": "options/options.html"
     },
 
     "web_accessible_resources": [
@@ -32,6 +37,8 @@
         "icons/ipfs-logo-on.svg",
         "icons/ipfs-logo-off.svg"
     ],
+
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ipfs.io/ipfs/QmP3fUQAVpvbP3pM47byDa3QRsUbvMztk1F48UU85kgGSW; object-src 'self'",
 
     "default_locale": "en"
 }
