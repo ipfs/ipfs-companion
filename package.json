@@ -89,10 +89,8 @@
     "xpi": "jpm xpi",
     "test": "npm run -s build && grunt test"
   },
-  "pre-commit": [
-  ],
-  "pre-push": [
-  ],
+  "pre-commit": [],
+  "pre-push": [],
   "jetpack": {
     "overrides": {
       "buffer": "sdk/io/buffer"

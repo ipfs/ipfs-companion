@@ -4,7 +4,6 @@ options.set('useCustomGateway', true)
 options.set('customGatewayUrl', 'http://127.0.0.1:8080')
 options.set('ipfsApiUrl', 'http://127.0.0.1:5001')
 
-
 function saveOption (name) {
   let element = document.querySelector(`#${name}`)
   let change = {}
