@@ -38,7 +38,7 @@
         "icons/ipfs-logo-off.svg"
     ],
 
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ipfs.io/ipfs/QmP3fUQAVpvbP3pM47byDa3QRsUbvMztk1F48UU85kgGSW; object-src 'self'",
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ipfs.io/ipfs/QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ https://ipfs.io/ipfs/QmP3fUQAVpvbP3pM47byDa3QRsUbvMztk1F48UU85kgGSW; object-src 'self'",
 
     "default_locale": "en"
 }
