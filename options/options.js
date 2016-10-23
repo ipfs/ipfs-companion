@@ -1,8 +1,9 @@
-var options = new Map() // key: optionName, value: defaultValue
-options.set('publicGateways', 'ipfs.io gateway.ipfs.io ipfs.pics')
-options.set('useCustomGateway', true)
-options.set('customGatewayUrl', 'http://127.0.0.1:8080')
-options.set('ipfsApiUrl', 'http://127.0.0.1:5001')
+/* global chrome */
+var options = new Set() // TODO: load list from background.js?
+options.add('publicGateways')
+options.add('useCustomGateway')
+options.add('customGatewayUrl')
+options.add('ipfsApiUrl')
 
 function saveOption (name) {
   let element = document.querySelector(`#${name}`)
@@ -21,35 +22,41 @@ function saveOption (name) {
   chrome.storage.local.set(change)
 }
 
-function readOption (name, defaultValue) {
+function readOption (name) {
   let element = document.querySelector(`#${name}`)
   chrome.storage.local.get(name, (storage) => {
-    let oldValue = storage[name]
-    switch (element.type) {
-      case 'text':
-      case 'url':
-        element.value = oldValue || defaultValue
-        break
-      case 'checkbox':
-        element.checked = typeof (oldValue) === 'boolean' ? oldValue : defaultValue
-        break
-      default:
-        console.log('Unsupported option type: ' + element.type)
+    if (chrome.runtime.lastError) {
+      console.log(chrome.runtime.lastError)
+    } else {
+      let oldValue = storage[name]
+      switch (element.type) {
+        case 'text':
+        case 'url':
+          element.value = oldValue
+          break
+        case 'checkbox':
+          element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
+          break
+        default:
+          console.log('Unsupported option type: ' + element.type)
+      }
     }
   })
 }
 
 function saveOptions (e) {
-  for (var option of options.keys()) {
+  for (let option of options) {
     saveOption(option)
   }
 }
 
 function readOptions () {
-  for (var [option, defaultValue] of options) {
-    readOption(option, defaultValue)
+  for (let option of options) {
+    readOption(option)
   }
 }
 
 document.addEventListener('DOMContentLoaded', readOptions)
+
+// TODO: remove button and save automatically (eg. on leaving input)
 document.querySelector('form').addEventListener('submit', saveOptions)
