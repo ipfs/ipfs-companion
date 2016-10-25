@@ -22,8 +22,7 @@ function init () {
     }).catch(function (err) {
       console.log('ipfs-api .id() test --> Failed to read Node info: ', err)
     })
-    // persist any newly discovered defaults
-    chrome.storage.local.set(options)
+    storeDefaultOptionsIfMissing()
   })
 }
 
@@ -52,8 +51,20 @@ function withOptions (callback) {
   })
 }
 
+function storeDefaultOptionsIfMissing () {
+  for (let key in optionDefaults) {
+    chrome.storage.local.get(key, (data) => {
+      if (!data[key]) {
+        let option = {}
+        option[key] = optionDefaults[key]
+        chrome.storage.local.set(option)
+      }
+    })
+  }
+}
+
 function onStorageChange (changes, area) {
-  for (key in changes) {
+  for (let key in changes) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
       if (key === 'ipfsApiUrl') {
