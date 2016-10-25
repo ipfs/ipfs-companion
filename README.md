@@ -5,7 +5,7 @@
 [![](https://img.shields.io/github/release/lidel/ipfs-firefox-addon.svg)](https://github.com/lidel/ipfs-firefox-addon/releases/latest)
 [![](https://img.shields.io/badge/mozilla-full%20review-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-blue.svg)](http://standardjs.com/)
-[![build-status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg)](https://travis-ci.org/lidel/ipfs-firefox-addon)
+[![build-status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg?branch=master)](https://travis-ci.org/lidel/ipfs-firefox-addon)
 
 > Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 
