@@ -5,3 +5,4 @@ node_modules
 firefox
 cache
 npm-debug.log
+web-ext-artifacts/

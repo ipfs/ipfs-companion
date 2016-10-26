@@ -1,121 +1,33 @@
 {
-  "name": "ipfs-firefox-addon",
-  "title": "IPFS Gateway Redirect",
-  "id": "ipfs-firefox-addon@lidel.org",
-  "description": "Access IPFS resources via custom HTTP2IPFS gateway",
-  "author": "Marcin Rataj",
-  "version": "1.5.9",
   "license": "CC0-1.0",
   "homepage": "https://github.com/lidel/ipfs-firefox-addon",
-  "icon": "resource://ipfs-firefox-addon-at-lidel-dot-org/data/ipfs-logo-on.svg",
-  "main": "lib/main.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/lidel/ipfs-firefox-addon.git"
   },
-  "preferences": [
-    {
-      "name": "useCustomGateway",
-      "title": "Use Custom Gateway",
-      "type": "bool",
-      "value": true
-    },
-    {
-      "name": "automatic",
-      "title": "Automatic Mode",
-      "type": "bool",
-      "value": false
-    },
-    {
-      "name": "publicGatewayHosts",
-      "title": "List of public gateways",
-      "type": "string",
-      "value": "ipfs.io gateway.ipfs.io ipfs.pics"
-    },
-    {
-      "name": "customGatewayHost",
-      "title": "Custom IPFS Gateway Address",
-      "type": "string",
-      "value": "127.0.0.1"
-    },
-    {
-      "name": "customGatewayPort",
-      "title": "Custom IPFS Gateway Port",
-      "type": "integer",
-      "value": 8080
-    },
-    {
-      "name": "customApiPort",
-      "title": "Custom IPFS API Port",
-      "type": "integer",
-      "value": 5001
-    },
-    {
-      "name": "apiPollInterval",
-      "title": "API Poll Interval",
-      "type": "integer",
-      "value": 3000
-    },
-    {
-      "name": "dns",
-      "title": "Enable DNS Lookup",
-      "type": "bool",
-      "value": false
-    },
-    {
-      "name": "linkify",
-      "title": "Extended IPFS Link Support",
-      "type": "bool",
-      "value": false
-    },
-    {
-      "name": "fsUris",
-      "title": "Keep fs: in the address bar",
-      "type": "bool",
-      "value": false
-    }
-  ],
-  "permissions": {
-    "private-browsing": true,
-    "multiprocess": true
-  },
-  "engines": {
-    "firefox": ">=43.0"
-  },
   "scripts": {
-    "build": "standard-format -w && browserify -r is-ipfs --no-builtins -s module.exports > lib/npm/is-ipfs.js",
-    "jpm_test": "grunt run:jpm_test",
-    "eslint": "grunt run:eslint",
-    "xpi": "jpm xpi",
-    "test": "npm run -s build && grunt test"
+    "build": "web-ext build --source-dir=web-ext-src/ --artifacts-dir=web-ext-artifacts/",
+    "format": "standard --fix web-ext-src/*/*.js",
+    "lint": "standard web-ext-src/*/*.js",
+    "firefox": "web-ext run --source-dir=web-ext-src/",
+    "test": "web-ext lint --source-dir=web-ext-src/"
   },
-  "pre-commit": [],
-  "pre-push": [],
-  "jetpack": {
-    "overrides": {
-      "buffer": "sdk/io/buffer"
-    }
-  },
+  "pre-push": [
+    "build", "test", "lint"
+  ],
   "standard": {
     "ignore": [
-      "lib/npm/**"
+      "web-ext-src/lib/npm/**"
     ]
   },
   "devDependencies": {
-    "browserify": "^13.1.0",
-    "eslint": "^3.1.1",
-    "eslint-config-standard": "^5.3.5",
-    "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0",
-    "grunt": "^1.0.1",
-    "grunt-run": "^0.6.0",
-    "jpm": "^1.1.2",
-    "load-grunt-tasks": "^3.5.0",
     "pre-commit": "^1.1.3",
     "pre-push": "^0.1.1",
-    "standard-format": "^2.2.1"
+    "standard": "^8.5.0",
+    "web-ext": "^1.6.0"
   },
   "dependencies": {
+    "ipfs-api": "^9.0.0",
     "is-ipfs": "^0.2.0"
   }
 }
