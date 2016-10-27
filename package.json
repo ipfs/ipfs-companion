@@ -6,18 +6,19 @@
     "url": "https://github.com/lidel/ipfs-firefox-addon.git"
   },
   "scripts": {
-    "build": "web-ext build --source-dir=web-ext-src/ --artifacts-dir=web-ext-artifacts/",
-    "format": "standard --fix web-ext-src/*/*.js",
-    "lint": "standard web-ext-src/*/*.js",
-    "firefox": "web-ext run --source-dir=web-ext-src/",
-    "test": "web-ext lint --source-dir=web-ext-src/"
+    "prebuild": "cp node_modules/is-ipfs/dist/index.min.js ext/src/lib/npm/is-ipfs.min.js && cp node_modules/ipfs-api/dist/index.min.js ext/src/lib/npm/ipfs-api.min.js",
+    "build": "web-ext build --source-dir=ext/ --artifacts-dir=web-ext-artifacts/",
+    "format": "standard --fix ext/src/*/*.js",
+    "lint": "standard ext/src/*/*.js",
+    "start": "web-ext run --source-dir=ext/",
+    "test": "web-ext lint --source-dir=ext/"
   },
   "pre-push": [
     "build", "test", "lint"
   ],
   "standard": {
     "ignore": [
-      "web-ext-src/lib/npm/**"
+      "ext/lib/npm/**"
     ]
   },
   "devDependencies": {
