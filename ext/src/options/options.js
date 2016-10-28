@@ -1,4 +1,4 @@
-/* global chrome */
+'use strict'
 var options = new Set() // TODO: load list from background.js?
 options.add('publicGateways')
 options.add('useCustomGateway')

@@ -1,4 +1,4 @@
-/* global chrome */
+'use strict'
 var ipfsApi, isIpfs
 const optionDefaults = {
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',

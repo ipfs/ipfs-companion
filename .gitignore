@@ -4,5 +4,6 @@ _vendor
 node_modules
 firefox
 cache
+build
 npm-debug.log
 web-ext-artifacts/

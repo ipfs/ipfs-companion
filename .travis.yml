@@ -9,7 +9,7 @@ addons:
 env:
     global:
         - DISPLAY=':99.0'
-        - FIREFOX_BIN='./firefox/firefox'
+        - FIREFOX_BINARY='./firefox/firefox'
     matrix:
         - FIREFOX_RELEASE='nightly-latest'
         - FIREFOX_RELEASE='aurora-latest'
@@ -30,8 +30,8 @@ before_script:
     - npm install
     - test $FIREFOX_RELEASE != nightly-latest               || aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - test $FIREFOX_RELEASE != aurora-latest                || aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-    - test $FIREFOX_RELEASE != beta-linux64-add-on-devel    || bash test/fetch-unbranded.sh $FIREFOX_RELEASE
-    - test $FIREFOX_RELEASE != release-linux64-add-on-devel || bash test/fetch-unbranded.sh $FIREFOX_RELEASE
+    - test $FIREFOX_RELEASE != beta-linux64-add-on-devel    || bash -x scripts/fetch-unbranded.sh $FIREFOX_RELEASE
+    - test $FIREFOX_RELEASE != release-linux64-add-on-devel || bash -x scripts/fetch-unbranded.sh $FIREFOX_RELEASE
     - test $FIREFOX_RELEASE != '43.0'                       || aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - test $FIREFOX_RELEASE != esr-latest                   || aria2c -o firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
