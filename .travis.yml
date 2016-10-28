@@ -10,12 +10,13 @@ env:
     global:
         - DISPLAY=':99.0'
         - FIREFOX_BINARY='./firefox/firefox'
+        - PATH="./firefox/:${PATH}"
     matrix:
         - FIREFOX_RELEASE='nightly-latest'
         - FIREFOX_RELEASE='aurora-latest'
         - FIREFOX_RELEASE='beta-linux64-add-on-devel'
         - FIREFOX_RELEASE='release-linux64-add-on-devel'
-        - FIREFOX_RELEASE='43.0'
+        - FIREFOX_RELEASE='49.0'
         - FIREFOX_RELEASE='esr-latest'
 matrix:
     fast_finish: true
