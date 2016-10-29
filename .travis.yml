@@ -40,4 +40,5 @@ before_script:
 script:
     - npm run build
     - npm test
+    - npm run clean
     - npm run lint
