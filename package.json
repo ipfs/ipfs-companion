@@ -6,6 +6,7 @@
     "url": "https://github.com/lidel/ipfs-firefox-addon.git"
   },
   "scripts": {
+    "start": "run-s clean build test firefox",
     "clean": "rm -f ext/src/lib/npm/*.js && rm -f build/*.zip",
     "build": "run-s clean build:*",
     "build:copy-is-ipfs-lib": "cp node_modules/is-ipfs/dist/index.min.js ext/src/lib/npm/is-ipfs.min.js",
