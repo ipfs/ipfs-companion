@@ -17,7 +17,7 @@
     "test:functional": "mocha test/functional",
     "lint": "run-s lint:*",
     "lint:standard": "snazzy --fix -v \"ext/src/**/*.js\" \"test/**/*.js\"",
-    "lint:lint-web-ext": "web-ext lint -s ext",
+    "lint:web-ext": "web-ext lint -s ext",
     "firefox": "web-ext run -s ext"
   },
   "pre-push": [
