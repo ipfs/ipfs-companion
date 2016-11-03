@@ -1,7 +1,0 @@
-.*
-*
-!/data/**
-!/lib/**
-!/locale/**
-!/package.json
-!/LICENSE
