@@ -1,5 +1,11 @@
 # Contributing
 
+## Make sure you invest your time in future-proof APIs :-)
+
+Mozilla decided to deprecate old SDK and our main objective is to [rewrite addon using WebExtensions APIs](https://github.com/lidel/ipfs-firefox-addon/issues/20).  
+Before you start working on any new PR make sure issue [#20](https://github.com/lidel/ipfs-firefox-addon/issues/20) is closed.   
+If not, consider helping there first.
+
 ## Work on existing issues
 
 Feel free to work on issues that are [not assigned to me yet](https://github.com/lidel/yt-looper/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee) or are marked with [help wanted](https://github.com/lidel/ipfs-firefox-addon/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee).

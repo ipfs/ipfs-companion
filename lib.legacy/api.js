@@ -26,10 +26,10 @@ function pin (address) {
   new Request({
     url: apiUrl('pin/add?arg=' + address),
     onComplete: function (response) {
-      let pinned = response.status === 200 && response.json.Pinned ? response.json.Pinned[0] : false
+      let pinned = response.status === 200
       notify({
         title: pinned ? 'Pinned' : 'Failed to pin',
-        text: pinned || address.slice(6)
+        text: address
       })
     }
   }).get()
