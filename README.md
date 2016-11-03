@@ -1,3 +1,9 @@
+
+| **Important Announcement** :rocket: |
+| --- |
+| [Add-on is being migrated to the new Firefox API called WebExtensions](https://github.com/lidel/ipfs-firefox-addon/issues/20).  It will be released as `2.x.x`  |
+| Versions `1.x.x` are maintained in [legacy-sdk](https://github.com/lidel/ipfs-firefox-addon/tree/legacy-sdk) branch. |
+
 # ipfs-firefox-addon AKA “IPFS Gateway Redirect”
 
 ![screenshot of v1.5.9](screenshot.png)
@@ -61,13 +67,6 @@ Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/fi
 
 It will guarantee automatic updates to the latest version reviewed by Mozilla community.
 
-### Manual Build
-
-It is also possible to manually build XPI from [the latest relase sources](https://github.com/lidel/ipfs-firefox-addon/releases/latest),
-however offical Firefox builds will not accept unsigned XPI package (only a developer version of Firefox can be used to run it).
-
-Please read [SECURITY.md](https://github.com/lidel/ipfs-firefox-addon/blob/master/SECURITY.md) if you want to perform quick security audit BEFORE installation.
-
 ### TROUBLESHOOTING
 
 #### Rule to work with NoScript with ABE enabled
@@ -90,9 +89,7 @@ Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript
 
 ## Contribute
 
-See [CONTRIBUTING](CONTRIBUTING.md)
-
-PRs are welcome.
+See [CONTRIBUTING](CONTRIBUTING.md) :sparkles:
 
 ## License
 
