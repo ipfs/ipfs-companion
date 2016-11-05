@@ -1,9 +1,8 @@
 'use strict'
-/* eslint-env mocha */
-/* globals withOptions, saveDefaultOptions, optionDefaults */
+/* eslint-env webextensions, mocha */
+/* globals sinon, expect, withOptions, saveDefaultOptions, optionDefaults */
 
 describe('init.js', function () {
-
   describe('withOptions', function () {
     it('should query local storage with hardcoded defaults for fallback', function (done) {
       chrome.storage.local.get.yields(optionDefaults)
@@ -34,13 +33,13 @@ describe('init.js', function () {
     }))
 
     it('should skip modified options', sinon.test(function () {
-      let modifiedOption = {ipfsApiUrl: 'http://10.1.2.4:8080'};
+      let modifiedOption = {ipfsApiUrl: 'http://10.1.2.4:8080'}
       chrome.storage.local.get.withArgs('ipfsApiUrl').yields(modifiedOption)
       chrome.storage.local.get.yields({})
       saveDefaultOptions(optionDefaults)
       for (let key in optionDefaults) {
-          let option = {}
-          option[key] = optionDefaults[key]
+        let option = {}
+        option[key] = optionDefaults[key]
         if (key === 'ipfsApiUrl') {
           sinon.assert.neverCalledWith(chrome.storage.local.set, option)
         } else {
@@ -51,5 +50,4 @@ describe('init.js', function () {
       chrome.storage.local.set.flush()
     }))
   })
-
 })

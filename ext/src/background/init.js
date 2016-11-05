@@ -1,4 +1,5 @@
 'use strict'
+/* eslint-env webextensions */
 
 var ipfsApi, isIpfs
 const optionDefaults = {
