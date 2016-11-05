@@ -32,6 +32,7 @@ before_script:
     - test $FIREFOX_RELEASE != release-linux64-add-on-devel || bash -x scripts/fetch-unbranded.sh $FIREFOX_RELEASE
     - test $FIREFOX_RELEASE != '49.0'                       || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - test $FIREFOX_RELEASE != esr-latest                   || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+    - test $FIREFOX_RELEASE != release-linux64-add-on-devel || unset COVERALLS_REPO_TOKEN # report just once
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
 script:
