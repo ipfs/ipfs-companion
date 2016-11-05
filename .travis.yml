@@ -4,6 +4,7 @@ node_js:
 sudo: false
 env:
     global:
+        - secure: "LUZnP+lhVj0zbFe/tSppMvI6jaXyOos84WZehPImMeara9/RRrRk5QpKsUsqr1x/oHzElJnbAX9OD/GOuEI4fyYv9qBXr8CKxBpmjlM2ElY85WcGm9mntRXtvR0iscR3Jg9kPtUBqzVlh1E/mQjs5GR2nLn0Fe34Xwl6TWd3m6c="
         - DISPLAY=':99.0'
         - FIREFOX_BINARY='./firefox/firefox'
         - PATH="./firefox/:${PATH}"

@@ -13,6 +13,7 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-blue.svg)](http://standardjs.com/)
 [![NSP Status](https://nodesecurity.io/orgs/lidelorg/projects/db13ad1f-ca19-42c5-8c58-dbb8d111b651/badge)](https://nodesecurity.io/orgs/lidelorg/projects/db13ad1f-ca19-42c5-8c58-dbb8d111b651)
 [![build-status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg?branch=master)](https://travis-ci.org/lidel/ipfs-firefox-addon)
+[![Coverage Status](https://coveralls.io/repos/github/lidel/ipfs-firefox-addon/badge.svg?branch=master)](https://coveralls.io/github/lidel/ipfs-firefox-addon?branch=master)
 
 > Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 
