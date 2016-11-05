@@ -7,7 +7,7 @@ module.exports = function (config) {
   config.set({
     singleRun: true,
     browsers: ['Firefox'],
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai', 'sinon'],
     reporters,
     coverageReporter: {
       dir: 'build/coverage',
@@ -27,7 +27,6 @@ module.exports = function (config) {
       ]
     },
     files: [
-      'node_modules/sinon/pkg/sinon.js',
       'node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
       'ext/src/background/*.js',
       'test/unit/*.test.js'
@@ -37,6 +36,8 @@ module.exports = function (config) {
       'karma-coveralls',
       'karma-coverage',
       'karma-firefox-launcher',
+      'karma-chai',
+      'karma-sinon',
       'karma-mocha',
       'karma-mocha-reporter'
     ]

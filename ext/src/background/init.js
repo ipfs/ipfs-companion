@@ -1,4 +1,5 @@
 'use strict'
+
 var ipfsApi, isIpfs
 const optionDefaults = {
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
@@ -8,27 +9,17 @@ const optionDefaults = {
 }
 
 function init () {
-  console.log('Initializing IPFS Support')
-  // ipfs-api
   withOptions((options) => {
-    // is-ipfs
     isIpfs = initIsIpfs()
-    console.log('is-ipfs library test (should be true) --> ' + isIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
-    // ipfs-api
     ipfsApi = initIpfsApi(options.ipfsApiUrl)
-    // execute test request :-)
-    ipfsApi.id().then(function (id) {
-      console.log('ipfs-api .id() test --> Node ID is: ', id)
-    }).catch(function (err) {
-      console.log('ipfs-api .id() test --> Failed to read Node info: ', err)
-    })
-    storeDefaultOptionsIfMissing()
+    smokeTestLibs()
+    saveDefaultOptions(options)
   })
 }
 
 function initIpfsApi (ipfsApiUrl) {
   const ipfsApi = window.frames.ipfsApiSandbox.IpfsApi
-  let parsed = document.createElement('a') // oh goddess why
+  const parsed = document.createElement('a') // oh goddess why
   parsed.href = ipfsApiUrl
   const apiHost = parsed.hostname
   const apiPort = parsed.port
@@ -41,6 +32,17 @@ function initIsIpfs () {
   return window.frames.isIpfsSandbox.IsIpfs
 }
 
+function smokeTestLibs () {
+  // is-ipfs
+  console.log('is-ipfs library test (should be true) --> ' + isIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
+  // ipfs-api: execute test request :-)
+  ipfsApi.id().then(function (id) {
+    console.log('ipfs-api .id() test --> Node ID is: ', id)
+  }).catch(function (err) {
+    console.log('ipfs-api .id() test --> Failed to read Node info: ', err)
+  })
+}
+
 function withOptions (callback) {
   chrome.storage.local.get(optionDefaults, (data) => {
     if (chrome.runtime.lastError) {
@@ -51,15 +53,20 @@ function withOptions (callback) {
   })
 }
 
-function storeDefaultOptionsIfMissing () {
-  for (let key in optionDefaults) {
-    chrome.storage.local.get(key, (data) => {
-      if (!data[key]) {
-        let option = {}
-        option[key] = optionDefaults[key]
-        chrome.storage.local.set(option)
-      }
-    })
+function saveDefaultOptions (readOptions) {
+  for (let key in readOptions) {
+    // inspect values which match defaults
+    if (readOptions[key] === optionDefaults[key]) {
+      // read value without fallback
+      chrome.storage.local.get(key, (data) => {
+        // save default value if data is missing
+        if (!data[key]) {
+          let option = {}
+          option[key] = optionDefaults[key]
+          chrome.storage.local.set(option)
+        }
+      })
+    }
   }
 }
 
