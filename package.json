@@ -7,20 +7,20 @@
   },
   "scripts": {
     "start": "run-s clean build test firefox",
-    "clean": "rm -f ext/src/lib/npm/*.js && rm -f build/*.zip",
+    "clean": "rm -f add-on/src/lib/npm/*.js && rm -f build/*.zip",
     "build": "run-s clean build:*",
-    "build:copy-is-ipfs-lib": "cp node_modules/is-ipfs/dist/index.min.js ext/src/lib/npm/is-ipfs.min.js",
-    "build:copy-ipfs-api-lib": "cp node_modules/ipfs-api/dist/index.min.js ext/src/lib/npm/ipfs-api.min.js",
-    "build:bundle-extension": "web-ext build -s ext -a build",
+    "build:copy-is-ipfs-lib": "cp node_modules/is-ipfs/dist/index.min.js add-on/src/lib/npm/is-ipfs.min.js",
+    "build:copy-ipfs-api-lib": "cp node_modules/ipfs-api/dist/index.min.js add-on/src/lib/npm/ipfs-api.min.js",
+    "build:bundle-extension": "web-ext build -s add-on/ -a build/",
     "test": "run-s test:*",
     "test:unit": "cross-env NODE_ENV=test karma start",
     "test:functional": "mocha test/functional",
     "lint": "run-s lint:*",
-    "lint:standard": "snazzy --fix -v \"ext/src/**/*.js\" \"test/**/*.js\"",
-    "lint:web-ext": "web-ext lint -s ext",
+    "lint:standard": "snazzy --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
+    "lint:web-ext": "web-ext lint -s add-on/",
     "git:push": "run-s test git:commit",
     "git:commit": "run-s clean lint build",
-    "firefox": "web-ext run -s ext"
+    "firefox": "web-ext run -s add-on/"
   },
   "pre-push": [
     "git:push"
@@ -30,7 +30,7 @@
   ],
   "standard": {
     "ignore": [
-      "ext/lib/npm/**"
+      "add-on/lib/npm/**"
     ]
   },
   "devDependencies": {
