@@ -28,7 +28,7 @@ module.exports = function (config) {
     },
     files: [
       'node_modules/sinon/pkg/sinon.js',
-      'node_modules/sinon-chrome/dist/sinon-chrome.latest.js',
+      'node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
       'ext/src/background/*.js',
       'test/unit/*.test.js'
     ],
