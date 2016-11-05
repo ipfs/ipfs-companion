@@ -18,8 +18,8 @@
     "lint": "run-s lint:*",
     "lint:standard": "snazzy --fix -v \"ext/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s ext",
-    "pre-push": "run-s test clean lint:* build",
-    "pre-commit": "run-s clean lint:* build",
+    "pre-push": "run-s test pre-commit",
+    "pre-commit": "run-s clean lint build",
     "firefox": "web-ext run -s ext"
   },
   "pre-push": [
