@@ -20,14 +20,8 @@ function init () {
 }
 
 function initIpfsApi (ipfsApiUrl) {
-  const parsed = document.createElement('a') // oh goddess why
-  parsed.href = ipfsApiUrl
-  const apiHost = parsed.hostname
-  const apiPort = parsed.port
-  const apiProtocol = parsed.protocol.split(':')[0]
-  parsed.remove()
-  console.log(window)
-  return window.IpfsApi({host: apiHost, port: apiPort, procotol: apiProtocol})
+  const url = new URL(ipfsApiUrl)
+  return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
 function smokeTestLibs () {
