@@ -1,7 +1,9 @@
 'use strict'
 /* eslint-env webextensions */
 
-var ipfsApi, isIpfs
+var ipfsApi
+const isIpfs = window.IsIpfs
+
 const optionDefaults = {
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
   useCustomGateway: true,
@@ -11,7 +13,6 @@ const optionDefaults = {
 
 function init () {
   withOptions((options) => {
-    isIpfs = initIsIpfs()
     ipfsApi = initIpfsApi(options.ipfsApiUrl)
     smokeTestLibs()
     saveDefaultOptions(options)
@@ -19,18 +20,14 @@ function init () {
 }
 
 function initIpfsApi (ipfsApiUrl) {
-  const ipfsApi = window.frames.ipfsApiSandbox.IpfsApi
   const parsed = document.createElement('a') // oh goddess why
   parsed.href = ipfsApiUrl
   const apiHost = parsed.hostname
   const apiPort = parsed.port
   const apiProtocol = parsed.protocol.split(':')[0]
   parsed.remove()
-  return ipfsApi({host: apiHost, port: apiPort, procotol: apiProtocol})
-}
-
-function initIsIpfs () {
-  return window.frames.isIpfsSandbox.IsIpfs
+  console.log(window)
+  return window.IpfsApi({host: apiHost, port: apiPort, procotol: apiProtocol})
 }
 
 function smokeTestLibs () {
