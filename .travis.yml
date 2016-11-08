@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-    - "6.1"
+    - "6"
 sudo: false
 env:
     global:
@@ -8,13 +8,23 @@ env:
         - DISPLAY=':99.0'
         - FIREFOX_BINARY='./firefox/firefox'
         - PATH="./firefox/:${PATH}"
+        - CXX=g++-4.8
     matrix:
+        - FIREFOX_RELEASE='release-linux64-add-on-devel'
         - FIREFOX_RELEASE='nightly-latest'
         - FIREFOX_RELEASE='aurora-latest'
-        - FIREFOX_RELEASE='beta-linux64-add-on-devel'
-        - FIREFOX_RELEASE='release-linux64-add-on-devel'
         - FIREFOX_RELEASE='49.0'
         - FIREFOX_RELEASE='esr-latest'
+        #- FIREFOX_RELEASE='beta-linux64-add-on-devel'
+
+# pulled in by node-webcrypto-ossl@1.0.7
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+
 matrix:
     fast_finish: true
     allow_failures:
@@ -33,6 +43,8 @@ before_script:
     - test $FIREFOX_RELEASE != esr-latest                   || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
     - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
     - sh -e /etc/init.d/xvfb start
+install:
+    - npm install --no-optional
 script:
     - npm run build
     - npm test
