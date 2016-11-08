@@ -1,5 +1,5 @@
 'use strict'
-/* eslint-env webextensions */
+/* eslint-env browser, webextensions */
 
 var ipfsApi
 const isIpfs = window.IsIpfs

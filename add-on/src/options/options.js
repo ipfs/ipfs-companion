@@ -1,5 +1,5 @@
 'use strict'
-/* eslint-env webextensions */
+/* eslint-env browser, webextensions */
 
 var options = new Set() // TODO: load list from background.js?
 options.add('publicGateways')

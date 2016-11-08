@@ -8,26 +8,22 @@
   "scripts": {
     "start": "run-s clean build test firefox",
     "clean": "rm -f add-on/src/lib/npm/*.js && rm -f build/*.zip",
-    "build": "run-s clean build:*",
+    "build": "run-s -n clean build:*",
     "build:copy-is-ipfs-lib": "cp node_modules/is-ipfs/dist/index.min.js add-on/src/lib/npm/is-ipfs.min.js",
     "build:copy-ipfs-api-lib": "cp node_modules/ipfs-api/dist/index.min.js add-on/src/lib/npm/ipfs-api.min.js",
     "build:bundle-extension": "web-ext build -s add-on/ -a build/",
-    "test": "run-s test:*",
+    "test": "run-s -n test:*",
     "test:unit": "cross-env NODE_ENV=test karma start",
     "test:functional": "mocha test/functional",
-    "lint": "run-s lint:*",
-    "lint:standard": "snazzy --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
+    "lint": "run-s -n lint:*",
+    "lint:standard": "standard --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s add-on/",
     "git:push": "run-s test git:commit",
     "git:commit": "run-s clean lint build",
     "firefox": "web-ext run -s add-on/"
   },
-  "pre-push": [
-    "git:push"
-  ],
-  "pre-commit": [
-    "git:commit"
-  ],
+  "pre-push": "git:push",
+  "pre-commit": "git:commit",
   "standard": {
     "ignore": [
       "add-on/lib/npm/**"
@@ -56,7 +52,6 @@
     "sinon": "1.17.6",
     "sinon-chai": "2.8.0",
     "sinon-chrome": "2.1.2",
-    "snazzy": "5.0.0",
     "standard": "8.5.0",
     "web-ext": "1.6.0"
   },
