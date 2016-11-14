@@ -28,6 +28,7 @@ module.exports = function (config) {
     },
     files: [
       'node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
+      'test/unit/*.shim.js',
       'add-on/src/background/*.js',
       'test/unit/*.test.js'
     ],

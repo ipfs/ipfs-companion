@@ -36,9 +36,9 @@ function smokeTestLibs () {
 }
 
 function withOptions (callback) {
-  chrome.storage.local.get(optionDefaults, (data) => {
-    if (chrome.runtime.lastError) {
-      console.log(chrome.runtime.lastError)
+  browser.storage.local.get(optionDefaults, (data) => {
+    if (browser.runtime.lastError) {
+      console.log(browser.runtime.lastError)
     } else {
       callback(data)
     }
@@ -50,12 +50,12 @@ function saveDefaultOptions (readOptions) {
     // inspect values which match defaults
     if (readOptions[key] === optionDefaults[key]) {
       // read value without fallback
-      chrome.storage.local.get(key, (data) => {
+      browser.storage.local.get(key, (data) => {
         // save default value if data is missing
         if (!data[key]) {
           let option = {}
           option[key] = optionDefaults[key]
-          chrome.storage.local.set(option)
+          browser.storage.local.set(option)
         }
       })
     }
@@ -84,4 +84,4 @@ function onStorageChange (changes, area) {
 // init during addon startup
 window.onload = init
 // start tracking storage changes (user options etc)
-chrome.storage.onChanged.addListener(onStorageChange)
+browser.storage.onChanged.addListener(onStorageChange)

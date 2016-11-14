@@ -21,14 +21,14 @@ function saveOption (name) {
     default:
       console.log('Unsupported option type: ' + element.type)
   }
-  chrome.storage.local.set(change)
+  browser.storage.local.set(change)
 }
 
 function readOption (name) {
   let element = document.querySelector(`#${name}`)
-  chrome.storage.local.get(name, (storage) => {
-    if (chrome.runtime.lastError) {
-      console.log(chrome.runtime.lastError)
+  browser.storage.local.get(name, (storage) => {
+    if (browser.runtime.lastError) {
+      console.log(browser.runtime.lastError)
     } else {
       let oldValue = storage[name]
       switch (element.type) {
