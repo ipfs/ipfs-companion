@@ -1,6 +1,7 @@
 {
+  "name": "ipfs-firefox-addon",
+  "homepage": "https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/",
   "license": "CC0-1.0",
-  "homepage": "https://github.com/lidel/ipfs-firefox-addon",
   "repository": {
     "type": "git",
     "url": "https://github.com/lidel/ipfs-firefox-addon.git"
@@ -22,6 +23,8 @@
     "git:commit": "run-s clean lint build",
     "firefox": "web-ext run -s add-on/"
   },
+  "private": true,
+  "preferGlobal": false,
   "pre-push": "git:push",
   "pre-commit": "git:commit",
   "standard": {
