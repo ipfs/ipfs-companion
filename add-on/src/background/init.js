@@ -2,21 +2,25 @@
 /* eslint-env browser, webextensions */
 
 var ipfsApi
-const isIpfs = window.IsIpfs
 
-const optionDefaults = {
+const optionDefaults = Object.freeze({
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
   useCustomGateway: true,
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001'
-}
+})
 
 function init () {
-  withOptions((options) => {
-    ipfsApi = initIpfsApi(options.ipfsApiUrl)
-    smokeTestLibs()
-    saveDefaultOptions(options)
-  })
+  const loadOptions = browser.storage.local.get(optionDefaults)
+  return loadOptions
+    .then(options => {
+      ipfsApi = initIpfsApi(options.ipfsApiUrl)
+      smokeTestLibs()
+      return storeMissingOptions(options, optionDefaults)
+    })
+    .catch(error => {
+      console.error(`Unable to load addon storage options due to ${error}`)
+    })
 }
 
 function initIpfsApi (ipfsApiUrl) {
@@ -26,62 +30,56 @@ function initIpfsApi (ipfsApiUrl) {
 
 function smokeTestLibs () {
   // is-ipfs
-  console.log('is-ipfs library test (should be true) --> ' + isIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
+  console.info('is-ipfs library test (should be true) --> ' + window.IsIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
   // ipfs-api: execute test request :-)
-  ipfsApi.id().then(function (id) {
-    console.log('ipfs-api .id() test --> Node ID is: ', id)
-  }).catch(function (err) {
-    console.log('ipfs-api .id() test --> Failed to read Node info: ', err)
-  })
+  ipfsApi.id()
+    .then(function (id) {
+      console.info('ipfs-api .id() test --> Node ID is: ', id)
+    })
+    .catch(function (err) {
+      console.info('ipfs-api .id() test --> Failed to read Node info: ', err)
+    })
 }
 
-function withOptions (callback) {
-  browser.storage.local.get(optionDefaults, (data) => {
-    if (browser.runtime.lastError) {
-      console.log(browser.runtime.lastError)
-    } else {
-      callback(data)
+function storeMissingOptions (read, defaults) {
+  const requiredKeys = Object.keys(defaults)
+  const changes = new Set()
+  requiredKeys.map(key => {
+    // limit work to defaults and missing values
+    if (!read.hasOwnProperty(key) || read[key] === defaults[key]) {
+      changes.add(new Promise((resolve, reject) => {
+        browser.storage.local.get(key).then(data => {
+          if (!data[key]) { // detect and fix key without value in storage
+            let option = {}
+            option[key] = defaults[key]
+            browser.storage.local.set(option)
+              .then(data => { resolve(`updated:${key}`) })
+              .catch(error => { reject(error) })
+          } else {
+            resolve(`nochange:${key}`)
+          }
+        })
+      }))
     }
   })
-}
-
-function saveDefaultOptions (readOptions) {
-  for (let key in readOptions) {
-    // inspect values which match defaults
-    if (readOptions[key] === optionDefaults[key]) {
-      // read value without fallback
-      browser.storage.local.get(key, (data) => {
-        // save default value if data is missing
-        if (!data[key]) {
-          let option = {}
-          option[key] = optionDefaults[key]
-          browser.storage.local.set(option)
-        }
-      })
-    }
-  }
+  return Promise.all(changes)
 }
 
 function onStorageChange (changes, area) {
   for (let key in changes) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
+      // debug info
+      //console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
         ipfsApi = initIpfsApi(change.newValue)
       }
-
-      // debug
-      console.log('Storage key "%s" in namespace "%s" changed. ' +
-      'Old value was "%s", new value is "%s".',
-        key,
-        area,
-        change.oldValue,
-        change.newValue)
     }
   }
 }
 
-// init during addon startup
-window.onload = init
 // start tracking storage changes (user options etc)
 browser.storage.onChanged.addListener(onStorageChange)
+
+// init during addon startup
+window.onload = init
