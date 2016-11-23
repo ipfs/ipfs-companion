@@ -70,7 +70,7 @@ function onStorageChange (changes, area) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
       // debug info
-      //console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
+      // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
         ipfsApi = initIpfsApi(change.newValue)
       }
@@ -81,5 +81,5 @@ function onStorageChange (changes, area) {
 // start tracking storage changes (user options etc)
 browser.storage.onChanged.addListener(onStorageChange)
 
-// init during addon startup
-window.onload = init
+// init add-on after all libs are loaded
+document.addEventListener('DOMContentLoaded', init)
