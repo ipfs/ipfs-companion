@@ -1,13 +1,19 @@
 'use strict'
 /* eslint-env webextensions, mocha */
-/* globals sinon, assert, init, initIpfsApi, onStorageChange, storeMissingOptions, optionDefaults */
+/* globals sinon, assert, URL, init, ipfsApi, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults */
 
 var sandbox
 
-describe('init.js', () => {
+var url2cfg = (string) => {
+  const url = new URL(string)
+  return {host: url.hostname, port: url.port, procotol: url.protocol}
+}
+
+describe('init.js', function () {
   beforeEach(() => {
     browser.flush()
     sandbox = sinon.sandbox.create()
+    sandbox.stub(window, 'IpfsApi')
   })
 
   afterEach(() => {
@@ -16,11 +22,9 @@ describe('init.js', () => {
   })
 
   describe('init()', function () {
-    const defaultIpfsApiUrl = optionDefaults['ipfsApiUrl']
     beforeEach(() => {
       browser.storage.local.get.returns(Promise.resolve(optionDefaults))
       sandbox.stub(window, 'smokeTestLibs')
-      sandbox.stub(window, 'initIpfsApi').returns({url: defaultIpfsApiUrl})
     })
     it('should query local storage for options with hardcoded defaults for fallback', done => {
       init()
@@ -31,11 +35,15 @@ describe('init.js', () => {
         .catch(error => { done(error) })
     })
     it('should create ipfsApi instance from URL in storage', done => {
+      const defaultIpfsApiUrl = optionDefaults['ipfsApiUrl']
+      const defaultCfg = url2cfg(defaultIpfsApiUrl)
+      IpfsApi.restore() // remove default stub, as we will need custom one
+      sandbox.stub(window, 'IpfsApi').withArgs(defaultCfg).returns(defaultCfg) // echo-like behaviour for easy test
       init()
         .then(() => {
-          sinon.assert.calledOnce(initIpfsApi)
-          sinon.assert.calledWith(initIpfsApi, defaultIpfsApiUrl)
-          assert.equal(window.ipfsApi.url, defaultIpfsApiUrl)
+          sinon.assert.calledOnce(IpfsApi)
+          sinon.assert.calledWith(IpfsApi, defaultCfg)
+          assert.equal(ipfsApi, defaultCfg) // expect echo
           done()
         })
         .catch(error => { done(error) })
@@ -48,11 +56,12 @@ describe('init.js', () => {
       const newIpfsApiUrl = 'http://1.2.3.4:8080'
       const changes = {ipfsApiUrl: {oldValue: oldIpfsApiUrl, newValue: newIpfsApiUrl}}
       const area = 'local'
-      sandbox.stub(window, 'initIpfsApi').returns({url: newIpfsApiUrl})
+      const newCfg = url2cfg(newIpfsApiUrl)
+      IpfsApi.restore() // remove default stub, as we will need custom one
+      sandbox.stub(window, 'IpfsApi').withArgs(newCfg).returns(newCfg)
       onStorageChange(changes, area)
-      sinon.assert.calledOnce(initIpfsApi)
-      sinon.assert.calledWith(initIpfsApi, newIpfsApiUrl)
-      assert.equal(window.ipfsApi.url, newIpfsApiUrl)
+      sinon.assert.calledOnce(IpfsApi)
+      sinon.assert.calledWith(IpfsApi, newCfg)
     })
   })
 

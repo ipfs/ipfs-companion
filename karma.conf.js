@@ -6,6 +6,7 @@ if (process.env.COVERALLS_REPO_TOKEN) {
 module.exports = function (config) {
   config.set({
     singleRun: true,
+    concurrency: Infinity,
     browsers: ['Firefox'],
     frameworks: ['mocha', 'chai', 'sinon'],
     reporters,
@@ -29,10 +30,12 @@ module.exports = function (config) {
     files: [
       'node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
       'test/unit/*.shim.js',
+      'add-on/src/lib/npm/is-ipfs.min.js',
+      'add-on/src/lib/npm/ipfs-api.min.js',
       'add-on/src/background/*.js',
       'test/unit/*.test.js'
     ],
-    preprocessors: {'add-on/**/*.js': ['coverage']},
+    preprocessors: {'add-on/**/!(npm)/*.js': ['coverage']},
     plugins: [
       'karma-coveralls',
       'karma-coverage',

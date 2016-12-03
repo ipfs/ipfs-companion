@@ -19,7 +19,7 @@ function init () {
       return storeMissingOptions(options, optionDefaults)
     })
     .catch(error => {
-      console.error(`Unable to load addon storage options due to ${error}`)
+      console.error(`Unable to initialize addon due to ${error}`)
     })
 }
 
