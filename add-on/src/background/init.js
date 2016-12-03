@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-var ipfsApi
+var ipfs
 
 const optionDefaults = Object.freeze({
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
@@ -14,7 +14,7 @@ function init () {
   const loadOptions = browser.storage.local.get(optionDefaults)
   return loadOptions
     .then(options => {
-      ipfsApi = initIpfsApi(options.ipfsApiUrl)
+      ipfs = initIpfsApi(options.ipfsApiUrl)
       smokeTestLibs()
       return storeMissingOptions(options, optionDefaults)
     })
@@ -32,7 +32,7 @@ function smokeTestLibs () {
   // is-ipfs
   console.info('is-ipfs library test (should be true) --> ' + window.IsIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
   // ipfs-api: execute test request :-)
-  ipfsApi.id()
+  ipfs.id()
     .then(function (id) {
       console.info('ipfs-api .id() test --> Node ID is: ', id)
     })
@@ -72,7 +72,7 @@ function onStorageChange (changes, area) {
       // debug info
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
-        ipfsApi = initIpfsApi(change.newValue)
+        ipfs = initIpfsApi(change.newValue)
       }
     }
   }

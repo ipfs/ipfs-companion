@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env webextensions, mocha */
-/* globals sinon, assert, URL, init, ipfsApi, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults */
+/* globals sinon, assert, URL, init, ipfs, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults */
 
 var sandbox
 
@@ -34,7 +34,7 @@ describe('init.js', function () {
         })
         .catch(error => { done(error) })
     })
-    it('should create ipfsApi instance from URL in storage', done => {
+    it('should create ipfs API instance from URL in storage', done => {
       const defaultIpfsApiUrl = optionDefaults['ipfsApiUrl']
       const defaultCfg = url2cfg(defaultIpfsApiUrl)
       IpfsApi.restore() // remove default stub, as we will need custom one
@@ -43,7 +43,7 @@ describe('init.js', function () {
         .then(() => {
           sinon.assert.calledOnce(IpfsApi)
           sinon.assert.calledWith(IpfsApi, defaultCfg)
-          assert.equal(ipfsApi, defaultCfg) // expect echo
+          assert.equal(ipfs, defaultCfg) // expect echo
           done()
         })
         .catch(error => { done(error) })
@@ -51,7 +51,7 @@ describe('init.js', function () {
   })
 
   describe('onStorageChange()', function () {
-    it('should update ipfsApi instance on IPFS API URL change', () => {
+    it('should update ipfs API instance on IPFS API URL change', () => {
       const oldIpfsApiUrl = 'http://127.0.0.1:5001'
       const newIpfsApiUrl = 'http://1.2.3.4:8080'
       const changes = {ipfsApiUrl: {oldValue: oldIpfsApiUrl, newValue: newIpfsApiUrl}}
