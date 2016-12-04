@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env webextensions, mocha */
-/* globals sinon, assert, URL, init, ipfs, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults */
+/* globals sinon, assert, URL, init, ipfs, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults, setBrowserActionBadge */
 
 var sandbox
 
@@ -51,7 +51,7 @@ describe('init.js', function () {
   })
 
   describe('onStorageChange()', function () {
-    it('should update ipfs API instance on IPFS API URL change', () => {
+    it('should update ipfs API instance on IPFS API URL change', done => {
       const oldIpfsApiUrl = 'http://127.0.0.1:5001'
       const newIpfsApiUrl = 'http://1.2.3.4:8080'
       const changes = {ipfsApiUrl: {oldValue: oldIpfsApiUrl, newValue: newIpfsApiUrl}}
@@ -62,6 +62,7 @@ describe('init.js', function () {
       onStorageChange(changes, area)
       sinon.assert.calledOnce(IpfsApi)
       sinon.assert.calledWith(IpfsApi, newCfg)
+      done()
     })
   })
 
@@ -119,4 +120,33 @@ describe('init.js', function () {
         .catch(error => { done(error) })
     })
   })
+
+  describe('setBrowserActionBadge()', function () {
+    it('should update text, color and icon of Browser Action button', done => {
+      setBrowserActionBadge('text', 'yellow', 'icon.svg')
+        .then(() => {
+          sinon.assert.calledWith(browser.browserAction.setBadgeText, {text: 'text'})
+          sinon.assert.calledWith(browser.browserAction.setBadgeBackgroundColor, {color: 'yellow'})
+          sinon.assert.calledWith(browser.browserAction.setIcon, {path: 'icon.svg'})
+          done()
+        })
+        .catch(error => { done(error) })
+    })
+  })
+
+  /* TODO :-)
+  describe('updateIpfsApiStatus', function () {
+    it('should update Browser Action button if API is offline', done => {
+      sandbox.stub(window, 'setBrowserActionBadge')
+      //sandbox.stub(ipfs.swarm, 'peers').returns(Promise.resolve([{}, {}, {}, {}]))
+      updateIpfsApiStatus()
+        .then(() => {
+          sinon.assert.calledWith(browser.browserAction.setBadgeText, {text: '4'})
+          sinon.assert.calledWith(setBrowserActionBadge, '4', 'red', 'foo')
+          done()
+        })
+        .catch(error => { done(error) })
+    })
+  })
+  */
 })

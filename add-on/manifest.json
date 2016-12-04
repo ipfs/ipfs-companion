@@ -12,6 +12,7 @@
     "permissions": [
         "<all_urls>",
         "notifications",
+        "alarms",
         "storage",
         "webRequest",
         "webRequestBlocking"
