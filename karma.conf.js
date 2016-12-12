@@ -32,6 +32,7 @@ module.exports = function (config) {
       'test/unit/*.shim.js',
       'add-on/src/lib/npm/is-ipfs.min.js',
       'add-on/src/lib/npm/ipfs-api.min.js',
+      'add-on/src/lib/*.js',
       'add-on/src/background/*.js',
       'test/unit/*.test.js'
     ],
