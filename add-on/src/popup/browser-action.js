@@ -6,17 +6,27 @@ const disableRedirect = document.getElementById('disable-gateway-redirect')
 const openWebUI = document.getElementById('open-webui')
 const openPreferences = document.getElementById('open-preferences')
 
-enableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: true}).then(updatePopup)
-disableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: false}).then(updatePopup)
+enableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: true})
+  .then(updatePopup)
+  .catch(error => { console.error(`Unable to update redirect state due to ${error}`) })
+
+disableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: false})
+  .then(updatePopup)
+  .catch(error => { console.error(`Unable to update redirect state due to ${error}`) })
+
 openWebUI.onclick = () => {
   browser.storage.local.get('ipfsApiUrl')
     .then(options => {
       const apiUrl = options['ipfsApiUrl']
       browser.tabs.create({ url: apiUrl + '/webui/' })
     })
+    .catch(error => {
+      console.error(`Unable Open Web UI due to ${error}`)
+    })
 }
+
 openPreferences.onclick = () => {
-  browser.runtime.openOptionsPage()
+  return browser.runtime.openOptionsPage()
 }
 
 function set (id, value) {
@@ -48,6 +58,9 @@ function updatePopup () {
         show('enable-gateway-redirect')
       }
     })
+    .catch(error => {
+      console.error(`Unable update redirect state due to ${error}`)
+    })
 
   // update gateway addresss
   browser.storage.local.get('customGatewayUrl')
@@ -67,6 +80,9 @@ function updatePopup () {
             if (peerCount < 0) {
               set('swarm-peers-val', 'offline')
             } else { set('swarm-peers-val', peerCount) }
+          })
+          .catch(error => {
+            console.error(`Unable update peer count due to ${error}`)
           })
       }
     })

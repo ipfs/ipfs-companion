@@ -10,6 +10,7 @@ const optionDefaults = Object.freeze({
   ipfsApiUrl: 'http://127.0.0.1:5001'
 })
 
+const idleInSecs = 60
 const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
 const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
 
@@ -40,10 +41,22 @@ function startBrowserActionBadgeUpdater () {
   browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
+function runIfNotIdle (action) {
+  browser.idle.queryState(idleInSecs)
+    .then(state => {
+      if (state === 'active') {
+        return action()
+      }
+    })
+    .catch(error => {
+      console.error(`Unable to read idle state due to ${error}`)
+    })
+}
+
 function handleAlarm (alarm) {
-  // console.log("alarm: " + alarm.name)
+  // avoid making expensive updates when IDLE
   if (alarm.name === ipfsApiStatusUpdateAlarm) {
-    updateIpfsApiStatus()
+    runIfNotIdle(refreshBrowserActionBadge)
   }
 }
 
@@ -58,7 +71,7 @@ function getSwarmPeerCount () {
     })
 }
 
-function updateIpfsApiStatus () {
+function refreshBrowserActionBadge () {
   let badgeText, badgeColor, badgeIcon
   return getSwarmPeerCount()
     .then(peerCount => {
@@ -76,6 +89,9 @@ function updateIpfsApiStatus () {
         badgeIcon = '/icons/ipfs-logo-off.svg'
       }
       return setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
+    })
+    .catch(error => {
+      console.error(`Unable to refresh BrowserAction Badge due to ${error}`)
     })
 }
 
@@ -133,6 +149,7 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
         ipfs = initIpfsApi(change.newValue)
+        browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
       } else if (key === 'useCustomGateway') {
         browser.alarms.create(ipfsRedirectUpdateAlarm, {})
       }
