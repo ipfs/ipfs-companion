@@ -1,6 +1,24 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const enableRedirect = document.getElementById('enable-gateway-redirect')
+const disableRedirect = document.getElementById('disable-gateway-redirect')
+const openWebUI = document.getElementById('open-webui')
+const openPreferences = document.getElementById('open-preferences')
+
+enableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: true}).then(updatePopup)
+disableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: false}).then(updatePopup)
+openWebUI.onclick = () => {
+  browser.storage.local.get('ipfsApiUrl')
+    .then(options => {
+      const apiUrl = options['ipfsApiUrl']
+      browser.tabs.create({ url: apiUrl + '/webui/' })
+    })
+}
+openPreferences.onclick = () => {
+  browser.runtime.openOptionsPage()
+}
+
 function set (id, value) {
   document.getElementById(id).innerHTML = value
 }
@@ -9,15 +27,23 @@ function show (id) {
   document.getElementById(id).style = 'display:inline-block'
 }
 
-function updateDiagnostics () {
+function hide (id) {
+  document.getElementById(id).style = 'display:none'
+}
+
+function updatePopup () {
   // update redirect status
   browser.storage.local.get('useCustomGateway')
     .then(options => {
       const enabled = options['useCustomGateway']
       if (enabled) {
+        hide('redirect-disabled')
+        hide('enable-gateway-redirect')
         show('redirect-enabled')
         show('disable-gateway-redirect')
       } else {
+        hide('redirect-enabled')
+        hide('disable-gateway-redirect')
         show('redirect-disabled')
         show('enable-gateway-redirect')
       }
@@ -50,7 +76,7 @@ function updateDiagnostics () {
 }
 
 // run on initial popup load
-updateDiagnostics()
+updatePopup()
 
 // listen to any changes and update diagnostics
-browser.alarms.onAlarm.addListener(updateDiagnostics)
+browser.alarms.onAlarm.addListener(updatePopup)

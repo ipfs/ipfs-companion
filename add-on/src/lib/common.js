@@ -11,6 +11,7 @@ const optionDefaults = Object.freeze({
 })
 
 const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
+const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
 
 // used in background/background.js
 function init () { // eslint-disable-line no-unused-vars
@@ -132,6 +133,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
         ipfs = initIpfsApi(change.newValue)
+      } else if (key === 'useCustomGateway') {
+        browser.alarms.create(ipfsRedirectUpdateAlarm, {})
       }
     }
   }

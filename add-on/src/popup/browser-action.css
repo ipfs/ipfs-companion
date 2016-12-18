@@ -54,7 +54,7 @@ li.action:active {
     height: 5rem;
 }
 
-
+#ipfs-resource-actions,
 #enable-gateway-redirect,
 #disable-gateway-redirect,
 #redirect-enabled,
