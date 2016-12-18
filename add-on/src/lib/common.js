@@ -12,7 +12,8 @@ const optionDefaults = Object.freeze({
 
 const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
 
-function init () {
+// used in background/background.js
+function init () { // eslint-disable-line no-unused-vars
   const loadOptions = browser.storage.local.get(optionDefaults)
   return loadOptions
     .then(options => {
@@ -33,9 +34,9 @@ function initIpfsApi (ipfsApiUrl) {
 
 function startBrowserActionBadgeUpdater () {
   const periodInMinutes = 0.05 // 3 secs
-  const delayInMinutes = 0.0
+  const when = Date.now() + 500
   browser.alarms.onAlarm.addListener(handleAlarm)
-  browser.alarms.create(ipfsApiStatusUpdateAlarm, { delayInMinutes, periodInMinutes })
+  browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
 function handleAlarm (alarm) {
@@ -45,27 +46,34 @@ function handleAlarm (alarm) {
   }
 }
 
-function updateIpfsApiStatus () {
-  let peerCount, badgeText, badgeColor, badgeIcon
+function getSwarmPeerCount () {
   return ipfs.swarm.peers()
     .then(peerInfos => {
-      peerCount = peerInfos.length
+      return peerInfos.length
+    })
+    .catch(() => {
+      // console.error(`Error while ipfs.swarm.peers: ${err}`)
+      return -1
+    })
+}
+
+function updateIpfsApiStatus () {
+  let badgeText, badgeColor, badgeIcon
+  return getSwarmPeerCount()
+    .then(peerCount => {
+      badgeText = peerCount.toString()
       if (peerCount > 0) {
         badgeColor = '#418B8E'
         badgeIcon = '/icons/ipfs-logo-on.svg'
-      } else {
+      } else if (peerCount === 0) {
         badgeColor = 'red'
         badgeIcon = '/icons/ipfs-logo-on.svg'
+      } else {
+        // API is offline
+        badgeText = ''
+        badgeColor = '#8C8C8C'
+        badgeIcon = '/icons/ipfs-logo-off.svg'
       }
-      badgeText = peerCount.toString()
-      return setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
-    })
-    .catch(() => {
-      // API is offline
-      // console.error(`Error while ipfs.swarm.peers: ${err}`)
-      badgeText = ''
-      badgeColor = '#8C8C8C'
-      badgeIcon = '/icons/ipfs-logo-off.svg'
       return setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
     })
 }
@@ -115,7 +123,8 @@ function storeMissingOptions (read, defaults) {
   return Promise.all(changes)
 }
 
-function onStorageChange (changes, area) {
+// used in background/background.js
+function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
   for (let key in changes) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
@@ -128,8 +137,3 @@ function onStorageChange (changes, area) {
   }
 }
 
-// start tracking storage changes (user options etc)
-browser.storage.onChanged.addListener(onStorageChange)
-
-// init add-on after all libs are loaded
-document.addEventListener('DOMContentLoaded', init)
