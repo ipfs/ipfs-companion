@@ -1,64 +1,54 @@
 'use strict'
 /* eslint-env browser, webextensions */
-
-var options = new Set() // TODO: load list from background.js?
-options.add('publicGateways')
-options.add('useCustomGateway')
-options.add('customGatewayUrl')
-options.add('ipfsApiUrl')
+/* global optionDefaults */
 
 function saveOption (name) {
-  let element = document.querySelector(`#${name}`)
-  let change = {}
-  switch (element.type) {
-    case 'text':
-    case 'url':
-      change[name] = element.value
-      break
-    case 'checkbox':
-      change[name] = element.checked
-      break
-    default:
-      console.log('Unsupported option type: ' + element.type)
+  const element = document.querySelector(`#${name}`)
+  if (element) {
+    const change = {}
+    switch (element.type) {
+      case 'text':
+      case 'url':
+        change[name] = element.value
+        break
+      case 'checkbox':
+        change[name] = element.checked
+        break
+      default:
+        console.log('Unsupported option type: ' + element.type)
+    }
+    browser.storage.local.set(change)
   }
-  browser.storage.local.set(change)
 }
 
 function readOption (name) {
-  let element = document.querySelector(`#${name}`)
-  browser.storage.local.get(name, (storage) => {
-    if (browser.runtime.lastError) {
-      console.log(browser.runtime.lastError)
-    } else {
-      let oldValue = storage[name]
-      switch (element.type) {
-        case 'text':
-        case 'url':
-          element.value = oldValue
-          break
-        case 'checkbox':
-          element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
-          break
-        default:
-          console.log('Unsupported option type: ' + element.type)
-      }
-    }
-  })
-}
-
-function saveOptions (e) {
-  for (let option of options) {
-    saveOption(option)
+  const element = document.querySelector(`#${name}`)
+  if (element) {
+    browser.storage.local.get(name)
+      .then(storage => {
+        if (browser.runtime.lastError) {
+          console.log(browser.runtime.lastError)
+        } else {
+          const oldValue = storage[name]
+          switch (element.type) {
+            case 'text':
+            case 'url':
+              element.value = oldValue
+              break
+            case 'checkbox':
+              element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
+              break
+            default:
+              console.log('Unsupported option type: ' + element.type)
+          }
+          element.onblur = () => saveOption(name) // autosave
+        }
+      })
   }
 }
 
-function readOptions () {
-  for (let option of options) {
-    readOption(option)
-  }
+function readAllOptions () {
+  Object.keys(optionDefaults).map(key => readOption(key))
 }
 
-document.addEventListener('DOMContentLoaded', readOptions)
-
-// TODO: remove button and save automatically (eg. on leaving input)
-document.querySelector('form').addEventListener('submit', saveOptions)
+document.addEventListener('DOMContentLoaded', readAllOptions)

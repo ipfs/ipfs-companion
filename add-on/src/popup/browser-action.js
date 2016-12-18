@@ -30,20 +30,22 @@ function updateDiagnostics () {
 
   browser.runtime.getBackgroundPage()
     .then(background => {
-      // update gateway version
-      background.ipfs.version()
-        .then(v => { set('gateway-version-val', (v.commit ? v.version + '/' + v.commit : v.version)) })
-        .catch(() => { set('gateway-version-val', 'offline') })
-      // update swarm peer count
-      background.getSwarmPeerCount()
-        .then(peerCount => {
-          if (peerCount < 0) {
-            set('swarm-peers-val', 'offline')
-          } else { set('swarm-peers-val', peerCount) }
-        })
+      if (background.ipfs) {
+        // update gateway version
+        background.ipfs.version()
+          .then(v => { set('gateway-version-val', (v.commit ? v.version + '/' + v.commit : v.version)) })
+          .catch(() => { set('gateway-version-val', 'offline') })
+        // update swarm peer count
+        background.getSwarmPeerCount()
+          .then(peerCount => {
+            if (peerCount < 0) {
+              set('swarm-peers-val', 'offline')
+            } else { set('swarm-peers-val', peerCount) }
+          })
+      }
     })
     .catch(error => {
-      console.error(`Unable to access background page due to ${error}`)
+      console.error(`Error while accessing background page: ${error}`)
     })
 }
 

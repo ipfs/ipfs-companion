@@ -9,20 +9,22 @@
 
     <form>
       <fieldset style="line-height: 2em; font-family: sans-serif;">
-        <legend>HTTP2IPFS Options</legend>
+        <legend>IPFS Options</legend>
 
-        <label>Public Gateway Hosts <input type="text" id="publicGateways" size="40" require placeholder="List of hostnames separated with spaces"/></label><br/>
+        <p><label>Redirect IPFS Requests to the Custom Gateway  <input type="checkbox" id="useCustomGateway" /></label></p>
 
-        <label>Custom Gateway URL <input type="url" id="customGatewayUrl" size="40" required pattern="https?://.+"/></label><br/>
+        <p><label>Public Gateways Hosts <input type="text" id="publicGateways" size="40" require placeholder="List of hostnames separated with spaces"/></label></p>
 
-        <label>IPFS HTTP API URL <input type="url" id="ipfsApiUrl" size="40" required pattern="https?://.+"/></label><br/>
+        <p><label>Custom Gateway URL <input type="url" id="customGatewayUrl" size="40" required pattern="https?://.+"/></label></p>
 
-        <label>Redirect to Custom Gateway  <input type="checkbox" id="useCustomGateway" /></label><br/>
 
-        <button type="submit" style="float:right;font-size:large">Save Options</button>
+        <p><label>IPFS API URL <input type="url" id="ipfsApiUrl" size="40" required pattern="https?://.+"/></label></p>
+
       </fieldset>
     </form>
 
+    <script src="../lib/common.js"></script>
+    <script src="../lib/data-i18n.js"></script>
     <script src="options.js"></script>
 
   </body>

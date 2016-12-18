@@ -19,7 +19,7 @@
     ],
 
     "background": {
-        "page": "src/background/init.html"
+        "page": "src/background/background.html"
     },
 
     "browser_action": {
