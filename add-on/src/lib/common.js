@@ -2,6 +2,9 @@
 /* eslint-env browser, webextensions */
 
 var ipfs
+var gwURLString
+var gwURL
+var ipfsRedirect
 
 const optionDefaults = Object.freeze({
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
@@ -21,12 +24,35 @@ function init () { // eslint-disable-line no-unused-vars
     .then(options => {
       ipfs = initIpfsApi(options.ipfsApiUrl)
       smokeTestLibs()
+      ipfsRedirect = options.useCustomGateway
+      gwURLString = options.customGatewayUrl
+      gwURL = new URL(gwURLString)
+      registerRequestRedirects()
       startBrowserActionBadgeUpdater()
       return storeMissingOptions(options, optionDefaults)
     })
     .catch(error => {
       console.error(`Unable to initialize addon due to ${error}`)
     })
+}
+
+function registerRequestRedirects () {
+  browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
+}
+
+function publicIpfsResource (url) {
+  return window.IsIpfs.url(url) && !url.startsWith(gwURLString)
+}
+
+function onBeforeRequest (request) {
+  if (ipfsRedirect && publicIpfsResource(request.url)) {
+    const newUrl = new URL(request.url)
+    newUrl.protocol = gwURL.protocol
+    newUrl.host = gwURL.host
+    newUrl.port = gwURL.port
+    console.log('redirecting: ' + request.url + ' to ' + newUrl.toString())
+    return { redirectUrl: newUrl.toString() }
+  }
 }
 
 function initIpfsApi (ipfsApiUrl) {
@@ -150,7 +176,11 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       if (key === 'ipfsApiUrl') {
         ipfs = initIpfsApi(change.newValue)
         browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
+      } else if (key === 'customGatewayUrl') {
+        gwURLString = change.newValue
+        gwURL = new URL(gwURLString)
       } else if (key === 'useCustomGateway') {
+        ipfsRedirect = change.newValue
         browser.alarms.create(ipfsRedirectUpdateAlarm, {})
       }
     }

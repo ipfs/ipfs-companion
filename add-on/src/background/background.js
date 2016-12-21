@@ -7,3 +7,4 @@ browser.storage.onChanged.addListener(onStorageChange)
 
 // init add-on after all libs are loaded
 document.addEventListener('DOMContentLoaded', init)
+
