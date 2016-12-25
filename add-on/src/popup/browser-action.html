@@ -6,27 +6,28 @@
 </head>
 
 <body>
+  <div>
   <img src="../../icons/ipfs-logo-off.svg" id="icon"/>
   <ul id="gateway-status">
+    <li id="gateway-address"><span data-i18n="panel_status-gateway-address"></span><span id="gateway-address-val">unknown</span></li>
+    <li id="gateway-version"><span data-i18n="panel_status-gateway-version"></span><span id="gateway-version-val">offline</span></li>
+    <li id="swarm-peers"><span data-i18n="panel_status-swarm-peers"></span><span id="swarm-peers-val">offline</span></li>
     <li id="gateway-redirect"> <span data-i18n="panel_status-gateway-redirect"></span>
       <span>
         <span id="redirect-enabled" data-i18n="panel_status-gateway-redirect-enabled"></span>
         <span id="redirect-disabled" data-i18n="panel_status-gateway-redirect-disabled"></span>
       </span>
     </li>
-    <li id="gateway-address"><span data-i18n="panel_status-gateway-address"></span><span id="gateway-address-val">unknown</span></li>
-    <li id="gateway-version"><span data-i18n="panel_status-gateway-version"></span><span id="gateway-version-val">offline</span></li>
-    <li id="swarm-peers"><span data-i18n="panel_status-swarm-peers"></span><span id="swarm-peers-val">offline</span></li>
   </ul>
+  </div>
 
   <ul id="operations">
-    <li class="header"><span data-i18n="panel_operations-header"></span></li>
+    <li class="action" id="open-webui" data-i18n="panel_open-webui"></span></li>
+    <li class="action" id="open-preferences" data-i18n="panel_open-preferences"></span></li>
     <li class="action" id="toggle-gateway-redirect">
       <span id="enable-gateway-redirect" data-i18n="panel_toggle-gateway-redirect-enable"></span>
       <span id="disable-gateway-redirect" data-i18n="panel_toggle-gateway-redirect-disable"></span>
     </li>
-    <li class="action" id="open-webui" data-i18n="panel_open-webui"></span></li>
-    <li class="action" id="open-preferences" data-i18n="panel_open-preferences"></span></li>
   </ul>
 
   <ul id="ipfs-resource-actions">

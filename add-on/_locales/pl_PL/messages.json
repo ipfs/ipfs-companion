@@ -92,9 +92,6 @@
   "panel_status-swarm-peers": {
     "message": "połączenia"
   },
-  "panel_operations-header": {
-    "message": "Operacje"
-  },
   "panel_open-webui": {
     "message": "Otwórz WebUI"
   },
