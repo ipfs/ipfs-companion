@@ -1,23 +1,15 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+
+// INIT
+// ===================================================================
 var ipfs
 var gwURLString
 var gwURL
 var ipfsRedirect
 
-const optionDefaults = Object.freeze({
-  publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
-  useCustomGateway: true,
-  customGatewayUrl: 'http://127.0.0.1:8080',
-  ipfsApiUrl: 'http://127.0.0.1:5001'
-})
-
-const idleInSecs = 60
-const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
-const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
-
-// used in background/background.js
+// init happens on addon load in background/background.js
 function init () { // eslint-disable-line no-unused-vars
   const loadOptions = browser.storage.local.get(optionDefaults)
   return loadOptions
@@ -27,8 +19,9 @@ function init () { // eslint-disable-line no-unused-vars
       ipfsRedirect = options.useCustomGateway
       gwURLString = options.customGatewayUrl
       gwURL = new URL(gwURLString)
-      registerRequestRedirects()
+      registerListeners()
       startBrowserActionBadgeUpdater()
+      registerListeners()
       return storeMissingOptions(options, optionDefaults)
     })
     .catch(error => {
@@ -36,9 +29,32 @@ function init () { // eslint-disable-line no-unused-vars
     })
 }
 
-function registerRequestRedirects () {
-  browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
+function initIpfsApi (ipfsApiUrl) {
+  const url = new URL(ipfsApiUrl)
+  return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
+
+function registerListeners () {
+  browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
+  browser.storage.onChanged.addListener(onStorageChange)
+  browser.tabs.onUpdated.addListener(onUpdatedTab)
+}
+
+function smokeTestLibs () {
+  // is-ipfs
+  console.info('is-ipfs library test (should be true) --> ' + window.IsIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
+  // ipfs-api: execute test request :-)
+  ipfs.id()
+    .then(id => {
+      console.info('ipfs-api .id() test --> Node ID is: ', id)
+    })
+    .catch(err => {
+      console.info('ipfs-api .id() test --> Failed to read Node info: ', err)
+    })
+}
+
+// REDIRECT
+// ===================================================================
 
 function publicIpfsResource (url) {
   return window.IsIpfs.url(url) && !url.startsWith(gwURLString)
@@ -55,16 +71,18 @@ function onBeforeRequest (request) {
   }
 }
 
-function initIpfsApi (ipfsApiUrl) {
-  const url = new URL(ipfsApiUrl)
-  return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
-}
+// ALARMS
+// ===================================================================
 
-function startBrowserActionBadgeUpdater () {
-  const periodInMinutes = 0.05 // 3 secs
-  const when = Date.now() + 500
-  browser.alarms.onAlarm.addListener(handleAlarm)
-  browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
+const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
+const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
+const idleInSecs = 60
+
+function handleAlarm (alarm) {
+  // avoid making expensive updates when IDLE
+  if (alarm.name === ipfsApiStatusUpdateAlarm) {
+    runIfNotIdle(refreshBrowserActionBadge)
+  }
 }
 
 function runIfNotIdle (action) {
@@ -79,12 +97,8 @@ function runIfNotIdle (action) {
     })
 }
 
-function handleAlarm (alarm) {
-  // avoid making expensive updates when IDLE
-  if (alarm.name === ipfsApiStatusUpdateAlarm) {
-    runIfNotIdle(refreshBrowserActionBadge)
-  }
-}
+// API HELPERS
+// ===================================================================
 
 function getSwarmPeerCount () {
   return ipfs.swarm.peers()
@@ -95,6 +109,32 @@ function getSwarmPeerCount () {
       // console.error(`Error while ipfs.swarm.peers: ${err}`)
       return -1
     })
+}
+
+// GUI
+// ===================================================================
+
+// pageAction
+// -------------------------------------------------------------------
+
+function onUpdatedTab (tabId, changeInfo, tab) {
+  // console.log('TODO onUpdatedTab: tabId=' + tabId + ', changeInfo=' + JSON.stringify(changeInfo) + ', tab=' + JSON.stringify(tab))
+  if (window.IsIpfs.url(tab.url)) {
+    browser.pageAction.show(tab.id)
+    console.log('enabling pageAction for tab.url=' + tab.url)
+  } else {
+    browser.pageAction.hide(tab.id)
+  }
+}
+
+// browserAction
+// -------------------------------------------------------------------
+
+function startBrowserActionBadgeUpdater () {
+  const periodInMinutes = 0.05 // 3 secs
+  const when = Date.now() + 500
+  browser.alarms.onAlarm.addListener(handleAlarm)
+  browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
 function refreshBrowserActionBadge () {
@@ -129,18 +169,15 @@ function setBrowserActionBadge (text, color, icon) {
   ])
 }
 
-function smokeTestLibs () {
-  // is-ipfs
-  console.info('is-ipfs library test (should be true) --> ' + window.IsIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
-  // ipfs-api: execute test request :-)
-  ipfs.id()
-    .then(id => {
-      console.info('ipfs-api .id() test --> Node ID is: ', id)
-    })
-    .catch(err => {
-      console.info('ipfs-api .id() test --> Failed to read Node info: ', err)
-    })
-}
+// OPTIONS
+// ===================================================================
+
+const optionDefaults = Object.freeze({
+  publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
+  useCustomGateway: true,
+  customGatewayUrl: 'http://127.0.0.1:8080',
+  ipfsApiUrl: 'http://127.0.0.1:5001'
+})
 
 function storeMissingOptions (read, defaults) {
   const requiredKeys = Object.keys(defaults)
@@ -166,7 +203,6 @@ function storeMissingOptions (read, defaults) {
   return Promise.all(changes)
 }
 
-// used in background/background.js
 function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
   for (let key in changes) {
     let change = changes[key]
@@ -187,3 +223,7 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
   }
 }
 
+// OTHER
+// ===================================================================
+
+// It's always worse than it seems

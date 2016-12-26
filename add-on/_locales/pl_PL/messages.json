@@ -104,9 +104,6 @@
   "panel_toggle-gateway-redirect-disable": {
     "message": "Wyłącz przekierowanie"
   },
-  "panel_ipfs-only-header": {
-    "message": "Operacje dla tego zasobu"
-  },
   "panel_pin-current-ipfs-address": {
     "message": "Przypnij zasób IPFS"
   },

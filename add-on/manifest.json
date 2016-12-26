@@ -12,6 +12,8 @@
     "permissions": [
         "<all_urls>",
         "idle",
+        "activeTab",
+        "tabs",
         "notifications",
         "alarms",
         "storage",
@@ -28,6 +30,13 @@
         "default_icon": "icons/ipfs-logo-off.svg",
         "default_title": "IPFS Gateway Redirect",
         "default_popup": "src/popup/browser-action.html"
+    },
+
+    "page_action": {
+        "browser_style": true,
+        "default_title": "Show IPFS actions for this page",
+        "default_icon": "icons/ipfs-logo-on.svg",
+        "default_popup": "src/popup/page-action.html"
     },
 
     "options_ui": {

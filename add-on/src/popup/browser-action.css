@@ -1,5 +1,6 @@
 body {
-    padding: 0.25rem;
+    margin: 0.25rem;
+    min-width: 300px;
 }
 p > img {
     vertical-align: middle;
@@ -66,7 +67,6 @@ li.action:active {
     float: right;
 }
 
-#ipfs-resource-actions,
 #enable-gateway-redirect,
 #disable-gateway-redirect,
 #redirect-enabled,

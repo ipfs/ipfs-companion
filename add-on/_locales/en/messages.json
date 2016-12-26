@@ -104,9 +104,6 @@
   "panel_toggle-gateway-redirect-disable": {
     "message": "Disable Gateway Redirect"
   },
-  "panel_ipfs-only-header": {
-    "message": "Actions for current address"
-  },
   "panel_pin-current-ipfs-address": {
     "message": "Pin IPFS Resource"
   },
