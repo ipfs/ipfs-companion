@@ -107,6 +107,9 @@
   "panel_pin-current-ipfs-address": {
     "message": "Pin IPFS Resource"
   },
+  "panel_unpin-current-ipfs-address": {
+    "message": "Unpin IPFS Resource"
+  },
   "panel_copy-current-ipfs-address": {
     "message": "Copy Canonical Address"
   },

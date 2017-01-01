@@ -1,7 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-
 // INIT
 // ===================================================================
 var ipfs
@@ -26,6 +25,7 @@ function init () { // eslint-disable-line no-unused-vars
     })
     .catch(error => {
       console.error(`Unable to initialize addon due to ${error}`)
+      notify('IPFS Add-on Issue', 'See Browser Console for more details')
     })
 }
 
@@ -114,14 +114,21 @@ function getSwarmPeerCount () {
 // GUI
 // ===================================================================
 
+function notify (title, message) {
+  browser.notifications.create({
+    'type': 'basic',
+    'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
+    'title': title,
+    'message': message
+  })
+}
+
 // pageAction
 // -------------------------------------------------------------------
 
 function onUpdatedTab (tabId, changeInfo, tab) {
-  // console.log('TODO onUpdatedTab: tabId=' + tabId + ', changeInfo=' + JSON.stringify(changeInfo) + ', tab=' + JSON.stringify(tab))
   if (window.IsIpfs.url(tab.url)) {
     browser.pageAction.show(tab.id)
-    console.log('enabling pageAction for tab.url=' + tab.url)
   } else {
     browser.pageAction.hide(tab.id)
   }

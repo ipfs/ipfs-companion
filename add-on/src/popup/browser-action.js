@@ -11,6 +11,18 @@ const ipfsIconOn = '../../icons/ipfs-logo-on.svg'
 const ipfsIconOff = '../../icons/ipfs-logo-off.svg'
 const offline = 'offline'
 
+function show (id) {
+  document.getElementById(id).style.display = 'inline-block'
+}
+
+function hide (id) {
+  document.getElementById(id).style.display = 'none'
+}
+
+function set (id, value) {
+  document.getElementById(id).innerHTML = value
+}
+
 enableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: true})
   .then(updatePopup)
   .catch(error => { console.error(`Unable to update redirect state due to ${error}`) })
@@ -32,18 +44,6 @@ openWebUI.onclick = () => {
 
 openPreferences.onclick = () => {
   return browser.runtime.openOptionsPage()
-}
-
-function set (id, value) {
-  document.getElementById(id).innerHTML = value
-}
-
-function show (id) {
-  document.getElementById(id).style = 'display:inline-block'
-}
-
-function hide (id) {
-  document.getElementById(id).style = 'display:none'
 }
 
 function updatePopup () {

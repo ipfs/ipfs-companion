@@ -107,6 +107,9 @@
   "panel_pin-current-ipfs-address": {
     "message": "Przypnij zasób IPFS"
   },
+  "panel_unpin-current-ipfs-address": {
+    "message": "Odepnij zasób IPFS"
+  },
   "panel_copy-current-ipfs-address": {
     "message": "Skopiuj kanoniczny adres"
   },
