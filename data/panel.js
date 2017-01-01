@@ -49,10 +49,16 @@ self.port.on('version', function (update) {
     : 'n/a'
 })
 
-self.port.on('swarm-peers', function (update) {
-  getById('swarm-peers-val').textContent = (update && update.Strings)
-    ? update.Strings.length
-    : 'n/a'
+self.port.on('swarm-peers', function (peers) {
+  var peerCount = null
+  if (peers && peers.Strings) { // go-ipfs <= 0.4.4
+    peerCount = peers.Strings.length
+  } else if (peers && peers.Peers) { // go-ipfs >= 0.4.5
+    peerCount = peers.Peers.length
+  } else {
+    peerCount = 'n/a'
+  }
+  getById('swarm-peers-val').textContent = peerCount
 })
 
 // outgoing
