@@ -3,10 +3,8 @@
 
 // INIT
 // ===================================================================
-var ipfs
-var gwURLString
-var gwURL
-var ipfsRedirect
+var ipfs // ipfs-api instance
+var state = {} // avoid redundant API reads by utilizing local cache of various states
 
 // init happens on addon load in background/background.js
 function init () { // eslint-disable-line no-unused-vars
@@ -14,12 +12,8 @@ function init () { // eslint-disable-line no-unused-vars
   return loadOptions
     .then(options => {
       ipfs = initIpfsApi(options.ipfsApiUrl)
-      smokeTestLibs()
-      ipfsRedirect = options.useCustomGateway
-      gwURLString = options.customGatewayUrl
-      gwURL = new URL(gwURLString)
-      registerListeners()
-      startBrowserActionBadgeUpdater()
+      initStates(options)
+      startAlarms()
       registerListeners()
       return storeMissingOptions(options, optionDefaults)
     })
@@ -34,12 +28,27 @@ function initIpfsApi (ipfsApiUrl) {
   return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
+function initStates (options) {
+  state.redirect = options.useCustomGateway
+  state.gwURLString = options.customGatewayUrl
+  state.gwURL = new URL(state.gwURLString)
+  state.automaticMode = options.automaticMode
+  getSwarmPeerCount()
+    .then(updatePeerCountState)
+    .then(updateBrowserActionBadge)
+}
+
+function updatePeerCountState (count) {
+  state.peerCount = count
+}
+
 function registerListeners () {
   browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
   browser.storage.onChanged.addListener(onStorageChange)
   browser.tabs.onUpdated.addListener(onUpdatedTab)
 }
 
+/*
 function smokeTestLibs () {
   // is-ipfs
   console.info('is-ipfs library test (should be true) --> ' + window.IsIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
@@ -52,20 +61,21 @@ function smokeTestLibs () {
       console.info('ipfs-api .id() test --> Failed to read Node info: ', err)
     })
 }
+*/
 
 // REDIRECT
 // ===================================================================
 
 function publicIpfsResource (url) {
-  return window.IsIpfs.url(url) && !url.startsWith(gwURLString)
+  return window.IsIpfs.url(url) && !url.startsWith(state.gwURLString)
 }
 
 function onBeforeRequest (request) {
-  if (ipfsRedirect && publicIpfsResource(request.url)) {
+  if (state.redirect && publicIpfsResource(request.url)) {
     const newUrl = new URL(request.url)
-    newUrl.protocol = gwURL.protocol
-    newUrl.host = gwURL.host
-    newUrl.port = gwURL.port
+    newUrl.protocol = state.gwURL.protocol
+    newUrl.host = state.gwURL.host
+    newUrl.port = state.gwURL.port
     console.log('redirecting: ' + request.url + ' to ' + newUrl.toString())
     return { redirectUrl: newUrl.toString() }
   }
@@ -76,15 +86,19 @@ function onBeforeRequest (request) {
 
 const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
 const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
-const idleInSecs = 60
 
 function handleAlarm (alarm) {
   // avoid making expensive updates when IDLE
   if (alarm.name === ipfsApiStatusUpdateAlarm) {
-    runIfNotIdle(refreshBrowserActionBadge)
+    getSwarmPeerCount()
+      .then(updatePeerCountState)
+      .then(updateAutomaticModeRedirectState)
+      .then(updateBrowserActionBadge)
   }
 }
 
+/*
+const idleInSecs = 60
 function runIfNotIdle (action) {
   browser.idle.queryState(idleInSecs)
     .then(state => {
@@ -96,6 +110,7 @@ function runIfNotIdle (action) {
       console.error(`Unable to read idle state due to ${error}`)
     })
 }
+*/
 
 // API HELPERS
 // ===================================================================
@@ -137,35 +152,29 @@ function onUpdatedTab (tabId, changeInfo, tab) {
 // browserAction
 // -------------------------------------------------------------------
 
-function startBrowserActionBadgeUpdater () {
+function startAlarms () {
   const periodInMinutes = 0.05 // 3 secs
   const when = Date.now() + 500
   browser.alarms.onAlarm.addListener(handleAlarm)
   browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
-function refreshBrowserActionBadge () {
+function updateBrowserActionBadge () {
   let badgeText, badgeColor, badgeIcon
-  return getSwarmPeerCount()
-    .then(peerCount => {
-      badgeText = peerCount.toString()
-      if (peerCount > 0) {
-        badgeColor = '#418B8E'
-        badgeIcon = '/icons/ipfs-logo-on.svg'
-      } else if (peerCount === 0) {
-        badgeColor = 'red'
-        badgeIcon = '/icons/ipfs-logo-on.svg'
-      } else {
-        // API is offline
-        badgeText = ''
-        badgeColor = '#8C8C8C'
-        badgeIcon = '/icons/ipfs-logo-off.svg'
-      }
-      return setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
-    })
-    .catch(error => {
-      console.error(`Unable to refresh BrowserAction Badge due to ${error}`)
-    })
+  badgeText = state.peerCount.toString()
+  if (state.peerCount > 0) {
+    badgeColor = '#418B8E'
+    badgeIcon = '/icons/ipfs-logo-on.svg'
+  } else if (state.peerCount === 0) {
+    badgeColor = 'red'
+    badgeIcon = '/icons/ipfs-logo-on.svg'
+  } else {
+    // API is offline
+    badgeText = ''
+    badgeColor = '#8C8C8C'
+    badgeIcon = '/icons/ipfs-logo-off.svg'
+  }
+  return setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
 }
 
 function setBrowserActionBadge (text, color, icon) {
@@ -182,9 +191,23 @@ function setBrowserActionBadge (text, color, icon) {
 const optionDefaults = Object.freeze({
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
   useCustomGateway: true,
+  automaticMode: true,
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001'
 })
+
+function updateAutomaticModeRedirectState () {
+  // enable/disable gw redirect based on API status and available peer count
+  if (state.automaticMode) {
+    if (state.peerCount > 0 && !state.redirect) { // enable if disabled
+      browser.storage.local.set({useCustomGateway: true})
+        .then(() => notify('IPFS API is Online', 'Automatic Mode: Custom Gateway Redirect is active'))
+    } else if (state.peerCount < 1 && state.redirect) { // disable if enabled
+      browser.storage.local.set({useCustomGateway: false})
+        .then(() => notify('IPFS API is Offline', 'Automatic Mode: Public Gateway will be used as a fallback'))
+    }
+  }
+}
 
 function storeMissingOptions (read, defaults) {
   const requiredKeys = Object.keys(defaults)
@@ -220,11 +243,13 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         ipfs = initIpfsApi(change.newValue)
         browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
       } else if (key === 'customGatewayUrl') {
-        gwURLString = change.newValue
-        gwURL = new URL(gwURLString)
+        state.gwURLString = change.newValue
+        state.gwURL = new URL(state.gwURLString)
       } else if (key === 'useCustomGateway') {
-        ipfsRedirect = change.newValue
+        state.redirect = change.newValue
         browser.alarms.create(ipfsRedirectUpdateAlarm, {})
+      } else if (key === 'automaticMode') {
+        state.automaticMode = change.newValue
       }
     }
   }
