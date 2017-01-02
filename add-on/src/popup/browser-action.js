@@ -36,6 +36,7 @@ openWebUI.onclick = () => {
     .then(options => {
       const apiUrl = options['ipfsApiUrl']
       browser.tabs.create({ url: apiUrl + '/webui/' })
+      window.close()
     })
     .catch(error => {
       console.error(`Unable Open Web UI due to ${error}`)
@@ -43,7 +44,7 @@ openWebUI.onclick = () => {
 }
 
 openPreferences.onclick = () => {
-  return browser.runtime.openOptionsPage()
+  browser.runtime.openOptionsPage().then(() => window.close())
 }
 
 function updatePopup () {
