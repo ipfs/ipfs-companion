@@ -1,3 +1,7 @@
+body {
+    margin: 0.25rem;
+    min-width: 300px;
+}
 p > img {
     vertical-align: middle;
 }
@@ -38,6 +42,7 @@ li.action:active {
 #gateway-status {
     padding: 0.5rem;
     min-height: 3em;
+    margin-right: 6rem;
 }
 #gateway-status > li {
     font-variant: small-caps;
@@ -46,10 +51,27 @@ li.action:active {
 #gateway-status > li > span:nth-of-type(2) {
     display: inline-block;
     float: right;
+    padding-left: 1rem;
 }
 
+#operations > li  {
+    text-align: center;
+
+}
 
 #icon {
-    width: 5rem;
-    height: 5rem;
+    width: 6rem;
+    height: 6rem;
+    padding: 0.25rem;
+    display: block;
+    float: right;
+}
+
+#pin-current-ipfs-address,
+#unpin-current-ipfs-address,
+#enable-gateway-redirect,
+#disable-gateway-redirect,
+#redirect-enabled,
+#redirect-disabled {
+    display: none;
 }

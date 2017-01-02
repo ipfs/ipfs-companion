@@ -92,9 +92,6 @@
   "panel_status-swarm-peers": {
     "message": "swarm peers"
   },
-  "panel_operations-header": {
-    "message": "Operations"
-  },
   "panel_open-webui": {
     "message": "Open WebUI"
   },
@@ -107,11 +104,11 @@
   "panel_toggle-gateway-redirect-disable": {
     "message": "Disable Gateway Redirect"
   },
-  "panel_ipfs-only-header": {
-    "message": "Actions for current address"
-  },
   "panel_pin-current-ipfs-address": {
     "message": "Pin IPFS Resource"
+  },
+  "panel_unpin-current-ipfs-address": {
+    "message": "Unpin IPFS Resource"
   },
   "panel_copy-current-ipfs-address": {
     "message": "Copy Canonical Address"
