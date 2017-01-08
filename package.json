@@ -52,7 +52,7 @@
     "pre-commit": "1.2.2",
     "pre-push": "0.1.1",
     "selenium-webdriver": "3.0.1",
-    "shx": "0.2.1",
+    "shx": "0.2.2",
     "sinon": "1.17.7",
     "sinon-chai": "2.8.0",
     "sinon-chrome": "2.1.2",
