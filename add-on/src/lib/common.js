@@ -30,9 +30,13 @@ function initIpfsApi (ipfsApiUrl) {
 
 function initStates (options) {
   state.redirect = options.useCustomGateway
+  state.apiURLString = options.ipfsApiUrl
+  state.apiURL = new URL(state.apiURLString)
   state.gwURLString = options.customGatewayUrl
   state.gwURL = new URL(state.gwURLString)
   state.automaticMode = options.automaticMode
+  state.dnslink = options.dnslink
+  state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
   getSwarmPeerCount()
     .then(updatePeerCountState)
     .then(updateBrowserActionBadge)
@@ -70,15 +74,120 @@ function publicIpfsResource (url) {
   return window.IsIpfs.url(url) && !url.startsWith(state.gwURLString)
 }
 
+function redirectToCustomGateway (request) {
+  const url = new URL(request.url)
+  url.protocol = state.gwURL.protocol
+  url.host = state.gwURL.host
+  url.port = state.gwURL.port
+  return { redirectUrl: url.toString() }
+}
+
 function onBeforeRequest (request) {
-  if (state.redirect && publicIpfsResource(request.url)) {
-    const newUrl = new URL(request.url)
-    newUrl.protocol = state.gwURL.protocol
-    newUrl.host = state.gwURL.host
-    newUrl.port = state.gwURL.port
-    console.log('redirecting: ' + request.url + ' to ' + newUrl.toString())
-    return { redirectUrl: newUrl.toString() }
+  if (state.redirect) {
+    // IPFS resources
+    if (publicIpfsResource(request.url)) {
+      return redirectToCustomGateway(request)
+    }
+    // Look for dnslink in TXT records of visited sites
+    if (isDnslookupEnabled(request)) {
+      return dnslinkLookup(request)
+    }
   }
+}
+
+// DNSLINK
+// ===================================================================
+
+function isDnslookupEnabled (request) {
+  return state.dnslink &&
+    state.peerCount > 0 &&
+    request.url.startsWith('http') &&
+    !request.url.startsWith(state.apiURLString) &&
+    !request.url.startsWith(state.gwURLString)
+}
+
+function dnslinkLookup (request) {
+  // TODO: benchmark and improve performance
+  const requestUrl = new URL(request.url)
+  const fqdn = requestUrl.hostname
+  let dnslink = state.dnslinkCache.get(fqdn)
+  if (typeof dnslink === 'undefined') {
+    // fetching fresh dnslink is expensive, so we switch to async
+    console.log('dnslink cache miss for: ' + fqdn)
+    /* According to https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest/onBeforeRequest
+     * "From Firefox 52 onwards, instead of returning BlockingResponse, the listener can return a Promise
+     * which is resolved with a BlockingResponse. This enables the listener to process the request asynchronously."
+     *
+     * Seems that this does not work yet, and even tho promise is executed, request is not blocked but resolves to regular URL.
+     * TODO: This should be revisited after Firefox 52 is released. If does not work by then, we need to fill a bug.
+     */
+    return asyncDnslookupResponse(fqdn, requestUrl)
+  }
+  if (dnslink) {
+    console.log('SYNC resolving to Cached dnslink redirect:' + fqdn)
+    return redirectToDnslinkPath(requestUrl, dnslink)
+  }
+}
+
+function asyncDnslookupResponse (fqdn, requestUrl) {
+  return readDnslinkTxtRecordFromApi(fqdn)
+      .then(dnslink => {
+        if (dnslink) {
+          state.dnslinkCache.set(fqdn, dnslink)
+          console.log('ASYNC Resolved dnslink for:' + fqdn + ' is: ' + dnslink)
+          return redirectToDnslinkPath(requestUrl, dnslink)
+        } else {
+          state.dnslinkCache.set(fqdn, false)
+          console.log('ASYNC NO dnslink for:' + fqdn)
+          return {}
+        }
+      })
+      .catch((error) => {
+        console.error(`ASYNC Error in asyncDnslookupResponse for '${fqdn}': ${error}`)
+        console.error(error)
+        return {}
+      })
+}
+
+function redirectToDnslinkPath (url, dnslink) {
+  url.protocol = state.gwURL.protocol
+  url.host = state.gwURL.host
+  url.port = state.gwURL.port
+  url.pathname = dnslink + url.pathname
+  return { redirectUrl: url.toString() }
+}
+
+function readDnslinkTxtRecordFromApi (fqdn) {
+  // js-ipfs-api does not provide method for fetching this
+  // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
+  return new Promise((resolve, reject) => {
+    const apiCall = state.apiURLString + '/api/v0/dns/' + fqdn
+    const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
+    xhr.open('GET', apiCall)
+    xhr.setRequestHeader('Accept', 'application/json')
+    xhr.onload = function () {
+      if (this.status === 200) {
+        const dnslink = JSON.parse(xhr.responseText).Path
+        resolve(dnslink)
+      } else if (this.status === 500) {
+        // go-ipfs returns 500 if host has no dnslink
+        // TODO: find/fill an upstream bug to make this more intuitive
+        resolve(false)
+      } else {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        })
+      }
+    }
+    xhr.onerror = function () {
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      })
+    }
+    xhr.send()
+  })
 }
 
 // ALARMS
@@ -179,8 +288,8 @@ function updateBrowserActionBadge () {
 
 function setBrowserActionBadge (text, color, icon) {
   return Promise.all([
-    browser.browserAction.setBadgeText({text: text}),
     browser.browserAction.setBadgeBackgroundColor({color: color}),
+    browser.browserAction.setBadgeText({text: text}),
     browser.browserAction.setIcon({path: icon})
   ])
 }
@@ -192,6 +301,7 @@ const optionDefaults = Object.freeze({
   publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
   useCustomGateway: true,
   automaticMode: true,
+  dnslink: false,
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001'
 })
@@ -240,7 +350,9 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       // debug info
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
-        ipfs = initIpfsApi(change.newValue)
+        state.apiURLString = change.newValue
+        state.apiURL = new URL(state.apiURLString)
+        ipfs = initIpfsApi(state.apiURLString)
         browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
       } else if (key === 'customGatewayUrl') {
         state.gwURLString = change.newValue
@@ -250,6 +362,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         browser.alarms.create(ipfsRedirectUpdateAlarm, {})
       } else if (key === 'automaticMode') {
         state.automaticMode = change.newValue
+      } else if (key === 'dnslink') {
+        state.dnslink = change.newValue
       }
     }
   }

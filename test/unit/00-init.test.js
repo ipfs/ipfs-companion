@@ -24,7 +24,7 @@ describe('init.js', function () {
   describe('init()', function () {
     beforeEach(() => {
       browser.storage.local.get.returns(Promise.resolve(optionDefaults))
-      //sandbox.stub(window, 'smokeTestLibs')
+      // sandbox.stub(window, 'smokeTestLibs')
     })
     it('should query local storage for options with hardcoded defaults for fallback', done => {
       init()

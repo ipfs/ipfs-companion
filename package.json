@@ -10,8 +10,9 @@
     "start": "run-s clean build test firefox",
     "clean": "shx rm -f add-on/src/lib/npm/*.js build/*.zip",
     "build": "run-s clean build:*",
-    "build:copy-is-ipfs-lib": "shx cp node_modules/is-ipfs/dist/index.min.js add-on/src/lib/npm/is-ipfs.min.js",
-    "build:copy-ipfs-api-lib": "shx cp node_modules/ipfs-api/dist/index.min.js add-on/src/lib/npm/ipfs-api.min.js",
+    "build:copy-is-ipfs-lib": "cp node_modules/is-ipfs/dist/index.min.js add-on/src/lib/npm/is-ipfs.min.js",
+    "build:copy-ipfs-api-lib": "cp node_modules/ipfs-api/dist/index.min.js add-on/src/lib/npm/ipfs-api.min.js",
+    "build:copy-lru-map-lib": "cp node_modules/lru_map/lru.js add-on/src/lib/npm/lru.js",
     "build:bundle-extension": "web-ext build -s add-on/ -a build/",
     "test": "run-s test:*",
     "test:unit": "cross-env NODE_ENV=test karma start",
@@ -29,7 +30,7 @@
   "pre-commit": "git:commit",
   "standard": {
     "ignore": [
-      "add-on/lib/npm/**"
+      "add-on/src/lib/npm/**"
     ]
   },
   "devDependencies": {
@@ -61,6 +62,7 @@
   },
   "dependencies": {
     "ipfs-api": "12.1.2",
-    "is-ipfs": "0.2.1"
+    "is-ipfs": "0.2.1",
+    "lru_map": "0.3.2"
   }
 }

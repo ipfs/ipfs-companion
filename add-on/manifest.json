@@ -8,6 +8,12 @@
     "icons": {
         "48": "icons/ipfs-logo-on.svg"
     },
+    "applications": {
+        "gecko": {
+            "id": "ipfs-firefox-addon@lidel.org",
+            "strict_min_version": "50.0"
+        }
+    },
 
     "permissions": [
         "<all_urls>",
