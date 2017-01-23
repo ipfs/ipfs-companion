@@ -304,6 +304,10 @@ const optionDefaults = Object.freeze({
   dnslink: false,
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001'
+  // TODO:
+  // ipfsApiPollMs
+  // linkify
+  // defaultToFsProtocol
 })
 
 function updateAutomaticModeRedirectState () {
