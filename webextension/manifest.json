@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "IPFS Gateway Redirect WebExtension Transition",
+    "version" : "0.1.6",
+
+    "permissions": [
+        "storage"
+    ],
+
+    "background": {
+        "scripts": ["background.js"]
+    }
+
+}
