@@ -13,7 +13,7 @@ function init () { // eslint-disable-line no-unused-vars
     .then(options => {
       ipfs = initIpfsApi(options.ipfsApiUrl)
       initStates(options)
-      startAlarms()
+      restartAlarms(options)
       registerListeners()
       return storeMissingOptions(options, optionDefaults)
     })
@@ -261,10 +261,19 @@ function onUpdatedTab (tabId, changeInfo, tab) {
 // browserAction
 // -------------------------------------------------------------------
 
-function startAlarms () {
-  const periodInMinutes = 0.05 // 3 secs
+function restartAlarms (options) {
+  const clearAlarms = browser.alarms.clearAll()
+  if (!browser.alarms.onAlarm.hasListener(handleAlarm)) {
+    browser.alarms.onAlarm.addListener(handleAlarm)
+  }
+  clearAlarms.then(() => {
+    createIpfsApiStatusUpdateAlarm(options.ipfsApiPollMs)
+  })
+}
+
+function createIpfsApiStatusUpdateAlarm (ipfsApiPollMs) {
+  const periodInMinutes = ipfsApiPollMs / 60000
   const when = Date.now() + 500
-  browser.alarms.onAlarm.addListener(handleAlarm)
   browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
@@ -303,9 +312,9 @@ const optionDefaults = Object.freeze({
   automaticMode: true,
   dnslink: false,
   customGatewayUrl: 'http://127.0.0.1:8080',
-  ipfsApiUrl: 'http://127.0.0.1:5001'
+  ipfsApiUrl: 'http://127.0.0.1:5001',
+  ipfsApiPollMs: 3000
   // TODO:
-  // ipfsApiPollMs
   // linkify
   // defaultToFsProtocol
 })
@@ -358,6 +367,10 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         state.apiURL = new URL(state.apiURLString)
         ipfs = initIpfsApi(state.apiURLString)
         browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
+      } else if (key === 'ipfsApiPollMs') {
+        browser.alarms.clear(ipfsApiStatusUpdateAlarm).then(() => {
+          createIpfsApiStatusUpdateAlarm(change.newValue)
+        })
       } else if (key === 'customGatewayUrl') {
         state.gwURLString = change.newValue
         state.gwURL = new URL(state.gwURLString)

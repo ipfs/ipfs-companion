@@ -8,6 +8,7 @@ function saveOption (name) {
     const change = {}
     switch (element.type) {
       case 'text':
+      case 'number':
       case 'url':
         change[name] = element.value
         break
@@ -30,6 +31,11 @@ function readOption (name) {
         switch (element.type) {
           case 'text':
           case 'url':
+            element.value = oldValue
+            break
+          case 'number':
+            // handle number change via mouse + widget controls
+            element.onclick = () => saveOption(name)
             element.value = oldValue
             break
           case 'checkbox':

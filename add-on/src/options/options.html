@@ -9,20 +9,37 @@
 
     <form>
       <fieldset style="line-height: 2em; font-family: sans-serif;">
-        <legend>IPFS Options</legend>
+        <legend>Basic</legend>
+
+
+        <p><label>Public Gateways Hosts <input type="text" id="publicGateways" size="40" required placeholder="List of hostnames separated with spaces"/></label></p>
+
+        <p><label>Custom Gateway URL <input type="url" id="customGatewayUrl" size="40" inputmode="url" required pattern="https?://.+"/></label></p>
+
+
+        <p><label>IPFS API URL <input type="url" id="ipfsApiUrl" size="40" inputmode="url" required pattern="https?://.+"/></label></p>
 
         <p><label>Redirect IPFS Requests to the Custom Gateway  <input type="checkbox" id="useCustomGateway" /></label></p>
 
         <p><label>Automatic Mode <small>(Redirect only when IPFS API is Online and node has peers)</small> <input type="checkbox" id="automaticMode" /></label></p>
 
-        <p><label>Enable <code>dnslink</code> lookups for every website <small>(experimental, degrades browser performance)</small>  <input type="checkbox" id="dnslink" /></label></p>
+      </fieldset>
+    </form>
 
-        <p><label>Public Gateways Hosts <input type="text" id="publicGateways" size="40" require placeholder="List of hostnames separated with spaces"/></label></p>
+    <form>
+      <fieldset style="line-height: 2em; font-family: sans-serif;">
+        <legend>Advanced</legend>
 
-        <p><label>Custom Gateway URL <input type="url" id="customGatewayUrl" size="40" required pattern="https?://.+"/></label></p>
+        <p><label>IPFS API Status Poll Interval (ms) <input type="number" inputmode="numeric" id="ipfsApiPollMs" min="1000" max="60000" step="1000" required /></label></p>
 
+      </fieldset>
+    </form>
 
-        <p><label>IPFS API URL <input type="url" id="ipfsApiUrl" size="40" required pattern="https?://.+"/></label></p>
+    <form>
+      <fieldset style="line-height: 2em; font-family: sans-serif;">
+        <legend>Experimental</legend>
+
+        <p><label>Enable <code>dnslink</code> lookups for every website  <input type="checkbox" id="dnslink" /> <small>(experimental, degrades browser performance)</small> </label></p>
 
       </fieldset>
     </form>
