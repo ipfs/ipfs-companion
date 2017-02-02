@@ -203,6 +203,7 @@ function handleAlarm (alarm) {
       .then(updatePeerCountState)
       .then(updateAutomaticModeRedirectState)
       .then(updateBrowserActionBadge)
+      .then(updateContextMenus)
   }
 }
 
@@ -247,11 +248,37 @@ function notify (title, message) {
   })
 }
 
+// contextMenus
+// -------------------------------------------------------------------
+const contextMenuUploadToIpfs = 'upload-to-ipfs'
+
+browser.contextMenus.create({
+  id: contextMenuUploadToIpfs,
+  title: contextMenuUploadToIpfs, // TODO: i18
+  contexts: ['image', 'video', 'audio'],
+  onclick: (info, tab) => {
+    ipfs.util.addFromURL(info.srcUrl, (err, result) => {
+      if (err) {
+        notify('Unable to upload to IPFS API', `${err}`)
+        return
+      }
+      browser.tabs.create({
+        'url': new URL(state.gwURLString + '/ipfs/' + result[0].hash).toString()
+      })
+    })
+  }
+})
+
+function updateContextMenus () {
+  browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
+}
+
 // pageAction
 // -------------------------------------------------------------------
 
 function onUpdatedTab (tabId, changeInfo, tab) {
-  if (window.IsIpfs.url(tab.url)) {
+  const ipfsContext = window.IsIpfs.url(tab.url)
+  if (ipfsContext) {
     browser.pageAction.show(tab.id)
   } else {
     browser.pageAction.hide(tab.id)

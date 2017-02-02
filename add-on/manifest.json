@@ -23,6 +23,7 @@
         "notifications",
         "alarms",
         "storage",
+        "contextMenus",
         "webRequest",
         "webRequestBlocking"
     ],
