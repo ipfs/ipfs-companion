@@ -58,7 +58,7 @@
     "sinon-chai": "2.8.0",
     "sinon-chrome": "2.1.2",
     "standard": "8.6.0",
-    "web-ext": "1.7.0"
+    "web-ext": "1.8.0"
   },
   "dependencies": {
     "ipfs-api": "12.1.3",
