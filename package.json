@@ -22,7 +22,7 @@
     "lint:web-ext": "web-ext lint -s add-on/",
     "git:push": "run-s test git:commit",
     "git:commit": "run-s clean lint build",
-    "firefox": "web-ext run -s add-on/"
+    "firefox": "web-ext run -s add-on/ --browser-console"
   },
   "private": true,
   "preferGlobal": false,
