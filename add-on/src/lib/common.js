@@ -250,11 +250,11 @@ function notify (title, message) {
 
 // contextMenus
 // -------------------------------------------------------------------
-const contextMenuUploadToIpfs = 'upload-to-ipfs'
+const contextMenuUploadToIpfs = 'context-menu-upload-to-ipfs'
 
 browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
-  title: contextMenuUploadToIpfs, // TODO: i18
+  title: browser.i18n.getMessage(contextMenuUploadToIpfs),
   contexts: ['image', 'video', 'audio'],
   onclick: (info, tab) => {
     ipfs.util.addFromURL(info.srcUrl, (err, result) => {

@@ -115,5 +115,8 @@
   },
   "panel_copy-current-public-gw-url": {
     "message": "Skopiuj URL do publicznej bramy"
+  },
+  "context-menu-upload-to-ipfs": {
+    "message": "Wyślij do IPFS"
   }
 }

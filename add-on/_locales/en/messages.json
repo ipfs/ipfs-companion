@@ -115,5 +115,8 @@
   },
   "panel_copy-current-public-gw-url": {
     "message": "Copy Public Gateway URL"
+  },
+  "context-menu-upload-to-ipfs": {
+    "message": "Upload to IPFS"
   }
 }
