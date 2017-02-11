@@ -39,7 +39,7 @@
     "fakefile": "0.0.8",
     "fs-promise": "1.0.0",
     "fx-runner": "1.0.6",
-    "geckodriver": "1.2.1",
+    "geckodriver": "1.4.0",
     "karma": "1.4.1",
     "karma-chai": "0.1.0",
     "karma-coverage": "1.1.1",
@@ -58,7 +58,7 @@
     "sinon-chai": "2.8.0",
     "sinon-chrome": "2.1.2",
     "standard": "9.0.0-beta.0",
-    "web-ext": "1.8.0"
+    "web-ext": "1.8.1"
   },
   "dependencies": {
     "ipfs-api": "12.1.6",

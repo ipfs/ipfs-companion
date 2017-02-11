@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-    - "6"
+    - "node"
 sudo: false
 env:
     global:
@@ -26,10 +26,10 @@ addons:
 
 matrix:
     fast_finish: true
-    allow_failures:
-        - env: FIREFOX_RELEASE='nightly-latest'
-        - env: FIREFOX_RELEASE='aurora-latest'
-        #- env: FIREFOX_RELEASE='esr-latest'
+    #    allow_failures:
+    #    - env: FIREFOX_RELEASE='nightly-latest'
+    #    - env: FIREFOX_RELEASE='aurora-latest'
+    #    - env: FIREFOX_RELEASE='esr-latest'
 cache:
     directories:
         - node_modules
