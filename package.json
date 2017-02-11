@@ -57,7 +57,7 @@
     "sinon": "1.17.7",
     "sinon-chai": "2.8.0",
     "sinon-chrome": "2.1.2",
-    "standard": "8.6.0",
+    "standard": "9.0.0-beta.0",
     "web-ext": "1.8.1"
   },
   "dependencies": {

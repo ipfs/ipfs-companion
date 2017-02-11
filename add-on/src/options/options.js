@@ -61,4 +61,3 @@ document.addEventListener('DOMContentLoaded', readAllOptions)
 
 // update on external changes such as browserAction menu
 browser.storage.onChanged.addListener(readAllOptions)
-
