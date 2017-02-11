@@ -174,17 +174,11 @@ function readDnslinkTxtRecordFromApi (fqdn) {
         // TODO: find/fill an upstream bug to make this more intuitive
         resolve(false)
       } else {
-        reject({
-          status: this.status,
-          statusText: xhr.statusText
-        })
+        reject(new Error(xhr.statusText))
       }
     }
     xhr.onerror = function () {
-      reject({
-        status: this.status,
-        statusText: xhr.statusText
-      })
+      reject(new Error(xhr.statusText))
     }
     xhr.send()
   })
