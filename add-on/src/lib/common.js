@@ -1,5 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
+/* global optionDefaults */
 
 // INIT
 // ===================================================================
@@ -35,6 +36,7 @@ function initStates (options) {
   state.gwURLString = options.customGatewayUrl
   state.gwURL = new URL(state.gwURLString)
   state.automaticMode = options.automaticMode
+  state.linkify = options.linkify
   state.dnslink = options.dnslink
   state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
   getSwarmPeerCount()
@@ -278,11 +280,24 @@ function updateContextMenus () {
 // -------------------------------------------------------------------
 
 function onUpdatedTab (tabId, changeInfo, tab) {
-  const ipfsContext = window.IsIpfs.url(tab.url)
-  if (ipfsContext) {
-    browser.pageAction.show(tab.id)
-  } else {
-    browser.pageAction.hide(tab.id)
+  if (tab && tab.url) {
+    const ipfsContext = window.IsIpfs.url(tab.url)
+    if (ipfsContext) {
+      browser.pageAction.show(tab.id)
+    } else {
+      browser.pageAction.hide(tab.id)
+    }
+    if (state.linkify && changeInfo.status === 'complete') {
+      console.log(`Running linkfyDOM for ${tab.url}`)
+      browser.tabs.executeScript(tabId, {
+        file: '/src/lib/linkifyDOM.js',
+        matchAboutBlank: false,
+        allFrames: true
+      })
+        .catch(error => {
+          console.error(`Unable to linkify DOM at '${tab.url}' due to ${error}`)
+        })
+    }
   }
 }
 
@@ -333,19 +348,6 @@ function setBrowserActionBadge (text, color, icon) {
 
 // OPTIONS
 // ===================================================================
-
-const optionDefaults = Object.freeze({
-  publicGateways: 'ipfs.io gateway.ipfs.io ipfs.pics global.upload',
-  useCustomGateway: true,
-  automaticMode: true,
-  dnslink: false,
-  customGatewayUrl: 'http://127.0.0.1:8080',
-  ipfsApiUrl: 'http://127.0.0.1:5001',
-  ipfsApiPollMs: 3000
-  // TODO:
-  // linkify
-  // defaultToFsProtocol
-})
 
 function updateAutomaticModeRedirectState () {
   // enable/disable gw redirect based on API status and available peer count
@@ -405,6 +407,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       } else if (key === 'useCustomGateway') {
         state.redirect = change.newValue
         browser.alarms.create(ipfsRedirectUpdateAlarm, {})
+      } else if (key === 'linkify') {
+        state.linkify = change.newValue
       } else if (key === 'automaticMode') {
         state.automaticMode = change.newValue
       } else if (key === 'dnslink') {

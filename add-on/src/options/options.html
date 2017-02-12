@@ -37,14 +37,15 @@
 
     <form>
       <fieldset style="line-height: 2em; font-family: sans-serif;">
-        <legend>Experimental</legend>
+        <legend>Experiments <small>(these PoC options may degrade browser performance)</small></legend>
 
-        <p><label>Enable <code>dnslink</code> lookups for every website  <input type="checkbox" id="dnslink" /> <small>(experimental, degrades browser performance)</small> </label></p>
+        <p><label>Enable <code>dnslink</code> lookups for every website  <input type="checkbox" id="dnslink" /></label></p>
+        <p><label>Make plaintext IPFS links clickable <input type="checkbox" id="linkify" /></label></p>
 
       </fieldset>
     </form>
 
-    <script src="../lib/common.js"></script>
+    <script src="../lib/option-defaults.js"></script>
     <script src="../lib/data-i18n.js"></script>
     <script src="options.js"></script>
 
