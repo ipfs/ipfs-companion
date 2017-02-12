@@ -251,17 +251,24 @@ browser.contextMenus.create({
   title: browser.i18n.getMessage(contextMenuUploadToIpfs),
   contexts: ['image', 'video', 'audio'],
   onclick: (info, tab) => {
-    ipfs.util.addFromURL(info.srcUrl, (err, result) => {
-      if (err) {
-        notify('Unable to upload to IPFS API', `${err}`)
-        return
-      }
-      browser.tabs.create({
-        'url': new URL(state.gwURLString + '/ipfs/' + result[0].hash).toString()
-      })
-    })
+    ipfs.util.addFromURL(info.srcUrl, uploadResultHandler)
   }
 })
+
+function uploadResultHandler (err, result) {
+  if (err || !result) {
+    notify('Unable to upload to IPFS API', `${err}`)
+    return console.error('ipfs add error', err, result)
+  }
+  result.forEach(function (file) {
+    if (file && file.hash) {
+      browser.tabs.create({
+        'url': new URL(state.gwURLString + '/ipfs/' + file.hash).toString()
+      })
+      console.log('successfully stored', file.hash)
+    }
+  })
+}
 
 function updateContextMenus () {
   browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
