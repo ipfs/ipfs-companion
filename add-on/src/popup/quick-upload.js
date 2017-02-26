@@ -1,7 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
-
-const Buffer = window.Buffer.Buffer // workaround for https://github.com/ipfs/js-ipfs-api/issues/528
+const Buffer = window.IpfsApi().Buffer
 const quickUploadInput = document.getElementById('quickUploadInput')
 const quickUploadMessage = document.getElementById('quickUploadMessage')
 

@@ -12,7 +12,6 @@
     "build": "run-s clean build:*",
     "build:copy-is-ipfs-lib": "shx cp node_modules/is-ipfs/dist/index.min.js add-on/src/lib/npm/is-ipfs.min.js",
     "build:copy-ipfs-api-lib": "shx cp node_modules/ipfs-api/dist/index.min.js add-on/src/lib/npm/ipfs-api.min.js",
-    "build:copy-buffer-lib": "browserify -t brfs -r buffer -s Buffer -o add-on/src/lib/npm/buffer.js",
     "build:copy-lru-map-lib": "shx cp node_modules/lru_map/lru.js add-on/src/lib/npm/lru.js",
     "build:bundle-extension": "web-ext build -s add-on/ -a build/",
     "test": "run-s test:*",
@@ -35,7 +34,6 @@
     ]
   },
   "devDependencies": {
-    "browserify": "14.1.0",
     "chai": "3.5.0",
     "cross-env": "3.1.4",
     "fakefile": "0.0.8",
@@ -65,7 +63,6 @@
   "dependencies": {
     "ipfs-api": "12.1.7",
     "is-ipfs": "0.3.0",
-    "buffer": "5.0.5",
     "lru_map": "0.3.2"
   }
 }
