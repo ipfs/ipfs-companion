@@ -92,6 +92,9 @@
   "panel_status-swarm-peers": {
     "message": "swarm peers"
   },
+  "panel_quick-upload": {
+    "message": "Quick Upload"
+  },
   "panel_open-webui": {
     "message": "Open WebUI"
   },

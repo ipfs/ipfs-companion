@@ -92,6 +92,9 @@
   "panel_status-swarm-peers": {
     "message": "połączenia"
   },
+  "panel_quick-upload": {
+    "message": "Opublikuj plik"
+  },
   "panel_open-webui": {
     "message": "Otwórz WebUI"
   },

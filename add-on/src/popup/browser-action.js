@@ -6,7 +6,6 @@ const disableRedirect = document.getElementById('disable-gateway-redirect')
 const openWebUI = document.getElementById('open-webui')
 const openPreferences = document.getElementById('open-preferences')
 const quickUpload = document.getElementById('quick-upload')
-const quickUploadInput = document.getElementById('quickUploadInput')
 
 const ipfsIcon = document.getElementById('icon')
 const ipfsIconOn = '../../icons/ipfs-logo-on.svg'
@@ -14,36 +13,18 @@ const ipfsIconOff = '../../icons/ipfs-logo-off.svg'
 const offline = 'offline'
 
 function show (id) {
-  document.getElementById(id).style.display = 'inline-block'
+  document.getElementById(id).classList.remove('hidden')
 }
 
 function hide (id) {
-  document.getElementById(id).style.display = 'none'
+  document.getElementById(id).classList.add('hidden')
 }
 
 function set (id, value) {
   document.getElementById(id).innerHTML = value
 }
 
-function onQuickUploadInputChange () {
-  browser.runtime.getBackgroundPage()
-    .then(bg => {
-      bg.ipfs.add(new Buffer(quickUploadInput.value), bg.uploadResultHandler)
-    })
-    .catch(error => { console.error(`Unable to perform quick upload due to ${error}`) })
-}
-
-function updateQuickUpload (enabled) {
-  if (enabled) {
-    quickUploadInput.onchange = onQuickUploadInputChange
-    quickUpload.style.opacity = 1
-    quickUploadInput.disabled = undefined
-  } else {
-    quickUploadInput.onchange = undefined
-    quickUpload.style.opacity = 0.5
-    quickUploadInput.disabled = 'disabled'
-  }
-}
+quickUpload.onclick = () => browser.tabs.create({ url: browser.extension.getURL('src/popup/quick-upload.html') })
 
 enableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: true})
   .then(updatePopup)
@@ -108,8 +89,11 @@ function updatePopup () {
             // update peer counter
             set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
             ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
-            // enable/disable quick upload
-            updateQuickUpload(peerCount > 0)
+            if (peerCount > 0) {
+              show('quick-upload')
+            } else {
+              hide('quick-upload')
+            }
           })
           .catch(error => {
             console.error(`Unable update peer count due to ${error}`)

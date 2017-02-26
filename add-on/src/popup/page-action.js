@@ -7,7 +7,11 @@ const copyIpfsAddress = document.getElementById('copy-current-ipfs-address')
 const copyPublicGwAddress = document.getElementById('copy-current-public-gw-url')
 
 function show (element) {
-  element.style.display = 'block'
+  element.classList.remove('hidden')
+}
+
+function hide (element) {
+  element.classList.add('hidden')
 }
 
 function copyTextToClipboard (copyText) {
@@ -88,4 +92,6 @@ function initPageAction () {
     })
 }
 
+hide(pinResource)
+hide(unpinResource)
 document.addEventListener('DOMContentLoaded', initPageAction)
