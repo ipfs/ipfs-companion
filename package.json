@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "cross-env": "3.1.4",
+    "cross-env": "3.2.0",
     "fakefile": "0.0.8",
     "fs-promise": "2.0.0",
     "fx-runner": "1.0.6",
