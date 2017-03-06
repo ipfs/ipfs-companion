@@ -52,7 +52,7 @@
     "npm-run-all": "4.0.2",
     "pre-commit": "1.2.2",
     "pre-push": "0.1.1",
-    "selenium-webdriver": "3.1.0",
+    "selenium-webdriver": "3.3.0",
     "shx": "0.2.2",
     "sinon": "2.0.0-pre.6",
     "sinon-chai": "2.8.0",
