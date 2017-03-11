@@ -63,6 +63,6 @@
   "dependencies": {
     "ipfs-api": "12.1.7",
     "is-ipfs": "0.3.0",
-    "lru_map": "0.3.2"
+    "lru_map": "0.3.3"
   }
 }
