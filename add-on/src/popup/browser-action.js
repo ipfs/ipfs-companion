@@ -21,7 +21,7 @@ function hide (id) {
 }
 
 function set (id, value) {
-  document.getElementById(id).innerHTML = value
+  document.getElementById(id).textContent = value
 }
 
 quickUpload.onclick = () => browser.tabs.create({ url: browser.extension.getURL('src/popup/quick-upload.html') })
@@ -52,7 +52,7 @@ openPreferences.onclick = () => {
 
 function updatePopup () {
   // update redirect status
-  browser.storage.local.get('useCustomGateway')
+  browser.storage.local.get(['useCustomGateway', 'automaticMode'])
     .then(options => {
       const enabled = options['useCustomGateway']
       if (enabled) {
@@ -65,6 +65,9 @@ function updatePopup () {
         hide('disable-gateway-redirect')
         show('redirect-disabled')
         show('enable-gateway-redirect')
+      }
+      if (options['automaticMode']) {
+        hide('toggle-gateway-redirect')
       }
     })
     .catch(error => {
