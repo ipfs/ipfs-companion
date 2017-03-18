@@ -35,7 +35,7 @@ function initPageAction () {
       return browser.runtime.getBackgroundPage()
         .then(bg => {
           copyPublicGwAddress.onclick = () => {
-            const publicGwAddress = new URL(currentTab.url.replace(bg.state.gwURLString, 'https://ipfs.io')).toString()
+            const publicGwAddress = new URL(currentTab.url.replace(bg.state.gwURLString, 'https://ipfs.io/')).toString()
             copyTextToClipboard(publicGwAddress)
             bg.notify('Copied Public URL', publicGwAddress) // TODO: i18
             window.close()

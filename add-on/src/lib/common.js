@@ -296,7 +296,7 @@ function updateContextMenus () {
 
 function onUpdatedTab (tabId, changeInfo, tab) {
   if (tab && tab.url) {
-    const ipfsContext = window.IsIpfs.url(tab.url)
+    const ipfsContext = window.IsIpfs.url(tab.url) && !tab.url.startsWith(state.apiURLString)
     if (ipfsContext) {
       browser.pageAction.show(tab.id)
     } else {
@@ -408,8 +408,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       // debug info
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
-        state.apiURLString = change.newValue
-        state.apiURL = new URL(state.apiURLString)
+        state.apiURL = new URL(change.newValue)
+        state.apiURLString = state.apiURL.toString()
         ipfs = initIpfsApi(state.apiURLString)
         browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
       } else if (key === 'ipfsApiPollMs') {
@@ -417,8 +417,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
           createIpfsApiStatusUpdateAlarm(change.newValue)
         })
       } else if (key === 'customGatewayUrl') {
-        state.gwURLString = change.newValue
-        state.gwURL = new URL(state.gwURLString)
+        state.gwURL = new URL(change.newValue)
+        state.gwURLString = state.gwURL.toString()
       } else if (key === 'useCustomGateway') {
         state.redirect = change.newValue
         browser.alarms.create(ipfsRedirectUpdateAlarm, {})
