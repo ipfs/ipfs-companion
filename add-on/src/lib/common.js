@@ -84,7 +84,22 @@ function redirectToCustomGateway (request) {
   return { redirectUrl: url.toString() }
 }
 
+function redirectToNormalizedPath (request) {
+  const url = new URL(request.url)
+  let path = decodeURIComponent(url.pathname)
+  path = path.replace(/^\/web\+fs:[/]*/i, '/') // web+fs://ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^\/web\+dweb:[/]*/i, '/') // web+dweb://ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^\/web\+([^:]+):[/]*/i, '/$1/') // web+foo://Qm → /foo/Qm
+  path = path.replace(/^\/ip([^/]+)\/ip[^/]+\//, '/ip$1/') // /ipfs/ipfs/Qm → /ipfs/Qm
+  url.pathname = path
+  return { redirectUrl: url.toString() }
+}
+
 function onBeforeRequest (request) {
+  if (request.url.startsWith('https://ipfs.io/web%2B')) {
+    // fix path passed via custom protocol
+    return redirectToNormalizedPath(request)
+  }
   if (state.redirect) {
     // IPFS resources
     if (publicIpfsResource(request.url)) {

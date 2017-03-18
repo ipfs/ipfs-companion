@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "IPFS Gateway Redirect WX",
-    "version" : "2.0.0",
+    "version" : "2.0.0alpha1",
 
     "description": "Access IPFS resources via custom HTTP2IPFS gateway",
     "homepage_url": "https://github.com/lidel/ipfs-firefox-addon",
@@ -54,6 +54,24 @@
         "icons/ipfs-logo-on.svg",
         "icons/ipfs-logo-off.svg"
     ],
+
+	"protocol_handlers": [
+		{
+			"protocol": "web+fs",
+			"name": "IPFS Add-On: *FS protocol handler",
+			"uriTemplate": "https://ipfs.io/%s"
+		},
+		{
+			"protocol": "web+ipns",
+			"name": "IPFS Add-On: IPNS protocol handler",
+			"uriTemplate": "https://ipfs.io/%s"
+		},
+		{
+			"protocol": "web+ipfs",
+			"name": "IPFS Add-On: IPFS protocol handler",
+			"uriTemplate": "https://ipfs.io/%s"
+		}
+	],
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; child-src 'self';",
 

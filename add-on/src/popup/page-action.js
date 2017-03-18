@@ -57,12 +57,12 @@ function initPageAction () {
               unpinResource.onclick = () => {
                 bg.ipfs.pin.rm(currentPath)
                   .then(result => {
-                    console.log(`ipfs.pin.rm result: ${result}`)
-                    bg.notify('Removed IPFS Pin', `${result}`) // TODO: i18
+                    console.log('ipfs.pin.rm result', result)
+                    bg.notify('Removed IPFS Pin', currentPath) // TODO: i18
                   })
                   .catch(error => {
-                    console.error(`Error while unpinning ${currentPath}: ${error}`)
-                    bg.notify('Error while unpinning', `${error}`) // TODO: i18
+                    console.error(`Error while unpinning ${currentPath}`, error)
+                    bg.notify('Error while unpinning', JSON.stringify(error)) // TODO: i18
                   })
                   .then(() => window.close())
               }
@@ -74,12 +74,12 @@ function initPageAction () {
                 pinResource.onclick = () => {
                   bg.ipfs.pin.add(currentPath)
                     .then(result => {
-                      console.log(`ipfs.pin.add result: ${result}`)
-                      bg.notify('Pinned IPFS Resource', `${result}`) // TODO: i18
+                      console.log('ipfs.pin.add result', result)
+                      bg.notify('Pinned IPFS Resource', currentPath) // TODO: i18
                     })
                     .catch(error => {
-                      console.error(`Error while pinning ${currentPath}: ${error}`)
-                      bg.notify('Error while pinning', `${error}`) // TODO: i18
+                      console.error(`Error while pinning ${currentPath}`, error)
+                      bg.notify('Error while pinning', JSON.strinfigy(error)) // TODO: i18
                     })
                     .then(() => window.close())
                 }
