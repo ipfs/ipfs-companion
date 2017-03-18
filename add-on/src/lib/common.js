@@ -73,7 +73,7 @@ function smokeTestLibs () {
 // ===================================================================
 
 function publicIpfsResource (url) {
-  return window.IsIpfs.url(url) && !url.startsWith(state.gwURLString)
+  return window.IsIpfs.url(url) && !url.startsWith(state.gwURLString) && !url.startsWith(state.apiURLString)
 }
 
 function redirectToCustomGateway (request) {

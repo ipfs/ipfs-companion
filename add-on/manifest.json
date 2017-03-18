@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "IPFS Gateway Redirect (Test Channel)",
-    "version" : "2.0.0alpha1",
+    "name": "IPFS Gateway Redirect (Development Channel)",
+    "version" : "2.0.0alpha2",
 
     "description": "Access IPFS resources via custom HTTP2IPFS gateway",
     "homepage_url": "https://github.com/lidel/ipfs-firefox-addon",
