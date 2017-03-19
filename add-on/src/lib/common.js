@@ -31,10 +31,10 @@ function initIpfsApi (ipfsApiUrl) {
 
 function initStates (options) {
   state.redirect = options.useCustomGateway
-  state.apiURLString = options.ipfsApiUrl
-  state.apiURL = new URL(state.apiURLString)
-  state.gwURLString = options.customGatewayUrl
-  state.gwURL = new URL(state.gwURLString)
+  state.apiURL = new URL(options.ipfsApiUrl)
+  state.apiURLString = state.apiURL.toString()
+  state.gwURL = new URL(options.customGatewayUrl)
+  state.gwURLString = state.gwURL.toString()
   state.automaticMode = options.automaticMode
   state.linkify = options.linkify
   state.dnslink = options.dnslink
