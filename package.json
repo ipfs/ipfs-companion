@@ -55,7 +55,6 @@
     "selenium-webdriver": "3.3.0",
     "shx": "0.2.2",
     "sinon": "2.1.0",
-    "sinon-chai": "2.8.0",
     "sinon-chrome": "2.1.2",
     "standard": "9.0.2",
     "web-ext": "1.8.1"
