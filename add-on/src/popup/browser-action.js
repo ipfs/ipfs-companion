@@ -96,6 +96,9 @@ function updatePopup () {
               show('quick-upload')
             } else {
               hide('quick-upload')
+              if (peerCount < 0) {
+                hide('open-webui')
+              }
             }
           })
           .catch(error => {
