@@ -71,6 +71,11 @@ li.action:active {
     font-weight: bold;
 }
 
+.faded {
+    cursor: default !important;
+    opacity: 0.5 !important;
+}
+
 .hidden {
     display: none !important;
 }

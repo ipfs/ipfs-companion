@@ -1,17 +1,19 @@
 {
     "manifest_version": 2,
     "name": "IPFS Gateway Redirect (Development Channel)",
+    "short_name": "IPFS Add-On",
     "version" : "2.0.0alpha3",
 
     "description": "Access IPFS resources via custom HTTP2IPFS gateway",
     "homepage_url": "https://github.com/lidel/ipfs-firefox-addon",
+    "author": "Marcin Rataj",
     "icons": {
         "48": "icons/ipfs-logo-on.svg"
     },
     "applications": {
         "gecko": {
             "id": "ipfs-firefox-addon@lidel.org",
-            "strict_min_version": "50.0"
+            "strict_min_version": "52.0"
         }
     },
 
@@ -24,6 +26,7 @@
         "alarms",
         "storage",
         "contextMenus",
+        "clipboardWrite",
         "webRequest",
         "webRequestBlocking"
     ],
