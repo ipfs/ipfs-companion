@@ -20,14 +20,14 @@
     "lint": "run-s lint:*",
     "lint:standard": "standard --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s add-on/",
-    "git:push": "run-s test git:commit",
-    "git:commit": "run-s clean lint build",
+    "postcheckout": "npm update && run-s clean build:copy*",
+    "postmerge": "run-s postcheckout",
+    "precommit": "run-s -s clean lint build",
+    "prepush": "run-s -s precommit test",
     "firefox": "web-ext run -s add-on/ --browser-console"
   },
   "private": true,
   "preferGlobal": false,
-  "pre-push": "git:push",
-  "pre-commit": "git:commit",
   "standard": {
     "ignore": [
       "add-on/src/lib/npm/**"
@@ -40,6 +40,7 @@
     "fs-promise": "2.0.2",
     "fx-runner": "1.0.6",
     "geckodriver": "1.5.0",
+    "husky": "0.13.3",
     "karma": "1.5.0",
     "karma-chai": "0.1.0",
     "karma-coverage": "1.1.1",
@@ -50,8 +51,6 @@
     "karma-sinon": "1.0.5",
     "mocha": "3.2.0",
     "npm-run-all": "4.0.2",
-    "pre-commit": "1.2.2",
-    "pre-push": "0.1.1",
     "selenium-webdriver": "3.3.0",
     "shx": "0.2.2",
     "sinon": "2.1.0",
