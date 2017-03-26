@@ -8,20 +8,19 @@ var ipfs // ipfs-api instance
 var state = {} // avoid redundant API reads by utilizing local cache of various states
 
 // init happens on addon load in background/background.js
-function init () { // eslint-disable-line no-unused-vars
-  const loadOptions = browser.storage.local.get(optionDefaults)
-  return loadOptions
-    .then(options => {
-      ipfs = initIpfsApi(options.ipfsApiUrl)
-      initStates(options)
-      restartAlarms(options)
-      registerListeners()
-      return storeMissingOptions(options, optionDefaults)
-    })
-    .catch(error => {
-      console.error(`Unable to initialize addon due to ${error}`)
-      notify('IPFS Add-on Issue', 'See Browser Console for more details')
-    })
+// eslint-disable-next-line no-unused-vars
+async function init () {
+  try {
+    const options = await browser.storage.local.get(optionDefaults)
+    ipfs = initIpfsApi(options.ipfsApiUrl)
+    initStates(options)
+    restartAlarms(options)
+    registerListeners()
+    await storeMissingOptions(options, optionDefaults)
+  } catch (error) {
+    console.error('Unable to initialize addon due to error', error)
+    notify('IPFS Add-on Issue', 'See Browser Console for more details')
+  }
 }
 
 function initIpfsApi (ipfsApiUrl) {
@@ -29,7 +28,7 @@ function initIpfsApi (ipfsApiUrl) {
   return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
-function initStates (options) {
+async function initStates (options) {
   state.redirect = options.useCustomGateway
   state.apiURL = new URL(options.ipfsApiUrl)
   state.apiURLString = state.apiURL.toString()
@@ -39,7 +38,7 @@ function initStates (options) {
   state.linkify = options.linkify
   state.dnslink = options.dnslink
   state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
-  getSwarmPeerCount()
+  await getSwarmPeerCount()
     .then(updatePeerCountState)
     .then(updateBrowserActionBadge)
 }
@@ -146,24 +145,23 @@ function dnslinkLookup (request) {
   }
 }
 
-function asyncDnslookupResponse (fqdn, requestUrl) {
-  return readDnslinkTxtRecordFromApi(fqdn)
-      .then(dnslink => {
-        if (dnslink) {
-          state.dnslinkCache.set(fqdn, dnslink)
-          console.log('ASYNC Resolved dnslink for:' + fqdn + ' is: ' + dnslink)
-          return redirectToDnslinkPath(requestUrl, dnslink)
-        } else {
-          state.dnslinkCache.set(fqdn, false)
-          console.log('ASYNC NO dnslink for:' + fqdn)
-          return {}
-        }
-      })
-      .catch((error) => {
-        console.error(`ASYNC Error in asyncDnslookupResponse for '${fqdn}': ${error}`)
-        console.error(error)
-        return {}
-      })
+async function asyncDnslookupResponse (fqdn, requestUrl) {
+  try {
+    const dnslink = await readDnslinkTxtRecordFromApi(fqdn)
+    if (dnslink) {
+      state.dnslinkCache.set(fqdn, dnslink)
+      console.log('ASYNC Resolved dnslink for:' + fqdn + ' is: ' + dnslink)
+      return redirectToDnslinkPath(requestUrl, dnslink)
+    } else {
+      state.dnslinkCache.set(fqdn, false)
+      console.log('ASYNC NO dnslink for:' + fqdn)
+      return {}
+    }
+  } catch (error) {
+    console.error(`ASYNC Error in asyncDnslookupResponse for '${fqdn}': ${error}`)
+    console.error(error)
+    return {}
+  }
 }
 
 function redirectToDnslinkPath (url, dnslink) {
@@ -236,15 +234,14 @@ function runIfNotIdle (action) {
 // API HELPERS
 // ===================================================================
 
-function getSwarmPeerCount () {
-  return ipfs.swarm.peers()
-    .then(peerInfos => {
-      return peerInfos.length
-    })
-    .catch(() => {
+async function getSwarmPeerCount () {
+  try {
+    const peerInfos = await ipfs.swarm.peers()
+    return peerInfos.length
+  } catch (error) {
       // console.error(`Error while ipfs.swarm.peers: ${err}`)
-      return -1
-    })
+    return -1
+  }
 }
 
 // GUI
@@ -274,8 +271,9 @@ browser.contextMenus.create({
 
 function uploadResultHandler (err, result) {
   if (err || !result) {
+    console.error('ipfs add error', err, result)
     notify('Unable to upload to IPFS API', `${err}`)
-    return console.error('ipfs add error', err, result)
+    return
   }
   result.forEach(function (file) {
     if (file && file.hash) {
@@ -294,7 +292,7 @@ function updateContextMenus () {
 // pageAction
 // -------------------------------------------------------------------
 
-function onUpdatedTab (tabId, changeInfo, tab) {
+async function onUpdatedTab (tabId, changeInfo, tab) {
   if (tab && tab.url) {
     const ipfsContext = window.IsIpfs.url(tab.url) && !tab.url.startsWith(state.apiURLString)
     if (ipfsContext) {
@@ -304,14 +302,15 @@ function onUpdatedTab (tabId, changeInfo, tab) {
     }
     if (state.linkify && changeInfo.status === 'complete') {
       console.log(`Running linkfyDOM for ${tab.url}`)
-      browser.tabs.executeScript(tabId, {
-        file: '/src/lib/linkifyDOM.js',
-        matchAboutBlank: false,
-        allFrames: true
-      })
-        .catch(error => {
-          console.error(`Unable to linkify DOM at '${tab.url}' due to ${error}`)
+      try {
+        await browser.tabs.executeScript(tabId, {
+          file: '/src/lib/linkifyDOM.js',
+          matchAboutBlank: false,
+          allFrames: true
         })
+      } catch (error) {
+        console.error(`Unable to linkify DOM at '${tab.url}' due to ${error}`)
+      }
     }
   }
 }
@@ -319,20 +318,18 @@ function onUpdatedTab (tabId, changeInfo, tab) {
 // browserAction
 // -------------------------------------------------------------------
 
-function restartAlarms (options) {
-  const clearAlarms = browser.alarms.clearAll()
+async function restartAlarms (options) {
+  await browser.alarms.clearAll()
   if (!browser.alarms.onAlarm.hasListener(handleAlarm)) {
     browser.alarms.onAlarm.addListener(handleAlarm)
   }
-  clearAlarms.then(() => {
-    createIpfsApiStatusUpdateAlarm(options.ipfsApiPollMs)
-  })
+  await createIpfsApiStatusUpdateAlarm(options.ipfsApiPollMs)
 }
 
 function createIpfsApiStatusUpdateAlarm (ipfsApiPollMs) {
   const periodInMinutes = ipfsApiPollMs / 60000
   const when = Date.now() + 500
-  browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
+  return browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
 function updateBrowserActionBadge () {

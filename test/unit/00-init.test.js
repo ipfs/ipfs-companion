@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env webextensions, mocha */
-/* globals sinon, assert, URL, init, ipfs, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults, setBrowserActionBadge */
+/* globals sinon, init, URL, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults, setBrowserActionBadge */
 
 var sandbox
 
@@ -10,10 +10,14 @@ var url2cfg = (string) => {
 }
 
 describe('init.js', function () {
+  const defaultIpfsApiUrl = optionDefaults['ipfsApiUrl']
+  const defaultCfg = url2cfg(defaultIpfsApiUrl)
+
   beforeEach(() => {
     browser.flush()
     sandbox = sinon.sandbox.create()
-    sandbox.stub(window, 'IpfsApi')
+    sandbox.stub(window, 'IpfsApi').withArgs(defaultCfg).returns(defaultCfg) // echo-like behaviour for easy test
+    browser.storage.local.get.returns(Promise.resolve(optionDefaults))
   })
 
   afterEach(() => {
@@ -22,32 +26,25 @@ describe('init.js', function () {
   })
 
   describe('init()', function () {
-    beforeEach(() => {
-      browser.storage.local.get.returns(Promise.resolve(optionDefaults))
-      // sandbox.stub(window, 'smokeTestLibs')
-    })
     it('should query local storage for options with hardcoded defaults for fallback', done => {
       init()
-        .then(() => {
-          sinon.assert.calledWith(browser.storage.local.get, optionDefaults)
-          done()
-        })
-        .catch(error => { done(error) })
+      sinon.assert.calledWith(browser.storage.local.get, optionDefaults)
+      done()
     })
+
+    /* TODO
     it('should create ipfs API instance from URL in storage', done => {
-      const defaultIpfsApiUrl = optionDefaults['ipfsApiUrl']
-      const defaultCfg = url2cfg(defaultIpfsApiUrl)
       IpfsApi.restore() // remove default stub, as we will need custom one
       sandbox.stub(window, 'IpfsApi').withArgs(defaultCfg).returns(defaultCfg) // echo-like behaviour for easy test
+      sandbox.stub(window, 'initIpfsApi').withArgs(defaultIpfsApiUrl).returns(defaultCfg) // echo-like behaviour for easy test
       init()
-        .then(() => {
-          sinon.assert.calledOnce(IpfsApi)
-          sinon.assert.calledWith(IpfsApi, defaultCfg)
-          assert.equal(ipfs, defaultCfg) // expect echo
-          done()
-        })
-        .catch(error => { done(error) })
+      sandbox.assert.calledOnce(initIpfsApi)
+      sinon.assert.calledOnce(IpfsApi)
+      sinon.assert.calledWith(IpfsApi, defaultCfg)
+      assert.equal(ipfs, defaultCfg) // expect echo
+      done()
     })
+    */
   })
 
   describe('onStorageChange()', function () {

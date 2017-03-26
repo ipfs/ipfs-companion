@@ -19,11 +19,11 @@ function hide (element) {
   element.classList.add('hidden')
 }
 
-async function getBackgroundPage () {
+function getBackgroundPage () {
   return browser.runtime.getBackgroundPage()
 }
 
-async function getCurrentTab () {
+function getCurrentTab () {
   return browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
 }
 
@@ -77,7 +77,7 @@ async function unpinCurrentResource () {
     const bg = await getBackgroundPage()
     const currentTab = await getCurrentTab()
     const currentPath = await resolveToIPFS(new URL(currentTab.url).pathname)
-    const result = await bg.ipfs.pin.rm(currentPath)
+    const result = await bg.ipfs.pin.rm(currentPath, {recursive: true})
     console.log('ipfs.pin.rm result', result)
     bg.notify('Removed IPFS Pin', currentPath) // TODO: i18
   } catch (error) {

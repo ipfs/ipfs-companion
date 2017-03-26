@@ -34,81 +34,76 @@ disableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: fal
   .then(updatePopup)
   .catch(error => { console.error(`Unable to update redirect state due to ${error}`) })
 
-openWebUI.onclick = () => {
-  browser.storage.local.get('ipfsApiUrl')
-    .then(options => {
-      const apiUrl = options['ipfsApiUrl']
-      browser.tabs.create({ url: apiUrl + '/webui/' })
-      window.close()
-    })
-    .catch(error => {
-      console.error(`Unable Open Web UI due to ${error}`)
-    })
+openWebUI.onclick = async () => {
+  try {
+    const options = await browser.storage.local.get('ipfsApiUrl')
+    const apiUrl = options['ipfsApiUrl']
+    await browser.tabs.create({ url: apiUrl + '/webui/' })
+    window.close()
+  } catch (error) {
+    console.error(`Unable Open Web UI due to ${error}`)
+  }
 }
 
 openPreferences.onclick = () => {
   browser.runtime.openOptionsPage().then(() => window.close())
 }
 
-function updatePopup () {
+async function updatePopup () {
   // update redirect status
-  browser.storage.local.get(['useCustomGateway', 'automaticMode'])
-    .then(options => {
-      const enabled = options['useCustomGateway']
-      if (enabled) {
-        hide('redirect-disabled')
-        hide('enable-gateway-redirect')
-        show('redirect-enabled')
-        show('disable-gateway-redirect')
-      } else {
-        hide('redirect-enabled')
-        hide('disable-gateway-redirect')
-        show('redirect-disabled')
-        show('enable-gateway-redirect')
-      }
-      if (options['automaticMode']) {
-        hide('toggle-gateway-redirect')
-      }
-    })
-    .catch(error => {
-      console.error(`Unable update redirect state due to ${error}`)
-    })
+  const options = await browser.storage.local.get()
+  try {
+    const enabled = options['useCustomGateway']
+    if (enabled) {
+      hide('redirect-disabled')
+      hide('enable-gateway-redirect')
+      show('redirect-enabled')
+      show('disable-gateway-redirect')
+    } else {
+      hide('redirect-enabled')
+      hide('disable-gateway-redirect')
+      show('redirect-disabled')
+      show('enable-gateway-redirect')
+    }
+    if (options['automaticMode']) {
+      hide('toggle-gateway-redirect')
+    }
+    set('gateway-address-val', options['customGatewayUrl'])
+  } catch (error) {
+    console.error(`Unable update redirect state due to ${error}`)
+    set('gateway-address-val', '???')
+  }
 
-  // update gateway addresss
-  browser.storage.local.get('customGatewayUrl')
-    .then(options => { set('gateway-address-val', options['customGatewayUrl']) })
-    .catch(() => { set('gateway-address-val', '???') })
-
-  browser.runtime.getBackgroundPage()
-    .then(background => {
-      if (background.ipfs) {
-        // update gateway version
-        background.ipfs.version()
-          .then(v => { set('gateway-version-val', (v.commit ? v.version + '/' + v.commit : v.version)) })
-          .catch(() => { set('gateway-version-val', offline) })
-        // update swarm peer count
-        background.getSwarmPeerCount()
-          .then(peerCount => {
-            // update peer counter
-            set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
-            ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
-            if (peerCount > 0) {
-              show('quick-upload')
-            } else {
-              hide('quick-upload')
-              if (peerCount < 0) {
-                hide('open-webui')
-              }
-            }
-          })
-          .catch(error => {
-            console.error(`Unable update peer count due to ${error}`)
-          })
+  try {
+    const background = await browser.runtime.getBackgroundPage()
+    if (background.ipfs) {
+      // update gateway version
+      try {
+        const v = await background.ipfs.version()
+        set('gateway-version-val', (v.commit ? v.version + '/' + v.commit : v.version))
+      } catch (error) {
+        set('gateway-version-val', offline)
       }
-    })
-    .catch(error => {
-      console.error(`Error while accessing background page: ${error}`)
-    })
+      // update swarm peer count
+      try {
+        const peerCount = await background.getSwarmPeerCount()
+        set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
+        ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
+        if (peerCount > 0) {
+          show('quick-upload')
+        } else {
+          hide('quick-upload')
+          if (peerCount < 0) {
+            hide('open-webui')
+          }
+        }
+      } catch (error) {
+        console.error(`Unable update peer count due to ${error}`)
+      }
+    }
+  } catch (error) {
+    console.error(`Error while accessing background page: ${error}`)
+  }
 }
 
 // run on initial popup load

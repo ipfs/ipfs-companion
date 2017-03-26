@@ -37,8 +37,23 @@ module.exports = function (config) {
       'add-on/src/background/*.js',
       'test/unit/*.test.js'
     ],
-    preprocessors: {'add-on/**/!(npm)/*.js': ['coverage']},
+    preprocessors: {
+      'add-on/**/!(npm)/*.js': ['babel','coverage']
+    },
+    babelPreprocessor: {
+      options: {
+        presets: ['es2017'],
+        sourceMap: 'inline'
+      },
+      filename: function (file) {
+        return file.originalPath.replace(/\.js$/, '.es2017.js');
+      },
+      sourceFileName: function (file) {
+        return file.originalPath;
+      }
+    },
     plugins: [
+      'karma-babel-preprocessor',
       'karma-coveralls',
       'karma-coverage',
       'karma-firefox-launcher',

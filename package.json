@@ -34,6 +34,7 @@
     ]
   },
   "devDependencies": {
+    "babel-preset-es2017": "6.22.0",
     "chai": "3.5.0",
     "cross-env": "3.2.4",
     "fakefile": "0.0.8",
@@ -42,6 +43,7 @@
     "geckodriver": "1.5.0",
     "husky": "0.13.3",
     "karma": "1.5.0",
+    "karma-babel-preprocessor": "6.0.1",
     "karma-chai": "0.1.0",
     "karma-coverage": "1.1.1",
     "karma-coveralls": "1.1.2",

@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 /* global optionDefaults */
 
-function saveOption (name) {
+async function saveOption (name) {
   const element = document.querySelector(`#${name}`)
   if (element) {
     const change = {}
@@ -18,37 +18,36 @@ function saveOption (name) {
       default:
         console.log('Unsupported option type: ' + element.type)
     }
-    browser.storage.local.set(change)
+    await browser.storage.local.set(change)
   }
 }
 
-function readOption (name) {
+async function readOption (name) {
   const element = document.querySelector(`#${name}`)
   if (element) {
-    browser.storage.local.get(name)
-      .then(storage => {
-        const oldValue = storage[name]
-        switch (element.type) {
-          case 'text':
-          case 'url':
-            element.value = oldValue
-            break
-          case 'number':
+    try {
+      const storage = await browser.storage.local.get(name)
+      const oldValue = storage[name]
+      switch (element.type) {
+        case 'text':
+        case 'url':
+          element.value = oldValue
+          break
+        case 'number':
             // handle number change via mouse + widget controls
-            element.onclick = () => saveOption(name)
-            element.value = oldValue
-            break
-          case 'checkbox':
-            element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
-            break
-          default:
-            console.log('Unsupported option type: ' + element.type)
-        }
-        element.onblur = () => saveOption(name) // autosave
-      })
-    .catch(error => {
+          element.onclick = () => saveOption(name)
+          element.value = oldValue
+          break
+        case 'checkbox':
+          element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
+          break
+        default:
+          console.log('Unsupported option type: ' + element.type)
+      }
+      element.onblur = () => saveOption(name) // autosave
+    } catch (error) {
       console.error(`Unable to initialize oprions due to ${error}`)
-    })
+    }
   }
 }
 
