@@ -275,8 +275,8 @@ async function addFromURL (info) {
       cache: 'force-cache',
       referrer: info.pageUrl
     }
-    //console.log('addFromURL.info', info)
-    //console.log('addFromURL.fetchOptions', fetchOptions)
+    // console.log('addFromURL.info', info)
+    // console.log('addFromURL.fetchOptions', fetchOptions)
     const response = await fetch(info.srcUrl, fetchOptions)
     const reader = new FileReader()
     reader.onloadend = () => {
