@@ -264,10 +264,39 @@ browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
   title: browser.i18n.getMessage(contextMenuUploadToIpfs),
   contexts: ['image', 'video', 'audio'],
-  onclick: (info, tab) => {
-    ipfs.util.addFromURL(info.srcUrl, uploadResultHandler)
-  }
+  onclick: addFromURL
 })
+
+async function addFromURL (info) {
+  // disabled due to https://github.com/lidel/ipfs-firefox-addon/issues/227
+  // ipfs.util.addFromURL(info.srcUrl, uploadResultHandler)
+  try {
+    const fetchOptions = {
+      cache: 'force-cache',
+      referrer: info.pageUrl
+    }
+    //console.log('addFromURL.info', info)
+    //console.log('addFromURL.fetchOptions', fetchOptions)
+    const response = await fetch(info.srcUrl, fetchOptions)
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const buffer = ipfs.Buffer.from(reader.result)
+      ipfs.add(buffer, uploadResultHandler)
+    }
+    reader.readAsArrayBuffer(await response.blob())
+  } catch (error) {
+    console.error(`Error for ${contextMenuUploadToIpfs}`, error)
+    if (error.message === 'NetworkError when attempting to fetch resource.') {
+      notify('Unable to upload to IPFS', 'Try disabling Tracking Protection (press ctrl+shift+j for more details)')
+      console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/lidel/ipfs-firefox-addon/issues/227')
+      browser.tabs.create({
+        'url': 'https://github.com/lidel/ipfs-firefox-addon/issues/227'
+      })
+    } else {
+      notify('Unable to upload to IPFS', `${error.message} (press ctrl+shift+j for more details)`)
+    }
+  }
+}
 
 function uploadResultHandler (err, result) {
   if (err || !result) {
