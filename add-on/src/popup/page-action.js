@@ -32,7 +32,7 @@ async function copyCurrentPublicGwAddress () {
   const currentTab = await getCurrentTab()
   const publicGwAddress = new URL(currentTab.url.replace(bg.state.gwURLString, 'https://ipfs.io/')).toString()
   copyTextToClipboard(publicGwAddress)
-  bg.notify('Copied Public URL', publicGwAddress) // TODO: i18
+  bg.notify('notify_copiedPublicURLTitle', publicGwAddress)
   window.close()
 }
 
@@ -41,7 +41,7 @@ async function copyCurrentCanonicalAddress () {
   const currentTab = await getCurrentTab()
   const rawIpfsAddress = currentTab.url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
   copyTextToClipboard(rawIpfsAddress)
-  bg.notify('Copied Canonical Address', rawIpfsAddress) // TODO: i18
+  bg.notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
   window.close()
 }
 
@@ -64,9 +64,9 @@ async function pinCurrentResource () {
     const currentPath = await resolveToIPFS(new URL(currentTab.url).pathname)
     const pinResult = await bg.ipfs.pin.add(currentPath, { recursive: true })
     console.log('ipfs.pin.add result', pinResult)
-    bg.notify('Pinned IPFS Resource', currentPath) // TODO: i18
+    bg.notify('notify_pinnedIpfsResourceTitle', currentPath)
   } catch (error) {
-    handlePinError('Error while pinning', error)
+    handlePinError('notify_pinErrorTitle', error)
   }
   window.close()
 }
@@ -79,9 +79,9 @@ async function unpinCurrentResource () {
     const currentPath = await resolveToIPFS(new URL(currentTab.url).pathname)
     const result = await bg.ipfs.pin.rm(currentPath, {recursive: true})
     console.log('ipfs.pin.rm result', result)
-    bg.notify('Removed IPFS Pin', currentPath) // TODO: i18
+    bg.notify('notify_unpinnedIpfsResourceTitle', currentPath)
   } catch (error) {
-    handlePinError('Error while unpinning', error)
+    handlePinError('notify_unpinErrorTitle', error)
   }
   window.close()
 }
@@ -107,12 +107,12 @@ function deactivatePinButton () {
   hide(unpinResourceButton)
 }
 
-async function handlePinError (errorMessage, error) {
-  console.error(errorMessage, error)
+async function handlePinError (errorMessageKey, error) {
+  console.error(browser.i18n.getMessage(errorMessageKey), error)
   deactivatePinButton()
   try {
     const bg = await getBackgroundPage()
-    bg.notify(errorMessage, error.message) // TODO: i18
+    bg.notify(errorMessageKey, error.message)
   } catch (error) {
     console.error('unable to access background page', error)
   }

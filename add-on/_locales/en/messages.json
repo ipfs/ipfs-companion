@@ -121,5 +121,59 @@
   },
   "contextMenu_uploadToIpfs": {
     "message": "Upload to IPFS"
+  },
+  "notify_addonIssueTitle": {
+    "message": "IPFS Add-on Issue"
+  },
+  "notify_addonIssueMsg": {
+    "message": "See Browser Console for more details"
+  },
+  "notify_copiedPublicURLTitle": {
+    "message": "Copied Public URL"
+  },
+  "notify_copiedCanonicalAddressTitle": {
+    "message": "Copied Canonical Address"
+  },
+  "notify_pinnedIpfsResourceTitle": {
+    "message": "Pinned IPFS Resource"
+  },
+  "notify_unpinnedIpfsResourceTitle": {
+    "message": "Removed IPFS Pin"
+  },
+  "notify_pinErrorTitle": {
+    "message": "Error while pinning"
+  },
+  "notify_unpinErrorTitle": {
+    "message": "Error while removing pin"
+  },
+  "notify_apiOnlineTitle": {
+    "message": "IPFS API is Online"
+  },
+  "notify_apiOnlineAutomaticModeMsg": {
+    "message": "Automatic Mode: Custom Gateway Redirect is active"
+  },
+  "notify_apiOfflineTitle": {
+    "message": "IPFS API is Offline"
+  },
+  "notify_apiOfflineAutomaticModeMsg": {
+    "message": "Automatic Mode: Public Gateway will be used as a fallback"
+  },
+  "notify_uploadErrorTitle": {
+    "message": "Unable to upload via IPFS API"
+  },
+  "notify_uploadTrackingProtectionErrorMsg": {
+    "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)"
+  },
+  "notify_inlineMsg": {
+    "message": "$msg$",
+    "placeholders": {
+        "msg": "$1"
+    }
+  },
+  "notify_inlineErrorMsg": {
+    "message": "$errorMsg$ (press ctrl+shift+j for more details)",
+    "placeholders": {
+        "errorMsg": "$1"
+    }
   }
 }

@@ -19,7 +19,7 @@ async function init () {
     await storeMissingOptions(options, optionDefaults)
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
-    notify('IPFS Add-on Issue', 'See Browser Console for more details')
+    notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
   }
 }
 
@@ -247,18 +247,25 @@ async function getSwarmPeerCount () {
 // GUI
 // ===================================================================
 
-function notify (title, message) {
+function notify (titleKey, messageKey, messageParam) {
+  let message
+  if (messageKey.startsWith('notify_')) {
+    message = messageParam ? browser.i18n.getMessage(messageKey, messageParam) : browser.i18n.getMessage(messageKey)
+  } else {
+    message = messageKey
+  }
+
   browser.notifications.create({
     'type': 'basic',
     'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
-    'title': title,
+    'title': browser.i18n.getMessage(titleKey),
     'message': message
   })
 }
 
 // contextMenus
 // -------------------------------------------------------------------
-const contextMenuUploadToIpfs = 'contextMenuUploadToIpfs'
+const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
 
 browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
@@ -287,13 +294,13 @@ async function addFromURL (info) {
   } catch (error) {
     console.error(`Error for ${contextMenuUploadToIpfs}`, error)
     if (error.message === 'NetworkError when attempting to fetch resource.') {
-      notify('Unable to upload to IPFS', 'Try disabling Tracking Protection (press ctrl+shift+j for more details)')
+      notify('notify_uploadErrorTitle', 'notify_uploadTrackingProtectionErrorMsg')
       console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/lidel/ipfs-firefox-addon/issues/227')
       browser.tabs.create({
         'url': 'https://github.com/lidel/ipfs-firefox-addon/issues/227'
       })
     } else {
-      notify('Unable to upload to IPFS', `${error.message} (press ctrl+shift+j for more details)`)
+      notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
     }
   }
 }
@@ -301,7 +308,7 @@ async function addFromURL (info) {
 function uploadResultHandler (err, result) {
   if (err || !result) {
     console.error('ipfs add error', err, result)
-    notify('Unable to upload to IPFS API', `${err}`)
+    notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err}`)
     return
   }
   result.forEach(function (file) {
@@ -395,10 +402,10 @@ function updateAutomaticModeRedirectState () {
   if (state.automaticMode) {
     if (state.peerCount > 0 && !state.redirect) { // enable if disabled
       browser.storage.local.set({useCustomGateway: true})
-        .then(() => notify('IPFS API is Online', 'Automatic Mode: Custom Gateway Redirect is active'))
+        .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
     } else if (state.peerCount < 1 && state.redirect) { // disable if enabled
       browser.storage.local.set({useCustomGateway: false})
-        .then(() => notify('IPFS API is Offline', 'Automatic Mode: Public Gateway will be used as a fallback'))
+        .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
     }
   }
 }
