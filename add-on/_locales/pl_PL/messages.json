@@ -74,52 +74,52 @@
   "fsUris_description": {
     "message": "(EXPERIMENTAL) wyświetla natywne URI fs:/ zamiast ich zamiany na http:// aktywnej bramy (może powodować błędy JS na stronach)"
   },
-  "panel_status-gateway-redirect": {
+  "panel_statusGatewayRedirect": {
     "message": "przekierowanie"
   },
-  "panel_status-gateway-redirect-enabled": {
+  "panel_statusGatewayRedirectEnabled": {
     "message": "włączone"
   },
-  "panel_status-gateway-redirect-disabled": {
+  "panel_statusGatewayRedirectDisabled": {
     "message": "wyłączone"
   },
-  "panel_status-gateway-address": {
+  "panel_statusGatewayAddress": {
     "message": "brama"
   },
-  "panel_status-gateway-version": {
+  "panel_statusGatewayVersion": {
     "message": "wersja"
   },
-  "panel_status-swarm-peers": {
+  "panel_statusSwarmPeers": {
     "message": "połączenia"
   },
-  "panel_quick-upload": {
+  "panel_quickUpload": {
     "message": "Opublikuj plik"
   },
-  "panel_open-webui": {
+  "panel_openWebui": {
     "message": "Otwórz WebUI"
   },
-  "panel_open-preferences": {
+  "panel_openPreferences": {
     "message": "Otwórz Preferencje"
   },
-  "panel_toggle-gateway-redirect-enable": {
+  "panel_toggleGatewayRedirectEnable": {
     "message": "Włącz przekierowanie"
   },
-  "panel_toggle-gateway-redirect-disable": {
+  "panel_toggleGatewayRedirectDisable": {
     "message": "Wyłącz przekierowanie"
   },
-  "panel_pin-current-ipfs-address": {
+  "panel_pinCurrentIpfsAddress": {
     "message": "Przypnij zasób IPFS"
   },
-  "panel_unpin-current-ipfs-address": {
+  "panel_unpinCurrentIpfsAddress": {
     "message": "Odepnij zasób IPFS"
   },
-  "panel_copy-current-ipfs-address": {
+  "panelCopy_currentIpfsAddress": {
     "message": "Skopiuj kanoniczny adres"
   },
-  "panel_copy-current-public-gw-url": {
+  "panel_copyCurrentPublicGwUrl": {
     "message": "Skopiuj URL do publicznej bramy"
   },
-  "context-menu-upload-to-ipfs": {
+  "contextMenu_uploadToIpfs": {
     "message": "Wyślij do IPFS"
   }
 }

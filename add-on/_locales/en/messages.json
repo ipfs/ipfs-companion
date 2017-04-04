@@ -74,52 +74,52 @@
   "fsUris_description": {
     "message": "(EXPERIMENTAL) display fs:/ URIs as-is instead of rewriting to http:// (may break JS on pages)"
   },
-  "panel_status-gateway-redirect": {
+  "panel_statusGatewayRedirect": {
     "message": "redirect"
   },
-  "panel_status-gateway-redirect-enabled": {
+  "panel_statusGatewayRedirectEnabled": {
     "message": "enabled"
   },
-  "panel_status-gateway-redirect-disabled": {
+  "panel_statusGatewayRedirectDisabled": {
     "message": "disabled"
   },
-  "panel_status-gateway-address": {
+  "panel_statusGatewayAddress": {
     "message": "gateway"
   },
-  "panel_status-gateway-version": {
+  "panel_statusGatewayVersion": {
     "message": "version"
   },
-  "panel_status-swarm-peers": {
+  "panel_statusSwarmPeers": {
     "message": "swarm peers"
   },
-  "panel_quick-upload": {
+  "panel_quickUpload": {
     "message": "Quick Upload"
   },
-  "panel_open-webui": {
+  "panel_openWebui": {
     "message": "Open WebUI"
   },
-  "panel_open-preferences": {
+  "panel_openPreferences": {
     "message": "Open Preferences"
   },
-  "panel_toggle-gateway-redirect-enable": {
+  "panel_toggleGatewayRedirectEnable": {
     "message": "Enable Gateway Redirect"
   },
-  "panel_toggle-gateway-redirect-disable": {
+  "panel_toggleGatewayRedirectDisable": {
     "message": "Disable Gateway Redirect"
   },
-  "panel_pin-current-ipfs-address": {
+  "panel_pinCurrentIpfsAddress": {
     "message": "Pin IPFS Resource"
   },
-  "panel_unpin-current-ipfs-address": {
+  "panel_unpinCurrentIpfsAddress": {
     "message": "Unpin IPFS Resource"
   },
-  "panel_copy-current-ipfs-address": {
+  "panelCopy_currentIpfsAddress": {
     "message": "Copy Canonical Address"
   },
-  "panel_copy-current-public-gw-url": {
+  "panel_copyCurrentPublicGwUrl": {
     "message": "Copy Public Gateway URL"
   },
-  "context-menu-upload-to-ipfs": {
+  "contextMenu_uploadToIpfs": {
     "message": "Upload to IPFS"
   }
 }

@@ -258,7 +258,7 @@ function notify (title, message) {
 
 // contextMenus
 // -------------------------------------------------------------------
-const contextMenuUploadToIpfs = 'context-menu-upload-to-ipfs'
+const contextMenuUploadToIpfs = 'contextMenuUploadToIpfs'
 
 browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
