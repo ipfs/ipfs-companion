@@ -2,34 +2,87 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="browser-action.css"/>
+  <style type="text/css">
+    #quick-upload {
+        font-weight: bold;
+    }
+    #icon {
+        width: 6rem;
+        height: 6rem;
+        padding: 0.25rem;
+        display: block;
+        float: left;
+    }
+    #gateway-status {
+        padding: 0;
+    }
+    #gateway-status ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0.5rem;
+        min-height: 3em;
+    }
+    #gateway-status li {
+        font-variant: small-caps;
+        padding: 0;
+        cursor: default;
+        display:block;
+        max-height:2rem;
+        text-overflow: ellipsis;
+        overflow: auto;
+    }
+    #gateway-status  li > span:nth-of-type(2) {
+        display: inline-block;
+        float: right;
+        padding-left: 1rem;
+    }
+    .hidden { display: none !important; }
+  </style>
 </head>
 
 <body>
-  <div>
-  <img src="../../icons/ipfs-logo-off.svg" id="icon"/>
-  <ul id="gateway-status">
-    <li id="gateway-address"><span data-i18n="panel_statusGatewayAddress"></span><span id="gateway-address-val">unknown</span></li>
-    <li id="gateway-version"><span data-i18n="panel_statusGatewayVersion"></span><span id="gateway-version-val">offline</span></li>
-    <li id="swarm-peers"><span data-i18n="panel_statusSwarmPeers"></span><span id="swarm-peers-val">offline</span></li>
-    <li id="gateway-redirect"><span data-i18n="panel_statusGatewayRedirect"></span>
-      <span>
-        <span id="redirect-enabled" data-i18n="panel_statusGatewayRedirectEnabled"></span>
-        <span id="redirect-disabled" data-i18n="panel_statusGatewayRedirectDisabled"></span>
-      </span>
-    </li>
-  </ul>
+  <!-- https://firefoxux.github.io/StyleGuide/#/navigation -->
+  <div class="panel">
+    <div class="panel-section panel-section-list" id="operations">
+      <div class="panel-list-item" id="quick-upload">
+        <div class="icon"></div>
+        <div class="text" data-i18n="panel_quickUpload"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-section-separator"></div>
+      <div class="panel-list-item" id="open-webui">
+        <div class="icon"></div>
+        <div class="text" data-i18n="panel_openWebui"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-list-item" id="open-preferences">
+        <div class="icon"></div>
+        <div class="text" data-i18n="panel_openPreferences"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-list-item" id="toggle-gateway-redirect">
+        <div class="icon"></div>
+        <div class="text" id="enable-gateway-redirect" data-i18n="panel_toggleGatewayRedirectEnable"></div>
+        <div class="text" id="disable-gateway-redirect" data-i18n="panel_toggleGatewayRedirectDisable"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-section-separator"></div>
+    </div>
+    <div class="panel-section" id="gateway-status">
+      <img src="../../icons/ipfs-logo-off.svg" id="icon"/>
+      <ul>
+        <li id="gateway-address"><span data-i18n="panel_statusGatewayAddress"></span><span id="gateway-address-val">unknown</span></li>
+        <li id="gateway-version"><span data-i18n="panel_statusGatewayVersion"></span><span id="gateway-version-val">offline</span></li>
+        <li id="swarm-peers"><span data-i18n="panel_statusSwarmPeers"></span><span id="swarm-peers-val">offline</span></li>
+        <li id="gateway-redirect"><span data-i18n="panel_statusGatewayRedirect"></span>
+          <span>
+            <span id="redirect-enabled" data-i18n="panel_statusGatewayRedirectEnabled"></span>
+            <span id="redirect-disabled" data-i18n="panel_statusGatewayRedirectDisabled"></span>
+          </span>
+        </li>
+      </ul>
+    </div>
   </div>
-
-  <ul id="operations">
-    <li class="action" id="quick-upload" data-i18n="panel_quickUpload"></li>
-    <li class="action" id="open-webui" data-i18n="panel_openWebui"></li>
-    <li class="action" id="open-preferences" data-i18n="panel_openPreferences"></li>
-    <li class="action" id="toggle-gateway-redirect">
-      <span id="enable-gateway-redirect" data-i18n="panel_toggleGatewayRedirectEnable"></span>
-      <span id="disable-gateway-redirect" data-i18n="panel_toggleGatewayRedirectDisable"></span>
-    </li>
-  </ul>
 
   <script src="../lib/data-i18n.js"></script>
   <script src="browser-action.js"></script>
