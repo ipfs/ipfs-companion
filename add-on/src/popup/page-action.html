@@ -2,16 +2,37 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="browser-action.css"/>
+  <style type="text/css">
+    .hidden { display: none !important; }
+  </style>
 </head>
 
 <body>
-  <ul id="ipfs-resource-actions">
-    <li class="action" id="copy-current-ipfs-address" data-i18n="panelCopy_currentIpfsAddress"></li>
-    <li class="action" id="copy-current-public-gw-url" data-i18n="panel_copyCurrentPublicGwUrl"></li>
-    <li class="action" id="pin-current-ipfs-address" data-i18n="panel_pinCurrentIpfsAddress"></li>
-    <li class="action" id="unpin-current-ipfs-address" data-i18n="panel_unpinCurrentIpfsAddress"></li>
-  </ul>
+
+  <div class="panel">
+    <div class="panel-section panel-section-list" id="ipfs-resource-actions">
+      <div class="panel-list-item" id="copy-current-ipfs-address">
+        <div class="icon"></div>
+        <div class="text" data-i18n="panelCopy_currentIpfsAddress"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-list-item" id="copy-current-public-gw-url">
+        <div class="icon"></div>
+        <div class="text" id="copy-current-public-gw-url" data-i18n="panel_copyCurrentPublicGwUrl"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-section-separator"></div>
+      <div class="panel-list-item" id="pin-current-ipfs-address">
+        <div class="icon"></div>
+        <div class="text" data-i18n="panel_pinCurrentIpfsAddress"></div>
+        <div class="text-shortcut"></div>
+      </div>
+      <div class="panel-list-item" id="unpin-current-ipfs-address">
+        <div class="icon"></div>
+        <div class="text" data-i18n="panel_unpinCurrentIpfsAddress"></div>
+        <div class="text-shortcut"></div>
+      </div>
+  </div>
 
   <script src="../lib/data-i18n.js"></script>
   <script src="page-action.js"></script>

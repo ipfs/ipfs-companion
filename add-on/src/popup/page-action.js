@@ -7,12 +7,12 @@ const copyIpfsAddressButton = document.getElementById('copy-current-ipfs-address
 const copyPublicGwAddressButton = document.getElementById('copy-current-public-gw-url')
 
 function show (element) {
-  element.classList.remove('faded')
+  element.classList.remove('disabled')
   element.classList.remove('hidden')
 }
 
-function fade (element) {
-  element.classList.add('faded')
+function disable (element) {
+  element.classList.add('disabled')
 }
 
 function hide (element) {
@@ -103,7 +103,7 @@ function activateUnpinning () {
 function deactivatePinButton () {
   pinResourceButton.onclick = undefined
   unpinResourceButton.onclick = undefined
-  fade(pinResourceButton)
+  disable(pinResourceButton)
   hide(unpinResourceButton)
 }
 
