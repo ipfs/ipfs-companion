@@ -14,7 +14,7 @@ async function onQuickUploadInputChange (event) {
       bg.ipfs.add(buffer, (err, result) => {
         if (err || !result) {
           // keep upload tab and display error message in it
-          quickUploadMessage.innerHTML = `Unable to upload to IPFS API: <br><code><pre>${err}</pre></code>`
+          quickUploadMessage.innerText = `Unable to upload to IPFS API: ${err}`
         } else {
           // close upload tab as it will be replaced with a new tab with uploaded content
           browser.tabs.getCurrent().then(tab => {
