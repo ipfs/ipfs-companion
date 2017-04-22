@@ -1,6 +1,6 @@
 {
-  "toggle_button_label": {
-    "message": "Przekierowanie Bramy IPFS"
+  "browserAction_title": {
+    "message": "Asystent IPFS"
   },
   "useCustomGateway_title": {
     "message": "Używaj własnej bramy"

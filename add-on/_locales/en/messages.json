@@ -1,6 +1,6 @@
 {
-  "toggle_button_label": {
-    "message": "IPFS Gateway Redirect"
+  "browserAction_title": {
+    "message": "IPFS Companion"
   },
   "useCustomGateway_title": {
     "message": "Use Custom Gateway"
