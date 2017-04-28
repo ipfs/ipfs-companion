@@ -57,7 +57,7 @@
     "shx": "0.2.2",
     "sinon": "2.2.0",
     "standard": "10.0.2",
-    "sinon-chrome": "2.2.0",
+    "sinon-chrome": "2.2.1",
     "web-ext": "1.9.0"
   },
   "dependencies": {
