@@ -55,7 +55,7 @@
     "npm-run-all": "4.0.2",
     "selenium-webdriver": "3.4.0",
     "shx": "0.2.2",
-    "sinon": "2.1.0",
+    "sinon": "2.2.0",
     "standard": "10.0.2",
     "sinon-chrome": "2.2.0",
     "web-ext": "1.9.0"
