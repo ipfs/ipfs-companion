@@ -42,7 +42,7 @@
     "fx-runner": "1.0.6",
     "geckodriver": "1.6.1",
     "husky": "0.13.3",
-    "karma": "1.6.0",
+    "karma": "1.7.0",
     "karma-babel-preprocessor": "6.0.1",
     "karma-chai": "0.1.0",
     "karma-coverage": "1.1.1",
