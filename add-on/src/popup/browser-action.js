@@ -89,13 +89,15 @@ async function updatePopup () {
         const peerCount = await background.getSwarmPeerCount()
         set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
         ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
-        if (peerCount > 0) {
+        if (peerCount > 0) { // API is online & there are peers
           show('quick-upload')
         } else {
           hide('quick-upload')
-          if (peerCount < 0) {
-            hide('open-webui')
-          }
+        }
+        if (peerCount < 0) { // API is offline
+          hide('open-webui')
+        } else {
+          show('open-webui')
         }
       } catch (error) {
         console.error(`Unable update peer count due to ${error}`)
@@ -107,6 +109,8 @@ async function updatePopup () {
 }
 
 // run on initial popup load
+hide('quick-upload')
+hide('open-webui')
 updatePopup()
 
 // listen to any changes and update diagnostics
