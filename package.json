@@ -38,7 +38,7 @@
     "chai": "3.5.0",
     "cross-env": "4.0.0",
     "fakefile": "0.0.8",
-    "fs-promise": "2.0.2",
+    "fs-promise": "2.0.3",
     "fx-runner": "1.0.6",
     "geckodriver": "1.6.1",
     "husky": "0.13.3",
