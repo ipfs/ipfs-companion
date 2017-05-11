@@ -383,15 +383,19 @@ function updateBrowserActionBadge () {
     badgeColor = '#8C8C8C'
     badgeIcon = '/icons/ipfs-logo-off.svg'
   }
-  return setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
+  setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
 }
 
-function setBrowserActionBadge (text, color, icon) {
-  return Promise.all([
-    browser.browserAction.setBadgeBackgroundColor({color: color}),
-    browser.browserAction.setBadgeText({text: text}),
-    browser.browserAction.setIcon({path: icon})
-  ])
+async function setBrowserActionBadge (text, color, icon) {
+  try {
+    await Promise.all([
+      browser.browserAction.setBadgeBackgroundColor({color: color}),
+      browser.browserAction.setBadgeText({text: text}),
+      browser.browserAction.setIcon({path: icon})
+    ])
+  } catch (error) {
+    console.error('Unable to update browserAction badge due to error', error)
+  }
 }
 
 // OPTIONS
