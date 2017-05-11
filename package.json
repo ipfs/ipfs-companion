@@ -13,6 +13,7 @@
     "build:copy-is-ipfs-lib": "shx cp node_modules/is-ipfs/dist/index.min.js add-on/src/lib/npm/is-ipfs.min.js",
     "build:copy-ipfs-api-lib": "shx cp node_modules/ipfs-api/dist/index.min.js add-on/src/lib/npm/ipfs-api.min.js",
     "build:copy-lru-map-lib": "shx cp node_modules/lru_map/lru.js add-on/src/lib/npm/lru.js",
+    "build:copy-wx-polyfill-lib": "shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js add-on/src/lib/npm/browser-polyfill.min.js",
     "build:bundle-extension": "web-ext build -s add-on/ -a build/",
     "test": "run-s test:*",
     "test:unit": "cross-env NODE_ENV=test karma start",
@@ -63,6 +64,7 @@
   "dependencies": {
     "ipfs-api": "14.0.1",
     "is-ipfs": "0.3.0",
-    "lru_map": "0.3.3"
+    "lru_map": "0.3.3",
+    "webextension-polyfill": "0.1.1"
   }
 }
