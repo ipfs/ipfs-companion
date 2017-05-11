@@ -325,17 +325,17 @@ function updateContextMenus () {
   browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
 }
 
-// pageAction
+// Page Actions
 // -------------------------------------------------------------------
+
+// used in browser-action popup
+// eslint-disable-next-line no-unused-vars
+function isIpfsPageActionsContext (url) {
+  return window.IsIpfs.url(url) && !url.startsWith(state.apiURLString)
+}
 
 async function onUpdatedTab (tabId, changeInfo, tab) {
   if (tab && tab.url) {
-    const ipfsContext = window.IsIpfs.url(tab.url) && !tab.url.startsWith(state.apiURLString)
-    if (ipfsContext) {
-      browser.pageAction.show(tab.id)
-    } else {
-      browser.pageAction.hide(tab.id)
-    }
     if (state.linkify && changeInfo.status === 'complete') {
       console.log(`Running linkfyDOM for ${tab.url}`)
       try {
