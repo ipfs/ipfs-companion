@@ -176,7 +176,7 @@ async function activatePinButton () {
 }
 
 async function updatePageActions () {
-  console.log('running updatePageActions()')
+  // console.log('running updatePageActions()')
   try {
     const bg = await getBackgroundPage()
     const currentTab = await getCurrentTab()
