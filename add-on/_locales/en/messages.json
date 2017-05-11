@@ -165,15 +165,19 @@
     "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)"
   },
   "notify_inlineMsg": {
-    "message": "$msg$",
+    "message": "$MSG$",
     "placeholders": {
-        "msg": "$1"
+        "msg": {
+          "content": "$1"
+        }
     }
   },
   "notify_inlineErrorMsg": {
-    "message": "$errorMsg$ (press ctrl+shift+j for more details)",
+    "message": "$ERROR$ (press ctrl+shift+j for more details)",
     "placeholders": {
-        "errorMsg": "$1"
+        "error": {
+          "content": "$1"
+        }
     }
   }
 }
