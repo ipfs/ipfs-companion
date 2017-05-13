@@ -368,13 +368,15 @@ function createIpfsApiStatusUpdateAlarm (ipfsApiPollMs) {
   return browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
 }
 
-function updateBrowserActionBadge () {
+async function updateBrowserActionBadge () {
   let badgeText, badgeColor, badgeIcon
   badgeText = state.peerCount.toString()
   if (state.peerCount > 0) {
+    // All is good (online with peers)
     badgeColor = '#418B8E'
     badgeIcon = '/icons/ipfs-logo-on.svg'
   } else if (state.peerCount === 0) {
+    // API is online but no peers
     badgeColor = 'red'
     badgeIcon = '/icons/ipfs-logo-on.svg'
   } else {
@@ -383,20 +385,59 @@ function updateBrowserActionBadge () {
     badgeColor = '#8C8C8C'
     badgeIcon = '/icons/ipfs-logo-off.svg'
   }
-  setBrowserActionBadge(badgeText, badgeColor, badgeIcon)
-}
-
-async function setBrowserActionBadge (text, color, icon) {
   try {
-    await Promise.all([
-      browser.browserAction.setBadgeBackgroundColor({color: color}),
-      browser.browserAction.setBadgeText({text: text}),
-      browser.browserAction.setIcon({path: icon})
-    ])
+    await browser.browserAction.setBadgeBackgroundColor({color: badgeColor})
+    await browser.browserAction.setBadgeText({text: badgeText})
+    await setBrowserActionIcon(badgeIcon)
   } catch (error) {
     console.error('Unable to update browserAction badge due to error', error)
   }
 }
+
+async function setBrowserActionIcon (iconPath) {
+  let iconDefinition = {path: iconPath}
+  try {
+    // Try SVG first -- Firefox supports it natively
+    await browser.browserAction.setIcon(iconDefinition)
+  } catch (error) {
+    // Fallback!
+    // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
+    // Still, we want icon, so we precompute rasters of popular sizes and use them instead
+    await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+  }
+}
+
+function rasterIconDefinition (svgPath) {
+  // icon sizes to cover ranges from:
+  // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
+  // - https://developer.chrome.com/extensions/manifest/icons
+  return {
+    'path': {
+      '19': rasterIconPath(svgPath, 19),
+      '38': rasterIconPath(svgPath, 38),
+      '128': rasterIconPath(svgPath, 128)
+    }
+  }
+}
+
+function rasterIconPath (iconPath, size) {
+  // point at precomputed PNG file
+  let baseName = /\/icons\/(.+)\.svg/.exec(iconPath)[1]
+  return `/icons/png/${baseName}_${size}.png`
+}
+
+/* Easter-Egg: PoC that generates raster on the fly ;-)
+function rasterIconData (iconPath, size) {
+  let icon = new Image()
+  icon.src = iconPath
+  let canvas = document.createElement('canvas')
+  let context = canvas.getContext('2d')
+  context.clearRect(0, 0, size, size)
+  context.drawImage(icon, 0, 0, size, size)
+  return context.getImageData(0, 0, size, size)
+}
+*/
 
 // OPTIONS
 // ===================================================================

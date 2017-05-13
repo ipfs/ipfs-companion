@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env webextensions, mocha */
-/* globals sinon, init, URL, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults, setBrowserActionBadge */
+/* globals sinon, init, URL, IpfsApi, onStorageChange, storeMissingOptions, optionDefaults */
 
 var sandbox
 
@@ -118,32 +118,4 @@ describe('init.js', function () {
     })
   })
 
-  describe('setBrowserActionBadge()', function () {
-    it('should update text, color and icon of Browser Action button', done => {
-      setBrowserActionBadge('text', 'yellow', 'icon.svg')
-        .then(() => {
-          sinon.assert.calledWith(browser.browserAction.setBadgeText, {text: 'text'})
-          sinon.assert.calledWith(browser.browserAction.setBadgeBackgroundColor, {color: 'yellow'})
-          sinon.assert.calledWith(browser.browserAction.setIcon, {path: 'icon.svg'})
-          done()
-        })
-        .catch(error => { done(error) })
-    })
-  })
-
-  /* TODO :-)
-  describe('updateIpfsApiStatus', function () {
-    it('should update Browser Action button if API is offline', done => {
-      sandbox.stub(window, 'setBrowserActionBadge')
-      //sandbox.stub(ipfs.swarm, 'peers').returns(Promise.resolve([{}, {}, {}, {}]))
-      updateIpfsApiStatus()
-        .then(() => {
-          sinon.assert.calledWith(browser.browserAction.setBadgeText, {text: '4'})
-          sinon.assert.calledWith(setBrowserActionBadge, '4', 'red', 'foo')
-          done()
-        })
-        .catch(error => { done(error) })
-    })
-  })
-  */
 })
