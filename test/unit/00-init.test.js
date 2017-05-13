@@ -117,5 +117,4 @@ describe('init.js', function () {
         .catch(error => { done(error) })
     })
   })
-
 })

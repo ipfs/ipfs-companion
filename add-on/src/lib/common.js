@@ -48,6 +48,7 @@ function updatePeerCountState (count) {
 }
 
 function registerListeners () {
+  browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
   browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
   browser.storage.onChanged.addListener(onStorageChange)
   browser.tabs.onUpdated.addListener(onUpdatedTab)
@@ -92,6 +93,27 @@ function redirectToNormalizedPath (request) {
   path = path.replace(/^\/ip([^/]+)\/ip[^/]+\//, '/ip$1/') // /ipfs/ipfs/Qm → /ipfs/Qm
   url.pathname = path
   return { redirectUrl: url.toString() }
+}
+
+// HTTP Request Hooks
+// ===================================================================
+
+function onBeforeSendHeaders (request) {
+  if (request.url.startsWith(state.apiURLString)) {
+    // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
+    // which produced '403 - Forbidden' error.
+    // This workaround removes bogus header from API requests
+    for (var i = 0; i < request.requestHeaders.length; i++) {
+      let header = request.requestHeaders[i]
+      if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
+        request.requestHeaders.splice(i, 1)
+        break
+      }
+    }
+  }
+  return {
+    requestHeaders: request.requestHeaders
+  }
 }
 
 function onBeforeRequest (request) {
