@@ -296,7 +296,7 @@ browser.contextMenus.create({
   onclick: addFromURL
 })
 
-function inFirefox() {
+function inFirefox () {
   return !!navigator.userAgent.match('Firefox')
 }
 
