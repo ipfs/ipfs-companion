@@ -296,23 +296,30 @@ browser.contextMenus.create({
   onclick: addFromURL
 })
 
+function inFirefox() {
+  return !!navigator.userAgent.match('Firefox')
+}
+
 async function addFromURL (info) {
-  // disabled due to https://github.com/lidel/ipfs-firefox-addon/issues/227
-  // ipfs.util.addFromURL(info.srcUrl, uploadResultHandler)
   try {
-    const fetchOptions = {
-      cache: 'force-cache',
-      referrer: info.pageUrl
+    if (inFirefox()) {
+      // workaround due to https://github.com/lidel/ipfs-firefox-addon/issues/227
+      const fetchOptions = {
+        cache: 'force-cache',
+        referrer: info.pageUrl
+      }
+      // console.log('addFromURL.info', info)
+      // console.log('addFromURL.fetchOptions', fetchOptions)
+      const response = await fetch(info.srcUrl, fetchOptions)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const buffer = ipfs.Buffer.from(reader.result)
+        ipfs.add(buffer, uploadResultHandler)
+      }
+      reader.readAsArrayBuffer(await response.blob())
+    } else {
+      ipfs.util.addFromURL(info.srcUrl, uploadResultHandler)
     }
-    // console.log('addFromURL.info', info)
-    // console.log('addFromURL.fetchOptions', fetchOptions)
-    const response = await fetch(info.srcUrl, fetchOptions)
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      const buffer = ipfs.Buffer.from(reader.result)
-      ipfs.add(buffer, uploadResultHandler)
-    }
-    reader.readAsArrayBuffer(await response.blob())
   } catch (error) {
     console.error(`Error for ${contextMenuUploadToIpfs}`, error)
     if (error.message === 'NetworkError when attempting to fetch resource.') {
