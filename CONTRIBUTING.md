@@ -1,47 +1,54 @@
 # Contributing
 
-## Make sure you invest your time in future-proof APIs :-)
+Contributions are always welcome!
 
-Mozilla decided to deprecate old SDK and our main objective is to [rewrite addon using WebExtensions APIs](https://github.com/lidel/ipfs-firefox-addon/issues/20).  
-Before you start working on any new PR make sure issue [#20](https://github.com/lidel/ipfs-firefox-addon/issues/20) is closed.   
-If not, consider helping there first.
+## Creating New Issues
 
-## Work on existing issues
+Do not hesitate and [create a new Issue](https://github.com/ipfs/ipfs-firefox-addon/issues/new) if you see a bug, room for improvement or simply have a question.
 
-Feel free to work on issues that are [not assigned to me yet](https://github.com/lidel/yt-looper/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee) or are marked with [help wanted](https://github.com/lidel/ipfs-firefox-addon/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee).
+## Working on existing Issues
+
+Feel free to work on issues that are [not assigned yet](https://github.com/ipfs/ipfs-firefox-addon/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee) and/or ones marked with [help wanted](https://github.com/ipfs/ipfs-firefox-addon/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee) tag.  
 As a courtesy, please add a comment informing  about your intent. That way we will not duplicate effort.
 
+## Submitting Pull Requests
 
-## Create new Issue
+Just make sure your PR comes with its own tests and does pass [automated TravisCI tests](https://travis-ci.org/lidel/ipfs-firefox-addon/branches).
+See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for details.
 
-Do not hesitate and [create a new Issue](https://github.com/ipfs-firefox-addon/issues/new)
-if you see a bug, a room for improvement or simply have a question.
+Read section below to get familiar with tools and commands that will make your work easier.
 
-## Submit Pull Requests
+## Development
 
-Pull Requests are welcome :-)
+You will need [NodeJS](https://nodejs.org/) and [Firefox](https://www.mozilla.org/en-US/firefox/developer/). Make sure `npm` and `firefox` are in your `PATH`.
 
-Just make sure your PR comes with its own tests and does pass [automated TravisCI tests](https://travis-ci.org/lidel/ipfs-firefox-addon/branches) against different Firefox versions.
+### Installing Dependencies
 
-Read section below to get familiar with tools that will make your work easier.
-
-## WebExtension Development
-
-You will need [NodeJS](https://nodejs.org/) and [Firefox](https://www.mozilla.org/en-US/firefox/developer/). Make sure `npm` and `firefox` are in your `PATH`.  
-
-First step is easy and needs to be run only once. To install all dependencies into to `node_modules` directory, execute:
+To install all dependencies into to `node_modules` directory, execute:
 
 ```bash
 npm install
 ```
 
-Then, there is a handy one stop command to build, test and deploy add-on in Firefox:
+### Firefox
+
+One stop command to build, test and deploy add-on to Firefox:
 
 ```bash
 npm start
 ```
 
-###  Tasks
+### Chromium
+
+First, build it manually:
+
+```bash
+npm run build
+```
+
+Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`
+
+## Useful Tasks
 
 Each `npm` task can be run separately. The most useful ones are:
 
@@ -61,5 +68,4 @@ Each `npm` task can be run separately. The most useful ones are:
 
   ```bash
   export PATH="/path/to/alternative/version/of/firefox/:${PATH}"
-  ``` 
-- FOO
+  ```
