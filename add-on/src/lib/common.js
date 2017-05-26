@@ -303,7 +303,7 @@ function inFirefox () {
 async function addFromURL (info) {
   try {
     if (inFirefox()) {
-      // workaround due to https://github.com/lidel/ipfs-firefox-addon/issues/227
+      // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
       const fetchOptions = {
         cache: 'force-cache',
         referrer: info.pageUrl
@@ -324,9 +324,9 @@ async function addFromURL (info) {
     console.error(`Error for ${contextMenuUploadToIpfs}`, error)
     if (error.message === 'NetworkError when attempting to fetch resource.') {
       notify('notify_uploadErrorTitle', 'notify_uploadTrackingProtectionErrorMsg')
-      console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/lidel/ipfs-firefox-addon/issues/227')
+      console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
       browser.tabs.create({
-        'url': 'https://github.com/lidel/ipfs-firefox-addon/issues/227'
+        'url': 'https://github.com/ipfs/ipfs-companion/issues/227'
       })
     } else {
       notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)

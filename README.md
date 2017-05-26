@@ -1,19 +1,19 @@
 
 | **Important Announcement** :rocket: |
 | --- |
-| [Add-on is being migrated to the new Firefox API called WebExtensions](https://github.com/lidel/ipfs-firefox-addon/issues/20).  It will be released as `2.x.x`  |
-| Versions `1.x.x` are maintained in [legacy-sdk](https://github.com/lidel/ipfs-firefox-addon/tree/legacy-sdk) branch. |
+| [Add-on is being migrated to the new Firefox API called WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).  It will be released as `2.x.x`  |
+| Versions `1.x.x` are maintained in [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch. |
 
-# ipfs-firefox-addon AKA “IPFS Gateway Redirect”
+# IPFS Companion
 
 ![screenshot of v1.5.9](screenshot.png)
 
-[![](https://img.shields.io/github/release/lidel/ipfs-firefox-addon.svg)](https://github.com/lidel/ipfs-firefox-addon/releases/latest)
+[![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-full%20review-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-blue.svg)](http://standardjs.com/)
 [![NSP Status](https://nodesecurity.io/orgs/lidelorg/projects/db13ad1f-ca19-42c5-8c58-dbb8d111b651/badge)](https://nodesecurity.io/orgs/lidelorg/projects/db13ad1f-ca19-42c5-8c58-dbb8d111b651)
-[![build-status](https://travis-ci.org/lidel/ipfs-firefox-addon.svg?branch=master)](https://travis-ci.org/lidel/ipfs-firefox-addon)
-[![Coverage Status](https://coveralls.io/repos/github/lidel/ipfs-firefox-addon/badge.svg?branch=master)](https://coveralls.io/github/lidel/ipfs-firefox-addon?branch=master)
+[![build-status](https://travis-ci.org/ipfs/ipfs-companion.svg?branch=master)](https://travis-ci.org/ipfs/ipfs-companion)
+[![Coverage Status](https://coveralls.io/repos/github/ipfs/ipfs-companion/badge.svg?branch=master)](https://coveralls.io/github/ipfs/ipfs-companion?branch=master)
 
 > Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
 

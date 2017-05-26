@@ -4,16 +4,16 @@ Contributions are always welcome!
 
 ## Creating New Issues
 
-Do not hesitate and [create a new Issue](https://github.com/ipfs/ipfs-firefox-addon/issues/new) if you see a bug, room for improvement or simply have a question.
+Do not hesitate and [create a new Issue](https://github.com/ipfs/ipfs-companion/issues/new) if you see a bug, room for improvement or simply have a question.
 
 ## Working on existing Issues
 
-Feel free to work on issues that are [not assigned yet](https://github.com/ipfs/ipfs-firefox-addon/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee) and/or ones marked with [help wanted](https://github.com/ipfs/ipfs-firefox-addon/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee) tag.  
+Feel free to work on issues that are [not assigned yet](https://github.com/ipfs/ipfs-companion/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee) and/or ones marked with [help wanted](https://github.com/ipfs/ipfs-companion/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee) tag.  
 As a courtesy, please add a comment informing  about your intent. That way we will not duplicate effort.
 
 ## Submitting Pull Requests
 
-Just make sure your PR comes with its own tests and does pass [automated TravisCI tests](https://travis-ci.org/lidel/ipfs-firefox-addon/branches).
+Just make sure your PR comes with its own tests and does pass [automated TravisCI tests](https://travis-ci.org/ipfs/ipfs-companion/branches).
 See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for details.
 
 Read section below to get familiar with tools and commands that will make your work easier.
