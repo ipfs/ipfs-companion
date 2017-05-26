@@ -96,7 +96,7 @@
     if (href.startsWith('fs:')) {
       href = href.replace('fs:', '')
     }
-    href = 'https://ipfs.io/' + href // for now just point to public gw, we will switch to custom protocol when https://github.com/lidel/ipfs-firefox-addon/issues/164 is closed
+    href = 'https://ipfs.io/' + href // for now just point to public gw, we will switch to custom protocol when https://github.com/ipfs/ipfs-companion/issues/164 is closed
     href = href.replace(/([^:]\/)\/+/g, '$1') // remove redundant slashes
     return href
   }

@@ -4,7 +4,7 @@
   "license": "CC0-1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lidel/ipfs-firefox-addon.git"
+    "url": "https://github.com/ipfs/ipfs-companion.git"
   },
   "scripts": {
     "start": "run-s clean build test firefox",
