@@ -41,8 +41,8 @@
     "fakefile": "0.0.9",
     "fs-promise": "2.0.3",
     "fx-runner": "1.0.6",
-    "geckodriver": "1.6.1",
-    "husky": "0.13.4",
+    "geckodriver": "1.7.1",
+    "husky": "0.14.2",
     "karma": "1.7.0",
     "karma-babel-preprocessor": "6.0.1",
     "karma-chai": "0.1.0",
@@ -56,13 +56,13 @@
     "npm-run-all": "4.0.2",
     "selenium-webdriver": "3.4.0",
     "shx": "0.2.2",
-    "sinon": "2.3.4",
+    "sinon": "2.3.6",
     "standard": "10.0.2",
     "sinon-chrome": "2.2.1",
-    "web-ext": "1.9.1"
+    "web-ext": "1.10.0"
   },
   "dependencies": {
-    "ipfs-api": "14.0.3",
+    "ipfs-api": "14.0.4",
     "is-ipfs": "0.3.0",
     "lru_map": "0.3.3",
     "webextension-polyfill": "0.1.1"
