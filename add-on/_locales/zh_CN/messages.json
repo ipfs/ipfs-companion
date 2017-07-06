@@ -1,0 +1,183 @@
+{
+  "browserAction_title": {
+    "message": "IPFS 伴侣"
+  },
+  "useCustomGateway_title": {
+    "message": "使用自定义网关"
+  },
+  "useCustomGateway_description": {
+    "message": "在启用后，发往下述公共网关的所有请求将改为发送到自定义网关。"
+  },
+  "publicGatewayHosts_title": {
+    "message": "公共网关"
+  },
+  "publicGatewayHosts_description": {
+    "message": "公共网关主机列表（空格分隔，第一项将用于复制公共 URL 功能）"
+  },
+  "customGatewayHost_title": {
+    "message": "自定义网关主机"
+  },
+  "customGatewayHost_description": {
+    "message": "大多数人使用 localhost (127.0.0.1)"
+  },
+  "customGatewayPort_title": {
+    "message": "自定义网关端口"
+  },
+  "customGatewayPort_description": {
+    "message": "HTTP2IPFS 网关服务（例如，go-ipfs 的本地实例）"
+  },
+  "customApiPort_title": {
+    "message": "IPFS API 端口"
+  },
+  "customApiPort_description": {
+    "message": "用于固定（位于网关主机）"
+  },
+  "apiPollInterval_title": {
+    "message": "API 轮训间隔"
+  },
+  "apiPollInterval_description": {
+    "message": "从 API 更新对等连接数量的间隔，单位毫秒"
+  },
+  "automatic_title": {
+    "message": "自动模式"
+  },
+  "automatic_description": {
+    "message": "基于对等端数量自动启用/禁用重定向。"
+  },
+  "automatic_up_notification_title": {
+    "message": "IPFS 已上线"
+  },
+  "automatic_up_notification_text": {
+    "message": "已启用重定向 IPFS 请求"
+  },
+  "automatic_down_notification_title": {
+    "message": "IPFS 未上线"
+  },
+  "automatic_down_notification_text": {
+    "message": "已禁用重定向 IPFS 请求"
+  },
+  "dns_title": {
+    "message": "启用 DNS 查询"
+  },
+  "dns_description": {
+    "message": "实验性：检查域名的 DNS TXT 记录是否包含至 IPFS 路径的 dnslink，并重定向过去"
+  },
+  "linkify_title": {
+    "message": "扩展 IPFS 链接支持"
+  },
+  "linkify_description": {
+    "message": "实验性：重写每个页面上到 /ip(f|n)s/* 路径的链接，改为指向 IPFS 网关。这将使明文 IPFS 链接可点击。"
+  },
+  "fsUris_title": {
+    "message": "地址栏中保留 fs:"
+  },
+  "fsUris_description": {
+    "message": "实验性：显示 fs:/ URI 而非重写为 http:// （可能影响网页的 JavaScript）"
+  },
+  "panel_statusGatewayRedirect": {
+    "message": "重定向"
+  },
+  "panel_statusGatewayRedirectEnabled": {
+    "message": "已启用"
+  },
+  "panel_statusGatewayRedirectDisabled": {
+    "message": "已禁用"
+  },
+  "panel_statusGatewayAddress": {
+    "message": "网关"
+  },
+  "panel_statusGatewayVersion": {
+    "message": "版本"
+  },
+  "panel_statusSwarmPeers": {
+    "message": "群集对等端"
+  },
+  "panel_quickUpload": {
+    "message": "快速上传"
+  },
+  "panel_openWebui": {
+    "message": "打开 WebUI"
+  },
+  "panel_openPreferences": {
+    "message": "打开选项"
+  },
+  "panel_toggleGatewayRedirectEnable": {
+    "message": "启用网关重定向"
+  },
+  "panel_toggleGatewayRedirectDisable": {
+    "message": "禁用网关重定向"
+  },
+  "panel_pinCurrentIpfsAddress": {
+    "message": "固定 IPFS 资源"
+  },
+  "panel_unpinCurrentIpfsAddress": {
+    "message": "解除固定 IPFS 资源"
+  },
+  "panelCopy_currentIpfsAddress": {
+    "message": "复制规范地址"
+  },
+  "panel_copyCurrentPublicGwUrl": {
+    "message": "复制公共网关网址"
+  },
+  "contextMenu_uploadToIpfs": {
+    "message": "上传到 IPFS"
+  },
+  "notify_addonIssueTitle": {
+    "message": "IPFS 附加组件问题报告"
+  },
+  "notify_addonIssueMsg": {
+    "message": "具体细节请参阅“浏览器控制台”"
+  },
+  "notify_copiedPublicURLTitle": {
+    "message": "已复制公共网关网址"
+  },
+  "notify_copiedCanonicalAddressTitle": {
+    "message": "已复制规范地址"
+  },
+  "notify_pinnedIpfsResourceTitle": {
+    "message": "已固定 IPFS 资源"
+  },
+  "notify_unpinnedIpfsResourceTitle": {
+    "message": "已解除 IPFS 固定"
+  },
+  "notify_pinErrorTitle": {
+    "message": "固定时出错"
+  },
+  "notify_unpinErrorTitle": {
+    "message": "解除固定时出错"
+  },
+  "notify_apiOnlineTitle": {
+    "message": "IPFS API 在线"
+  },
+  "notify_apiOnlineAutomaticModeMsg": {
+    "message": "自动模式：自定义网关重定向已激活"
+  },
+  "notify_apiOfflineTitle": {
+    "message": "IPFS API 离线"
+  },
+  "notify_apiOfflineAutomaticModeMsg": {
+    "message": "自动模式：公共网关将作为后备方案"
+  },
+  "notify_uploadErrorTitle": {
+    "message": "无法通过 IPFS API 上传"
+  },
+  "notify_uploadTrackingProtectionErrorMsg": {
+    "message": "请尝试禁用“跟踪保护”（详细信息请见 ctrl+shift+j）"
+  },
+  "notify_inlineMsg": {
+    "message": "$MSG$",
+    "placeholders": {
+        "msg": {
+          "content": "$1"
+        }
+    }
+  },
+  "notify_inlineErrorMsg": {
+    "message": "$ERROR$（详细信息请见 ctrl+shift+j）",
+    "placeholders": {
+        "error": {
+          "content": "$1"
+        }
+    }
+  }
+}
