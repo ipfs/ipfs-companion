@@ -18,6 +18,9 @@ const ipfsIconOn = '../../icons/ipfs-logo-on.svg'
 const ipfsIconOff = '../../icons/ipfs-logo-off.svg'
 const offline = 'offline'
 
+var port
+var state
+
 function resolv (element) {
   // lookup DOM if element is just a string ID
   if (Object.prototype.toString.call(element) === '[object String]') {
@@ -49,28 +52,24 @@ function getBackgroundPage () {
   return browser.runtime.getBackgroundPage()
 }
 
-function getCurrentTab () {
-  return browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+function notify (title, message) {
+  port.postMessage({event: 'notification', title: title, message: message})
 }
 
 // Ipfs Context Page Actions
 // ===================================================================
 
 async function copyCurrentPublicGwAddress () {
-  const bg = await getBackgroundPage()
-  const currentTab = await getCurrentTab()
-  const publicGwAddress = new URL(currentTab.url.replace(bg.state.gwURLString, 'https://ipfs.io/')).toString()
+  const publicGwAddress = new URL(state.currentTab.url.replace(state.gwURLString, 'https://ipfs.io/')).toString()
   copyTextToClipboard(publicGwAddress)
-  bg.notify('notify_copiedPublicURLTitle', publicGwAddress)
+  notify('notify_copiedPublicURLTitle', publicGwAddress)
   window.close()
 }
 
 async function copyCurrentCanonicalAddress () {
-  const bg = await getBackgroundPage()
-  const currentTab = await getCurrentTab()
-  const rawIpfsAddress = currentTab.url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
+  const rawIpfsAddress = state.currentTab.url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
   copyTextToClipboard(rawIpfsAddress)
-  bg.notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
+  notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
   window.close()
 }
 
@@ -89,11 +88,10 @@ async function pinCurrentResource () {
   deactivatePinButton()
   try {
     const bg = await getBackgroundPage()
-    const currentTab = await getCurrentTab()
-    const currentPath = await resolveToIPFS(new URL(currentTab.url).pathname)
+    const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
     const pinResult = await bg.ipfs.pin.add(currentPath, { recursive: true })
     console.log('ipfs.pin.add result', pinResult)
-    bg.notify('notify_pinnedIpfsResourceTitle', currentPath)
+    notify('notify_pinnedIpfsResourceTitle', currentPath)
   } catch (error) {
     handlePinError('notify_pinErrorTitle', error)
   }
@@ -104,11 +102,10 @@ async function unpinCurrentResource () {
   deactivatePinButton()
   try {
     const bg = await getBackgroundPage()
-    const currentTab = await getCurrentTab()
-    const currentPath = await resolveToIPFS(new URL(currentTab.url).pathname)
+    const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
     const result = await bg.ipfs.pin.rm(currentPath, {recursive: true})
     console.log('ipfs.pin.rm result', result)
-    bg.notify('notify_unpinnedIpfsResourceTitle', currentPath)
+    notify('notify_unpinnedIpfsResourceTitle', currentPath)
   } catch (error) {
     handlePinError('notify_unpinErrorTitle', error)
   }
@@ -140,8 +137,7 @@ async function handlePinError (errorMessageKey, error) {
   console.error(browser.i18n.getMessage(errorMessageKey), error)
   deactivatePinButton()
   try {
-    const bg = await getBackgroundPage()
-    bg.notify(errorMessageKey, error.message)
+    notify(errorMessageKey, error.message)
   } catch (error) {
     console.error('unable to access background page', error)
   }
@@ -159,8 +155,7 @@ async function resolveToIPFS (path) {
 async function activatePinButton () {
   try {
     const bg = await getBackgroundPage()
-    const currentTab = await getCurrentTab()
-    const currentPath = await resolveToIPFS(new URL(currentTab.url).pathname)
+    const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
     const response = await bg.ipfs.pin.ls(currentPath, {quiet: true})
     console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
     activateUnpinning()
@@ -176,21 +171,27 @@ async function activatePinButton () {
 }
 
 async function updatePageActions () {
-  // console.log('running updatePageActions()')
-  try {
-    const bg = await getBackgroundPage()
-    const currentTab = await getCurrentTab()
-    if (bg.isIpfsPageActionsContext(currentTab.url)) {
-      deactivatePinButton()
-      show(ipfsContextActions)
-      copyPublicGwAddressButton.onclick = copyCurrentPublicGwAddress
-      copyIpfsAddressButton.onclick = copyCurrentCanonicalAddress
+  // IPFS contexts require access to background page
+  // which is denied in Private Browsing mode
+  const bg = await getBackgroundPage()
+
+  // Check if current page is an IPFS one
+  const ipfsContext = bg && state && state.ipfsPageActionsContext
+
+  // There is no point in displaying actions that require API interaction if API is down
+  const apiIsUp = state && state.peerCount >= 0
+
+  if (ipfsContext) {
+    show(ipfsContextActions)
+    copyPublicGwAddressButton.onclick = copyCurrentPublicGwAddress
+    copyIpfsAddressButton.onclick = copyCurrentCanonicalAddress
+    if (apiIsUp) {
       activatePinButton()
     } else {
-      hide(ipfsContextActions)
+      deactivatePinButton()
     }
-  } catch (error) {
-    console.error(`Error while setting up pageAction: ${error}`)
+  } else {
+    hide(ipfsContextActions)
   }
 }
 
@@ -223,6 +224,7 @@ openPreferences.onclick = () => {
 }
 
 async function updateBrowserActionPopup () {
+  updatePageActions()
   // update redirect status
   const options = await browser.storage.local.get()
   try {
@@ -247,46 +249,45 @@ async function updateBrowserActionPopup () {
     set('gateway-address-val', '???')
   }
 
-  try {
-    const background = await browser.runtime.getBackgroundPage()
-    if (background.ipfs) {
-      // update swarm peer count
-      try {
-        const peerCount = background.state.peerCount
-        set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
-        ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
-        if (peerCount > 0) { // API is online & there are peers
-          show('quick-upload')
-        } else {
-          hide('quick-upload')
-        }
-        if (peerCount < 0) { // API is offline
-          hide('open-webui')
-        } else {
-          show('open-webui')
-        }
-      } catch (error) {
-        console.error(`Unable update peer count due to ${error}`)
-      }
-      // update gateway version
-      try {
-        const v = await background.ipfs.version()
-        set('gateway-version-val', (v.commit ? v.version + '/' + v.commit : v.version))
-      } catch (error) {
-        set('gateway-version-val', offline)
-      }
+  if (state) {
+    // update swarm peer count
+    const peerCount = state.peerCount
+    set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
+    ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
+    if (peerCount > 0) { // API is online & there are peers
+      show('quick-upload')
+    } else {
+      hide('quick-upload')
     }
-  } catch (error) {
-    console.error(`Error while accessing background page: ${error}`)
+    if (peerCount < 0) { // API is offline
+      hide('open-webui')
+    } else {
+      show('open-webui')
+    }
+    // update gateway version
+    set('gateway-version-val', state.gatewayVersion ? state.gatewayVersion : offline)
   }
 }
 
 // hide things that cause ugly reflow if removed later
+deactivatePinButton()
 hide(ipfsContextActions)
 hide('quick-upload')
 hide('open-webui')
 
-// listen to any changes and update diagnostics
-browser.alarms.onAlarm.addListener(updateBrowserActionPopup)
-document.addEventListener('DOMContentLoaded', updatePageActions)
-document.addEventListener('DOMContentLoaded', updateBrowserActionPopup)
+function onDOMContentLoaded () {
+  // set up initial layout that will remain if there is no peers
+  updateBrowserActionPopup()
+  // initialize connection to the background script which will trigger UI updates
+  port = browser.runtime.connect({name: 'browser-action-port'})
+  port.onMessage.addListener((message) => {
+    if (message.statusUpdate) {
+      // console.log('In browser action, received message from background:', message)
+      state = message.statusUpdate
+      updateBrowserActionPopup()
+    }
+  })
+}
+
+// init
+document.addEventListener('DOMContentLoaded', onDOMContentLoaded)

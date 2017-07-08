@@ -221,20 +221,70 @@ function readDnslinkTxtRecordFromApi (fqdn) {
   })
 }
 
+// PORTS
+// ===================================================================
+// https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/connect
+// Make a connection between different contexts inside the add-on,
+// e.g. signalling between browser action popup and background page that works
+// in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
+
+const browserActionPortName = 'browser-action-port'
+var browserActionPort
+
+browser.runtime.onConnect.addListener(port => {
+  // console.log('onConnect', port)
+  if (port.name === browserActionPortName) {
+    browserActionPort = port
+    browserActionPort.onMessage.addListener(handleMessageFromBrowserAction)
+    browserActionPort.onDisconnect.addListener(() => { browserActionPort = null })
+    sendStatusUpdateToBrowserAction()
+  }
+})
+
+function handleMessageFromBrowserAction (message) {
+  // console.log('In background script, received message from browser action', message)
+  if (message.event === 'notification') {
+    notify(message.title, message.message)
+  }
+}
+
+async function sendStatusUpdateToBrowserAction () {
+  if (browserActionPort) {
+    const info = {
+      peerCount: state.peerCount,
+      currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+    }
+    try {
+      let v = await ipfs.version()
+      if (v) {
+        info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
+      }
+    } catch (error) {
+      info.gatewayVersion = null
+    }
+    if (info.currentTab) {
+      info.ipfsPageActionsContext = isIpfsPageActionsContext(info.currentTab.url)
+    }
+    browserActionPort.postMessage({statusUpdate: info})
+  }
+}
+
 // ALARMS
 // ===================================================================
+// TODO: Remove use of alarms for signal passing, use PORTS instead
 
 const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
 const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
 
-function handleAlarm (alarm) {
+async function handleAlarm (alarm) {
   // avoid making expensive updates when IDLE
   if (alarm.name === ipfsApiStatusUpdateAlarm) {
-    getSwarmPeerCount()
+    await getSwarmPeerCount()
       .then(updatePeerCountState)
       .then(updateAutomaticModeRedirectState)
       .then(updateBrowserActionBadge)
       .then(updateContextMenus)
+    sendStatusUpdateToBrowserAction()
   }
 }
 
