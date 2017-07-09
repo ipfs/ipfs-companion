@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "IPFS Companion (Development Channel)",
     "short_name": "IPFS Companion",
-    "version" : "2.0.6",
+    "version" : "2.0.7",
 
     "description": "Access IPFS resources via custom HTTP2IPFS gateway",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",
