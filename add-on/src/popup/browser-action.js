@@ -276,7 +276,7 @@ hide('quick-upload')
 hide('open-webui')
 
 function onDOMContentLoaded () {
-  // set up initial layout that will remain if there is no peers
+  // set up initial layout that will remain if there are no peers
   updateBrowserActionPopup()
   // initialize connection to the background script which will trigger UI updates
   port = browser.runtime.connect({name: 'browser-action-port'})

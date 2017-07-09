@@ -14,9 +14,9 @@ async function init () {
     const options = await browser.storage.local.get(optionDefaults)
     ipfs = initIpfsApi(options.ipfsApiUrl)
     initStates(options)
-    restartAlarms(options)
     registerListeners()
     await storeMissingOptions(options, optionDefaults)
+    restartAlarms(options)
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -274,7 +274,6 @@ async function sendStatusUpdateToBrowserAction () {
 // TODO: Remove use of alarms for signal passing, use PORTS instead
 
 const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
-const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
 
 async function handleAlarm (alarm) {
   // avoid making expensive updates when IDLE
@@ -578,7 +577,6 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         state.gwURLString = state.gwURL.toString()
       } else if (key === 'useCustomGateway') {
         state.redirect = change.newValue
-        browser.alarms.create(ipfsRedirectUpdateAlarm, {})
       } else if (key === 'linkify') {
         state.linkify = change.newValue
       } else if (key === 'automaticMode') {
