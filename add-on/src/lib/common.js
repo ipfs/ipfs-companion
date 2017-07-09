@@ -14,8 +14,8 @@ async function init () {
     const options = await browser.storage.local.get(optionDefaults)
     ipfs = initIpfsApi(options.ipfsApiUrl)
     initStates(options)
-    restartAlarms(options)
     registerListeners()
+    setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(options, optionDefaults)
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
@@ -38,13 +38,6 @@ async function initStates (options) {
   state.linkify = options.linkify
   state.dnslink = options.dnslink
   state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
-  await getSwarmPeerCount()
-    .then(updatePeerCountState)
-    .then(updateBrowserActionBadge)
-}
-
-function updatePeerCountState (count) {
-  state.peerCount = count
 }
 
 function registerListeners () {
@@ -53,21 +46,6 @@ function registerListeners () {
   browser.storage.onChanged.addListener(onStorageChange)
   browser.tabs.onUpdated.addListener(onUpdatedTab)
 }
-
-/*
-function smokeTestLibs () {
-  // is-ipfs
-  console.info('is-ipfs library test (should be true) --> ' + window.IsIpfs.multihash('QmUqRvxzQyYWNY6cD1Hf168fXeqDTQWwZpyXjU5RUExciZ'))
-  // ipfs-api: execute test request :-)
-  ipfs.id()
-    .then(id => {
-      console.info('ipfs-api .id() test --> Node ID is: ', id)
-    })
-    .catch(err => {
-      console.info('ipfs-api .id() test --> Failed to read Node info: ', err)
-    })
-}
-*/
 
 // REDIRECT
 // ===================================================================
@@ -221,48 +199,52 @@ function readDnslinkTxtRecordFromApi (fqdn) {
   })
 }
 
-// ALARMS
+// PORTS
 // ===================================================================
+// https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/connect
+// Make a connection between different contexts inside the add-on,
+// e.g. signalling between browser action popup and background page that works
+// in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
 
-const ipfsApiStatusUpdateAlarm = 'ipfs-api-status-update'
-const ipfsRedirectUpdateAlarm = 'ipfs-redirect-update'
+const browserActionPortName = 'browser-action-port'
+var browserActionPort
 
-function handleAlarm (alarm) {
-  // avoid making expensive updates when IDLE
-  if (alarm.name === ipfsApiStatusUpdateAlarm) {
-    getSwarmPeerCount()
-      .then(updatePeerCountState)
-      .then(updateAutomaticModeRedirectState)
-      .then(updateBrowserActionBadge)
-      .then(updateContextMenus)
+browser.runtime.onConnect.addListener(port => {
+  // console.log('onConnect', port)
+  if (port.name === browserActionPortName) {
+    browserActionPort = port
+    browserActionPort.onMessage.addListener(handleMessageFromBrowserAction)
+    browserActionPort.onDisconnect.addListener(() => { browserActionPort = null })
+    sendStatusUpdateToBrowserAction()
+  }
+})
+
+function handleMessageFromBrowserAction (message) {
+  // console.log('In background script, received message from browser action', message)
+  if (message.event === 'notification') {
+    notify(message.title, message.message)
   }
 }
 
-/*
-const idleInSecs = 60
-function runIfNotIdle (action) {
-  browser.idle.queryState(idleInSecs)
-    .then(state => {
-      if (state === 'active') {
-        return action()
+async function sendStatusUpdateToBrowserAction () {
+  if (browserActionPort) {
+    const info = {
+      peerCount: state.peerCount,
+      gwURLString: state.gwURLString,
+      currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+    }
+    try {
+      let v = await ipfs.version()
+      if (v) {
+        info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
       }
-    })
-    .catch(error => {
-      console.error(`Unable to read idle state due to ${error}`)
-    })
-}
-*/
-
-// API HELPERS
-// ===================================================================
-
-async function getSwarmPeerCount () {
-  try {
-    const peerInfos = await ipfs.swarm.peers()
-    return peerInfos.length
-  } catch (error) {
-      // console.error(`Error while ipfs.swarm.peers: ${err}`)
-    return -1
+    } catch (error) {
+      info.gatewayVersion = null
+    }
+    if (info.currentTab) {
+      info.ipfsPageActionsContext = isIpfsPageActionsContext(info.currentTab.url)
+    }
+    browserActionPort.postMessage({statusUpdate: info})
   }
 }
 
@@ -380,22 +362,59 @@ async function onUpdatedTab (tabId, changeInfo, tab) {
   }
 }
 
+// API STATUS UPDATES
+// -------------------------------------------------------------------
+// API is polled for peer count every ipfsApiPollMs
+
+const offlinePeerCount = -1
+const idleInSecs = 5 * 60
+
+var apiStatusUpdateInterval
+
+function setApiStatusUpdateInterval (ipfsApiPollMs) {
+  if (apiStatusUpdateInterval) {
+    clearInterval(apiStatusUpdateInterval)
+  }
+  apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
+  apiStatusUpdate()
+}
+
+async function apiStatusUpdate () {
+  state.peerCount = await getSwarmPeerCount()
+  updatePeerCountDependentStates()
+  sendStatusUpdateToBrowserAction()
+}
+
+function updatePeerCountDependentStates () {
+  updateAutomaticModeRedirectState()
+  updateBrowserActionBadge()
+  updateContextMenus()
+}
+
+async function getSwarmPeerCount () {
+  try {
+    const peerInfos = await ipfs.swarm.peers()
+    return peerInfos.length
+  } catch (error) {
+    // console.error(`Error while ipfs.swarm.peers: ${err}`)
+    return offlinePeerCount
+  }
+}
+
+async function runIfNotIdle (action) {
+  try {
+    const state = await browser.idle.queryState(idleInSecs)
+    if (state === 'active') {
+      return action()
+    }
+  } catch (error) {
+    console.error('Unable to read idle state, executing action without idle check', error)
+    return action()
+  }
+}
+
 // browserAction
 // -------------------------------------------------------------------
-
-async function restartAlarms (options) {
-  await browser.alarms.clearAll()
-  if (!browser.alarms.onAlarm.hasListener(handleAlarm)) {
-    browser.alarms.onAlarm.addListener(handleAlarm)
-  }
-  await createIpfsApiStatusUpdateAlarm(options.ipfsApiPollMs)
-}
-
-function createIpfsApiStatusUpdateAlarm (ipfsApiPollMs) {
-  const periodInMinutes = ipfsApiPollMs / 60000
-  const when = Date.now() + 500
-  return browser.alarms.create(ipfsApiStatusUpdateAlarm, { when, periodInMinutes })
-}
 
 async function updateBrowserActionBadge () {
   let badgeText, badgeColor, badgeIcon
@@ -518,17 +537,14 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         state.apiURL = new URL(change.newValue)
         state.apiURLString = state.apiURL.toString()
         ipfs = initIpfsApi(state.apiURLString)
-        browser.alarms.create(ipfsApiStatusUpdateAlarm, {})
+        apiStatusUpdate()
       } else if (key === 'ipfsApiPollMs') {
-        browser.alarms.clear(ipfsApiStatusUpdateAlarm).then(() => {
-          createIpfsApiStatusUpdateAlarm(change.newValue)
-        })
+        setApiStatusUpdateInterval(change.newValue)
       } else if (key === 'customGatewayUrl') {
         state.gwURL = new URL(change.newValue)
         state.gwURLString = state.gwURL.toString()
       } else if (key === 'useCustomGateway') {
         state.redirect = change.newValue
-        browser.alarms.create(ipfsRedirectUpdateAlarm, {})
       } else if (key === 'linkify') {
         state.linkify = change.newValue
       } else if (key === 'automaticMode') {
