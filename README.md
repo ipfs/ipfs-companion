@@ -64,13 +64,13 @@ Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/fi
 
 It will guarantee automatic updates to the latest version reviewed by Mozilla community.
 
-#### Old Firefox (< 53) and XUL-compatible browsers
+#### Legacy Firefox (< 53) and XUL-Compatible Browsers
 
 Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
 While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
 For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
 
-### Chromium-based browsers
+### Chromium-Based Browsers
 
 Try manual installation:
 
@@ -87,11 +87,11 @@ Try manual installation:
 
 ### TROUBLESHOOTING
 
-#### Upload via right-click does not work in Firefox
+#### Upload via Right-Click Does Not Work in Firefox
 
 See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
 
-#### Rule to work with NoScript with ABE enabled
+#### Rule To Work with NoScript with ABE Enabled
 
 By default [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks this addon by blocking assets loaded from IPFS Gateway running on localhost.    
 To make it work, one needs to extend the SYSTEM Rulset and prepend it with IPFS whitelist:
