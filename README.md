@@ -1,3 +1,13 @@
+| **Read This First** |
+| --- |
+| This branch contains sources of legacy versions `1.x.x`.|
+| Maintenance of this codebase stopped in 2016 and is left for historical purposes.    
+| Since then [add-on was migrated to the new API called WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20) and was released as `2.x.x`. |
+| For up-to-date sources switch to `master` branch.|
+
+
+
+
 # ipfs-firefox-addon AKA “IPFS Gateway Redirect”
 
 ![screenshot of v1.5.9](screenshot.png)
