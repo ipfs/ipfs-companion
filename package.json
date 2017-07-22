@@ -36,13 +36,13 @@
   },
   "devDependencies": {
     "babel-preset-es2017": "6.24.1",
-    "chai": "4.0.2",
+    "chai": "4.1.0",
     "cross-env": "5.0.1",
     "fakefile": "0.0.9",
     "fs-promise": "2.0.3",
-    "fx-runner": "1.0.6",
-    "geckodriver": "1.7.1",
-    "husky": "0.14.2",
+    "fx-runner": "1.0.7",
+    "geckodriver": "1.8.0",
+    "husky": "0.14.3",
     "karma": "1.7.0",
     "karma-babel-preprocessor": "6.0.1",
     "karma-chai": "0.1.0",
@@ -56,10 +56,10 @@
     "npm-run-all": "4.0.2",
     "selenium-webdriver": "3.4.0",
     "shx": "0.2.2",
-    "sinon": "2.3.6",
+    "sinon": "2.3.8",
     "standard": "10.0.2",
     "sinon-chrome": "2.2.1",
-    "web-ext": "1.10.0"
+    "web-ext": "1.10.1"
   },
   "dependencies": {
     "ipfs-api": "14.0.4",

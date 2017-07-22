@@ -1,9 +1,3 @@
-
-| **Important Announcement** :rocket: |
-| --- |
-| [Add-on is being migrated to the new Firefox API called WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).  It will be released as `2.x.x`  |
-| Versions `1.x.x` are maintained in [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch. |
-
 # IPFS Companion
 
 ![screenshot of v1.5.9](screenshot.png)
@@ -15,15 +9,16 @@
 [![build-status](https://travis-ci.org/ipfs/ipfs-companion.svg?branch=master)](https://travis-ci.org/ipfs/ipfs-companion)
 [![Coverage Status](https://coveralls.io/repos/github/lidel/ipfs-firefox-addon/badge.svg?branch=master)](https://coveralls.io/github/lidel/ipfs-firefox-addon?branch=master)
 
-> Firefox addon that provides transparent access to IPFS resources via local HTTP2IPFS gateway.
-
-(If you are using Google Chrome or Chromium check [ipfs-chrome-extension](https://github.com/dylanPowers/ipfs-chrome-extension) or [ipfs-chrome-station](https://github.com/xicombd/ipfs-chrome-station) instead)
+> WebExtension that simplifies access to IPFS resources
 
 ## Table of Contents
 
 - [Background](#background)
 - [Features](#features)
 - [Install](#install)
+  - [Firefox](#firefox)
+  - [Chromium](#chromium-based-browsers)
+- [Troubleshooting](#troubleshooting)
 - [Contribute](#contribute)
 - [License](#license)
 
@@ -37,30 +32,32 @@ It aims to make the web faster, safer, and more open.
 
 Learn more at: https://ipfs.io (It is really cool, I promise!)
 
-## Features
+## Features 
 
 - Toolbar icon displays current IPFS peering status
 - Click on it to open IPFS actions menu
   - Display information about custom gateway
-  - Toggle redirection to the gateway (ON by default)
-  - Open WebUI (eg. go-ipfs daemon running at the custom gateway)
+  - Redirection to local gateway (automatic by default, manual mode can be enabled in Preferences)
+  - Easy way to open WebUI (e.g. go-ipfs daemon running at the custom gateway)
+  - Quick Upload of local files to IPFS
+  - Mirror to IPFS via right click on any image or video on any website
   - Additionally, on pages loaded from IPFS:
-    - Pin IPFS Resource (via API)
+    - Pin/Unpin IPFS Resource (via API)
     - Copy canonical IPFS address
-    - Copy shareable URL to resource at a default public gateway (first one on public gateway list)
+    - Copy shareable URL to resource at the public gateway
 - Requests to `https?://<public_gateway>/(ipfs|ipns)/$RESOURCE`  
   are replaced with `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
-- Custom Gateway address and other settings can be tweaked at   
-  `about:addons` → Extensions → IPFS Gateway Redirect → Preferences
+- Custom Gateway address and other settings can be tweaked via Preferences
 - Requests made via popular custom protocols are routed to the active gateway (public or custom):
    - `[web+](ipfs|ipns):/*$RESOURCE`
    - `[web+]fs:/*(ipfs|ipns)/$RESOURCE`
 - Experimental features (disabled by default, use Preferences screen to enable)
-   - Automatic Mode: enable/disable redirect based on the number of peers
    - Detect and redirect sites with [dnslink](https://github.com/jbenet/go-dnslink) to `/ipns/<fqdn>`
    - Rewrite hrefs with `/ip(f|n)s/*` paths on every page to point to IPFS gateway. Make plaintext IPFS links clickable.
 
 ## Install
+
+### Firefox
 
 Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/):
 
@@ -68,7 +65,32 @@ Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/fi
 
 It will guarantee automatic updates to the latest version reviewed by Mozilla community.
 
+#### Old Firefox (< 53) and XUL-compatible browsers
+
+Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).     
+While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
+For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
+
+### Chromium-based browsers
+
+Try manual installation:
+
+1. Download Sources
+2. Build it:
+
+  ```bash
+  npm install
+  npm run build
+  ```
+
+3. Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`
+
+
 ### TROUBLESHOOTING
+
+#### Upload via right-click does not work in Firefox
+
+See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
 
 #### Rule to work with NoScript with ABE enabled
 
@@ -99,3 +121,4 @@ See [CONTRIBUTING](CONTRIBUTING.md) :sparkles:
 [is-ipfs](https://github.com/xicombd/is-ipfs), [js-multihash](https://github.com/jbenet/js-multihash) and other NPM dependencies are under MIT license, unless stated otherwise.
 
 The add-on itself is released under [CC0](LICENSE): to the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain.
+
