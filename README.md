@@ -8,7 +8,7 @@
 [![build-status](https://travis-ci.org/ipfs/ipfs-companion.svg?branch=master)](https://travis-ci.org/ipfs/ipfs-companion)
 [![Coverage Status](https://coveralls.io/repos/github/lidel/ipfs-firefox-addon/badge.svg?branch=master)](https://coveralls.io/github/lidel/ipfs-firefox-addon?branch=master)
 
-> WebExtension that simplifies access to IPFS resources
+> Browser extension that simplifies access to IPFS resources
 
 ## Table of Contents
 
@@ -31,7 +31,7 @@ It aims to make the web faster, safer, and more open.
 
 Learn more at: https://ipfs.io (It is really cool, I promise!)
 
-## Features 
+## Features
 
 - Toolbar icon displays current IPFS peering status
 - Click on it to open IPFS actions menu
@@ -66,7 +66,7 @@ It will guarantee automatic updates to the latest version reviewed by Mozilla co
 
 #### Old Firefox (< 53) and XUL-compatible browsers
 
-Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).     
+Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
 While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
 For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
 

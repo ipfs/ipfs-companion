@@ -4,7 +4,7 @@
     "short_name": "IPFS Companion",
     "version" : "2.0.8",
 
-    "description": "WebExtension that simplifies access to IPFS resources",
+    "description": "Browser extension that simplifies access to IPFS resources",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",
     "author": "Marcin Rataj",
     "icons": {
