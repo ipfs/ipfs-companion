@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
-    "name": "IPFS Companion (Development Channel)",
+    "name": "IPFS Companion",
     "short_name": "IPFS Companion",
-    "version" : "2.0.7",
+    "version" : "2.0.8",
 
-    "description": "Access IPFS resources via custom HTTP2IPFS gateway",
+    "description": "Browser extension that simplifies access to IPFS resources",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",
     "author": "Marcin Rataj",
     "icons": {
@@ -15,7 +15,7 @@
     "applications": {
         "gecko": {
             "id": "ipfs-firefox-addon@lidel.org",
-            "strict_min_version": "52.0"
+            "strict_min_version": "53.0"
         }
     },
 
