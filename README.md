@@ -3,7 +3,7 @@
 ![screenshot of v2.0.8](screenshot.png)
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
-[![](https://img.shields.io/badge/mozilla-full%20review-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
+[![](https://img.shields.io/badge/mozilla-full%20review-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-blue.svg)](http://standardjs.com/)
 [![build-status](https://travis-ci.org/ipfs/ipfs-companion.svg?branch=master)](https://travis-ci.org/ipfs/ipfs-companion)
 [![Coverage Status](https://coveralls.io/repos/github/lidel/ipfs-firefox-addon/badge.svg?branch=master)](https://coveralls.io/github/lidel/ipfs-firefox-addon?branch=master)
@@ -15,8 +15,6 @@
 - [Background](#background)
 - [Features](#features)
 - [Install](#install)
-  - [Firefox](#firefox)
-  - [Chromium](#chromium-based-browsers)
 - [Troubleshooting](#troubleshooting)
 - [Contribute](#contribute)
 - [License](#license)
@@ -29,7 +27,7 @@ IPFS is a new hypermedia distribution protocol, addressed by content and identit
 IPFS enables the creation of completely distributed applications.
 It aims to make the web faster, safer, and more open.
 
-Learn more at: https://ipfs.io (It is really cool, I promise!)
+Learn more at: https://ipfs.io (It is really cool, we promise!)
 
 ## Features
 
@@ -56,11 +54,15 @@ Learn more at: https://ipfs.io (It is really cool, I promise!)
 
 ## Install
 
-### Firefox
+### TL;DR
 
-Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/):
+| Firefox                                                                                                                                                    | Chrome / Chromium                                                                                                                                                                        |
+| -------------                                                                                                                                              | -------------                                                                                                                                                                            |
+| [![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/) | [![](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
-[![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-gateway-redirect/)
+### Modern Firefox (> 53)
+
+Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/).
 
 It will guarantee automatic updates to the latest version reviewed by Mozilla community.
 
@@ -70,7 +72,11 @@ Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-
 While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
 For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
 
-### Chromium-Based Browsers
+### Chrome / Chromium
+
+Install the latest signed release from [Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch).
+
+### Other Browsers Supporting WebExtensions API
 
 Try manual installation:
 
@@ -82,7 +88,7 @@ Try manual installation:
   npm run build
   ```
 
-3. Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`
+3. Load it into browser (eg. open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`)
 
 
 ### TROUBLESHOOTING
