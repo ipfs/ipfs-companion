@@ -54,6 +54,8 @@ Learn more at: https://ipfs.io (It is really cool, we promise!)
 
 ## Install
 
+First, make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer. `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.
+
 ### TL;DR
 
 | Firefox                                                                                                                                                    | Chrome / Chromium                                                                                                                                                                        |
