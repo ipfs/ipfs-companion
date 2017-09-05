@@ -12,6 +12,10 @@ async function saveOption (name) {
       case 'url':
         change[name] = element.value
         break
+      case 'textarea':
+        // normalize input into a string of hostnames separated by a single space
+        change[name] = element.value.replace(/[\r\n,;]+/g, ' ').replace(/ +(?= )/g, '').trim()
+        break
       case 'checkbox':
         change[name] = element.checked
         break
@@ -33,8 +37,13 @@ async function readOption (name) {
         case 'url':
           element.value = oldValue
           break
+        case 'textarea':
+          element.onfocusout = () => saveOption(name)
+          // display every hostname in a new line
+          element.value = oldValue.trim().split(' ').join('\n')
+          break
         case 'number':
-            // handle number change via mouse + widget controls
+          // handle number change via mouse + widget controls
           element.onclick = () => saveOption(name)
           element.value = oldValue
           break
