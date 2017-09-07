@@ -33,6 +33,18 @@
       label {
         flex: 1;
       }
+      label > dl > dd {
+        opacity: .5;
+        font-size: .9em;
+        margin-left: 2em;
+        margin-right: .2em;
+      }
+      div:hover {
+        background-color: rgba(62, 148, 152, 0.05);
+      }
+      div:hover > label > dl > dd {
+        opacity: 1;
+      }
       input, textarea {
         flex: 1;
         padding: .5em;
@@ -62,20 +74,31 @@
       <fieldset>
         <legend>Gateways</legend>
         <div>
-          <label for="publicGateways">Public Gateways Hosts</label>
-          <textarea id="publicGateways" rows="4" required placeholder="List of hostnames separated with spaces"></textarea>
+          <label for="publicGateways">
+            <dl>
+              <dt>Public Gateways</dt>
+              <dd>list of hostnames known for exposing IPFS resources under <code>/ipfs/</code> path</dd>
+            </dl>
+          </label>
+          <textarea id="publicGateways" rows="4" required placeholder="List of hostnames separated with spaces or newlines"></textarea>
         </div>
         <div>
-          <label for="customGatewayUrl">Custom Gateway URL</label>
+          <label for="customGatewayUrl">
+            <dl>
+              <dt>Custom Gateway</dt>
+              <dd>URL address of preferred HTTP2IPFS&nbsp;Gateway</dd>
+            </dl>
+          </label>
           <input type="url" id="customGatewayUrl" inputmode="url" required pattern="https?://.+"/>
         </div>
         <div>
-          <label for="useCustomGateway">Redirect IPFS Requests to the Custom Gateway</label>
+          <label for="useCustomGateway">
+            <dl>
+              <dt>Use Custom Gateway</dt>
+              <dd>replace requests to <em>Public</em> gateway with <em>Custom</em> one</dd>
+            </dl>
+          </label>
           <input type="checkbox" id="useCustomGateway" />
-        </div>
-        <div>
-          <label for="automaticMode">Automatic Mode <br/><em>(toggles redirect when IPFS API goes online/offline)</em></label>
-          <input type="checkbox" id="automaticMode" />
         </div>
       </fieldset>
     </form>
@@ -83,12 +106,31 @@
       <fieldset>
         <legend>API</legend>
         <div>
-          <label for="ipfsApiUrl">IPFS API URL</label>
+          <label for="ipfsApiUrl">
+            <dl>
+              <dt>IPFS API URL</dt>
+              <dd>hint: this is where <code>/webui</code> lives</dd>
+            </dl>
+          </label>
           <input type="url" id="ipfsApiUrl" inputmode="url" required pattern="https?://.+"/>
         </div>
         <div>
-          <label for="ipfsApiPollMs">IPFS API Status Poll Interval (ms)</label>
+          <label for="ipfsApiPollMs">
+            <dl>
+              <dt>Status Poll Interval</dt>
+              <dd>how often peer count is refreshed (in miliseconds)</dd>
+            </dl>
+          </label>
           <input type="number" inputmode="numeric" id="ipfsApiPollMs" min="1000" max="60000" step="1000" required />
+        </div>
+        <div>
+          <label for="automaticMode">
+            <dl>
+              <dt>Automatic Mode<dt>
+              <dd>toggle use of <em>Custom Gateway</em> when IPFS API availability changes</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="automaticMode" />
         </div>
       </fieldset>
     </form>
@@ -97,12 +139,23 @@
         <legend>Experiments</legend>
         <div><span><strong>Note:</strong> these features are work-in-progress and may degrade browser performance. <abbr title="Your Mileage May Vary">YMMV</abbr>.</span></div>
         <div>
-          <label for="dnslink">Enable <code>DNSLINK</code> lookups for every website</label>
-          <input type="checkbox" id="dnslink" />
+          <label for="linkify">
+            <dl>
+              <dt>Clickable IPFS Addresses</dt>
+              <dd>turn plaintext <code>/ipfs/</code> paths into clickable links</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="linkify" />
         </div>
         <div>
-          <label for="linkify">Make plaintext IPFS links clickable</label>
-          <input type="checkbox" id="linkify" />
+          <label for="dnslink">
+            <dl>
+              <dt>DNSLINK Support<dt>
+              <dd>perform DNS lookup for every visited website and use <em>Custom Gateway</em> if DNSLINK is present in its DNS TXT record<br>
+              <strong>(known to slow down the browser)</strong></dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="dnslink" />
         </div>
       </fieldset>
     </form>
