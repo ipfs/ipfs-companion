@@ -380,13 +380,14 @@ function setApiStatusUpdateInterval (ipfsApiPollMs) {
 }
 
 async function apiStatusUpdate () {
+  let oldPeerCount = state.peerCount
   state.peerCount = await getSwarmPeerCount()
-  updatePeerCountDependentStates()
+  updatePeerCountDependentStates(oldPeerCount, state.peerCount)
   sendStatusUpdateToBrowserAction()
 }
 
-function updatePeerCountDependentStates () {
-  updateAutomaticModeRedirectState()
+function updatePeerCountDependentStates (oldPeerCount, newPeerCount) {
+  updateAutomaticModeRedirectState(oldPeerCount, newPeerCount)
   updateBrowserActionBadge()
   updateContextMenus()
 }
@@ -490,13 +491,13 @@ function rasterIconData (iconPath, size) {
 // OPTIONS
 // ===================================================================
 
-function updateAutomaticModeRedirectState () {
-  // enable/disable gw redirect based on API status and available peer count
+function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
+  // enable/disable gw redirect based on API going online or offline
   if (state.automaticMode) {
-    if (state.peerCount > 0 && !state.redirect) { // enable if disabled
+    if (oldPeerCount < 1 && newPeerCount > 0 && !state.redirect) {
       browser.storage.local.set({useCustomGateway: true})
         .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
-    } else if (state.peerCount < 1 && state.redirect) { // disable if enabled
+    } else if (oldPeerCount > 0 && newPeerCount < 1 && state.redirect) {
       browser.storage.local.set({useCustomGateway: false})
         .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
     }

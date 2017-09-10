@@ -1,5 +1,4 @@
-<html>
-
+<!DOCTYPE html>
 <head>
   <meta charset="utf-8">
   <style type="text/css">
@@ -8,7 +7,7 @@
       when manifest had "browser_style": true
 	  We duplicated them here for now to have the same look and feel under Chromium
      */
-	html
+	html,
 	body {
 	  background: transparent;
 	  box-sizing: border-box;
@@ -18,6 +17,8 @@
 	  font: caption;
 	  margin: 0;
 	  padding: 0;
+      -moz-user-select: none;
+      user-select: none;
 	}
 
 	body * {
@@ -111,10 +112,11 @@
         width: 6rem;
         height: 6rem;
         padding: 0.25rem;
-        display: block;
-        float: left;
     }
     #gateway-status {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
         padding: 0;
     }
     #gateway-status ul {
@@ -123,26 +125,29 @@
         padding: 0.5rem;
         min-height: 3rem;
         min-width: 14rem;
+        display: flex;
+        flex-direction: column;
     }
     #gateway-status li {
         text-transform: uppercase;
-		font-size: small;
+        font-size: small;
         padding: 0;
         cursor: default;
-        display: block;
         max-height:2rem;
         text-overflow: ellipsis;
         overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
     #gateway-status  li > span:nth-of-type(2) {
         font-family: monospace;
-        display: block;
-        float:right;
-        text-align: right;
+        text-overflow: ellipsis;
         padding-left: 1rem;
     }
     .hidden { display: none !important; }
   </style>
+  <script src="../lib/npm/browser-polyfill.min.js"></script>
 </head>
 
 <body>
@@ -211,7 +216,6 @@
     </div>
   </div>
 
-  <script src="../lib/npm/browser-polyfill.min.js"></script>
   <script src="../lib/data-i18n.js"></script>
   <script src="browser-action.js"></script>
 </body>

@@ -240,9 +240,6 @@ async function updateBrowserActionPopup () {
       show('redirect-disabled')
       show('enable-gateway-redirect')
     }
-    if (options['automaticMode']) {
-      hide('toggle-gateway-redirect')
-    }
     set('gateway-address-val', options['customGatewayUrl'])
   } catch (error) {
     console.error(`Unable update redirect state due to ${error}`)

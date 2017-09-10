@@ -1,56 +1,167 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta charset="utf-8">
     <style type="text/css">
-      input { display: inline-block; } /* fix for https://github.com/ipfs/ipfs-companion/issues/257 */
+      fieldset {
+        border: none;
+        border-top: 3px solid #3E9398;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: .5em;
+        min-width: 40em;
+      }
+      legend {
+        letter-spacing: .15em;
+        text-transform: uppercase;
+        padding: .5em;
+        font-weight: bold;
+      }
+      fieldset > div {
+        padding: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      fieldset > div + div {
+        border-top: 1px solid #ccc;
+      }
+      fieldset > div > * {
+        align-self: center;
+
+      }
+      label {
+        flex: 1;
+      }
+      label > dl > dd {
+        opacity: .5;
+        font-size: .9em;
+        margin-left: 2em;
+        margin-right: .2em;
+      }
+      div:hover {
+        background-color: rgba(62, 148, 152, 0.05);
+      }
+      div:hover > label > dl > dd {
+        opacity: 1;
+      }
+      input, textarea {
+        flex: 1;
+        padding: .5em;
+        font-family: monospace;
+      }
+      input[type=text],
+      input[type=url],
+      input[type=number],
+      textarea {
+        -webkit-transition: all 0.30s ease-in-out;
+        -moz-transition: all 0.30s ease-in-out;
+        border: 1px solid #ccc;
+      }
+      input[type=text]:focus,
+      input[type=url]:focus,
+      input[type=number]:focus,
+      textarea:focus {
+        outline: none;
+        border: 1px solid #3E9398;
+        box-shadow: 0 0 5px #5FCBCF;
+      }
     </style>
-  </head>
-
-  <body>
-
-    <form>
-      <fieldset style="line-height: 2em; font-family: sans-serif;">
-        <legend>Basic</legend>
-
-
-        <p><label>Public Gateways Hosts <input type="text" id="publicGateways" size="40" required placeholder="List of hostnames separated with spaces"/></label></p>
-
-        <p><label>Custom Gateway URL <input type="url" id="customGatewayUrl" size="40" inputmode="url" required pattern="https?://.+"/></label></p>
-
-
-        <p><label>IPFS API URL <input type="url" id="ipfsApiUrl" size="40" inputmode="url" required pattern="https?://.+"/></label></p>
-
-        <p><label>Redirect IPFS Requests to the Custom Gateway  <input type="checkbox" id="useCustomGateway" /></label></p>
-
-        <p><label>Automatic Mode <small>(Redirect only when IPFS API is Online and node has peers)</small> <input type="checkbox" id="automaticMode" /></label></p>
-
-      </fieldset>
-    </form>
-
-    <form>
-      <fieldset style="line-height: 2em; font-family: sans-serif;">
-        <legend>Advanced</legend>
-
-        <p><label>IPFS API Status Poll Interval (ms) <input type="number" inputmode="numeric" id="ipfsApiPollMs" min="1000" max="60000" step="1000" required /></label></p>
-
-      </fieldset>
-    </form>
-
-    <form>
-      <fieldset style="line-height: 2em; font-family: sans-serif;">
-        <legend>Experiments <small>(these PoC options may degrade browser performance)</small></legend>
-
-        <p><label>Enable <code>dnslink</code> lookups for every website  <input type="checkbox" id="dnslink" /></label></p>
-        <p><label>Make plaintext IPFS links clickable <input type="checkbox" id="linkify" /></label></p>
-
-      </fieldset>
-    </form>
-
     <script src="../lib/npm/browser-polyfill.min.js"></script>
-    <script src="../lib/option-defaults.js"></script>
+  </head>
+  <body>
+    <form>
+      <fieldset>
+        <legend>Gateways</legend>
+        <div>
+          <label for="publicGateways">
+            <dl>
+              <dt>Public Gateways</dt>
+              <dd>List of hostnames known to expose IPFS under <code>/ipfs/</code></dd>
+            </dl>
+          </label>
+          <textarea id="publicGateways" rows="4" required autocomplete="off" spellcheck="false" placeholder="List of hostnames separated with spaces or newlines"></textarea>
+        </div>
+        <div>
+          <label for="customGatewayUrl">
+            <dl>
+              <dt>Custom Gateway</dt>
+              <dd>URL of preferred HTTP2IPFS&nbsp;Gateway</dd>
+            </dl>
+          </label>
+          <input type="url" id="customGatewayUrl" inputmode="url" required pattern="https?://.+"/>
+        </div>
+        <div>
+          <label for="useCustomGateway">
+            <dl>
+              <dt>Use Custom Gateway</dt>
+              <dd>Redirect requests made to <em>Public</em> gateways to the <em>Custom</em> gateway</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="useCustomGateway" />
+        </div>
+      </fieldset>
+    </form>
+    <form>
+      <fieldset>
+        <legend>API</legend>
+        <div>
+          <label for="ipfsApiUrl">
+            <dl>
+              <dt>IPFS API URL</dt>
+              <dd>Hint: this is where <code>/webui</code> lives</dd>
+            </dl>
+          </label>
+          <input type="url" id="ipfsApiUrl" inputmode="url" required pattern="https?://.+"/>
+        </div>
+        <div>
+          <label for="ipfsApiPollMs">
+            <dl>
+              <dt>Status Poll Interval</dt>
+              <dd>How often peer count is refreshed (in miliseconds)</dd>
+            </dl>
+          </label>
+          <input type="number" inputmode="numeric" id="ipfsApiPollMs" min="1000" max="60000" step="1000" required />
+        </div>
+        <div>
+          <label for="automaticMode">
+            <dl>
+              <dt>Automatic Mode<dt>
+              <dd>Toggle use of <em>Custom Gateway</em> when IPFS API availability changes</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="automaticMode" />
+        </div>
+      </fieldset>
+    </form>
+    <form>
+      <fieldset>
+        <legend>Experiments</legend>
+        <div><span><strong>Note:</strong> these features are work-in-progress and may degrade browser performance. <abbr title="Your Mileage May Vary">YMMV</abbr>.</span></div>
+        <div>
+          <label for="linkify">
+            <dl>
+              <dt>Clickable IPFS Addresses</dt>
+              <dd>Turn plaintext <code>/ipfs/</code> paths into clickable links</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="linkify" />
+        </div>
+        <div>
+          <label for="dnslink">
+            <dl>
+              <dt>DNSLINK Support<dt>
+              <dd>Perform DNS lookup for every visited website and use <em>Custom Gateway</em> if DNSLINK is present in its DNS TXT record<br>
+              <strong>(known to slow down the browser)</strong></dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="dnslink" />
+        </div>
+      </fieldset>
+    </form>
+
     <script src="../lib/data-i18n.js"></script>
+    <script src="../lib/option-defaults.js"></script>
     <script src="options.js"></script>
 
   </body>
