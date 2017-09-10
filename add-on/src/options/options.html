@@ -77,7 +77,7 @@
           <label for="publicGateways">
             <dl>
               <dt>Public Gateways</dt>
-              <dd>list of hostnames known for exposing IPFS resources under <code>/ipfs/</code> path</dd>
+              <dd>List of hostnames known to expose IPFS under <code>/ipfs/</code></dd>
             </dl>
           </label>
           <textarea id="publicGateways" rows="4" required autocomplete="off" spellcheck="false" placeholder="List of hostnames separated with spaces or newlines"></textarea>
@@ -86,7 +86,7 @@
           <label for="customGatewayUrl">
             <dl>
               <dt>Custom Gateway</dt>
-              <dd>URL address of preferred HTTP2IPFS&nbsp;Gateway</dd>
+              <dd>URL of preferred HTTP2IPFS&nbsp;Gateway</dd>
             </dl>
           </label>
           <input type="url" id="customGatewayUrl" inputmode="url" required pattern="https?://.+"/>
@@ -95,7 +95,7 @@
           <label for="useCustomGateway">
             <dl>
               <dt>Use Custom Gateway</dt>
-              <dd>replace requests to <em>Public</em> gateway with <em>Custom</em> one</dd>
+              <dd>Redirect requests made to <em>Public</em> gateways to the <em>Custom</em> gateway</dd>
             </dl>
           </label>
           <input type="checkbox" id="useCustomGateway" />
@@ -109,7 +109,7 @@
           <label for="ipfsApiUrl">
             <dl>
               <dt>IPFS API URL</dt>
-              <dd>hint: this is where <code>/webui</code> lives</dd>
+              <dd>Hint: this is where <code>/webui</code> lives</dd>
             </dl>
           </label>
           <input type="url" id="ipfsApiUrl" inputmode="url" required pattern="https?://.+"/>
@@ -118,7 +118,7 @@
           <label for="ipfsApiPollMs">
             <dl>
               <dt>Status Poll Interval</dt>
-              <dd>how often peer count is refreshed (in miliseconds)</dd>
+              <dd>How often peer count is refreshed (in miliseconds)</dd>
             </dl>
           </label>
           <input type="number" inputmode="numeric" id="ipfsApiPollMs" min="1000" max="60000" step="1000" required />
@@ -127,7 +127,7 @@
           <label for="automaticMode">
             <dl>
               <dt>Automatic Mode<dt>
-              <dd>toggle use of <em>Custom Gateway</em> when IPFS API availability changes</dd>
+              <dd>Toggle use of <em>Custom Gateway</em> when IPFS API availability changes</dd>
             </dl>
           </label>
           <input type="checkbox" id="automaticMode" />
@@ -142,7 +142,7 @@
           <label for="linkify">
             <dl>
               <dt>Clickable IPFS Addresses</dt>
-              <dd>turn plaintext <code>/ipfs/</code> paths into clickable links</dd>
+              <dd>Turn plaintext <code>/ipfs/</code> paths into clickable links</dd>
             </dl>
           </label>
           <input type="checkbox" id="linkify" />
@@ -151,7 +151,7 @@
           <label for="dnslink">
             <dl>
               <dt>DNSLINK Support<dt>
-              <dd>perform DNS lookup for every visited website and use <em>Custom Gateway</em> if DNSLINK is present in its DNS TXT record<br>
+              <dd>Perform DNS lookup for every visited website and use <em>Custom Gateway</em> if DNSLINK is present in its DNS TXT record<br>
               <strong>(known to slow down the browser)</strong></dd>
             </dl>
           </label>
