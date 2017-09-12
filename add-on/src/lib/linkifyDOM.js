@@ -17,7 +17,7 @@
   // linkify lock
   window.ipfsLinkifiedDOM = true
 
-  const urlRE = /\s+(?:\/ip(f|n)s\/|fs:|ipns:|ipfs:)[^\s+"<>]+/g
+  const urlRE = /(?:\s+|^)(?:\/ip(f|n)s\/|fs:|ipns:|ipfs:)[^\s+"<>]+/g
 
   // tags we will scan looking for un-hyperlinked IPFS addresses
   const allowedParents = [
@@ -56,6 +56,7 @@
   })
 
   function linkifyContainer (container) {
+    // console.log('linkifyContainer', container)
     if (!container.nodeType) {
       return
     }
@@ -85,7 +86,7 @@
   }
 
   function normalizeHref (href) {
-    console.log(href)
+    // console.log(href)
     // convert various variants to regular URL at the public gateway
     if (href.startsWith('ipfs:')) {
       href = href.replace('ipfs:', '/ipfs/')
@@ -102,6 +103,7 @@
   }
 
   function linkifyTextNode (node) {
+    // console.log('linkifyTextNode', node)
     let link
     let match
     const txt = node.textContent
