@@ -96,7 +96,10 @@ function onBeforeRequest (request) {
   // handler for protocol_handlers from manifest.json
   if (webPlusProtocolRequest(request)) {
     // fix path passed via custom protocol
-    return normalizedWebPlusRequest(request)
+    const fix = normalizedWebPlusRequest(request)
+    if (fix) {
+      return fix
+    }
   }
 
   // handle redirects to custom gateway
@@ -126,18 +129,21 @@ function pathAtPublicGw (path) {
 }
 
 function normalizedWebPlusRequest (request) {
-  let path = decodeURIComponent(new URL(request.url).pathname)
-  path = path.replace(/^\/web\+fs:[/]*/i, '/') // web+fs://ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+dweb:[/]*/i, '/') // web+dweb://ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+([^:]+):[/]*/i, '/$1/') // web+foo://Qm → /foo/Qm
-  path = path.replace(/^\/ip([^/]+)\/ip[^/]+\//, '/ip$1/') // /ipfs/ipfs/Qm → /ipfs/Qm
-  return { redirectUrl: pathAtPublicGw(path) }
+  const oldPath = decodeURIComponent(new URL(request.url).pathname)
+  let path = oldPath
+  path = path.replace(/^\/web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
+  path = path.replace(/^\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
+  if (oldPath !== path && window.IsIpfs.path(path)) {
+    return { redirectUrl: pathAtPublicGw(path) }
+  }
+  return null
 }
 
 // PROTOCOL HANDLERS: UNIVERSAL FALLBACK FOR UNHANDLED PROTOCOLS
 // ===================================================================
 
-const unhandledIpfsRE = /=(?:web%2B|)(ipfs|ipns|fs|dweb)%3A(?:%2F|)(%2F[^&]+)/
+const unhandledIpfsRE = /=(?:web%2B|)(ipfs(?=%3A%2F%2F)|ipns(?=%3A%2F%2F)|dweb(?=%3A%2Fip[f|n]s))%3A(?:%2F%2F|%2F)([^&]+)/
 
 function mayContainUnhandledIpfsProtocol (request) {
   // TODO: run only for google, bing, duckduckgo etc
@@ -149,7 +155,7 @@ function unhandledIpfsPath (requestUrl) {
   const unhandled = requestUrl.match(unhandledIpfsRE)
   if (unhandled && unhandled.length > 1) {
     const unhandledProtocol = decodeURIComponent(unhandled[1])
-    const unhandledPath = decodeURIComponent(unhandled[2])
+    const unhandledPath = `/${decodeURIComponent(unhandled[2])}`
     return window.IsIpfs.path(unhandledPath) ? unhandledPath : `/${unhandledProtocol}${unhandledPath}`
   }
   return null
