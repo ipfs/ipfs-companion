@@ -37,6 +37,7 @@ async function initStates (options) {
   state.automaticMode = options.automaticMode
   state.linkify = options.linkify
   state.dnslink = options.dnslink
+  state.catchUnhandledProtocols = options.catchUnhandledProtocols
   state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
 }
 
@@ -54,22 +55,11 @@ function publicIpfsResource (url) {
   return window.IsIpfs.url(url) && !url.startsWith(state.gwURLString) && !url.startsWith(state.apiURLString)
 }
 
-function redirectToCustomGateway (request) {
-  const url = new URL(request.url)
+function redirectToCustomGateway (requestUrl) {
+  const url = new URL(requestUrl)
   url.protocol = state.gwURL.protocol
   url.host = state.gwURL.host
   url.port = state.gwURL.port
-  return { redirectUrl: url.toString() }
-}
-
-function redirectToNormalizedPath (request) {
-  const url = new URL(request.url)
-  let path = decodeURIComponent(url.pathname)
-  path = path.replace(/^\/web\+fs:[/]*/i, '/') // web+fs://ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+dweb:[/]*/i, '/') // web+dweb://ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+([^:]+):[/]*/i, '/$1/') // web+foo://Qm → /foo/Qm
-  path = path.replace(/^\/ip([^/]+)\/ip[^/]+\//, '/ip$1/') // /ipfs/ipfs/Qm → /ipfs/Qm
-  url.pathname = path
   return { redirectUrl: url.toString() }
 }
 
@@ -95,19 +85,82 @@ function onBeforeSendHeaders (request) {
 }
 
 function onBeforeRequest (request) {
-  if (request.url.startsWith('https://ipfs.io/web%2B')) {
-    // fix path passed via custom protocol
-    return redirectToNormalizedPath(request)
+  // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
+  if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
+    const fix = normalizedUnhandledIpfsProtocol(request)
+    if (fix) {
+      return fix
+    }
   }
+
+  // handler for protocol_handlers from manifest.json
+  if (webPlusProtocolRequest(request)) {
+    // fix path passed via custom protocol
+    return normalizedWebPlusRequest(request)
+  }
+
+  // handle redirects to custom gateway
   if (state.redirect) {
     // IPFS resources
     if (publicIpfsResource(request.url)) {
-      return redirectToCustomGateway(request)
+      return redirectToCustomGateway(request.url)
     }
     // Look for dnslink in TXT records of visited sites
     if (isDnslookupEnabled(request)) {
       return dnslinkLookup(request)
     }
+  }
+}
+
+// PROTOCOL HANDLERS: web+ in Firefox (protocol_handlers from manifest.json)
+// ===================================================================
+
+const webPlusProtocolHandler = 'https://ipfs.io/web%2B'
+
+function webPlusProtocolRequest (request) {
+  return request.url.startsWith(webPlusProtocolHandler)
+}
+
+function pathAtPublicGw (path) {
+  return new URL(`https://ipfs.io${path}`).toString()
+}
+
+function normalizedWebPlusRequest (request) {
+  let path = decodeURIComponent(new URL(request.url).pathname)
+  path = path.replace(/^\/web\+fs:[/]*/i, '/') // web+fs://ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^\/web\+dweb:[/]*/i, '/') // web+dweb://ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^\/web\+([^:]+):[/]*/i, '/$1/') // web+foo://Qm → /foo/Qm
+  path = path.replace(/^\/ip([^/]+)\/ip[^/]+\//, '/ip$1/') // /ipfs/ipfs/Qm → /ipfs/Qm
+  return { redirectUrl: pathAtPublicGw(path) }
+}
+
+// PROTOCOL HANDLERS: UNIVERSAL FALLBACK FOR UNHANDLED PROTOCOLS
+// ===================================================================
+
+const unhandledIpfsRE = /=(?:web%2B|)(ipfs|ipns|fs|dweb)%3A(?:%2F|)(%2F[^&]+)/
+
+function mayContainUnhandledIpfsProtocol (request) {
+  // TODO: run only for google, bing, duckduckgo etc
+  // TODO: add checkbox under experiments
+  return request.url.includes('%3A%2F')
+}
+
+function unhandledIpfsPath (requestUrl) {
+  const unhandled = requestUrl.match(unhandledIpfsRE)
+  if (unhandled && unhandled.length > 1) {
+    const unhandledProtocol = decodeURIComponent(unhandled[1])
+    const unhandledPath = decodeURIComponent(unhandled[2])
+    return window.IsIpfs.path(unhandledPath) ? unhandledPath : `/${unhandledProtocol}${unhandledPath}`
+  }
+  return null
+}
+
+function normalizedUnhandledIpfsProtocol (request) {
+  const path = unhandledIpfsPath(request.url)
+  if (window.IsIpfs.path(path)) {
+    // replace search query with fake request to the public gateway
+    // (will be redirected later, if needed)
+    return { redirectUrl: pathAtPublicGw(path) }
   }
 }
 
@@ -548,6 +601,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         state.redirect = change.newValue
       } else if (key === 'linkify') {
         state.linkify = change.newValue
+      } else if (key === 'catchUnhandledProtocols') {
+        state.catchUnhandledProtocols = change.newValue
       } else if (key === 'automaticMode') {
         state.automaticMode = change.newValue
       } else if (key === 'dnslink') {

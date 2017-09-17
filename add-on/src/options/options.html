@@ -139,6 +139,15 @@
         <legend>Experiments</legend>
         <div><span><strong>Note:</strong> these features are work-in-progress and may degrade browser performance. <abbr title="Your Mileage May Vary">YMMV</abbr>.</span></div>
         <div>
+          <label for="catchUnhandledProtocols">
+            <dl>
+              <dt>Catch Unhandled IPFS Protocols</dt>
+              <dd>Enables support for <code>ipfs://</code>, <code>ipns://</code> and <code>dweb://</code> by catching and normalizing requests done with unhandled protocols</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="catchUnhandledProtocols" />
+        </div>
+        <div>
           <label for="linkify">
             <dl>
               <dt>Clickable IPFS Addresses</dt>
