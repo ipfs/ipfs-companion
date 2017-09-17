@@ -24,7 +24,7 @@
     "postcheckout": "npm update && run-s clean build:copy*",
     "postmerge": "run-s postcheckout",
     "precommit": "run-s -s clean lint build",
-    "prepush": "run-s -s precommit test",
+    "prepush": "run-s -s precommit test build",
     "firefox": "web-ext run -s add-on/ --browser-console"
   },
   "private": true,
