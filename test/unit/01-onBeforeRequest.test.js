@@ -49,111 +49,111 @@ describe('onBeforeRequest', function () {
   })
 
   describe('request made via "web+" handler from manifest.json/protocol_handlers', function () {
-    it('should not be normalized if URI is web+ipfs:/{CID}', function () {
+    it('should not be normalized if web+ipfs:/{CID}', function () {
       const request = url2request('https://ipfs.io/web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is web+ipfs://{CID}', function () {
+    it('should be normalized if web+ipfs://{CID}', function () {
       const request = url2request('https://ipfs.io/web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
     })
-    it('should not be normalized if URI is web+ipns:/{foo}', function () {
+    it('should not be normalized if web+ipns:/{foo}', function () {
       const request = url2request('https://ipfs.io/web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is web+ipns://{foo}', function () {
+    it('should be normalized if web+ipns://{foo}', function () {
       const request = url2request('https://ipfs.io/web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
     })
-    it('should be normalized if URI is web+dweb:/ipfs/{CID}', function () {
+    it('should be normalized if web+dweb:/ipfs/{CID}', function () {
       const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
     })
-    it('should not be normalized if URI is web+dweb://ipfs/{CID}', function () {
+    it('should not be normalized if web+dweb://ipfs/{CID}', function () {
       const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is web+dweb:/ipns/{foo}', function () {
+    it('should be normalized if web+dweb:/ipns/{foo}', function () {
       const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
     })
-    it('should not be normalized if URI is web+dweb://ipns/{foo}', function () {
+    it('should not be normalized if web+dweb://ipns/{foo}', function () {
       const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should not be normalized if URI is web+{foo}:/bar', function () {
+    it('should not be normalized if web+{foo}:/bar', function () {
       const request = url2request('https://ipfs.io/web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should not be normalized if URI is web+{foo}://bar', function () {
+    it('should not be normalized if web+{foo}://bar', function () {
       const request = url2request('https://ipfs.io/web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
   })
 
   describe('catching unhandled custom protocol request', function () {
-    it('should not be normalized if URI is ipfs:/{CID}', function () {
+    it('should not be normalized if ipfs:/{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is ipfs://{CID}', function () {
+    it('should be normalized if ipfs://{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
     })
-    it('should not be normalized if URI is ipns:/{foo}', function () {
+    it('should not be normalized if ipns:/{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=ipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is ipns://{foo}', function () {
+    it('should be normalized if ipns://{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=ipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
     })
-    it('should be normalized if URI is dweb:/ipfs/{CID}', function () {
+    it('should be normalized if dweb:/ipfs/{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
     })
-    it('should not be normalized if URI is dweb://ipfs/{CID}', function () {
+    it('should not be normalized if dweb://ipfs/{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is dweb:/ipns/{foo}', function () {
+    it('should be normalized if dweb:/ipns/{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
     })
-    it('should not be normalized if URI is dweb://ipns/{foo}', function () {
+    it('should not be normalized if dweb://ipns/{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
       should.not.exist(onBeforeRequest(request))
     })
 
-    it('should not be normalized if URI is web+ipfs:/{CID}', function () {
+    it('should not be normalized if web+ipfs:/{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is web+ipfs://{CID}', function () {
+    it('should be normalized if web+ipfs://{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
     })
-    it('should not be normalized if URI is web+ipns:/{foo}', function () {
+    it('should not be normalized if web+ipns:/{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is web+ipns://{foo}', function () {
+    it('should be normalized if web+ipns://{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
     })
-    it('should be normalized if URI is web+dweb:/ipfs/{CID}', function () {
+    it('should be normalized if web+dweb:/ipfs/{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
     })
-    it('should not be normalized if URI is web+dweb://ipfs/{CID}', function () {
+    it('should not be normalized if web+dweb://ipfs/{CID}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
       should.not.exist(onBeforeRequest(request))
     })
-    it('should be normalized if URI is web+dweb:/ipns/{foo}', function () {
+    it('should be normalized if web+dweb:/ipns/{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
       onBeforeRequest(request).redirectUrl.should.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
     })
-    it('should not be normalized if URI is web+dweb://ipns/{foo}', function () {
+    it('should not be normalized if web+dweb://ipns/{foo}', function () {
       const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
       should.not.exist(onBeforeRequest(request))
     })
