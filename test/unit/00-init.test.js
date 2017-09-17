@@ -48,7 +48,7 @@ describe('init.js', function () {
   })
 
   describe('onStorageChange()', function () {
-    it('should update ipfs API instance on IPFS API URL change', done => {
+    it('should update ipfs API instance on IPFS API URL change', function () {
       const oldIpfsApiUrl = 'http://127.0.0.1:5001'
       const newIpfsApiUrl = 'http://1.2.3.4:8080'
       const changes = {ipfsApiUrl: {oldValue: oldIpfsApiUrl, newValue: newIpfsApiUrl}}
@@ -59,7 +59,6 @@ describe('init.js', function () {
       onStorageChange(changes, area)
       sinon.assert.calledOnce(IpfsApi)
       sinon.assert.calledWith(IpfsApi, newCfg)
-      done()
     })
   })
 
