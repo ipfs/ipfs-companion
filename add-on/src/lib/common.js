@@ -46,6 +46,8 @@ function registerListeners () {
   browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
   browser.storage.onChanged.addListener(onStorageChange)
   browser.tabs.onUpdated.addListener(onUpdatedTab)
+  browser.runtime.onMessage.addListener(onRuntimeMessage)
+  browser.runtime.onConnect.addListener(onRuntimeConnect)
 }
 
 // REDIRECT
@@ -258,7 +260,18 @@ function readDnslinkTxtRecordFromApi (fqdn) {
   })
 }
 
-// PORTS
+// RUNTIME MESSAGES (one-off messaging)
+// ===================================================================
+// https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
+
+function onRuntimeMessage (request, sender) {
+  // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
+  if (request.isIpfsPath) {
+    return Promise.resolve({isIpfsPath: window.IsIpfs.path(request.isIpfsPath)})
+  }
+}
+
+// PORTS (connection-based messaging)
 // ===================================================================
 // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/connect
 // Make a connection between different contexts inside the add-on,
@@ -268,7 +281,7 @@ function readDnslinkTxtRecordFromApi (fqdn) {
 const browserActionPortName = 'browser-action-port'
 var browserActionPort
 
-browser.runtime.onConnect.addListener(port => {
+function onRuntimeConnect (port) {
   // console.log('onConnect', port)
   if (port.name === browserActionPortName) {
     browserActionPort = port
@@ -276,7 +289,7 @@ browser.runtime.onConnect.addListener(port => {
     browserActionPort.onDisconnect.addListener(() => { browserActionPort = null })
     sendStatusUpdateToBrowserAction()
   }
-})
+}
 
 function handleMessageFromBrowserAction (message) {
   // console.log('In background script, received message from browser action', message)
@@ -407,15 +420,22 @@ function isIpfsPageActionsContext (url) {
 async function onUpdatedTab (tabId, changeInfo, tab) {
   if (tab && tab.url) {
     if (state.linkify && changeInfo.status === 'complete') {
-      console.log(`Running linkfyDOM for ${tab.url}`)
+      console.log(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
       try {
+        await browser.tabs.executeScript(tabId, {
+          file: '/src/lib/npm/browser-polyfill.min.js',
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_start'
+        })
         await browser.tabs.executeScript(tabId, {
           file: '/src/lib/linkifyDOM.js',
           matchAboutBlank: false,
-          allFrames: true
+          allFrames: true,
+          runAt: 'document_idle'
         })
       } catch (error) {
-        console.error(`Unable to linkify DOM at '${tab.url}' due to ${error}`)
+        console.error(`Unable to linkify DOM at '${tab.url}' due to`, error)
       }
     }
   }
