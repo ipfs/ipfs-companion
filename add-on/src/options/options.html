@@ -137,7 +137,16 @@
     <form>
       <fieldset>
         <legend>Experiments</legend>
-        <div><span><strong>Note:</strong> these features are work-in-progress and may degrade browser performance. <abbr title="Your Mileage May Vary">YMMV</abbr>.</span></div>
+        <div><span><strong>Note:</strong> these features are new or work-in-progress. <abbr title="Your Mileage May Vary">YMMV</abbr>.</span></div>
+        <div>
+          <label for="displayNotifications">
+            <dl>
+              <dt>Enable Notifications</dt>
+              <dd>Displays system notifications when API state changes, a link is copied etc</dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="displayNotifications" />
+        </div>
         <div>
           <label for="catchUnhandledProtocols">
             <dl>
