@@ -38,6 +38,7 @@ async function initStates (options) {
   state.linkify = options.linkify
   state.dnslink = options.dnslink
   state.catchUnhandledProtocols = options.catchUnhandledProtocols
+  state.displayNotifications = options.displayNotifications
   state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
 }
 
@@ -324,19 +325,22 @@ async function sendStatusUpdateToBrowserAction () {
 // ===================================================================
 
 function notify (titleKey, messageKey, messageParam) {
+  const title = browser.i18n.getMessage(titleKey)
   let message
   if (messageKey.startsWith('notify_')) {
     message = messageParam ? browser.i18n.getMessage(messageKey, messageParam) : browser.i18n.getMessage(messageKey)
   } else {
     message = messageKey
   }
-
-  browser.notifications.create({
-    'type': 'basic',
-    'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
-    'title': browser.i18n.getMessage(titleKey),
-    'message': message
-  })
+  if (state.displayNotifications) {
+    browser.notifications.create({
+      'type': 'basic',
+      'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
+      'title': title,
+      'message': message
+    })
+  }
+  console.log(`[ipfs-companion] ${title}: ${message}`)
 }
 
 // contextMenus
@@ -418,7 +422,7 @@ function isIpfsPageActionsContext (url) {
 }
 
 async function onUpdatedTab (tabId, changeInfo, tab) {
-  if (tab && tab.url) {
+  if (tab && tab.url && !tab.url.startsWith('chrome://')) {
     if (state.linkify && changeInfo.status === 'complete') {
       console.log(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
       try {
@@ -629,6 +633,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         state.linkify = change.newValue
       } else if (key === 'catchUnhandledProtocols') {
         state.catchUnhandledProtocols = change.newValue
+      } else if (key === 'displayNotifications') {
+        state.displayNotifications = change.newValue
       } else if (key === 'automaticMode') {
         state.automaticMode = change.newValue
       } else if (key === 'dnslink') {
