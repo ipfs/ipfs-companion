@@ -6,6 +6,7 @@
  * plain text with IPFS addresses with clickable links.
  * Loosely based on https://github.com/mdn/webextensions-examples/blob/master/emoji-substitution/substitute.js
  * Note that this is a quick&dirty PoC and may slow down browsing experience.
+ * Test page: http://bit.ly/2fgkF4E
  * TODO: measure & improve performance
  */
 
@@ -14,10 +15,19 @@
     return
   }
 
+  // Limit contentType to "text/plain" or "text/html"
+  if (document.contentType !== undefined && document.contentType !== 'text/plain' && document.contentType !== 'text/html') {
+    return
+  }
+
   // linkify lock
   window.ipfsLinkifiedDOM = true
+  window.ipfsLinkifyValidationCache = new Map()
 
-  const urlRE = /(?:\s+|^)(?:\/ip(f|n)s\/|fs:|ipns:|ipfs:)[^\s+"<>]+/g
+  const urlRE = /(?:\s+|^)(\/ip(?:f|n)s\/|dweb:\/ip(?:f|n)s\/|ipns:\/\/|ipfs:\/\/)([^\s+"<>]+)/g
+
+  // Chrome compatibility
+  // var browser = browser || chrome
 
   // tags we will scan looking for un-hyperlinked IPFS addresses
   const allowedParents = [
@@ -28,117 +38,155 @@
     's', 'strong', 'sub', 'sup', 'td', 'th', 'tt', 'u', 'var'
   ]
 
-  const textNodeXpath = '//text()[(parent::' + allowedParents.join(' or parent::') + ') and ' +
-                  "(contains(., 'ipfs') or contains(., 'ipns')) ]"
+  const textNodeXpath = './/text()[' +
+    "(contains(., '/ipfs/') or contains(., '/ipns/') or contains(., 'ipns:/') or contains(., 'ipfs:/')) and " +
+    'not(ancestor::a) and not(ancestor::script) and not(ancestor::style) and ' +
+    '(parent::' + allowedParents.join(' or parent::') + ') ' +
+    ']'
 
-  linkifyContainer(document.body)
+  function init () {
+    linkifyContainer(document.body)
 
-  // body.appendChild(document.createTextNode('fooo /ipfs/QmTAsnXoWmLZQEpvyZscrReFzqxP3pvULfGVgpJuayrp1w bar'))
-  new MutationObserver(function (mutations) {
-    for (let mutation of mutations) {
-      if (mutation.type === 'childList') {
-        for (let addedNode of mutation.addedNodes) {
-          if (addedNode.nodeType === Node.TEXT_NODE) {
-            linkifyTextNode(addedNode)
-          } else {
-            linkifyContainer(addedNode)
+    // body.appendChild(document.createTextNode('fooo /ipfs/QmTAsnXoWmLZQEpvyZscrReFzqxP3pvULfGVgpJuayrp1w bar'))
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'childList') {
+          for (let addedNode of mutation.addedNodes) {
+            if (addedNode.nodeType === Node.TEXT_NODE) {
+              setTimeout(() => linkifyTextNode(addedNode), 0)
+            } else {
+              setTimeout(() => linkifyContainer(addedNode), 0)
+            }
           }
         }
-      }
-      if (mutation.type === 'characterData') {
-        linkifyTextNode(mutation.target)
-      }
-    }
-  }).observe(document.body, {
-    characterData: true,
-    childList: true,
-    subtree: true
-  })
+        if (mutation.type === 'characterData') {
+          setTimeout(() => linkifyTextNode(mutation.target), 0)
+        }
+      })
+    }).observe(document.body, {
+      characterData: true,
+      childList: true,
+      subtree: true
+    })
+  }
 
   function linkifyContainer (container) {
-    // console.log('linkifyContainer', container)
-    if (!container.nodeType) {
+    if (!container || !container.nodeType) {
       return
     }
     if (container.className && container.className.match(/\blinkifiedIpfsAddress\b/)) {
       // prevent infinite recursion
       return
     }
-    const xpathResult = document.evaluate(textNodeXpath, container, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null)
+    const xpathResult = document.evaluate(textNodeXpath, container, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
     let i = 0
-    function continuation () {
+    async function continuation () {
       let node = null
       let counter = 0
       while ((node = xpathResult.snapshotItem(i++))) {
         const parent = node.parentNode
-        if (!parent) continue
+        // Skip if no longer in visible DOM
+        if (!parent || !document.body.contains(node)) continue
+        // Skip already linkified nodes
+        if (parent.className && parent.className.match(/\blinkifiedIpfsAddress\b/)) continue
         // Skip styled <pre> -- often highlighted by script.
         if (parent.tagName === 'PRE' && parent.className) continue
         // Skip forms, textareas
         if (parent.isContentEditable) continue
-        linkifyTextNode(node)
-        if (++counter > 50) {
-          return setTimeout(continuation, 0)
+        await linkifyTextNode(node)
+        if (++counter > 10) {
+          return setTimeout(continuation, 100)
         }
       }
     }
-    setTimeout(continuation, 0)
+    window.requestAnimationFrame(continuation)
   }
 
-  function normalizeHref (href) {
-    // console.log(href)
-    // convert various variants to regular URL at the public gateway
-    if (href.startsWith('ipfs:')) {
-      href = href.replace('ipfs:', '/ipfs/')
+  function textToIpfsResource (match) {
+    let root = match[1]
+    let path = match[2]
+
+    // skip trailing dots and commas
+    path = path.replace(/[.,]*$/, '')
+
+    // convert various protocol variants to regular URL at the public gateway
+    if (root === 'ipfs://') {
+      root = '/ipfs/'
+    } else if (root === 'ipns://') {
+      root = '/ipns/'
+    } else if (root === 'dweb:/ipfs/') {
+      root = '/ipfs/'
+    } else if (root === 'dweb:/ipns/') {
+      root = '/ipns/'
     }
-    if (href.startsWith('ipns:')) {
-      href = href.replace('ipns:', '/ipns/')
-    }
-    if (href.startsWith('fs:')) {
-      href = href.replace('fs:', '')
-    }
-    href = 'https://ipfs.io/' + href // for now just point to public gw, we will switch to custom protocol when https://github.com/ipfs/ipfs-companion/issues/164 is closed
-    href = href.replace(/([^:]\/)\/+/g, '$1') // remove redundant slashes
-    return href
+    return validIpfsResource(root + path)
   }
 
-  function linkifyTextNode (node) {
-    // console.log('linkifyTextNode', node)
+  async function validIpfsResource (path) {
+    // validation is expensive, caching result improved performance
+    // on page that have multiple copies of the same path
+    if (window.ipfsLinkifyValidationCache.has(path)) {
+      return window.ipfsLinkifyValidationCache.get(path)
+    }
+    try {
+      // Callback wrapped in promise -- Chrome compatibility
+      const checkResult = await browser.runtime.sendMessage({isIpfsPath: path})
+      if (checkResult.isIpfsPath) {
+        // TODO: use customizable public gateway
+        window.ipfsLinkifyValidationCache.set(path, 'https://ipfs.io' + path)
+      } else {
+        window.ipfsLinkifyValidationCache.set(path, null)
+      }
+    } catch (error) {
+      window.ipfsLinkifyValidationCache.set(path, null)
+      console.error('isIpfsPath.error for ' + path, error)
+    }
+    return window.ipfsLinkifyValidationCache.get(path)
+  }
+
+  async function linkifyTextNode (node) {
     let link
     let match
     const txt = node.textContent
     let span = null
     let point = 0
     while ((match = urlRE.exec(txt))) {
+      link = await textToIpfsResource(match)
       if (span == null) {
-        // Create a span to hold the new text with links in it.
+          // Create a span to hold the new text with links in it.
         span = document.createElement('span')
         span.className = 'linkifiedIpfsAddress'
       }
-      // get the link without trailing dots and commas
-      link = match[0].replace(/[.,]*$/, '')
-      const replaceLength = link.length
-      // put in text up to the link
-      span.appendChild(document.createTextNode(txt.substring(point, match.index)))
-      // create a link and put it in the span
-      const a = document.createElement('a')
-      a.className = 'linkifiedIpfsAddress'
-      a.appendChild(document.createTextNode(link))
-      a.setAttribute('href', normalizeHref(link.trim()))
-      span.appendChild(a)
-      // track insertion point
+      const replaceLength = match[0].length
+      if (link) {
+        // put in text up to the link
+        span.appendChild(document.createTextNode(txt.substring(point, match.index)))
+        // create a link and put it in the span
+        const a = document.createElement('a')
+        a.className = 'linkifiedIpfsAddress'
+        a.appendChild(document.createTextNode(match[0]))
+        a.setAttribute('href', link)
+        span.appendChild(a)
+      } else {
+        // wrap text in span to exclude it from future processing
+        span.appendChild(document.createTextNode(match[0]))
+      }
+        // track insertion point
       point = match.index + replaceLength
     }
     if (span) {
       // take the text after the last link
       span.appendChild(document.createTextNode(txt.substring(point, txt.length)))
+      span.normalize()
       // replace the original text with the new span
       try {
         node.parentNode.replaceChild(span, node)
       } catch (e) {
         console.error(e)
-        console.log(node)
+        // console.log(node)
       }
     }
   }
+
+  init()
 }(window.ipfsLinkifiedDOM))
