@@ -5,7 +5,7 @@
 var sandbox
 
 const url2request = (string) => {
-  return {url: string}
+  return {url: string, type: 'main_frame'}
 }
 
 describe('onBeforeRequest', function () {
@@ -172,6 +172,10 @@ describe('onBeforeRequest', function () {
       state.catchUnhandledProtocols = false
       const request = url2request('https://duckduckgo.com/?q=foo%3A%2Fbar%3FargTest%23hashTest&foo=bar')
       should.not.exist(onBeforeRequest(request))
+    })
+    it('should not be normalized if request.type != main_frame', function () {
+      const xhrRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'xmlhttprequest'}
+      should.not.exist(onBeforeRequest(xhrRequest))
     })
   })
 })
