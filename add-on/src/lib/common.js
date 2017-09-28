@@ -149,9 +149,7 @@ function normalizedWebPlusRequest (request) {
 const unhandledIpfsRE = /=(?:web%2B|)(ipfs(?=%3A%2F%2F)|ipns(?=%3A%2F%2F)|dweb(?=%3A%2Fip[f|n]s))%3A(?:%2F%2F|%2F)([^&]+)/
 
 function mayContainUnhandledIpfsProtocol (request) {
-  // TODO: run only for google, bing, duckduckgo etc
-  // TODO: add checkbox under experiments
-  return request.url.includes('%3A%2F')
+  return request.type === 'main_frame' && request.url.includes('%3A%2F')
 }
 
 function unhandledIpfsPath (requestUrl) {
