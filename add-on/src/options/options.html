@@ -74,22 +74,13 @@
       <fieldset>
         <legend>Gateways</legend>
         <div>
-          <label for="publicGateways">
-            <dl>
-              <dt>Public Gateways</dt>
-              <dd>List of hostnames known to expose IPFS under <code>/ipfs/</code></dd>
-            </dl>
-          </label>
-          <textarea id="publicGateways" rows="4" required autocomplete="off" spellcheck="false" placeholder="List of hostnames separated with spaces or newlines"></textarea>
-        </div>
-        <div>
           <label for="customGatewayUrl">
             <dl>
-              <dt>Custom Gateway</dt>
+              <dt>Custom Local Gateway</dt>
               <dd>URL of preferred HTTP2IPFS&nbsp;Gateway</dd>
             </dl>
           </label>
-          <input type="url" id="customGatewayUrl" inputmode="url" required pattern="https?://.+"/>
+          <input type="url" id="customGatewayUrl" inputmode="url" required pattern="https?://[^/].+"/>
         </div>
         <div>
           <label for="useCustomGateway">
@@ -99,6 +90,15 @@
             </dl>
           </label>
           <input type="checkbox" id="useCustomGateway" />
+        </div>
+        <div>
+          <label for="publicGatewayUrl">
+            <dl>
+              <dt>Default Public Gateway</dt>
+              <dd>Fallback URL used when Custom Gateway is not available and for copying shareable links</dd>
+            </dl>
+          </label>
+          <input type="url" id="publicGatewayUrl" inputmode="url" required pattern="https?://[^/]+"/>
         </div>
       </fieldset>
     </form>
@@ -112,7 +112,7 @@
               <dd>Hint: this is where <code>/webui</code> lives</dd>
             </dl>
           </label>
-          <input type="url" id="ipfsApiUrl" inputmode="url" required pattern="https?://.+"/>
+          <input type="url" id="ipfsApiUrl" inputmode="url" required pattern="https?://[^/]+"/>
         </div>
         <div>
           <label for="ipfsApiPollMs">

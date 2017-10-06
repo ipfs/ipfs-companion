@@ -6,7 +6,7 @@
  * plain text with IPFS addresses with clickable links.
  * Loosely based on https://github.com/mdn/webextensions-examples/blob/master/emoji-substitution/substitute.js
  * Note that this is a quick&dirty PoC and may slow down browsing experience.
- * Test page: http://bit.ly/2fgkF4E
+ * Test page: http://bit.ly/2yuknPI
  * TODO: measure & improve performance
  */
 
@@ -130,16 +130,11 @@
     }
     try {
       // Callback wrapped in promise -- Chrome compatibility
-      const checkResult = await browser.runtime.sendMessage({isIpfsPath: path})
-      if (checkResult.isIpfsPath) {
-        // TODO: use customizable public gateway
-        window.ipfsLinkifyValidationCache.set(path, 'https://ipfs.io' + path)
-      } else {
-        window.ipfsLinkifyValidationCache.set(path, null)
-      }
+      const checkResult = await browser.runtime.sendMessage({pubGwUrlForIpfsOrIpnsPath: path})
+      window.ipfsLinkifyValidationCache.set(path, checkResult.pubGwUrlForIpfsOrIpnsPath)
     } catch (error) {
       window.ipfsLinkifyValidationCache.set(path, null)
-      console.error('isIpfsPath.error for ' + path, error)
+      console.error('pubGwUrlForIpfsOrIpnsPath.error for ' + path, error)
     }
     return window.ipfsLinkifyValidationCache.get(path)
   }

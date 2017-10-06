@@ -13,7 +13,7 @@ async function saveOption (name) {
         change[name] = element.value
         break
       case 'textarea':
-        // normalize input into a string of hostnames separated by a single space
+        // normalize input into a string of entries separated by a single space
         change[name] = element.value.replace(/[\r\n,;]+/g, ' ').replace(/ +(?= )/g, '').trim()
         break
       case 'checkbox':
@@ -39,7 +39,7 @@ async function readOption (name) {
           break
         case 'textarea':
           element.onfocusout = () => saveOption(name)
-          // display every hostname in a new line
+          // display every entry in a new line
           element.value = oldValue.trim().split(' ').join('\n')
           break
         case 'number':
