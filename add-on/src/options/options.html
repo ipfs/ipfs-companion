@@ -66,6 +66,10 @@
         border: 1px solid #3E9398;
         box-shadow: 0 0 5px #5FCBCF;
       }
+      input:invalid {
+        border: 1px solid #933E98;
+        box-shadow: 0 0 5px #CB5FCF;
+      }
     </style>
     <script src="../lib/npm/browser-polyfill.min.js"></script>
   </head>
@@ -80,7 +84,8 @@
               <dd>URL of preferred HTTP2IPFS&nbsp;Gateway</dd>
             </dl>
           </label>
-          <input type="url" id="customGatewayUrl" inputmode="url" required pattern="https?://[^/].+"/>
+          <input type="url" id="customGatewayUrl" inputmode="url" required
+                 pattern="^https?://[^/]+$" spellcheck="false" title="Enter URL without any sub-path" />
         </div>
         <div>
           <label for="useCustomGateway">
@@ -98,7 +103,8 @@
               <dd>Fallback URL used when Custom Gateway is not available and for copying shareable links</dd>
             </dl>
           </label>
-          <input type="url" id="publicGatewayUrl" inputmode="url" required pattern="https?://[^/]+"/>
+          <input type="url" id="publicGatewayUrl" inputmode="url" required
+                 pattern="^https?://[^/]+$" spellcheck="false" title="Enter URL without any sub-path" />
         </div>
       </fieldset>
     </form>
@@ -112,7 +118,8 @@
               <dd>Hint: this is where <code>/webui</code> lives</dd>
             </dl>
           </label>
-          <input type="url" id="ipfsApiUrl" inputmode="url" required pattern="https?://[^/]+"/>
+          <input type="url" id="ipfsApiUrl" inputmode="url" required
+                 pattern="^https?://[^/]+$" spellcheck="false" title="Enter URL without any sub-path" />
         </div>
         <div>
           <label for="ipfsApiPollMs">
