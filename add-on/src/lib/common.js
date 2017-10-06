@@ -28,7 +28,7 @@ function initIpfsApi (ipfsApiUrl) {
   return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
-async function initStates (options) {
+function initStates (options) {
   state.redirect = options.useCustomGateway
   state.apiURL = new URL(options.ipfsApiUrl)
   state.apiURLString = state.apiURL.toString()
@@ -54,8 +54,30 @@ function registerListeners () {
 // REDIRECT
 // ===================================================================
 
-function publicIpfsResource (url) {
-  return window.IsIpfs.url(url) && !url.startsWith(state.gwURLString) && !url.startsWith(state.apiURLString)
+function publicIpfsOrIpnsResource (url) {
+  // first, exclude gateway and api, otherwise we have infinite loop
+  if (!url.startsWith(state.gwURLString) && !url.startsWith(state.apiURLString)) {
+    // /ipfs/ is easy to validate, we just check if CID is correct and return if true
+    if (window.IsIpfs.ipfsUrl(url)) {
+      return true
+    }
+    // /ipns/ requires multiple stages/branches, as it can be FQDN with dnslink or CID
+    if (window.IsIpfs.ipnsUrl(url)) {
+      const ipnsRoot = new URL(url).pathname.match(/^\/ipns\/([^/]+)/)[1]
+      // console.log('=====> IPNS root', ipnsRoot)
+      // first check if root is a regular CID
+      if (window.IsIpfs.cid(ipnsRoot)) {
+        // console.log('=====> IPNS is a valid CID', ipnsRoot)
+        return true
+      }
+      if (isDnslookupSafe(url) && cachedDnslinkLookup(ipnsRoot)) {
+        // console.log('=====> IPNS for FQDN with valid dnslink: ', ipnsRoot)
+        return true
+      }
+    }
+  }
+  // everything else is not ipfs-related
+  return false
 }
 
 function redirectToCustomGateway (requestUrl) {
@@ -107,13 +129,13 @@ function onBeforeRequest (request) {
 
   // handle redirects to custom gateway
   if (state.redirect) {
-    // IPFS resources
-    if (publicIpfsResource(request.url)) {
+    // Detect valid /ipfs/ and /ipns/ on any site
+    if (publicIpfsOrIpnsResource(request.url)) {
       return redirectToCustomGateway(request.url)
     }
     // Look for dnslink in TXT records of visited sites
-    if (isDnslookupEnabled(request)) {
-      return dnslinkLookup(request)
+    if (state.dnslink && isDnslookupSafe(request.url)) {
+      return dnslinkLookupAndOptionalRedirect(request.url)
     }
   }
 }
@@ -174,54 +196,43 @@ function normalizedUnhandledIpfsProtocol (request) {
 // DNSLINK
 // ===================================================================
 
-function isDnslookupEnabled (request) {
-  return state.dnslink &&
-    state.peerCount > 0 &&
-    request.url.startsWith('http') &&
-    !request.url.startsWith(state.apiURLString) &&
-    !request.url.startsWith(state.gwURLString)
+function isDnslookupSafe (requestUrl) {
+  return state.peerCount > 0 &&
+    requestUrl.startsWith('http') &&
+    !requestUrl.startsWith(state.apiURLString) &&
+    !requestUrl.startsWith(state.gwURLString)
 }
 
-function dnslinkLookup (request) {
-  // TODO: benchmark and improve performance
-  const requestUrl = new URL(request.url)
-  const fqdn = requestUrl.hostname
+function dnslinkLookupAndOptionalRedirect (requestUrl) {
+  const url = new URL(requestUrl)
+  const fqdn = url.hostname
+  const dnslink = cachedDnslinkLookup(fqdn)
+  if (dnslink) {
+    return redirectToDnslinkPath(url, dnslink)
+  }
+}
+
+function cachedDnslinkLookup (fqdn) {
   let dnslink = state.dnslinkCache.get(fqdn)
   if (typeof dnslink === 'undefined') {
-    // fetching fresh dnslink is expensive, so we switch to async
-    console.log('dnslink cache miss for: ' + fqdn)
-    /* According to https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest/onBeforeRequest
-     * "From Firefox 52 onwards, instead of returning BlockingResponse, the listener can return a Promise
-     * which is resolved with a BlockingResponse. This enables the listener to process the request asynchronously."
-     *
-     * Seems that this does not work yet, and even tho promise is executed, request is not blocked but resolves to regular URL.
-     * TODO: This should be revisited after Firefox 52 is released. If does not work by then, we need to fill a bug.
-     */
-    return asyncDnslookupResponse(fqdn, requestUrl)
-  }
-  if (dnslink) {
-    console.log('SYNC resolving to Cached dnslink redirect:' + fqdn)
-    return redirectToDnslinkPath(requestUrl, dnslink)
-  }
-}
-
-async function asyncDnslookupResponse (fqdn, requestUrl) {
-  try {
-    const dnslink = await readDnslinkTxtRecordFromApi(fqdn)
-    if (dnslink) {
-      state.dnslinkCache.set(fqdn, dnslink)
-      console.log('ASYNC Resolved dnslink for:' + fqdn + ' is: ' + dnslink)
-      return redirectToDnslinkPath(requestUrl, dnslink)
-    } else {
-      state.dnslinkCache.set(fqdn, false)
-      console.log('ASYNC NO dnslink for:' + fqdn)
-      return {}
+    try {
+      console.log('dnslink cache miss for: ' + fqdn)
+      dnslink = readDnslinkFromTxtRecord(fqdn)
+      if (dnslink) {
+        state.dnslinkCache.set(fqdn, dnslink)
+        console.log(`Resolved dnslink: '${fqdn}' -> '${dnslink}'`)
+      } else {
+        state.dnslinkCache.set(fqdn, false)
+        console.log(`Resolved NO dnslink for '${fqdn}'`)
+      }
+    } catch (error) {
+      console.error(`Error in dnslinkLookupAndOptionalRedirect for '${fqdn}'`)
+      console.error(error)
     }
-  } catch (error) {
-    console.error(`ASYNC Error in asyncDnslookupResponse for '${fqdn}': ${error}`)
-    console.error(error)
-    return {}
+  } else {
+    console.log(`Resolved via cached dnslink: '${fqdn}' -> '${dnslink}'`)
   }
+  return dnslink
 }
 
 function redirectToDnslinkPath (url, dnslink) {
@@ -232,31 +243,30 @@ function redirectToDnslinkPath (url, dnslink) {
   return { redirectUrl: url.toString() }
 }
 
-function readDnslinkTxtRecordFromApi (fqdn) {
+function readDnslinkFromTxtRecord (fqdn) {
   // js-ipfs-api does not provide method for fetching this
   // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
-  return new Promise((resolve, reject) => {
-    const apiCall = state.apiURLString + '/api/v0/dns/' + fqdn
-    const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
-    xhr.open('GET', apiCall)
-    xhr.setRequestHeader('Accept', 'application/json')
-    xhr.onload = function () {
-      if (this.status === 200) {
-        const dnslink = JSON.parse(xhr.responseText).Path
-        resolve(dnslink)
-      } else if (this.status === 500) {
-        // go-ipfs returns 500 if host has no dnslink
-        // TODO: find/fill an upstream bug to make this more intuitive
-        resolve(false)
-      } else {
-        reject(new Error(xhr.statusText))
-      }
+  const apiCall = state.apiURLString + '/api/v0/dns/' + fqdn
+  const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
+  // synchronous mode with small timeout
+  // (it is okay, because we do it only once, then it is cached and read via cachedDnslinkLookup)
+  xhr.open('GET', apiCall, false)
+  xhr.setRequestHeader('Accept', 'application/json')
+  xhr.send(null)
+  if (xhr.status === 200) {
+    const dnslink = JSON.parse(xhr.responseText).Path
+    // console.log('readDnslinkFromTxtRecord', readDnslinkFromTxtRecord)
+    if (!window.IsIpfs.path(dnslink)) {
+      throw new Error(`dnslink for '${fqdn}' is not a valid IPFS path: '${dnslink}'`)
     }
-    xhr.onerror = function () {
-      reject(new Error(xhr.statusText))
-    }
-    xhr.send()
-  })
+    return dnslink
+  } else if (xhr.status === 500) {
+    // go-ipfs returns 500 if host has no dnslink
+    // TODO: find/fill an upstream bug to make this more intuitive
+    return false
+  } else {
+    throw new Error(xhr.statusText)
+  }
 }
 
 // RUNTIME MESSAGES (one-off messaging)

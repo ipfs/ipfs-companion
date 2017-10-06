@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "IPFS Companion",
     "short_name": "IPFS Companion",
-    "version" : "2.0.10",
+    "version" : "2.0.11",
 
     "description": "Browser extension that simplifies access to IPFS resources",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",
@@ -59,8 +59,8 @@
 
 	"protocol_handlers": [
 		{
-			"protocol": "web+fs",
-			"name": "IPFS Add-On: *FS protocol handler",
+			"protocol": "web+dweb",
+			"name": "IPFS Add-On: DWEB protocol handler",
 			"uriTemplate": "https://ipfs.io/%s"
 		},
 		{

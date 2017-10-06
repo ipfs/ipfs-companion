@@ -1,6 +1,7 @@
 'use strict'
 /* eslint-env webextensions, mocha */
-/* globals sinon, optionDefaults, should, state, onBeforeRequest */
+// eslint-disable-next-line no-unused-vars
+/* globals sinon, initStates, optionDefaults, should, state, onBeforeRequest, readDnslinkFromTxtRecord */
 
 var sandbox
 
@@ -13,7 +14,11 @@ describe('onBeforeRequest', function () {
     browser.flush()
     sandbox = sinon.sandbox.create()
     browser.storage.local.get.returns(Promise.resolve(optionDefaults))
+    // reset states
+    initStates(optionDefaults)
+    // stub default state for most of tests
     // redirect by default -- makes test code shorter
+    state.peerCount = 1
     state.redirect = true
     state.catchUnhandledProtocols = true
     state.gwURLString = 'http://127.0.0.1:8080'
@@ -34,16 +39,48 @@ describe('onBeforeRequest', function () {
       const request = url2request('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       should.not.exist(onBeforeRequest(request))
     })
+    it('should be left untouched if CID is invalid', function () {
+      const request = url2request('https://ipfs.io/ipfs/notacid?argTest#hashTest')
+      should.not.exist(onBeforeRequest(request))
+    })
   })
 
   describe('request for a path matching /ipns/{path}', function () {
-    it('should be served from custom gateway if redirect is enabled', function () {
-      const request = url2request('https://ipfs.io/ipns/ipfs.io/index.html?argTest#hashTest')
-      onBeforeRequest(request).redirectUrl.should.equal('http://127.0.0.1:8080/ipns/ipfs.io/index.html?argTest#hashTest')
+    it('should be served from custom gateway if {path} points to a FQDN with existing dnslink', function () {
+      const request = url2request('https://ipfs.io/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+      // stub the existence of valid dnslink
+      const fqdn = 'ipfs.git.sexy'
+      // eslint-disable-next-line no-global-assign
+      readDnslinkFromTxtRecord = sandbox.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+      // pretend API is online and we can do dns lookups with it
+      state.peerCount = 1
+      onBeforeRequest(request).redirectUrl.should.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+    })
+    it('should be served from custom gateway if {path} starts with a valid CID', function () {
+      const request = url2request('https://ipfs.io/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+      // eslint-disable-next-line no-global-assign
+      readDnslinkFromTxtRecord = sandbox.stub().returns(false)
+      onBeforeRequest(request).redirectUrl.should.equal('http://127.0.0.1:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
     })
     it('should be left untouched if redirect is disabled', function () {
       state.redirect = false
       const request = url2request('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+      should.not.exist(onBeforeRequest(request))
+    })
+    it('should be left untouched if FQDN is not a real domain nor a valid CID', function () {
+      const request = url2request('https://ipfs.io/ipns/notafqdnorcid?argTest#hashTest')
+      // eslint-disable-next-line no-global-assign
+      readDnslinkFromTxtRecord = sandbox.stub().returns(false)
+      should.not.exist(onBeforeRequest(request))
+    })
+    it('should be left untouched if {path} points to a FQDN but API is offline', function () {
+      const request = url2request('https://ipfs.io/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+      // stub the existence of valid dnslink in dnslink cache
+      const fqdn = 'ipfs.git.sexy'
+      // eslint-disable-next-line no-global-assign
+      readDnslinkFromTxtRecord = sandbox.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+      // pretend API is offline and we can do dns lookups with it
+      state.peerCount = 0
       should.not.exist(onBeforeRequest(request))
     })
   })
