@@ -96,7 +96,7 @@ function onBeforeSendHeaders (request) {
     // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
     // which produced '403 - Forbidden' error.
     // This workaround removes bogus header from API requests
-    for (var i = 0; i < request.requestHeaders.length; i++) {
+    for (let i = 0; i < request.requestHeaders.length; i++) {
       let header = request.requestHeaders[i]
       if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
         request.requestHeaders.splice(i, 1)
@@ -110,6 +110,11 @@ function onBeforeSendHeaders (request) {
 }
 
 function onBeforeRequest (request) {
+  // skip requests to the custom gateway or API (otherwise we have too much recursion)
+  if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
+    return
+  }
+
   // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
   if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
     const fix = normalizedUnhandledIpfsProtocol(request)
