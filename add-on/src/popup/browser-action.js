@@ -60,7 +60,7 @@ function notify (title, message) {
 // ===================================================================
 
 async function copyCurrentPublicGwAddress () {
-  const publicGwAddress = new URL(state.currentTab.url.replace(state.gwURLString, 'https://ipfs.io/')).toString()
+  const publicGwAddress = new URL(state.currentTab.url.replace(state.gwURLString, state.pubGwURLString)).toString()
   copyTextToClipboard(publicGwAddress)
   notify('notify_copiedPublicURLTitle', publicGwAddress)
   window.close()

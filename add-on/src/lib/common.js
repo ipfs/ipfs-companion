@@ -29,6 +29,10 @@ function initIpfsApi (ipfsApiUrl) {
 }
 
 function initStates (options) {
+  // we store the most used values in optimized form
+  // to minimize performance impact on overall browsing experience
+  state.pubGwURL = new URL(options.publicGatewayUrl)
+  state.pubGwURLString = state.pubGwURL.toString()
   state.redirect = options.useCustomGateway
   state.apiURL = new URL(options.ipfsApiUrl)
   state.apiURLString = state.apiURL.toString()
@@ -62,22 +66,34 @@ function publicIpfsOrIpnsResource (url) {
       return true
     }
     // /ipns/ requires multiple stages/branches, as it can be FQDN with dnslink or CID
-    if (window.IsIpfs.ipnsUrl(url)) {
-      const ipnsRoot = new URL(url).pathname.match(/^\/ipns\/([^/]+)/)[1]
-      // console.log('=====> IPNS root', ipnsRoot)
-      // first check if root is a regular CID
-      if (window.IsIpfs.cid(ipnsRoot)) {
-        // console.log('=====> IPNS is a valid CID', ipnsRoot)
-        return true
-      }
-      if (isDnslookupSafe(url) && cachedDnslinkLookup(ipnsRoot)) {
-        // console.log('=====> IPNS for FQDN with valid dnslink: ', ipnsRoot)
-        return true
-      }
+    if (window.IsIpfs.ipnsUrl(url) && validIpnsPath(new URL(url).pathname)) {
+      return true
     }
   }
   // everything else is not ipfs-related
   return false
+}
+
+function validIpnsPath (path) {
+  if (window.IsIpfs.ipnsPath(path)) {
+    // we may have false-positives here, so we do additional checks below
+    const ipnsRoot = path.match(/^\/ipns\/([^/]+)/)[1]
+    // console.log('==> IPNS root', ipnsRoot)
+    // first check if root is a regular CID
+    if (window.IsIpfs.cid(ipnsRoot)) {
+      // console.log('==> IPNS is a valid CID', ipnsRoot)
+      return true
+    }
+    if (isDnslookupPossible() && cachedDnslinkLookup(ipnsRoot)) {
+      // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
+      return true
+    }
+  }
+  return false
+}
+
+function validIpfsOrIpnsPath (path) {
+  return window.IsIpfs.ipfsPath(path) || validIpnsPath(path)
 }
 
 function redirectToCustomGateway (requestUrl) {
@@ -139,7 +155,7 @@ function onBeforeRequest (request) {
       return redirectToCustomGateway(request.url)
     }
     // Look for dnslink in TXT records of visited sites
-    if (state.dnslink && isDnslookupSafe(request.url)) {
+    if (state.dnslink && isDnslookupSafeForURL(request.url)) {
       return dnslinkLookupAndOptionalRedirect(request.url)
     }
   }
@@ -154,8 +170,8 @@ function webPlusProtocolRequest (request) {
   return request.url.startsWith(webPlusProtocolHandler)
 }
 
-function pathAtPublicGw (path) {
-  return new URL(`https://ipfs.io${path}`).toString()
+function urlAtPublicGw (path) {
+  return new URL(`${state.pubGwURLString}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
 }
 
 function normalizedWebPlusRequest (request) {
@@ -165,7 +181,7 @@ function normalizedWebPlusRequest (request) {
   path = path.replace(/^\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
   path = path.replace(/^\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
   if (oldPath !== path && window.IsIpfs.path(path)) {
-    return { redirectUrl: pathAtPublicGw(path) }
+    return { redirectUrl: urlAtPublicGw(path) }
   }
   return null
 }
@@ -194,15 +210,21 @@ function normalizedUnhandledIpfsProtocol (request) {
   if (window.IsIpfs.path(path)) {
     // replace search query with fake request to the public gateway
     // (will be redirected later, if needed)
-    return { redirectUrl: pathAtPublicGw(path) }
+    return { redirectUrl: urlAtPublicGw(path) }
   }
 }
 
 // DNSLINK
 // ===================================================================
 
-function isDnslookupSafe (requestUrl) {
-  return state.peerCount > 0 &&
+function isDnslookupPossible () {
+  // DNS lookups require IPFS API to be up
+  // and have a confirmed connection to the internet
+  return state.peerCount > 0
+}
+
+function isDnslookupSafeForURL (requestUrl) {
+  return isDnslookupPossible() &&
     requestUrl.startsWith('http') &&
     !requestUrl.startsWith(state.apiURLString) &&
     !requestUrl.startsWith(state.gwURLString)
@@ -280,8 +302,10 @@ function readDnslinkFromTxtRecord (fqdn) {
 
 function onRuntimeMessage (request, sender) {
   // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
-  if (request.isIpfsPath) {
-    return Promise.resolve({isIpfsPath: window.IsIpfs.path(request.isIpfsPath)})
+  if (request.pubGwUrlForIpfsOrIpnsPath) {
+    const path = request.pubGwUrlForIpfsOrIpnsPath
+    const result = validIpfsOrIpnsPath(path) ? urlAtPublicGw(path) : null
+    return Promise.resolve({pubGwUrlForIpfsOrIpnsPath: result})
   }
 }
 
@@ -317,6 +341,7 @@ async function sendStatusUpdateToBrowserAction () {
     const info = {
       peerCount: state.peerCount,
       gwURLString: state.gwURLString,
+      pubGwURLString: state.pubGwURLString,
       currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
     }
     try {
@@ -640,6 +665,9 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       } else if (key === 'customGatewayUrl') {
         state.gwURL = new URL(change.newValue)
         state.gwURLString = state.gwURL.toString()
+      } else if (key === 'publicGatewayUrl') {
+        state.pubGwURL = new URL(change.newValue)
+        state.pubGwURLString = state.pubGwURL.toString()
       } else if (key === 'useCustomGateway') {
         state.redirect = change.newValue
       } else if (key === 'linkify') {
