@@ -3,22 +3,32 @@
   <head>
     <meta charset="utf-8">
     <style type="text/css">
+      form * {
+        font: caption;
+        font-size: 1rem;
+      }
+      em {
+        font-style: italic;
+      }
+      code {
+        font-family: monospace;
+      }
       fieldset {
         border: none;
         border-top: 3px solid #3E9398;
         display: flex;
         flex-direction: column;
-        margin-bottom: .5em;
-        min-width: 40em;
+        margin-bottom: .5rem;
+        min-width: 40rem;
       }
       legend {
-        letter-spacing: .15em;
+        letter-spacing: .15rem;
         text-transform: uppercase;
-        padding: .5em;
+        padding: .5rem;
         font-weight: bold;
       }
       fieldset > div {
-        padding: 1em;
+        padding: 1rem;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -35,9 +45,8 @@
       }
       label > dl > dd {
         opacity: .5;
-        font-size: .9em;
-        margin-left: 2em;
-        margin-right: .2em;
+        margin-left: 2rem;
+        margin-right: .2rem;
       }
       div:hover {
         background-color: rgba(62, 148, 152, 0.05);
@@ -47,7 +56,7 @@
       }
       input, textarea {
         flex: 1;
-        padding: .5em;
+        padding: .5rem;
         font-family: monospace;
       }
       input[type=text],
@@ -100,7 +109,7 @@
           <label for="publicGatewayUrl">
             <dl>
               <dt>Default Public Gateway</dt>
-              <dd>Fallback URL used when Custom Gateway is not available and for copying shareable links</dd>
+              <dd>Fallback URL used when <em>Custom Gateway</em> is not available and for copying shareable links</dd>
             </dl>
           </label>
           <input type="url" id="publicGatewayUrl" inputmode="url" required
