@@ -49,6 +49,7 @@
     },
 
     "options_ui": {
+        "browser_style": false,
         "page": "src/options/options.html"
     },
 

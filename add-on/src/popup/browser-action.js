@@ -250,7 +250,13 @@ async function updateBrowserActionPopup () {
     // update swarm peer count
     const peerCount = state.peerCount
     set('swarm-peers-val', peerCount < 0 ? offline : peerCount)
-    ipfsIcon.src = peerCount > 0 ? ipfsIconOn : ipfsIconOff
+    if (peerCount > 0) {
+      ipfsIcon.src = ipfsIconOn
+      ipfsIcon.classList.add('online')
+    } else {
+      ipfsIcon.src = ipfsIconOff
+      ipfsIcon.classList.remove('online')
+    }
     if (peerCount > 0) { // API is online & there are peers
       show('quick-upload')
     } else {
