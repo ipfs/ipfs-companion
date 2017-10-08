@@ -7,6 +7,9 @@
         font: caption;
         font-size: 1rem;
       }
+      strong {
+        font-weight: bold;
+      }
       em {
         font-style: italic;
       }
@@ -38,7 +41,6 @@
       }
       fieldset > div > * {
         align-self: center;
-
       }
       label {
         flex: 1;
@@ -58,6 +60,10 @@
         flex: 1;
         padding: .5rem;
         font-family: monospace;
+      }
+      #resetAllOptions {
+        flex: 1;
+        text-align: center;
       }
       input[type=text],
       input[type=url],
@@ -190,6 +196,16 @@
             </dl>
           </label>
           <input type="checkbox" id="dnslink" />
+        </div>
+        <div>
+          <label for="resetAllOptions">
+            <dl>
+              <dt>Reset Everything<dt>
+              <dd>Replaces user preferences with default ones<br>
+              <strong>(this can't be undone!)</strong></dd>
+            </dl>
+          </label>
+          <span id="resetAllOptions"><button>Reset Everything!</button></span>
         </div>
       </fieldset>
     </form>
