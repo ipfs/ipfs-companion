@@ -68,8 +68,25 @@ function readAllOptions () {
   Object.keys(optionDefaults).map(key => readOption(key))
 }
 
+function resetAllOptions (event) {
+  // go over every key and set its value to a default one
+  Object.keys(optionDefaults).map(async key => {
+    const change = {}
+    change[key] = optionDefaults[key]
+    await browser.storage.local.set(change)
+    readOption(key)
+  })
+  window.scrollTo(0, 0)
+  event.target.disabled = true
+  setTimeout(() => { event.target.disabled = false }, 3000)
+  event.preventDefault()
+}
+
 // initial load
-document.addEventListener('DOMContentLoaded', readAllOptions)
+document.addEventListener('DOMContentLoaded', () => {
+  readAllOptions()
+  document.querySelector('#resetAllOptions > button').addEventListener('click', resetAllOptions)
+})
 
 // update on external changes such as browserAction menu
 browser.storage.onChanged.addListener(readAllOptions)
