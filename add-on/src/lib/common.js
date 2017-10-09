@@ -460,8 +460,8 @@ function isIpfsPageActionsContext (url) {
 }
 
 async function onUpdatedTab (tabId, changeInfo, tab) {
-  if (tab && tab.url && !tab.url.startsWith('chrome://')) {
-    if (state.linkify && changeInfo.status === 'complete') {
+  if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
+    if (state.linkify) {
       console.log(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
       try {
         await browser.tabs.executeScript(tabId, {
@@ -478,6 +478,28 @@ async function onUpdatedTab (tabId, changeInfo, tab) {
         })
       } catch (error) {
         console.error(`Unable to linkify DOM at '${tab.url}' due to`, error)
+      }
+    }
+    if (state.catchUnhandledProtocols) {
+      // console.log(`[ipfs-companion] Normalizing links with unhandled protocols at ${tab.url}`)
+      // See: https://github.com/ipfs/ipfs-companion/issues/286
+      try {
+        // pass the URL of user-preffered public gateway
+        await browser.tabs.executeScript(tabId, {
+          code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_start'
+        })
+        // inject script that normalizes `href` and `src` containing unhandled protocols
+        await browser.tabs.executeScript(tabId, {
+          file: '/src/lib/normalizeLinksWithUnhandledProtocols.js',
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_end'
+        })
+      } catch (error) {
+        console.error(`Unable to normalize links at '${tab.url}' due to`, error)
       }
     }
   }
