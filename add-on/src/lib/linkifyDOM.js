@@ -10,8 +10,8 @@
  * TODO: measure & improve performance
  */
 
-;(function (alreadyLinkified) {
-  if (alreadyLinkified) {
+;(function (alreadyLoaded) {
+  if (alreadyLoaded) {
     return
   }
 
@@ -21,8 +21,8 @@
   }
 
   // linkify lock
-  window.ipfsLinkifiedDOM = true
-  window.ipfsLinkifyValidationCache = new Map()
+  window.ipfsCompanionLinkifiedDOM = true
+  window.ipfsCompanionLinkifyValidationCache = new Map()
 
   const urlRE = /(?:\s+|^)(\/ip(?:f|n)s\/|dweb:\/ip(?:f|n)s\/|ipns:\/\/|ipfs:\/\/)([^\s+"<>]+)/g
 
@@ -86,7 +86,7 @@
       while ((node = xpathResult.snapshotItem(i++))) {
         const parent = node.parentNode
         // Skip if no longer in visible DOM
-        if (!parent || !document.body.contains(node)) continue
+        if (!parent || !container.contains(node)) continue
         // Skip already linkified nodes
         if (parent.className && parent.className.match(/\blinkifiedIpfsAddress\b/)) continue
         // Skip styled <pre> -- often highlighted by script.
@@ -95,11 +95,11 @@
         if (parent.isContentEditable) continue
         await linkifyTextNode(node)
         if (++counter > 10) {
-          return setTimeout(continuation, 100)
+          return setTimeout(continuation, 0)
         }
       }
     }
-    window.requestAnimationFrame(continuation)
+    setTimeout(continuation, 0)
   }
 
   function textToIpfsResource (match) {
@@ -125,18 +125,18 @@
   async function validIpfsResource (path) {
     // validation is expensive, caching result improved performance
     // on page that have multiple copies of the same path
-    if (window.ipfsLinkifyValidationCache.has(path)) {
-      return window.ipfsLinkifyValidationCache.get(path)
+    if (window.ipfsCompanionLinkifyValidationCache.has(path)) {
+      return window.ipfsCompanionLinkifyValidationCache.get(path)
     }
     try {
       // Callback wrapped in promise -- Chrome compatibility
       const checkResult = await browser.runtime.sendMessage({pubGwUrlForIpfsOrIpnsPath: path})
-      window.ipfsLinkifyValidationCache.set(path, checkResult.pubGwUrlForIpfsOrIpnsPath)
+      window.ipfsCompanionLinkifyValidationCache.set(path, checkResult.pubGwUrlForIpfsOrIpnsPath)
     } catch (error) {
-      window.ipfsLinkifyValidationCache.set(path, null)
+      window.ipfsCompanionLinkifyValidationCache.set(path, null)
       console.error('pubGwUrlForIpfsOrIpnsPath.error for ' + path, error)
     }
-    return window.ipfsLinkifyValidationCache.get(path)
+    return window.ipfsCompanionLinkifyValidationCache.get(path)
   }
 
   async function linkifyTextNode (node) {
@@ -172,7 +172,6 @@
     if (span) {
       // take the text after the last link
       span.appendChild(document.createTextNode(txt.substring(point, txt.length)))
-      span.normalize()
       // replace the original text with the new span
       try {
         node.parentNode.replaceChild(span, node)
@@ -184,4 +183,4 @@
   }
 
   init()
-}(window.ipfsLinkifiedDOM))
+}(window.ipfsCompanionLinkifiedDOM))

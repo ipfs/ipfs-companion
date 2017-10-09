@@ -79,7 +79,7 @@
       while ((node = xpathResult.snapshotItem(i++))) {
         const parent = node.parentNode
         // Skip if no longer in visible DOM
-        if (!parent || !document.body.contains(node)) continue
+        if (!parent || !root.contains(node)) continue
         normalizeElement(node)
         if (++counter > 10) {
           return setTimeout(continuation, 0)
