@@ -224,8 +224,10 @@ function isDnslookupPossible () {
 }
 
 function isDnslookupSafeForURL (requestUrl) {
+  // skip URLs that could produce infinite recursion or weird loops
   return isDnslookupPossible() &&
     requestUrl.startsWith('http') &&
+    !window.IsIpfs.url(requestUrl) &&
     !requestUrl.startsWith(state.apiURLString) &&
     !requestUrl.startsWith(state.gwURLString)
 }
