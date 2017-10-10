@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "IPFS Companion",
     "short_name": "IPFS Companion",
-    "version" : "2.0.11",
+    "version" : "2.0.12",
 
     "description": "Browser extension that simplifies access to IPFS resources",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",

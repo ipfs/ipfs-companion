@@ -82,8 +82,11 @@
         box-shadow: 0 0 5px #5FCBCF;
       }
       input:invalid {
-        border: 1px solid #933E98;
-        box-shadow: 0 0 5px #CB5FCF;
+        border: 1px solid red !important;
+        background-color: #FFF0F0;
+        box-shadow: 0 0 5px red !important;
+        color: red;
+        transition: box-shadow 0.3s;
       }
     </style>
     <script src="../lib/npm/browser-polyfill.min.js"></script>
@@ -173,7 +176,7 @@
           <label for="catchUnhandledProtocols">
             <dl>
               <dt>Catch Unhandled IPFS Protocols</dt>
-              <dd>Enables support for <code>ipfs://$cid</code>, <code>ipns://$peerid</code> and <code>dweb:/ipfs/$cid</code> by catching and normalizing requests done with unhandled protocols</dd>
+              <dd>Enables support for <code>ipfs://$cid</code>, <code>ipns://$peerid</code> and <code>dweb:/ipfs/$cid</code> by normalizing links and requests done with unhandled protocols</dd>
             </dl>
           </label>
           <input type="checkbox" id="catchUnhandledProtocols" />
