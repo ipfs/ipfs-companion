@@ -24,7 +24,7 @@
   window.ipfsCompanionLinkifiedDOM = true
   window.ipfsCompanionLinkifyValidationCache = new Map()
 
-  const urlRE = /(?:\s+|^)(\/ip(?:f|n)s\/|dweb:\/ip(?:f|n)s\/|ipns:\/\/|ipfs:\/\/)([^\s+"<>]+)/g
+  const urlRE = /(?:\s+|^)(\/ip(?:f|n)s\/|dweb:\/ip(?:f|n)s\/|ipns:\/\/|ipfs:\/\/)([^\s+"<>:]+)/g
 
   // Chrome compatibility
   // var browser = browser || chrome
