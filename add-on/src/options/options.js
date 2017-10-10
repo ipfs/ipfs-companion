@@ -4,7 +4,7 @@
 
 async function saveOption (name) {
   const element = document.querySelector(`#${name}`)
-  if (!element.checkValidity()) {
+  if (!element.reportValidity()) {
     console.warn('[ipfs-companion] Invalid value for option: ' + name)
     return
   }
