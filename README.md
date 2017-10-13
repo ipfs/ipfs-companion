@@ -1,6 +1,6 @@
 # IPFS Companion
 
-![screenshot of v2.0.8](screenshot.png)
+![demo of v2.0.13](https://ipfs.io/ipfs/QmUxZrrjUGZVMjqc2noCRkQZr8B9JyGNj7sPpRoJ6uPQq1)
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-full%20review-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
@@ -21,36 +21,46 @@
 
 ## Background
 
-This add-on enables everyone to access ipfs.io (or any other public gateway) urls the way they were meant: from locally running IPFS daemon :-)
+This add-on enables everyone to access IPFS resources the way they were meant: from locally running IPFS node :-)
 
 IPFS is a new hypermedia distribution protocol, addressed by content and identities.
 IPFS enables the creation of completely distributed applications.
 It aims to make the web faster, safer, and more open.
 
-Learn more at: https://ipfs.io (It is really cool, we promise!)
+Learn more at [ipfs.io](https://ipfs.io) (it is really cool, we promise!)
 
 ## Features
 
-- Toolbar icon displays current IPFS peering status
-- Click on it to open IPFS actions menu
-  - Display information about custom gateway
-  - Redirection to local gateway (automatic by default, manual mode can be enabled in Preferences)
-  - Easy way to open WebUI (e.g. go-ipfs daemon running at the custom gateway)
-  - Quick Upload of local files to IPFS
-  - Mirror to IPFS via right click on any image or video on any website
-  - Additionally, on pages loaded from IPFS:
-    - Pin/Unpin IPFS Resource (via API)
+#### Automagical Detection of IPFS Resources
+
+  Requests for resources at IPFS-like paths (`/ipfs/$cid` or `/ipns/$peerid_or_fqdn`) are detected on any website.  
+  If tested path is a valid IPFS address it gets redirected and loaded from a local gateway, e.g:  
+  `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
+  → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+
+#### IPFS Status and Action Menu
+
+- IPFS API and Gateway status
+- Quick Upload of local files
+- Easy access to [WebUI](https://github.com/ipfs/webui/) and add-on Preferences
+- Toggle redirection to local gateway (automatic by default, manual mode can be enabled in Preferences)
+- Additional actions for pages loaded from IPFS
+    - Pin/Unpin of IPFS resources (via API)
     - Copy canonical IPFS address
-    - Copy shareable URL to resource at the public gateway
-- Requests to `https?://<public_gateway>/(ipfs|ipns)/$RESOURCE`  
-  are replaced with `http://127.0.0.1:8080/(ipfs|ipns)/$RESOURCE`
-- Custom Gateway address and other settings can be tweaked via Preferences
-- Requests made via popular custom protocols are routed to the active gateway (public or custom):
-   - `[web+](ipfs|ipns):/*$RESOURCE`
-   - `[web+]fs:/*(ipfs|ipns)/$RESOURCE`
-- Experimental features (disabled by default, use Preferences screen to enable)
-   - Detect and redirect sites with [dnslink](https://github.com/jbenet/go-dnslink) to `/ipns/<fqdn>`
-   - Rewrite hrefs with `/ip(f|n)s/*` paths on every page to point to IPFS gateway. Make plaintext IPFS links clickable.
+    - Copy shareable URL to resource at preferred public gateway
+
+#### Experiments!
+
+_(some are disabled by default, use Preferences screen to enable)_
+
+- Requests made via [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) are re-routed to HTTP gateway (public or custom):
+    - `ipns://$cid`
+    - `ipns://$cid_or_fqdn`
+    - `dweb:/ipfs/$cid`
+    - `dweb:/ipns/$cid_or_fqdn`
+- Detect domains with [dnslink](https://github.com/jbenet/go-dnslink) in DNS TXT record and load them from IPFS
+- Make plaintext IPFS links clickable
+- Mirror to IPFS by right click on any image or video
 
 ## Install
 
