@@ -59,7 +59,7 @@
     "sinon": "4.0.0",
     "standard": "10.0.3",
     "sinon-chrome": "2.2.1",
-    "web-ext": "2.0.0"
+    "web-ext": "2.2.2"
   },
   "dependencies": {
     "ipfs-api": "14.3.5",
