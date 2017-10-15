@@ -60,28 +60,15 @@ function notify (title, message) {
 // ===================================================================
 
 async function copyCurrentPublicGwAddress () {
-  const publicGwAddress = new URL(state.currentTab.url.replace(state.gwURLString, state.pubGwURLString)).toString()
-  copyTextToClipboard(publicGwAddress)
-  notify('notify_copiedPublicURLTitle', publicGwAddress)
+  const bg = await getBackgroundPage()
+  await bg.copyPublicGwAddressOfCurrentTab()
   window.close()
 }
 
 async function copyCurrentCanonicalAddress () {
-  const rawIpfsAddress = state.currentTab.url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
-  copyTextToClipboard(rawIpfsAddress)
-  notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
+  const bg = await getBackgroundPage()
+  await bg.copyCanonicalAddressOfCurrentTab()
   window.close()
-}
-
-function copyTextToClipboard (copyText) {
-  // lets take a moment and ponder on the state of copying a string in 2017
-  const copyFrom = document.createElement('textarea')
-  copyFrom.textContent = copyText
-  const body = document.getElementsByTagName('body')[0]
-  body.appendChild(copyFrom) // oh god why
-  copyFrom.select()
-  document.execCommand('copy') // srsly
-  body.removeChild(copyFrom)
 }
 
 async function pinCurrentResource () {
