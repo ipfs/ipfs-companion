@@ -50,7 +50,9 @@ function registerListeners () {
   browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
   browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
   browser.storage.onChanged.addListener(onStorageChange)
+  browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
   browser.tabs.onUpdated.addListener(onUpdatedTab)
+  browser.tabs.onActivated.addListener(onActivatedTab)
   browser.runtime.onMessage.addListener(onRuntimeMessage)
   browser.runtime.onConnect.addListener(onRuntimeConnect)
 }
@@ -386,11 +388,15 @@ function notify (titleKey, messageKey, messageParam) {
 // contextMenus
 // -------------------------------------------------------------------
 const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
+const contextMenuCopyIpfsAddress = 'panelCopy_currentIpfsAddress'
+const contextMenuCopyPublicGwUrl = 'panel_copyCurrentPublicGwUrl'
+// TODO const contextMenuPinUnpinAddress = 'panel_pinCurrentIpfsAddress'
 
 browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
   title: browser.i18n.getMessage(contextMenuUploadToIpfs),
   contexts: ['image', 'video', 'audio'],
+  enabled: false,
   onclick: addFromURL
 })
 
@@ -448,11 +454,99 @@ function uploadResultHandler (err, result) {
   })
 }
 
-function updateContextMenus () {
-  browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
+async function copyCanonicalAddressOfCurrentTab () {
+  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+  const rawIpfsAddress = currentTab.url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
+  copyTextToClipboard(rawIpfsAddress, currentTab.id)
+  notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
 }
 
-// Page Actions
+async function copyPublicGwAddressOfCurrentTab () {
+  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+  const urlAtPubGw = currentTab.url.replace(state.gwURLString, state.pubGwURLString)
+  copyTextToClipboard(urlAtPubGw, currentTab.id)
+  notify('notify_copiedPublicURLTitle', urlAtPubGw)
+}
+
+async function copyTextToClipboard (copyText, tabId) {
+  // Lets take a moment and ponder on the state of copying a string in 2017:
+  const copyToClipboardIn2017 = `function copyToClipboardIn2017(text) {
+      function oncopy(event) {
+          document.removeEventListener('copy', oncopy, true);
+          event.stopImmediatePropagation();
+          event.preventDefault();
+          event.clipboardData.setData('text/plain', text);
+      }
+      document.addEventListener('copy', oncopy, true);
+      document.execCommand('copy');
+    }`
+
+  // In Firefox you can't select text or focus an input field in background pages,
+  // so you can't write to the clipboard from a background page.
+  // We work around this limitation by injecting content scropt into a tab and copying there.
+  // Yes, this is 2017.
+  try {
+    const copyHelperPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof copyToClipboardIn2017 === 'function';" }))[0]
+    if (!copyHelperPresent) {
+      await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: copyToClipboardIn2017 })
+    }
+    await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: 'copyToClipboardIn2017(' + JSON.stringify(copyText) + ');' })
+  } catch (error) {
+    console.error('Failed to copy text: ' + error)
+  }
+}
+
+async function updateContextMenus (changedTabId) {
+  await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
+  if (changedTabId) {
+    // recalculate tab-dependant menu items
+    const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+    if (currentTab.id === changedTabId) {
+      try {
+        // we can't hide items due to https://bugzilla.mozilla.org/show_bug.cgi?id=1397249
+        // so we remove items for previous tab and then create new ones if needed
+        await browser.contextMenus.remove(contextMenuCopyIpfsAddress)
+        await browser.contextMenus.remove(contextMenuCopyPublicGwUrl)
+        // await browser.contextMenus.remove(contextMenuPinUnpinAddress)
+      } catch (e) {
+        // ignore
+        // console.error(e)
+      }
+      if (window.IsIpfs.url(currentTab.url)) {
+        // console.log('enabling ipfs context menus', currentTab)
+        try {
+          await browser.contextMenus.create({
+            id: contextMenuCopyIpfsAddress,
+            title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
+            contexts: ['page'],
+            onclick: copyCanonicalAddressOfCurrentTab
+          })
+          await browser.contextMenus.create({
+            id: contextMenuCopyPublicGwUrl,
+            title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
+            contexts: ['page'],
+            onclick: copyPublicGwAddressOfCurrentTab
+          })
+          /*
+          await browser.contextMenus.create({
+            id: contextMenuPinUnpinAddress,
+            title: browser.i18n.getMessage(contextMenuPinUnpinAddress),
+            contexts: ['page'],
+            onclick: TODO // TODO
+          })
+          */
+        } catch (e) {
+          // ignore
+          // console.error(e)
+        }
+      } else {
+        // console.log('no ipfs context menus', currentTab)
+      }
+    }
+  }
+}
+
+// Page-specific Actions
 // -------------------------------------------------------------------
 
 // used in browser-action popup
@@ -461,17 +555,28 @@ function isIpfsPageActionsContext (url) {
   return window.IsIpfs.url(url) && !url.startsWith(state.apiURLString)
 }
 
+async function onActivatedTab (activeInfo) {
+  await updateContextMenus(activeInfo.tabId)
+}
+
+async function onNavigationCommitted (details) {
+  await updateContextMenus(details.tabId)
+}
+
 async function onUpdatedTab (tabId, changeInfo, tab) {
-  if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
+  if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
     if (state.linkify) {
       console.log(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
       try {
-        await browser.tabs.executeScript(tabId, {
-          file: '/src/lib/npm/browser-polyfill.min.js',
-          matchAboutBlank: false,
-          allFrames: true,
-          runAt: 'document_start'
-        })
+        const browserApiPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof browser !== 'undefined'" }))[0]
+        if (!browserApiPresent) {
+          await browser.tabs.executeScript(tabId, {
+            file: '/src/lib/npm/browser-polyfill.min.js',
+            matchAboutBlank: false,
+            allFrames: true,
+            runAt: 'document_start'
+          })
+        }
         await browser.tabs.executeScript(tabId, {
           file: '/src/lib/linkifyDOM.js',
           matchAboutBlank: false,
