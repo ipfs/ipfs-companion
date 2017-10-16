@@ -390,7 +390,6 @@ function notify (titleKey, messageKey, messageParam) {
 const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
 const contextMenuCopyIpfsAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyPublicGwUrl = 'panel_copyCurrentPublicGwUrl'
-// TODO const contextMenuPinUnpinAddress = 'panel_pinCurrentIpfsAddress'
 
 browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
@@ -398,6 +397,20 @@ browser.contextMenus.create({
   contexts: ['image', 'video', 'audio'],
   enabled: false,
   onclick: addFromURL
+})
+browser.contextMenus.create({
+  id: contextMenuCopyIpfsAddress,
+  title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
+  contexts: ['page', 'image', 'video', 'audio', 'link'],
+  documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+  onclick: copyCanonicalAddress
+})
+browser.contextMenus.create({
+  id: contextMenuCopyPublicGwUrl,
+  title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
+  contexts: ['page', 'image', 'video', 'audio', 'link'],
+  documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+  onclick: copyAddressAtPublicGw
 })
 
 function inFirefox () {
@@ -454,21 +467,44 @@ function uploadResultHandler (err, result) {
   })
 }
 
-async function copyCanonicalAddressOfCurrentTab () {
+async function findUrlForContext (context) {
+  if (context) {
+    console.log(context)
+    if (context.linkUrl) {
+      // present when clicked on a link
+      return context.linkUrl
+    }
+    if (context.srcUrl) {
+      // present when clicked on page element such as image or video
+      return context.srcUrl
+    }
+    if (context.pageUrl) {
+      // pageUrl is the root frame
+      return context.pageUrl
+    }
+  }
+  // falback to the url of current tab
   const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-  const rawIpfsAddress = currentTab.url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
-  copyTextToClipboard(rawIpfsAddress, currentTab.id)
+  return currentTab.url
+}
+
+async function copyCanonicalAddress (context) {
+  const url = await findUrlForContext(context)
+  const rawIpfsAddress = url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
+  copyTextToClipboard(rawIpfsAddress)
   notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
 }
 
-async function copyPublicGwAddressOfCurrentTab () {
-  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-  const urlAtPubGw = currentTab.url.replace(state.gwURLString, state.pubGwURLString)
-  copyTextToClipboard(urlAtPubGw, currentTab.id)
+async function copyAddressAtPublicGw (context) {
+  const url = await findUrlForContext(context)
+  const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
+  copyTextToClipboard(urlAtPubGw)
   notify('notify_copiedPublicURLTitle', urlAtPubGw)
 }
 
-async function copyTextToClipboard (copyText, tabId) {
+async function copyTextToClipboard (copyText) {
+  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+  const tabId = currentTab.id
   // Lets take a moment and ponder on the state of copying a string in 2017:
   const copyToClipboardIn2017 = `function copyToClipboardIn2017(text) {
       function oncopy(event) {
@@ -502,46 +538,9 @@ async function updateContextMenus (changedTabId) {
     // recalculate tab-dependant menu items
     const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
     if (currentTab.id === changedTabId) {
-      try {
-        // we can't hide items due to https://bugzilla.mozilla.org/show_bug.cgi?id=1397249
-        // so we remove items for previous tab and then create new ones if needed
-        await browser.contextMenus.remove(contextMenuCopyIpfsAddress)
-        await browser.contextMenus.remove(contextMenuCopyPublicGwUrl)
-        // await browser.contextMenus.remove(contextMenuPinUnpinAddress)
-      } catch (e) {
-        // ignore
-        // console.error(e)
-      }
-      if (window.IsIpfs.url(currentTab.url)) {
-        // console.log('enabling ipfs context menus', currentTab)
-        try {
-          await browser.contextMenus.create({
-            id: contextMenuCopyIpfsAddress,
-            title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
-            contexts: ['page'],
-            onclick: copyCanonicalAddressOfCurrentTab
-          })
-          await browser.contextMenus.create({
-            id: contextMenuCopyPublicGwUrl,
-            title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
-            contexts: ['page'],
-            onclick: copyPublicGwAddressOfCurrentTab
-          })
-          /*
-          await browser.contextMenus.create({
-            id: contextMenuPinUnpinAddress,
-            title: browser.i18n.getMessage(contextMenuPinUnpinAddress),
-            contexts: ['page'],
-            onclick: TODO // TODO
-          })
-          */
-        } catch (e) {
-          // ignore
-          // console.error(e)
-        }
-      } else {
-        // console.log('no ipfs context menus', currentTab)
-      }
+      const ipfsContext = isIpfsPageActionsContext(currentTab.url)
+      browser.contextMenus.update(contextMenuCopyIpfsAddress, {enabled: ipfsContext})
+      browser.contextMenus.update(contextMenuCopyPublicGwUrl, {enabled: ipfsContext})
     }
   }
 }

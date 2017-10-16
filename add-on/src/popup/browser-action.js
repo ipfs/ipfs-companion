@@ -61,13 +61,13 @@ function notify (title, message) {
 
 async function copyCurrentPublicGwAddress () {
   const bg = await getBackgroundPage()
-  await bg.copyPublicGwAddressOfCurrentTab()
+  await bg.copyAddressAtPublicGw()
   window.close()
 }
 
 async function copyCurrentCanonicalAddress () {
   const bg = await getBackgroundPage()
-  await bg.copyCanonicalAddressOfCurrentTab()
+  await bg.copyCanonicalAddress()
   window.close()
 }
 
