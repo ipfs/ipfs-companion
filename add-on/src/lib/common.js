@@ -469,7 +469,6 @@ function uploadResultHandler (err, result) {
 
 async function findUrlForContext (context) {
   if (context) {
-    console.log(context)
     if (context.linkUrl) {
       // present when clicked on a link
       return context.linkUrl
