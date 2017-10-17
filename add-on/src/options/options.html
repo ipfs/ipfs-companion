@@ -2,10 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
     <style type="text/css">
       form * {
         font: caption;
-        font-size: 1rem;
+        font-size: 1em;
       }
       strong {
         font-weight: bold;
@@ -21,17 +22,16 @@
         border-top: 3px solid #3E9398;
         display: flex;
         flex-direction: column;
-        margin-bottom: .5rem;
-        min-width: 40rem;
+        margin-bottom: .5em;
       }
       legend {
-        letter-spacing: .15rem;
+        letter-spacing: .15em;
         text-transform: uppercase;
-        padding: .5rem;
+        padding: .5em;
         font-weight: bold;
       }
       fieldset > div {
-        padding: 1rem;
+        padding: 1em;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -46,19 +46,20 @@
         flex: 1;
       }
       label > dl > dd {
-        opacity: .5;
-        margin-left: 2rem;
-        margin-right: .2rem;
+        color: #888;
+        margin-top: .2em;
+        margin-left: 0;
+        margin-right: .2em;
       }
       div:hover {
         background-color: rgba(62, 148, 152, 0.05);
       }
       div:hover > label > dl > dd {
-        opacity: 1;
+        color: #333;
       }
       input, textarea {
         flex: 1;
-        padding: .5rem;
+        padding: .5em;
         font-family: monospace;
       }
       #resetAllOptions {
