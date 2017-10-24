@@ -185,5 +185,14 @@
   },
   "option_resetAllOptions_description": {
     "message": "Replaces user preferences with default ones (can't be undone!)"
+  },
+  "manifest_extensionName": {
+    "message": "IPFS Companion"
+  },
+  "manifest_shortExtensionName": {
+    "message": "IPFS Companion"
+  },
+  "manifest_extensionDescription": {
+    "message": "Browser extension that simplifies access to IPFS resources"
   }
 }

@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
-    "name": "IPFS Companion",
-    "short_name": "IPFS Companion",
+    "name": "__MSG_manifest_extensionName__",
+    "short_name": "__MSG_manifest_shortExtensionName__",
     "version" : "2.0.15",
 
-    "description": "Browser extension that simplifies access to IPFS resources",
+    "description": "__MSG_manifest_extensionDescription__",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",
     "author": "Marcin Rataj",
     "icons": {
