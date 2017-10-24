@@ -95,12 +95,12 @@
   <body>
     <form>
       <fieldset>
-        <legend>Gateways</legend>
+        <legend data-i18n="option_header_gateways"></legend>
         <div>
           <label for="customGatewayUrl">
             <dl>
-              <dt>Custom Local Gateway</dt>
-              <dd>URL of preferred HTTP2IPFS&nbsp;Gateway</dd>
+              <dt data-i18n="option_customGatewayUrl_title"></dt>
+              <dd data-i18n="option_customGatewayUrl_description"></dd>
             </dl>
           </label>
           <input type="url" id="customGatewayUrl" inputmode="url" required
@@ -109,8 +109,8 @@
         <div>
           <label for="useCustomGateway">
             <dl>
-              <dt>Use Custom Gateway</dt>
-              <dd>Redirect requests made to <em>Public</em> gateways to the <em>Custom</em> gateway</dd>
+              <dt data-i18n="option_useCustomGateway_title"></dt>
+              <dd data-i18n="option_useCustomGateway_description"></dd>
             </dl>
           </label>
           <input type="checkbox" id="useCustomGateway" />
@@ -118,8 +118,8 @@
         <div>
           <label for="publicGatewayUrl">
             <dl>
-              <dt>Default Public Gateway</dt>
-              <dd>Fallback URL used when <em>Custom Gateway</em> is not available and for copying shareable links</dd>
+              <dt data-i18n="option_publicGatewayUrl_title"></dt>
+              <dd data-i18n="option_publicGatewayUrl_description"></dd>
             </dl>
           </label>
           <input type="url" id="publicGatewayUrl" inputmode="url" required
@@ -129,12 +129,12 @@
     </form>
     <form>
       <fieldset>
-        <legend>API</legend>
+        <legend data-i18n="option_header_api"></legend>
         <div>
           <label for="ipfsApiUrl">
             <dl>
-              <dt>IPFS API URL</dt>
-              <dd>Hint: this is where <code>/webui</code> lives</dd>
+              <dt data-i18n="option_ipfsApiUrl_title"></dt>
+              <dd data-i18n="option_ipfsApiUrl_description"></dd>
             </dl>
           </label>
           <input type="url" id="ipfsApiUrl" inputmode="url" required
@@ -143,8 +143,8 @@
         <div>
           <label for="ipfsApiPollMs">
             <dl>
-              <dt>Status Poll Interval</dt>
-              <dd>How often peer count is refreshed (in miliseconds)</dd>
+              <dt data-i18n="option_ipfsApiPollMs_title"></dt>
+              <dd data-i18n="option_ipfsApiPollMs_description"></dd>
             </dl>
           </label>
           <input type="number" inputmode="numeric" id="ipfsApiPollMs" min="1000" max="60000" step="1000" required />
@@ -152,8 +152,8 @@
         <div>
           <label for="automaticMode">
             <dl>
-              <dt>Automatic Mode<dt>
-              <dd>Toggle use of <em>Custom Gateway</em> when IPFS API availability changes</dd>
+              <dt data-i18n="option_automaticMode_title"><dt>
+              <dd data-i18n="option_automaticMode_description"></dd>
             </dl>
           </label>
           <input type="checkbox" id="automaticMode" />
@@ -162,13 +162,13 @@
     </form>
     <form>
       <fieldset>
-        <legend>Experiments</legend>
-        <div><span><strong>Note:</strong> these features are new or work-in-progress. <abbr title="Your Mileage May Vary">YMMV</abbr>.</span></div>
+        <legend data-i18n="option_header_experiments"></legend>
+        <div data-i18n="option_experiments_warning"></div>
         <div>
           <label for="displayNotifications">
             <dl>
-              <dt>Enable Notifications</dt>
-              <dd>Displays system notifications when API state changes, a link is copied etc</dd>
+              <dt data-i18n="option_displayNotifications_title"></dt>
+              <dd data-i18n="option_displayNotifications_description"></dd>
             </dl>
           </label>
           <input type="checkbox" id="displayNotifications" />
@@ -176,8 +176,8 @@
         <div>
           <label for="catchUnhandledProtocols">
             <dl>
-              <dt>Catch Unhandled IPFS Protocols</dt>
-              <dd>Enables support for <code>ipfs://$cid</code>, <code>ipns://$peerid</code> and <code>dweb:/ipfs/$cid</code> by normalizing links and requests done with unhandled protocols</dd>
+              <dt data-i18n="option_catchUnhandledProtocols_title"></dt>
+              <dd data-i18n="option_catchUnhandledProtocols_description"></dd>
             </dl>
           </label>
           <input type="checkbox" id="catchUnhandledProtocols" />
@@ -185,8 +185,8 @@
         <div>
           <label for="linkify">
             <dl>
-              <dt>Linkify IPFS Addresses</dt>
-              <dd>Turn plaintext <code>/ipfs/</code> paths into clickable links</dd>
+              <dt data-i18n="option_linkify_title"></dt>
+              <dd data-i18n="option_linkify_description"></dd>
             </dl>
           </label>
           <input type="checkbox" id="linkify" />
@@ -194,9 +194,8 @@
         <div>
           <label for="dnslink">
             <dl>
-              <dt>DNSLINK Support<dt>
-              <dd>Perform DNS lookup for every visited website and use <em>Custom Gateway</em> if DNSLINK is present in its DNS TXT record<br>
-              <strong>(known to slow down the browser)</strong></dd>
+              <dt data-i18n="option_dnslink_title"><dt>
+              <dd data-i18n="option_dnslink_description"></dd>
             </dl>
           </label>
           <input type="checkbox" id="dnslink" />
@@ -204,12 +203,11 @@
         <div>
           <label for="resetAllOptions">
             <dl>
-              <dt>Reset Everything<dt>
-              <dd>Replaces user preferences with default ones<br>
-              <strong>(this can't be undone!)</strong></dd>
+              <dt data-i18n="option_resetAllOptions_title"></dt>
+              <dd data-i18n="option_resetAllOptions_description"></dd>
             </dl>
           </label>
-          <span id="resetAllOptions"><button>Reset Everything!</button></span>
+          <span id="resetAllOptions"><button data-i18n="option_resetAllOptions_title"></button></span>
         </div>
       </fieldset>
     </form>

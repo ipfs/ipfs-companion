@@ -95,17 +95,95 @@
   "notify_inlineMsg": {
     "message": "$MSG$",
     "placeholders": {
-        "msg": {
-          "content": "$1"
-        }
+      "msg": {
+        "content": "$1"
+      }
     }
   },
   "notify_inlineErrorMsg": {
     "message": "$ERROR$ (press ctrl+shift+j for more details)",
     "placeholders": {
-        "error": {
-          "content": "$1"
-        }
+      "error": {
+        "content": "$1"
+      }
     }
+  },
+  "option_header_gateways": {
+    "message": "Gateways"
+  },
+  "option_customGatewayUrl_title": {
+    "message": "Custom Local Gateway"
+  },
+  "option_customGatewayUrl_description": {
+    "message": "URL of preferred HTTP2IPFS Gateway"
+  },
+  "option_useCustomGateway_title": {
+    "message": "Use Custom Gateway"
+  },
+  "option_useCustomGateway_description": {
+    "message": "Redirect requests made to Public gateways to the Custom gateway"
+  },
+  "option_publicGatewayUrl_title": {
+    "message": "Default Public Gateway"
+  },
+  "option_publicGatewayUrl_description": {
+    "message": "Fallback URL used when Custom Gateway is not available and for copying shareable links"
+  },
+  "option_header_api": {
+    "message": "API"
+  },
+  "option_ipfsApiUrl_title": {
+    "message": "IPFS API URL"
+  },
+  "option_ipfsApiUrl_description": {
+    "message": "Hint: this is where /webui lives"
+  },
+  "option_ipfsApiPollMs_title": {
+    "message": "Status Poll Interval"
+  },
+  "option_ipfsApiPollMs_description": {
+    "message": "How often peer count is refreshed (in miliseconds)"
+  },
+  "option_automaticMode_title": {
+    "message": "Automatic Mode"
+  },
+  "option_automaticMode_description": {
+    "message": "Toggle use of Custom Gateway when IPFS API availability changes"
+  },
+  "option_header_experiments": {
+    "message": "Experiments"
+  },
+  "option_experiments_warning": {
+    "message": "Be warned: these features are new or work-in-progress.  YMMV."
+  },
+  "option_displayNotifications_title": {
+    "message": "Enable Notifications"
+  },
+  "option_displayNotifications_description": {
+    "message": "Displays system notifications when API state changes, a link is copied etc"
+  },
+  "option_catchUnhandledProtocols_title": {
+    "message": "Catch Unhandled IPFS Protocols"
+  },
+  "option_catchUnhandledProtocols_description": {
+    "message": "Enables support for ipfs://$cid, ipns://$peerid and dweb:/ipfs/$cid by normalizing links and requests done with unhandled protocols"
+  },
+  "option_linkify_title": {
+    "message": "Linkify IPFS Addresses"
+  },
+  "option_linkify_description": {
+    "message": "Turn plaintext /ipfs/ paths into clickable links"
+  },
+  "option_dnslink_title": {
+    "message": "DNSLINK Support"
+  },
+  "option_dnslink_description": {
+    "message": "Perform DNS lookup for every visited website and use Custom Gateway if DNSLINK is present in its DNS TXT record (known to slow down the browser)"
+  },
+  "option_resetAllOptions_title": {
+    "message": "Reset Everything"
+  },
+  "option_resetAllOptions_description": {
+    "message": "Replaces user preferences with default ones (can't be undone!)"
   }
 }
