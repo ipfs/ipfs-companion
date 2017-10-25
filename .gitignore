@@ -5,4 +5,5 @@ firefox
 cache
 build
 npm-debug.log
+crowdin.yml
 .*~

@@ -129,7 +129,9 @@ Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript
 
 ## Contribute
 
-See [CONTRIBUTING](CONTRIBUTING.md) :sparkles:
+Please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
+
+This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
 
 ## License
 
