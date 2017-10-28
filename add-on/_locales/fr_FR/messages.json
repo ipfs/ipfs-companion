@@ -1,126 +1,126 @@
 {
   "browserAction_title": {
-    "message": "Asystent IPFS",
+    "message": "Compagnon IPFS",
     "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_statusGatewayRedirect": {
-    "message": "przekierowanie",
+    "message": "rediréger",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectEnabled": {
-    "message": "włączone",
+    "message": "activé",
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectDisabled": {
-    "message": "wyłączone",
+    "message": "désactivé",
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "brama",
+    "message": "routeur",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
-    "message": "wersja",
+    "message": "version",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "połączenia",
+    "message": "essaim de pairs",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
-    "message": "Opublikuj plik",
+    "message": "Dépôt rapide",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "Otwórz WebUI",
+    "message": "Ouvrir l'interface",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
-    "message": "Otwórz preferencje",
+    "message": "Ouvrir les préférences",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectEnable": {
-    "message": "Włącz przekierowanie",
+    "message": "Activer la redirection de la passerelle",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "Wyłącz przekierowanie",
+    "message": "Activer la redirection de la passerelle",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Przypnij zasób IPFS",
+    "message": "Epingler la ressource IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Odepnij zasób IPFS",
+    "message": "Désépingler la ressource IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Skopiuj kanoniczny adres",
+    "message": "Copier l’adresse canonique",
     "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Skopiuj URL do publicznej bramy",
+    "message": "Copier URL de la passerelle publique",
     "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Wyślij do IPFS",
+    "message": "Dépôt vers IPFS",
     "description": "An item in right-click context menu"
   },
   "notify_addonIssueTitle": {
-    "message": "Problem z Asystentem IPFS",
+    "message": "Erreur gadget IPFS",
     "description": "A title of system notification"
   },
   "notify_addonIssueMsg": {
-    "message": "Otwórz Konsolę Przeglądarki aby zobaczyć szczegóły",
+    "message": "Regarder la console du navigateur pour plus de détails",
     "description": "A message in system notification"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Skopiowano publiczny URL",
+    "message": "Publique URL copié",
     "description": "A title of system notification"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Skopiowano kanoniczny adres",
+    "message": "Adresse canonique copié",
     "description": "A title of system notification"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "Przypięto wskazany zasób IPFS",
+    "message": "Ressource IPFS désépinglé",
     "description": "A title of system notification"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Odpięto wskazany zasób IPFS",
+    "message": "Epingle IPFS supprimé",
     "description": "A title of system notification"
   },
   "notify_pinErrorTitle": {
-    "message": "Błąd podczas przypinania zasobu IPFS",
+    "message": "Erreur survenu pendant épinglage de la Ressource IPFS",
     "description": "A title of system notification"
   },
   "notify_unpinErrorTitle": {
-    "message": "Błąd podczas odpinania zasobu IPFS",
+    "message": "Erreur survenu pendant la suppression de l'épingle IPFS",
     "description": "A title of system notification"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS: nawiązano połączenie z API",
+    "message": "API IPFS est en ligne",
     "description": "A title of system notification"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Tryb automatyczny: przekierowanie do alternatywnej bramy jest aktywne",
+    "message": "Mode automatique: redirection personnalisé du routeur est activé",
     "description": "A message in system notification"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS: utracono połączenie z API",
+    "message": "API IPFS hors ligne",
     "description": "A title of system notification"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Tryb automatyczny: awaryjne przekierowanie do publicznej bramy",
+    "message": "Mode automatique: le routeur publique sera utilisé en cas d'erreur",
     "description": "A message in system notification"
   },
   "notify_uploadErrorTitle": {
-    "message": "Nie udało się wysłać poprzez API IPFS",
+    "message": "Désactiver le dépôt via l'API IPFS",
     "description": "A title of system notification"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Spróbuj wyłączyć \"Ochronę przed śledzeniem\" (wciśnij ctrl+shift+j po więcej szczegółów)"
+    "message": "Essayer de désactivé la protection contre le tracking ( appuyer sur ctrl + j pour plus de détails)"
   },
   "notify_inlineMsg": {
     "message": "$MSG$",
@@ -132,7 +132,7 @@
     "description": "A generic placeholder for notification message, leave as-is"
   },
   "notify_inlineErrorMsg": {
-    "message": "$ERROR$ (wciśnij ctrl+shift+j po więcej informacji)",
+    "message": "$ERROR$ ( appuyer sur ctrl+shift + j pour plus de détails)",
     "placeholders": {
       "error": {
         "content": "$1"
@@ -141,31 +141,31 @@
     "description": "A generic placeholder for error notification"
   },
   "option_header_gateways": {
-    "message": "Bramy",
+    "message": "Passerelle",
     "description": "A section header on the Preferences screen"
   },
   "option_customGatewayUrl_title": {
-    "message": "Własna lokalna brama",
+    "message": "Passerelle locale personnalisée",
     "description": "An option title on the Preferences screen"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL preferowanej bramy HTTP",
+    "message": "URL de la passerelle préférentielles HTTP2IPFS",
     "description": "An option description on the Preferences screen"
   },
   "option_useCustomGateway_title": {
-    "message": "Użyj własnej bramy",
+    "message": "Utiliser une passerelle personnalisée",
     "description": "An option title on the Preferences screen"
   },
   "option_useCustomGateway_description": {
-    "message": "Przekieruj żądania o zasoby IPFS do własnej lokalnej bramy",
+    "message": "Rediriger les demandes faites à la passerelles public vers la passerelle personnalisée",
     "description": "An option description on the Preferences screen"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Domyślna brama publiczna",
+    "message": "Passerelle publique par défaut",
     "description": "An option title on the Preferences screen"
   },
   "option_publicGatewayUrl_description": {
-    "message": "URL zapasowej bramy, który będzie również używany przy kopiowaniu publicznych linków",
+    "message": "URL de secours utilisé lorsque passerelle personnalisée n’est pas disponible et pour copier les liens partageables",
     "description": "An option description on the Preferences screen"
   },
   "option_header_api": {
@@ -173,87 +173,87 @@
     "description": "A section header on the Preferences screen"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "IPI API URL",
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Wskazówka: adres który udostępnia \/webui",
+    "message": "Astuce : où se trouve la webui",
     "description": "An option description on the Preferences screen"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Odświeżanie statusu",
+    "message": "Intervalle d’interrogation du statut",
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Jak często licznik połączeń jest odświeżany (w milisekundach)",
+    "message": "Combien de fois la compte des pairs est actualisé (en millisecondes)",
     "description": "An option description on the Preferences screen"
   },
   "option_automaticMode_title": {
-    "message": "Tryb automatyczny",
+    "message": "Mode automatique",
     "description": "An option title on the Preferences screen"
   },
   "option_automaticMode_description": {
-    "message": "Przełącza między własną a publiczną bramą w zależności od dostępności IPFS API",
+    "message": "Activer\/désactiver utilisation de la passerelle personalisée lors de changements de disponibilité de CIP API",
     "description": "An option description on the Preferences screen"
   },
   "option_header_experiments": {
-    "message": "Eksperymenty",
+    "message": "Expérience",
     "description": "A section header on the Preferences screen"
   },
   "option_experiments_warning": {
-    "message": "Uwaga: poniższe opcje są nowe lub wciąż rozwijane. YMMV.",
+    "message": "ATTENTION : ces caractéristiques sont nouvelles ou en cours de développement. YMMV.",
     "description": "Warning about Experiments section on the Preferences screen"
   },
   "option_displayNotifications_title": {
-    "message": "Włącz powiadomienia",
+    "message": "Activer les Notifications",
     "description": "An option title on the Preferences screen"
   },
   "option_displayNotifications_description": {
-    "message": "Wyświetla powiadomienia systemowe podczas zmiany stanu API, kopiowania linków itp",
+    "message": "Affiche les notifications système lorsque API changements d’État, un lien est copié etc",
     "description": "An option description on the Preferences screen"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Przechwytuj nieobsłużone protokoły IPFS",
+    "message": "Attraper les erreurs non gérées par IPFS",
     "description": "An option title on the Preferences screen"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Włącza wsparcie dla ipfs:\/\/$cid, ipns:\/\/$peerid oraz dweb:\/ipfs\/$cid poprzez normalizację linków i żądań wykonanych tymi protokołami",
+    "message": "Active le support ipfs:\/\/$cid, ipns:\/\/$peerid et dweb:\/ipfs\/$cid en normalisant les liens et demandes faits avec des protocoles non gérées",
     "description": "An option description on the Preferences screen"
   },
   "option_linkify_title": {
-    "message": "\"Linkifikacja\" adresów IPFS",
+    "message": "Rendre un lien avec une adresse IPFS",
     "description": "An option title on the Preferences screen"
   },
   "option_linkify_description": {
-    "message": "Zamienia tekst zawierający ścieżki \/ipfs\/ w klikalne linki",
+    "message": "Transformer les chemins de \/ipfs\/ de texte brut en liens cliquables",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_title": {
-    "message": "Wsparcie DNSLINK",
+    "message": "Support de DNSLINK",
     "description": "An option title on the Preferences screen"
   },
   "option_dnslink_description": {
-    "message": "Odpytuje DNS o każdy odwiedzany host i używa własnej bramy jeśli DNSLINK jest obecny w rekordzie DNS TXT tego hosta (ta funkcja spowalnia działanie przeglądarki)",
+    "message": "Effectuer une recherche DNS pour tous les sites Web visité et utiliser la passerelle personalisée si DNSLINK est présent dans son dossier de TXT DNS (connu pour ralentir le navigateur)",
     "description": "An option description on the Preferences screen"
   },
   "option_resetAllOptions_title": {
-    "message": "Resetuj wszystko",
+    "message": "Tout supprimer",
     "description": "An option title and button label on the Preferences screen"
   },
   "option_resetAllOptions_description": {
-    "message": "Zastępuje wszystkie preferencje wartościami domyślnymi (nie można cofnąć!)",
+    "message": "Remplace les préférences utilisateur par défaut (ne peut être annulée !)",
     "description": "An option description on the Preferences screen"
   },
   "manifest_extensionName": {
-    "message": "Asystent IPFS",
+    "message": "Compagnon IPFS",
     "description": "Extension name in the Manifest file"
   },
   "manifest_shortExtensionName": {
-    "message": "Asystent IPFS",
+    "message": "Compagnon IPFS",
     "description": "Short extension name in the Manifest file"
   },
   "manifest_extensionDescription": {
-    "message": "Rozszerzenie przeglądarki ułatwiające dostęp do zasobów IPFS",
+    "message": "Extension de navigateur qui simplifie l’accès aux ressources de IPFS",
     "description": "Extension description in the Manifest file"
   }
 }

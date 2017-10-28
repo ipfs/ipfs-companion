@@ -18,6 +18,10 @@ See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for de
 
 Read section below to get familiar with tools and commands that will make your work easier.
 
+## Translations
+
+Submit PR with a new locale or improve existing ones via [Crowdin](https://crowdin.com/project/ipfs-companion).
+
 ## Development
 
 You will need [NodeJS](https://nodejs.org/) and [Firefox](https://www.mozilla.org/en-US/firefox/developer/). Make sure `npm` and `firefox` are in your `PATH`.

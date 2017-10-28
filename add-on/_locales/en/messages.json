@@ -1,165 +1,123 @@
 {
   "browserAction_title": {
-    "message": "IPFS Companion"
-  },
-  "useCustomGateway_title": {
-    "message": "Use Custom Gateway"
-  },
-  "useCustomGateway_description": {
-    "message": "When enabled, all requests to any of Public Gateways defined below will be sent to Custom Gateway instead."
-  },
-  "publicGatewayHosts_title": {
-    "message": "Public Gateways"
-  },
-  "publicGatewayHosts_description": {
-    "message": "List of public gateway hosts (space separated, first one is the default used for copying public URLs)"
-  },
-  "customGatewayHost_title": {
-    "message": "Custom Gateway Host"
-  },
-  "customGatewayHost_description": {
-    "message": "Most people want to use localhost (127.0.0.1)"
-  },
-  "customGatewayPort_title": {
-    "message": "Custom Gateway Port"
-  },
-  "customGatewayPort_description": {
-    "message": "HTTP2IPFS gateway service (e.g. local instance of go-ipfs)"
-  },
-  "customApiPort_title": {
-    "message": "IPFS API Port"
-  },
-  "customApiPort_description": {
-    "message": "Used for pinning (on the Gateway host)"
-  },
-  "apiPollInterval_title": {
-    "message": "API Poll Interval"
-  },
-  "apiPollInterval_description": {
-    "message": "How often peer connection number is updated from API (in miliseconds)"
-  },
-  "automatic_title": {
-    "message": "Automatic Mode"
-  },
-  "automatic_description": {
-    "message": "Automatically enable/disable redirect based on the peer count."
-  },
-  "automatic_up_notification_title": {
-    "message": "IPFS is Up"
-  },
-  "automatic_up_notification_text": {
-    "message": "Redirection of IPFS requests is enabled"
-  },
-  "automatic_down_notification_title": {
-    "message": "IPFS is Down"
-  },
-  "automatic_down_notification_text": {
-    "message": "Redirection of IPFS requests is disabled"
-  },
-  "dns_title": {
-    "message": "Enable DNS Lookup"
-  },
-  "dns_description": {
-    "message": "(EXPERIMENTAL) Check if domain contains DNS TXT record with dnslink to IPFS path and redirect to it"
-  },
-  "linkify_title": {
-    "message": "Extended IPFS Link Support"
-  },
-  "linkify_description": {
-    "message": "(EXPERIMENTAL) Rewrite links to /ip(f|n)s/* paths on every page to point to IPFS gateway. Make plaintext IPFS links clickable."
-  },
-  "fsUris_title": {
-    "message": "Keep fs: in the address bar"
-  },
-  "fsUris_description": {
-    "message": "(EXPERIMENTAL) display fs:/ URIs as-is instead of rewriting to http:// (may break JS on pages)"
+    "message": "IPFS Companion",
+    "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_statusGatewayRedirect": {
-    "message": "redirect"
+    "message": "redirect",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectEnabled": {
-    "message": "enabled"
+    "message": "enabled",
+    "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectDisabled": {
-    "message": "disabled"
+    "message": "disabled",
+    "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "gateway"
+    "message": "gateway",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
-    "message": "version"
+    "message": "version",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "swarm peers"
+    "message": "swarm peers",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
-    "message": "Quick Upload"
+    "message": "Quick Upload",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "Open WebUI"
+    "message": "Open WebUI",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
-    "message": "Open Preferences"
+    "message": "Open Preferences",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectEnable": {
-    "message": "Enable Gateway Redirect"
+    "message": "Enable Gateway Redirect",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "Disable Gateway Redirect"
+    "message": "Disable Gateway Redirect",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource"
+    "message": "Pin IPFS Resource",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Unpin IPFS Resource"
+    "message": "Unpin IPFS Resource",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy Canonical Address"
+    "message": "Copy Canonical Address",
+    "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Public Gateway URL"
+    "message": "Copy Public Gateway URL",
+    "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Upload to IPFS"
+    "message": "Upload to IPFS",
+    "description": "An item in right-click context menu"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS Add-on Issue"
+    "message": "IPFS Add-on Issue",
+    "description": "A title of system notification"
   },
   "notify_addonIssueMsg": {
-    "message": "See Browser Console for more details"
+    "message": "See Browser Console for more details",
+    "description": "A message in system notification"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Copied Public URL"
+    "message": "Copied Public URL",
+    "description": "A title of system notification"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Copied Canonical Address"
+    "message": "Copied Canonical Address",
+    "description": "A title of system notification"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "Pinned IPFS Resource"
+    "message": "IPFS Resource is now pinned",
+    "description": "A title of system notification"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Removed IPFS Pin"
+    "message": "Removed IPFS Pin",
+    "description": "A title of system notification"
   },
   "notify_pinErrorTitle": {
-    "message": "Error while pinning"
+    "message": "Error while pinning IPFS Resource",
+    "description": "A title of system notification"
   },
   "notify_unpinErrorTitle": {
-    "message": "Error while removing pin"
+    "message": "Error while removing IPFS Pin",
+    "description": "A title of system notification"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API is Online"
+    "message": "IPFS API is Online",
+    "description": "A title of system notification"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatic Mode: Custom Gateway Redirect is active"
+    "message": "Automatic Mode: Custom Gateway Redirect is active",
+    "description": "A message in system notification"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API is Offline"
+    "message": "IPFS API is Offline",
+    "description": "A title of system notification"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatic Mode: Public Gateway will be used as a fallback"
+    "message": "Automatic Mode: Public Gateway will be used as a fallback",
+    "description": "A message in system notification"
   },
   "notify_uploadErrorTitle": {
-    "message": "Unable to upload via IPFS API"
+    "message": "Unable to upload via IPFS API",
+    "description": "A title of system notification"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
     "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)"
@@ -167,17 +125,135 @@
   "notify_inlineMsg": {
     "message": "$MSG$",
     "placeholders": {
-        "msg": {
-          "content": "$1"
-        }
-    }
+      "msg": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for notification message, leave as-is"
   },
   "notify_inlineErrorMsg": {
     "message": "$ERROR$ (press ctrl+shift+j for more details)",
     "placeholders": {
-        "error": {
-          "content": "$1"
-        }
-    }
+      "error": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for error notification"
+  },
+  "option_header_gateways": {
+    "message": "Gateways",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_customGatewayUrl_title": {
+    "message": "Custom Local Gateway",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_customGatewayUrl_description": {
+    "message": "URL of preferred HTTP2IPFS Gateway",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_useCustomGateway_title": {
+    "message": "Use Custom Gateway",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_useCustomGateway_description": {
+    "message": "Redirect requests for IPFS resources to the Custom gateway",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_publicGatewayUrl_title": {
+    "message": "Default Public Gateway",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_publicGatewayUrl_description": {
+    "message": "Fallback URL used when Custom Gateway is not available and for copying shareable links",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_header_api": {
+    "message": "API",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_ipfsApiUrl_title": {
+    "message": "IPFS API URL",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsApiUrl_description": {
+    "message": "Hint: this is where /webui lives",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_ipfsApiPollMs_title": {
+    "message": "Status Poll Interval",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsApiPollMs_description": {
+    "message": "How often peer count is refreshed (in miliseconds)",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_automaticMode_title": {
+    "message": "Automatic Mode",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_automaticMode_description": {
+    "message": "Toggle use of Custom Gateway when IPFS API availability changes",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_header_experiments": {
+    "message": "Experiments",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_experiments_warning": {
+    "message": "Be warned: these features are new or work-in-progress. YMMV.",
+    "description": "Warning about Experiments section on the Preferences screen"
+  },
+  "option_displayNotifications_title": {
+    "message": "Enable Notifications",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_displayNotifications_description": {
+    "message": "Displays system notifications when API state changes, a link is copied etc",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_catchUnhandledProtocols_title": {
+    "message": "Catch Unhandled IPFS Protocols",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_catchUnhandledProtocols_description": {
+    "message": "Enables support for ipfs://$cid, ipns://$peerid and dweb:/ipfs/$cid by normalizing links and requests done with unhandled protocols",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_linkify_title": {
+    "message": "Linkify IPFS Addresses",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_linkify_description": {
+    "message": "Turn plaintext /ipfs/ paths into clickable links",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_dnslink_title": {
+    "message": "DNSLINK Support",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_dnslink_description": {
+    "message": "Perform DNS lookup for every visited website and use Custom Gateway if DNSLINK is present in its DNS TXT record (known to slow down the browser)",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_resetAllOptions_title": {
+    "message": "Reset Everything",
+    "description": "An option title and button label on the Preferences screen"
+  },
+  "option_resetAllOptions_description": {
+    "message": "Replaces user preferences with default ones (can't be undone!)",
+    "description": "An option description on the Preferences screen"
+  },
+  "manifest_extensionName": {
+    "message": "IPFS Companion",
+    "description": "Extension name in the Manifest file"
+  },
+  "manifest_shortExtensionName": {
+    "message": "IPFS Companion",
+    "description": "Short extension name in the Manifest file"
+  },
+  "manifest_extensionDescription": {
+    "message": "Browser extension that simplifies access to IPFS resources",
+    "description": "Extension description in the Manifest file"
   }
 }
