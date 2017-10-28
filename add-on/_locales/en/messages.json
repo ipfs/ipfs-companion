@@ -84,7 +84,7 @@
     "description": "A title of system notification"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "Pinned IPFS Resource",
+    "message": "IPFS Resource is now pinned",
     "description": "A title of system notification"
   },
   "notify_unpinnedIpfsResourceTitle": {
@@ -92,11 +92,11 @@
     "description": "A title of system notification"
   },
   "notify_pinErrorTitle": {
-    "message": "Error while pinning",
+    "message": "Error while pinning IPFS Resource",
     "description": "A title of system notification"
   },
   "notify_unpinErrorTitle": {
-    "message": "Error while removing pin",
+    "message": "Error while removing IPFS Pin",
     "description": "A title of system notification"
   },
   "notify_apiOnlineTitle": {
@@ -157,7 +157,7 @@
     "description": "An option title on the Preferences screen"
   },
   "option_useCustomGateway_description": {
-    "message": "Redirect requests made to Public gateways to the Custom gateway",
+    "message": "Redirect requests for IPFS resources to the Custom gateway",
     "description": "An option description on the Preferences screen"
   },
   "option_publicGatewayUrl_title": {

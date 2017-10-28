@@ -1,93 +1,123 @@
 {
   "browserAction_title": {
-    "message": "IPFS 伴侣"
+    "message": "IPFS 伙伴",
+    "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_statusGatewayRedirect": {
-    "message": "重定向"
+    "message": "重定向",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectEnabled": {
-    "message": "已启用"
+    "message": "已启用",
+    "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectDisabled": {
-    "message": "已禁用"
+    "message": "已禁用",
+    "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "网关"
+    "message": "网关",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
-    "message": "版本"
+    "message": "版本",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "群集对等端"
+    "message": "群集对等端",
+    "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
-    "message": "快速上传"
+    "message": "快速上传",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "打开 WebUI"
+    "message": "打开 WebUI",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
-    "message": "打开选项"
+    "message": "打开选项",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectEnable": {
-    "message": "启用网关重定向"
+    "message": "启用网关重定向",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "禁用网关重定向"
+    "message": "禁用网关重定向",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "固定 IPFS 资源"
+    "message": "固定 IPFS 资源",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "解除固定 IPFS 资源"
+    "message": "解除固定 IPFS 资源",
+    "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "复制规范地址"
+    "message": "复制规范地址",
+    "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "复制公共网关网址"
+    "message": "复制公共网关网址",
+    "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "上传到 IPFS"
+    "message": "上传到 IPFS",
+    "description": "An item in right-click context menu"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS 附加组件问题报告"
+    "message": "IPFS 附加组件问题报告",
+    "description": "A title of system notification"
   },
   "notify_addonIssueMsg": {
-    "message": "具体细节请参阅“浏览器控制台”"
+    "message": "具体细节请参阅“浏览器控制台”",
+    "description": "A message in system notification"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "已复制公共网关网址"
+    "message": "已复制公共网关网址",
+    "description": "A title of system notification"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "已复制规范地址"
+    "message": "已复制规范地址",
+    "description": "A title of system notification"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "已固定 IPFS 资源"
+    "message": "已固定 IPFS 资源",
+    "description": "A title of system notification"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "已解除 IPFS 固定"
+    "message": "已解除 IPFS 固定",
+    "description": "A title of system notification"
   },
   "notify_pinErrorTitle": {
-    "message": "固定时出错"
+    "message": "固定时出错",
+    "description": "A title of system notification"
   },
   "notify_unpinErrorTitle": {
-    "message": "解除固定时出错"
+    "message": "解除固定时出错",
+    "description": "A title of system notification"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API 在线"
+    "message": "IPFS API 在线",
+    "description": "A title of system notification"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "自动模式：自定义网关重定向已激活"
+    "message": "自动模式：自定义网关重定向已激活",
+    "description": "A message in system notification"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API 离线"
+    "message": "IPFS API 离线",
+    "description": "A title of system notification"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "自动模式：公共网关将作为后备方案"
+    "message": "自动模式：公共网关将作为后备方案",
+    "description": "A message in system notification"
   },
   "notify_uploadErrorTitle": {
-    "message": "无法通过 IPFS API 上传"
+    "message": "无法通过 IPFS API 上传",
+    "description": "A title of system notification"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
     "message": "请尝试禁用“跟踪保护”（详细信息请见 ctrl+shift+j）"
@@ -95,17 +125,135 @@
   "notify_inlineMsg": {
     "message": "$MSG$",
     "placeholders": {
-        "msg": {
-          "content": "$1"
-        }
-    }
+      "msg": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for notification message, leave as-is"
   },
   "notify_inlineErrorMsg": {
     "message": "$ERROR$（详细信息请见 ctrl+shift+j）",
     "placeholders": {
-        "error": {
-          "content": "$1"
-        }
-    }
+      "error": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for error notification"
+  },
+  "option_header_gateways": {
+    "message": "网关",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_customGatewayUrl_title": {
+    "message": "自定义本地网关",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_customGatewayUrl_description": {
+    "message": "首选的HTTP2IPFS网关地址（URL）",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_useCustomGateway_title": {
+    "message": "使用自定义网关",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_useCustomGateway_description": {
+    "message": "公共网关重定向至自定义网关",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_publicGatewayUrl_title": {
+    "message": "默认公共网关",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_publicGatewayUrl_description": {
+    "message": "自定义网关不可用或复制共享连接时回退URL",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_header_api": {
+    "message": "API",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_ipfsApiUrl_title": {
+    "message": "IPFS API链接",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsApiUrl_description": {
+    "message": "提示：\/webui 可用",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_ipfsApiPollMs_title": {
+    "message": "轮询间隔状态",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsApiPollMs_description": {
+    "message": "节点计数的刷新频率(毫秒级)",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_automaticMode_title": {
+    "message": "自动模式",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_automaticMode_description": {
+    "message": "当API可用性发生变化时，切换使用自定义网关",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_header_experiments": {
+    "message": "试验",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_experiments_warning": {
+    "message": "警告：这些功能正在完善当中。YMMV",
+    "description": "Warning about Experiments section on the Preferences screen"
+  },
+  "option_displayNotifications_title": {
+    "message": "启用通知",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_displayNotifications_description": {
+    "message": "当API状态改变或链接被复制时显示系统通知",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_catchUnhandledProtocols_title": {
+    "message": "捕获未处理的IPFS协议",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_catchUnhandledProtocols_description": {
+    "message": "通过规范未经处理的协议的链接和请求来启用 ipfs:\/\/$cid， ipns:\/\/$peerid， dweb:\/ipfs\/$cid",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_linkify_title": {
+    "message": "IPFS地址转成链接",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_linkify_description": {
+    "message": "将\/ipfs\/路径转换成可点击链接",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_dnslink_title": {
+    "message": "支持DNS链接",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_dnslink_description": {
+    "message": "如果DNS记录中存在DNSLINK，则为每个访问过的站点执行DNS查询并使用自定义网关（会降低访问速度）",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_resetAllOptions_title": {
+    "message": "全部重置",
+    "description": "An option title and button label on the Preferences screen"
+  },
+  "option_resetAllOptions_description": {
+    "message": "将用户配置替换为默认值(不可撤销！)",
+    "description": "An option description on the Preferences screen"
+  },
+  "manifest_extensionName": {
+    "message": "IPFS 伴侣",
+    "description": "Extension name in the Manifest file"
+  },
+  "manifest_shortExtensionName": {
+    "message": "IPFS 伴侣",
+    "description": "Short extension name in the Manifest file"
+  },
+  "manifest_extensionDescription": {
+    "message": "简化IPFS资源访问的浏览器扩展",
+    "description": "Extension description in the Manifest file"
   }
 }

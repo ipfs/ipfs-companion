@@ -1,126 +1,126 @@
 {
   "browserAction_title": {
-    "message": "Asystent IPFS",
+    "message": "IPFS Begleiter",
     "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_statusGatewayRedirect": {
-    "message": "przekierowanie",
+    "message": "Weiterleitung",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectEnabled": {
-    "message": "włączone",
+    "message": "aktiviert",
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectDisabled": {
-    "message": "wyłączone",
+    "message": "deaktiviert",
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "brama",
+    "message": "Gateway",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
-    "message": "wersja",
+    "message": "Version",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "połączenia",
+    "message": "Schwarmpeers",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
-    "message": "Opublikuj plik",
+    "message": "Schnell-Upload",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "Otwórz WebUI",
+    "message": "WebUI öffnen",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
-    "message": "Otwórz preferencje",
+    "message": "Einstellungen öffnen",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectEnable": {
-    "message": "Włącz przekierowanie",
+    "message": "Gateway-Weiterleitung aktivieren",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "Wyłącz przekierowanie",
+    "message": "Gateway-Weiterleitung deaktivieren",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Przypnij zasób IPFS",
+    "message": "IPFS-Ressource anpinnen",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Odepnij zasób IPFS",
+    "message": "IPFS-Ressource abpinnen",
     "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Skopiuj kanoniczny adres",
+    "message": "Kanonische Adresse kopieren",
     "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Skopiuj URL do publicznej bramy",
+    "message": "Öffentliche Gateway-URL kopieren",
     "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Wyślij do IPFS",
+    "message": "Auf IPFS hochladen",
     "description": "An item in right-click context menu"
   },
   "notify_addonIssueTitle": {
-    "message": "Problem z Asystentem IPFS",
+    "message": "IPFS Add-on-Problem",
     "description": "A title of system notification"
   },
   "notify_addonIssueMsg": {
-    "message": "Otwórz Konsolę Przeglądarki aby zobaczyć szczegóły",
+    "message": "Weitere Informationen finden Sie in der Browser-Konsole",
     "description": "A message in system notification"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Skopiowano publiczny URL",
+    "message": "Kopierte öffentliche URL",
     "description": "A title of system notification"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Skopiowano kanoniczny adres",
+    "message": "Kopierte kanonische Adresse",
     "description": "A title of system notification"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "Przypięto wskazany zasób IPFS",
+    "message": "IPFS-Ressource wurde angepinnt",
     "description": "A title of system notification"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Odpięto wskazany zasób IPFS",
+    "message": "IPFS-Pin wurde entfernt",
     "description": "A title of system notification"
   },
   "notify_pinErrorTitle": {
-    "message": "Błąd podczas przypinania zasobu IPFS",
+    "message": "Fehler beim Anpinnen der IPFS-Ressource",
     "description": "A title of system notification"
   },
   "notify_unpinErrorTitle": {
-    "message": "Błąd podczas odpinania zasobu IPFS",
+    "message": "Fehler beim Entfernen des IPFS-Pin",
     "description": "A title of system notification"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS: nawiązano połączenie z API",
+    "message": "IPFS API ist online",
     "description": "A title of system notification"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Tryb automatyczny: przekierowanie do alternatywnej bramy jest aktywne",
+    "message": "Automatischer Modus: Benutzerdefinierte Gateway-Weiterleitung ist aktiv",
     "description": "A message in system notification"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS: utracono połączenie z API",
+    "message": "IPFS API ist offline",
     "description": "A title of system notification"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Tryb automatyczny: awaryjne przekierowanie do publicznej bramy",
+    "message": "Automatischer Modus: Öffentliches Gateway wird als Fallback verwendet",
     "description": "A message in system notification"
   },
   "notify_uploadErrorTitle": {
-    "message": "Nie udało się wysłać poprzez API IPFS",
+    "message": "Upload via IPFS API funktioniert nicht",
     "description": "A title of system notification"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Spróbuj wyłączyć \"Ochronę przed śledzeniem\" (wciśnij ctrl+shift+j po więcej szczegółów)"
+    "message": "Tracking-Schutz deaktivieren (Strg + Umschalt + j für mehr Informationen)"
   },
   "notify_inlineMsg": {
     "message": "$MSG$",
@@ -132,7 +132,7 @@
     "description": "A generic placeholder for notification message, leave as-is"
   },
   "notify_inlineErrorMsg": {
-    "message": "$ERROR$ (wciśnij ctrl+shift+j po więcej informacji)",
+    "message": "$ERROR$ (Strg + Umschalt + j für mehr Informationen)",
     "placeholders": {
       "error": {
         "content": "$1"
@@ -141,31 +141,31 @@
     "description": "A generic placeholder for error notification"
   },
   "option_header_gateways": {
-    "message": "Bramy",
+    "message": "Gateways",
     "description": "A section header on the Preferences screen"
   },
   "option_customGatewayUrl_title": {
-    "message": "Własna lokalna brama",
+    "message": "Benutzerdefiniertes lokales Gateway",
     "description": "An option title on the Preferences screen"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL preferowanej bramy HTTP",
+    "message": "URL des bevorzugten HTTP2IPFS Gateways",
     "description": "An option description on the Preferences screen"
   },
   "option_useCustomGateway_title": {
-    "message": "Użyj własnej bramy",
+    "message": "Benutzerdefiniertes Gateway verwenden",
     "description": "An option title on the Preferences screen"
   },
   "option_useCustomGateway_description": {
-    "message": "Przekieruj żądania o zasoby IPFS do własnej lokalnej bramy",
+    "message": "Anfragen an öffentliche Gateways an das benutzerdefinierte Gateway weiterleiten",
     "description": "An option description on the Preferences screen"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Domyślna brama publiczna",
+    "message": "Öffentliches Standardgateway",
     "description": "An option title on the Preferences screen"
   },
   "option_publicGatewayUrl_description": {
-    "message": "URL zapasowej bramy, który będzie również używany przy kopiowaniu publicznych linków",
+    "message": "Fallback-URL verwenden, wenn benutzerdefiniertes Gateway nicht verfügbar ist und für das Kopieren von teilbaren Links",
     "description": "An option description on the Preferences screen"
   },
   "option_header_api": {
@@ -177,83 +177,83 @@
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Wskazówka: adres który udostępnia \/webui",
+    "message": "Hinweis: hier befindet sich \/webui",
     "description": "An option description on the Preferences screen"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Odświeżanie statusu",
+    "message": "Statusabrufintervall",
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Jak często licznik połączeń jest odświeżany (w milisekundach)",
+    "message": "Aktualisierungsfrequenz der Anzahl Nachbarn (in Millisekunden)",
     "description": "An option description on the Preferences screen"
   },
   "option_automaticMode_title": {
-    "message": "Tryb automatyczny",
+    "message": "Automatischer Modus",
     "description": "An option title on the Preferences screen"
   },
   "option_automaticMode_description": {
-    "message": "Przełącza między własną a publiczną bramą w zależności od dostępności IPFS API",
+    "message": "Verwendung von benutzerdefinierten Gateways wechseln, wenn sich die IPFS API-Verfügbarkeit ändert",
     "description": "An option description on the Preferences screen"
   },
   "option_header_experiments": {
-    "message": "Eksperymenty",
+    "message": "Experimente",
     "description": "A section header on the Preferences screen"
   },
   "option_experiments_warning": {
-    "message": "Uwaga: poniższe opcje są nowe lub wciąż rozwijane. YMMV.",
+    "message": "ACHTUNG: diese Funktionen sind neu oder befinden sich noch in der Entwicklung. \"YMMV\"",
     "description": "Warning about Experiments section on the Preferences screen"
   },
   "option_displayNotifications_title": {
-    "message": "Włącz powiadomienia",
+    "message": "Benachrichtigungen aktivieren",
     "description": "An option title on the Preferences screen"
   },
   "option_displayNotifications_description": {
-    "message": "Wyświetla powiadomienia systemowe podczas zmiany stanu API, kopiowania linków itp",
+    "message": "Zeigt Systembenachrichtigungen an, wenn sich die API ändert, ein Link kopiert wird usw.",
     "description": "An option description on the Preferences screen"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Przechwytuj nieobsłużone protokoły IPFS",
+    "message": "Nicht aktive IPFS Protokolle entgegennehmen",
     "description": "An option title on the Preferences screen"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Włącza wsparcie dla ipfs:\/\/$cid, ipns:\/\/$peerid oraz dweb:\/ipfs\/$cid poprzez normalizację linków i żądań wykonanych tymi protokołami",
+    "message": "Ermöglicht die Unterstützung für ipfs:\/\/$cid, ipns:\/\/$peerid und dweb:\/ipfs\/$cid durch die Normalisierung der Links und Anfragen durch nicht aktive Protokolle",
     "description": "An option description on the Preferences screen"
   },
   "option_linkify_title": {
-    "message": "\"Linkifikacja\" adresów IPFS",
+    "message": "Linkify IPFS Adressen",
     "description": "An option title on the Preferences screen"
   },
   "option_linkify_description": {
-    "message": "Zamienia tekst zawierający ścieżki \/ipfs\/ w klikalne linki",
+    "message": "Unkodierte \/ipfs\/ Pfade in anklickbare Links umwandeln",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_title": {
-    "message": "Wsparcie DNSLINK",
+    "message": "DNSLINK Unterstützung",
     "description": "An option title on the Preferences screen"
   },
   "option_dnslink_description": {
-    "message": "Odpytuje DNS o każdy odwiedzany host i używa własnej bramy jeśli DNSLINK jest obecny w rekordzie DNS TXT tego hosta (ta funkcja spowalnia działanie przeglądarki)",
+    "message": "DNS-Lookup für jede besuchte Website durchführen und benutzerdefinierte Gateways benutzen, wenn DNSLINK im DNS-TXT-Datensatz hinterlegt ist (verlangsamt wahrscheinlich den Browser)",
     "description": "An option description on the Preferences screen"
   },
   "option_resetAllOptions_title": {
-    "message": "Resetuj wszystko",
+    "message": "Alle Einstellungen zurücksetzen",
     "description": "An option title and button label on the Preferences screen"
   },
   "option_resetAllOptions_description": {
-    "message": "Zastępuje wszystkie preferencje wartościami domyślnymi (nie można cofnąć!)",
+    "message": "Ersetzt alle Benutzereinstellungen mit der Standardkonfiguration (kann nicht rückgängig gemacht werden!)",
     "description": "An option description on the Preferences screen"
   },
   "manifest_extensionName": {
-    "message": "Asystent IPFS",
+    "message": "IPFS Begleiter",
     "description": "Extension name in the Manifest file"
   },
   "manifest_shortExtensionName": {
-    "message": "Asystent IPFS",
+    "message": "IPFS Begleiter",
     "description": "Short extension name in the Manifest file"
   },
   "manifest_extensionDescription": {
-    "message": "Rozszerzenie przeglądarki ułatwiające dostęp do zasobów IPFS",
+    "message": "Browser-Erweiterung, die den Zugriff auf IPFS-Ressourcen vereinfacht",
     "description": "Extension description in the Manifest file"
   }
 }
