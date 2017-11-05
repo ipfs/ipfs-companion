@@ -67,6 +67,10 @@
     "message": "Upload to IPFS",
     "description": "An item in right-click context menu"
   },
+  "contextMenu_createShortUrl": {
+    "message": "Create Short URL (Experimental)",
+    "description": "An item in right-click context menu"
+  },
   "notify_addonIssueTitle": {
     "message": "IPFS Add-on Issue",
     "description": "A title of system notification"
@@ -231,6 +235,14 @@
   "option_dnslink_title": {
     "message": "DNSLINK Support",
     "description": "An option title on the Preferences screen"
+  },
+  "option_preloadAtPublicGateway_title": {
+    "message": "Preload Uploads",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_preloadAtPublicGateway_description": {
+    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "description": "An option description on the Preferences screen"
   },
   "option_dnslink_description": {
     "message": "Perform DNS lookup for every visited website and use Custom Gateway if DNSLINK is present in its DNS TXT record (known to slow down the browser)",

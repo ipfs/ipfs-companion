@@ -41,6 +41,7 @@ function initStates (options) {
   state.automaticMode = options.automaticMode
   state.linkify = options.linkify
   state.dnslink = options.dnslink
+  state.preloadAtPublicGateway = options.preloadAtPublicGateway
   state.catchUnhandledProtocols = options.catchUnhandledProtocols
   state.displayNotifications = options.displayNotifications
   state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
@@ -152,6 +153,10 @@ function onBeforeRequest (request) {
 
   // handle redirects to custom gateway
   if (state.redirect) {
+    // Ignore preload requests
+    if (request.method === 'HEAD' && state.preloadAtPublicGateway && request.url.startsWith(state.pubGwURLString)) {
+      return
+    }
     // Detect valid /ipfs/ and /ipns/ on any site
     if (publicIpfsOrIpnsResource(request.url)) {
       return redirectToCustomGateway(request.url)
@@ -388,6 +393,7 @@ function notify (titleKey, messageKey, messageParam) {
 // contextMenus
 // -------------------------------------------------------------------
 const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
+const contextMenuCreateShortUrl = 'contextMenu_createShortUrl'
 const contextMenuCopyIpfsAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyPublicGwUrl = 'panel_copyCurrentPublicGwUrl'
 
@@ -395,6 +401,7 @@ browser.contextMenus.create({
   id: contextMenuUploadToIpfs,
   title: browser.i18n.getMessage(contextMenuUploadToIpfs),
   contexts: ['image', 'video', 'audio'],
+  documentUrlPatterns: ['<all_urls>'],
   enabled: false,
   onclick: addFromURL
 })
@@ -412,12 +419,88 @@ browser.contextMenus.create({
   documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
   onclick: copyAddressAtPublicGw
 })
+browser.contextMenus.create({
+  id: contextMenuCreateShortUrl,
+  title: browser.i18n.getMessage(contextMenuCreateShortUrl),
+  contexts: ['page', 'image', 'video', 'audio', 'link'],
+  documentUrlPatterns: ['<all_urls>'],
+  enabled: false,
+  onclick: copyShortAddressAtPublicGw
+})
 
 function inFirefox () {
   return !!navigator.userAgent.match('Firefox')
 }
 
+// URL Shortener
+// -------------------------------------------------------------------
+
+async function copyShortAddressAtPublicGw (info) {
+  let longUrl = await findUrlForContext(info)
+  if (longUrl.startsWith(state.gwURLString)) {
+    // normalize local URL to point at the public GW
+    const rawIpfsAddress = longUrl.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
+    longUrl = urlAtPublicGw(rawIpfsAddress)
+  }
+  const redirectHtml = `<!DOCTYPE html>
+    <head>
+    <meta charset="UTF-8">
+    <noscript><meta http-equiv='refresh' content='0; URL=${longUrl}' /></noscript>
+    <title>${longUrl}</title>
+    </head>
+    <body onload='window.location.replace("${longUrl}")'>
+    Redirecting to <a href='${longUrl}'>${longUrl}</a>
+    `
+  // console.log('html for redirect', redirectHtml)
+  const buffer = ipfs.Buffer.from(redirectHtml, 'utf-8')
+  const opts = {hash: 'murmur3'}
+  console.log('[ipfs-companion] shortening URL to a MurmurHash3', longUrl)
+  ipfs.add(buffer, opts, urlShorteningResultHandler)
+}
+
+function urlShorteningResultHandler (err, result) {
+  if (err || !result) {
+    console.error('ipfs add error', err, result)
+    notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err}`)
+    return
+  }
+  result.forEach(function (file) {
+    if (file && file.hash) {
+      const path = `/ipfs/${file.hash}`
+      const shortUrlAtPubGw = urlAtPublicGw(path)
+      copyTextToClipboard(shortUrlAtPubGw)
+      notify('notify_copiedPublicURLTitle', shortUrlAtPubGw)
+      if (state.preloadAtPublicGateway) {
+        preloadAtPublicGateway(path)
+      }
+    }
+  })
+}
+
+function preloadAtPublicGateway (path) {
+  // asynchronous HTTP HEAD request preloads triggers content without downloading it
+  return new Promise((resolve, reject) => {
+    const http = new XMLHttpRequest()
+    http.open('HEAD', urlAtPublicGw(path))
+    http.onreadystatechange = function () {
+      if (this.readyState === this.DONE) {
+        console.log(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)
+        if (this.status === 200) {
+          resolve(this.statusText)
+        } else {
+          reject(new Error(this.statusText))
+        }
+      }
+    }
+    http.send()
+  })
+}
+
+// URL Uploader
+// -------------------------------------------------------------------
+
 async function addFromURL (info) {
+  const srcUrl = await findUrlForContext(info)
   try {
     if (inFirefox()) {
       // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
@@ -427,7 +510,7 @@ async function addFromURL (info) {
       }
       // console.log('addFromURL.info', info)
       // console.log('addFromURL.fetchOptions', fetchOptions)
-      const response = await fetch(info.srcUrl, fetchOptions)
+      const response = await fetch(srcUrl, fetchOptions)
       const reader = new FileReader()
       reader.onloadend = () => {
         const buffer = ipfs.Buffer.from(reader.result)
@@ -435,7 +518,7 @@ async function addFromURL (info) {
       }
       reader.readAsArrayBuffer(await response.blob())
     } else {
-      ipfs.util.addFromURL(info.srcUrl, uploadResultHandler)
+      ipfs.util.addFromURL(srcUrl, uploadResultHandler)
     }
   } catch (error) {
     console.error(`Error for ${contextMenuUploadToIpfs}`, error)
@@ -459,13 +542,20 @@ function uploadResultHandler (err, result) {
   }
   result.forEach(function (file) {
     if (file && file.hash) {
+      const path = `/ipfs/${file.hash}`
       browser.tabs.create({
-        'url': new URL(state.gwURLString + '/ipfs/' + file.hash).toString()
+        'url': new URL(state.gwURLString + path).toString()
       })
-      console.log('successfully stored', file.hash)
+      console.log('successfully stored', path)
+      if (state.preloadAtPublicGateway) {
+        preloadAtPublicGateway(path)
+      }
     }
   })
 }
+
+// Copying URLs
+// -------------------------------------------------------------------
 
 async function findUrlForContext (context) {
   if (context) {
@@ -533,6 +623,7 @@ async function copyTextToClipboard (copyText) {
 
 async function updateContextMenus (changedTabId) {
   await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
+  await browser.contextMenus.update(contextMenuCreateShortUrl, {enabled: state.peerCount > 0})
   if (changedTabId) {
     // recalculate tab-dependant menu items
     const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
@@ -807,6 +898,8 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
         state.automaticMode = change.newValue
       } else if (key === 'dnslink') {
         state.dnslink = change.newValue
+      } else if (key === 'preloadAtPublicGateway') {
+        state.preloadAtPublicGateway = change.newValue
       }
     }
   }

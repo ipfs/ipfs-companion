@@ -7,6 +7,7 @@ const optionDefaults = Object.freeze({ // eslint-disable-line no-unused-vars
   automaticMode: true,
   linkify: false,
   dnslink: false,
+  preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
   customGatewayUrl: 'http://127.0.0.1:8080',
