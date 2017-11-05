@@ -24,7 +24,7 @@
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "swarm peers",
+    "message": "nodi connessi",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
@@ -48,11 +48,11 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Mantieni Risorsa IPFS",
+    "message": "Fissa Risorsa IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Smetti di mantenere la risorsa IPFS",
+    "message": "Rimuovi la risorsa IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
