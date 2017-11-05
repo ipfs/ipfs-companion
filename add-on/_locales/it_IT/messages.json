@@ -1,126 +1,126 @@
 {
   "browserAction_title": {
-    "message": "IPFS Begleiter",
+    "message": "IPFS Companion",
     "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_statusGatewayRedirect": {
-    "message": "Weiterleitung",
+    "message": "reindirizza",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectEnabled": {
-    "message": "aktiviert",
+    "message": "attivo",
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectDisabled": {
-    "message": "deaktiviert",
+    "message": "disattivato",
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "Gateway",
+    "message": "gateway",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
-    "message": "Version",
+    "message": "versione",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "Schwarmpeers",
+    "message": "nodi connessi",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
-    "message": "Schnell-Upload",
+    "message": "Upload veloce",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "WebUI öffnen",
+    "message": "Apri WebUI",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
-    "message": "Einstellungen öffnen",
+    "message": "Apri Preferenze",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectEnable": {
-    "message": "Gateway-Weiterleitung aktivieren",
+    "message": "Abilita il reindirizzamento al gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "Gateway-Weiterleitung deaktivieren",
+    "message": "Disabilita il reindirizzamento al gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "IPFS-Ressource anpinnen",
+    "message": "Fissa Risorsa IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "IPFS-Ressource abpinnen",
+    "message": "Rimuovi la risorsa IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Kanonische Adresse kopieren",
+    "message": "Copia indirizzo canonico",
     "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Öffentliche Gateway-URL kopieren",
+    "message": "Copia l'URL del Gateway Pubblico",
     "description": "A menu item in Browser Action pop-up and right-click context menu"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Auf IPFS hochladen",
+    "message": "Carica su IPFS",
     "description": "An item in right-click context menu"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS Add-on-Problem",
+    "message": "IPFS add-on issue",
     "description": "A title of system notification"
   },
   "notify_addonIssueMsg": {
-    "message": "Weitere Informationen finden Sie in der Browser-Konsole",
+    "message": "Apri la console del browser per maggiori dettagli",
     "description": "A message in system notification"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Kopierte öffentliche URL",
+    "message": "URL pubblico copiato",
     "description": "A title of system notification"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Kopierte kanonische Adresse",
+    "message": "Indirizzo canonico copiato",
     "description": "A title of system notification"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS-Ressource wurde angepinnt",
+    "message": "La Risorsa IPFS è ora mantenuta",
     "description": "A title of system notification"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "IPFS-Pin wurde entfernt",
+    "message": "La risorsa IPFS non sara piu mantenuta",
     "description": "A title of system notification"
   },
   "notify_pinErrorTitle": {
-    "message": "Fehler beim Anpinnen der IPFS-Ressource",
+    "message": "Errore mentre mantenevo la risorsa IPFS",
     "description": "A title of system notification"
   },
   "notify_unpinErrorTitle": {
-    "message": "Fehler beim Entfernen des IPFS-Pin",
+    "message": "Errore mentre rimuovevo il mantenimento della risorsa IPFS",
     "description": "A title of system notification"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API ist online",
+    "message": "Le API di IPFS sono Online",
     "description": "A title of system notification"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatischer Modus: Benutzerdefinierte Gateway-Weiterleitung ist aktiv",
+    "message": "Modalità automatica: Il reindirizzamento ad un Gateway personalizzato è attivo",
     "description": "A message in system notification"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API ist offline",
+    "message": "Le API di IPFS sono Offline",
     "description": "A title of system notification"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatischer Modus: Öffentliches Gateway wird als Fallback verwendet",
+    "message": "Modalità automatica: Il Gateway pubblico verrà utilizzato come un fallback",
     "description": "A message in system notification"
   },
   "notify_uploadErrorTitle": {
-    "message": "Upload via IPFS API funktioniert nicht",
+    "message": "Impossibile caricare tramite le API di IPFS",
     "description": "A title of system notification"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Tracking-Schutz deaktivieren (Strg + Umschalt + j für mehr Informationen)"
+    "message": "Prova a disattivare la protezione del monitoraggio (premere ctrl\/cmd + shift + j per maggiori dettagli)"
   },
   "notify_inlineMsg": {
     "message": "$MSG$",
@@ -132,7 +132,7 @@
     "description": "A generic placeholder for notification message, leave as-is"
   },
   "notify_inlineErrorMsg": {
-    "message": "$ERROR$ (Strg + Umschalt + j für mehr Informationen)",
+    "message": "$ERROR$ (premi ctrl\/cmd + shift + j per maggiori dettagli)",
     "placeholders": {
       "error": {
         "content": "$1"
@@ -145,27 +145,27 @@
     "description": "A section header on the Preferences screen"
   },
   "option_customGatewayUrl_title": {
-    "message": "Benutzerdefiniertes lokales Gateway",
+    "message": "Gateway locale personalizzato",
     "description": "An option title on the Preferences screen"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL des bevorzugten HTTP2IPFS Gateways",
+    "message": "URL del preferito Gateway HTTP2IPFS",
     "description": "An option description on the Preferences screen"
   },
   "option_useCustomGateway_title": {
-    "message": "Benutzerdefiniertes Gateway verwenden",
+    "message": "Usa un Gateway personalizzato",
     "description": "An option title on the Preferences screen"
   },
   "option_useCustomGateway_description": {
-    "message": "Anfragen an öffentliche Gateways an das benutzerdefinierte Gateway weiterleiten",
+    "message": "Reindirizza le richieste per risorse IPFS al Gateway Personalizzato",
     "description": "An option description on the Preferences screen"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Öffentliches Standardgateway",
+    "message": "Default Gateway pubblico",
     "description": "An option title on the Preferences screen"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Fallback-URL verwenden, wenn benutzerdefiniertes Gateway nicht verfügbar ist und für das Kopieren von teilbaren Links",
+    "message": "Fallback URL utilizzato quando il Gateway personalizzato non è disponibile e per la copia link condivisibile",
     "description": "An option description on the Preferences screen"
   },
   "option_header_api": {
@@ -177,83 +177,83 @@
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hinweis: hier befindet sich \/webui",
+    "message": "Suggerimento: questo è dove vive \/webui",
     "description": "An option description on the Preferences screen"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Statusabrufintervall",
+    "message": "Intervallo di Polling dello Stato",
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Aktualisierungsfrequenz der Anzahl Nachbarn (in Millisekunden)",
+    "message": "Quanto spesso il conteggio delle connessioni viene aggiornato (in millisecondi)",
     "description": "An option description on the Preferences screen"
   },
   "option_automaticMode_title": {
-    "message": "Automatischer Modus",
+    "message": "Modalità automatica",
     "description": "An option title on the Preferences screen"
   },
   "option_automaticMode_description": {
-    "message": "Verwendung von benutzerdefinierten Gateways wechseln, wenn sich die IPFS API-Verfügbarkeit ändert",
+    "message": "Attiva\/Disattiva uso di Custom Gateway quando la disponibilità delle API di IPFS cambia",
     "description": "An option description on the Preferences screen"
   },
   "option_header_experiments": {
-    "message": "Experimente",
+    "message": "Esperimenti",
     "description": "A section header on the Preferences screen"
   },
   "option_experiments_warning": {
-    "message": "ACHTUNG: diese Funktionen sind neu oder befinden sich noch in der Entwicklung. Nutzung auf eigenes Risiko.",
+    "message": "Attenzione: queste caratteristiche sono nuove o work-in-progress. Usa a tuo rischio.",
     "description": "Warning about Experiments section on the Preferences screen"
   },
   "option_displayNotifications_title": {
-    "message": "Benachrichtigungen aktivieren",
+    "message": "Abilita Notifiche",
     "description": "An option title on the Preferences screen"
   },
   "option_displayNotifications_description": {
-    "message": "Zeigt Systembenachrichtigungen an, wenn sich die API ändert, ein Link kopiert wird usw.",
+    "message": "Visualizza le notifiche di sistema quando: cambia lo stato di API, un collegamento viene copiato, etc... etc",
     "description": "An option description on the Preferences screen"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Nicht aktive IPFS Protokolle entgegennehmen",
+    "message": "Analizza i protocolli IPFS non gestiti",
     "description": "An option title on the Preferences screen"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Ermöglicht die Unterstützung für ipfs:\/\/$cid, ipns:\/\/$peerid und dweb:\/ipfs\/$cid durch die Normalisierung der Links und Anfragen durch nicht aktive Protokolle",
+    "message": "Attiva il supporto per ipfs:\/\/$cid, ipns:\/\/$peerid e dweb:\/ipfs\/$cid normalizzando i collegamenti e le richieste fatte con protocolli non gestiti",
     "description": "An option description on the Preferences screen"
   },
   "option_linkify_title": {
-    "message": "IPFS Adressen in Links umwandeln",
+    "message": "Trasforma gli indirizzi IPFS in link",
     "description": "An option title on the Preferences screen"
   },
   "option_linkify_description": {
-    "message": "Unkodierte \/ipfs\/ Pfade in anklickbare Links umwandeln",
+    "message": "Trasformare i percorsi \/ipfs\/ di testo normale in link cliccabili",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_title": {
-    "message": "DNSLINK Unterstützung",
+    "message": "Supporto a DNSLINK",
     "description": "An option title on the Preferences screen"
   },
   "option_dnslink_description": {
-    "message": "DNS-Lookup für jede besuchte Website durchführen und benutzerdefinierte Gateways benutzen, wenn DNSLINK im DNS-TXT-Datensatz hinterlegt ist (verlangsamt wahrscheinlich den Browser)",
+    "message": "Esegui una ricerca DNS per ogni sito Web visitato ed utilizza il Custom Gateway se DNSLINK è presente nel suo record DNS TXT (potrebbe rallentare il browser)",
     "description": "An option description on the Preferences screen"
   },
   "option_resetAllOptions_title": {
-    "message": "Alle Einstellungen zurücksetzen",
+    "message": "Azzera tutto",
     "description": "An option title and button label on the Preferences screen"
   },
   "option_resetAllOptions_description": {
-    "message": "Ersetzt alle Benutzereinstellungen mit der Standardkonfiguration (kann nicht rückgängig gemacht werden!)",
+    "message": "Sostituisce le preferenze dell'utente con quelle di default (non può essere annullata!)",
     "description": "An option description on the Preferences screen"
   },
   "manifest_extensionName": {
-    "message": "IPFS Begleiter",
+    "message": "IPFS Companion",
     "description": "Extension name in the Manifest file"
   },
   "manifest_shortExtensionName": {
-    "message": "IPFS Begleiter",
+    "message": "IPFS Companion",
     "description": "Short extension name in the Manifest file"
   },
   "manifest_extensionDescription": {
-    "message": "Browser-Erweiterung, die den Zugriff auf IPFS-Ressourcen vereinfacht",
+    "message": "Estensione per il browser che semplifica l'accesso alle risorse IPFS",
     "description": "Extension description in the Manifest file"
   }
 }
