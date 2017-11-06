@@ -244,7 +244,10 @@ function dnslinkLookupAndOptionalRedirect (requestUrl) {
   const fqdn = url.hostname
   const dnslink = cachedDnslinkLookup(fqdn)
   if (dnslink) {
-    return redirectToDnslinkPath(url, dnslink)
+    // redirect to IPNS and leave it up to the gateway
+    // to load the correct path from IPFS
+    // - https://github.com/ipfs/ipfs-companion/issues/298
+    return redirectToIpnsPath(url)
   }
 }
 
@@ -252,37 +255,37 @@ function cachedDnslinkLookup (fqdn) {
   let dnslink = state.dnslinkCache.get(fqdn)
   if (typeof dnslink === 'undefined') {
     try {
-      console.log('dnslink cache miss for: ' + fqdn)
+      console.info('dnslink cache miss for: ' + fqdn)
       dnslink = readDnslinkFromTxtRecord(fqdn)
       if (dnslink) {
         state.dnslinkCache.set(fqdn, dnslink)
-        console.log(`Resolved dnslink: '${fqdn}' -> '${dnslink}'`)
+        console.info(`Resolved dnslink: '${fqdn}' -> '${dnslink}'`)
       } else {
         state.dnslinkCache.set(fqdn, false)
-        console.log(`Resolved NO dnslink for '${fqdn}'`)
+        console.info(`Resolved NO dnslink for '${fqdn}'`)
       }
     } catch (error) {
       console.error(`Error in dnslinkLookupAndOptionalRedirect for '${fqdn}'`)
       console.error(error)
     }
   } else {
-    console.log(`Resolved via cached dnslink: '${fqdn}' -> '${dnslink}'`)
+    console.info(`Resolved via cached dnslink: '${fqdn}' -> '${dnslink}'`)
   }
   return dnslink
 }
 
-function redirectToDnslinkPath (url, dnslink) {
+function redirectToIpnsPath (url) {
+  const fqdn = url.hostname
   url.protocol = state.gwURL.protocol
   url.host = state.gwURL.host
-  url.port = state.gwURL.port
-  url.pathname = dnslink + url.pathname
+  url.pathname = `/ipns/${fqdn}${url.pathname}`
   return { redirectUrl: url.toString() }
 }
 
 function readDnslinkFromTxtRecord (fqdn) {
   // js-ipfs-api does not provide method for fetching this
   // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
-  const apiCall = state.apiURLString + '/api/v0/dns/' + fqdn
+  const apiCall = `${state.apiURLString}api/v0/dns/${fqdn}`
   const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
   // synchronous mode with small timeout
   // (it is okay, because we do it only once, then it is cached and read via cachedDnslinkLookup)
@@ -387,7 +390,7 @@ function notify (titleKey, messageKey, messageParam) {
       'message': message
     })
   }
-  console.log(`[ipfs-companion] ${title}: ${message}`)
+  console.info(`[ipfs-companion] ${title}: ${message}`)
 }
 
 // contextMenus
@@ -431,7 +434,7 @@ function preloadAtPublicGateway (path) {
     http.open('HEAD', urlAtPublicGw(path))
     http.onreadystatechange = function () {
       if (this.readyState === this.DONE) {
-        console.log(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)
+        console.info(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)
         if (this.status === 200) {
           resolve(this.statusText)
         } else {
@@ -493,7 +496,7 @@ function uploadResultHandler (err, result) {
       browser.tabs.create({
         'url': new URL(state.gwURLString + path).toString()
       })
-      console.log('successfully stored', path)
+      console.info('successfully stored', path)
       if (state.preloadAtPublicGateway) {
         preloadAtPublicGateway(path)
       }
@@ -607,7 +610,7 @@ async function onNavigationCommitted (details) {
 async function onUpdatedTab (tabId, changeInfo, tab) {
   if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
     if (state.linkify) {
-      console.log(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
+      console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
       try {
         const browserApiPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof browser !== 'undefined'" }))[0]
         if (!browserApiPresent) {
