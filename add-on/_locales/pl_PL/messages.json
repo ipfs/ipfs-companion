@@ -232,6 +232,14 @@
     "message": "Wsparcie DNSLINK",
     "description": "An option title on the Preferences screen"
   },
+  "option_preloadAtPublicGateway_title": {
+    "message": "Propagacja wysłanych danych",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_preloadAtPublicGateway_description": {
+    "message": "Włącza propagację opublikowanych zasobów poprzez asynchroniczne zapytanie HTTP HEAD do publicznej bramy",
+    "description": "An option description on the Preferences screen"
+  },
   "option_dnslink_description": {
     "message": "Odpytuje DNS o każdy odwiedzany host i używa własnej bramy jeśli DNSLINK jest obecny w rekordzie DNS TXT tego hosta (ta funkcja spowalnia działanie przeglądarki)",
     "description": "An option description on the Preferences screen"

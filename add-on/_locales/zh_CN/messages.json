@@ -232,6 +232,14 @@
     "message": "支持DNS链接",
     "description": "An option title on the Preferences screen"
   },
+  "option_preloadAtPublicGateway_title": {
+    "message": "Preload Uploads",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_preloadAtPublicGateway_description": {
+    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "description": "An option description on the Preferences screen"
+  },
   "option_dnslink_description": {
     "message": "如果DNS记录中存在DNSLINK，则为每个访问过的站点执行DNS查询并使用自定义网关（会降低访问速度）",
     "description": "An option description on the Preferences screen"

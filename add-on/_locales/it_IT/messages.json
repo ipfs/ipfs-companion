@@ -232,6 +232,14 @@
     "message": "Supporto a DNSLINK",
     "description": "An option title on the Preferences screen"
   },
+  "option_preloadAtPublicGateway_title": {
+    "message": "Preload Uploads",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_preloadAtPublicGateway_description": {
+    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "description": "An option description on the Preferences screen"
+  },
   "option_dnslink_description": {
     "message": "Esegui una ricerca DNS per ogni sito Web visitato ed utilizza il Custom Gateway se DNSLINK è presente nel suo record DNS TXT (potrebbe rallentare il browser)",
     "description": "An option description on the Preferences screen"
