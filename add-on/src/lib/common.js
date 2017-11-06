@@ -419,62 +419,9 @@ browser.contextMenus.create({
   documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
   onclick: copyAddressAtPublicGw
 })
-browser.contextMenus.create({
-  id: contextMenuCreateShortUrl,
-  title: browser.i18n.getMessage(contextMenuCreateShortUrl),
-  contexts: ['page', 'image', 'video', 'audio', 'link'],
-  documentUrlPatterns: ['<all_urls>'],
-  enabled: false,
-  onclick: copyShortAddressAtPublicGw
-})
 
 function inFirefox () {
   return !!navigator.userAgent.match('Firefox')
-}
-
-// URL Shortener
-// -------------------------------------------------------------------
-
-async function copyShortAddressAtPublicGw (info) {
-  let longUrl = await findUrlForContext(info)
-  if (longUrl.startsWith(state.gwURLString)) {
-    // normalize local URL to point at the public GW
-    const rawIpfsAddress = longUrl.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
-    longUrl = urlAtPublicGw(rawIpfsAddress)
-  }
-  const redirectHtml = `<!DOCTYPE html>
-    <head>
-    <meta charset="UTF-8">
-    <noscript><meta http-equiv='refresh' content='0; URL=${longUrl}' /></noscript>
-    <title>${longUrl}</title>
-    </head>
-    <body onload='window.location.replace("${longUrl}")'>
-    Redirecting to <a href='${longUrl}'>${longUrl}</a>
-    `
-  // console.log('html for redirect', redirectHtml)
-  const buffer = ipfs.Buffer.from(redirectHtml, 'utf-8')
-  const opts = {hash: 'murmur3'}
-  console.log('[ipfs-companion] shortening URL to a MurmurHash3', longUrl)
-  ipfs.add(buffer, opts, urlShorteningResultHandler)
-}
-
-function urlShorteningResultHandler (err, result) {
-  if (err || !result) {
-    console.error('ipfs add error', err, result)
-    notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err}`)
-    return
-  }
-  result.forEach(function (file) {
-    if (file && file.hash) {
-      const path = `/ipfs/${file.hash}`
-      const shortUrlAtPubGw = urlAtPublicGw(path)
-      copyTextToClipboard(shortUrlAtPubGw)
-      notify('notify_copiedPublicURLTitle', shortUrlAtPubGw)
-      if (state.preloadAtPublicGateway) {
-        preloadAtPublicGateway(path)
-      }
-    }
-  })
 }
 
 function preloadAtPublicGateway (path) {

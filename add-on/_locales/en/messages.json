@@ -67,10 +67,6 @@
     "message": "Upload to IPFS",
     "description": "An item in right-click context menu"
   },
-  "contextMenu_createShortUrl": {
-    "message": "Create Short URL (Experimental)",
-    "description": "An item in right-click context menu"
-  },
   "notify_addonIssueTitle": {
     "message": "IPFS Add-on Issue",
     "description": "A title of system notification"
