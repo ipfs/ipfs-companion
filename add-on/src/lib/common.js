@@ -504,6 +504,11 @@ function uploadResultHandler (err, result) {
 // Copying URLs
 // -------------------------------------------------------------------
 
+function safeIpfsPath (urlOrPath) {
+  // better safe than sorry: https://github.com/ipfs/ipfs-companion/issues/303
+  return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
+}
+
 async function findUrlForContext (context) {
   if (context) {
     if (context.linkUrl) {
@@ -526,7 +531,7 @@ async function findUrlForContext (context) {
 
 async function copyCanonicalAddress (context) {
   const url = await findUrlForContext(context)
-  const rawIpfsAddress = url.replace(/^.+(\/ip(f|n)s\/.+)/, '$1')
+  const rawIpfsAddress = safeIpfsPath(url)
   copyTextToClipboard(rawIpfsAddress)
   notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
 }

@@ -62,7 +62,7 @@
     "web-ext": "2.2.2"
   },
   "dependencies": {
-    "ipfs-api": "15.0.0",
+    "ipfs-api": "15.0.1",
     "is-ipfs": "0.3.2",
     "lru_map": "0.3.3",
     "webextension-polyfill": "0.1.2"

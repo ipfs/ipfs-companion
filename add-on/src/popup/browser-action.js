@@ -131,8 +131,9 @@ async function handlePinError (errorMessageKey, error) {
 }
 
 async function resolveToIPFS (path) {
+  const bg = await getBackgroundPage()
+  path = bg.safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
-    const bg = await getBackgroundPage()
     const response = await bg.ipfs.name.resolve(path, {recursive: true, nocache: false})
     return response.Path
   }
