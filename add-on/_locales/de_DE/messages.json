@@ -237,7 +237,7 @@
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Ermöglicht automatischen Preload der Upload über asynchrone HTTP HEAD-Requests an ein öffentliches Gateway",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_description": {
