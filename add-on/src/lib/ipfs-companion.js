@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
-/* global optionDefaults */
+/* global optionDefaults Multiaddr */
 
 // INIT
 // ===================================================================
@@ -13,6 +13,14 @@ async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
     ipfs = initIpfsApi(options.ipfsApiUrl)
+    // If user hasn't provided a custom gateway url, ask ipfs.
+    if (options.customGatewayUrl === optionDefaults.customGatewayUrl) {
+      const gatewayUrl = await getGatewayUrl(ipfs)
+      if (gatewayUrl) {
+        // use the gateway url as reported by ipfs.config if possible.
+        options.customGatewayUrl = gatewayUrl
+      }
+    }
     initStates(options)
     registerListeners()
     setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -26,6 +34,29 @@ async function init () {
 function initIpfsApi (ipfsApiUrl) {
   const url = new URL(ipfsApiUrl)
   return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
+}
+
+async function getIpfsConfig (ipfs) {
+  try {
+    const buff = await ipfs.config.get()
+    return JSON.parse(buff.toString())
+  } catch (err) {
+    console.log('Failed to get IPSF config', err)
+    return null
+  }
+}
+
+async function getGatewayUrl (ipfs) {
+  const config = await getIpfsConfig(ipfs)
+  if (!config) return null
+  return toGatewayUrl(config)
+}
+
+function toGatewayUrl (ipfsConfig) {
+  const customGatewayAddr = new Multiaddr(ipfsConfig.Addresses.Gateway)
+  const {host, port} = customGatewayAddr.toOptions()
+  // there has got to be a better way.
+  return `http://${host}:${port}`
 }
 
 function initStates (options) {
