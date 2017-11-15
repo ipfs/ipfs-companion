@@ -215,20 +215,31 @@ async function updateBrowserActionPopup () {
   updatePageActions()
   // update redirect status
   const options = await browser.storage.local.get()
+  const isBrowserIpfs = (await getBackgroundPage()).isBrowserIpfs()
+
   try {
-    const enabled = options['useCustomGateway']
-    if (enabled) {
-      hide('redirect-disabled')
-      hide('enable-gateway-redirect')
-      show('redirect-enabled')
-      show('disable-gateway-redirect')
+    if (isBrowserIpfs) {
+      hide('toggle-gateway-redirect')
+      hide('gateway-redirect')
+      set('gateway-address-val', options['publicGatewayUrl'])
     } else {
-      hide('redirect-enabled')
-      hide('disable-gateway-redirect')
-      show('redirect-disabled')
-      show('enable-gateway-redirect')
+      show('toggle-gateway-redirect')
+      show('gateway-redirect')
+
+      const enabled = options['useCustomGateway']
+      if (enabled) {
+        hide('redirect-disabled')
+        hide('enable-gateway-redirect')
+        show('redirect-enabled')
+        show('disable-gateway-redirect')
+      } else {
+        hide('redirect-enabled')
+        hide('disable-gateway-redirect')
+        show('redirect-disabled')
+        show('enable-gateway-redirect')
+      }
+      set('gateway-address-val', options['customGatewayUrl'])
     }
-    set('gateway-address-val', options['customGatewayUrl'])
   } catch (error) {
     console.error(`Unable update redirect state due to ${error}`)
     set('gateway-address-val', '???')
@@ -250,7 +261,7 @@ async function updateBrowserActionPopup () {
     } else {
       hide('quick-upload')
     }
-    if (peerCount < 0) { // API is offline
+    if (isBrowserIpfs || peerCount < 0) { // API is offline
       hide('open-webui')
     } else {
       show('open-webui')

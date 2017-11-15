@@ -11,7 +11,7 @@ async function onQuickUploadInputChange (event) {
     let reader = new FileReader()
     reader.onloadend = () => {
       const buffer = Buffer.from(reader.result)
-      bg.ipfs.add(buffer, (err, result) => {
+      bg.ipfs.files.add(buffer, (err, result) => {
         if (err || !result) {
           // keep upload tab and display error message in it
           quickUploadMessage.innerText = `Unable to upload to IPFS API: ${err}`
