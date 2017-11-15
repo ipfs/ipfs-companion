@@ -16,8 +16,8 @@
 - [Background](#background)
 - [Features](#features)
 - [Install](#install)
-- [Troubleshooting](#troubleshooting)
 - [Contribute](#contribute)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 
 ## Background
@@ -110,6 +110,14 @@ Try manual installation:
         1. Enter `about:debugging` in the URL bar
         2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 
+
+
+## Contribute
+
+If you want to help in developing this extension, please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
+
+This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
+
 ### TROUBLESHOOTING
 
 #### Upload via Right-Click Does Not Work in Firefox
@@ -133,12 +141,6 @@ Deny
 ```
 
 Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
-
-## Contribute
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
-
-This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
 
 ## License
 
