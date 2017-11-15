@@ -89,20 +89,26 @@ For historical background on the rewrite see [Issue #20: Move to WebExtensions](
 
 Install the latest signed release from [Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch).
 
-### Other Browsers Supporting WebExtensions API
+### Development or other Browsers Supporting WebExtensions API
 
 Try manual installation:
 
 1. Download Sources
 2. Build it:
 
-  ```bash
-  npm install
-  npm run build
-  ```
+    ```bash
+    npm install
+    npm run build
+    ```
 
-3. Load it into browser (eg. open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`)
-
+3. Load it into browser:
+    * Chromium-based
+        1. Enter `chrome://extensions` in the URL bar
+        2. Enable "Developer mode"
+        3. Click "Load unpacked extension..." and point it at `add-on/manifest.json`
+    * Firefox
+        1. Enter `about:debugging` in the URL bar
+        2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 
 ### TROUBLESHOOTING
 
@@ -141,4 +147,3 @@ This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/c
 [is-ipfs](https://github.com/xicombd/is-ipfs), [js-multihash](https://github.com/jbenet/js-multihash) and other NPM dependencies are under MIT license, unless stated otherwise.
 
 The add-on itself is released under [CC0](LICENSE): to the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain.
-
