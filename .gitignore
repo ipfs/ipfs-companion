@@ -1,9 +1,9 @@
 vendor
 node_modules
-package-lock.json
 firefox
 cache
 build
 npm-debug.log
 crowdin.yml
 .*~
+add-on/dist

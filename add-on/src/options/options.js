@@ -1,6 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
-/* global optionDefaults */
+
+const browser = require('webextension-polyfill')
+const optionDefaults = require('../lib/option-defaults')
+const translateDataAttrs = require('../lib/data-i18n')
+
+translateDataAttrs()
 
 async function saveOption (name) {
   const element = document.querySelector(`#${name}`)

@@ -1,7 +1,0 @@
-# This directory is a placeholder for 3rd party libraries
-# that should not be tracked with Git
-#
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore

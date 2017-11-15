@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const optionDefaults = Object.freeze({ // eslint-disable-line no-unused-vars
+module.exports = Object.freeze({
   publicGatewayUrl: 'https://ipfs.io',
   useCustomGateway: true,
   automaticMode: true,

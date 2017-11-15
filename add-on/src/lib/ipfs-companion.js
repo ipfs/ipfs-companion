@@ -1,18 +1,22 @@
 'use strict'
 /* eslint-env browser, webextensions */
-/* global optionDefaults */
+
+const browser = require('webextension-polyfill')
+const optionDefaults = require('./option-defaults')
+const { LRUMap } = require('lru_map')
+const IsIpfs = require('is-ipfs')
+const IpfsApi = require('ipfs-api')
 
 // INIT
 // ===================================================================
 var ipfs // ipfs-api instance
-var state = {} // avoid redundant API reads by utilizing local cache of various states
+var state = window.state = {} // avoid redundant API reads by utilizing local cache of various states
 
 // init happens on addon load in background/background.js
-// eslint-disable-next-line no-unused-vars
-async function init () {
+module.exports = async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
-    ipfs = initIpfsApi(options.ipfsApiUrl)
+    ipfs = window.ipfs = initIpfsApi(options.ipfsApiUrl)
     initStates(options)
     registerListeners()
     setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -25,7 +29,7 @@ async function init () {
 
 function initIpfsApi (ipfsApiUrl) {
   const url = new URL(ipfsApiUrl)
-  return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
+  return IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
 function initStates (options) {
@@ -44,7 +48,7 @@ function initStates (options) {
   state.preloadAtPublicGateway = options.preloadAtPublicGateway
   state.catchUnhandledProtocols = options.catchUnhandledProtocols
   state.displayNotifications = options.displayNotifications
-  state.dnslinkCache = /* global LRUMap */ new LRUMap(1000)
+  state.dnslinkCache = new LRUMap(1000)
 }
 
 function registerListeners () {
@@ -65,11 +69,11 @@ function publicIpfsOrIpnsResource (url) {
   // first, exclude gateway and api, otherwise we have infinite loop
   if (!url.startsWith(state.gwURLString) && !url.startsWith(state.apiURLString)) {
     // /ipfs/ is easy to validate, we just check if CID is correct and return if true
-    if (window.IsIpfs.ipfsUrl(url)) {
+    if (IsIpfs.ipfsUrl(url)) {
       return true
     }
     // /ipns/ requires multiple stages/branches, as it can be FQDN with dnslink or CID
-    if (window.IsIpfs.ipnsUrl(url) && validIpnsPath(new URL(url).pathname)) {
+    if (IsIpfs.ipnsUrl(url) && validIpnsPath(new URL(url).pathname)) {
       return true
     }
   }
@@ -78,12 +82,12 @@ function publicIpfsOrIpnsResource (url) {
 }
 
 function validIpnsPath (path) {
-  if (window.IsIpfs.ipnsPath(path)) {
+  if (IsIpfs.ipnsPath(path)) {
     // we may have false-positives here, so we do additional checks below
     const ipnsRoot = path.match(/^\/ipns\/([^/]+)/)[1]
     // console.log('==> IPNS root', ipnsRoot)
     // first check if root is a regular CID
-    if (window.IsIpfs.cid(ipnsRoot)) {
+    if (IsIpfs.cid(ipnsRoot)) {
       // console.log('==> IPNS is a valid CID', ipnsRoot)
       return true
     }
@@ -96,7 +100,7 @@ function validIpnsPath (path) {
 }
 
 function validIpfsOrIpnsPath (path) {
-  return window.IsIpfs.ipfsPath(path) || validIpnsPath(path)
+  return IsIpfs.ipfsPath(path) || validIpnsPath(path)
 }
 
 function redirectToCustomGateway (requestUrl) {
@@ -187,7 +191,7 @@ function normalizedWebPlusRequest (request) {
   path = path.replace(/^\/web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
   path = path.replace(/^\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
   path = path.replace(/^\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
-  if (oldPath !== path && window.IsIpfs.path(path)) {
+  if (oldPath !== path && IsIpfs.path(path)) {
     return { redirectUrl: urlAtPublicGw(path) }
   }
   return null
@@ -207,14 +211,14 @@ function unhandledIpfsPath (requestUrl) {
   if (unhandled && unhandled.length > 1) {
     const unhandledProtocol = decodeURIComponent(unhandled[1])
     const unhandledPath = `/${decodeURIComponent(unhandled[2])}`
-    return window.IsIpfs.path(unhandledPath) ? unhandledPath : `/${unhandledProtocol}${unhandledPath}`
+    return IsIpfs.path(unhandledPath) ? unhandledPath : `/${unhandledProtocol}${unhandledPath}`
   }
   return null
 }
 
 function normalizedUnhandledIpfsProtocol (request) {
   const path = unhandledIpfsPath(request.url)
-  if (window.IsIpfs.path(path)) {
+  if (IsIpfs.path(path)) {
     // replace search query with fake request to the public gateway
     // (will be redirected later, if needed)
     return { redirectUrl: urlAtPublicGw(path) }
@@ -234,7 +238,7 @@ function isDnslookupSafeForURL (requestUrl) {
   // skip URLs that could produce infinite recursion or weird loops
   return isDnslookupPossible() &&
     requestUrl.startsWith('http') &&
-    !window.IsIpfs.url(requestUrl) &&
+    !IsIpfs.url(requestUrl) &&
     !requestUrl.startsWith(state.apiURLString) &&
     !requestUrl.startsWith(state.gwURLString)
 }
@@ -295,7 +299,7 @@ function readDnslinkFromTxtRecord (fqdn) {
   if (xhr.status === 200) {
     const dnslink = JSON.parse(xhr.responseText).Path
     // console.log('readDnslinkFromTxtRecord', readDnslinkFromTxtRecord)
-    if (!window.IsIpfs.path(dnslink)) {
+    if (!IsIpfs.path(dnslink)) {
       throw new Error(`dnslink for '${fqdn}' is not a valid IPFS path: '${dnslink}'`)
     }
     return dnslink
@@ -504,6 +508,8 @@ function uploadResultHandler (err, result) {
   })
 }
 
+window.uploadResultHandler = uploadResultHandler
+
 // Copying URLs
 // -------------------------------------------------------------------
 
@@ -511,6 +517,8 @@ function safeIpfsPath (urlOrPath) {
   // better safe than sorry: https://github.com/ipfs/ipfs-companion/issues/303
   return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
 }
+
+window.safeIpfsPath = safeIpfsPath
 
 async function findUrlForContext (context) {
   if (context) {
@@ -539,12 +547,16 @@ async function copyCanonicalAddress (context) {
   notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
 }
 
+window.copyCanonicalAddress = copyCanonicalAddress
+
 async function copyAddressAtPublicGw (context) {
   const url = await findUrlForContext(context)
   const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
   copyTextToClipboard(urlAtPubGw)
   notify('notify_copiedPublicURLTitle', urlAtPubGw)
 }
+
+window.copyAddressAtPublicGw = copyAddressAtPublicGw
 
 async function copyTextToClipboard (copyText) {
   const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
@@ -596,7 +608,7 @@ async function updateContextMenus (changedTabId) {
 // used in browser-action popup
 // eslint-disable-next-line no-unused-vars
 function isIpfsPageActionsContext (url) {
-  return window.IsIpfs.url(url) && !url.startsWith(state.apiURLString)
+  return IsIpfs.url(url) && !url.startsWith(state.apiURLString)
 }
 
 async function onActivatedTab (activeInfo) {
@@ -831,7 +843,7 @@ function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
       if (key === 'ipfsApiUrl') {
         state.apiURL = new URL(change.newValue)
         state.apiURLString = state.apiURL.toString()
-        ipfs = initIpfsApi(state.apiURLString)
+        ipfs = window.ipfs = initIpfsApi(state.apiURLString)
         apiStatusUpdate()
       } else if (key === 'ipfsApiPollMs') {
         setApiStatusUpdateInterval(change.newValue)
