@@ -17,6 +17,8 @@ async function init () {
     registerListeners()
     setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(options, optionDefaults)
+    await fallbackToBrowserIpfs()
+    apiStatusUpdate()
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -27,6 +29,40 @@ function initIpfsApi (ipfsApiUrl) {
   const url = new URL(ipfsApiUrl)
   return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
+
+async function fallbackToBrowserIpfs () {
+  if (fallbackToBrowserIpfs.cancel) {
+    fallbackToBrowserIpfs.cancel()
+    fallbackToBrowserIpfs.cancel = null
+  }
+
+  let cancelled = false
+  let connected = false
+
+  fallbackToBrowserIpfs.cancel = () => { cancelled = true }
+
+  for (let i = 0; i < 20; i++) {
+    if (cancelled) return
+
+    try {
+      await ipfs.id()
+      connected = true
+      break
+    } catch (err) {
+      console.warn('Failed to connect to IPFS node', err)
+      await sleep(1000)
+    }
+  }
+
+  if (cancelled) return
+
+  if (!connected) {
+    console.log('Falling back to in-browser IPFS node...')
+    ipfs = new window.Ipfs()
+  }
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function initStates (options) {
   // we store the most used values in optimized form
@@ -152,7 +188,7 @@ function onBeforeRequest (request) {
   }
 
   // handle redirects to custom gateway
-  if (state.redirect) {
+  if (!isBrowserIpfs() && state.redirect) {
     // Ignore preload requests
     if (request.method === 'HEAD' && state.preloadAtPublicGateway && request.url.startsWith(state.pubGwURLString)) {
       return
@@ -348,6 +384,10 @@ function handleMessageFromBrowserAction (message) {
   }
 }
 
+function isBrowserIpfs () {
+  return ipfs instanceof window.Ipfs
+}
+
 async function sendStatusUpdateToBrowserAction () {
   if (browserActionPort) {
     const info = {
@@ -493,11 +533,13 @@ function uploadResultHandler (err, result) {
   result.forEach(function (file) {
     if (file && file.hash) {
       const path = `/ipfs/${file.hash}`
+      const gwUrl = isBrowserIpfs() ? state.pubGwURLString : state.gwURLString
+      console.log(gwUrl, state.pubGwURLString, state.gwURLString)
       browser.tabs.create({
-        'url': new URL(state.gwURLString + path).toString()
+        'url': new URL(gwUrl + path).toString()
       })
       console.info('successfully stored', path)
-      if (state.preloadAtPublicGateway) {
+      if (!isBrowserIpfs() && state.preloadAtPublicGateway) {
         preloadAtPublicGateway(path)
       }
     }
@@ -787,7 +829,7 @@ function rasterIconData (iconPath, size) {
 
 function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
   // enable/disable gw redirect based on API going online or offline
-  if (state.automaticMode) {
+  if (!isBrowserIpfs() && state.automaticMode) {
     if (oldPeerCount < 1 && newPeerCount > 0 && !state.redirect) {
       browser.storage.local.set({useCustomGateway: true})
         .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
@@ -822,17 +864,25 @@ function storeMissingOptions (read, defaults) {
   return Promise.all(changes)
 }
 
-function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
+async function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
   for (let key in changes) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
       // debug info
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       if (key === 'ipfsApiUrl') {
-        state.apiURL = new URL(change.newValue)
-        state.apiURLString = state.apiURL.toString()
-        ipfs = initIpfsApi(state.apiURLString)
-        apiStatusUpdate()
+        const newApiUrl = new URL(change.newValue)
+        const newApiUrlString = newApiUrl.toString()
+
+        // Only re-init if url changed
+        if (state.apiURLString !== newApiUrlString) {
+          state.apiURL = newApiUrl
+          state.apiURLString = newApiUrlString
+          ipfs = initIpfsApi(state.apiURLString)
+          apiStatusUpdate()
+          await fallbackToBrowserIpfs()
+          apiStatusUpdate()
+        }
       } else if (key === 'ipfsApiPollMs') {
         setApiStatusUpdateInterval(change.newValue)
       } else if (key === 'customGatewayUrl') {
