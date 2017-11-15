@@ -31,6 +31,7 @@ module.exports = function (config) {
       'node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
       'test/unit/*.shim.js',
       'add-on/src/lib/npm/is-ipfs.min.js',
+      'add-on/src/lib/npm/ipfs.min.js',
       'add-on/src/lib/npm/ipfs-api.min.js',
       'add-on/src/lib/npm/lru.js',
       'add-on/src/lib/*.js',
@@ -38,7 +39,7 @@ module.exports = function (config) {
       'test/unit/*.test.js'
     ],
     preprocessors: {
-      'add-on/**/!(npm)/*.js': ['babel','coverage']
+      'add-on/**/!(npm)/*.js': ['babel', 'coverage']
     },
     babelPreprocessor: {
       options: {
@@ -46,10 +47,10 @@ module.exports = function (config) {
         sourceMap: 'inline'
       },
       filename: function (file) {
-        return file.originalPath.replace(/\.js$/, '.es2017.js');
+        return file.originalPath.replace(/\.js$/, '.es2017.js')
       },
       sourceFileName: function (file) {
-        return file.originalPath;
+        return file.originalPath
       }
     },
     plugins: [
