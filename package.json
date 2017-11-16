@@ -33,11 +33,6 @@
   },
   "private": true,
   "preferGlobal": false,
-  "standard": {
-    "ignore": [
-      "add-on/src/lib/npm/**"
-    ]
-  },
   "devDependencies": {
     "babel-preset-es2017": "6.24.1",
     "browserify": "14.5.0",
