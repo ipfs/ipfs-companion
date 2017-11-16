@@ -40,10 +40,10 @@
   },
   "devDependencies": {
     "babel-preset-es2017": "6.24.1",
-    "browserify": "^14.5.0",
+    "browserify": "14.5.0",
     "chai": "4.1.2",
     "cross-env": "5.1.1",
-    "factor-bundle": "^2.5.0",
+    "factor-bundle": "2.5.0",
     "fakefile": "0.0.9",
     "fs-promise": "2.0.3",
     "fx-runner": "1.0.8",
@@ -65,7 +65,7 @@
     "sinon": "4.1.2",
     "sinon-chrome": "2.2.1",
     "standard": "10.0.3",
-    "watchify": "^3.9.0",
+    "watchify": "3.9.0",
     "web-ext": "2.2.2"
   },
   "dependencies": {
