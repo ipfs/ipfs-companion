@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
-/* global optionDefaults Multiaddr */
+/* global optionDefaults */
 
 // INIT
 // ===================================================================
@@ -41,7 +41,7 @@ async function getIpfsConfig (ipfs) {
     const buff = await ipfs.config.get()
     return JSON.parse(buff.toString())
   } catch (err) {
-    console.log('Failed to get IPSF config', err)
+    console.log('Failed to get IPFS config', err)
     return null
   }
 }
@@ -53,10 +53,14 @@ async function getGatewayUrl (ipfs) {
 }
 
 function toGatewayUrl (ipfsConfig) {
-  const customGatewayAddr = new Multiaddr(ipfsConfig.Addresses.Gateway)
-  const {host, port} = customGatewayAddr.toOptions()
+  if (!ipfsConfig || !ipfsConfig.Addresses || !ipfsConfig.Addresses.Gateway) {
+    return null
+  }
   // there has got to be a better way.
-  return `http://${host}:${port}`
+  const multiAddrRE = /\/ip4\/(.+)\/tcp\/(\d+)/
+  const res = multiAddrRE.exec(ipfsConfig.Addresses.Gateway)
+  if (!res) return null
+  return `http://${res[1]}:${res[2]}`
 }
 
 function initStates (options) {
