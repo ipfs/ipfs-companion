@@ -627,14 +627,14 @@ async function onUpdatedTab (tabId, changeInfo, tab) {
         const browserApiPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof browser !== 'undefined'" }))[0]
         if (!browserApiPresent) {
           await browser.tabs.executeScript(tabId, {
-            file: '/src/lib/npm/browser-polyfill.min.js',
+            file: '/dist/lib/browser-polyfill.min.js',
             matchAboutBlank: false,
             allFrames: true,
             runAt: 'document_start'
           })
         }
         await browser.tabs.executeScript(tabId, {
-          file: '/src/lib/linkifyDOM.js',
+          file: '/dist/lib/linkifyDOM.js',
           matchAboutBlank: false,
           allFrames: true,
           runAt: 'document_idle'
