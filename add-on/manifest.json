@@ -46,7 +46,7 @@
             "128": "icons/png/ipfs-logo-off_128.png"
         },
         "default_title": "__MSG_browserAction_title__",
-        "default_popup": "dist/popup/browser-action.html"
+        "default_popup": "dist/popup/browser-action/index.html"
     },
 
     "options_ui": {
