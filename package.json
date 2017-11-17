@@ -16,7 +16,7 @@
     "build:copy:src": "shx mkdir -p add-on/dist && shx cp -R add-on/src/* add-on/dist",
     "build:copy:wx-polyfill-lib": "shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js add-on/dist/lib/browser-polyfill.min.js",
     "build:js": "browserify add-on/src/background/background.js add-on/src/options/options.js add-on/src/popup/browser-action.js add-on/src/popup/quick-upload.js -p [ factor-bundle -o add-on/dist/background/background.js -o add-on/dist/options/options.js -o add-on/dist/popup/browser-action.js -o add-on/dist/popup/quick-upload.js ] -o add-on/dist/common.js",
-    "build:bundle-extension": "web-ext build -s add-on/ -a build/",
+    "build:bundle-extension": "web-ext build -s add-on/ -i src/ -a build/",
     "watch": "run-p watch:*",
     "watch:js": "watchify add-on/src/background/background.js add-on/src/options/options.js add-on/src/popup/browser-action.js add-on/src/popup/quick-upload.js -p [ factor-bundle -o add-on/dist/background/background.js -o add-on/dist/options/options.js -o add-on/dist/popup/browser-action.js -o add-on/dist/popup/quick-upload.js ] -o add-on/dist/common.js -v",
     "test": "run-s test:*",
