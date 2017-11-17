@@ -6,6 +6,9 @@ const contextActions = require('./context-actions')
 const operations = require('./operations')
 const gatewayStatus = require('./gateway-status')
 
+// Render the browser action page:
+// Passed current app `state` from the store and `emit`, a function to create
+// events, allowing views to signal back to the store that something happened.
 module.exports = function browserActionPage (state, emit) {
   const onCopyIpfsAddr = () => emit('copyIpfsAddr')
   const onCopyPublicGwAddr = () => emit('copyPublicGwAddr')
@@ -17,7 +20,7 @@ module.exports = function browserActionPage (state, emit) {
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleRedirect = () => emit('toggleRedirect')
 
-  const contextActionsProps = Object.assign({ hidden: state.contextActionsHidden, onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
+  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onOpenPrefs, onToggleRedirect }, state)
   const gwStatusProps = Object.assign({}, state)
 

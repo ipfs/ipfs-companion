@@ -5,17 +5,17 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
 module.exports = function contextActions ({
-  hidden,
-  pinHidden,
-  pinDisabled,
-  unPinHidden,
-  unPinDisabled,
+  isIpfsContext,
+  isPinning,
+  isUnPinning,
+  isPinned,
+  isIpfsOnline,
   onCopyIpfsAddr,
   onCopyPublicGwAddr,
   onPin,
   onUnPin
 }) {
-  if (hidden) return null
+  if (!isIpfsContext) return null
 
   return html`
     <div class="panel-section panel-section-list">
@@ -29,20 +29,20 @@ module.exports = function contextActions ({
         <div class="text">${browser.i18n.getMessage('panel_copyCurrentPublicGwUrl')}</div>
         <div class="text-shortcut"></div>
       </div>
-      ${pinHidden ? null : html`
-        <div class="panel-list-item ${pinDisabled ? 'disabled' : ''}" onclick=${onPin}>
+      ${isIpfsOnline && isPinned ? null : html`
+        <div class="panel-list-item ${isPinning ? 'disabled' : ''}" onclick=${onPin}>
           <div class="icon"></div>
           <div class="text">${browser.i18n.getMessage('panel_pinCurrentIpfsAddress')}</div>
           <div class="text-shortcut"></div>
         </div>
       `}
-      ${unPinHidden ? null : html`
-        <div class="panel-list-item ${unPinDisabled ? 'disabled' : ''}" onclick=${onUnPin}>
+      ${isIpfsOnline && isPinned ? html`
+        <div class="panel-list-item ${isUnPinning ? 'disabled' : ''}" onclick=${onUnPin}>
           <div class="icon"></div>
           <div class="text">${browser.i18n.getMessage('panel_unpinCurrentIpfsAddress')}</div>
           <div class="text-shortcut"></div>
         </div>
-      `}
+      ` : null}
       <div class="panel-section-separator"></div>
     </div>
   `

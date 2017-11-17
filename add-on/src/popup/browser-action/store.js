@@ -3,19 +3,17 @@
 
 const browser = require('webextension-polyfill')
 
+// The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
   Object.assign(state, {
     // UI state
-    contextActionsHidden: true,
-    pinHidden: false,
-    pinDisabled: true,
-    unPinHidden: true,
-    unPinDisabled: false,
-    quickUploadHidden: true,
-    openWebUiHidden: true,
+    isIpfsContext: false,
+    isPinning: false,
+    isUnPinning: false,
+    isPinned: false,
     currentTabUrl: null,
     // IPFS status
-    ipfsOnline: false,
+    isIpfsOnline: false,
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,
@@ -33,7 +31,7 @@ module.exports = (state, emitter) => {
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
         // console.log('In browser action, received message from background:', message)
-        await updateBrowserActionPopup(message.statusUpdate)
+        await updateBrowserActionState(message.statusUpdate)
         emitter.emit('render')
       }
     })
@@ -52,7 +50,7 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('pin', async function pinCurrentResource () {
-    deactivatePinButton()
+    state.isPinning = true
     emitter.emit('render')
 
     try {
@@ -61,14 +59,17 @@ module.exports = (state, emitter) => {
       const pinResult = await bg.ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       notify('notify_pinnedIpfsResourceTitle', currentPath)
+      state.isPinned = true
     } catch (error) {
       handlePinError('notify_pinErrorTitle', error)
     }
+    state.isPinning = false
+    emitter.emit('render')
     window.close()
   })
 
   emitter.on('unPin', async function unPinCurrentResource () {
-    deactivatePinButton()
+    state.isUnPinning = true
     emitter.emit('render')
 
     try {
@@ -77,9 +78,12 @@ module.exports = (state, emitter) => {
       const result = await bg.ipfs.pin.rm(currentPath, {recursive: true})
       console.log('ipfs.pin.rm result', result)
       notify('notify_unpinnedIpfsResourceTitle', currentPath)
+      state.isPinned = false
     } catch (error) {
       handlePinError('notify_unpinErrorTitle', error)
     }
+    state.isUnPinning = true
+    emitter.emit('render')
     window.close()
   })
 
@@ -125,7 +129,7 @@ module.exports = (state, emitter) => {
     }
   })
 
-  async function updatePageActions (status) {
+  async function updatePageActionsState (status) {
     // IPFS contexts require access to background page
     // which is denied in Private Browsing mode
     const bg = await getBackgroundPage(status)
@@ -133,26 +137,18 @@ module.exports = (state, emitter) => {
     // Check if current page is an IPFS one
     const ipfsContext = bg && status && status.ipfsPageActionsContext
 
-    // There is no point in displaying actions that require API interaction if API is down
-    const apiIsUp = status && status.peerCount >= 0
-
-    if (apiIsUp) {
-      await activatePinButton()
-    } else {
-      deactivatePinButton()
-    }
-
-    if (ipfsContext) {
-      state.contextActionsHidden = false
-    } else {
-      state.contextActionsHidden = true
-    }
-
+    state.isIpfsContext = !!ipfsContext
     state.currentTabUrl = status.currentTab.url
+
+    if (state.isIpfsContext) {
+      // There is no point in displaying actions that require API interaction if API is down
+      const apiIsUp = status && status.peerCount >= 0
+      if (apiIsUp) await updatePinnedState(status)
+    }
   }
 
-  async function updateBrowserActionPopup (status) {
-    await updatePageActions(status)
+  async function updateBrowserActionState (status) {
+    await updatePageActionsState(status)
     const options = await browser.storage.local.get()
 
     try {
@@ -165,52 +161,30 @@ module.exports = (state, emitter) => {
 
     if (status) {
       state.swarmPeers = status.peerCount < 0 ? null : status.peerCount
-      state.ipfsOnline = status.peerCount > 0
+      state.isIpfsOnline = status.peerCount > 0
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
-      state.quickUploadHidden = !state.ipfsOnline
-      state.openWebUiHidden = !state.ipfsOnline
     } else {
       state.swarmPeers = null
-      state.ipfsOnline = false
+      state.isIpfsOnline = false
       state.gatewayVersion = null
-      state.quickUploadHidden = true
-      state.openWebUiHidden = true
     }
   }
 
-  async function activatePinButton () {
+  async function updatePinnedState (status) {
     try {
       const bg = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
+      const currentPath = await resolveToIPFS(new URL(status.currentTab.url).pathname)
       const response = await bg.ipfs.pin.ls(currentPath, {quiet: true})
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
-      activateUnpinning()
+      state.isPinned = true
     } catch (error) {
       if (/is not pinned/.test(error.message)) {
         console.log(`negative ipfs.pin.ls: ${error} (${JSON.stringify(error)})`)
-        activatePinning()
       } else {
         console.error(`unexpected result of ipfs.pin.ls: ${error} (${JSON.stringify(error)})`)
-        deactivatePinButton()
       }
+      state.isPinned = false
     }
-  }
-
-  function deactivatePinButton () {
-    state.pinDisabled = true
-    state.unPinHidden = true
-  }
-
-  function activatePinning () {
-    state.pinHidden = false
-    state.pinDisabled = false
-    state.unPinHidden = true
-  }
-
-  function activateUnpinning () {
-    state.pinHidden = true
-    state.unPinHidden = false
-    state.unPinDisabled = false
   }
 
   function notify (title, message) {

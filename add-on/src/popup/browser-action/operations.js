@@ -5,8 +5,7 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
 module.exports = function operations ({
-  quickUploadHidden,
-  openWebUiHidden,
+  isIpfsOnline,
   redirectEnabled,
   onQuickUpload,
   onOpenWebUi,
@@ -15,20 +14,20 @@ module.exports = function operations ({
 }) {
   return html`
     <div class="panel-section panel-section-list">
-      ${quickUploadHidden ? null : html`
+      ${isIpfsOnline ? html`
         <div class="panel-list-item" id="quick-upload" onclick=${onQuickUpload}>
           <div class="icon"></div>
           <div class="text" data-i18n="">${browser.i18n.getMessage('panel_quickUpload')}</div>
           <div class="text-shortcut"></div>
         </div>
-      `}
-      ${openWebUiHidden ? null : html`
+      ` : null}
+      ${isIpfsOnline ? html`
         <div class="panel-list-item" onclick=${onOpenWebUi}>
           <div class="icon"></div>
           <div class="text">${browser.i18n.getMessage('panel_openWebui')}</div>
           <div class="text-shortcut"></div>
         </div>
-      `}
+      ` : null}
       <div class="panel-list-item" onclick=${onOpenPrefs}>
         <div class="icon"></div>
         <div class="text">${browser.i18n.getMessage('panel_openPreferences')}</div>

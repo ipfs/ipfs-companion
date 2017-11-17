@@ -8,15 +8,15 @@ module.exports = function gatewayStatus ({
   gatewayAddress,
   gatewayVersion,
   swarmPeers,
-  ipfsOnline,
+  isIpfsOnline,
   redirectEnabled
 }) {
   return html`
     <div class="panel-section" id="gateway-status">
       <img
         id="icon"
-        src="../../../icons/ipfs-logo-${ipfsOnline ? 'on' : 'off'}.svg"
-        class="${ipfsOnline ? 'online' : ''}"/>
+        src="../../../icons/ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg"
+        class="${isIpfsOnline ? 'online' : ''}"/>
       <ul>
         <li>
           <span>${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
