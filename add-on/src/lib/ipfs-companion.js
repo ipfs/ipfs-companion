@@ -13,6 +13,14 @@ async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
     ipfs = initIpfsApi(options.ipfsApiUrl)
+    // If user hasn't provided a custom gateway url, ask ipfs.
+    if (options.customGatewayUrl === optionDefaults.customGatewayUrl) {
+      const gatewayUrl = await getGatewayUrl(ipfs)
+      if (gatewayUrl) {
+        // use the gateway url as reported by ipfs.config if possible.
+        options.customGatewayUrl = gatewayUrl
+      }
+    }
     initStates(options)
     registerListeners()
     setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -26,6 +34,33 @@ async function init () {
 function initIpfsApi (ipfsApiUrl) {
   const url = new URL(ipfsApiUrl)
   return window.IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
+}
+
+async function getIpfsConfig (ipfs) {
+  try {
+    const buff = await ipfs.config.get()
+    return JSON.parse(buff.toString())
+  } catch (err) {
+    console.log('Failed to get IPFS config', err)
+    return null
+  }
+}
+
+async function getGatewayUrl (ipfs) {
+  const config = await getIpfsConfig(ipfs)
+  if (!config) return null
+  return toGatewayUrl(config)
+}
+
+function toGatewayUrl (ipfsConfig) {
+  if (!ipfsConfig || !ipfsConfig.Addresses || !ipfsConfig.Addresses.Gateway) {
+    return null
+  }
+  // there has got to be a better way.
+  const multiAddrRE = /\/ip4\/(.+)\/tcp\/(\d+)/
+  const res = multiAddrRE.exec(ipfsConfig.Addresses.Gateway)
+  if (!res) return null
+  return `http://${res[1]}:${res[2]}`
 }
 
 function initStates (options) {
