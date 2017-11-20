@@ -430,7 +430,7 @@ async function onUpdatedTab (tabId, changeInfo, tab) {
         })
         // inject script that normalizes `href` and `src` containing unhandled protocols
         await browser.tabs.executeScript(tabId, {
-          file: '/src/lib/normalizeLinksWithUnhandledProtocols.js',
+          file: '/dist/lib/normalizeLinksWithUnhandledProtocols.js',
           matchAboutBlank: false,
           allFrames: true,
           runAt: 'document_end'
