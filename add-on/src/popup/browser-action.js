@@ -1,6 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const browser = require('webextension-polyfill')
+const translateDataAttrs = require('../lib/data-i18n')
+
+translateDataAttrs()
+
 const ipfsContextActions = document.getElementById('ipfs-resource-context-actions')
 const pinResourceButton = document.getElementById('pin-current-ipfs-address')
 const unpinResourceButton = document.getElementById('unpin-current-ipfs-address')
@@ -186,7 +191,7 @@ async function updatePageActions () {
 // Global Actions
 // ===================================================================
 
-quickUpload.onclick = () => browser.tabs.create({ url: browser.extension.getURL('src/popup/quick-upload.html') })
+quickUpload.onclick = () => browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-upload.html') })
 
 enableRedirect.onclick = () => browser.storage.local.set({useCustomGateway: true})
   .then(updateBrowserActionPopup)
