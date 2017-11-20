@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const optionDefaults = require('./option-defaults')
+const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState } = require('./state')
 const IsIpfs = require('is-ipfs')
 const IpfsApi = require('ipfs-api')
@@ -29,7 +29,7 @@ module.exports = async function init () {
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await storeMissingOptions(options, optionDefaults)
+    await storeMissingOptions(options, optionDefaults, browser.storage.local)
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -582,30 +582,6 @@ function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
         .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
     }
   }
-}
-
-function storeMissingOptions (read, defaults) {
-  const requiredKeys = Object.keys(defaults)
-  const changes = new Set()
-  requiredKeys.map(key => {
-    // limit work to defaults and missing values
-    if (!read.hasOwnProperty(key) || read[key] === defaults[key]) {
-      changes.add(new Promise((resolve, reject) => {
-        browser.storage.local.get(key).then(data => {
-          if (!data[key]) { // detect and fix key without value in storage
-            let option = {}
-            option[key] = defaults[key]
-            browser.storage.local.set(option)
-              .then(data => { resolve(`updated:${key}`) })
-              .catch(error => { reject(error) })
-          } else {
-            resolve(`nochange:${key}`)
-          }
-        })
-      }))
-    }
-  })
-  return Promise.all(changes)
 }
 
 function onStorageChange (changes, area) {

@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const optionDefaults = require('../lib/option-defaults')
+const { optionDefaults } = require('../lib/options')
 const translateDataAttrs = require('../lib/data-i18n')
 
 translateDataAttrs()

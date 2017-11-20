@@ -7,7 +7,7 @@ const { initState } = require('../../../add-on/src/lib/state')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
 const createDnsLink = require('../../../add-on/src/lib/dns-link')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
-const optionDefaults = require('../../../add-on/src/lib/option-defaults')
+const { optionDefaults } = require('../../../add-on/src/lib/options')
 
 const url2request = (string) => {
   return {url: string, type: 'main_frame'}
