@@ -3,15 +3,16 @@
 
 const browser = require('webextension-polyfill')
 const optionDefaults = require('./option-defaults')
-const { LRUMap } = require('lru_map')
 const IsIpfs = require('is-ipfs')
 const IpfsApi = require('ipfs-api')
 const { safeIpfsPath } = require('./ipfs-path')
+const createDnsLink = require('./dns-link')
 
 // INIT
 // ===================================================================
 var ipfs // ipfs-api instance
 var state // avoid redundant API reads by utilizing local cache of various states
+var dnsLink
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -19,6 +20,7 @@ module.exports = async function init () {
     state = window.state = {}
     const options = await browser.storage.local.get(optionDefaults)
     ipfs = window.ipfs = initIpfsApi(options.ipfsApiUrl)
+    dnsLink = createDnsLink(getState)
     initStates(options)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -32,6 +34,13 @@ module.exports = async function init () {
 module.exports.destroy = function () {
   clearInterval(apiStatusUpdateInterval)
   apiStatusUpdateInterval = null
+  ipfs = null
+  state = null
+  dnsLink = null
+}
+
+function getState () {
+  return state
 }
 
 function initIpfsApi (ipfsApiUrl) {
@@ -55,7 +64,6 @@ function initStates (options) {
   state.preloadAtPublicGateway = options.preloadAtPublicGateway
   state.catchUnhandledProtocols = options.catchUnhandledProtocols
   state.displayNotifications = options.displayNotifications
-  state.dnslinkCache = new LRUMap(1000)
 }
 
 function registerListeners () {
@@ -98,7 +106,7 @@ function validIpnsPath (path) {
       // console.log('==> IPNS is a valid CID', ipnsRoot)
       return true
     }
-    if (isDnslookupPossible() && cachedDnslinkLookup(ipnsRoot)) {
+    if (dnsLink.isDnslookupPossible() && dnsLink.cachedDnslinkLookup(ipnsRoot)) {
       // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
       return true
     }
@@ -173,8 +181,8 @@ function onBeforeRequest (request) {
       return redirectToCustomGateway(request.url)
     }
     // Look for dnslink in TXT records of visited sites
-    if (state.dnslink && isDnslookupSafeForURL(request.url)) {
-      return dnslinkLookupAndOptionalRedirect(request.url)
+    if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
+      return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
     }
   }
 }
@@ -234,90 +242,6 @@ function normalizedUnhandledIpfsProtocol (request) {
 
 // DNSLINK
 // ===================================================================
-
-function isDnslookupPossible () {
-  // DNS lookups require IPFS API to be up
-  // and have a confirmed connection to the internet
-  return state.peerCount > 0
-}
-
-function isDnslookupSafeForURL (requestUrl) {
-  // skip URLs that could produce infinite recursion or weird loops
-  return isDnslookupPossible() &&
-    requestUrl.startsWith('http') &&
-    !IsIpfs.url(requestUrl) &&
-    !requestUrl.startsWith(state.apiURLString) &&
-    !requestUrl.startsWith(state.gwURLString)
-}
-
-function dnslinkLookupAndOptionalRedirect (requestUrl) {
-  const url = new URL(requestUrl)
-  const fqdn = url.hostname
-  const dnslink = cachedDnslinkLookup(fqdn)
-  if (dnslink) {
-    // redirect to IPNS and leave it up to the gateway
-    // to load the correct path from IPFS
-    // - https://github.com/ipfs/ipfs-companion/issues/298
-    return redirectToIpnsPath(url)
-  }
-}
-
-function cachedDnslinkLookup (fqdn) {
-  let dnslink = state.dnslinkCache.get(fqdn)
-  if (typeof dnslink === 'undefined') {
-    try {
-      console.info('dnslink cache miss for: ' + fqdn)
-      dnslink = readDnslinkFromTxtRecord(fqdn)
-      if (dnslink) {
-        state.dnslinkCache.set(fqdn, dnslink)
-        console.info(`Resolved dnslink: '${fqdn}' -> '${dnslink}'`)
-      } else {
-        state.dnslinkCache.set(fqdn, false)
-        console.info(`Resolved NO dnslink for '${fqdn}'`)
-      }
-    } catch (error) {
-      console.error(`Error in dnslinkLookupAndOptionalRedirect for '${fqdn}'`)
-      console.error(error)
-    }
-  } else {
-    console.info(`Resolved via cached dnslink: '${fqdn}' -> '${dnslink}'`)
-  }
-  return dnslink
-}
-
-function redirectToIpnsPath (url) {
-  const fqdn = url.hostname
-  url.protocol = state.gwURL.protocol
-  url.host = state.gwURL.host
-  url.pathname = `/ipns/${fqdn}${url.pathname}`
-  return { redirectUrl: url.toString() }
-}
-
-function readDnslinkFromTxtRecord (fqdn) {
-  // js-ipfs-api does not provide method for fetching this
-  // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
-  const apiCall = `${state.apiURLString}api/v0/dns/${fqdn}`
-  const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
-  // synchronous mode with small timeout
-  // (it is okay, because we do it only once, then it is cached and read via cachedDnslinkLookup)
-  xhr.open('GET', apiCall, false)
-  xhr.setRequestHeader('Accept', 'application/json')
-  xhr.send(null)
-  if (xhr.status === 200) {
-    const dnslink = JSON.parse(xhr.responseText).Path
-    // console.log('readDnslinkFromTxtRecord', readDnslinkFromTxtRecord)
-    if (!IsIpfs.path(dnslink)) {
-      throw new Error(`dnslink for '${fqdn}' is not a valid IPFS path: '${dnslink}'`)
-    }
-    return dnslink
-  } else if (xhr.status === 500) {
-    // go-ipfs returns 500 if host has no dnslink
-    // TODO: find/fill an upstream bug to make this more intuitive
-    return false
-  } else {
-    throw new Error(xhr.statusText)
-  }
-}
 
 // RUNTIME MESSAGES (one-off messaging)
 // ===================================================================
