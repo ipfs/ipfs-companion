@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 const optionDefaults = Object.freeze({
   publicGatewayUrl: 'https://ipfs.io',
