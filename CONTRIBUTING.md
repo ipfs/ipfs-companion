@@ -58,9 +58,9 @@ Each `npm` task can be run separately. The most useful ones are:
 
 - `npm install` -- install all NPM dependencies
 - `npm run build` -- build the add-on (copy external libraries, create `.zip` bundle)
-- `npm test` -- run entire test suite (both unit and functional tests)
-- `npm test:unit` -- run unit tests only
-- `npm test:functional` -- run functional tests only
+- `npm run yarn-build` -- fast install+build with yarn
+- `npm run docker-build` -- reproducible build using yarn.lock and specific version of yarn and node
+- `npm test` -- run entire test suite
 - `npm run lint` -- check for potential syntax problems (run all linters)
 - `npm run lint:standard` -- run [standard](http://standardjs.com) linter ([IPFS JavaScript projects default to standard code style](https://github.com/ipfs/community/blob/master/js-project-guidelines.md#linting--code-style))
 - `npm run lint:web-ext` -- run [addons-linter](https://github.com/mozilla/addons-linter) shipped with `web-ext` tool

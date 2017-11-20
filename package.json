@@ -29,7 +29,8 @@
     "precommit": "run-s -s clean build lint",
     "prepush": "run-s -s precommit test build",
     "firefox": "web-ext run -s add-on/ --browser-console",
-    "docker-build": "docker run -it --rm --name ipfs-companion-build -v \"$PWD\":/src -w /src node:8.9.1 /bin/bash -c \"npx yarn@1.2.1 && npx yarn@1.2.1 build\""
+    "yarn-build": "npx yarn@1.2.1 && npx yarn@1.2.1 build",
+    "docker-build": "docker run -it --rm --name ipfs-companion-build -v \"$PWD\":/src -w /src node:8.9.1 /bin/bash -c \"npm run yarn-build\""
   },
   "private": true,
   "preferGlobal": false,
