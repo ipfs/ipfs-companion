@@ -3,25 +3,30 @@
 
 const browser = require('webextension-polyfill')
 const optionDefaults = require('./option-defaults')
+const { initState } = require('./state')
 const IsIpfs = require('is-ipfs')
 const IpfsApi = require('ipfs-api')
-const { safeIpfsPath } = require('./ipfs-path')
+const { createIpfsPathValidator, safeIpfsPath, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
+const { createRequestModifier } = require('./ipfs-request')
 
 // INIT
 // ===================================================================
 var ipfs // ipfs-api instance
 var state // avoid redundant API reads by utilizing local cache of various states
 var dnsLink
+var ipfsPathValidator
+var modifyRequest
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
   try {
-    state = window.state = {}
     const options = await browser.storage.local.get(optionDefaults)
+    state = window.state = initState(options)
     ipfs = window.ipfs = initIpfsApi(options.ipfsApiUrl)
     dnsLink = createDnsLink(getState)
-    initStates(options)
+    ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
+    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(options, optionDefaults)
@@ -37,6 +42,8 @@ module.exports.destroy = function () {
   ipfs = null
   state = null
   dnsLink = null
+  modifyRequest = null
+  ipfsPathValidator = null
 }
 
 function getState () {
@@ -48,24 +55,6 @@ function initIpfsApi (ipfsApiUrl) {
   return IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
-function initStates (options) {
-  // we store the most used values in optimized form
-  // to minimize performance impact on overall browsing experience
-  state.pubGwURL = new URL(options.publicGatewayUrl)
-  state.pubGwURLString = state.pubGwURL.toString()
-  state.redirect = options.useCustomGateway
-  state.apiURL = new URL(options.ipfsApiUrl)
-  state.apiURLString = state.apiURL.toString()
-  state.gwURL = new URL(options.customGatewayUrl)
-  state.gwURLString = state.gwURL.toString()
-  state.automaticMode = options.automaticMode
-  state.linkify = options.linkify
-  state.dnslink = options.dnslink
-  state.preloadAtPublicGateway = options.preloadAtPublicGateway
-  state.catchUnhandledProtocols = options.catchUnhandledProtocols
-  state.displayNotifications = options.displayNotifications
-}
-
 function registerListeners () {
   browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
   browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
@@ -75,55 +64,6 @@ function registerListeners () {
   browser.tabs.onActivated.addListener(onActivatedTab)
   browser.runtime.onMessage.addListener(onRuntimeMessage)
   browser.runtime.onConnect.addListener(onRuntimeConnect)
-}
-
-// REDIRECT
-// ===================================================================
-
-function publicIpfsOrIpnsResource (url) {
-  // first, exclude gateway and api, otherwise we have infinite loop
-  if (!url.startsWith(state.gwURLString) && !url.startsWith(state.apiURLString)) {
-    // /ipfs/ is easy to validate, we just check if CID is correct and return if true
-    if (IsIpfs.ipfsUrl(url)) {
-      return true
-    }
-    // /ipns/ requires multiple stages/branches, as it can be FQDN with dnslink or CID
-    if (IsIpfs.ipnsUrl(url) && validIpnsPath(new URL(url).pathname)) {
-      return true
-    }
-  }
-  // everything else is not ipfs-related
-  return false
-}
-
-function validIpnsPath (path) {
-  if (IsIpfs.ipnsPath(path)) {
-    // we may have false-positives here, so we do additional checks below
-    const ipnsRoot = path.match(/^\/ipns\/([^/]+)/)[1]
-    // console.log('==> IPNS root', ipnsRoot)
-    // first check if root is a regular CID
-    if (IsIpfs.cid(ipnsRoot)) {
-      // console.log('==> IPNS is a valid CID', ipnsRoot)
-      return true
-    }
-    if (dnsLink.isDnslookupPossible() && dnsLink.cachedDnslinkLookup(ipnsRoot)) {
-      // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
-      return true
-    }
-  }
-  return false
-}
-
-function validIpfsOrIpnsPath (path) {
-  return IsIpfs.ipfsPath(path) || validIpnsPath(path)
-}
-
-function redirectToCustomGateway (requestUrl) {
-  const url = new URL(requestUrl)
-  url.protocol = state.gwURL.protocol
-  url.host = state.gwURL.host
-  url.port = state.gwURL.port
-  return { redirectUrl: url.toString() }
 }
 
 // HTTP Request Hooks
@@ -148,100 +88,8 @@ function onBeforeSendHeaders (request) {
 }
 
 function onBeforeRequest (request) {
-  // skip requests to the custom gateway or API (otherwise we have too much recursion)
-  if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
-    return
-  }
-
-  // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
-  if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-    const fix = normalizedUnhandledIpfsProtocol(request)
-    if (fix) {
-      return fix
-    }
-  }
-
-  // handler for protocol_handlers from manifest.json
-  if (webPlusProtocolRequest(request)) {
-    // fix path passed via custom protocol
-    const fix = normalizedWebPlusRequest(request)
-    if (fix) {
-      return fix
-    }
-  }
-
-  // handle redirects to custom gateway
-  if (state.redirect) {
-    // Ignore preload requests
-    if (request.method === 'HEAD' && state.preloadAtPublicGateway && request.url.startsWith(state.pubGwURLString)) {
-      return
-    }
-    // Detect valid /ipfs/ and /ipns/ on any site
-    if (publicIpfsOrIpnsResource(request.url)) {
-      return redirectToCustomGateway(request.url)
-    }
-    // Look for dnslink in TXT records of visited sites
-    if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
-      return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
-    }
-  }
+  return modifyRequest(request)
 }
-
-// PROTOCOL HANDLERS: web+ in Firefox (protocol_handlers from manifest.json)
-// ===================================================================
-
-const webPlusProtocolHandler = 'https://ipfs.io/web%2B'
-
-function webPlusProtocolRequest (request) {
-  return request.url.startsWith(webPlusProtocolHandler)
-}
-
-function urlAtPublicGw (path) {
-  return new URL(`${state.pubGwURLString}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
-}
-
-function normalizedWebPlusRequest (request) {
-  const oldPath = decodeURIComponent(new URL(request.url).pathname)
-  let path = oldPath
-  path = path.replace(/^\/web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
-  if (oldPath !== path && IsIpfs.path(path)) {
-    return { redirectUrl: urlAtPublicGw(path) }
-  }
-  return null
-}
-
-// PROTOCOL HANDLERS: UNIVERSAL FALLBACK FOR UNHANDLED PROTOCOLS
-// ===================================================================
-
-const unhandledIpfsRE = /=(?:web%2B|)(ipfs(?=%3A%2F%2F)|ipns(?=%3A%2F%2F)|dweb(?=%3A%2Fip[f|n]s))%3A(?:%2F%2F|%2F)([^&]+)/
-
-function mayContainUnhandledIpfsProtocol (request) {
-  return request.type === 'main_frame' && request.url.includes('%3A%2F')
-}
-
-function unhandledIpfsPath (requestUrl) {
-  const unhandled = requestUrl.match(unhandledIpfsRE)
-  if (unhandled && unhandled.length > 1) {
-    const unhandledProtocol = decodeURIComponent(unhandled[1])
-    const unhandledPath = `/${decodeURIComponent(unhandled[2])}`
-    return IsIpfs.path(unhandledPath) ? unhandledPath : `/${unhandledProtocol}${unhandledPath}`
-  }
-  return null
-}
-
-function normalizedUnhandledIpfsProtocol (request) {
-  const path = unhandledIpfsPath(request.url)
-  if (IsIpfs.path(path)) {
-    // replace search query with fake request to the public gateway
-    // (will be redirected later, if needed)
-    return { redirectUrl: urlAtPublicGw(path) }
-  }
-}
-
-// DNSLINK
-// ===================================================================
 
 // RUNTIME MESSAGES (one-off messaging)
 // ===================================================================
@@ -251,7 +99,7 @@ function onRuntimeMessage (request, sender) {
   // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
   if (request.pubGwUrlForIpfsOrIpnsPath) {
     const path = request.pubGwUrlForIpfsOrIpnsPath
-    const result = validIpfsOrIpnsPath(path) ? urlAtPublicGw(path) : null
+    const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? urlAtPublicGw(path, state.pubGwURLString) : null
     return Promise.resolve({pubGwUrlForIpfsOrIpnsPath: result})
   }
 }
@@ -366,7 +214,7 @@ function preloadAtPublicGateway (path) {
   // asynchronous HTTP HEAD request preloads triggers content without downloading it
   return new Promise((resolve, reject) => {
     const http = new XMLHttpRequest()
-    http.open('HEAD', urlAtPublicGw(path))
+    http.open('HEAD', urlAtPublicGw(path, state.pubGwURLString))
     http.onreadystatechange = function () {
       if (this.readyState === this.DONE) {
         console.info(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)

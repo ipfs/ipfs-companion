@@ -40,7 +40,7 @@ module.exports = function createDnsLink (getState) {
       if (typeof dnslink === 'undefined') {
         try {
           console.info('dnslink cache miss for: ' + fqdn)
-          dnslink = readDnslinkFromTxtRecord(fqdn, getState().apiURLString)
+          dnslink = dnsLink.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
             cache.set(fqdn, dnslink)
             console.info(`Resolved dnslink: '${fqdn}' -> '${dnslink}'`)
@@ -58,6 +58,32 @@ module.exports = function createDnsLink (getState) {
       return dnslink
     },
 
+    readDnslinkFromTxtRecord (fqdn) {
+      // js-ipfs-api does not provide method for fetching this
+      // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
+      const apiCall = `${getState().apiURLString}api/v0/dns/${fqdn}`
+      const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
+      // synchronous mode with small timeout
+      // (it is okay, because we do it only once, then it is cached and read via cachedDnslinkLookup)
+      xhr.open('GET', apiCall, false)
+      xhr.setRequestHeader('Accept', 'application/json')
+      xhr.send(null)
+      if (xhr.status === 200) {
+        const dnslink = JSON.parse(xhr.responseText).Path
+        // console.log('readDnslinkFromTxtRecord', readDnslinkFromTxtRecord)
+        if (!IsIpfs.path(dnslink)) {
+          throw new Error(`dnslink for '${fqdn}' is not a valid IPFS path: '${dnslink}'`)
+        }
+        return dnslink
+      } else if (xhr.status === 500) {
+        // go-ipfs returns 500 if host has no dnslink
+        // TODO: find/fill an upstream bug to make this more intuitive
+        return false
+      } else {
+        throw new Error(xhr.statusText)
+      }
+    },
+
     redirectToIpnsPath (url) {
       const fqdn = url.hostname
       url.protocol = getState().gwURL.protocol
@@ -68,30 +94,4 @@ module.exports = function createDnsLink (getState) {
   }
 
   return dnsLink
-}
-
-function readDnslinkFromTxtRecord (fqdn, apiUrl) {
-  // js-ipfs-api does not provide method for fetching this
-  // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
-  const apiCall = `${apiUrl}api/v0/dns/${fqdn}`
-  const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
-  // synchronous mode with small timeout
-  // (it is okay, because we do it only once, then it is cached and read via cachedDnslinkLookup)
-  xhr.open('GET', apiCall, false)
-  xhr.setRequestHeader('Accept', 'application/json')
-  xhr.send(null)
-  if (xhr.status === 200) {
-    const dnslink = JSON.parse(xhr.responseText).Path
-    // console.log('readDnslinkFromTxtRecord', readDnslinkFromTxtRecord)
-    if (!IsIpfs.path(dnslink)) {
-      throw new Error(`dnslink for '${fqdn}' is not a valid IPFS path: '${dnslink}'`)
-    }
-    return dnslink
-  } else if (xhr.status === 500) {
-    // go-ipfs returns 500 if host has no dnslink
-    // TODO: find/fill an upstream bug to make this more intuitive
-    return false
-  } else {
-    throw new Error(xhr.statusText)
-  }
 }
