@@ -7,3 +7,4 @@ build
 npm-debug.log
 crowdin.yml
 .*~
+add-on/dist

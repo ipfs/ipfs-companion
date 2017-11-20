@@ -1,6 +1,13 @@
 'use strict'
 /* eslint-env browser, webextensions */
-const Buffer = window.IpfsApi().Buffer
+
+const browser = require('webextension-polyfill')
+const IpfsApi = require('ipfs-api')
+const translateDataAttrs = require('../lib/data-i18n')
+
+translateDataAttrs()
+
+const Buffer = IpfsApi().Buffer
 const quickUploadInput = document.getElementById('quickUploadInput')
 const quickUploadMessage = document.getElementById('quickUploadMessage')
 
