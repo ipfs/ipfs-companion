@@ -6,25 +6,32 @@ const optionDefaults = require('./option-defaults')
 const { LRUMap } = require('lru_map')
 const IsIpfs = require('is-ipfs')
 const IpfsApi = require('ipfs-api')
+const { safeIpfsPath } = require('./ipfs-path')
 
 // INIT
 // ===================================================================
 var ipfs // ipfs-api instance
-var state = window.state = {} // avoid redundant API reads by utilizing local cache of various states
+var state // avoid redundant API reads by utilizing local cache of various states
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
   try {
+    state = window.state = {}
     const options = await browser.storage.local.get(optionDefaults)
     ipfs = window.ipfs = initIpfsApi(options.ipfsApiUrl)
     initStates(options)
     registerListeners()
-    setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(options, optionDefaults)
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
   }
+}
+
+module.exports.destroy = function () {
+  clearInterval(apiStatusUpdateInterval)
+  apiStatusUpdateInterval = null
 }
 
 function initIpfsApi (ipfsApiUrl) {
@@ -513,11 +520,6 @@ window.uploadResultHandler = uploadResultHandler
 // Copying URLs
 // -------------------------------------------------------------------
 
-function safeIpfsPath (urlOrPath) {
-  // better safe than sorry: https://github.com/ipfs/ipfs-companion/issues/303
-  return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
-}
-
 window.safeIpfsPath = safeIpfsPath
 
 async function findUrlForContext (context) {
@@ -677,12 +679,12 @@ const idleInSecs = 5 * 60
 
 var apiStatusUpdateInterval
 
-function setApiStatusUpdateInterval (ipfsApiPollMs) {
+async function setApiStatusUpdateInterval (ipfsApiPollMs) {
   if (apiStatusUpdateInterval) {
     clearInterval(apiStatusUpdateInterval)
   }
   apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
-  apiStatusUpdate()
+  await apiStatusUpdate()
 }
 
 async function apiStatusUpdate () {
@@ -834,7 +836,7 @@ function storeMissingOptions (read, defaults) {
   return Promise.all(changes)
 }
 
-function onStorageChange (changes, area) { // eslint-disable-line no-unused-vars
+function onStorageChange (changes, area) {
   for (let key in changes) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
