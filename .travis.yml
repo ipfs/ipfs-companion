@@ -41,7 +41,7 @@ before_script:
 install:
     - npm install --no-optional
 script:
+    - npm run clean
     - npm run build
     - npm test
-    - npm run clean
     - npm run lint
