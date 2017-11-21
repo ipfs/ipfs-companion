@@ -95,6 +95,7 @@ module.exports = (state, emitter) => {
 
   emitter.on('quickUpload', () => {
     browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-upload.html') })
+    window.close()
   })
 
   emitter.on('openWebUi', async () => {

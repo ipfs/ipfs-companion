@@ -613,6 +613,14 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bel@^5.1.3:
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/bel/-/bel-5.1.5.tgz#99d9381ce8503b120702e920e23daf515a6cba53"
+  dependencies:
+    hyperx "^2.3.0"
+    is-electron "^2.0.0"
+    pelo "^0.0.4"
+
 better-assert@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/better-assert/-/better-assert-1.0.2.tgz#40866b9e1b9e0b55b481894311e68faffaebc522"
@@ -1098,6 +1106,23 @@ chokidar@^1.0.0, chokidar@^1.4.1, chokidar@^1.4.3:
     readdirp "^2.0.0"
   optionalDependencies:
     fsevents "^1.0.0"
+
+choo@6.6.0:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/choo/-/choo-6.6.0.tgz#2726211b8205a746d6a8d535042ef03f1ebd2a6d"
+  dependencies:
+    bel "^5.1.3"
+    document-ready "^2.0.1"
+    nanobus "^4.2.0"
+    nanohref "^3.0.0"
+    nanolocation "^1.0.0"
+    nanomorph "^5.1.2"
+    nanoquery "^1.1.0"
+    nanoraf "^3.0.0"
+    nanorouter "^2.0.0"
+    nanotiming "^6.0.0"
+    scroll-to-anchor "^1.0.0"
+    xtend "^4.0.1"
 
 chownr@^1.0.1:
   version "1.0.1"
@@ -1724,6 +1749,10 @@ doctrine@^2.0.0:
   dependencies:
     esutils "^2.0.2"
     isarray "^1.0.0"
+
+document-ready@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/document-ready/-/document-ready-2.0.1.tgz#3e3bf31d3235b94e232e7b2c5fa1a634e873bae4"
 
 dom-serialize@^2.2.0:
   version "2.2.1"
@@ -3070,6 +3099,16 @@ husky@0.14.3:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
+hyperscript-attribute-to-property@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hyperscript-attribute-to-property/-/hyperscript-attribute-to-property-1.0.0.tgz#825308d49bb8e2957923f731981bcc811cad7aff"
+
+hyperx@^2.3.0:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/hyperx/-/hyperx-2.3.2.tgz#17518dad514209b3f7090f149c08a9a64386396e"
+  dependencies:
+    hyperscript-attribute-to-property "^1.0.0"
+
 iconv-lite@0.4.19, iconv-lite@^0.4.17:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
@@ -3323,6 +3362,10 @@ is-decimal@^1.0.0:
 is-dotfile@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/is-dotfile/-/is-dotfile-1.0.3.tgz#a6a2f32ffd2dfb04f5ca25ecd0f6b83cf798a1e1"
+
+is-electron@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-electron/-/is-electron-2.1.0.tgz#37dd2e9e7167efa8bafce86c0c25762bc4b851fa"
 
 is-equal-shallow@^0.1.3:
   version "0.1.3"
@@ -4352,6 +4395,51 @@ nan@^2.2.1, nan@^2.3.0, nan@^2.3.3:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
 
+nanoassert@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/nanoassert/-/nanoassert-1.1.0.tgz#4f3152e09540fde28c76f44b19bbcd1d5a42478d"
+
+nanobus@^4.2.0:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/nanobus/-/nanobus-4.3.1.tgz#d85139b5ee057e36db0113cdcf01a09b7efd10ac"
+  dependencies:
+    nanotiming "^6.0.0"
+    remove-array-items "^1.0.0"
+
+nanohref@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/nanohref/-/nanohref-3.0.1.tgz#3879428e4fa80b7d5484692471cfa0b4a3348f8e"
+
+nanolocation@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/nanolocation/-/nanolocation-1.0.0.tgz#15b5c7af05895d1a9f21f0d136495d994450686b"
+
+nanomorph@^5.1.2:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/nanomorph/-/nanomorph-5.1.3.tgz#65b81912bb32278aaa7aacc9ccd99b4508f6a21d"
+  dependencies:
+    nanoassert "^1.1.0"
+
+nanoquery@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/nanoquery/-/nanoquery-1.2.0.tgz#0e44537ac1a2717e11ee796abce605f141984982"
+  dependencies:
+    nanoassert "^1.1.0"
+
+nanoraf@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/nanoraf/-/nanoraf-3.0.1.tgz#ab9fb9c257b9adcc71d82982cb58d8fa3503764a"
+
+nanorouter@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/nanorouter/-/nanorouter-2.1.0.tgz#4fcaf96203a00898da89188b1bff5a8fc06ef4ff"
+  dependencies:
+    wayfarer "^6.5.0"
+
+nanotiming@^6.0.0:
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/nanotiming/-/nanotiming-6.1.5.tgz#673b104bd651ba6e98e4172ee744f2ccb4d6f11b"
+
 native-promise-only@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/native-promise-only/-/native-promise-only-0.8.1.tgz#20a318c30cb45f71fe7adfbf7b21c99c1472ef11"
@@ -4870,6 +4958,10 @@ peer-info@~0.11.0:
     multiaddr "^3.0.1"
     peer-id "~0.10.2"
 
+pelo@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/pelo/-/pelo-0.0.4.tgz#ca30c8d59a669d3b43a6d14c28681ca21b604b0f"
+
 pem-jwk@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/pem-jwk/-/pem-jwk-1.5.1.tgz#7a8637fd2f67a827e57c0c42e1c23c3fd52cfb01"
@@ -5371,6 +5463,10 @@ remark@^5.0.1:
     remark-stringify "^1.1.0"
     unified "^4.1.1"
 
+remove-array-items@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/remove-array-items/-/remove-array-items-1.0.0.tgz#07bf42cb332f4cf6e85ead83b5e4e896d2326b21"
+
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz#c24bce2a283adad5bc3f58e0d48249b92379d8ef"
@@ -5610,6 +5706,10 @@ sandwich-stream@^1.0.0:
 sax@>=0.6.0:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
+
+scroll-to-anchor@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/scroll-to-anchor/-/scroll-to-anchor-1.1.0.tgz#c99b8d2e5d95056752787ca78095ab75b520b3fd"
 
 secp256k1@^3.3.0:
   version "3.3.1"
@@ -6705,6 +6805,12 @@ watchpack@1.3.0:
     async "^2.1.2"
     chokidar "^1.4.3"
     graceful-fs "^4.1.2"
+
+wayfarer@^6.5.0:
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/wayfarer/-/wayfarer-6.6.2.tgz#3baadc1c4b85ef9be26ee75fac6cde9b075ae473"
+  dependencies:
+    xtend "^4.0.1"
 
 wcwidth@^1.0.0:
   version "1.0.1"
