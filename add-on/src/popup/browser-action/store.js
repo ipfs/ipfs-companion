@@ -23,9 +23,6 @@ module.exports = (state, emitter) => {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
-    // A short pause allows the popup to animate in without breaking
-    await new Promise((resolve) => setTimeout(resolve, 100))
-
     // initialize connection to the background script which will trigger UI updates
     port = browser.runtime.connect({name: 'browser-action-port'})
     port.onMessage.addListener(async (message) => {
