@@ -169,72 +169,8 @@
 </head>
 
 <body>
-  <!-- https://firefoxux.github.io/StyleGuide/#/navigation -->
-  <div class="panel">
-    <div class="panel-section panel-section-list" id="ipfs-resource-context-actions">
-      <div class="panel-list-item" id="copy-current-ipfs-address">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panelCopy_currentIpfsAddress"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" id="copy-current-public-gw-url">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panel_copyCurrentPublicGwUrl"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" id="pin-current-ipfs-address">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panel_pinCurrentIpfsAddress"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" id="unpin-current-ipfs-address">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panel_unpinCurrentIpfsAddress"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-section-separator"></div>
-    </div>
-    <div class="panel-section panel-section-list" id="operations">
-      <div class="panel-list-item" id="quick-upload">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panel_quickUpload"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" id="open-webui">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panel_openWebui"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" id="open-preferences">
-        <div class="icon"></div>
-        <div class="text" data-i18n="panel_openPreferences"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" id="toggle-gateway-redirect">
-        <div class="icon"></div>
-        <div class="text" id="enable-gateway-redirect" data-i18n="panel_toggleGatewayRedirectEnable"></div>
-        <div class="text" id="disable-gateway-redirect" data-i18n="panel_toggleGatewayRedirectDisable"></div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-section-separator"></div>
-    </div>
-    <div class="panel-section" id="gateway-status">
-      <img src="../../icons/ipfs-logo-off.svg" id="icon"/>
-      <ul>
-        <li id="gateway-address"><span data-i18n="panel_statusGatewayAddress"></span><span id="gateway-address-val">unknown</span></li>
-        <li id="gateway-version"><span data-i18n="panel_statusGatewayVersion"></span><span id="gateway-version-val">offline</span></li>
-        <li id="swarm-peers"><span data-i18n="panel_statusSwarmPeers"></span><span id="swarm-peers-val">offline</span></li>
-        <li id="gateway-redirect"><span data-i18n="panel_statusGatewayRedirect"></span>
-          <span>
-            <span id="redirect-enabled" data-i18n="panel_statusGatewayRedirectEnabled"></span>
-            <span id="redirect-disabled" data-i18n="panel_statusGatewayRedirectDisabled"></span>
-          </span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <script src="../ipfs-companion-common.js"></script>
+  <div id="root"></div>
+  <script src="../../ipfs-companion-common.js"></script>
   <script src="browser-action.js"></script>
 </body>
 

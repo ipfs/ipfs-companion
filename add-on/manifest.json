@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "__MSG_manifest_extensionName__",
     "short_name": "__MSG_manifest_shortExtensionName__",
-    "version" : "2.1.0rc2",
+    "version" : "2.1.0",
 
     "description": "__MSG_manifest_extensionDescription__",
     "homepage_url": "https://github.com/ipfs/ipfs-companion",
@@ -46,7 +46,7 @@
             "128": "icons/png/ipfs-logo-off_128.png"
         },
         "default_title": "__MSG_browserAction_title__",
-        "default_popup": "dist/popup/browser-action.html"
+        "default_popup": "dist/popup/browser-action/index.html"
     },
 
     "options_ui": {
