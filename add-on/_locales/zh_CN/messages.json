@@ -233,11 +233,11 @@
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "预加载上传",
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "通过公共网关的异步http头请求开启对已上传资产的自动预加载",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_description": {
