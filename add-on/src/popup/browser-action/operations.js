@@ -17,7 +17,7 @@ module.exports = function operations ({
       ${isIpfsOnline ? html`
         <div class="panel-list-item" id="quick-upload" onclick=${onQuickUpload}>
           <div class="icon"></div>
-          <div class="text" data-i18n="">${browser.i18n.getMessage('panel_quickUpload')}</div>
+          <div class="text">${browser.i18n.getMessage('panel_quickUpload')}</div>
           <div class="text-shortcut"></div>
         </div>
       ` : null}
