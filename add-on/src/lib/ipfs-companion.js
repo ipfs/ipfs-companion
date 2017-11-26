@@ -179,7 +179,6 @@ function notify (titleKey, messageKey, messageParam) {
 // contextMenus
 // -------------------------------------------------------------------
 const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
-const contextMenuCreateShortUrl = 'contextMenu_createShortUrl'
 const contextMenuCopyIpfsAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyPublicGwUrl = 'panel_copyCurrentPublicGwUrl'
 
@@ -269,7 +268,7 @@ async function addFromURL (info) {
 
 function uploadResultHandler (err, result) {
   if (err || !result) {
-    console.error('ipfs add error', err, result)
+    console.error('[ipfs-companion] ipfs add error', err, result)
     notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err}`)
     return
   }
@@ -279,7 +278,7 @@ function uploadResultHandler (err, result) {
       browser.tabs.create({
         'url': new URL(state.gwURLString + path).toString()
       })
-      console.info('successfully stored', path)
+      console.info('[ipfs-companion] successfully stored', path)
       if (state.preloadAtPublicGateway) {
         preloadAtPublicGateway(path)
       }
@@ -364,11 +363,10 @@ async function copyTextToClipboard (copyText) {
 
 async function updateContextMenus (changedTabId) {
   await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
-  await browser.contextMenus.update(contextMenuCreateShortUrl, {enabled: state.peerCount > 0})
   if (changedTabId) {
     // recalculate tab-dependant menu items
     const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-    if (currentTab.id === changedTabId) {
+    if (currentTab && currentTab.id === changedTabId) {
       const ipfsContext = isIpfsPageActionsContext(currentTab.url)
       browser.contextMenus.update(contextMenuCopyIpfsAddress, {enabled: ipfsContext})
       browser.contextMenus.update(contextMenuCopyPublicGwUrl, {enabled: ipfsContext})
