@@ -401,14 +401,14 @@ async function onUpdatedTab (tabId, changeInfo, tab) {
         const browserApiPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof browser !== 'undefined'" }))[0]
         if (!browserApiPresent) {
           await browser.tabs.executeScript(tabId, {
-            file: '/dist/lib/browser-polyfill.min.js',
+            file: '/dist/contentScripts/browser-polyfill.min.js',
             matchAboutBlank: false,
             allFrames: true,
             runAt: 'document_start'
           })
         }
         await browser.tabs.executeScript(tabId, {
-          file: '/dist/lib/linkifyDOM.js',
+          file: '/dist/contentScripts/linkifyDOM.js',
           matchAboutBlank: false,
           allFrames: true,
           runAt: 'document_idle'
@@ -430,7 +430,7 @@ async function onUpdatedTab (tabId, changeInfo, tab) {
         })
         // inject script that normalizes `href` and `src` containing unhandled protocols
         await browser.tabs.executeScript(tabId, {
-          file: '/dist/lib/normalizeLinksWithUnhandledProtocols.js',
+          file: '/dist/contentScripts/normalizeLinksWithUnhandledProtocols.js',
           matchAboutBlank: false,
           allFrames: true,
           runAt: 'document_end'
