@@ -182,28 +182,32 @@ const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
 const contextMenuCopyIpfsAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyPublicGwUrl = 'panel_copyCurrentPublicGwUrl'
 
-browser.contextMenus.create({
-  id: contextMenuUploadToIpfs,
-  title: browser.i18n.getMessage(contextMenuUploadToIpfs),
-  contexts: ['image', 'video', 'audio'],
-  documentUrlPatterns: ['<all_urls>'],
-  enabled: false,
-  onclick: addFromURL
-})
-browser.contextMenus.create({
-  id: contextMenuCopyIpfsAddress,
-  title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
-  contexts: ['page', 'image', 'video', 'audio', 'link'],
-  documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-  onclick: copyCanonicalAddress
-})
-browser.contextMenus.create({
-  id: contextMenuCopyPublicGwUrl,
-  title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
-  contexts: ['page', 'image', 'video', 'audio', 'link'],
-  documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-  onclick: copyAddressAtPublicGw
-})
+try {
+  browser.contextMenus.create({
+    id: contextMenuUploadToIpfs,
+    title: browser.i18n.getMessage(contextMenuUploadToIpfs),
+    contexts: ['image', 'video', 'audio'],
+    documentUrlPatterns: ['<all_urls>'],
+    enabled: false,
+    onclick: addFromURL
+  })
+  browser.contextMenus.create({
+    id: contextMenuCopyIpfsAddress,
+    title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
+    contexts: ['page', 'image', 'video', 'audio', 'link'],
+    documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+    onclick: copyCanonicalAddress
+  })
+  browser.contextMenus.create({
+    id: contextMenuCopyPublicGwUrl,
+    title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
+    contexts: ['page', 'image', 'video', 'audio', 'link'],
+    documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+    onclick: copyAddressAtPublicGw
+  })
+} catch (err) {
+  console.log('[ipfs-companion] Error creating contextMenus', err)
+}
 
 function inFirefox () {
   return !!navigator.userAgent.match('Firefox')
@@ -362,15 +366,19 @@ async function copyTextToClipboard (copyText) {
 }
 
 async function updateContextMenus (changedTabId) {
-  await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
-  if (changedTabId) {
-    // recalculate tab-dependant menu items
-    const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-    if (currentTab && currentTab.id === changedTabId) {
-      const ipfsContext = isIpfsPageActionsContext(currentTab.url)
-      browser.contextMenus.update(contextMenuCopyIpfsAddress, {enabled: ipfsContext})
-      browser.contextMenus.update(contextMenuCopyPublicGwUrl, {enabled: ipfsContext})
+  try {
+    await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
+    if (changedTabId) {
+      // recalculate tab-dependant menu items
+      const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+      if (currentTab && currentTab.id === changedTabId) {
+        const ipfsContext = isIpfsPageActionsContext(currentTab.url)
+        browser.contextMenus.update(contextMenuCopyIpfsAddress, {enabled: ipfsContext})
+        browser.contextMenus.update(contextMenuCopyPublicGwUrl, {enabled: ipfsContext})
+      }
     }
+  } catch (err) {
+    console.log('[ipfs-companion] Error updating context menus', err)
   }
 }
 
