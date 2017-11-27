@@ -206,7 +206,7 @@ try {
     onclick: copyAddressAtPublicGw
   })
 } catch (err) {
-  console.error('Error creating contextMenus', err)
+  console.log('[ipfs-companion] Error creating contextMenus', err)
 }
 
 function inFirefox () {
@@ -378,7 +378,7 @@ async function updateContextMenus (changedTabId) {
       }
     }
   } catch (err) {
-    console.error('Error updating context menus', err)
+    console.log('[ipfs-companion] Error updating context menus', err)
   }
 }
 

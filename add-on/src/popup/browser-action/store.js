@@ -110,7 +110,13 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('openPrefs', () => {
-    browser.runtime.openOptionsPage().then(() => window.close())
+    browser.runtime.openOptionsPage()
+      .then(() => window.close())
+      .catch((err) => {
+        console.error('runtime.openOptionsPage() failed, opening options page in tab instead.', err)
+        // brave: fallback to opening options page as a tab.
+        browser.tabs.create({ url: browser.extension.getURL('dist/options/options.html') })
+      })
   })
 
   emitter.on('toggleRedirect', async () => {
