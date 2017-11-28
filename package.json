@@ -38,7 +38,7 @@
   "devDependencies": {
     "babel-preset-es2017": "6.24.1",
     "browserify": "14.5.0",
-    "browserify-css": "^0.14.0",
+    "browserify-css": "0.14.0",
     "browserify-package-json": "1.0.1",
     "chai": "4.1.2",
     "cross-env": "5.1.1",

@@ -817,7 +817,7 @@ browserify-cipher@^1.0.0:
     browserify-des "^1.0.0"
     evp_bytestokey "^1.0.0"
 
-browserify-css@^0.14.0:
+browserify-css@0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/browserify-css/-/browserify-css-0.14.0.tgz#5ece581aa6f8c9aab262956fd06d57c526c9a334"
   dependencies:
