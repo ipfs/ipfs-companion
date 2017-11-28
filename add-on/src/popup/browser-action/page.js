@@ -2,9 +2,12 @@
 /* eslint-env browser, webextensions */
 
 const html = require('choo/html')
+const header = require('./header')
 const contextActions = require('./context-actions')
 const operations = require('./operations')
 const gatewayStatus = require('./gateway-status')
+
+require('./page.css')
 
 // Render the browser action page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -20,12 +23,14 @@ module.exports = function browserActionPage (state, emit) {
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleRedirect = () => emit('toggleRedirect')
 
+  const headerProps = Object.assign({}, state)
   const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onOpenPrefs, onToggleRedirect }, state)
   const gwStatusProps = Object.assign({}, state)
 
   return html`
-    <div class="panel">
+    <div class="helvetica" style="min-width: 320px">
+      ${header(headerProps)}
       ${contextActions(contextActionsProps)}
       ${operations(opsProps)}
       ${gatewayStatus(gwStatusProps)}

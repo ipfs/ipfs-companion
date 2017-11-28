@@ -1,0 +1,40 @@
+@import url('node_modules/tachyons/css/tachyons.css');
+@import url('./mdc.switch.css');
+
+.bg-near-white--hover:hover {
+  background-color: #F4F4F4;
+}
+
+.outline-0--focus:focus {
+  outline: 0;
+}
+
+@keyframes heart-beat {
+  0% {
+    transform: scale(1);
+  }
+  5% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 1.05em rgba(95, 203, 207, 0.5));
+  }
+  10% {
+    transform: scale(1.025);
+    filter: drop-shadow(0 0 1.025em rgba(95, 203, 207, 0.25));
+  }
+  15% {
+    transform: scale(1.075);
+    filter: drop-shadow(0 0 1.075em rgba(95, 203, 207, 0.5));
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#ipfs-logo.online {
+  animation-name: heart-beat;
+  animation-iteration-count: infinite;
+  animation-duration: 2.5s;
+}

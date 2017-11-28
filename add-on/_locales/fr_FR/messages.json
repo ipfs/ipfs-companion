@@ -3,6 +3,14 @@
     "message": "Compagnon IPFS",
     "description": "A pop-up title when user hovers on Browser Action button"
   },
+  "panel_headerIpfsNodeEmbedded": {
+    "message": "Embedded",
+    "description": "Label for an embedded IPFS node"
+  },
+  "panel_headerIpfsNodeExternal": {
+    "message": "External",
+    "description": "Label for an external IPFS node"
+  },
   "panel_statusGatewayRedirect": {
     "message": "rediréger",
     "description": "A label in Node status section of Browser Action pop-up"

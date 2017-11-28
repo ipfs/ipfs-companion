@@ -3,6 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const navItem = require('./nav-item')
 
 module.exports = function operations ({
   isIpfsOnline,
@@ -13,38 +14,32 @@ module.exports = function operations ({
   onToggleRedirect
 }) {
   return html`
-    <div class="panel-section panel-section-list">
-      ${isIpfsOnline ? html`
-        <div class="panel-list-item" id="quick-upload" onclick=${onQuickUpload}>
-          <div class="icon"></div>
-          <div class="text">${browser.i18n.getMessage('panel_quickUpload')}</div>
-          <div class="text-shortcut"></div>
-        </div>
-      ` : null}
-      ${isIpfsOnline ? html`
-        <div class="panel-list-item" onclick=${onOpenWebUi}>
-          <div class="icon"></div>
-          <div class="text">${browser.i18n.getMessage('panel_openWebui')}</div>
-          <div class="text-shortcut"></div>
-        </div>
-      ` : null}
-      <div class="panel-list-item" onclick=${onOpenPrefs}>
-        <div class="icon"></div>
-        <div class="text">${browser.i18n.getMessage('panel_openPreferences')}</div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-list-item" onclick=${onToggleRedirect}>
-        <div class="icon"></div>
-        <div class="text">
-          ${browser.i18n.getMessage(
-            redirectEnabled
-              ? 'panel_toggleGatewayRedirectDisable'
-              : 'panel_toggleGatewayRedirectEnable'
-          )}
-        </div>
-        <div class="text-shortcut"></div>
-      </div>
-      <div class="panel-section-separator"></div>
+    <div class="bb b--black-20 mv2 pb2">
+      ${isIpfsOnline ? (
+        navItem({
+          text: browser.i18n.getMessage('panel_quickUpload'),
+          bold: true,
+          onClick: onQuickUpload
+        })
+      ) : null}
+      ${isIpfsOnline ? (
+        navItem({
+          text: browser.i18n.getMessage('panel_openWebui'),
+          onClick: onOpenWebUi
+        })
+      ) : null}
+      ${navItem({
+        text: browser.i18n.getMessage('panel_openPreferences'),
+        onClick: onOpenPrefs
+      })}
+      ${navItem({
+        text: browser.i18n.getMessage(
+          redirectEnabled
+            ? 'panel_toggleGatewayRedirectDisable'
+            : 'panel_toggleGatewayRedirectEnable'
+        ),
+        onClick: onToggleRedirect
+      })}
     </div>
   `
 }
