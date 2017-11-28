@@ -23,13 +23,9 @@ module.exports = async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
     state = window.state = initState(options)
-
     ipfs = window.ipfs = await initIpfsClient(options)
     console.log('[ipfs-companion] ipfs init complete')
-
-    // Check for ipfs dns txt records
     dnsLink = createDnsLink(getState)
-    // is it an ipfs path?
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
     registerListeners()
