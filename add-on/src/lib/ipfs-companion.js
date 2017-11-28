@@ -24,8 +24,8 @@ module.exports = async function init () {
     const options = await browser.storage.local.get(optionDefaults)
     state = window.state = initState(options)
 
-    ipfs = window.ipfs = await initIpfsClient(state)
-    console.log('[ipfs-companion] ipfs init complete', ipfs)
+    ipfs = window.ipfs = await initIpfsClient(options)
+    console.log('[ipfs-companion] ipfs init complete')
 
     // Check for ipfs dns txt records
     dnsLink = createDnsLink(getState)
@@ -590,7 +590,7 @@ function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
   }
 }
 
-function onStorageChange (changes, area) {
+async function onStorageChange (changes, area) {
   for (let key in changes) {
     let change = changes[key]
     if (change.oldValue !== change.newValue) {
@@ -599,7 +599,7 @@ function onStorageChange (changes, area) {
       if (key === 'ipfsApiUrl') {
         state.apiURL = new URL(change.newValue)
         state.apiURLString = state.apiURL.toString()
-        ipfs = window.ipfs = initIpfsClient(state)
+        ipfs = window.ipfs = await initIpfsClient(state)
         apiStatusUpdate()
       } else if (key === 'ipfsApiPollMs') {
         setApiStatusUpdateInterval(change.newValue)

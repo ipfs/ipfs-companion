@@ -1,3 +1,5 @@
+'use strict'
+
 const Ipfs = require('ipfs')
 const IpfsApi = require('ipfs-api')
 

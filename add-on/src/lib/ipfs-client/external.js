@@ -1,11 +1,12 @@
+'use strict'
+/* eslint-env browser */
+
 const IpfsApi = require('ipfs-api')
 
 exports.init = async function (opts) {
-  const url = new window.URL(opts.ipfsApiUrl)
+  console.log('[ipfs-companion] External ipfs init')
+
+  const url = new URL(opts.ipfsApiUrl)
   const api = IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
   return api
-}
-
-exports.destroy = async function () {
-  return Promise.resolve()
 }
