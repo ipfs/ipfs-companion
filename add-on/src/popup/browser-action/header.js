@@ -11,6 +11,7 @@ module.exports = function header ({ isIpfsOnline }) {
         <img
           src="../../../icons/ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg"
           class="${isIpfsOnline ? 'online' : ''}"
+          id="ipfs-logo"
           style="width: 52px" />
       </div>
       <h1 class="f5 mt2 mb2 tc white normal">IPFS node</h1>
