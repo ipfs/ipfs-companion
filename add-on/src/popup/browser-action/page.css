@@ -1,0 +1,10 @@
+@import url('node_modules/tachyons/css/tachyons.css');
+@import url('./mdc.switch.css');
+
+.bg-near-white--hover:hover {
+  background-color: #F4F4F4;
+}
+
+.outline-0--focus:focus {
+  outline: 0;
+}

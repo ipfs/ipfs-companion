@@ -2,6 +2,33 @@
 # yarn lockfile v1
 
 
+"@material/animation@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@material/animation/-/animation-0.25.0.tgz#b252ac3d0b628e79a79f0c406d7470fb56352a80"
+
+"@material/elevation@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@material/elevation/-/elevation-0.25.0.tgz#ab1b22cdc6d0c840e2c389e334c39466a8397c9b"
+  dependencies:
+    "@material/animation" "^0.25.0"
+    "@material/theme" "^0.4.0"
+
+"@material/switch@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@material/switch/-/switch-0.25.0.tgz#6c67390fb67f98b467da4de39fa6256fab83172f"
+  dependencies:
+    "@material/animation" "^0.25.0"
+    "@material/elevation" "^0.25.0"
+    "@material/theme" "^0.25.0"
+
+"@material/theme@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@material/theme/-/theme-0.25.0.tgz#707b4c61ebc62e662d36164c8dd45fcf98bb1444"
+
+"@material/theme@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@material/theme/-/theme-0.4.0.tgz#0aef1a0279b65c15990584fb8b8eca095c734641"
+
 "@types/node@*":
   version "8.0.53"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.53.tgz#396b35af826fa66aad472c8cb7b8d5e277f4e6d8"

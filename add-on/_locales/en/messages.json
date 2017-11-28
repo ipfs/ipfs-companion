@@ -3,6 +3,14 @@
     "message": "IPFS Companion",
     "description": "A pop-up title when user hovers on Browser Action button"
   },
+  "panel_headerIpfsNodeEmbedded": {
+    "message": "Embedded",
+    "description": "Label for an embedded IPFS node"
+  },
+  "panel_headerIpfsNodeExternal": {
+    "message": "External",
+    "description": "Label for an external IPFS node"
+  },
   "panel_statusGatewayRedirect": {
     "message": "redirect",
     "description": "A label in Node status section of Browser Action pop-up"
@@ -16,7 +24,7 @@
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "gateway",
+    "message": "HTTP Gateway",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
