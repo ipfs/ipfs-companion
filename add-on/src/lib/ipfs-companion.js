@@ -5,10 +5,10 @@ const browser = require('webextension-polyfill')
 const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState } = require('./state')
 const IsIpfs = require('is-ipfs')
-const IpfsApi = require('ipfs-api')
 const { createIpfsPathValidator, safeIpfsPath, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
+const { initIpfsClient } = require('./ipfs-client')
 
 // INIT
 // ===================================================================
@@ -23,8 +23,13 @@ module.exports = async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
     state = window.state = initState(options)
-    ipfs = window.ipfs = initIpfsApi(options.ipfsApiUrl)
+
+    ipfs = window.ipfs = await initIpfsClient(state)
+    console.log('[ipfs-companion] ipfs init complete', ipfs)
+
+    // Check for ipfs dns txt records
     dnsLink = createDnsLink(getState)
+    // is it an ipfs path?
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
     registerListeners()
@@ -48,11 +53,6 @@ module.exports.destroy = function () {
 
 function getState () {
   return state
-}
-
-function initIpfsApi (ipfsApiUrl) {
-  const url = new URL(ipfsApiUrl)
-  return IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
 }
 
 function registerListeners () {
@@ -599,7 +599,7 @@ function onStorageChange (changes, area) {
       if (key === 'ipfsApiUrl') {
         state.apiURL = new URL(change.newValue)
         state.apiURLString = state.apiURL.toString()
-        ipfs = window.ipfs = initIpfsApi(state.apiURLString)
+        ipfs = window.ipfs = initIpfsClient(state)
         apiStatusUpdate()
       } else if (key === 'ipfsApiPollMs') {
         setApiStatusUpdateInterval(change.newValue)
