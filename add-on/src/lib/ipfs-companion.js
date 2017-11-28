@@ -249,7 +249,7 @@ async function addFromURL (info) {
       const response = await fetch(srcUrl, fetchOptions)
       const reader = new FileReader()
       reader.onloadend = () => {
-        const buffer = ipfs.Buffer.from(reader.result)
+        const buffer = Buffer.from(reader.result)
         ipfs.add(buffer, uploadResultHandler)
       }
       reader.readAsArrayBuffer(await response.blob())
