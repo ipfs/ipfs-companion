@@ -50,9 +50,9 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      const bg = await getBackgroundPage()
+      const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
-      const pinResult = await bg.ipfs.pin.add(currentPath, { recursive: true })
+      const pinResult = await ipfsCompanion.ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       notify('notify_pinnedIpfsResourceTitle', currentPath)
       state.isPinned = true
@@ -69,9 +69,9 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      const bg = await getBackgroundPage()
+      const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
-      const result = await bg.ipfs.pin.rm(currentPath, {recursive: true})
+      const result = await ipfsCompanion.ipfs.pin.rm(currentPath, {recursive: true})
       console.log('ipfs.pin.rm result', result)
       notify('notify_unpinnedIpfsResourceTitle', currentPath)
       state.isPinned = false
@@ -175,9 +175,9 @@ module.exports = (state, emitter) => {
 
   async function updatePinnedState (status) {
     try {
-      const bg = await getBackgroundPage()
+      const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(status.currentTab.url).pathname)
-      const response = await bg.ipfs.pin.ls(currentPath, {quiet: true})
+      const response = await ipfsCompanion.ipfs.pin.ls(currentPath, {quiet: true})
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {
@@ -200,10 +200,10 @@ function getBackgroundPage () {
 }
 
 async function resolveToIPFS (path) {
-  const bg = await getBackgroundPage()
   path = safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
-    const response = await bg.ipfs.name.resolve(path, {recursive: true, nocache: false})
+    const { ipfsCompanion } = await getBackgroundPage()
+    const response = await ipfsCompanion.ipfs.name.resolve(path, {recursive: true, nocache: false})
     return response.Path
   }
   return path
