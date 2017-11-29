@@ -4,15 +4,15 @@
 const IpfsApi = require('ipfs-api')
 
 exports.init = async function (opts) {
-  console.log('[ipfs-companion] External ipfs init')
+  console.log('[ipfs-companion] External ipfs init', opts.apiURLString)
 
-  const url = new URL(opts.ipfsApiUrl)
+  const url = opts.apiURL
   const api = IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
   return api
 }
 
 exports.destroy = async function () {
-  console.log('[ipfs-companion] Embedded ipfs destroy')
+  console.log('[ipfs-companion] External ipfs destroy')
 }
 
-// TODO: I become a caching proxy for ipfs-api
+// TODO: Upgrade to a caching proxy for ipfs-api

@@ -23,7 +23,7 @@ module.exports = async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
     state = window.state = initState(options)
-    ipfs = window.ipfs = await initIpfsClient(options)
+    ipfs = window.ipfs = await initIpfsClient(state)
     console.log('[ipfs-companion] ipfs init complete')
     dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
@@ -131,6 +131,7 @@ function handleMessageFromBrowserAction (message) {
 async function sendStatusUpdateToBrowserAction () {
   if (browserActionPort) {
     const info = {
+      ipfsNodeType: state.ipfsNodeType,
       peerCount: state.peerCount,
       gwURLString: state.gwURLString,
       pubGwURLString: state.pubGwURLString,
@@ -168,7 +169,7 @@ function notify (titleKey, messageKey, messageParam) {
       'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
       'title': title,
       'message': message
-    })
+    }).catch(err => console.log('[ipfs-companion] Could not create notification', err))
   }
   console.info(`[ipfs-companion] ${title}: ${message}`)
 }
@@ -593,7 +594,11 @@ async function onStorageChange (changes, area) {
     if (change.oldValue !== change.newValue) {
       // debug info
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
-      if (key === 'ipfsApiUrl') {
+      if (key === 'ipfsNodeType') {
+        state.ipfsNodeType = change.newValue
+        ipfs = window.ipfs = await initIpfsClient(state)
+        apiStatusUpdate()
+      } else if (key === 'ipfsApiUrl') {
         state.apiURL = new URL(change.newValue)
         state.apiURLString = state.apiURL.toString()
         ipfs = window.ipfs = await initIpfsClient(state)

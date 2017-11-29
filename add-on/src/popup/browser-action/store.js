@@ -13,6 +13,7 @@ module.exports = (state, emitter) => {
     isPinned: false,
     currentTabUrl: null,
     // IPFS status
+    ipfsNodeType: 'external',
     isIpfsOnline: false,
     gatewayAddress: null,
     swarmPeers: null,
@@ -27,7 +28,7 @@ module.exports = (state, emitter) => {
     port = browser.runtime.connect({name: 'browser-action-port'})
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
-        // console.log('In browser action, received message from background:', message)
+        console.log('In browser action, received message from background:', message)
         await updateBrowserActionState(message.statusUpdate)
         emitter.emit('render')
       }
@@ -133,6 +134,19 @@ module.exports = (state, emitter) => {
     }
   })
 
+  emitter.on('toggleNodeType', async () => {
+    const prev = state.ipfsNodeType
+    state.ipfsNodeType = prev === 'external' ? 'embedded' : 'external'
+    emitter.emit('render')
+    try {
+      await browser.storage.local.set({ipfsNodeType: state.ipfsNodeType})
+    } catch (error) {
+      console.error(`Unable to update ipfs node type due to ${error}`)
+      state.ipfsNodeType = prev
+      emitter.emit('render')
+    }
+  })
+
   async function updatePageActionsState (status) {
     // IPFS contexts require access to background page
     // which is denied in Private Browsing mode
@@ -164,10 +178,12 @@ module.exports = (state, emitter) => {
     }
 
     if (status) {
+      state.ipfsNodeType = status.ipfsNodeType
       state.swarmPeers = status.peerCount < 0 ? null : status.peerCount
       state.isIpfsOnline = status.peerCount > 0
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
     } else {
+      state.ipfsNodeType = 'external'
       state.swarmPeers = null
       state.isIpfsOnline = false
       state.gatewayVersion = null
@@ -192,7 +208,7 @@ module.exports = (state, emitter) => {
   }
 
   function notify (title, message) {
-    port.postMessage({event: 'notification', title: title, message: message})
+    port.postMessage({event: 'notification', title: title, message: message}).catch((err) => console.log(err))
   }
 }
 
