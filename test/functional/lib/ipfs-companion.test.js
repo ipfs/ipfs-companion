@@ -5,13 +5,13 @@ const { URL } = require('url')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
 describe('init', () => {
-  let init
+  let ipfsCompanion
 
   before(() => {
     global.window = {}
     global.browser = browser
     global.URL = URL
-    init = require('../../../add-on/src/lib/ipfs-companion')
+    ipfsCompanion = require('../../../add-on/src/lib/ipfs-companion')
   })
 
   beforeEach(() => {
@@ -21,9 +21,9 @@ describe('init', () => {
   it('should query local storage for options with hardcoded defaults for fallback', async () => {
     browser.storage.local.get.returns(Promise.resolve(optionDefaults))
     browser.storage.local.set.returns(Promise.resolve())
-    await init()
+    await ipfsCompanion()
     browser.storage.local.get.calledWith(optionDefaults)
-    init.destroy()
+    await ipfsCompanion.destroy()
   })
 
   after(() => {
@@ -35,13 +35,13 @@ describe('init', () => {
 })
 
 describe.skip('onStorageChange()', function () {
-  let init
+  let ipfsCompanion
 
   before(() => {
     global.window = {}
     global.browser = browser
     global.URL = URL
-    init = require('../../../add-on/src/lib/ipfs-companion')
+    ipfsCompanion = require('../../../add-on/src/lib/ipfs-companion')
   })
 
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe.skip('onStorageChange()', function () {
     browser.contextMenus.update.returns(Promise.resolve())
     browser.idle.queryState.returns(Promise.resolve('active'))
 
-    await init()
+    await ipfsCompanion()
 
     const oldIpfsApiUrl = 'http://127.0.0.1:5001'
     const newIpfsApiUrl = 'http://1.2.3.4:8080'
@@ -67,7 +67,7 @@ describe.skip('onStorageChange()', function () {
     const ipfs = global.window.ipfs
     browser.storage.onChanged.dispatch(changes, area)
     expect(ipfs).to.not.equal(window.ipfs)
-    init.destroy()
+    ipfsCompanion.destroy()
   })
 
   after(() => {

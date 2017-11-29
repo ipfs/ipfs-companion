@@ -10,3 +10,9 @@ exports.init = async function (opts) {
   const api = IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
   return api
 }
+
+exports.destroy = async function () {
+  console.log('[ipfs-companion] Embedded ipfs destroy')
+}
+
+// TODO: I become a caching proxy for ipfs-api

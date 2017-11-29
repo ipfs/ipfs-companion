@@ -27,6 +27,7 @@ exports.init = function init () {
 }
 
 exports.destroy = async function () {
+  console.log('[ipfs-companion] Embedded ipfs destroy')
   if (!node) return
 
   await node.stop()

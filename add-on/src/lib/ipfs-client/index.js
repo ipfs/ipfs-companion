@@ -5,16 +5,23 @@ const external = require('./external')
 
 let client = null
 
-exports.initIpfsClient = async function (opts) {
-  if (client && client.destroy) {
-    await client.destroy()
-  }
+async function initIpfsClient (opts) {
+  await destroyIpfsClient()
 
   if (opts.ipfsNodeType === 'embedded') {
-    client = await embedded.init(opts)
+    client = embedded
   } else {
-    client = await external.init(opts)
+    client = external
   }
 
-  return client
+  return client.init(opts)
 }
+
+async function destroyIpfsClient () {
+  if (client && client.destroy) {
+    return client.destroy()
+  }
+}
+
+exports.initIpfsClient = initIpfsClient
+exports.destroyIpfsClient = destroyIpfsClient

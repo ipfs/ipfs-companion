@@ -8,7 +8,7 @@ const IsIpfs = require('is-ipfs')
 const { createIpfsPathValidator, safeIpfsPath, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
-const { initIpfsClient } = require('./ipfs-client')
+const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 
 // INIT
 // ===================================================================
@@ -37,7 +37,7 @@ module.exports = async function init () {
   }
 }
 
-module.exports.destroy = function () {
+module.exports.destroy = async function () {
   clearInterval(apiStatusUpdateInterval)
   apiStatusUpdateInterval = null
   ipfs = null
@@ -45,6 +45,7 @@ module.exports.destroy = function () {
   dnsLink = null
   modifyRequest = null
   ipfsPathValidator = null
+  await destroyIpfsClient()
 }
 
 function getState () {
