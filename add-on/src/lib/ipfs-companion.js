@@ -6,9 +6,12 @@ const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState } = require('./state')
 const IsIpfs = require('is-ipfs')
 const IpfsApi = require('ipfs-api')
-const { createIpfsPathValidator, safeIpfsPath, urlAtPublicGw } = require('./ipfs-path')
+const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
+const { createNotifier } = require('./notifier')
+const createCopier = require('./copy')
+const { findUrlForContext } = require('./context-menus')
 
 // INIT
 // ===================================================================
@@ -17,6 +20,8 @@ var state // avoid redundant API reads by utilizing local cache of various state
 var dnsLink
 var ipfsPathValidator
 var modifyRequest
+var notify
+var copier
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -24,6 +29,8 @@ module.exports = async function init () {
     const options = await browser.storage.local.get(optionDefaults)
     state = window.state = initState(options)
     ipfs = window.ipfs = initIpfsApi(options.ipfsApiUrl)
+    notify = createNotifier(getState)
+    copier = createCopier(getState, notify)
     dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
@@ -44,6 +51,8 @@ module.exports.destroy = function () {
   dnsLink = null
   modifyRequest = null
   ipfsPathValidator = null
+  notify = null
+  copier = null
 }
 
 function getState () {
@@ -124,11 +133,16 @@ function onRuntimeConnect (port) {
   }
 }
 
+const BrowserActionMessageHandlers = {
+  notification: (message) => notify(message.title, message.message),
+  copyCanonicalAddress: () => copier.copyCanonicalAddress(),
+  copyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+}
+
 function handleMessageFromBrowserAction (message) {
-  // console.log('In background script, received message from browser action', message)
-  if (message.event === 'notification') {
-    notify(message.title, message.message)
-  }
+  const handler = BrowserActionMessageHandlers[message && message.event]
+  if (!handler) return console.warn('Unknown browser action message event', message)
+  handler(message)
 }
 
 async function sendStatusUpdateToBrowserAction () {
@@ -157,25 +171,6 @@ async function sendStatusUpdateToBrowserAction () {
 // GUI
 // ===================================================================
 
-function notify (titleKey, messageKey, messageParam) {
-  const title = browser.i18n.getMessage(titleKey)
-  let message
-  if (messageKey.startsWith('notify_')) {
-    message = messageParam ? browser.i18n.getMessage(messageKey, messageParam) : browser.i18n.getMessage(messageKey)
-  } else {
-    message = messageKey
-  }
-  if (state.displayNotifications) {
-    browser.notifications.create({
-      'type': 'basic',
-      'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
-      'title': title,
-      'message': message
-    })
-  }
-  console.info(`[ipfs-companion] ${title}: ${message}`)
-}
-
 // contextMenus
 // -------------------------------------------------------------------
 const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
@@ -196,14 +191,14 @@ try {
     title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
     contexts: ['page', 'image', 'video', 'audio', 'link'],
     documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-    onclick: copyCanonicalAddress
+    onclick: () => copier.copyCanonicalAddress()
   })
   browser.contextMenus.create({
     id: contextMenuCopyPublicGwUrl,
     title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
     contexts: ['page', 'image', 'video', 'audio', 'link'],
     documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-    onclick: copyAddressAtPublicGw
+    onclick: () => copier.copyAddressAtPublicGw()
   })
 } catch (err) {
   console.log('[ipfs-companion] Error creating contextMenus', err)
@@ -294,76 +289,6 @@ window.uploadResultHandler = uploadResultHandler
 
 // Copying URLs
 // -------------------------------------------------------------------
-
-window.safeIpfsPath = safeIpfsPath
-
-async function findUrlForContext (context) {
-  if (context) {
-    if (context.linkUrl) {
-      // present when clicked on a link
-      return context.linkUrl
-    }
-    if (context.srcUrl) {
-      // present when clicked on page element such as image or video
-      return context.srcUrl
-    }
-    if (context.pageUrl) {
-      // pageUrl is the root frame
-      return context.pageUrl
-    }
-  }
-  // falback to the url of current tab
-  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-  return currentTab.url
-}
-
-async function copyCanonicalAddress (context) {
-  const url = await findUrlForContext(context)
-  const rawIpfsAddress = safeIpfsPath(url)
-  copyTextToClipboard(rawIpfsAddress)
-  notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
-}
-
-window.copyCanonicalAddress = copyCanonicalAddress
-
-async function copyAddressAtPublicGw (context) {
-  const url = await findUrlForContext(context)
-  const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
-  copyTextToClipboard(urlAtPubGw)
-  notify('notify_copiedPublicURLTitle', urlAtPubGw)
-}
-
-window.copyAddressAtPublicGw = copyAddressAtPublicGw
-
-async function copyTextToClipboard (copyText) {
-  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-  const tabId = currentTab.id
-  // Lets take a moment and ponder on the state of copying a string in 2017:
-  const copyToClipboardIn2017 = `function copyToClipboardIn2017(text) {
-      function oncopy(event) {
-          document.removeEventListener('copy', oncopy, true);
-          event.stopImmediatePropagation();
-          event.preventDefault();
-          event.clipboardData.setData('text/plain', text);
-      }
-      document.addEventListener('copy', oncopy, true);
-      document.execCommand('copy');
-    }`
-
-  // In Firefox you can't select text or focus an input field in background pages,
-  // so you can't write to the clipboard from a background page.
-  // We work around this limitation by injecting content scropt into a tab and copying there.
-  // Yes, this is 2017.
-  try {
-    const copyHelperPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof copyToClipboardIn2017 === 'function';" }))[0]
-    if (!copyHelperPresent) {
-      await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: copyToClipboardIn2017 })
-    }
-    await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: 'copyToClipboardIn2017(' + JSON.stringify(copyText) + ');' })
-  } catch (error) {
-    console.error('Failed to copy text: ' + error)
-  }
-}
 
 async function updateContextMenus (changedTabId) {
   try {

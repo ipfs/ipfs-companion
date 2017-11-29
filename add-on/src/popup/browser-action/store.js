@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const { safeIpfsPath } = require('../../lib/ipfs-path')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -35,14 +36,12 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('copyPublicGwAddr', async function copyCurrentPublicGwAddress () {
-    const bg = await getBackgroundPage()
-    await bg.copyAddressAtPublicGw()
+    port.postMessage({ event: 'copyAddressAtPublicGw' })
     window.close()
   })
 
   emitter.on('copyIpfsAddr', async function copyCurrentCanonicalAddress () {
-    const bg = await getBackgroundPage()
-    await bg.copyCanonicalAddress()
+    port.postMessage({ event: 'copyCanonicalAddress' })
     window.close()
   })
 
@@ -202,7 +201,7 @@ function getBackgroundPage () {
 
 async function resolveToIPFS (path) {
   const bg = await getBackgroundPage()
-  path = bg.safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
+  path = safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
     const response = await bg.ipfs.name.resolve(path, {recursive: true, nocache: false})
     return response.Path
