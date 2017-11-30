@@ -1,5 +1,5 @@
 const bl = require('bl')
-const identifyStream = require('buffer-signature').identifyStream
+const {mimeSniff} = require('./mime-sniff')
 
 exports.createIpfsUrlProtocolHandler = (getIpfs) => {
   return async (request, reply) => {
@@ -10,9 +10,7 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
     const ipfs = getIpfs()
 
     try {
-      // TODO: disable mime type detection for now
-      const mimeType = 'text/plain'
-      const {data} = await getDataAndGuessMimeType(ipfs, path)
+      const {data, mimeType} = await getDataAndGuessMimeType(ipfs, path)
       console.log(`[ipfs-companion] returning ${path} as ${mimeType}`)
       reply({mimeType, data})
     } catch (err) {
@@ -28,13 +26,11 @@ function getDataAndGuessMimeType (ipfs, path) {
     ipfs.files.cat(path, (err, stream) => {
       if (err) return reject(err)
 
-      let mimeType = null
-      stream
-        .pipe(identifyStream(info => { mimeType = info.mimeType }))
-        .pipe(bl((err, data) => {
-          if (err) return reject(err)
-          resolve({mimeType, data: data.toString('utf8')})
-        }))
+      stream.pipe(bl((err, data) => {
+        if (err) return reject(err)
+        const mimeType = mimeSniff(data, path)
+        resolve({mimeType, data: data.toString('utf8')})
+      }))
     })
   })
 }
