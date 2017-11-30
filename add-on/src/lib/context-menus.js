@@ -29,30 +29,39 @@ const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 
 function createContextMenus (getState, ipfsPathValidator, { onUploadToIpfs, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
-  browser.contextMenus.create({
-    id: contextMenuUploadToIpfs,
-    title: browser.i18n.getMessage(contextMenuUploadToIpfs),
-    contexts: ['image', 'video', 'audio'],
-    documentUrlPatterns: ['<all_urls>'],
-    enabled: false,
-    onclick: onUploadToIpfs
-  })
+  try {
+    browser.contextMenus.create({
+      id: contextMenuUploadToIpfs,
+      title: browser.i18n.getMessage(contextMenuUploadToIpfs),
+      contexts: ['image', 'video', 'audio'],
+      documentUrlPatterns: ['<all_urls>'],
+      enabled: false,
+      onclick: onUploadToIpfs
+    })
 
-  browser.contextMenus.create({
-    id: contextMenuCopyCanonicalAddress,
-    title: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-    contexts: ['page', 'image', 'video', 'audio', 'link'],
-    documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-    onclick: onCopyCanonicalAddress
-  })
+    browser.contextMenus.create({
+      id: contextMenuCopyCanonicalAddress,
+      title: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+      contexts: ['page', 'image', 'video', 'audio', 'link'],
+      documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+      onclick: onCopyCanonicalAddress
+    })
 
-  browser.contextMenus.create({
-    id: contextMenuCopyAddressAtPublicGw,
-    title: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-    contexts: ['page', 'image', 'video', 'audio', 'link'],
-    documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-    onclick: onCopyAddressAtPublicGw
-  })
+    browser.contextMenus.create({
+      id: contextMenuCopyAddressAtPublicGw,
+      title: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+      contexts: ['page', 'image', 'video', 'audio', 'link'],
+      documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+      onclick: onCopyAddressAtPublicGw
+    })
+  } catch (err) {
+    // documentUrlPatterns is not supported in brave
+    if (err.message.indexOf('createProperties.documentUrlPatterns of contextMenus.create is not supported yet') > -1) {
+      console.warn('[ipfs-companion] Context menus disabled - createProperties.documentUrlPatterns of contextMenus.create is not supported yet')
+      return { update: () => Promise.resolve() }
+    }
+    throw err
+  }
 
   return {
     async update (changedTabId) {
