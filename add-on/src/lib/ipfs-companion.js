@@ -211,7 +211,7 @@ try {
     onclick: copyAddressAtPublicGw
   })
 } catch (err) {
-  console.log('[ipfs-companion] Error creating contextMenus', err)
+  console.debug('[ipfs-companion] Error creating contextMenus')
 }
 
 function inFirefox () {
@@ -255,7 +255,7 @@ async function addFromURL (info) {
       const reader = new FileReader()
       reader.onloadend = () => {
         const buffer = Buffer.from(reader.result)
-        ipfs.add(buffer, uploadResultHandler)
+        ipfs.files.add(buffer, uploadResultHandler)
       }
       reader.readAsArrayBuffer(await response.blob())
     } else {
@@ -275,6 +275,17 @@ async function addFromURL (info) {
   }
 }
 
+// TODO: feature detect and push to client type specific modules.
+function getIpfsPathAndLocalAddress (hash) {
+  const path = `/ipfs/${hash}`
+  if (state.ipfsNodeType === 'embedded' && chrome.protocol.registerStringProtocol) {
+    return {path, localAddress: `ipfs://${hash}`}
+  } else {
+    const url = new URL(path, state.gwURLString).toString()
+    return {path, localAddress: url}
+  }
+}
+
 function uploadResultHandler (err, result) {
   if (err || !result) {
     console.error('[ipfs-companion] ipfs add error', err, result)
@@ -283,9 +294,9 @@ function uploadResultHandler (err, result) {
   }
   result.forEach(function (file) {
     if (file && file.hash) {
-      const path = `/ipfs/${file.hash}`
+      const {path, localAddress} = getIpfsPathAndLocalAddress(file.hash)
       browser.tabs.create({
-        'url': new URL(state.gwURLString + path).toString()
+        'url': localAddress
       })
       console.info('[ipfs-companion] successfully stored', path)
       if (state.preloadAtPublicGateway) {
@@ -383,7 +394,7 @@ async function updateContextMenus (changedTabId) {
       }
     }
   } catch (err) {
-    // console.debug('[ipfs-companion] Error updating context menus', err)
+    console.debug('[ipfs-companion] Error updating context menus')
   }
 }
 
