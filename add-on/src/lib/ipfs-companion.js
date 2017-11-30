@@ -176,7 +176,7 @@ function notify (titleKey, messageKey, messageParam) {
       'iconUrl': browser.extension.getURL('icons/ipfs-logo-on.svg'),
       'title': title,
       'message': message
-    }).catch(err => console.log('[ipfs-companion] Could not create notification', err))
+    }).catch(err => console.log('[ipfs-companion] Could not create browser notification', err))
   }
   console.info(`[ipfs-companion] ${title}: ${message}`)
 }

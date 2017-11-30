@@ -21,6 +21,7 @@ describe('init', () => {
   it('should query local storage for options with hardcoded defaults for fallback', async () => {
     browser.storage.local.get.returns(Promise.resolve(optionDefaults))
     browser.storage.local.set.returns(Promise.resolve())
+    browser.notifications.create.returns(Promise.resolve())
     await ipfsCompanion()
     browser.storage.local.get.calledWith(optionDefaults)
     await ipfsCompanion.destroy()
@@ -57,6 +58,7 @@ describe.skip('onStorageChange()', function () {
     browser.tabs.query.returns(Promise.resolve([{ id: 'TEST' }]))
     browser.contextMenus.update.returns(Promise.resolve())
     browser.idle.queryState.returns(Promise.resolve('active'))
+    browser.notifications.create.returns(Promise.resolve())
 
     await ipfsCompanion()
 
