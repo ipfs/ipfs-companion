@@ -6,7 +6,7 @@ const html = require('choo/html')
 
 module.exports = function header ({ isIpfsOnline }) {
   return html`
-    <div class="pv3 br2 br--top ba bw1 b--white" style="background: linear-gradient(to bottom, #041727 0%,#043b55 100%)">
+    <div class="pv3 br2 br--top ba bw1 b--white" style="background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%); background-size: auto 100%">
       <div class="tc mb2" title="${isIpfsOnline ? '' : 'offline'}">
         <img
           src="../../../icons/ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg"
