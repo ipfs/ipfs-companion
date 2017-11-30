@@ -39,7 +39,8 @@ module.exports = async function init () {
     await storeMissingOptions(options, optionDefaults, browser.storage.local)
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
-    notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
+    if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
+    throw error
   }
 
   function getState () {
