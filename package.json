@@ -68,6 +68,7 @@
     "web-ext": "2.2.2"
   },
   "dependencies": {
+    "buffer-signature": "1.0.0",
     "choo": "6.6.0",
     "ipfs": "0.26.0",
     "ipfs-api": "17.1.3",

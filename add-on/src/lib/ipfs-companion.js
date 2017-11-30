@@ -9,6 +9,7 @@ const { createIpfsPathValidator, safeIpfsPath, urlAtPublicGw } = require('./ipfs
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
+const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 
 // INIT
 // ===================================================================
@@ -61,6 +62,12 @@ function registerListeners () {
   browser.tabs.onActivated.addListener(onActivatedTab)
   browser.runtime.onMessage.addListener(onRuntimeMessage)
   browser.runtime.onConnect.addListener(onRuntimeConnect)
+  if (chrome && chrome.protocol && chrome.protocol.registerStringProtocol) {
+    console.log(`[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler`)
+    chrome.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
+  } else {
+    console.log(`[ipfs-companion] registerStringProtocol not available`, chrome.protocol)
+  }
 }
 
 // HTTP Request Hooks
@@ -376,7 +383,7 @@ async function updateContextMenus (changedTabId) {
       }
     }
   } catch (err) {
-    console.log('[ipfs-companion] Error updating context menus', err)
+    // console.debug('[ipfs-companion] Error updating context menus', err)
   }
 }
 
