@@ -36,6 +36,10 @@ function createIpfsPathValidator (getState, dnsLink) {
 
     validIpfsOrIpnsPath (path) {
       return IsIpfs.ipfsPath(path) || validIpnsPath(path, dnsLink)
+    },
+
+    isIpfsPageActionsContext (url) {
+      return IsIpfs.url(url) && !url.startsWith(getState().apiURLString)
     }
   }
 

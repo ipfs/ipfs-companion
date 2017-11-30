@@ -4,14 +4,13 @@
 const browser = require('webextension-polyfill')
 const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState } = require('./state')
-const IsIpfs = require('is-ipfs')
 const IpfsApi = require('ipfs-api')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
-const { findUrlForContext } = require('./context-menus')
+const { createContextMenus, findUrlForContext } = require('./context-menus')
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -24,6 +23,7 @@ module.exports = async function init () {
   var modifyRequest
   var notify
   var copier
+  var contextMenus
 
   try {
     const options = await browser.storage.local.get(optionDefaults)
@@ -33,6 +33,11 @@ module.exports = async function init () {
     copier = createCopier(getState, notify)
     dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
+    contextMenus = createContextMenus(getState, ipfsPathValidator, {
+      onUploadToIpfs: addFromURL,
+      onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
+      onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+    })
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -150,7 +155,7 @@ module.exports = async function init () {
         info.gatewayVersion = null
       }
       if (info.currentTab) {
-        info.ipfsPageActionsContext = isIpfsPageActionsContext(info.currentTab.url)
+        info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
       }
       browserActionPort.postMessage({statusUpdate: info})
     }
@@ -158,39 +163,6 @@ module.exports = async function init () {
 
   // GUI
   // ===================================================================
-
-  // contextMenus
-  // -------------------------------------------------------------------
-  const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
-  const contextMenuCopyIpfsAddress = 'panelCopy_currentIpfsAddress'
-  const contextMenuCopyPublicGwUrl = 'panel_copyCurrentPublicGwUrl'
-
-  try {
-    browser.contextMenus.create({
-      id: contextMenuUploadToIpfs,
-      title: browser.i18n.getMessage(contextMenuUploadToIpfs),
-      contexts: ['image', 'video', 'audio'],
-      documentUrlPatterns: ['<all_urls>'],
-      enabled: false,
-      onclick: addFromURL
-    })
-    browser.contextMenus.create({
-      id: contextMenuCopyIpfsAddress,
-      title: browser.i18n.getMessage(contextMenuCopyIpfsAddress),
-      contexts: ['page', 'image', 'video', 'audio', 'link'],
-      documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-      onclick: () => copier.copyCanonicalAddress()
-    })
-    browser.contextMenus.create({
-      id: contextMenuCopyPublicGwUrl,
-      title: browser.i18n.getMessage(contextMenuCopyPublicGwUrl),
-      contexts: ['page', 'image', 'video', 'audio', 'link'],
-      documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-      onclick: () => copier.copyAddressAtPublicGw()
-    })
-  } catch (err) {
-    console.log('[ipfs-companion] Error creating contextMenus', err)
-  }
 
   function inFirefox () {
     return !!navigator.userAgent.match('Firefox')
@@ -245,7 +217,7 @@ module.exports = async function init () {
         result = await ipfs.util.addFromURL(srcUrl)
       }
     } catch (error) {
-      console.error(`Error for ${contextMenuUploadToIpfs}`, error)
+      console.error('Error in upload to IPFS context menu', error)
       if (error.message === 'NetworkError when attempting to fetch resource.') {
         notify('notify_uploadErrorTitle', 'notify_uploadTrackingProtectionErrorMsg')
         console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
@@ -276,38 +248,15 @@ module.exports = async function init () {
     })
   }
 
-  async function updateContextMenus (changedTabId) {
-    try {
-      await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: state.peerCount > 0})
-      if (changedTabId) {
-        // recalculate tab-dependant menu items
-        const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-        if (currentTab && currentTab.id === changedTabId) {
-          const ipfsContext = isIpfsPageActionsContext(currentTab.url)
-          browser.contextMenus.update(contextMenuCopyIpfsAddress, {enabled: ipfsContext})
-          browser.contextMenus.update(contextMenuCopyPublicGwUrl, {enabled: ipfsContext})
-        }
-      }
-    } catch (err) {
-      console.log('[ipfs-companion] Error updating context menus', err)
-    }
-  }
-
   // Page-specific Actions
   // -------------------------------------------------------------------
 
-  // used in browser-action popup
-  // eslint-disable-next-line no-unused-vars
-  function isIpfsPageActionsContext (url) {
-    return IsIpfs.url(url) && !url.startsWith(state.apiURLString)
-  }
-
   async function onActivatedTab (activeInfo) {
-    await updateContextMenus(activeInfo.tabId)
+    await contextMenus.update(activeInfo.tabId)
   }
 
   async function onNavigationCommitted (details) {
-    await updateContextMenus(details.tabId)
+    await contextMenus.update(details.tabId)
   }
 
   async function onUpdatedTab (tabId, changeInfo, tab) {
@@ -386,7 +335,7 @@ module.exports = async function init () {
   function updatePeerCountDependentStates (oldPeerCount, newPeerCount) {
     updateAutomaticModeRedirectState(oldPeerCount, newPeerCount)
     updateBrowserActionBadge()
-    updateContextMenus()
+    contextMenus.update()
   }
 
   async function getSwarmPeerCount () {
@@ -569,6 +518,7 @@ module.exports = async function init () {
       ipfsPathValidator = null
       notify = null
       copier = null
+      contextMenus = null
     }
   }
 
