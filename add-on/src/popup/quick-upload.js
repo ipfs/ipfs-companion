@@ -22,28 +22,25 @@ function quickUploadStore (state, emitter) {
   emitter.on('fileInputChange', async (event) => {
     const file = event.target.files[0]
     try {
-      const bg = await browser.runtime.getBackgroundPage()
-      let reader = new FileReader()
-      reader.onloadend = () => {
-        const buffer = Buffer.from(reader.result)
-        bg.ipfs.files.add(buffer, (err, result) => {
-          if (err || !result) {
-            // keep upload tab and display error message in it
-            state.message = `Unable to upload to IPFS API: ${err}`
-            emitter.emit('render')
-          } else {
-            // close upload tab as it will be replaced with a new tab with uploaded content
-            browser.tabs.getCurrent().then(tab => {
-              browser.tabs.remove(tab.id)
-            })
-          }
-          // execute handler
-          return bg.uploadResultHandler(err, result)
-        })
-      }
-      reader.readAsArrayBuffer(file)
-    } catch (error) {
-      console.error(`Unable to perform quick upload due to ${error}`)
+      const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
+
+      const buffer = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(Buffer.from(reader.result))
+        reader.onerror = reject
+        reader.readAsArrayBuffer(file)
+      })
+
+      await ipfsCompanion.ipfsAddAndShow(buffer)
+
+      // close upload tab as it will be replaced with a new tab with uploaded content
+      const tab = await browser.tabs.getCurrent()
+      browser.tabs.remove(tab.id)
+    } catch (err) {
+      console.error('Unable to perform quick upload', err)
+      // keep upload tab and display error message in it
+      state.message = `Unable to upload to IPFS API: ${err}`
+      emitter.emit('render')
     }
   })
 }

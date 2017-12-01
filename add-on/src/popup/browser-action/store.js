@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const { safeIpfsPath } = require('../../lib/ipfs-path')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -36,14 +37,12 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('copyPublicGwAddr', async function copyCurrentPublicGwAddress () {
-    const bg = await getBackgroundPage()
-    await bg.copyAddressAtPublicGw()
+    port.postMessage({ event: 'copyAddressAtPublicGw' })
     window.close()
   })
 
   emitter.on('copyIpfsAddr', async function copyCurrentCanonicalAddress () {
-    const bg = await getBackgroundPage()
-    await bg.copyCanonicalAddress()
+    port.postMessage({ event: 'copyCanonicalAddress' })
     window.close()
   })
 
@@ -52,9 +51,9 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      const bg = await getBackgroundPage()
+      const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
-      const pinResult = await bg.ipfs.pin.add(currentPath, { recursive: true })
+      const pinResult = await ipfsCompanion.ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       notify('notify_pinnedIpfsResourceTitle', currentPath)
       state.isPinned = true
@@ -71,9 +70,9 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      const bg = await getBackgroundPage()
+      const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
-      const result = await bg.ipfs.pin.rm(currentPath, {recursive: true})
+      const result = await ipfsCompanion.ipfs.pin.rm(currentPath, {recursive: true})
       console.log('ipfs.pin.rm result', result)
       notify('notify_unpinnedIpfsResourceTitle', currentPath)
       state.isPinned = false
@@ -192,9 +191,9 @@ module.exports = (state, emitter) => {
 
   async function updatePinnedState (status) {
     try {
-      const bg = await getBackgroundPage()
+      const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(status.currentTab.url).pathname)
-      const response = await bg.ipfs.pin.ls(currentPath, {quiet: true})
+      const response = await ipfsCompanion.ipfs.pin.ls(currentPath, {quiet: true})
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {
@@ -217,10 +216,10 @@ function getBackgroundPage () {
 }
 
 async function resolveToIPFS (path) {
-  const bg = await getBackgroundPage()
-  path = bg.safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
+  path = safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
-    const response = await bg.ipfs.name.resolve(path, {recursive: true, nocache: false})
+    const { ipfsCompanion } = await getBackgroundPage()
+    const response = await ipfsCompanion.ipfs.name.resolve(path, {recursive: true, nocache: false})
     return response.Path
   }
   return path
