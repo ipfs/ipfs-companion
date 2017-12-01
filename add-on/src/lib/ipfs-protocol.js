@@ -1,4 +1,3 @@
-const bl = require('bl')
 const { mimeSniff } = require('./mime-sniff')
 const dirView = require('ipfs/src/http/gateway/dir-view')
 const PathUtils = require('ipfs/src/http/gateway/utils/path')
@@ -29,23 +28,20 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
   }
 }
 
-function getDataAndGuessMimeType (ipfs, path) {
-  return new Promise((resolve, reject) => {
-    ipfs.files.cat(path, async (err, stream) => {
-      if (err) {
-        if (err.message.toLowerCase() === 'this dag node is a directory') {
-          return resolve(await getDirectoryListingOrIndexData(ipfs, path))
-        }
-        return reject(err)
-      }
+async function getDataAndGuessMimeType (ipfs, path) {
+  let data
 
-      stream.pipe(bl((err, data) => {
-        if (err) return reject(err)
-        const mimeType = mimeSniff(data, path)
-        resolve({mimeType, data: data.toString('utf8')})
-      }))
-    })
-  })
+  try {
+    data = await ipfs.files.cat(path)
+  } catch (err) {
+    if (err.message.toLowerCase() === 'this dag node is a directory') {
+      return getDirectoryListingOrIndexData(ipfs, path)
+    }
+    throw err
+  }
+
+  const mimeType = mimeSniff(data, path)
+  return {mimeType, data: data.toString('utf8')}
 }
 
 async function getDirectoryListingOrIndexData (ipfs, path) {
@@ -56,5 +52,5 @@ async function getDirectoryListingOrIndexData (ipfs, path) {
     return getDataAndGuessMimeType(ipfs, PathUtils.joinURLParts(path, index.name))
   }
 
-  return {mimeType: 'text/html', data: dirView.render(path.replace(/^\/ipfs/, ''), listing)}
+  return {mimeType: 'text/html', data: dirView.render(path, listing)}
 }
