@@ -164,6 +164,26 @@
     },
     "description": "A generic placeholder for error notification"
   },
+  "option_header_nodeType" : {
+    "message": "IPFS Node",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_ipfsNodeType_title": {
+    "message": "IPFS Node Type",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsNodeType_description": {
+    "message": "External: Connect to an IPFS deamon over http. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_ipfsNodeType_external": {
+    "message": "External",
+    "description": "An option on the Preferences screen"
+  },
+  "option_ipfsNodeType_embedded": {
+    "message": "Embedded",
+    "description": "An option on the Preferences screen"
+  },
   "option_header_gateways": {
     "message": "Gateways",
     "description": "A section header on the Preferences screen"

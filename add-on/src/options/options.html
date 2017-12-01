@@ -57,7 +57,7 @@
       div:hover > label > dl > dd {
         color: #333;
       }
-      input, textarea {
+      input, textarea, select {
         flex: 1;
         padding: .5em;
         font-family: monospace;
@@ -69,6 +69,7 @@
       input[type=text],
       input[type=url],
       input[type=number],
+      select,
       textarea {
         -webkit-transition: all 0.30s ease-in-out;
         -moz-transition: all 0.30s ease-in-out;
@@ -77,6 +78,7 @@
       input[type=text]:focus,
       input[type=url]:focus,
       input[type=number]:focus,
+      select:focus,
       textarea:focus {
         outline: none;
         border: 1px solid #3E9398;
@@ -93,6 +95,21 @@
   </head>
   <body>
     <form>
+      <fieldset>
+        <legend data-i18n="option_header_nodeType"></legend>
+        <div>
+          <label for="ipfsNodeType">
+            <dl>
+              <dt data-i18n="option_ipfsNodeType_title"></dt>
+              <dd data-i18n="option_ipfsNodeType_description"></dd>
+            </dl>
+          </label>
+          <select id="ipfsNodeType" name='ipfsNodeType'>
+            <option value='external' data-i18n="option_ipfsNodeType_external"></option>
+            <option value='embedded' data-i18n="option_ipfsNodeType_embedded"></option>
+          </select>
+        </div>
+      </fieldset>
       <fieldset>
         <legend data-i18n="option_header_gateways"></legend>
         <div>

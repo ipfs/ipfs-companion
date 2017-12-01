@@ -47,6 +47,10 @@
     "message": "nodurile partenere",
     "description": "A label in Node status section of Browser Action pop-up"
   },
+  "panel_statusSwarmPeersTitle": {
+    "message": "The number of other ipfs nodes you can connect to",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up"
+  },
   "panel_quickUpload": {
     "message": "Încărcare rapidă",
     "description": "A menu item in Browser Action pop-up"
@@ -159,6 +163,26 @@
       }
     },
     "description": "A generic placeholder for error notification"
+  },
+  "option_header_nodeType" : {
+    "message": "IPFS Node",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_ipfsNodeType_title": {
+    "message": "IPFS Node Type",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsNodeType_description": {
+    "message": "External: Connect to an IPFS deamon over http. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_ipfsNodeType_external": {
+    "message": "External",
+    "description": "An option on the Preferences screen"
+  },
+  "option_ipfsNodeType_embedded": {
+    "message": "Embedded",
+    "description": "An option on the Preferences screen"
   },
   "option_header_gateways": {
     "message": "Gateway-uri",

@@ -16,6 +16,7 @@ async function saveOption (name) {
   if (element) {
     const change = {}
     switch (element.type) {
+      case 'select-one':
       case 'text':
       case 'number':
       case 'url':
@@ -58,6 +59,10 @@ async function readOption (name) {
           break
         case 'checkbox':
           element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
+          break
+        case 'select-one':
+          element.onchange = () => saveOption(name)
+          element.value = oldValue
           break
         default:
           console.log('Unsupported option type: ' + element.type)
