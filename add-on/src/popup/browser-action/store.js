@@ -16,6 +16,8 @@ module.exports = (state, emitter) => {
     // IPFS status
     ipfsNodeType: 'external',
     isIpfsOnline: false,
+    ipfsApiUrl: null,
+    publicGatewayUrl: null,
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,
@@ -167,16 +169,11 @@ module.exports = (state, emitter) => {
   async function updateBrowserActionState (status) {
     await updatePageActionsState(status)
     const options = await browser.storage.local.get()
-
-    try {
+    if (status) {
+      state.publicGatewayUrl = options.publicGatewayUrl
+      state.ipfsApiUrl = options.ipfsApiUrl
       state.redirectEnabled = options.useCustomGateway
       state.gatewayAddress = options.customGatewayUrl
-    } catch (error) {
-      console.error(`Unable update redirect state due to ${error}`)
-      state.gatewayAddress = '???'
-    }
-
-    if (status) {
       state.ipfsNodeType = status.ipfsNodeType
       state.swarmPeers = status.peerCount < 0 ? null : status.peerCount
       state.isIpfsOnline = status.peerCount > 0

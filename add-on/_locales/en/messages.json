@@ -7,8 +7,16 @@
     "message": "Embedded",
     "description": "Label for an embedded IPFS node"
   },
+  "panel_headerIpfsNodeEmbeddedTitle": {
+    "message": "Experimental: Use IPFS embedded in your browser via js-ipfs",
+    "description": "Label for an embedded IPFS node"
+  },
   "panel_headerIpfsNodeExternal": {
     "message": "External",
+    "description": "Label for an external IPFS node"
+  },
+  "panel_headerIpfsNodeExternalTitle": {
+    "message": "Connect to an IPFS node over http",
     "description": "Label for an external IPFS node"
   },
   "panel_statusGatewayRedirect": {
@@ -24,7 +32,11 @@
     "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
-    "message": "HTTP Gateway",
+    "message": "Gateway",
+    "description": "A label in Node status section of Browser Action pop-up"
+  },
+  "panel_statusApiAddress": {
+    "message": "API",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
@@ -32,8 +44,12 @@
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "swarm peers",
+    "message": "Peers",
     "description": "A label in Node status section of Browser Action pop-up"
+  },
+  "panel_statusSwarmPeersTitle": {
+    "message": "The number of other ipfs nodes you can connect to",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
     "message": "Share files via IPFS",
@@ -48,11 +64,11 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectEnable": {
-    "message": "Enable Gateway Redirect",
+    "message": "Use Custom Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "Disable Gateway Redirect",
+    "message": "Use Public Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {

@@ -239,9 +239,10 @@ module.exports = async function init () {
   // TODO: feature detect and push to client type specific modules.
   function getIpfsPathAndLocalAddress (hash) {
     const path = `/ipfs/${hash}`
-    if (state.ipfsNodeType === 'embedded' && chrome && chrome.protocol && chrome.protocol.registerStringProtocol) {
+    if (state.ipfsNodeType === 'embedded' && browser && browser.protocol && browser.protocol.registerStringProtocol) {
       return {path, localAddress: `ipfs://${hash}`}
     } else {
+      // Use the chosen gateway... local or public
       const url = new URL(path, state.gwURLString).toString()
       return {path, localAddress: url}
     }

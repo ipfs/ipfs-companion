@@ -7,8 +7,16 @@
     "message": "Embedded",
     "description": "Label for an embedded IPFS node"
   },
+  "panel_headerIpfsNodeEmbeddedTitle": {
+    "message": "Experimental: Use IPFS embedded in your browser via js-ipfs",
+    "description": "Label for an embedded IPFS node"
+  },
   "panel_headerIpfsNodeExternal": {
     "message": "External",
+    "description": "Label for an external IPFS node"
+  },
+  "panel_headerIpfsNodeExternalTitle": {
+    "message": "Connect to an IPFS node over http",
     "description": "Label for an external IPFS node"
   },
   "panel_statusGatewayRedirect": {
@@ -27,6 +35,10 @@
     "message": "网关",
     "description": "A label in Node status section of Browser Action pop-up"
   },
+  "panel_statusApiAddress": {
+    "message": "API",
+    "description": "A label in Node status section of Browser Action pop-up"
+  },
   "panel_statusGatewayVersion": {
     "message": "版本",
     "description": "A label in Node status section of Browser Action pop-up"
@@ -34,6 +46,10 @@
   "panel_statusSwarmPeers": {
     "message": "群集对等端",
     "description": "A label in Node status section of Browser Action pop-up"
+  },
+  "panel_statusSwarmPeersTitle": {
+    "message": "The number of other ipfs nodes you can connect to",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
     "message": "快速上传",

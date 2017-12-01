@@ -23,14 +23,20 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
 
 function getDataAndGuessMimeType (ipfs, path) {
   return new Promise((resolve, reject) => {
-    ipfs.files.cat(path, (err, stream) => {
+    ipfs.files.cat(path, (err, res) => {
       if (err) return reject(err)
-
-      stream.pipe(bl((err, data) => {
-        if (err) return reject(err)
-        const mimeType = mimeSniff(data, path)
-        resolve({mimeType, data: data.toString('utf8')})
-      }))
+      if (res.pipe) {
+        // is Stream! (js-ipfs is gonna return a buffer in the next release, bringing it inline with js-ipfs-api)
+        res.pipe(bl((err, data) => {
+          if (err) return reject(err)
+          const mimeType = mimeSniff(data, path)
+          resolve({mimeType, data: data.toString('utf8')})
+        }))
+      } else {
+        // is buffer
+        const mimeType = mimeSniff(res, path)
+        resolve({mimeType, data: res.toString('utf8')})
+      }
     })
   })
 }

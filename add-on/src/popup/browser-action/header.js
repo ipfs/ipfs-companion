@@ -19,7 +19,7 @@ module.exports = function header ({ ipfsNodeType, onToggleNodeType, isIpfsOnline
       <h1 class="f5 mt2 mb2 tc white normal">IPFS node</h1>
       <div class="pt1">
         <div class="flex flex-row justify-center mb2">
-          <label for="node" class="mdc-switch-label w-40 tr f7 white">
+          <label for="node" class="mdc-switch-label w-40 tr f7 white" title="${browser.i18n.getMessage('panel_headerIpfsNodeEmbeddedTitle')}">
             ${browser.i18n.getMessage('panel_headerIpfsNodeEmbedded')}
           </label>
           <div class="mdc-switch mh3">
@@ -28,7 +28,7 @@ module.exports = function header ({ ipfsNodeType, onToggleNodeType, isIpfsOnline
               <div class="mdc-switch__knob"></div>
             </div>
           </div>
-          <label for="node" class="mdc-switch-label w-40 f7 white">
+          <label for="node" class="mdc-switch-label w-40 f7 white" title="${browser.i18n.getMessage('panel_headerIpfsNodeExternalTitle')}">
             ${browser.i18n.getMessage('panel_headerIpfsNodeExternal')}
           </label>
         </div>
