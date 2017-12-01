@@ -278,7 +278,7 @@ async function addFromURL (info) {
 // TODO: feature detect and push to client type specific modules.
 function getIpfsPathAndLocalAddress (hash) {
   const path = `/ipfs/${hash}`
-  if (state.ipfsNodeType === 'embedded' && chrome.protocol.registerStringProtocol) {
+  if (state.ipfsNodeType === 'embedded' && chrome && chrome.protocol && chrome.protocol.registerStringProtocol) {
     return {path, localAddress: `ipfs://${hash}`}
   } else {
     const url = new URL(path, state.gwURLString).toString()

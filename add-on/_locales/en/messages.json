@@ -36,7 +36,7 @@
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
-    "message": "Quick Upload",
+    "message": "Share files via IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {

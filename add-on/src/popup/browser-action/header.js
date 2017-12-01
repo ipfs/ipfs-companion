@@ -3,18 +3,18 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const logo = require('../logo')
 
 module.exports = function header ({ ipfsNodeType, onToggleNodeType, isIpfsOnline }) {
-  const logoTypePrefix = ipfsNodeType === 'embedded' ? 'js-' : ''
-  const logoFileName = `${logoTypePrefix}ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
   return html`
     <div class="pv3 br2 br--top ba bw1 b--white" style="background: linear-gradient(to bottom, #041727 0%,#043b55 100%)">
       <div class="tc mb2" title="${isIpfsOnline ? '' : 'offline'}">
-        <img
-          src="../../../icons/${logoFileName}"
-          class="${isIpfsOnline ? 'online' : ''}"
-          id="ipfs-logo"
-          style="width: 52px" />
+        ${logo({
+          size: 52,
+          path: '../../../icons',
+          ipfsNodeType,
+          isIpfsOnline
+        })}
       </div>
       <h1 class="f5 mt2 mb2 tc white normal">IPFS node</h1>
       <div class="pt1">
