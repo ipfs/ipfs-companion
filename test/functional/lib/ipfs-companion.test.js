@@ -21,9 +21,9 @@ describe('init', () => {
   it('should query local storage for options with hardcoded defaults for fallback', async () => {
     browser.storage.local.get.returns(Promise.resolve(optionDefaults))
     browser.storage.local.set.returns(Promise.resolve())
-    await init()
+    const ipfsCompanion = await init()
     browser.storage.local.get.calledWith(optionDefaults)
-    init.destroy()
+    ipfsCompanion.destroy()
   })
 
   after(() => {
@@ -58,7 +58,7 @@ describe.skip('onStorageChange()', function () {
     browser.contextMenus.update.returns(Promise.resolve())
     browser.idle.queryState.returns(Promise.resolve('active'))
 
-    await init()
+    const ipfsCompanion = await init()
 
     const oldIpfsApiUrl = 'http://127.0.0.1:5001'
     const newIpfsApiUrl = 'http://1.2.3.4:8080'
@@ -67,7 +67,7 @@ describe.skip('onStorageChange()', function () {
     const ipfs = global.window.ipfs
     browser.storage.onChanged.dispatch(changes, area)
     expect(ipfs).to.not.equal(window.ipfs)
-    init.destroy()
+    ipfsCompanion.destroy()
   })
 
   after(() => {
