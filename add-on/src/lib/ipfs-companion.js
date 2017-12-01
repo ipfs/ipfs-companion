@@ -24,6 +24,9 @@ module.exports = async function init () {
   var notify
   var copier
   var contextMenus
+  var apiStatusUpdateInterval
+  const offlinePeerCount = -1
+  const idleInSecs = 5 * 60
 
   try {
     const options = await browser.storage.local.get(optionDefaults)
@@ -311,11 +314,6 @@ module.exports = async function init () {
   // API STATUS UPDATES
   // -------------------------------------------------------------------
   // API is polled for peer count every ipfsApiPollMs
-
-  const offlinePeerCount = -1
-  const idleInSecs = 5 * 60
-
-  var apiStatusUpdateInterval
 
   async function setApiStatusUpdateInterval (ipfsApiPollMs) {
     if (apiStatusUpdateInterval) {
