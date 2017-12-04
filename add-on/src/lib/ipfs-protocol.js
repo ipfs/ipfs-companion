@@ -1,5 +1,5 @@
 const { mimeSniff } = require('./mime-sniff')
-const dirView = require('ipfs/src/http/gateway/dir-view')
+const dirView = require('./dir-view')
 const PathUtils = require('ipfs/src/http/gateway/utils/path')
 
 exports.createIpfsUrlProtocolHandler = (getIpfs) => {
@@ -8,10 +8,7 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
     console.log(`[ipfs-companion] handling ${request.url}`)
 
     let path = request.url.replace('ipfs://', '/')
-
-    if (path.indexOf('/ipfs') !== 0) {
-      path = `/ipfs${path}`
-    }
+    path = path.startsWith('/ipfs') ? path : `/ipfs${path}`
 
     const ipfs = getIpfs()
 
@@ -52,5 +49,5 @@ async function getDirectoryListingOrIndexData (ipfs, path) {
     return getDataAndGuessMimeType(ipfs, PathUtils.joinURLParts(path, index.name))
   }
 
-  return {mimeType: 'text/html', data: dirView.render(path, listing)}
+  return {mimeType: 'text/html', data: dirView.render(path.replace(/^\/ipfs\//, 'ipfs://'), listing)}
 }
