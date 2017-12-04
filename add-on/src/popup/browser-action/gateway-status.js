@@ -15,7 +15,7 @@ module.exports = function gatewayStatus ({
     <ul class="list mv3 ph3">
       <li class="flex mb1">
         <span class="w-50 f6 ttu">${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
-        <span class="w-50 f6 ttu tr">${gatewayAddress == null ? 'unknown' : gatewayAddress}</span>
+        <span class="w-50 f6 truncate tr">${gatewayAddress == null ? 'unknown' : gatewayAddress}</span>
       </li>
       <li class="flex mb1">
         <span class="w-50 f6 ttu">${browser.i18n.getMessage('panel_statusGatewayVersion')}</span>

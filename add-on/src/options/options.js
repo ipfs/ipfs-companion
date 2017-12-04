@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { optionDefaults } = require('../lib/options')
+const { optionDefaults, normalizeGatewayURL } = require('../lib/options')
 const translateDataAttrs = require('../lib/data-i18n')
 
 translateDataAttrs()
@@ -18,8 +18,10 @@ async function saveOption (name) {
     switch (element.type) {
       case 'text':
       case 'number':
-      case 'url':
         change[name] = element.value
+        break
+      case 'url':
+        change[name] = normalizeGatewayURL(element.value)
         break
       case 'textarea':
         // normalize input into a string of entries separated by a single space
