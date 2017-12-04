@@ -56,11 +56,11 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Fissa Risorsa IPFS",
+    "message": "Spillare Risorsa IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Rimuovi la risorsa IPFS",
+    "message": "Rimuovi la risorsa IPFS spillata",
     "description": "A menu item in Browser Action pop-up"
   },
   "panelCopy_currentIpfsAddress": {
@@ -76,7 +76,7 @@
     "description": "An item in right-click context menu"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS add-on issue",
+    "message": "Problema con moduli aggiuntivi (add-on) IPFS",
     "description": "A title of system notification"
   },
   "notify_addonIssueMsg": {
@@ -241,11 +241,11 @@
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "Precaricare gli Uploads",
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Consente il caricamento anticipato delle unita´ caricate mediante una richiesta HTTP HEAD asincrona ad una Gateway pubblica",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_description": {

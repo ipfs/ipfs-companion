@@ -12,7 +12,7 @@
     "description": "Label for an external IPFS node"
   },
   "panel_statusGatewayRedirect": {
-    "message": "rediréger",
+    "message": "rediriger",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayRedirectEnabled": {
@@ -40,7 +40,7 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "Ouvrir l'interface",
+    "message": "Ouvrir l'interface web",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
@@ -52,7 +52,7 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_toggleGatewayRedirectDisable": {
-    "message": "Activer la redirection de la passerelle",
+    "message": "Désactiver la redirection de la passerelle",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -241,11 +241,11 @@
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "Précharger les uploads",
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Activer le préchargement des actifs uploadés via une requête HTTP HEAD asynchrone à une passerelle publique",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_description": {
