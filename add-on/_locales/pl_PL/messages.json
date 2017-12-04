@@ -173,7 +173,7 @@
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsNodeType_description": {
-    "message": "External: Connect to an IPFS deamon over http. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "message": "External: Connect to an IPFS daemon over http. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
     "description": "An option description on the Preferences screen"
   },
   "option_ipfsNodeType_external": {
