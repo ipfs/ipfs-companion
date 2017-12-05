@@ -1,0 +1,173 @@
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./fonts/OpenSans/OpenSans-Regular.woff2') format('woff2'),
+  url('./fonts/OpenSans/OpenSans-Regular.woff') format('woff'),
+  url('./fonts/OpenSans/OpenSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'Fira Sans';
+  src: url('./fonts/Fira/FiraSans-Light.woff2') format('woff2'),
+  url('./fonts/Fira/FiraSans-Light.woff') format('woff'),
+  url('./fonts/Fira/FiraSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'Fira Sans';
+  src: url('./fonts/Fira/FiraSans-Regular.woff2') format('woff2'),
+  url('./fonts/Fira/FiraSans-Regular.woff') format('woff'),
+  url('./fonts/Fira/FiraSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'Fira Sans';
+  src: url('./fonts/Fira/FiraSans-Medium.woff2') format('woff2'),
+  url('./fonts/Fira/FiraSans-Medium.woff') format('woff'),
+  url('./fonts/Fira/FiraSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'Fira Sans';
+  src: url('./fonts/Fira/FiraSans-SemiBold') format('woff2'),
+  url('./fonts/Fira/FiraSans-SemiBold') format('woff'),
+  url('./fonts/Fira/FiraSans-SemiBold') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+h1 {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
+  text-shadow: 0px 0px 1px rgba(150, 150, 150, 1);
+  font-size: 32px;
+}
+
+h2 {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 500;
+  color: #484848;
+  font-size: 24px;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif;
+  color: #484848;
+  font-size: 14px;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: #008DBE;
+}
+
+a:link {
+  color: #265301;
+}
+
+a:hover {
+  color: #026081;
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 25%;
+  background-image: url('../images/header-background.png');
+  background-repeat: repeat;
+}
+
+#header h1 {
+  color: #fff;
+  padding: 10px 10px 10px 10px;
+  text-align: center;
+}
+
+#header .logo {
+  height: 50%;
+}
+
+#content {
+}
+
+.main-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px 0 20px 0;
+}
+
+.main-info p {
+  text-align: center;
+}
+
+.section {
+  display: flex;
+  padding: 10px 15% 20px 15%;
+}
+
+.section-title {
+  width: 25%;
+  padding: 20px 0 0 0;
+  border-right: 1px #E1E0E1 solid;
+}
+
+.section-content {
+  width: 75%;
+  padding: 0 0 0 30px;
+}
+
+.section-content ul {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 5px;
+}
+
+.section-content a {
+  list-style-type: none;
+}
+
+#learn-section {
+  background-color: #F8F9FA;
+}
+
+#app-section ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.app-item {
+  height: 80px;
+  width: 300px;
+  margin: 10px 10px 10px 10px;
+}
+
+.app-item img {
+  max-height: 100%;
+  max-width: 100%;
+}
