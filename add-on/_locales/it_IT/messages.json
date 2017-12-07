@@ -11,18 +11,6 @@
     "message": "External",
     "description": "Label for an external IPFS node"
   },
-  "panel_statusGatewayRedirect": {
-    "message": "reindirizza",
-    "description": "A label in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectEnabled": {
-    "message": "attivo",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectDisabled": {
-    "message": "disattivato",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
   "panel_statusGatewayAddress": {
     "message": "gateway",
     "description": "A label in Node status section of Browser Action pop-up"
@@ -47,12 +35,12 @@
     "message": "Apri Preferenze",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectEnable": {
-    "message": "Abilita il reindirizzamento al gateway",
+  "panel_switchToCustomGateway": {
+    "message": "Switch to Custom Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectDisable": {
-    "message": "Disabilita il reindirizzamento al gateway",
+  "panel_switchToPublicGateway": {
+    "message": "Switch to Public Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {

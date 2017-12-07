@@ -121,6 +121,7 @@ module.exports = (state, emitter) => {
   emitter.on('toggleRedirect', async () => {
     const enabled = state.redirectEnabled
     state.redirectEnabled = !enabled
+    state.gatewayAddress = '…'
     emitter.emit('render')
 
     try {
@@ -128,8 +129,9 @@ module.exports = (state, emitter) => {
     } catch (error) {
       console.error(`Unable to update redirect state due to ${error}`)
       state.redirectEnabled = enabled
-      emitter.emit('render')
     }
+
+    emitter.emit('render')
   })
 
   async function updatePageActionsState (status) {
@@ -156,7 +158,11 @@ module.exports = (state, emitter) => {
 
     try {
       state.redirectEnabled = options.useCustomGateway
-      state.gatewayAddress = options.customGatewayUrl
+      if (options.useCustomGateway) {
+        state.gatewayAddress = options.customGatewayUrl
+      } else {
+        state.gatewayAddress = options.publicGatewayUrl
+      }
     } catch (error) {
       console.error(`Unable update redirect state due to ${error}`)
       state.gatewayAddress = '???'

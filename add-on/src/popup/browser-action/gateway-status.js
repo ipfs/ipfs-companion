@@ -25,16 +25,6 @@ module.exports = function gatewayStatus ({
         <span class="w-50 f6 ttu">${browser.i18n.getMessage('panel_statusSwarmPeers')}</span>
         <span class="w-50 f6 ttu tr">${swarmPeers == null ? 'offline' : swarmPeers}</span>
       </li>
-      <li class="flex">
-        <span class="w-50 f6 ttu">${browser.i18n.getMessage('panel_statusGatewayRedirect')}</span>
-        <span class="w-50 f6 ttu tr">
-          ${browser.i18n.getMessage(
-            redirectEnabled
-              ? 'panel_statusGatewayRedirectEnabled'
-              : 'panel_statusGatewayRedirectDisabled'
-          )}
-        </span>
-      </li>
     </ul>
   `
 }

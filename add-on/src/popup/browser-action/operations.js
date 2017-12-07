@@ -35,8 +35,8 @@ module.exports = function operations ({
       ${navItem({
         text: browser.i18n.getMessage(
           redirectEnabled
-            ? 'panel_toggleGatewayRedirectDisable'
-            : 'panel_toggleGatewayRedirectEnable'
+            ? 'panel_switchToPublicGateway'
+            : 'panel_switchToCustomGateway'
         ),
         onClick: onToggleRedirect
       })}
