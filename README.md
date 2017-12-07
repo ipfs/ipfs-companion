@@ -116,7 +116,7 @@ Try manual installation:
 
 [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/contributing.md)
 
-Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/station/issues)!
+Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/ipfs-companion/issues)!
 
 If you want to help in developing this extension, please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
 
