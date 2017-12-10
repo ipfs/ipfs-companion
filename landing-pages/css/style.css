@@ -50,7 +50,7 @@ html, body {
   padding: 0;
 }
 
-h1, h2 {
+h1, h2, h3 {
   margin: 0;
 }
 
@@ -66,6 +66,13 @@ h2 {
   font-weight: 500;
   color: #484848;
   font-size: 24px;
+}
+
+h3 {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+  color: #484848;
+  font-size: 20px;
 }
 
 p {
@@ -107,21 +114,30 @@ a:hover {
 }
 
 #header .logo {
-  height: 50%;
+  height: 100px;
 }
 
 #content {
+  display: flex;
+  flex-direction: column;
 }
 
 .main-info {
   display: flex;
+  align-self: center;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding: 20px 0 20px 0;
+  width: 50%;
 }
 
 .main-info p {
+  text-align: center;
+}
+
+.main-info h2, h3 {
+  margin: 20px 0 20px 0;
   text-align: center;
 }
 
@@ -170,4 +186,23 @@ a:hover {
 .app-item img {
   max-height: 100%;
   max-width: 100%;
+}
+
+.network-image {
+  min-width: 300px;
+  width: 75%;
+  margin: 20px 0 20px 0;
+}
+
+.btn-install-station {
+  background: #67C6CC;
+  border-radius: 7px;
+  margin: 5px 0 10px 0;
+  padding: 20px 40px 20px 40px;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
+  font-size: 26px;
+  color: #FFFFFF;
+  text-shadow: 0 2px 3px rgba(0,0,0,0.50);
+  letter-spacing: 0.47px;
 }
