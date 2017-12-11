@@ -180,8 +180,8 @@ module.exports = (state, emitter) => {
       state.ipfsNodeType = status.ipfsNodeType
       state.ipfsApiUrl = options.ipfsApiUrl
       state.redirectEnabled = options.useCustomGateway
-      state.swarmPeers = status.peerCount < 0 ? null : status.peerCount
-      state.isIpfsOnline = status.peerCount > 0
+      state.swarmPeers = status.peerCount === -1 ? 0 : status.peerCount
+      state.isIpfsOnline = status.peerCount > -1
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
     } else {
       state.ipfsNodeType = 'external'

@@ -452,11 +452,13 @@ module.exports = async function init () {
 
   function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
     // enable/disable gw redirect based on API going online or offline
+    // newPeerCount === -1 currently implies node is offline.
+    // TODO: use `node.isOnline()` if available (js-ipfs)
     if (state.automaticMode) {
-      if (oldPeerCount < 1 && newPeerCount > 0 && !state.redirect) {
+      if (oldPeerCount === -1 && newPeerCount > -1 && !state.redirect) {
         browser.storage.local.set({useCustomGateway: true})
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
-      } else if (oldPeerCount > 0 && newPeerCount < 1 && state.redirect) {
+      } else if (oldPeerCount > -1 && newPeerCount === -1 && state.redirect) {
         browser.storage.local.set({useCustomGateway: false})
           .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
       }
