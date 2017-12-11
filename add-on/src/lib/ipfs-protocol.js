@@ -13,9 +13,9 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
     const ipfs = getIpfs()
 
     try {
-      const {data, mimeType} = await getDataAndGuessMimeType(ipfs, path)
-      console.log(`[ipfs-companion] returning ${path} as ${mimeType}`)
-      reply({mimeType, data})
+      const {data, mimeType, charset} = await getDataAndGuessMimeType(ipfs, path)
+      console.log(`[ipfs-companion] returning ${path} as mime ${mimeType} and charset ${charset}`)
+      reply({mimeType, data, charset})
     } catch (err) {
       console.error('[ipfs-companion] failed to get data', err)
       reply({mimeType: 'text/html', data: `Error ${err.message}`})
@@ -37,13 +37,13 @@ async function getDataAndGuessMimeType (ipfs, path) {
     throw err
   }
 
-  const mimeType = mimeSniff(data, path)
-  return {mimeType, data: data.toString('utf8')}
+  const mimeType = mimeSniff(data, path) || 'text/plain'
+  return {mimeType, data: data.toString('utf8'), charset: 'utf8'}
 }
 
 async function getDirectoryListingOrIndexData (ipfs, path) {
   const listing = await ipfs.ls(path)
-  const index = listing.find((l) => ['index.html', 'index.htm'].includes(l.name))
+  const index = listing.find((l) => ['index', 'index.html', 'index.htm'].includes(l.name))
 
   if (index) {
     return getDataAndGuessMimeType(ipfs, PathUtils.joinURLParts(path, index.name))
