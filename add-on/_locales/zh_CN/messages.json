@@ -19,18 +19,6 @@
     "message": "Connect to an IPFS node over http",
     "description": "Label for an external IPFS node"
   },
-  "panel_statusGatewayRedirect": {
-    "message": "重定向",
-    "description": "A label in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectEnabled": {
-    "message": "已启用",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectDisabled": {
-    "message": "已禁用",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
   "panel_statusGatewayAddress": {
     "message": "网关",
     "description": "A label in Node status section of Browser Action pop-up"
@@ -63,12 +51,12 @@
     "message": "打开选项",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectEnable": {
-    "message": "启用网关重定向",
+  "panel_switchToCustomGateway": {
+    "message": "Switch to Custom Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectDisable": {
-    "message": "禁用网关重定向",
+  "panel_switchToPublicGateway": {
+    "message": "Switch to Public Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {

@@ -19,18 +19,6 @@
     "message": "Connect to an IPFS node over http",
     "description": "Label for an external IPFS node"
   },
-  "panel_statusGatewayRedirect": {
-    "message": "rediréger",
-    "description": "A label in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectEnabled": {
-    "message": "activé",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectDisabled": {
-    "message": "désactivé",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
   "panel_statusGatewayAddress": {
     "message": "routeur",
     "description": "A label in Node status section of Browser Action pop-up"
@@ -56,19 +44,19 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
-    "message": "Ouvrir l'interface",
+    "message": "Ouvrir l'interface web",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openPreferences": {
     "message": "Ouvrir les préférences",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectEnable": {
-    "message": "Activer la redirection de la passerelle",
+  "panel_switchToCustomGateway": {
+    "message": "Switch to Custom Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectDisable": {
-    "message": "Activer la redirection de la passerelle",
+  "panel_switchToPublicGateway": {
+    "message": "Switch to Public Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -277,11 +265,11 @@
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "Précharger les uploads",
     "description": "An option title on the Preferences screen"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Activer le préchargement des actifs uploadés via une requête HTTP HEAD asynchrone à une passerelle publique",
     "description": "An option description on the Preferences screen"
   },
   "option_dnslink_description": {

@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_headerIpfsNodeEmbedded": {
-    "message": "Embedded",
+    "message": "Wbudowany",
     "description": "Label for an embedded IPFS node"
   },
   "panel_headerIpfsNodeEmbeddedTitle": {
@@ -12,27 +12,15 @@
     "description": "Label for an embedded IPFS node"
   },
   "panel_headerIpfsNodeExternal": {
-    "message": "External",
+    "message": "Zewnętrzny",
     "description": "Label for an external IPFS node"
   },
   "panel_headerIpfsNodeExternalTitle": {
     "message": "Connect to an IPFS node over http",
     "description": "Label for an external IPFS node"
   },
-  "panel_statusGatewayRedirect": {
-    "message": "przekierowanie",
-    "description": "A label in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectEnabled": {
-    "message": "włączone",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectDisabled": {
-    "message": "wyłączone",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
   "panel_statusGatewayAddress": {
-    "message": "brama",
+    "message": "Brama HTTP",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusApiAddress": {
@@ -63,12 +51,12 @@
     "message": "Otwórz preferencje",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectEnable": {
-    "message": "Włącz przekierowanie",
+  "panel_switchToCustomGateway": {
+    "message": "Przepnij na własną bramę",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectDisable": {
-    "message": "Wyłącz przekierowanie",
+  "panel_switchToPublicGateway": {
+    "message": "Przepnij na publiczną bramę",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {

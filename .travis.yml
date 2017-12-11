@@ -9,11 +9,11 @@ env:
         - FIREFOX_BINARY='./firefox/firefox'
         - PATH="./firefox/:${PATH}"
         - CXX=g++-4.8
-    matrix:
-        - FIREFOX_RELEASE='latest'
-        - FIREFOX_RELEASE='nightly-latest'
-        - FIREFOX_RELEASE='52.0'
-        - FIREFOX_RELEASE='esr-latest'
+#    matrix:
+#        - FIREFOX_RELEASE='latest'
+#        - FIREFOX_RELEASE='nightly-latest'
+#        - FIREFOX_RELEASE='52.0'
+#        - FIREFOX_RELEASE='esr-latest'
 
 # pulled in by node-webcrypto-ossl@1.0.7
 addons:
@@ -31,17 +31,15 @@ matrix:
 cache:
     directories:
         - node_modules
-before_script:
-    - test $FIREFOX_RELEASE != nightly-latest || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-    - test $FIREFOX_RELEASE != latest         || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-    - test $FIREFOX_RELEASE != '52.0'         || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-    - test $FIREFOX_RELEASE != esr-latest     || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-    - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
-    - sh -e /etc/init.d/xvfb start
+#before_script:
+#    - test $FIREFOX_RELEASE != nightly-latest || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+#    - test $FIREFOX_RELEASE != latest         || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+#    - test $FIREFOX_RELEASE != '55.0'         || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+#    - test $FIREFOX_RELEASE != esr-latest     || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
+#    - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
+#    - sh -e /etc/init.d/xvfb start
 install:
-    - npm install --no-optional
+    - npm run yarn-build
 script:
-    - npm run clean
-    - npm run build
     - npm test
     - npm run lint

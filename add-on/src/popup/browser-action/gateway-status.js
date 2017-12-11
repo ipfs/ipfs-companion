@@ -15,12 +15,11 @@ module.exports = function gatewayStatus ({
   redirectEnabled
 }) {
   const api = ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
-  const gateway = (ipfsNodeType === 'embedded' || !redirectEnabled) ? publicGatewayUrl : gatewayAddress
   return html`
     <ul class="list mv3 ph3">
       <li class="flex mb2">
         <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
-        <code class="w-60 f7 tr">${gateway}</code>
+        <code class="w-60 f7 tr">${gatewayAddress == null ? 'unknown' : gatewayAddress}</code>
       </li>
       <li class="flex mb2">
         <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusApiAddress')}</span>

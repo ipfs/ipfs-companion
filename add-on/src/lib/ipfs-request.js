@@ -13,6 +13,11 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       return
     }
 
+    // skip all local requests
+    if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:')) {
+      return
+    }
+
     // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
     if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
       const fix = normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)

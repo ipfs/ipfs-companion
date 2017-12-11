@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button"
   },
   "panel_headerIpfsNodeEmbedded": {
-    "message": "Embedded",
+    "message": "Eingebettet",
     "description": "Label for an embedded IPFS node"
   },
   "panel_headerIpfsNodeEmbeddedTitle": {
@@ -12,24 +12,12 @@
     "description": "Label for an embedded IPFS node"
   },
   "panel_headerIpfsNodeExternal": {
-    "message": "External",
+    "message": "Extern",
     "description": "Label for an external IPFS node"
   },
   "panel_headerIpfsNodeExternalTitle": {
     "message": "Connect to an IPFS node over http",
     "description": "Label for an external IPFS node"
-  },
-  "panel_statusGatewayRedirect": {
-    "message": "Weiterleitung",
-    "description": "A label in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectEnabled": {
-    "message": "aktiviert",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
-  },
-  "panel_statusGatewayRedirectDisabled": {
-    "message": "deaktiviert",
-    "description": "Redirect state in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayAddress": {
     "message": "Gateway",
@@ -63,12 +51,12 @@
     "message": "Einstellungen öffnen",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectEnable": {
-    "message": "Gateway-Weiterleitung aktivieren",
+  "panel_switchToCustomGateway": {
+    "message": "Switch to Custom Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
-  "panel_toggleGatewayRedirectDisable": {
-    "message": "Gateway-Weiterleitung deaktivieren",
+  "panel_switchToPublicGateway": {
+    "message": "Switch to Public Gateway",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {

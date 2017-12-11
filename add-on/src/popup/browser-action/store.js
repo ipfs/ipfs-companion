@@ -124,6 +124,7 @@ module.exports = (state, emitter) => {
   emitter.on('toggleRedirect', async () => {
     const enabled = state.redirectEnabled
     state.redirectEnabled = !enabled
+    state.gatewayAddress = '…'
     emitter.emit('render')
 
     try {
@@ -131,8 +132,9 @@ module.exports = (state, emitter) => {
     } catch (error) {
       console.error(`Unable to update redirect state due to ${error}`)
       state.redirectEnabled = enabled
-      emitter.emit('render')
     }
+
+    emitter.emit('render')
   })
 
   emitter.on('toggleNodeType', async () => {
@@ -170,11 +172,14 @@ module.exports = (state, emitter) => {
     await updatePageActionsState(status)
     const options = await browser.storage.local.get()
     if (status) {
-      state.publicGatewayUrl = options.publicGatewayUrl
+      if (options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
+        state.gatewayAddress = options.customGatewayUrl
+      } else {
+        state.gatewayAddress = options.publicGatewayUrl
+      }
+      state.ipfsNodeType = status.ipfsNodeType
       state.ipfsApiUrl = options.ipfsApiUrl
       state.redirectEnabled = options.useCustomGateway
-      state.gatewayAddress = options.customGatewayUrl
-      state.ipfsNodeType = status.ipfsNodeType
       state.swarmPeers = status.peerCount < 0 ? null : status.peerCount
       state.isIpfsOnline = status.peerCount > 0
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
