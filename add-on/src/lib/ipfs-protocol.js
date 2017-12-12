@@ -49,5 +49,9 @@ async function getDirectoryListingOrIndexData (ipfs, path) {
     return getDataAndGuessMimeType(ipfs, PathUtils.joinURLParts(path, index.name))
   }
 
-  return {mimeType: 'text/html', data: dirView.render(path.replace(/^\/ipfs\//, 'ipfs://'), listing)}
+  return {
+    mimeType: 'text/html',
+    data: dirView.render(path.replace(/^\/ipfs\//, 'ipfs://'), listing),
+    charset: 'utf8'
+  }
 }
