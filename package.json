@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/ipfs/ipfs-companion.git"
   },
+  "browser": {
+    "ipfs": false
+  },
   "scripts": {
     "start": "run-s clean build test firefox",
     "clean": "run-p clean:*",
@@ -68,7 +71,6 @@
     "web-ext": "2.2.2"
   },
   "dependencies": {
-    "bl": "1.2.1",
     "choo": "6.6.0",
     "doc-sniff": "1.0.1",
     "file-type": "7.3.0",

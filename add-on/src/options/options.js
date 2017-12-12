@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const { optionDefaults, normalizeGatewayURL } = require('../lib/options')
 const translateDataAttrs = require('../lib/data-i18n')
+const isJsIpfsEnabled = require('../lib/is-js-ipfs-enabled')()
 
 translateDataAttrs()
 
@@ -96,6 +97,9 @@ function resetAllOptions (event) {
 
 // initial load
 document.addEventListener('DOMContentLoaded', () => {
+  if (isJsIpfsEnabled) {
+    document.getElementById('showIfEmbeddedIpfsEnabled').style.display = 'block'
+  }
   readAllOptions()
   document.querySelector('#resetAllOptions > button').addEventListener('click', resetAllOptions)
 })

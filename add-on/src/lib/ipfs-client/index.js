@@ -1,7 +1,7 @@
 'use strict'
 
-const embedded = require('./embedded')
 const external = require('./external')
+const embedded = require('./embedded')
 
 let client = null
 
