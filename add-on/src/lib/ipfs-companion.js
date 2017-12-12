@@ -65,11 +65,12 @@ module.exports = async function init () {
     browser.tabs.onActivated.addListener(onActivatedTab)
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
+   // browser.protocol exists only in Brave
     if (browser.protocol && browser.protocol.registerStringProtocol) {
       console.log(`[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler`)
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
-      console.log(`[ipfs-companion] registerStringProtocol not available`, browser.protocol)
+      console.log(`[ipfs-companion] registerStringProtocol not available, native protocol will not be registered`, browser.protocol)
     }
   }
 
