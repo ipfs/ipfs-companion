@@ -19,10 +19,16 @@
     "build:copy:src": "shx mkdir -p add-on/dist && shx cp -R add-on/src/* add-on/dist",
     "build:copy:wx-polyfill-lib": "shx cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js add-on/dist/contentScripts/browser-polyfill.min.js",
     "build:js": "browserify -p prundupify -t browserify-css -t [ browserify-package-json --global ] add-on/src/background/background.js add-on/src/options/options.js add-on/src/popup/browser-action/index.js add-on/src/popup/quick-upload.js -p [ factor-bundle -o add-on/dist/background/background.js -o add-on/dist/options/options.js -o add-on/dist/popup/browser-action/browser-action.js -o add-on/dist/popup/quick-upload.js ] -o add-on/dist/ipfs-companion-common.js",
+    "build:content-scripts": "run-p build:content-scripts:**",
+    "build:content-scripts:ipfs-proxy:content": "browserify add-on/src/contentScripts/ipfs-proxy/content.js -o add-on/dist/contentScripts/ipfs-proxy/content.js",
+    "build:content-scripts:ipfs-proxy:page": "browserify add-on/src/contentScripts/ipfs-proxy/page.js -o add-on/dist/contentScripts/ipfs-proxy/page.js",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib",
     "build:bundle-extension": "web-ext build -s add-on/ -i src/ -a build/",
     "watch": "run-p watch:*",
     "watch:js": "watchify -p prundupify -t browserify-css -t [ browserify-package-json --global ] add-on/src/background/background.js add-on/src/options/options.js add-on/src/popup/browser-action/index.js add-on/src/popup/quick-upload.js -p [ factor-bundle -o add-on/dist/background/background.js -o add-on/dist/options/options.js -o add-on/dist/popup/browser-action/browser-action.js -o add-on/dist/popup/quick-upload.js ] -o add-on/dist/ipfs-companion-common.js -v",
+    "watch:content-scripts": "run-p watch:content-scripts:**",
+    "watch:content-scripts:ipfs-proxy:content": "watchify add-on/src/contentScripts/ipfs-proxy/content.js -o add-on/dist/contentScripts/ipfs-proxy/content.js",
+    "watch:content-scripts:ipfs-proxy:page": "watchify add-on/src/contentScripts/ipfs-proxy/page.js -o add-on/dist/contentScripts/ipfs-proxy/page.js",
     "test": "run-s test:*",
     "test:functional": "mocha test/functional/**/*.test.js",
     "lint": "run-s lint:*",
@@ -60,6 +66,7 @@
   "dependencies": {
     "choo": "6.6.1",
     "doc-sniff": "1.0.1",
+    "es6-promisify": "^5.0.0",
     "file-type": "7.3.0",
     "ipfs": "0.27.5",
     "ipfs-api": "17.2.6",
@@ -68,6 +75,7 @@
     "lru_map": "0.3.3",
     "mime-types": "2.1.17",
     "prundupify": "1.0.0",
+    "shortid": "^2.2.8",
     "tachyons": "4.9.0",
     "webextension-polyfill": "0.1.2"
   }

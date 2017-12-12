@@ -12,6 +12,7 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const { createContextMenus, findUrlForContext } = require('./context-menus')
+const createIpfsProxy = require('./ipfs-proxy')
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -26,6 +27,7 @@ module.exports = async function init () {
   var copier
   var contextMenus
   var apiStatusUpdateInterval
+  var ipfsProxy
   const offlinePeerCount = -1
   const idleInSecs = 5 * 60
 
@@ -43,6 +45,7 @@ module.exports = async function init () {
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
+    ipfsProxy = createIpfsProxy(() => ipfs)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(options, optionDefaults, browser.storage.local)
@@ -554,6 +557,8 @@ module.exports = async function init () {
       notify = null
       copier = null
       contextMenus = null
+      ipfsProxy.destroy()
+      ipfsProxy = null
       await destroyIpfsClient()
     }
   }

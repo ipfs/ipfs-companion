@@ -38,6 +38,22 @@
         "page": "dist/background/background.html"
     },
 
+    "content_scripts": [
+      {
+        "matches": [
+          "file://*/*",
+          "http://*/*",
+          "https://*/*"
+        ],
+        "match_about_blank": true,
+        "js": [
+          "dist/contentScripts/ipfs-proxy/content.js"
+        ],
+        "run_at": "document_start",
+        "all_frames": true
+      }
+    ],
+
     "browser_action": {
         "browser_style": false,
         "default_icon": {
