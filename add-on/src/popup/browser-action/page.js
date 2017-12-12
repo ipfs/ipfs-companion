@@ -22,8 +22,9 @@ module.exports = function browserActionPage (state, emit) {
   const onOpenWebUi = () => emit('openWebUi')
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleRedirect = () => emit('toggleRedirect')
+  const onToggleNodeType = () => emit('toggleNodeType')
 
-  const headerProps = Object.assign({}, state)
+  const headerProps = Object.assign({ onToggleNodeType }, state)
   const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onOpenPrefs, onToggleRedirect }, state)
   const gwStatusProps = Object.assign({}, state)

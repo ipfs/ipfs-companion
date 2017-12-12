@@ -7,12 +7,24 @@
     "message": "Embedded",
     "description": "Label for an embedded IPFS node"
   },
+  "panel_headerIpfsNodeEmbeddedTitle": {
+    "message": "Experimental: Use IPFS embedded in your browser via js-ipfs",
+    "description": "Label for an embedded IPFS node"
+  },
   "panel_headerIpfsNodeExternal": {
     "message": "External",
     "description": "Label for an external IPFS node"
   },
+  "panel_headerIpfsNodeExternalTitle": {
+    "message": "Connect to an IPFS node over HTTP",
+    "description": "Label for an external IPFS node"
+  },
   "panel_statusGatewayAddress": {
-    "message": "HTTP Gateway",
+    "message": "Gateway",
+    "description": "A label in Node status section of Browser Action pop-up"
+  },
+  "panel_statusApiAddress": {
+    "message": "API",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusGatewayVersion": {
@@ -20,11 +32,15 @@
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeers": {
-    "message": "swarm peers",
+    "message": "Peers",
     "description": "A label in Node status section of Browser Action pop-up"
   },
+  "panel_statusSwarmPeersTitle": {
+    "message": "The number of other IPFS nodes you can connect to",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up"
+  },
   "panel_quickUpload": {
-    "message": "Quick Upload",
+    "message": "Share files via IPFS",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_openWebui": {
@@ -135,6 +151,26 @@
       }
     },
     "description": "A generic placeholder for error notification"
+  },
+  "option_header_nodeType" : {
+    "message": "IPFS Node",
+    "description": "A section header on the Preferences screen"
+  },
+  "option_ipfsNodeType_title": {
+    "message": "IPFS Node Type",
+    "description": "An option title on the Preferences screen"
+  },
+  "option_ipfsNodeType_description": {
+    "message": "External: Connect to an IPFS daemon over HTTP. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "description": "An option description on the Preferences screen"
+  },
+  "option_ipfsNodeType_external": {
+    "message": "External",
+    "description": "An option on the Preferences screen"
+  },
+  "option_ipfsNodeType_embedded": {
+    "message": "Embedded",
+    "description": "An option on the Preferences screen"
   },
   "option_header_gateways": {
     "message": "Gateways",

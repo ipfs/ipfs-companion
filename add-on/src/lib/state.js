@@ -5,6 +5,7 @@ function initState (options) {
   const state = {}
   // we store the most used values in optimized form
   // to minimize performance impact on overall browsing experience
+  state.ipfsNodeType = options.ipfsNodeType
   state.pubGwURL = new URL(options.publicGatewayUrl)
   state.pubGwURLString = state.pubGwURL.toString()
   state.redirect = options.useCustomGateway

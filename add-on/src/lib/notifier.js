@@ -17,7 +17,7 @@ function createNotifier (getState) {
         iconUrl: browser.extension.getURL('icons/ipfs-logo-on.svg'),
         title: title,
         message: message
-      })
+      }).catch(err => console.warn(`[ipfs-companion] Browser notification failed: ${err.message}`))
     }
     console.info(`[ipfs-companion] ${title}: ${message}`)
   }

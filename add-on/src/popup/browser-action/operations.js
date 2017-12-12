@@ -6,6 +6,7 @@ const html = require('choo/html')
 const navItem = require('./nav-item')
 
 module.exports = function operations ({
+  ipfsNodeType,
   isIpfsOnline,
   redirectEnabled,
   onQuickUpload,
@@ -22,7 +23,7 @@ module.exports = function operations ({
           onClick: onQuickUpload
         })
       ) : null}
-      ${isIpfsOnline ? (
+      ${ipfsNodeType === 'external' && isIpfsOnline ? (
         navItem({
           text: browser.i18n.getMessage('panel_openWebui'),
           onClick: onOpenWebUi
@@ -32,14 +33,16 @@ module.exports = function operations ({
         text: browser.i18n.getMessage('panel_openPreferences'),
         onClick: onOpenPrefs
       })}
-      ${navItem({
-        text: browser.i18n.getMessage(
-          redirectEnabled
-            ? 'panel_switchToPublicGateway'
-            : 'panel_switchToCustomGateway'
-        ),
-        onClick: onToggleRedirect
-      })}
+      ${ipfsNodeType === 'external' ? (
+        navItem({
+          text: browser.i18n.getMessage(
+            redirectEnabled
+              ? 'panel_switchToPublicGateway'
+              : 'panel_switchToCustomGateway'
+          ),
+          onClick: onToggleRedirect
+        })
+      ) : null}
     </div>
   `
 }

@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const { optionDefaults, normalizeGatewayURL } = require('../lib/options')
 const translateDataAttrs = require('../lib/data-i18n')
+const isJsIpfsEnabled = require('../lib/is-js-ipfs-enabled')()
 
 translateDataAttrs()
 
@@ -16,6 +17,7 @@ async function saveOption (name) {
   if (element) {
     const change = {}
     switch (element.type) {
+      case 'select-one':
       case 'text':
       case 'number':
         change[name] = element.value
@@ -61,6 +63,10 @@ async function readOption (name) {
         case 'checkbox':
           element.checked = typeof (oldValue) === 'boolean' ? oldValue : false
           break
+        case 'select-one':
+          element.onchange = () => saveOption(name)
+          element.value = oldValue
+          break
         default:
           console.log('Unsupported option type: ' + element.type)
       }
@@ -91,6 +97,9 @@ function resetAllOptions (event) {
 
 // initial load
 document.addEventListener('DOMContentLoaded', () => {
+  if (isJsIpfsEnabled) {
+    document.getElementById('showIfEmbeddedIpfsEnabled').style.display = 'block'
+  }
   readAllOptions()
   document.querySelector('#resetAllOptions > button').addEventListener('click', resetAllOptions)
 })

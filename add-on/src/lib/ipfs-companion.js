@@ -4,10 +4,11 @@
 const browser = require('webextension-polyfill')
 const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState } = require('./state')
-const IpfsApi = require('ipfs-api')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
+const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
+const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const { createContextMenus, findUrlForContext } = require('./context-menus')
@@ -31,7 +32,7 @@ module.exports = async function init () {
   try {
     const options = await browser.storage.local.get(optionDefaults)
     state = initState(options)
-    ipfs = initIpfsApi(options.ipfsApiUrl)
+    ipfs = await initIpfsClient(state)
     notify = createNotifier(getState)
     copier = createCopier(getState, notify)
     dnsLink = createDnsLink(getState)
@@ -55,11 +56,6 @@ module.exports = async function init () {
     return state
   }
 
-  function initIpfsApi (ipfsApiUrl) {
-    const url = new URL(ipfsApiUrl)
-    return IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
-  }
-
   function registerListeners () {
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
@@ -69,6 +65,13 @@ module.exports = async function init () {
     browser.tabs.onActivated.addListener(onActivatedTab)
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
+   // browser.protocol exists only in Brave
+    if (browser.protocol && browser.protocol.registerStringProtocol) {
+      console.log(`[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler`)
+      browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
+    } else {
+      console.log(`[ipfs-companion] registerStringProtocol not available, native protocol will not be registered`, browser.protocol)
+    }
   }
 
   // HTTP Request Hooks
@@ -144,6 +147,7 @@ module.exports = async function init () {
   async function sendStatusUpdateToBrowserAction () {
     if (browserActionPort) {
       const info = {
+        ipfsNodeType: state.ipfsNodeType,
         peerCount: state.peerCount,
         gwURLString: state.gwURLString,
         pubGwURLString: state.pubGwURLString,
@@ -215,7 +219,7 @@ module.exports = async function init () {
           reader.readAsArrayBuffer(blob)
         })
 
-        result = await ipfs.add(buffer)
+        result = await ipfs.files.add(buffer)
       } else {
         result = await ipfs.util.addFromURL(srcUrl)
       }
@@ -236,12 +240,24 @@ module.exports = async function init () {
     return uploadResultHandler(result)
   }
 
+  // TODO: feature detect and push to client type specific modules.
+  function getIpfsPathAndLocalAddress (hash) {
+    const path = `/ipfs/${hash}`
+    if (state.ipfsNodeType === 'embedded' && browser && browser.protocol && browser.protocol.registerStringProtocol) {
+      return {path, localAddress: `ipfs://${hash}`}
+    } else {
+      // Use the chosen gateway... local or public
+      const url = new URL(path, state.gwURLString).toString()
+      return {path, localAddress: url}
+    }
+  }
+
   function uploadResultHandler (result) {
     result.forEach(function (file) {
       if (file && file.hash) {
-        const path = `/ipfs/${file.hash}`
+        const {path, localAddress} = getIpfsPathAndLocalAddress(file.hash)
         browser.tabs.create({
-          'url': new URL(state.gwURLString + path).toString()
+          'url': localAddress
         })
         console.info('[ipfs-companion] successfully stored', path)
         if (state.preloadAtPublicGateway) {
@@ -437,27 +453,33 @@ module.exports = async function init () {
 
   function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
     // enable/disable gw redirect based on API going online or offline
+    // newPeerCount === -1 currently implies node is offline.
+    // TODO: use `node.isOnline()` if available (js-ipfs)
     if (state.automaticMode) {
-      if (oldPeerCount < 1 && newPeerCount > 0 && !state.redirect) {
+      if (oldPeerCount === -1 && newPeerCount > -1 && !state.redirect) {
         browser.storage.local.set({useCustomGateway: true})
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
-      } else if (oldPeerCount > 0 && newPeerCount < 1 && state.redirect) {
+      } else if (oldPeerCount > -1 && newPeerCount === -1 && state.redirect) {
         browser.storage.local.set({useCustomGateway: false})
           .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
       }
     }
   }
 
-  function onStorageChange (changes, area) {
+  async function onStorageChange (changes, area) {
     for (let key in changes) {
       let change = changes[key]
       if (change.oldValue !== change.newValue) {
         // debug info
         // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
-        if (key === 'ipfsApiUrl') {
+        if (key === 'ipfsNodeType') {
+          state.ipfsNodeType = change.newValue
+          ipfs = await initIpfsClient(state)
+          apiStatusUpdate()
+        } else if (key === 'ipfsApiUrl') {
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()
-          ipfs = initIpfsApi(state.apiURLString)
+          ipfs = await initIpfsClient(state)
           apiStatusUpdate()
         } else if (key === 'ipfsApiPollMs') {
           setApiStatusUpdateInterval(change.newValue)
@@ -496,7 +518,7 @@ module.exports = async function init () {
     async ipfsAddAndShow (buffer) {
       let result
       try {
-        result = await api.ipfs.add(buffer)
+        result = await api.ipfs.files.add(buffer)
       } catch (err) {
         console.error('Failed to IPFS add', err)
         notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
@@ -506,7 +528,7 @@ module.exports = async function init () {
       return result
     },
 
-    destroy () {
+    async destroy () {
       clearInterval(apiStatusUpdateInterval)
       apiStatusUpdateInterval = null
       ipfs = null
@@ -517,6 +539,7 @@ module.exports = async function init () {
       notify = null
       copier = null
       contextMenus = null
+      await destroyIpfsClient()
     }
   }
 

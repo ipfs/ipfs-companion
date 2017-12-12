@@ -1,6 +1,7 @@
 'use strict'
 
 const optionDefaults = Object.freeze({
+  ipfsNodeType: 'external',
   publicGatewayUrl: 'https://ipfs.io',
   useCustomGateway: true,
   automaticMode: true,
