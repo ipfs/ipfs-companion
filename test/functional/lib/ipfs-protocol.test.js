@@ -26,7 +26,7 @@ describe('ipfs-protocol', () => {
     const url = 'ipfs://QmQxeMcbqW9npq5h5kyE2iPECR9jxJF4j5x4bSRQ2phLY4'
     const links = [
       { name: `one${Date.now()}`, size: Date.now() },
-      { name: `two{Date.now()}`, size: Date.now() },
+      { name: `two${Date.now()}`, size: Date.now() },
       { name: `three${Date.now()}`, size: Date.now() }
     ]
     const ipfs = {
