@@ -4,7 +4,7 @@ const isSvg = require('is-svg')
 const mime = require('mime-types')
 
 /*
- * A quikc, best effort mime sniffing fn, via:
+ * A quick, best effort mime sniffing fn, via:
  * @see https://github.com/sindresorhus/file-type
  * @see https://github.com/sindresorhus/is-svg
  * @see https://github.com/bitinn/doc-sniff

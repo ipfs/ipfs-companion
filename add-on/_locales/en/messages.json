@@ -16,7 +16,7 @@
     "description": "Label for an external IPFS node"
   },
   "panel_headerIpfsNodeExternalTitle": {
-    "message": "Connect to an IPFS node over http",
+    "message": "Connect to an IPFS node over HTTP",
     "description": "Label for an external IPFS node"
   },
   "panel_statusGatewayAddress": {
@@ -36,7 +36,7 @@
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "The number of other ipfs nodes you can connect to",
+    "message": "The number of other IPFS nodes you can connect to",
     "description": "A label tool-tip in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
@@ -161,7 +161,7 @@
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsNodeType_description": {
-    "message": "External: Connect to an IPFS daemon over http. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "message": "External: Connect to an IPFS daemon over HTTP. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
     "description": "An option description on the Preferences screen"
   },
   "option_ipfsNodeType_external": {
