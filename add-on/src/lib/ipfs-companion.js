@@ -149,6 +149,7 @@ module.exports = async function init () {
       const info = {
         ipfsNodeType: state.ipfsNodeType,
         peerCount: state.peerCount,
+        repoStats: state.repoStats,
         gwURLString: state.gwURLString,
         pubGwURLString: state.pubGwURLString,
         currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
@@ -342,6 +343,7 @@ module.exports = async function init () {
   async function apiStatusUpdate () {
     let oldPeerCount = state.peerCount
     state.peerCount = await getSwarmPeerCount()
+    state.repoStats = await getRepoStats()
     updatePeerCountDependentStates(oldPeerCount, state.peerCount)
     sendStatusUpdateToBrowserAction()
   }
@@ -359,6 +361,17 @@ module.exports = async function init () {
     } catch (error) {
       // console.error(`Error while ipfs.swarm.peers: ${err}`)
       return offlinePeerCount
+    }
+  }
+
+  async function getRepoStats () {
+    try {
+      const repoStats = await ipfs.stats.repo()
+      console.log({repoStats})
+      return repoStats
+    } catch (error) {
+      console.error(`Error while ipfs.stats.repo: ${error}`)
+      return {}
     }
   }
 
