@@ -365,9 +365,9 @@ module.exports = async function init () {
   }
 
   async function getRepoStats () {
+    if (!ipfs.stats || !ipfs.stats.repo) return {}
     try {
       const repoStats = await ipfs.stats.repo()
-      console.log({repoStats})
       return repoStats
     } catch (error) {
       console.error(`Error while ipfs.stats.repo: ${error}`)
