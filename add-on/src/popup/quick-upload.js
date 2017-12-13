@@ -87,16 +87,20 @@ function quickUploadPage (state, emit) {
           </div>
         </header>
 
-        <div class='pv6 mv5' style="padding-left:100px; border:solid 2px #6ACAD1">
-          <input class="dn" type="file" id="quickUploadInput" onchange=${onFileInputChange} />
-          <label class="f3 link dim br1 ph4 pv3 mb2 dib white" style="background: #6ACAD1" for="quickUploadInput">
-            Pick a file
-          </label>
-          <span class='f3'>
-            <emph class='underline pl3 pr2 moon-gray'>or</emph> drop it here to share
-          </span>
-          <p class='f4'>${state.message}</p>
-        </div>
+        <label for="quickUploadInput" class='db relative mv5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
+          <input class="db absolute pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" onchange=${onFileInputChange} style=""/>
+          <div class='dt dim' style='padding-left: 100px; height: 300px'>
+            <div class='dtc v-mid'>
+              <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
+                Pick a file
+              </span>
+              <span class='f3'>
+                <emph class='underline pl3 pr2 moon-gray'>or</emph> drop it here to share
+              </span>
+              <p class='f4'>${state.message}</p>
+            </div>
+          </div>
+        </label>
 
       </div>
     </div>
