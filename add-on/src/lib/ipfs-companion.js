@@ -145,25 +145,28 @@ module.exports = async function init () {
   }
 
   async function sendStatusUpdateToBrowserAction () {
+    if (!browserActionPort) return
+    const info = {
+      ipfsNodeType: state.ipfsNodeType,
+      peerCount: state.peerCount,
+      repoStats: state.repoStats,
+      gwURLString: state.gwURLString,
+      pubGwURLString: state.pubGwURLString,
+      currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+    }
+    try {
+      let v = await ipfs.version()
+      if (v) {
+        info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
+      }
+    } catch (error) {
+      info.gatewayVersion = null
+    }
+    if (info.currentTab) {
+      info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
+    }
+    // Still here?
     if (browserActionPort) {
-      const info = {
-        ipfsNodeType: state.ipfsNodeType,
-        peerCount: state.peerCount,
-        gwURLString: state.gwURLString,
-        pubGwURLString: state.pubGwURLString,
-        currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-      }
-      try {
-        let v = await ipfs.version()
-        if (v) {
-          info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
-        }
-      } catch (error) {
-        info.gatewayVersion = null
-      }
-      if (info.currentTab) {
-        info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
-      }
       browserActionPort.postMessage({statusUpdate: info})
     }
   }
@@ -342,6 +345,7 @@ module.exports = async function init () {
   async function apiStatusUpdate () {
     let oldPeerCount = state.peerCount
     state.peerCount = await getSwarmPeerCount()
+    state.repoStats = await getRepoStats()
     updatePeerCountDependentStates(oldPeerCount, state.peerCount)
     sendStatusUpdateToBrowserAction()
   }
@@ -359,6 +363,17 @@ module.exports = async function init () {
     } catch (error) {
       // console.error(`Error while ipfs.swarm.peers: ${err}`)
       return offlinePeerCount
+    }
+  }
+
+  async function getRepoStats () {
+    try {
+      const repoStats = await ipfs.stats.repo()
+      console.log({repoStats})
+      return repoStats
+    } catch (error) {
+      console.error(`Error while ipfs.stats.repo: ${error}`)
+      return {}
     }
   }
 
