@@ -14,7 +14,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
     }
 
     // skip all local requests
-    if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:')) {
+    if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
       return
     }
 

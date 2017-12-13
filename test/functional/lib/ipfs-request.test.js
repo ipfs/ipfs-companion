@@ -25,7 +25,7 @@ describe('modifyRequest', function () {
       peerCount: 1,
       redirect: true,
       catchUnhandledProtocols: true,
-      gwURLString: 'http://localhost:8080'
+      gwURLString: 'http://127.0.0.1:8080'
     })
     const getState = () => state
     dnsLink = createDnsLink(getState)
@@ -36,7 +36,7 @@ describe('modifyRequest', function () {
   describe('request for a path matching /ipfs/{CIDv0}', function () {
     it('should be served from custom gateway if redirect is enabled', function () {
       const request = url2request('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
     })
     it('should be left untouched if redirect is disabled', function () {
       state.redirect = false
@@ -57,12 +57,12 @@ describe('modifyRequest', function () {
       dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
       // pretend API is online and we can do dns lookups with it
       state.peerCount = 1
-      expect(modifyRequest(request).redirectUrl).to.equal('http://localhost:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+      expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
     })
     it('should be served from custom gateway if {path} starts with a valid CID', function () {
       const request = url2request('https://ipfs.io/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
       dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
-      expect(modifyRequest(request).redirectUrl).to.equal('http://localhost:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+      expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
     })
     it('should be left untouched if redirect is disabled', function () {
       state.redirect = false
@@ -218,16 +218,22 @@ describe('modifyRequest', function () {
 
   describe('request for IPFS path at a localhost', function () {
     // we do not touch local requests, as it may interfere with other nodes running at the same machine
-    // or could produce false-positives such as redirection from 127.0.0.1:5001/ipfs/path to localhost:8080/ipfs/path
+    // or could produce false-positives such as redirection from 127.0.0.1:5001/ipfs/path to 127.0.0.1:8080/ipfs/path
     it('should be left untouched if 127.0.0.1 is used', function () {
-      state.redirect = false
+      state.redirect = true
       const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
       expect(modifyRequest(request)).to.equal(undefined)
     })
     it('should be left untouched if localhost is used', function () {
       // https://github.com/ipfs/ipfs-companion/issues/291
-      state.redirect = false
+      state.redirect = true
       const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+      expect(modifyRequest(request)).to.equal(undefined)
+    })
+    it('should be left untouched if [::1] is used', function () {
+      // https://github.com/ipfs/ipfs-companion/issues/291
+      state.redirect = true
+      const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
       expect(modifyRequest(request)).to.equal(undefined)
     })
   })
