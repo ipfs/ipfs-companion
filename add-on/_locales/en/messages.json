@@ -295,5 +295,38 @@
   "manifest_extensionDescription": {
     "message": "Browser extension that simplifies access to IPFS resources",
     "description": "Extension description in the Manifest file"
+  },
+  "quickUpload_subhead_peers_and_files": {
+    "message": "Connected to $PEERCOUNT$ peers and sharing $FILESCOUNT$ files",
+    "description": "Info stats beneath the header on the share files page",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      },
+      "filesCount": {
+        "content": "$2"
+      }
+    }
+  },
+  "quickUpload_subhead_peers": {
+    "message": "Connected to $PEERCOUNT$ peers",
+    "description": "Partial info stats beneath the header on the share files page",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickUpload_pick_file_button": {
+    "message": "Pick a file",
+    "description": "Text on the 'pick a file' button"
+  },
+  "quickUpload_or": {
+    "message": "or",
+    "description": "seperates the pick a file button from the drop message"
+  },
+  "quickUpload_drop_it_here": {
+    "message": "drop it here to share",
+    "description": "Partial info stats beneath the header on the share files page"
   }
 }

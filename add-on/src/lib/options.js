@@ -10,8 +10,8 @@ const optionDefaults = Object.freeze({
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
-  customGatewayUrl: 'http://localhost:8080',
-  ipfsApiUrl: 'http://localhost:5001',
+  customGatewayUrl: 'http://127.0.0.1:8080',
+  ipfsApiUrl: 'http://127.0.0.1:5001',
   ipfsApiPollMs: 3000
 })
 
@@ -45,10 +45,9 @@ function storeMissingOptions (read, defaults, storage) {
 exports.storeMissingOptions = storeMissingOptions
 
 function normalizeGatewayURL (url) {
-  // https://github.com/ipfs/ipfs-companion/issues/291
+  // https://github.com/ipfs/ipfs-companion/issues/328
   return url
-    .replace('/127.0.0.1:', '/localhost:')
-    .replace('/gateway.ipfs.io', '/ipfs.io')
+    .replace('/localhost:', '/127.0.0.1:')
 }
 
 exports.normalizeGatewayURL = normalizeGatewayURL
