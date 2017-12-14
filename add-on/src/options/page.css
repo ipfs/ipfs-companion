@@ -1,0 +1,85 @@
+form * {
+  font: caption;
+  font-size: 1em;
+}
+strong {
+  font-weight: bold;
+}
+em {
+  font-style: italic;
+}
+code {
+  font-family: monospace;
+}
+fieldset {
+  border: none;
+  border-top: 3px solid #3E9398;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: .5em;
+}
+legend {
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: .5em;
+  font-weight: bold;
+}
+fieldset > div {
+  padding: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+fieldset > div + div {
+  border-top: 1px solid #ccc;
+}
+fieldset > div > * {
+  align-self: center;
+}
+label {
+  flex: 1;
+}
+label > dl > dd {
+  color: #888;
+  margin-top: .2em;
+  margin-left: 0;
+  margin-right: .2em;
+}
+div:hover {
+  background-color: rgba(62, 148, 152, 0.05);
+}
+div:hover > label > dl > dd {
+  color: #333;
+}
+input, select {
+  flex: 1;
+  padding: .5em;
+  font-family: monospace;
+}
+#resetAllOptions {
+  flex: 1;
+  text-align: center;
+}
+input[type=text],
+input[type=url],
+input[type=number],
+select {
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  border: 1px solid #ccc;
+}
+input[type=text]:focus,
+input[type=url]:focus,
+input[type=number]:focus,
+select:focus {
+  outline: none;
+  border: 1px solid #3E9398;
+  box-shadow: 0 0 5px #5FCBCF;
+}
+input:invalid {
+  border: 1px solid red !important;
+  background-color: #FFF0F0;
+  box-shadow: 0 0 5px red !important;
+  color: red;
+  transition: box-shadow 0.3s;
+}
