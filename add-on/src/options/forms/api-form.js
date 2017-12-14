@@ -3,9 +3,10 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const { normalizeGatewayURL } = require('../../lib/options')
 
 function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
-  const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl')
+  const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', normalizeGatewayURL)
   const onIpfsApiPollMsChange = onOptionChange('ipfsApiPollMs')
   const onAutomaticModeChange = onOptionChange('automaticMode')
 
