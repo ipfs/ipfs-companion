@@ -16,7 +16,7 @@ module.exports = function gatewayStatus ({
 }) {
   const api = ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`
-    <ul class="list mv3 ph3">
+    <ul class="list mv3 ph3 bg-white black">
       <li class="flex mb2">
         <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
         <code class="w-60 f7 tr">${gatewayAddress == null ? 'unknown' : gatewayAddress}</code>
