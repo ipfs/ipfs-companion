@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { proxifyServer } = require('./post-message-proxy')
+const { expose } = require('postmsg-rpc')
 
 module.exports = function createIpfsProxy (getIpfs) {
   let connections = []
@@ -30,7 +30,7 @@ module.exports = function createIpfsProxy (getIpfs) {
 
 function createProxy (getIpfs, port) {
   return {
-    id: proxifyServer('id', getIpfs, {
+    id: expose('ipfs.id', () => getIpfs().id(), {
       addListener: (_, handler) => port.onMessage.addListener(handler),
       removeListener: (_, handler) => port.onMessage.removeListener(handler),
       postMessage: (data) => port.postMessage(data),
