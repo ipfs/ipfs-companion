@@ -359,7 +359,7 @@ module.exports = async function init () {
       const peerInfos = await ipfs.swarm.peers()
       return peerInfos.length
     } catch (error) {
-      // console.error(`Error while ipfs.swarm.peers: ${err}`)
+      console.error(`Error while ipfs.swarm.peers: ${error}`)
       return offlinePeerCount
     }
   }
