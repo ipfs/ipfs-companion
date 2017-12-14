@@ -6350,6 +6350,12 @@ postcss@6.0.14:
     source-map "^0.6.1"
     supports-color "^4.4.0"
 
+postmsg-rpc@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/postmsg-rpc/-/postmsg-rpc-2.1.1.tgz#5d72d0ea5d907e771b18060d045894b1f2edbf26"
+  dependencies:
+    shortid "^2.2.8"
+
 prebuild-install@^2.1.0:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-2.4.1.tgz#c28ba1d1eedc17fbd6b3229a657ffc0fba479b49"
@@ -7281,6 +7287,10 @@ shelljs@^0.7.3, shelljs@^0.7.5:
 shellwords@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
+
+shortid@^2.2.8:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/shortid/-/shortid-2.2.8.tgz#033b117d6a2e975804f6f0969dbe7d3d0b355131"
 
 shot@^3.4.2:
   version "3.4.2"

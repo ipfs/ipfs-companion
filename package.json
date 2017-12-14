@@ -73,9 +73,8 @@
     "is-svg": "2.1.0",
     "lru_map": "0.3.3",
     "mime-types": "2.1.17",
-    "postmsg-rpc": "^2.0.1",
+    "postmsg-rpc": "^2.1.1",
     "prundupify": "1.0.0",
-    "shortid": "^2.2.8",
     "tachyons": "4.9.0",
     "webextension-polyfill": "0.1.2"
   }
