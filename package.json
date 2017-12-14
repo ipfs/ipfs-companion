@@ -28,8 +28,6 @@
     "lint": "run-s lint:*",
     "lint:standard": "standard --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s add-on/",
-    "postcheckout": "npm update && run-s clean build:copy*",
-    "postmerge": "run-s postcheckout",
     "precommit": "run-s -s clean build lint",
     "prepush": "run-s -s precommit test build",
     "firefox": "web-ext run -s add-on/ --browser-console",
