@@ -2,16 +2,21 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { expose } = require('postmsg-rpc')
+const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
 
 module.exports = function createIpfsProxy (getIpfs) {
   let connections = []
 
   const onConnect = (port) => {
-    const proxy = createProxy(getIpfs, port)
+    const proxy = createProxyServer(getIpfs, {
+      addListener: (_, handler) => port.onMessage.addListener(handler),
+      removeListener: (_, handler) => port.onMessage.removeListener(handler),
+      postMessage: (data) => port.postMessage(data),
+      getMessageData: (d) => d
+    })
 
     const destroy = () => {
-      Object.keys(proxy).forEach((k) => k.close && k.close())
+      closeProxyServer(proxy)
       port.onDisconnect.removeListener(onDisconnect)
       connections = connections.filter(c => c.destroy !== destroy)
     }
@@ -26,15 +31,4 @@ module.exports = function createIpfsProxy (getIpfs) {
   browser.runtime.onConnect.addListener(onConnect)
 
   return { destroy: () => connections.forEach(c => c.destroy) }
-}
-
-function createProxy (getIpfs, port) {
-  return {
-    id: expose('ipfs.id', () => getIpfs().id(), {
-      addListener: (_, handler) => port.onMessage.addListener(handler),
-      removeListener: (_, handler) => port.onMessage.removeListener(handler),
-      postMessage: (data) => port.postMessage(data),
-      getMessageData: (d) => d
-    })
-  }
 }

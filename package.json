@@ -6,9 +6,6 @@
     "type": "git",
     "url": "https://github.com/ipfs/ipfs-companion.git"
   },
-  "browser": {
-    "ipfs": false
-  },
   "scripts": {
     "start": "run-s clean build test firefox",
     "clean": "run-p clean:*",
@@ -69,11 +66,11 @@
     "file-type": "7.3.0",
     "ipfs": "0.27.5",
     "ipfs-api": "17.2.6",
+    "ipfs-postmsg-proxy": "0.0.3",
     "is-ipfs": "0.3.2",
     "is-svg": "2.1.0",
     "lru_map": "0.3.3",
     "mime-types": "2.1.17",
-    "postmsg-rpc": "^2.1.1",
     "prundupify": "1.0.0",
     "tachyons": "4.9.0",
     "webextension-polyfill": "0.1.2"

@@ -41,9 +41,7 @@
     "content_scripts": [
       {
         "matches": [
-          "file://*/*",
-          "http://*/*",
-          "https://*/*"
+          "<all_urls>"
         ],
         "match_about_blank": true,
         "js": [
@@ -72,7 +70,8 @@
 
     "web_accessible_resources": [
         "icons/ipfs-logo-on.svg",
-        "icons/ipfs-logo-off.svg"
+        "icons/ipfs-logo-off.svg",
+        "dist/contentScripts/ipfs-proxy/page.js"
     ],
 
 	"protocol_handlers": [
