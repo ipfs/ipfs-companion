@@ -30,7 +30,7 @@ module.exports = function browserActionPage (state, emit) {
   const gwStatusProps = Object.assign({}, state)
 
   return html`
-    <div class="helvetica">
+    <div class="helvetica bg-white">
       ${header(headerProps)}
       ${contextActions(contextActionsProps)}
       ${operations(opsProps)}
