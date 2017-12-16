@@ -79,7 +79,7 @@
     "lru_map": "0.3.3",
     "mime-types": "2.1.17",
     "prundupify": "1.0.0",
-    "tachyons": "^4.9.0",
+    "tachyons": "4.9.0",
     "webextension-polyfill": "0.1.2"
   }
 }

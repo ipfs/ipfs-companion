@@ -145,26 +145,28 @@ module.exports = async function init () {
   }
 
   async function sendStatusUpdateToBrowserAction () {
+    if (!browserActionPort) return
+    const info = {
+      ipfsNodeType: state.ipfsNodeType,
+      peerCount: state.peerCount,
+      repoStats: state.repoStats,
+      gwURLString: state.gwURLString,
+      pubGwURLString: state.pubGwURLString,
+      currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+    }
+    try {
+      let v = await ipfs.version()
+      if (v) {
+        info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
+      }
+    } catch (error) {
+      info.gatewayVersion = null
+    }
+    if (info.currentTab) {
+      info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
+    }
+    // Still here?
     if (browserActionPort) {
-      const info = {
-        ipfsNodeType: state.ipfsNodeType,
-        peerCount: state.peerCount,
-        repoStats: state.repoStats,
-        gwURLString: state.gwURLString,
-        pubGwURLString: state.pubGwURLString,
-        currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
-      }
-      try {
-        let v = await ipfs.version()
-        if (v) {
-          info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
-        }
-      } catch (error) {
-        info.gatewayVersion = null
-      }
-      if (info.currentTab) {
-        info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
-      }
       browserActionPort.postMessage({statusUpdate: info})
     }
   }
