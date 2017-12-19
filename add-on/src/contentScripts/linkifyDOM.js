@@ -74,7 +74,7 @@
     if (!container || !container.nodeType) {
       return
     }
-    if (container.className && container.className.match(/\blinkifiedIpfsAddress\b/)) {
+    if (container.className && container.className.match && container.className.match(/\blinkifiedIpfsAddress\b/)) {
       // prevent infinite recursion
       return
     }
