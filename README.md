@@ -128,9 +128,21 @@ Try manual installation:
 https://github.com/ipfs-shipyard/browser-laptop/blob/66f38870fced0dbc55aae7fe1ed905bff602f88e/app/extensions.js#L500-L502
 - In the `browser-laptop` project run `npm install` then in separate shells run `npm run watch` and `npm start`. If you have any trouble running Brave from source, check: https://github.com/brave/browser-laptop#installation
 
-Brave will start up and you should see a badge with your number of connected ipfs peers next to the brave button, top right. (_the ipfs-companion badge [currently doesn't appear]()_). Click on the badge and update your gateway settings to use port `9090`, then go share something with your peers...
+Brave will start up and you should see a badge with your number of connected ipfs peers next to the brave button, top right. (_the ipfs-companion badge currently doesn't appear [issue](https://github.com/brave/browser-laptop/issues/11797), [pr](https://github.com/brave/browser-laptop/pull/11143)_). Click on the badge and update your gateway settings to use port `9090`, then go share something with your peers...
 
 ![brave ipfs](https://user-images.githubusercontent.com/58871/34110877-e3080b0a-e3ff-11e7-8667-72fcef369386.gif)
+
+### Enable Embedded IPFS Support via [js-ipfs](https://github.com/ipfs/js-ipfs)
+
+We are testing out embedding an ipfs node in the add-on background page. It's hidden by default currently.
+
+To enable it, edit the `package.json` file to remove...
+
+```json
+  "ipfs": false
+```
+
+...from the `browser` section and run `npm run build`. Note, don't set it to `true`, as that's not how the [browser module stubbing works](https://github.com/defunctzombie/package-browser-field-spec#ignore-a-module)
 
 ## Contribute
 
