@@ -65,13 +65,13 @@ _(some are disabled by default, use Preferences screen to enable)_
 
 ## Install
 
-First, make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer. `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.
+We recommend installing the add-on via your browser's add-on store.
 
-### TL;DR
-
-| Firefox                                                                                                                                                    | Chrome / Chromium                                                                                                                                                                        |
-| -------------                                                                                                                                              | -------------                                                                                                                                                                            |
+| Firefox | Chrome / Chromium |
+|---------|-------------------|
 | [![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/) | [![](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+
+`ipfs-companion` is designed to retrieve content from a locally running IPFS daemon. so make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer.
 
 ### Modern Firefox (> 53)
 
@@ -89,7 +89,8 @@ For historical background on the rewrite see [Issue #20: Move to WebExtensions](
 
 Install the latest signed release from [Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch).
 
-### Development or other Browsers Supporting WebExtensions API
+
+## Development or other Browsers Supporting WebExtensions API
 
 Try manual installation:
 
@@ -110,7 +111,38 @@ Try manual installation:
         1. Enter `about:debugging` in the URL bar
         2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 
+### Brave
 
+`ipfs-companion` works in Brave. To try it out today you need to run brave from source, but we are working with Brave to get seamless IPFS support working out of the box. Track our progress [here](https://github.com/ipfs/ipfs-companion/issues/312)
+
+- Configure your local ipfs gateway to run on port 9090 (_the default, port 8080, conflicts with the brave webpack dev server_)
+- Clone and build `ipfs-companion` as above
+- Clone [`brave/browser-laptop`](https://github.com/brave/browser-laptop)
+- Symlink the `ipfs-companion/add-on` dir to `browser-laptop/app/extensions/ipfs`
+- Add the following to `browser-laptop/app/extensions.js`
+```js
+  // Enable IPFS
+  extensionInfo.setState('ipfs', extensionStates.REGISTERED)
+  loadExtension('ipfs', getExtensionsPath('ipfs'), undefined, 'component')
+```
+https://github.com/ipfs-shipyard/browser-laptop/blob/66f38870fced0dbc55aae7fe1ed905bff602f88e/app/extensions.js#L500-L502
+- In the `browser-laptop` project run `npm install` then in separate shells run `npm run watch` and `npm start`. If you have any trouble running Brave from source, check: https://github.com/brave/browser-laptop#installation
+
+Brave will start up and you should see a badge with your number of connected ipfs peers next to the brave button, top right. (_the ipfs-companion badge currently doesn't appear [issue](https://github.com/brave/browser-laptop/issues/11797), [pr](https://github.com/brave/browser-laptop/pull/11143)_). Click on the badge and update your gateway settings to use port `9090`, then go share something with your peers...
+
+![brave ipfs](https://user-images.githubusercontent.com/58871/34110877-e3080b0a-e3ff-11e7-8667-72fcef369386.gif)
+
+### Enable Embedded IPFS Support via [js-ipfs](https://github.com/ipfs/js-ipfs)
+
+We are testing out embedding an ipfs node in the add-on background page. It's hidden by default currently.
+
+To enable it, edit the `package.json` file to remove...
+
+```json
+  "ipfs": false
+```
+
+...from the `browser` section and run `npm run build`. Note, don't set it to `true`, as that's not how the [browser module stubbing works](https://github.com/defunctzombie/package-browser-field-spec#ignore-a-module)
 
 ## Contribute
 
