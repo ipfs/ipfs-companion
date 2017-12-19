@@ -16,11 +16,11 @@
     "description": "Label for an external IPFS node"
   },
   "panel_headerIpfsNodeExternalTitle": {
-    "message": "Connect to an IPFS node over http",
+    "message": "Connect to an IPFS node over HTTP",
     "description": "Label for an external IPFS node"
   },
   "panel_statusGatewayAddress": {
-    "message": "Gateway",
+    "message": "HTTP Gateway",
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusApiAddress": {
@@ -36,7 +36,7 @@
     "description": "A label in Node status section of Browser Action pop-up"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "The number of other ipfs nodes you can connect to",
+    "message": "The number of other IPFS nodes you can connect to",
     "description": "A label tool-tip in Node status section of Browser Action pop-up"
   },
   "panel_quickUpload": {
@@ -52,11 +52,11 @@
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_switchToCustomGateway": {
-    "message": "Switch to Custom Gateway",
+    "message": "Zu benutzerdefiniertem Gateway wechseln",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_switchToPublicGateway": {
-    "message": "Switch to Public Gateway",
+    "message": "Zu öffentlichem Gateway wechseln",
     "description": "A menu item in Browser Action pop-up"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -152,7 +152,7 @@
     },
     "description": "A generic placeholder for error notification"
   },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "IPFS Node",
     "description": "A section header on the Preferences screen"
   },
@@ -161,7 +161,7 @@
     "description": "An option title on the Preferences screen"
   },
   "option_ipfsNodeType_description": {
-    "message": "External: Connect to an IPFS daemon over http. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "message": "External: Connect to an IPFS daemon over HTTP. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
     "description": "An option description on the Preferences screen"
   },
   "option_ipfsNodeType_external": {
@@ -295,5 +295,38 @@
   "manifest_extensionDescription": {
     "message": "Browser-Erweiterung, die den Zugriff auf IPFS-Ressourcen vereinfacht",
     "description": "Extension description in the Manifest file"
+  },
+  "quickUpload_subhead_peers_and_files": {
+    "message": "Connected to $PEERCOUNT$ peers and sharing $FILESCOUNT$ files",
+    "description": "Info stats beneath the header on the share files page",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      },
+      "filesCount": {
+        "content": "$2"
+      }
+    }
+  },
+  "quickUpload_subhead_peers": {
+    "message": "Connected to $PEERCOUNT$ peers",
+    "description": "Partial info stats beneath the header on the share files page",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickUpload_pick_file_button": {
+    "message": "Pick a file",
+    "description": "Text on the 'pick a file' button"
+  },
+  "quickUpload_or": {
+    "message": "or",
+    "description": "seperates the pick a file button from the drop message"
+  },
+  "quickUpload_drop_it_here": {
+    "message": "drop it here to share",
+    "description": "Partial info stats beneath the header on the share files page"
   }
 }
