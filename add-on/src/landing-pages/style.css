@@ -1,1 +1,22 @@
 @import url('node_modules/tachyons/css/tachyons.css');
+
+#header {
+  background: linear-gradient(to top, #041727 0%, #043b55 100%);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+}
+
+.dweb-links {
+  list-style-type: none;
+}
+
+.app-list {
+  list-style-type: none;
+}
+
+.app-item img {
+  height: 80px;
+}
