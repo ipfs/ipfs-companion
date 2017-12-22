@@ -4,6 +4,14 @@
   background: linear-gradient(to top, #041727 0%, #043b55 100%);
 }
 
+#main {
+  background: linear-gradient(to top, #041727 0%, #043b55 100%);
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .logo {
   height: 80px;
   width: 80px;
@@ -20,3 +28,12 @@
 .app-item img {
   height: 80px;
 }
+
+#btn-install {
+  background-color: #6ACAD1;
+}
+
+#btn-install:hover {
+  margin-top: -1px;
+}
+
