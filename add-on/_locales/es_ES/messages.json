@@ -1,0 +1,333 @@
+{
+  "browserAction_title": {
+    "message": "Compañía IPFS",
+    "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
+  },
+  "panel_headerIpfsNodeEmbedded": {
+    "message": "Insertado",
+    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
+  },
+  "panel_headerIpfsNodeEmbeddedTitle": {
+    "message": "Experimental: Uso del IPFS introducido en su navegador a través de js-ipfs",
+    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
+  },
+  "panel_headerIpfsNodeExternal": {
+    "message": "Externo",
+    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
+  },
+  "panel_headerIpfsNodeExternalTitle": {
+    "message": "Conectarse a un nodo IPFS a través de HTTP",
+    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
+  },
+  "panel_statusGatewayAddress": {
+    "message": "Entrada",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
+  },
+  "panel_statusApiAddress": {
+    "message": "API",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
+  },
+  "panel_statusGatewayVersion": {
+    "message": "versión",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
+  },
+  "panel_statusSwarmPeers": {
+    "message": "Puertos",
+    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
+  },
+  "panel_statusSwarmPeersTitle": {
+    "message": "La cantidad de otros nodos IPFS a los que se puede conectar",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
+  },
+  "panel_quickUpload": {
+    "message": "Compartir archivos a través de IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
+  },
+  "panel_openWebui": {
+    "message": "Abrir Ui Web",
+    "description": "A menu item in Browser Action pop-up (panel_openWebui)"
+  },
+  "panel_openPreferences": {
+    "message": "Abrir preferencias",
+    "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
+  },
+  "panel_switchToCustomGateway": {
+    "message": "Cambiar a la entrada personalizada",
+    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  },
+  "panel_switchToPublicGateway": {
+    "message": "Cambiar a la entrada publica",
+    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  },
+  "panel_pinCurrentIpfsAddress": {
+    "message": "Marcar recursos de IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  },
+  "panel_unpinCurrentIpfsAddress": {
+    "message": "Desmarcar recursos de IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
+  },
+  "panelCopy_currentIpfsAddress": {
+    "message": "Copiar dirección canónica",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+  },
+  "panel_copyCurrentPublicGwUrl": {
+    "message": "Copiar URL de la entrada publica",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
+  },
+  "contextMenu_uploadToIpfs": {
+    "message": "Cargar a IPFS",
+    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
+  },
+  "notify_addonIssueTitle": {
+    "message": "Añadir inconveniente de IPFS",
+    "description": "A title of system notification (notify_addonIssueTitle)"
+  },
+  "notify_addonIssueMsg": {
+    "message": "Para más detalle ver la consola del navegador",
+    "description": "A message in system notification (notify_addonIssueMsg)"
+  },
+  "notify_copiedPublicURLTitle": {
+    "message": "Copiar URL publico",
+    "description": "A title of system notification (notify_copiedPublicURLTitle)"
+  },
+  "notify_copiedCanonicalAddressTitle": {
+    "message": "Copiar dirección canónica",
+    "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+  },
+  "notify_pinnedIpfsResourceTitle": {
+    "message": "El recurso IPFS ahora está paralizado",
+    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
+  },
+  "notify_unpinnedIpfsResourceTitle": {
+    "message": "Remover la marcación IPFS",
+    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
+  },
+  "notify_pinErrorTitle": {
+    "message": "Error en el marcado del recurso de IPFS",
+    "description": "A title of system notification (notify_pinErrorTitle)"
+  },
+  "notify_unpinErrorTitle": {
+    "message": "Error al marcar como eliminado el IPFS",
+    "description": "A title of system notification (notify_unpinErrorTitle)"
+  },
+  "notify_apiOnlineTitle": {
+    "message": "El IPFS API está en linea",
+    "description": "A title of system notification (notify_apiOnlineTitle)"
+  },
+  "notify_apiOnlineAutomaticModeMsg": {
+    "message": "Modo Automático: La entrada personalizada redirige el archivo",
+    "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
+  },
+  "notify_apiOfflineTitle": {
+    "message": "El API de IPFS está desconectado",
+    "description": "A title of system notification (notify_apiOfflineTitle)"
+  },
+  "notify_apiOfflineAutomaticModeMsg": {
+    "message": "Modo Automático: Entrada Publica se usará como respaldo",
+    "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
+  },
+  "notify_uploadErrorTitle": {
+    "message": "No puede cargarse a través de la API de IPFS",
+    "description": "A title of system notification (notify_uploadErrorTitle)"
+  },
+  "notify_uploadTrackingProtectionErrorMsg": {
+    "message": "Intente desactivar la protección de seguimiento (presionar ctrl+shift+j para más detalles)",
+    "description": "(notify_uploadTrackingProtectionErrorMsg)"
+  },
+  "notify_inlineMsg": {
+    "message": "$MSG$",
+    "placeholders": {
+      "msg": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
+  },
+  "notify_inlineErrorMsg": {
+    "message": "$ERROR$ (presionar ctrl+shift+j para más detalles)",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
+  },
+  "option_header_nodeType": {
+    "message": "Nodo de IPFS",
+    "description": "A section header on the Preferences screen (option_header_nodeType)"
+  },
+  "option_ipfsNodeType_title": {
+    "message": "Tipo de nodo IPFS",
+    "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
+  },
+  "option_ipfsNodeType_description": {
+    "message": "Externo: Conéctese a un daemon IPFS sobre HTTP. \n\nIncrustado: Ejecute un nodo de IPFS en su navegador a través de ipfs-js *Experimental*",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
+  "option_ipfsNodeType_external": {
+    "message": "Externo",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
+  },
+  "option_ipfsNodeType_embedded": {
+    "message": "Insertado",
+    "description": "An option on the Preferences screeni (option_ipfsNodeType_embedded)"
+  },
+  "option_header_gateways": {
+    "message": "Entradas",
+    "description": "A section header on the Preferences screen (option_header_gateways)"
+  },
+  "option_customGatewayUrl_title": {
+    "message": "Entrada Local Personalizada",
+    "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
+  },
+  "option_customGatewayUrl_description": {
+    "message": "URL de entrada HTTP2IPFS preferido",
+    "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
+  },
+  "option_useCustomGateway_title": {
+    "message": "Use entrada personalizada",
+    "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
+  },
+  "option_useCustomGateway_description": {
+    "message": "Redirigir las solicitudes de recursos de IPFS a la entrada personalizada",
+    "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
+  },
+  "option_publicGatewayUrl_title": {
+    "message": "Entrada Publica Predeterminada",
+    "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
+  },
+  "option_publicGatewayUrl_description": {
+    "message": "Recurra a usar el URL alternativo cuando la entrada personalizada no esté disponible para copiar enlaces compartibles",
+    "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
+  },
+  "option_header_api": {
+    "message": "API",
+    "description": "A section header on the Preferences screen (option_header_api)"
+  },
+  "option_ipfsApiUrl_title": {
+    "message": "URL del API de IPFS",
+    "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
+  },
+  "option_ipfsApiUrl_description": {
+    "message": "Sugerencia: aquí es donde vive \/webUI",
+    "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
+  },
+  "option_ipfsApiPollMs_title": {
+    "message": "Intervalo de encuesta de estado",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  },
+  "option_ipfsApiPollMs_description": {
+    "message": "Con qué frecuencia se actualiza el conteo de puertos (en milisegundos)",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  },
+  "option_automaticMode_title": {
+    "message": "Modo Automático",
+    "description": "An option title on the Preferences screen (option_automaticMode_title)"
+  },
+  "option_automaticMode_description": {
+    "message": "Alternar el uso de entradas personalizadas cuando cambia la disponibilidad de API de IPFS",
+    "description": "An option description on the Preferences screen (option_automaticMode_description)"
+  },
+  "option_header_experiments": {
+    "message": "Experimentos",
+    "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_experiments_warning": {
+    "message": "Tenga cuidado: estas funciones son nuevas o se encuentran en proceso. YMMV.",
+    "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
+  },
+  "option_displayNotifications_title": {
+    "message": "Habilitar notificaciones",
+    "description": "An option title on the Preferences screen (option_displayNotifications_title)"
+  },
+  "option_displayNotifications_description": {
+    "message": "Muestra las notificaciones del sistema cuando el estado de la API cambia, se copia un enlace etc",
+    "description": "An option description on the Preferences screen (option_displayNotifications_description)"
+  },
+  "option_catchUnhandledProtocols_title": {
+    "message": "Capturar Protocolos IPFS no gestionados",
+    "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
+  },
+  "option_catchUnhandledProtocols_description": {
+    "message": "Habilitar el soporte para pfs:\/\/$cid, ipns:\/\/$peerid y dweb:\/ipfs\/$cid por la normalización de enlaces y solicitudes con protocolos no controlados",
+    "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
+  },
+  "option_linkify_title": {
+    "message": "Linkify direcciones de IPFS",
+    "description": "An option title on the Preferences screen (option_linkify_title)"
+  },
+  "option_linkify_description": {
+    "message": "Convertir texto plano \/ipfs\/ rutas de enlaces cliqueables",
+    "description": "An option description on the Preferences screen (option_linkify_description)"
+  },
+  "option_dnslink_title": {
+    "message": "Soporte DNSLINK",
+    "description": "An option title on the Preferences screen (option_dnslink_title)"
+  },
+  "option_preloadAtPublicGateway_title": {
+    "message": "Subida de carga previa",
+    "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
+  },
+  "option_preloadAtPublicGateway_description": {
+    "message": "Permite la carga previa automática de los activos subidos a través de una solicitud HTTP HEAD asíncrona a una entrada publica",
+    "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
+  },
+  "option_dnslink_description": {
+    "message": "Realice una busqueda de DNS para cada sitio web visitado y use la entrada personalizada si DNSLINK está presente en su registro TXT de DNS (conocido por retardar el navegador)",
+    "description": "An option description on the Preferences screen (option_dnslink_description)"
+  },
+  "option_resetAllOptions_title": {
+    "message": "Restablecer Todo",
+    "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
+  },
+  "option_resetAllOptions_description": {
+    "message": "Reemplaza las preferencias del usuario por las predeterminadas (no se puede deshacer!)",
+    "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
+  },
+  "manifest_extensionName": {
+    "message": "Compañía IPFS",
+    "description": "Extension name in the Manifest file (manifest_extensionName)"
+  },
+  "manifest_shortExtensionName": {
+    "message": "Compañía IPFS",
+    "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
+  },
+  "manifest_extensionDescription": {
+    "message": "Extensión del navegador que simplifica el acceso a los recursos de IPFS",
+    "description": "Extension description in the Manifest file (manifest_extensionDescription)"
+  },
+  "quickUpload_subhead_peers_and_files": {
+    "message": "Conectado a los puertos $PEERCOUNT$ y compartiendo archivos $FILESCOUNT$",
+    "description": "Info stats beneath the header on the share files page (quickUpload_subhead_peers_and_files)",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      },
+      "filesCount": {
+        "content": "$2"
+      }
+    }
+  },
+  "quickUpload_subhead_peers": {
+    "message": "Conectado $PEERCOUNT$ a los puertos",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickUpload_pick_file_button": {
+    "message": "Escoja un archivo",
+    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
+  },
+  "quickUpload_or": {
+    "message": "o",
+    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
+  },
+  "quickUpload_drop_it_here": {
+    "message": "soltarlo aquí para compartir",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+  }
+}
