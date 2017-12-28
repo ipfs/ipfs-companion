@@ -1,138 +1,139 @@
 {
   "browserAction_title": {
     "message": "Asystent IPFS",
-    "description": "A pop-up title when user hovers on Browser Action button"
+    "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeEmbedded": {
     "message": "Wbudowany",
-    "description": "Label for an embedded IPFS node"
+    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
   },
   "panel_headerIpfsNodeEmbeddedTitle": {
-    "message": "Experimental: Use IPFS embedded in your browser via js-ipfs",
-    "description": "Label for an embedded IPFS node"
+    "message": "Eksperyment: uruchom instancję JS-IPFS w przeglądarce",
+    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
   },
   "panel_headerIpfsNodeExternal": {
     "message": "Zewnętrzny",
-    "description": "Label for an external IPFS node"
+    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
   },
   "panel_headerIpfsNodeExternalTitle": {
-    "message": "Connect to an IPFS node over HTTP",
-    "description": "Label for an external IPFS node"
+    "message": "Połącz do węzła IPFS po HTTP",
+    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
   },
   "panel_statusGatewayAddress": {
     "message": "Brama HTTP",
-    "description": "A label in Node status section of Browser Action pop-up"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusApiAddress": {
     "message": "API",
-    "description": "A label in Node status section of Browser Action pop-up"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusGatewayVersion": {
     "message": "wersja",
-    "description": "A label in Node status section of Browser Action pop-up"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
     "message": "połączenia",
-    "description": "A label in Node status section of Browser Action pop-up"
+    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "The number of other IPFS nodes you can connect to",
-    "description": "A label tool-tip in Node status section of Browser Action pop-up"
+    "message": "Liczba węzłów IPFS umożliwiających połączenie",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
-    "message": "Opublikuj plik",
-    "description": "A menu item in Browser Action pop-up"
+    "message": "Opublikuj plik via IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
     "message": "Otwórz WebUI",
-    "description": "A menu item in Browser Action pop-up"
+    "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
     "message": "Otwórz preferencje",
-    "description": "A menu item in Browser Action pop-up"
+    "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_switchToCustomGateway": {
     "message": "Przepnij na własną bramę",
-    "description": "A menu item in Browser Action pop-up"
+    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
   },
   "panel_switchToPublicGateway": {
     "message": "Przepnij na publiczną bramę",
-    "description": "A menu item in Browser Action pop-up"
+    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Przypnij zasób IPFS",
-    "description": "A menu item in Browser Action pop-up"
+    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_unpinCurrentIpfsAddress": {
     "message": "Odepnij zasób IPFS",
-    "description": "A menu item in Browser Action pop-up"
+    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
     "message": "Skopiuj kanoniczny adres",
-    "description": "A menu item in Browser Action pop-up and right-click context menu"
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Skopiuj URL do publicznej bramy",
-    "description": "A menu item in Browser Action pop-up and right-click context menu"
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "contextMenu_uploadToIpfs": {
     "message": "Wyślij do IPFS",
-    "description": "An item in right-click context menu"
+    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
   },
   "notify_addonIssueTitle": {
     "message": "Problem z Asystentem IPFS",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
     "message": "Otwórz Konsolę Przeglądarki aby zobaczyć szczegóły",
-    "description": "A message in system notification"
+    "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedPublicURLTitle": {
     "message": "Skopiowano publiczny URL",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_copiedPublicURLTitle)"
   },
   "notify_copiedCanonicalAddressTitle": {
     "message": "Skopiowano kanoniczny adres",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
     "message": "Przypięto wskazany zasób IPFS",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
     "message": "Odpięto wskazany zasób IPFS",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
     "message": "Błąd podczas przypinania zasobu IPFS",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
     "message": "Błąd podczas odpinania zasobu IPFS",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
     "message": "IPFS: nawiązano połączenie z API",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
     "message": "Tryb automatyczny: przekierowanie do alternatywnej bramy jest aktywne",
-    "description": "A message in system notification"
+    "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
     "message": "IPFS: utracono połączenie z API",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
     "message": "Tryb automatyczny: awaryjne przekierowanie do publicznej bramy",
-    "description": "A message in system notification"
+    "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
     "message": "Nie udało się wysłać poprzez API IPFS",
-    "description": "A title of system notification"
+    "description": "A title of system notification (notify_uploadErrorTitle)"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Spróbuj wyłączyć \"Ochronę przed śledzeniem\" (wciśnij ctrl+shift+j po więcej szczegółów)"
+    "message": "Spróbuj wyłączyć \"Ochronę przed śledzeniem\" (wciśnij ctrl+shift+j po więcej szczegółów)",
+    "description": "(notify_uploadTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
     "message": "$MSG$",
@@ -141,7 +142,7 @@
         "content": "$1"
       }
     },
-    "description": "A generic placeholder for notification message, leave as-is"
+    "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
     "message": "$ERROR$ (wciśnij ctrl+shift+j po więcej informacji)",
@@ -150,155 +151,155 @@
         "content": "$1"
       }
     },
-    "description": "A generic placeholder for error notification"
+    "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "option_header_nodeType": {
-    "message": "IPFS Node",
-    "description": "A section header on the Preferences screen"
+    "message": "Węzeł IPFS",
+    "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS Node Type",
-    "description": "An option title on the Preferences screen"
+    "message": "Typ węzła IPFS",
+    "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_description": {
-    "message": "External: Connect to an IPFS daemon over HTTP. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
-    "description": "An option description on the Preferences screen"
+    "message": "Zdalny: Połącz z usługą IPFS po HTTP. \n\nWbudowany: Uruchom instancję JS-IPFS w przeglądarce *Eksperyment*",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "External",
-    "description": "An option on the Preferences screen"
+    "message": "Zdalny",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Embedded",
-    "description": "An option on the Preferences screen"
+    "message": "Wbudowany",
+    "description": "An option on the Preferences screeni (option_ipfsNodeType_embedded)"
   },
   "option_header_gateways": {
     "message": "Bramy",
-    "description": "A section header on the Preferences screen"
+    "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
     "message": "Własna lokalna brama",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
     "message": "URL preferowanej bramy HTTP",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_useCustomGateway_title": {
     "message": "Użyj własnej bramy",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
     "message": "Przekieruj żądania o zasoby IPFS do własnej lokalnej bramy",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_publicGatewayUrl_title": {
     "message": "Domyślna brama publiczna",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
     "message": "URL zapasowej bramy, który będzie również używany przy kopiowaniu publicznych linków",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_header_api": {
     "message": "API",
-    "description": "A section header on the Preferences screen"
+    "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
     "message": "IPFS API URL",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
     "message": "Wskazówka: adres który udostępnia \/webui",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
     "message": "Odświeżanie statusu",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
     "message": "Jak często licznik połączeń jest odświeżany (w milisekundach)",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
     "message": "Tryb automatyczny",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
     "message": "Przełącza między własną a publiczną bramą w zależności od dostępności IPFS API",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_experiments": {
     "message": "Eksperymenty",
-    "description": "A section header on the Preferences screen"
+    "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experiments_warning": {
     "message": "Uwaga: poniższe opcje są nowe lub wciąż rozwijane. YMMV.",
-    "description": "Warning about Experiments section on the Preferences screen"
+    "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_displayNotifications_title": {
     "message": "Włącz powiadomienia",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
     "message": "Wyświetla powiadomienia systemowe podczas zmiany stanu API, kopiowania linków itp",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
     "message": "Przechwytuj nieobsłużone protokoły IPFS",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
     "message": "Włącza wsparcie dla ipfs:\/\/$cid, ipns:\/\/$peerid oraz dweb:\/ipfs\/$cid poprzez normalizację linków i żądań wykonanych tymi protokołami",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
     "message": "\"Linkifikacja\" adresów IPFS",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
     "message": "Zamienia tekst zawierający ścieżki \/ipfs\/ w klikalne linki",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslink_title": {
     "message": "Wsparcie DNSLINK",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_dnslink_title)"
   },
   "option_preloadAtPublicGateway_title": {
     "message": "Propagacja wysłanych danych",
-    "description": "An option title on the Preferences screen"
+    "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
     "message": "Włącza propagację opublikowanych zasobów poprzez asynchroniczne zapytanie HTTP HEAD do publicznej bramy",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_dnslink_description": {
     "message": "Odpytuje DNS o każdy odwiedzany host i używa własnej bramy jeśli DNSLINK jest obecny w rekordzie DNS TXT tego hosta (ta funkcja spowalnia działanie przeglądarki)",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_dnslink_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Resetuj wszystko",
-    "description": "An option title and button label on the Preferences screen"
+    "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
     "message": "Zastępuje wszystkie preferencje wartościami domyślnymi (nie można cofnąć!)",
-    "description": "An option description on the Preferences screen"
+    "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
     "message": "Asystent IPFS",
-    "description": "Extension name in the Manifest file"
+    "description": "Extension name in the Manifest file (manifest_extensionName)"
   },
   "manifest_shortExtensionName": {
     "message": "Asystent IPFS",
-    "description": "Short extension name in the Manifest file"
+    "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
     "message": "Rozszerzenie przeglądarki ułatwiające dostęp do zasobów IPFS",
-    "description": "Extension description in the Manifest file"
+    "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers_and_files": {
-    "message": "Connected to $PEERCOUNT$ peers and sharing $FILESCOUNT$ files",
-    "description": "Info stats beneath the header on the share files page",
+    "message": "Połączono z $PEERCOUNT$ węzłami, udostępniając $FILESCOUNT$ plików",
+    "description": "Info stats beneath the header on the share files page (quickUpload_subhead_peers_and_files)",
     "placeholders": {
       "peerCount": {
         "content": "$1"
@@ -309,8 +310,8 @@
     }
   },
   "quickUpload_subhead_peers": {
-    "message": "Connected to $PEERCOUNT$ peers",
-    "description": "Partial info stats beneath the header on the share files page",
+    "message": "Połączono z $PEERCOUNT$ węzłami",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",
     "placeholders": {
       "peerCount": {
         "content": "$1"
@@ -318,15 +319,15 @@
     }
   },
   "quickUpload_pick_file_button": {
-    "message": "Pick a file",
-    "description": "Text on the 'pick a file' button"
+    "message": "Wybierz plik",
+    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
   },
   "quickUpload_or": {
-    "message": "or",
-    "description": "seperates the pick a file button from the drop message"
+    "message": "lub",
+    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
   },
   "quickUpload_drop_it_here": {
-    "message": "drop it here to share",
-    "description": "Partial info stats beneath the header on the share files page"
+    "message": "upuść go tu, aby udostępnić",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   }
 }
