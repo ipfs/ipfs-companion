@@ -31,8 +31,11 @@ module.exports = (state, emitter) => {
     port = browser.runtime.connect({name: 'browser-action-port'})
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
+        // quick initial redraw with cached values
+        emitter.emit('render')
         console.log('In browser action, received message from background:', message)
         await updateBrowserActionState(message.statusUpdate)
+        // another redraw after laggy state update finished
         emitter.emit('render')
       }
     })
@@ -57,8 +60,8 @@ module.exports = (state, emitter) => {
       const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
       const pinResult = await ipfsCompanion.ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
-      notify('notify_pinnedIpfsResourceTitle', currentPath)
       state.isPinned = true
+      notify('notify_pinnedIpfsResourceTitle', currentPath)
     } catch (error) {
       handlePinError('notify_pinErrorTitle', error)
     }
@@ -75,13 +78,13 @@ module.exports = (state, emitter) => {
       const { ipfsCompanion } = await getBackgroundPage()
       const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
       const result = await ipfsCompanion.ipfs.pin.rm(currentPath, {recursive: true})
+      state.isPinned = false
       console.log('ipfs.pin.rm result', result)
       notify('notify_unpinnedIpfsResourceTitle', currentPath)
-      state.isPinned = false
     } catch (error) {
       handlePinError('notify_unpinErrorTitle', error)
     }
-    state.isUnPinning = true
+    state.isUnPinning = false
     emitter.emit('render')
     window.close()
   })
@@ -90,8 +93,8 @@ module.exports = (state, emitter) => {
     console.error(browser.i18n.getMessage(errorMessageKey), error)
     try {
       notify(errorMessageKey, error.message)
-    } catch (error) {
-      console.error('unable to access background page', error)
+    } catch (notifyError) {
+      console.error('Unable to notify user about pin-related error', notifyError)
     }
   }
 
@@ -209,7 +212,8 @@ module.exports = (state, emitter) => {
   }
 
   function notify (title, message) {
-    port.postMessage({event: 'notification', title: title, message: message}).catch((err) => console.log(err))
+    // console.log('Sending notification (' + title + '): ' + message + ')')
+    return port.postMessage({event: 'notification', title: title, message: message})
   }
 }
 
