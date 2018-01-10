@@ -45,6 +45,17 @@ module.exports = (state, emitter) => {
         }
       }
     })
+    // fix for https://github.com/ipfs-shipyard/ipfs-companion/issues/318
+    setTimeout(() => {
+      document.body.style.height = window.innerHeight + 1 + 'px'
+      setTimeout(function () {
+        // final render that should fix macOS UI issues
+        requestAnimationFrame(() => {
+          document.body.style.removeProperty('height')
+          emitter.emit('render')
+        })
+      }, 100)
+    }, 200)
   })
 
   emitter.on('copyPublicGwAddr', async function copyCurrentPublicGwAddress () {
