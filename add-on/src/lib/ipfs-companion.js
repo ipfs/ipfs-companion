@@ -30,6 +30,7 @@ module.exports = async function init () {
   var ipfsProxy
   const offlinePeerCount = -1
   const idleInSecs = 5 * 60
+  const browserActionPortName = 'browser-action-port'
 
   try {
     const options = await browser.storage.local.get(optionDefaults)
@@ -122,7 +123,6 @@ module.exports = async function init () {
   // e.g. signalling between browser action popup and background page that works
   // in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
 
-  const browserActionPortName = 'browser-action-port'
   var browserActionPort
 
   function onRuntimeConnect (port) {

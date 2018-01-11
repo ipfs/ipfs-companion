@@ -6,8 +6,13 @@ const browser = require('webextension-polyfill')
 const port = browser.runtime.connect({ name: 'ipfs-proxy' })
 
 // Forward on messages from background to the page and vice versa
-port.onMessage.addListener((msg) => window.postMessage(msg, '*'))
-window.addEventListener('message', (msg) => port.postMessage(msg.data))
+port.onMessage.addListener((data) => window.postMessage(data, '*'))
+
+window.addEventListener('message', (msg) => {
+  if (msg.data && msg.data.sender === 'postmsg-rpc/client') {
+    port.postMessage(msg.data)
+  }
+})
 
 function injectPageScript () {
   try {
