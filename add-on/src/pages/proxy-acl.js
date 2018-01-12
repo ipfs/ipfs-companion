@@ -30,8 +30,8 @@ function proxyAclStore (state, emitter) {
     const permission = e.currentTarget.getAttribute('data-permission')
 
     const msg = permission
-      ? `Revoke permission ${permission} for ${origin}?`
-      : `Revoke all permissions for ${origin}?`
+      ? browser.i18n.getMessage('page_proxyAcl_confirm_revoke', permission, origin)
+      : browser.i18n.getMessage('page_proxyAcl_confirm_revoke_all', origin)
 
     if (!window.confirm(msg)) return
 
@@ -73,7 +73,7 @@ function proxyAclPage (state, emit) {
               ${browser.i18n.getMessage('page_proxyAcl_title')}
             </h1>
             <p class="f3 fw2 lh-copy ma0 light-gray">
-              View and revoke granted access rights to your IPFS instance.
+              ${browser.i18n.getMessage('page_proxyAcl_subtitle')}
             </p>
           </div>
         </header>
@@ -91,7 +91,7 @@ function proxyAclPage (state, emit) {
             }, [])}
           </table>
         ` : html`
-          <p class="f5 light-gray i">No permissions granted.</p>
+          <p class="f5 light-gray i">${browser.i18n.getMessage('page_proxyAcl_no_perms')}</p>
         `}
       </div>
     </div>
@@ -108,6 +108,12 @@ function originRow ({ origin, onRevoke }) {
 }
 
 function accessRow ({ origin, access, onRevoke, onToggleAllow }) {
+  const title = browser.i18n.getMessage(
+    access.allow
+      ? 'page_proxyAcl_toggle_to_deny_button_title'
+      : 'page_proxyAcl_toggle_to_allow_button_title'
+  )
+
   return html`
     <tr class="bg-animate hover-bg-white-o-005 hide-child">
       <td
@@ -117,8 +123,10 @@ function accessRow ({ origin, access, onRevoke, onToggleAllow }) {
         data-origin="${origin}"
         data-permission="${access.permission}"
         data-allow=${access.allow}
-        title="${access.allow ? 'Click to deny' : 'Click to allow'}">
-        ${access.allow ? 'Allow' : 'Deny'}
+        title="${title}">
+        ${browser.i18n.getMessage(
+          access.allow ? 'page_proxyAcl_allow_button_value' : 'page_proxyAcl_deny_button_value'
+        )}
       </td>
       <td class="f5 light-gray ph3 pv2 bb b--white-10">${access.permission}</td>
       <td class="tr bb b--white-10">
@@ -131,13 +139,17 @@ function accessRow ({ origin, access, onRevoke, onToggleAllow }) {
 }
 
 function revokeButton ({ onRevoke, origin, permission = null }) {
+  const title = permission
+    ? browser.i18n.getMessage('page_proxyAcl_revoke_button_title', permission)
+    : browser.i18n.getMessage('page_proxyAcl_revoke_all_button_title')
+
   return html`
     <button
       class="button-reset outline-0 bg-transparent bw0 pointer ph3 pv1 light-gray hover-red"
       onclick=${onRevoke}
       data-origin="${origin}"
       data-permission="${permission || ''}"
-      title="Revoke ${permission || 'all granted permissions'}">
+      title="${title}">
       ${closeIcon()}
     </button>
   `

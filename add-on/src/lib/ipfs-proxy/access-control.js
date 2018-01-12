@@ -69,15 +69,11 @@ class AccessControl extends EventEmitter {
   async revokeAccess (origin, permission = null) {
     const acl = await this.getAcl()
 
-    console.log('revokeAccess', origin, permission, acl[origin])
-
     if (permission) {
       acl[origin] = acl[origin].filter((access) => access.permission !== permission)
     } else {
       acl[origin] = []
     }
-
-    console.log('revokeAccess', acl[origin])
 
     return this._setAcl(acl)
   }
