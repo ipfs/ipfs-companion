@@ -3,11 +3,11 @@
 
 const browser = require('webextension-polyfill')
 const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
-const createAcl = require('./acl')
+const AccessControl = require('./access-control')
 
 module.exports = function createIpfsProxy (getIpfs) {
   let connections = []
-  const acl = createAcl()
+  const accessControl = new AccessControl()
 
   const onConnect = (port) => {
     const { origin } = new URL(port.sender.url)
@@ -42,7 +42,7 @@ module.exports = function createIpfsProxy (getIpfs) {
         'swarm.connect',
         'swarm.disconnect'
       ].reduce((obj, permission) => {
-        obj[permission] = createAclPreCall(acl, origin, permission)
+        obj[permission] = createAclPreCall(accessControl, origin, permission)
         return obj
       }, {})
     })
@@ -65,13 +65,13 @@ module.exports = function createIpfsProxy (getIpfs) {
   return { destroy: () => connections.forEach(c => c.destroy) }
 }
 
-function createAclPreCall (acl, origin, permission) {
+function createAclPreCall (accessControl, origin, permission) {
   return async (...args) => {
-    let access = await acl.getAccess(origin, permission)
+    let access = await accessControl.getAccess(origin, permission)
 
     if (!access) {
-      const { allow, blanket, remember } = await acl.requestAccess(origin, permission)
-      access = await acl.setAccess(origin, blanket ? '*' : permission, allow, remember)
+      const { allow, blanket, remember } = await accessControl.requestAccess(origin, permission)
+      access = await accessControl.setAccess(origin, blanket ? '*' : permission, allow, remember)
     }
 
     if (!access.allow) throw new Error(`User denied access to ${permission}`)

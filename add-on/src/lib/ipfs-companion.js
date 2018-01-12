@@ -49,7 +49,11 @@ module.exports = async function init () {
     ipfsProxy = createIpfsProxy(() => ipfs)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await storeMissingOptions(options, optionDefaults, browser.storage.local)
+    await storeMissingOptions(
+      await browser.storage.local.get(),
+      optionDefaults,
+      browser.storage.local
+    )
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')

@@ -54,6 +54,7 @@ module.exports = function optionsPage (state, emit) {
         catchUnhandledProtocols: state.options.catchUnhandledProtocols,
         linkify: state.options.linkify,
         dnslink: state.options.dnslink,
+        ipfsProxy: state.options.ipfsProxy,
         onOptionChange,
         onOptionsReset
       })}

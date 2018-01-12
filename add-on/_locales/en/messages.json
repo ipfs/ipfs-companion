@@ -265,6 +265,18 @@
     "message": "DNSLINK Support",
     "description": "An option title on the Preferences screen (option_dnslink_title)"
   },
+  "option_ipfsProxy_title": {
+    "message": "window.ipfs",
+    "description": "An option title for enabling/disabling the IPFS proxy"
+  },
+  "option_ipfsProxy_description": {
+    "message": "Add IPFS to the window object on every page",
+    "description": "An option description for the IPFS proxy"
+  },
+  "option_ipfsProxy_link_manage_permissions": {
+    "message": "Manage permissions",
+    "description": "Link text for managing permissions"
+  },
   "option_preloadAtPublicGateway_title": {
     "message": "Preload Uploads",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
@@ -329,5 +341,9 @@
   "quickUpload_drop_it_here": {
     "message": "drop it here to share",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+  },
+  "page_proxyAcl_title": {
+    "message": "Manage Permissions",
+    "description": "Page title for the IPFS proxy ACL page"
   }
 }

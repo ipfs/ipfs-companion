@@ -10,6 +10,7 @@ function experimentsForm ({
   catchUnhandledProtocols,
   linkify,
   dnslink,
+  ipfsProxy,
   onOptionChange,
   onOptionsReset
 }) {
@@ -18,6 +19,7 @@ function experimentsForm ({
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onDnsLinkChange = onOptionChange('dnslink')
+  const onIpfsProxyChange = onOptionChange('ipfsProxy')
 
   return html`
     <form>
@@ -68,6 +70,22 @@ function experimentsForm ({
             </dl>
           </label>
           <input type="checkbox" id="dnslink" onchange=${onDnsLinkChange} checked=${dnslink} />
+        </div>
+        <div>
+          <label for="ipfs-proxy">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
+              <dd>
+                ${browser.i18n.getMessage('option_ipfsProxy_description')}
+                ${ipfsProxy ? html`
+                  <a href="${browser.extension.getURL('dist/pages/proxy-acl.html')}" target="_blank">
+                    ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
+                  </a>
+                ` : null}
+              </dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="ipfs-proxy" onchange=${onIpfsProxyChange} checked=${ipfsProxy} />
         </div>
         <div>
           <label for="resetAllOptions">
