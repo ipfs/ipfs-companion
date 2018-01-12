@@ -30,7 +30,7 @@ function proxyAclStore (state, emitter) {
     const permission = e.currentTarget.getAttribute('data-permission')
 
     const msg = permission
-      ? browser.i18n.getMessage('page_proxyAcl_confirm_revoke', permission, origin)
+      ? browser.i18n.getMessage('page_proxyAcl_confirm_revoke', [permission, origin])
       : browser.i18n.getMessage('page_proxyAcl_confirm_revoke_all', origin)
 
     if (!window.confirm(msg)) return
