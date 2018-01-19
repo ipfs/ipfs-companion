@@ -1,0 +1,333 @@
+{
+  "browserAction_title": {
+    "message": "IPFS Companion",
+    "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
+  },
+  "panel_headerIpfsNodeEmbedded": {
+    "message": "Meutancap",
+    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
+  },
+  "panel_headerIpfsNodeEmbeddedTitle": {
+    "message": "Eksperimen: Pakek IPFS nyang meutancap bak peramban Gata melalui js-ipfs",
+    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
+  },
+  "panel_headerIpfsNodeExternal": {
+    "message": "Eksternal",
+    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
+  },
+  "panel_headerIpfsNodeExternalTitle": {
+    "message": "Hubongkan u simpol IPFS melalui HTTP",
+    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
+  },
+  "panel_statusGatewayAddress": {
+    "message": "Pageu",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
+  },
+  "panel_statusApiAddress": {
+    "message": "API",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
+  },
+  "panel_statusGatewayVersion": {
+    "message": "versi",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
+  },
+  "panel_statusSwarmPeers": {
+    "message": "Seusama",
+    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
+  },
+  "panel_statusSwarmPeersTitle": {
+    "message": "Jumlah node IPFS laen jih nyang jeut Gata hubungi",
+    "description": "A label tool-tip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
+  },
+  "panel_quickUpload": {
+    "message": "Berbagi file melalui IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
+  },
+  "panel_openWebui": {
+    "message": "Buka WebUI",
+    "description": "A menu item in Browser Action pop-up (panel_openWebui)"
+  },
+  "panel_openPreferences": {
+    "message": "Buka Preferensi",
+    "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
+  },
+  "panel_switchToCustomGateway": {
+    "message": "Meualih u Geurbang Kustom",
+    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  },
+  "panel_switchToPublicGateway": {
+    "message": "Meualih u Geurbang Umum",
+    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  },
+  "panel_pinCurrentIpfsAddress": {
+    "message": "Semat Sumber Daya IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  },
+  "panel_unpinCurrentIpfsAddress": {
+    "message": "Peuleuh Semat Sumber Daya IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
+  },
+  "panelCopy_currentIpfsAddress": {
+    "message": "Salen Alamat Resmi",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+  },
+  "panel_copyCurrentPublicGwUrl": {
+    "message": "Salen URL Geurbang Umum",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
+  },
+  "contextMenu_uploadToIpfs": {
+    "message": "Upload u IPFS",
+    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
+  },
+  "notify_addonIssueTitle": {
+    "message": "Masalah Add-on IPFS",
+    "description": "A title of system notification (notify_addonIssueTitle)"
+  },
+  "notify_addonIssueMsg": {
+    "message": "Kalon Konsul Peramban Untok leubeh Jeulas",
+    "description": "A message in system notification (notify_addonIssueMsg)"
+  },
+  "notify_copiedPublicURLTitle": {
+    "message": "URL Umum nyang meusalen",
+    "description": "A title of system notification (notify_copiedPublicURLTitle)"
+  },
+  "notify_copiedCanonicalAddressTitle": {
+    "message": "Alamat Resmi nyang Meusalen",
+    "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+  },
+  "notify_pinnedIpfsResourceTitle": {
+    "message": "Sumber Daya jinoe jitancapkan",
+    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
+  },
+  "notify_unpinnedIpfsResourceTitle": {
+    "message": "Meuhapoh semat IPFS",
+    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
+  },
+  "notify_pinErrorTitle": {
+    "message": "Kesalahan watee meunyematkan sumber daya IPFS",
+    "description": "A title of system notification (notify_pinErrorTitle)"
+  },
+  "notify_unpinErrorTitle": {
+    "message": "Kesalahan watee meuhapoh semat IPFS",
+    "description": "A title of system notification (notify_unpinErrorTitle)"
+  },
+  "notify_apiOnlineTitle": {
+    "message": "API IPFS Teungoh Online",
+    "description": "A title of system notification (notify_apiOnlineTitle)"
+  },
+  "notify_apiOnlineAutomaticModeMsg": {
+    "message": "Mode Otomatis: Peungalihan Geurbang Kustom aktif",
+    "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
+  },
+  "notify_apiOfflineTitle": {
+    "message": "API IPFS Teungoh Offline",
+    "description": "A title of system notification (notify_apiOfflineTitle)"
+  },
+  "notify_apiOfflineAutomaticModeMsg": {
+    "message": "Mode Otomatis: Geurbang Umum akan ta gunakan seubagai posisi surot",
+    "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
+  },
+  "notify_uploadErrorTitle": {
+    "message": "Hanjeut meu-unggah melalui API IPFS",
+    "description": "A title of system notification (notify_uploadErrorTitle)"
+  },
+  "notify_uploadTrackingProtectionErrorMsg": {
+    "message": "Cuba peumate Peulacakan Perlindungan (teukon ctrl+shift+j untok rincian leubeh lanjot)",
+    "description": "(notify_uploadTrackingProtectionErrorMsg)"
+  },
+  "notify_inlineMsg": {
+    "message": "$MSG$",
+    "placeholders": {
+      "msg": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
+  },
+  "notify_inlineErrorMsg": {
+    "message": "$ERROR$ (teukon ctrl+shift+j keu rincian leubeh lanjot)",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    },
+    "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
+  },
+  "option_header_nodeType": {
+    "message": "Node IPFS",
+    "description": "A section header on the Preferences screen (option_header_nodeType)"
+  },
+  "option_ipfsNodeType_title": {
+    "message": "Jenis Node IPFS",
+    "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
+  },
+  "option_ipfsNodeType_description": {
+    "message": "Eksternal: Hubongkan u daemon IPFS melalui HTTP. \n\n Meutancap: Peujak node IPFS bak peramban lewat ipfs-js *eksperimen*",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
+  "option_ipfsNodeType_external": {
+    "message": "Eksternal",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
+  },
+  "option_ipfsNodeType_embedded": {
+    "message": "Meutancap",
+    "description": "An option on the Preferences screeni (option_ipfsNodeType_embedded)"
+  },
+  "option_header_gateways": {
+    "message": "Geurbang",
+    "description": "A section header on the Preferences screen (option_header_gateways)"
+  },
+  "option_customGatewayUrl_title": {
+    "message": "Geurbang Kustom Lokal",
+    "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
+  },
+  "option_customGatewayUrl_description": {
+    "message": "URL pilehan nyang diinginkan HTTP2IPFS",
+    "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
+  },
+  "option_useCustomGateway_title": {
+    "message": "Gunakan Geurbang Kustom",
+    "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
+  },
+  "option_useCustomGateway_description": {
+    "message": "Lake peungalihan sumber daya IPFS u Geurbang Kustom",
+    "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
+  },
+  "option_publicGatewayUrl_title": {
+    "message": "Geurbang Publik Bawaan",
+    "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
+  },
+  "option_publicGatewayUrl_description": {
+    "message": "URL surot nyang tapakek watee Geurbang Kustom hana tersedia dan untok tasalin tautan nyang jeut ta bagikan",
+    "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
+  },
+  "option_header_api": {
+    "message": "API",
+    "description": "A section header on the Preferences screen (option_header_api)"
+  },
+  "option_ipfsApiUrl_title": {
+    "message": "URL API IPFS",
+    "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
+  },
+  "option_ipfsApiUrl_description": {
+    "message": "Peutunjok: nyoe adalah tempat tinggai \/webui",
+    "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
+  },
+  "option_ipfsApiPollMs_title": {
+    "message": "Status Poll Interval",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  },
+  "option_ipfsApiPollMs_description": {
+    "message": "Padum goe jumlah rekan di peusegar (lam milidetik)",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  },
+  "option_automaticMode_title": {
+    "message": "Mode Otomatis",
+    "description": "An option title on the Preferences screen (option_automaticMode_title)"
+  },
+  "option_automaticMode_description": {
+    "message": "Meualeh meunggunakan Geurbang Kustom watee ketersediaan API IPFS Meuubah",
+    "description": "An option description on the Preferences screen (option_automaticMode_description)"
+  },
+  "option_header_experiments": {
+    "message": "Eksperimen",
+    "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_experiments_warning": {
+    "message": "Beuhati-hati: fitur nyoe baroe atau karya lam proses. YMMV.",
+    "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
+  },
+  "option_displayNotifications_title": {
+    "message": "Pudep Pemberitahuan",
+    "description": "An option title on the Preferences screen (option_displayNotifications_title)"
+  },
+  "option_displayNotifications_description": {
+    "message": "Meutampilkan sistem pemberitahuan watee peurubahan nanggroe API, tautan akan meusalen dll",
+    "description": "An option description on the Preferences screen (option_displayNotifications_description)"
+  },
+  "option_catchUnhandledProtocols_title": {
+    "message": "Drop Protokol IPFS nyang hana ditangani",
+    "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
+  },
+  "option_catchUnhandledProtocols_description": {
+    "message": "Memungkinkan dukongan untok ipfs:\/\/$cid, ipns:\/\/$peerid dan dweb:\/ipfs\/$cid oleh normalisasi tautan dan permintaan nyang dilakukan dengan hana tertangani protokol",
+    "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
+  },
+  "option_linkify_title": {
+    "message": "Alamat IPFS Linkify",
+    "description": "An option title on the Preferences screen (option_linkify_title)"
+  },
+  "option_linkify_description": {
+    "message": "Ubah plainteks \/ipfs\/ jalan u tautan diklik",
+    "description": "An option description on the Preferences screen (option_linkify_description)"
+  },
+  "option_dnslink_title": {
+    "message": "Dukongan DNSLINK",
+    "description": "An option title on the Preferences screen (option_dnslink_title)"
+  },
+  "option_preloadAtPublicGateway_title": {
+    "message": "Pramuat Unggah",
+    "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
+  },
+  "option_preloadAtPublicGateway_description": {
+    "message": "Puedepkan pramuat otomatis aset nyang ta unggah lewat permintaan HTTP HEAD asinkron u Geurbang Publik",
+    "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
+  },
+  "option_dnslink_description": {
+    "message": "Melakukan pencarian DNS untok seutiap web nyang dikunjongi dan menggunakan Geurbang Kustom meuseu DNSLINK hadir lam rekor DNS TXT (dikeunal untok meuperlambat peramban)",
+    "description": "An option description on the Preferences screen (option_dnslink_description)"
+  },
+  "option_resetAllOptions_title": {
+    "message": "Reset Mandum",
+    "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
+  },
+  "option_resetAllOptions_description": {
+    "message": "Gantoe preferensi pengguna ngon nyang standar (hanjeut dibatalkan!)",
+    "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
+  },
+  "manifest_extensionName": {
+    "message": "IPFS Companion",
+    "description": "Extension name in the Manifest file (manifest_extensionName)"
+  },
+  "manifest_shortExtensionName": {
+    "message": "IPFS Companion",
+    "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
+  },
+  "manifest_extensionDescription": {
+    "message": "Ekstensi peramban nyang meunyederhanakan akses u sumber daya IPFS",
+    "description": "Extension description in the Manifest file (manifest_extensionDescription)"
+  },
+  "quickUpload_subhead_peers_and_files": {
+    "message": "Meuhubong u rekan-rekan $PEERCOUNT$ dan berbagi file $FILESCOUNT$",
+    "description": "Info stats beneath the header on the share files page (quickUpload_subhead_peers_and_files)",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      },
+      "filesCount": {
+        "content": "$2"
+      }
+    }
+  },
+  "quickUpload_subhead_peers": {
+    "message": "Meuhubong u rekan-rekan $PEERCOUNT$",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",
+    "placeholders": {
+      "peerCount": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickUpload_pick_file_button": {
+    "message": "Pileh berkas",
+    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
+  },
+  "quickUpload_or": {
+    "message": "atau",
+    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
+  },
+  "quickUpload_drop_it_here": {
+    "message": "peurhoet di sinoe untok berbagi",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+  }
+}
