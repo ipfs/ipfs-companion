@@ -5,11 +5,39 @@ const browser = require('webextension-polyfill')
 const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
 const AccessControl = require('./access-control')
 
-module.exports = function createIpfsProxy (getIpfs) {
+const ACL_FUNCTIONS = [
+  'block.put',
+  'config.set',
+  'config.get',
+  'config.replace',
+  'dag.put',
+  'dht.put',
+  'dht.provide',
+  'files.add',
+  'key.get',
+  'key.list',
+  'key.rename',
+  'key.rm',
+  'object.new',
+  'object.put',
+  'object.patch.addLink',
+  'object.patch.rmLink',
+  'object.patch.appendData',
+  'object.patch.setData',
+  'pin.add',
+  'pin.rm',
+  'pubsub.publish',
+  'swarm.connect',
+  'swarm.disconnect'
+]
+
+function createIpfsProxy (getIpfs, getState) {
   let connections = []
   const accessControl = new AccessControl()
 
-  const onConnect = (port) => {
+  const onPortConnect = (port) => {
+    if (port.name !== 'ipfs-proxy') return
+
     const { origin } = new URL(port.sender.url)
 
     const proxy = createProxyServer(getIpfs, {
@@ -17,31 +45,7 @@ module.exports = function createIpfsProxy (getIpfs) {
       removeListener: (_, handler) => port.onMessage.removeListener(handler),
       postMessage: (data) => port.postMessage(data),
       getMessageData: (d) => d,
-      pre: [
-        'block.put',
-        'config.set',
-        'config.get',
-        'config.replace',
-        'dag.put',
-        'dht.put',
-        'dht.provide',
-        'files.add',
-        'key.get',
-        'key.list',
-        'key.rename',
-        'key.rm',
-        'object.new',
-        'object.put',
-        'object.patch.addLink',
-        'object.patch.rmLink',
-        'object.patch.appendData',
-        'object.patch.setData',
-        'pin.add',
-        'pin.rm',
-        'pubsub.publish',
-        'swarm.connect',
-        'swarm.disconnect'
-      ].reduce((obj, permission) => {
+      pre: ACL_FUNCTIONS.reduce((obj, permission) => {
         obj[permission] = createAclPreCall(accessControl, origin, permission)
         return obj
       }, {})
@@ -60,10 +64,46 @@ module.exports = function createIpfsProxy (getIpfs) {
     connections.push({ close })
   }
 
-  browser.runtime.onConnect.addListener(onConnect)
+  browser.runtime.onConnect.addListener(onPortConnect)
 
-  return { destroy: () => connections.forEach(c => c.destroy) }
+  const onTabUpdated = (tabId, changeInfo, tab) => {
+    // Some devtools tabs do not have an ID
+    if (!tabId || tabId === browser.tabs.TAB_ID_NONE) return
+
+    // If IPFS proxy option is not enabled do not execute the content script
+    if (!getState().ipfsProxy) return
+
+    // Only inject on http(s): ipfs: or dweb:
+    if (!['http', 'ipfs', 'dweb'].some(p => (tab.url || '').startsWith(p))) return
+
+    // Only inject when loaded
+    if (changeInfo.status !== 'complete') return
+
+    try {
+      browser.tabs.executeScript(tab.id, {
+        file: browser.extension.getURL('dist/contentScripts/ipfs-proxy/content.js'),
+        runAt: 'document_start',
+        allFrames: true
+      })
+    } catch (err) {
+      console.error('Failed to execute IPFS proxy content script', err)
+    }
+  }
+
+  browser.tabs.onUpdated.addListener(onTabUpdated)
+
+  const handle = {
+    destroy () {
+      connections.forEach(c => c.destroy)
+      browser.runtime.onConnect.removeListener(onPortConnect)
+      browser.tabs.onUpdated.removeListener(onTabUpdated)
+    }
+  }
+
+  return handle
 }
+
+module.exports = createIpfsProxy
 
 function createAclPreCall (accessControl, origin, permission) {
   return async (...args) => {

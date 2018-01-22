@@ -1,31 +1,26 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const once = require('./once')
+const injectScript = require('./inject-script')
 
-const port = browser.runtime.connect({ name: 'ipfs-proxy' })
+window.ipfsCompanion = window.ipfsCompanion || {}
+window.ipfsCompanion.once = window.ipfsCompanion.once || {}
 
-// Forward on messages from background to the page and vice versa
-port.onMessage.addListener((data) => window.postMessage(data, '*'))
+// Only run this once for this window!
+// URL can change (history API) which causes this script to be executed again,
+// but it only needs to be setup once per window...
+once('ipfsProxyContentScriptExecuted', () => {
+  const port = browser.runtime.connect({ name: 'ipfs-proxy' })
 
-window.addEventListener('message', (msg) => {
-  if (msg.data && msg.data.sender === 'postmsg-rpc/client') {
-    port.postMessage(msg.data)
-  }
-})
+  // Forward on messages from background to the page and vice versa
+  port.onMessage.addListener((data) => window.postMessage(data, '*'))
 
-function injectPageScript () {
-  try {
-    const scriptTag = document.createElement('script')
-    scriptTag.src = browser.extension.getURL('dist/contentScripts/ipfs-proxy/page.js')
-    scriptTag.onload = function () {
-      this.parentNode.removeChild(this)
+  window.addEventListener('message', (msg) => {
+    if (msg.data && msg.data.sender === 'postmsg-rpc/client') {
+      port.postMessage(msg.data)
     }
-    const container = document.head || document.documentElement
-    container.insertBefore(scriptTag, container.children[0])
-  } catch (err) {
-    console.error('Failed to inject ipfs-proxy/page.js', err)
-  }
-}
+  })
 
-injectPageScript()
+  injectScript(browser.extension.getURL('dist/contentScripts/ipfs-proxy/page.js'))
+}, { store: window.ipfsCompanion.once })()

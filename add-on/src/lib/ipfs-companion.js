@@ -46,7 +46,7 @@ module.exports = async function init () {
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
-    ipfsProxy = createIpfsProxy(() => ipfs)
+    ipfsProxy = createIpfsProxy(() => ipfs, getState)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(
@@ -525,6 +525,8 @@ module.exports = async function init () {
           state.dnslink = change.newValue
         } else if (key === 'preloadAtPublicGateway') {
           state.preloadAtPublicGateway = change.newValue
+        } else if (key === 'ipfsProxy') {
+          state.ipfsProxy = change.newValue
         }
       }
     }
