@@ -27,7 +27,7 @@
     "watch:content-scripts:ipfs-proxy:content": "watchify -s IpfsProxyContent add-on/src/contentScripts/ipfs-proxy/content.js -o add-on/dist/contentScripts/ipfs-proxy/content.js",
     "watch:content-scripts:ipfs-proxy:page": "watchify -s IpfsProxyPage add-on/src/contentScripts/ipfs-proxy/page.js -o add-on/dist/contentScripts/ipfs-proxy/page.js",
     "test": "run-s test:*",
-    "test:functional": "mocha test/functional/**/*.test.js",
+    "test:functional": "mocha 'test/functional/**/*.test.js'",
     "lint": "run-s lint:*",
     "lint:standard": "standard --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s add-on/",
@@ -74,6 +74,7 @@
     "is-svg": "2.1.0",
     "lru_map": "0.3.3",
     "mime-types": "2.1.17",
+    "p-queue": "^2.3.0",
     "prundupify": "1.0.0",
     "tachyons": "4.9.0",
     "webextension-polyfill": "0.1.2"

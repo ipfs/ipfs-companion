@@ -33,7 +33,7 @@ const ACL_FUNCTIONS = [
 
 function createIpfsProxy (getIpfs, getState) {
   let connections = []
-  const accessControl = new AccessControl()
+  const accessControl = new AccessControl(browser.storage)
 
   const onPortConnect = (port) => {
     if (port.name !== 'ipfs-proxy') return

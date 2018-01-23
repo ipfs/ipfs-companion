@@ -9,7 +9,7 @@ const AccessControl = require('../lib/ipfs-proxy/access-control')
 
 require('./proxy-acl.css')
 
-const accessControl = new AccessControl()
+const accessControl = new AccessControl(browser.storage)
 const app = choo()
 
 app.use(proxyAclStore)

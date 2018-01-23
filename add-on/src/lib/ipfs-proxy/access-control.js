@@ -1,18 +1,20 @@
 'use strict'
 
-const browser = require('webextension-polyfill')
 const EventEmitter = require('events')
+const PQueue = require('p-queue')
 
 class AccessControl extends EventEmitter {
-  constructor (storage = browser.storage) {
+  constructor (storage, key = 'ipfsProxyAcl') {
     super()
     this._storage = storage
+    this._key = key
     this._onStorageChange = this._onStorageChange.bind(this)
     storage.onChanged.addListener(this._onStorageChange)
+    this._writeQ = new PQueue({ concurrency: 1 })
   }
 
   async _onStorageChange (changes) {
-    const isAclChange = Object.keys(changes).some((key) => key === 'ipfsProxyAcl')
+    const isAclChange = Object.keys(changes).some((key) => key === this._key)
     if (!isAclChange) return
     const acl = await this.getAcl()
     this.emit('change', acl)
@@ -24,19 +26,21 @@ class AccessControl extends EventEmitter {
   }
 
   async setAccess (origin, permission, allow) {
-    const access = { permission, allow }
-    const acl = await this.getAcl()
+    return this._writeQ.add(async () => {
+      const access = { origin, permission, allow }
+      const acl = await this.getAcl()
 
-    if (permission === '*') {
-      // If grant permission is blanket, then remove all stored grants for this origin
-      acl[origin] = [access]
-    } else {
-      // Remove this grant if exists, and add the new one
-      acl[origin] = (acl[origin] || []).filter((a) => a.permission !== permission).concat(access)
-    }
+      if (permission === '*') {
+        // If grant permission is blanket, then remove all stored grants for this origin
+        acl[origin] = [access]
+      } else {
+        // Remove this grant if exists, and add the new one
+        acl[origin] = (acl[origin] || []).filter((a) => a.permission !== permission).concat(access)
+      }
 
-    await this._setAcl(acl)
-    return access
+      await this._setAcl(acl)
+      return access
+    })
   }
 
   async requestAccess (origin, permission) {
@@ -56,26 +60,28 @@ class AccessControl extends EventEmitter {
   }
 
   async getAcl () {
-    const acl = (await this._storage.local.get('ipfsProxyAcl')).ipfsProxyAcl
+    const acl = (await this._storage.local.get(this._key))[this._key]
     return acl ? JSON.parse(acl) : {}
   }
 
   _setAcl (acl) {
-    return this._storage.local.set({ ipfsProxyAcl: JSON.stringify(acl) })
+    return this._storage.local.set({ [this._key]: JSON.stringify(acl) })
   }
 
   // Revoke access to the given permission
   // if permission is null, revoke all access
   async revokeAccess (origin, permission = null) {
-    const acl = await this.getAcl()
+    return this._writeQ.add(async () => {
+      const acl = await this.getAcl()
 
-    if (permission) {
-      acl[origin] = acl[origin].filter((access) => access.permission !== permission)
-    } else {
-      acl[origin] = []
-    }
+      if (permission) {
+        acl[origin] = acl[origin].filter((access) => access.permission !== permission)
+      } else {
+        acl[origin] = []
+      }
 
-    return this._setAcl(acl)
+      return this._setAcl(acl)
+    })
   }
 
   destroy () {
