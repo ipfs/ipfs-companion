@@ -1,13 +1,10 @@
 'use strict'
-const { describe, it, beforeEach } = require('mocha')
+const { describe, it } = require('mocha')
 const { expect } = require('chai')
-const browser = require('sinon-chrome')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const Storage = require('mem-storage-area/Storage')
 
-describe('access-control', () => {
-  beforeEach(() => browser.flush())
-
+describe('lib/ipfs-proxy/access-control', () => {
   it('should maintain ACL', async () => {
     const accessControl = new AccessControl(new Storage())
     let acl = await accessControl.getAcl()
@@ -26,16 +23,16 @@ describe('access-control', () => {
     await Promise.all(sets.map(s => accessControl.setAccess(...s)))
 
     const expectedAcl = {
-      'http://ipfs.io': [
-        { origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: true }
-      ],
-      'https://ipld.io': [
-        { origin: 'https://ipld.io', permission: 'ipfs.block.new', allow: false }
-      ],
-      'https://filecoin.io': [
-        { origin: 'https://filecoin.io', permission: 'ipfs.pubsub.subscribe', allow: false },
-        { origin: 'https://filecoin.io', permission: 'ipfs.pubsub.publish', allow: true }
-      ]
+      'http://ipfs.io': {
+        'ipfs.files.add': true
+      },
+      'https://ipld.io': {
+        'ipfs.block.new': false
+      },
+      'https://filecoin.io': {
+        'ipfs.pubsub.subscribe': false,
+        'ipfs.pubsub.publish': true
+      }
     }
 
     acl = await accessControl.getAcl()
@@ -56,11 +53,11 @@ describe('access-control', () => {
     expect(access).to.deep.equal(expectedAccess)
   })
 
-  it('should return undefined for missing grant', async () => {
+  it('should return null for missing grant', async () => {
     const accessControl = new AccessControl(new Storage())
     const access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
 
-    expect(access).to.equal(undefined)
+    expect(access).to.equal(null)
   })
 
   it('should emit change event when ACL changes', async () => {
@@ -69,9 +66,9 @@ describe('access-control', () => {
 
       accessControl.on('change', acl => {
         expect(acl).to.deep.equal({
-          'http://ipfs.io': [
-            { origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: false }
-          ]
+          'http://ipfs.io': {
+            'ipfs.files.add': false
+          }
         })
         resolve()
       })
@@ -105,7 +102,7 @@ describe('access-control', () => {
 
     access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
 
-    expect(access).to.equal(undefined)
+    expect(access).to.equal(null)
   })
 
   it('should revoke all granted access if no permission specified', async () => {
@@ -117,17 +114,17 @@ describe('access-control', () => {
     let acl = await accessControl.getAcl()
 
     expect(acl).to.deep.equal({
-      'http://ipfs.io': [
-        { origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: false },
-        { origin: 'http://ipfs.io', permission: 'ipfs.block.put', allow: false }
-      ]
+      'http://ipfs.io': {
+        'ipfs.files.add': false,
+        'ipfs.block.put': false
+      }
     })
 
     await accessControl.revokeAccess('http://ipfs.io')
 
     acl = await accessControl.getAcl()
 
-    expect(acl).to.deep.equal({ 'http://ipfs.io': [] })
+    expect(acl).to.deep.equal({ 'http://ipfs.io': {} })
   })
 
   it('should destroy itself', () => {

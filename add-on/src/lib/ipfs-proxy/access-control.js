@@ -22,7 +22,8 @@ class AccessControl extends EventEmitter {
 
   async getAccess (origin, permission) {
     const acl = await this.getAcl()
-    return (acl[origin] || []).find((a) => a.permission === permission)
+    if (acl[origin] == null || acl[origin][permission] == null) return null
+    return { origin, permission, allow: acl[origin][permission] }
   }
 
   async setAccess (origin, permission, allow) {
@@ -30,14 +31,15 @@ class AccessControl extends EventEmitter {
       const access = { origin, permission, allow }
       const acl = await this.getAcl()
 
-      // Remove this grant if exists, and add the new one
-      acl[origin] = (acl[origin] || []).filter((a) => a.permission !== permission).concat(access)
+      acl[origin] = acl[origin] || {}
+      acl[origin][permission] = allow
 
       await this._setAcl(acl)
       return access
     })
   }
 
+  // { origin: { permission: allow } }
   async getAcl () {
     const acl = (await this._storage.local.get(this._key))[this._key]
     return acl ? JSON.parse(acl) : {}
@@ -54,9 +56,9 @@ class AccessControl extends EventEmitter {
       const acl = await this.getAcl()
 
       if (permission) {
-        acl[origin] = acl[origin].filter((access) => access.permission !== permission)
+        delete acl[origin][permission]
       } else {
-        acl[origin] = []
+        acl[origin] = {}
       }
 
       return this._setAcl(acl)
