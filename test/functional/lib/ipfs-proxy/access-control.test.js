@@ -1,18 +1,15 @@
 'use strict'
-const { describe, it, before, beforeEach, after } = require('mocha')
+const { describe, it, beforeEach } = require('mocha')
 const { expect } = require('chai')
 const browser = require('sinon-chrome')
-let AccessControl
+const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 
 describe.only('access-control', () => {
-  before(() => {
-    global.browser = browser
-    AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
-  })
-
   beforeEach(() => browser.flush())
 
   it('should store access permissions', async () => {
+    this._storage.local.get
+
     const accessControl = new AccessControl(browser.storage)
     let acl = await accessControl.getAcl()
 
@@ -33,9 +30,5 @@ describe.only('access-control', () => {
       expect(access.permission).to.equal(sets[i][1])
       expect(access.allow).to.equal(sets[i][2])
     })
-  })
-
-  after(() => {
-    delete global.browser
   })
 })
