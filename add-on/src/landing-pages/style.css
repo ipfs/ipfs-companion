@@ -1,0 +1,37 @@
+@import url('node_modules/tachyons/css/tachyons.css');
+
+#header {
+  background: linear-gradient(to top, #041727 0%, #043b55 100%);
+}
+
+#main {
+  background: linear-gradient(to top, #041727 0%, #043b55 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+}
+
+.dweb-links {
+  list-style-type: none;
+}
+
+.app-list {
+  list-style-type: none;
+}
+
+.app-item img {
+  height: 80px;
+}
+
+#btn-install {
+  background-color: #6ACAD1;
+}
+
+#btn-install:hover {
+  margin-top: -1px;
+}
+
