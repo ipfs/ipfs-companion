@@ -1,3 +1,5 @@
+'use strict'
+
 const html = require('choo/html')
 const logo = require('../../popup/logo')
 

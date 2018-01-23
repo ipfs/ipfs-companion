@@ -1,3 +1,5 @@
+'use strict'
+
 const Ipfs = require('ipfs')
 const { createProxyClient } = require('ipfs-postmsg-proxy')
 const _Buffer = Buffer

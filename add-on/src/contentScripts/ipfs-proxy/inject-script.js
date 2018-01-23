@@ -1,3 +1,5 @@
+'use strict'
+
 function injectScript (src, target, opts) {
   opts = opts || {}
   const doc = opts.document || document

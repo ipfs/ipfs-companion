@@ -1,5 +1,5 @@
 'use strict'
-/* eslint-env browser, webextensions */
+/* eslint-env browser */
 
 const browser = require('webextension-polyfill')
 const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
