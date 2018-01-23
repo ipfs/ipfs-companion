@@ -20,7 +20,7 @@ function createProxyAclPage (i18n) {
           <header class="flex items-center mb4">
             ${logo({
               size: 80,
-              path: '../../icons',
+              path: '../../../icons',
               heartbeat: false
             })}
             <div class="pl3">

@@ -78,7 +78,7 @@ function experimentsForm ({
               <dd>
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 ${ipfsProxy ? html`
-                  <a href="${browser.extension.getURL('dist/pages/proxy-acl.html')}" target="_blank">
+                  <a href="${browser.extension.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
                     ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                   </a>
                 ` : null}
