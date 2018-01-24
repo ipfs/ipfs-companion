@@ -2,11 +2,12 @@
 const { describe, it } = require('mocha')
 const { expect } = require('chai')
 const createProxyAclPage = require('../../../../add-on/src/pages/proxy-acl/page')
+const { objToAcl } = require('../../../helpers/acl')
 
 describe('pages/proxy-acl/page', () => {
   it('should render with empty ACL', async () => {
     const i18n = createMockI18n()
-    const state = { acl: {} }
+    const state = { acl: objToAcl({}) }
 
     let res
 
@@ -17,11 +18,11 @@ describe('pages/proxy-acl/page', () => {
   it('should render with single origin ACL and single allowed permission', async () => {
     const i18n = createMockI18n()
     const state = {
-      acl: {
+      acl: objToAcl({
         'https://ipfs.io': {
           'ipfs.files.add': true
         }
-      }
+      })
     }
 
     let res
@@ -36,11 +37,11 @@ describe('pages/proxy-acl/page', () => {
   it('should render with single origin ACL and single denied permission', async () => {
     const i18n = createMockI18n()
     const state = {
-      acl: {
+      acl: objToAcl({
         'https://ipfs.io': {
           'ipfs.files.add': false
         }
-      }
+      })
     }
 
     let res
@@ -55,12 +56,12 @@ describe('pages/proxy-acl/page', () => {
   it('should render with single origin ACL and multiple permissions', async () => {
     const i18n = createMockI18n()
     const state = {
-      acl: {
+      acl: objToAcl({
         'https://ipfs.io': {
           'ipfs.files.add': true,
-          'ipfs.block.new': false
+          'ipfs.object.new': false
         }
-      }
+      })
     }
 
     let res
@@ -71,21 +72,21 @@ describe('pages/proxy-acl/page', () => {
     expect(res).to.have.string('page_proxyAcl_toggle_to_deny_button_title')
     expect(res).to.have.string('page_proxyAcl_toggle_to_allow_button_title')
     expect(res).to.have.string('ipfs.files.add')
-    expect(res).to.have.string('ipfs.block.new')
+    expect(res).to.have.string('ipfs.object.new')
   })
 
   it('should render with multiple origins and multiple permissions', async () => {
     const i18n = createMockI18n()
     const state = {
-      acl: {
+      acl: objToAcl({
         'https://ipfs.io': {
           'ipfs.files.add': false,
-          'ipfs.block.new': true
+          'ipfs.object.new': true
         },
         'https://ipld.io': {
           'ipfs.block.put': true
         }
-      }
+      })
     }
 
     let res
@@ -97,7 +98,7 @@ describe('pages/proxy-acl/page', () => {
     expect(res).to.have.string('page_proxyAcl_toggle_to_allow_button_title')
     expect(res).to.have.string('page_proxyAcl_toggle_to_deny_button_title')
     expect(res).to.have.string('ipfs.files.add')
-    expect(res).to.have.string('ipfs.block.new')
+    expect(res).to.have.string('ipfs.object.new')
     expect(res).to.have.string('ipfs.block.put')
   })
 })

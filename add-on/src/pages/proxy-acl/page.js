@@ -11,8 +11,8 @@ function createProxyAclPage (i18n) {
     const onToggleAllow = (e) => emit('toggleAllow', e)
 
     const { acl } = state
-    const origins = Object.keys(state.acl)
-    const hasGrants = origins.some((origin) => !!Object.keys(acl[origin]).length)
+    const origins = Array.from(state.acl.keys())
+    const hasGrants = origins.some((origin) => !!acl.get(origin).size)
 
     return html`
       <div class="avenir pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); min-height:100%;">
@@ -35,13 +35,15 @@ function createProxyAclPage (i18n) {
           ${hasGrants ? html`
             <table class="w-100 mb4" style="border-spacing: 0">
               ${origins.reduce((rows, origin) => {
-                if (!Object.keys(acl[origin]).length) return rows
+                const permissions = acl.get(origin)
+
+                if (!permissions.size) return rows
 
                 return rows.concat(
                   originRow({ onRevoke, origin, i18n }),
-                  Object.keys(acl[origin])
+                  Array.from(permissions.keys())
                     .sort()
-                    .map((permission) => accessRow({ origin, permission, allow: acl[origin][permission], onRevoke, onToggleAllow, i18n }))
+                    .map((permission) => accessRow({ origin, permission, allow: permissions.get(permission), onRevoke, onToggleAllow, i18n }))
                 )
               }, [])}
             </table>

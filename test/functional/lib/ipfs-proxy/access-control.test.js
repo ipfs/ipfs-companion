@@ -1,20 +1,26 @@
 'use strict'
-const { describe, it } = require('mocha')
+const { describe, it, before, after } = require('mocha')
 const { expect } = require('chai')
+const { URL } = require('url')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const Storage = require('mem-storage-area/Storage')
+const { objToAcl } = require('../../../helpers/acl')
 
 describe('lib/ipfs-proxy/access-control', () => {
+  before(() => {
+    global.URL = URL
+  })
+
   it('should maintain ACL', async () => {
     const accessControl = new AccessControl(new Storage())
     let acl = await accessControl.getAcl()
 
     // Ensure ACL starts out empty
-    expect(acl).to.deep.equal({})
+    expect(acl).to.deep.equal(new Map())
 
     const sets = [
       ['http://ipfs.io', 'ipfs.files.add', true],
-      ['https://ipld.io', 'ipfs.block.new', false],
+      ['https://ipld.io', 'ipfs.object.new', false],
       ['https://filecoin.io', 'ipfs.pubsub.subscribe', true],
       ['https://filecoin.io', 'ipfs.pubsub.subscribe', false],
       ['https://filecoin.io', 'ipfs.pubsub.publish', true]
@@ -22,18 +28,18 @@ describe('lib/ipfs-proxy/access-control', () => {
 
     await Promise.all(sets.map(s => accessControl.setAccess(...s)))
 
-    const expectedAcl = {
+    const expectedAcl = objToAcl({
       'http://ipfs.io': {
         'ipfs.files.add': true
       },
       'https://ipld.io': {
-        'ipfs.block.new': false
+        'ipfs.object.new': false
       },
       'https://filecoin.io': {
         'ipfs.pubsub.subscribe': false,
         'ipfs.pubsub.publish': true
       }
-    }
+    })
 
     acl = await accessControl.getAcl()
 
@@ -65,11 +71,11 @@ describe('lib/ipfs-proxy/access-control', () => {
       const accessControl = new AccessControl(new Storage())
 
       accessControl.on('change', acl => {
-        expect(acl).to.deep.equal({
+        expect(acl).to.deep.equal(objToAcl({
           'http://ipfs.io': {
             'ipfs.files.add': false
           }
-        })
+        }))
         resolve()
       })
 
@@ -113,22 +119,26 @@ describe('lib/ipfs-proxy/access-control', () => {
 
     let acl = await accessControl.getAcl()
 
-    expect(acl).to.deep.equal({
+    expect(acl).to.deep.equal(objToAcl({
       'http://ipfs.io': {
         'ipfs.files.add': false,
         'ipfs.block.put': false
       }
-    })
+    }))
 
     await accessControl.revokeAccess('http://ipfs.io')
 
     acl = await accessControl.getAcl()
 
-    expect(acl).to.deep.equal({ 'http://ipfs.io': {} })
+    expect(acl).to.deep.equal(objToAcl({ 'http://ipfs.io': {} }))
   })
 
   it('should destroy itself', () => {
     const accessControl = new AccessControl(new Storage())
     expect(() => accessControl.destroy()).to.not.throw()
+  })
+
+  after(() => {
+    delete global.URL
   })
 })

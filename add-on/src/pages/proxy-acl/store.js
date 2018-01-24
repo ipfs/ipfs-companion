@@ -2,7 +2,7 @@
 
 function createProxyAclStore (accessControl, i18n, confirm = window.confirm) {
   return function proxyAclStore (state, emitter) {
-    state.acl = {}
+    state.acl = new Map()
 
     emitter.on('DOMContentLoaded', async () => {
       state.acl = await accessControl.getAcl()
