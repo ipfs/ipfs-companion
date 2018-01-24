@@ -66,6 +66,53 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(access).to.equal(null)
   })
 
+  it('should not set access if origin is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.setAccess('NOT A VALID ORIGIN', 'ipfs.files.add', true)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+
+    try {
+      await accessControl.setAccess(138, 'ipfs.files.add', true)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+  })
+
+  it('should not set access if permission is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.setAccess('http://ipfs.io', 138, true)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid permission')
+  })
+
+  it('should not set access if allow is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', 'true')
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid allow')
+  })
+
   it('should emit change event when ACL changes', async () => {
     return new Promise(resolve => {
       const accessControl = new AccessControl(new Storage())
@@ -131,6 +178,32 @@ describe('lib/ipfs-proxy/access-control', () => {
     acl = await accessControl.getAcl()
 
     expect(acl).to.deep.equal(objToAcl({ 'http://ipfs.io': {} }))
+  })
+
+  it('should not revoke access if origin is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.revokeAccess('NOT A VALID ORIGIN', 'ipfs.files.add')
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+  })
+
+  it('should not revoke access if permission is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.revokeAccess('http://ipfs.io', 138)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid permission')
   })
 
   it('should destroy itself', () => {
