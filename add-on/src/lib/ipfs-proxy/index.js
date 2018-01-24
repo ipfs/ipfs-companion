@@ -81,7 +81,7 @@ function createIpfsProxy (getIpfs, getState) {
 
     try {
       browser.tabs.executeScript(tab.id, {
-        file: browser.extension.getURL('dist/contentScripts/ipfs-proxy/content.js'),
+        file: '/dist/contentScripts/ipfs-proxy/content.js',
         runAt: 'document_start',
         allFrames: true
       })
