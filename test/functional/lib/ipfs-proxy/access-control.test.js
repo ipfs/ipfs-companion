@@ -59,6 +59,32 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(access).to.deep.equal(expectedAccess)
   })
 
+  it('should not get access if origin is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.getAccess(null, 'ipfs.files.add')
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+  })
+
+  it('should not get access if permission is invalid', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let error
+
+    try {
+      await accessControl.getAccess('http://ipfs.io', 138)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Invalid permission')
+  })
+
   it('should return null for missing grant', async () => {
     const accessControl = new AccessControl(new Storage())
     const access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')

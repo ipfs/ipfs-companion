@@ -22,7 +22,10 @@ class AccessControl extends EventEmitter {
 
     // Map { origin => Map { permission => allow } }
     this.emit('change', aclChangeKeys.reduce((aclChanges, key) => {
-      return aclChanges.set(key.slice(prefix.length + 1), new Map(changes[key].newValue))
+      return aclChanges.set(
+        key.slice(prefix.length + 1),
+        new Map(JSON.parse(changes[key].newValue))
+      )
     }, new Map()))
   }
 
@@ -34,12 +37,14 @@ class AccessControl extends EventEmitter {
   // e.g. Map { 'files.add' => true, 'object.new' => false }
   async _getGrants (origin) {
     const key = this._getGrantsKey(origin)
-    return new Map((await this._storage.local.get({ [key]: [] }))[key])
+    return new Map(
+      JSON.parse((await this._storage.local.get({ [key]: '[]' }))[key])
+    )
   }
 
   async _setGrants (origin, grants) {
     const key = this._getGrantsKey(origin)
-    return this._storage.local.set({ [key]: Array.from(grants) })
+    return this._storage.local.set({ [key]: JSON.stringify(Array.from(grants)) })
   }
 
   async getAccess (origin, permission) {
@@ -77,7 +82,7 @@ class AccessControl extends EventEmitter {
     return Object.keys(data)
       .reduce((acl, key) => {
         return key.startsWith(prefix)
-          ? acl.set(key.slice(prefix.length + 1), new Map(data[key]))
+          ? acl.set(key.slice(prefix.length + 1), new Map(JSON.parse(data[key])))
           : acl
       }, new Map())
   }
