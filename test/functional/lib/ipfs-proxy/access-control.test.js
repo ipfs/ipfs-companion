@@ -117,8 +117,8 @@ describe('lib/ipfs-proxy/access-control', () => {
     return new Promise(resolve => {
       const accessControl = new AccessControl(new Storage())
 
-      accessControl.on('change', acl => {
-        expect(acl).to.deep.equal(objToAcl({
+      accessControl.on('change', changes => {
+        expect(changes).to.deep.equal(objToAcl({
           'http://ipfs.io': {
             'ipfs.files.add': false
           }

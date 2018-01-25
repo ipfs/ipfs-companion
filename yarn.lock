@@ -5001,7 +5001,7 @@ level-js@^2.2.4:
     typedarray-to-buffer "~1.0.0"
     xtend "~2.1.2"
 
-"level-js@github:timkuijsten/level.js#idbunwrapper":
+level-js@timkuijsten/level.js#idbunwrapper:
   version "2.2.3"
   resolved "https://codeload.github.com/timkuijsten/level.js/tar.gz/18e03adab34c49523be7d3d58fafb0c632f61303"
   dependencies:
@@ -5599,9 +5599,9 @@ md5.js@^1.3.4:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-mem-storage-area@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/mem-storage-area/-/mem-storage-area-1.0.2.tgz#b4c93581a8d0923b0aa43e0c755184799da8a630"
+mem-storage-area@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/mem-storage-area/-/mem-storage-area-1.0.3.tgz#a8a9bc75eaf5ae69efe185fedd475fb731d14880"
 
 mem@^1.1.0:
   version "1.1.0"
@@ -5856,7 +5856,7 @@ multihashing-async@~0.4.6, multihashing-async@~0.4.7:
     murmurhash3js "^3.0.1"
     nodeify "^1.0.1"
 
-"multiplex@github:dignifiedquire/multiplex":
+multiplex@dignifiedquire/multiplex:
   version "6.7.0"
   resolved "https://codeload.github.com/dignifiedquire/multiplex/tar.gz/b5d5edd30454e2c978ee8c52df86f5f4840d2eab"
   dependencies:

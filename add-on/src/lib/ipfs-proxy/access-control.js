@@ -5,26 +5,52 @@ const EventEmitter = require('events')
 const PQueue = require('p-queue')
 
 class AccessControl extends EventEmitter {
-  constructor (storage, key = 'ipfsProxyAcl') {
+  constructor (storage, storageKeyPrefix = 'ipfsProxyAcl') {
     super()
     this._storage = storage
-    this._key = key
+    this._storageKeyPrefix = storageKeyPrefix
     this._onStorageChange = this._onStorageChange.bind(this)
     storage.onChanged.addListener(this._onStorageChange)
     this._writeQ = new PQueue({ concurrency: 1 })
   }
 
   async _onStorageChange (changes) {
-    const isAclChange = Object.keys(changes).some((key) => key === this._key)
-    if (!isAclChange) return
-    const acl = await this.getAcl()
-    this.emit('change', acl)
+    const prefix = this._storageKeyPrefix
+    const aclChangeKeys = Object.keys(changes).filter((key) => key.startsWith(prefix))
+
+    if (!aclChangeKeys.length) return
+
+    // Map { origin => Map { permission => allow } }
+    this.emit('change', aclChangeKeys.reduce((aclChanges, key) => {
+      return aclChanges.set(key.slice(prefix.length + 1), new Map(changes[key].newValue))
+    }, new Map()))
+  }
+
+  _getGrantsKey (origin) {
+    return `${this._storageKeyPrefix}.${origin}`
+  }
+
+  // Get a Map of granted permissions for a given origin
+  // e.g. Map { 'files.add' => true, 'object.new' => false }
+  async _getGrants (origin) {
+    const key = this._getGrantsKey(origin)
+    return new Map((await this._storage.local.get({ [key]: [] }))[key])
+  }
+
+  async _setGrants (origin, grants) {
+    const key = this._getGrantsKey(origin)
+    return this._storage.local.set({ [key]: Array.from(grants) })
   }
 
   async getAccess (origin, permission) {
-    const acl = await this.getAcl()
-    if (!acl.has(origin) || !acl.get(origin).has(permission)) return null
-    return { origin, permission, allow: acl.get(origin).get(permission) }
+    if (!isOrigin(origin)) throw new TypeError('Invalid origin')
+    if (!isString(permission)) throw new TypeError('Invalid permission')
+
+    const grants = await this._getGrants(origin)
+
+    return grants.has(permission)
+      ? { origin, permission, allow: grants.get(permission) }
+      : null
   }
 
   async setAccess (origin, permission, allow) {
@@ -34,28 +60,26 @@ class AccessControl extends EventEmitter {
 
     return this._writeQ.add(async () => {
       const access = { origin, permission, allow }
-      const acl = await this.getAcl()
+      const grants = await this._getGrants(origin)
 
-      if (!acl.has(origin)) {
-        acl.set(origin, new Map())
-      }
+      grants.set(permission, allow)
+      await this._setGrants(origin, grants)
 
-      acl.get(origin).set(permission, allow)
-
-      await this._setAcl(acl)
       return access
     })
   }
 
-  // { origin: { permission: allow } }
+  // Map { origin => Map { permission => allow } }
   async getAcl () {
-    const acl = (await this._storage.local.get(this._key))[this._key]
-    return new Map(acl ? JSON.parse(acl).map(entry => [entry[0], new Map(entry[1])]) : [])
-  }
+    const data = await this._storage.local.get()
+    const prefix = this._storageKeyPrefix
 
-  _setAcl (acl) {
-    acl = Array.from(acl).map(entry => [entry[0], Array.from(entry[1])])
-    return this._storage.local.set({ [this._key]: JSON.stringify(acl) })
+    return Object.keys(data)
+      .reduce((acl, key) => {
+        return key.startsWith(prefix)
+          ? acl.set(key.slice(prefix.length + 1), new Map(data[key]))
+          : acl
+      }, new Map())
   }
 
   // Revoke access to the given permission
@@ -65,17 +89,17 @@ class AccessControl extends EventEmitter {
     if (permission && !isString(permission)) throw new TypeError('Invalid permission')
 
     return this._writeQ.add(async () => {
-      const acl = await this.getAcl()
+      let grants
 
       if (permission) {
-        if (acl.has(origin)) {
-          acl.get(origin).delete(permission)
-        }
+        grants = await this._getGrants(origin)
+        if (!grants.has(permission)) return
+        grants.delete(permission)
       } else {
-        acl.set(origin, new Map())
+        grants = new Map()
       }
 
-      return this._setAcl(acl)
+      await this._setGrants(origin, grants)
     })
   }
 

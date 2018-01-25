@@ -30,8 +30,8 @@ function createProxyAclStore (accessControl, i18n, confirm = window.confirm) {
       accessControl.setAccess(origin, permission, !allow)
     })
 
-    async function onAclChange (acl) {
-      state.acl = acl
+    async function onAclChange (changes) {
+      changes.forEach((v, k) => state.acl.set(k, v))
       emitter.emit('render')
     }
   }
