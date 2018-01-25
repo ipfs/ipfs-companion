@@ -9,3 +9,5 @@ yarn-error.log
 crowdin.yml
 .*~
 add-on/dist
+coverage
+.nyc_output

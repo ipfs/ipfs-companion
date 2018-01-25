@@ -12,6 +12,7 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const { createContextMenus, findUrlForContext } = require('./context-menus')
+const createIpfsProxy = require('./ipfs-proxy')
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -26,8 +27,10 @@ module.exports = async function init () {
   var copier
   var contextMenus
   var apiStatusUpdateInterval
+  var ipfsProxy
   const offlinePeerCount = -1
   const idleInSecs = 5 * 60
+  const browserActionPortName = 'browser-action-port'
 
   try {
     const options = await browser.storage.local.get(optionDefaults)
@@ -43,9 +46,14 @@ module.exports = async function init () {
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
+    ipfsProxy = createIpfsProxy(() => ipfs, getState)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await storeMissingOptions(options, optionDefaults, browser.storage.local)
+    await storeMissingOptions(
+      await browser.storage.local.get(),
+      optionDefaults,
+      browser.storage.local
+    )
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -119,7 +127,6 @@ module.exports = async function init () {
   // e.g. signalling between browser action popup and background page that works
   // in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
 
-  const browserActionPortName = 'browser-action-port'
   var browserActionPort
 
   function onRuntimeConnect (port) {
@@ -518,6 +525,8 @@ module.exports = async function init () {
           state.dnslink = change.newValue
         } else if (key === 'preloadAtPublicGateway') {
           state.preloadAtPublicGateway = change.newValue
+        } else if (key === 'ipfsProxy') {
+          state.ipfsProxy = change.newValue
         }
       }
     }
@@ -554,6 +563,8 @@ module.exports = async function init () {
       notify = null
       copier = null
       contextMenus = null
+      ipfsProxy.destroy()
+      ipfsProxy = null
       await destroyIpfsClient()
     }
   }
