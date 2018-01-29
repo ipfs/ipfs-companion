@@ -26,6 +26,8 @@ Submit PR with a new locale or improve existing ones via [Crowdin](https://crowd
 
 You will need [NodeJS](https://nodejs.org/) and [Firefox](https://www.mozilla.org/en-US/firefox/developer/). Make sure `npm` and `firefox` are in your `PATH`.
 
+It may be a good idea to use `yarn` instead of `npm`. We provide `yarn.lock` if you choose to do so.
+
 ### Installing Dependencies
 
 To install all dependencies into to `node_modules` directory, execute:
@@ -51,6 +53,38 @@ npm run build
 ```
 
 Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`
+
+### Firefox for Android
+
+To run your extension in [Firefox for Android](https://www.mozilla.org/en-US/firefox/mobile/), follow these instructions:
+
+- [Set up your computer and Android emulator or device](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Developing_WebExtensions_for_Firefox_for_Android#Set_up_your_computer_and_Android_emulator_or_device) (enable Developer Mode, USB Debugging etc)
+
+With device connected to your development computer, run:
+
+```
+web-ext run -s add-on --target=firefox-android
+```
+
+It will list all connected devices with their IDs. If the list is empty, go back to the setup step.
+
+Next, deploy extension to the specific device:
+
+```
+web-ext run --target=firefox-android --android-device=<device ID>
+```
+
+The first time you run this command there may be a popup on your Android device asking if you want to grant access over USB.
+
+#### Debugging in Firefox for Android
+
+Remote debug port will be printed to console right after successful deployment:
+
+```
+You can connect to this Android device on TCP port <debug PORT>
+```
+
+The fastest way to connect is to open `chrome://devtools/content/framework/connect/connect.xhtml` in Firefox the same machine you run web-ext from.
 
 ## Useful Tasks
 
