@@ -55,9 +55,14 @@ function createContextMenus (getState, ipfsPathValidator, { onUploadToIpfs, onCo
       onclick: onCopyAddressAtPublicGw
     })
   } catch (err) {
-    // documentUrlPatterns is not supported in brave
+    // documentUrlPatterns is not supported in Brave
     if (err.message.indexOf('createProperties.documentUrlPatterns of contextMenus.create is not supported yet') > -1) {
       console.warn('[ipfs-companion] Context menus disabled - createProperties.documentUrlPatterns of contextMenus.create is not supported yet')
+      return { update: () => Promise.resolve() }
+    }
+    // contextMenus are not supported in Firefox for Android
+    if (err.message === 'browser.contextMenus is undefined' || typeof browser.contextMenus === 'undefined') {
+      console.warn('[ipfs-companion] Context menus disabled - browser.contextMenus is undefined')
       return { update: () => Promise.resolve() }
     }
     throw err
