@@ -1,0 +1,5 @@
+node(label: 'linux') {
+  sh 'npm run docker-build'
+  sh 'npm run docker-test'
+  sh 'archiveArtifacts artifacts: 'build/*.zip''
+}
