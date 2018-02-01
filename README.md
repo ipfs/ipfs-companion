@@ -112,6 +112,8 @@ Try manual installation:
         1. Enter `about:debugging` in the URL bar
         2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 
+### Reproducible Build in Docker
+
 You can also do the build via Docker. Run the following commands for ending up
 with a built extension inside the `build/` directory.
 
