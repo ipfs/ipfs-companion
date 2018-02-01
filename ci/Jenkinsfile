@@ -1,5 +1,7 @@
 node(label: 'linux') {
-  sh 'npm run docker-build'
-  sh 'npm run docker-test'
-  sh 'archiveArtifacts artifacts: 'build/*.zip''
+  checkout scm
+  sh 'docker build -t ipfs-companion .'
+  sh 'docker run -i ipfs-companion yarn test'
+  sh 'docker run -i -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn build'
+  archiveArtifacts artifacts: 'build/*.zip'
 }
