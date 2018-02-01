@@ -72,7 +72,7 @@
     "file-type": "7.3.0",
     "ipfs": "0.27.6",
     "ipfs-api": "17.2.7",
-    "ipfs-postmsg-proxy": "2.0.0",
+    "ipfs-postmsg-proxy": "2.1.0",
     "is-ipfs": "0.3.2",
     "is-svg": "2.1.0",
     "lru_map": "0.3.3",
