@@ -2,6 +2,7 @@
 
 const browser = require('webextension-polyfill')
 const injectScript = require('./inject-script')
+const fs = require('fs')
 
 function init () {
   const port = browser.runtime.connect({ name: 'ipfs-proxy' })
@@ -15,13 +16,11 @@ function init () {
     }
   })
 
-  injectScript(browser.extension.getURL('dist/contentScripts/ipfs-proxy/page.js'))
+  // browserify inlines contents of this file
+  // eslint-disable-next-line
+  const code = fs.readFileSync(__dirname + '/../../../dist/contentScripts/ipfs-proxy/page.js', 'utf8')
+
+  injectScript(code)
 }
 
-// Only run this once for this window!
-// URL can change (history API) which causes this script to be executed again,
-// but it only needs to be setup once per window...
-if (!window.__ipfsProxyContentInitialized) {
-  init()
-  window.__ipfsProxyContentInitialized = true
-}
+init()

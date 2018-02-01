@@ -270,7 +270,7 @@
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "Add IPFS to the window object on every page",
+    "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
