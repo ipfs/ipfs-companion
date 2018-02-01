@@ -8,3 +8,8 @@
 .outline-0--focus:focus {
   outline: 0;
 }
+
+html,
+body {
+  background: #041727 linear-gradient(to bottom, #041727, white 50%);
+}

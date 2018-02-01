@@ -8,7 +8,7 @@ const isJsIpfsEnabled = require('../../lib/is-js-ipfs-enabled')()
 
 module.exports = function header ({ ipfsNodeType, onToggleNodeType, isIpfsOnline }) {
   return html`
-    <div class="pv3 br2 br--top ba bw1 b--white" style="background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%); background-size: auto 100%">
+    <div class="pv3 ba bw1 bt-0 br-0 bl-0" style="background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%); background-size: auto 100%">
       <div class="tc mb2" title="${isIpfsOnline ? '' : 'offline'}">
         ${logo({
           size: 52,
