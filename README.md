@@ -118,7 +118,7 @@ with a built extension inside the `build/` directory.
 ```sh
 docker build -t ipfs-companion .
 docker run -it ipfs-companion yarn test # Make sure all tests are passing before building
-docker run -it $(pwd)/build:/usr/src/app/build ipfs-companion yarn build
+docker run -it -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn build
 ```
 
 Now you can install the extension directly from `build/`
