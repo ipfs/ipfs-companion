@@ -112,6 +112,19 @@ Try manual installation:
         1. Enter `about:debugging` in the URL bar
         2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 
+### Reproducible Build in Docker
+
+You can also do the build via Docker. Run the following commands for ending up
+with a built extension inside the `build/` directory.
+
+```sh
+docker build -t ipfs-companion .
+docker run -it ipfs-companion yarn test # Make sure all tests are passing before building
+docker run -it -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn build
+```
+
+Now you can install the extension directly from `build/`
+
 ### Brave
 
 `ipfs-companion` works in Brave. To try it out today you need to run brave from source, but we are working with Brave to get seamless IPFS support working out of the box. Track our progress [here](https://github.com/ipfs/ipfs-companion/issues/312)

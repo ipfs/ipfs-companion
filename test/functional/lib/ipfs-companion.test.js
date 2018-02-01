@@ -14,7 +14,8 @@ describe('init', () => {
     init = require('../../../add-on/src/lib/ipfs-companion')
   })
 
-  beforeEach(() => {
+  beforeEach(function () {
+    this.timeout = 1000 * 10
     browser.flush()
   })
 
