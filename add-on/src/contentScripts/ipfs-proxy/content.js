@@ -17,8 +17,7 @@ function init () {
   })
 
   // browserify inlines contents of this file
-  // eslint-disable-next-line
-  const code = fs.readFileSync(__dirname + '/../../../dist/contentScripts/ipfs-proxy/page.js', 'utf8')
+  const code = fs.readFileSync(`${__dirname}/../../../dist/contentScripts/ipfs-proxy/page.js`, 'utf8')
 
   injectScript(code)
 }
