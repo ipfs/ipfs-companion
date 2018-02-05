@@ -8,7 +8,7 @@ const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-cont
 const createPreAcl = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
 const ACL_WHITELIST = require('../../../../add-on/src/lib/ipfs-proxy/acl-whitelist.json')
 
-describe.only('lib/ipfs-proxy/pre-acl', () => {
+describe('lib/ipfs-proxy/pre-acl', () => {
   before(() => {
     global.URL = URL
   })
