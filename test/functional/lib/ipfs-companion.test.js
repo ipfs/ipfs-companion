@@ -7,17 +7,17 @@ const { optionDefaults } = require('../../../add-on/src/lib/options')
 describe('init', () => {
   let init
 
-  before(function () {
-    this.timeout = 1000 * 10
+  before(function (done) {
     global.window = {}
     global.browser = browser
     global.URL = URL
     init = require('../../../add-on/src/lib/ipfs-companion')
+    done()
   })
 
-  beforeEach(function () {
-    this.timeout = 1000 * 10
+  beforeEach(function (done) {
     browser.flush()
+    done()
   })
 
   it('should query local storage for options with hardcoded defaults for fallback', async () => {
