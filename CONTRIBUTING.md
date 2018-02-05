@@ -13,7 +13,7 @@ As a courtesy, please add a comment informing  about your intent. That way we wi
 
 ## Submitting Pull Requests
 
-Just make sure your PR comes with its own tests and does pass [automated TravisCI tests](https://travis-ci.org/ipfs/ipfs-companion/branches).
+Just make sure your PR comes with its own tests and does pass [automated CI build](https://ci.ipfs.team/blue/organizations/jenkins/IPFS%20Shipyard%2Fipfs-companion/pr).
 See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for details.
 
 Read section below to get familiar with tools and commands that will make your work easier.
@@ -92,8 +92,8 @@ Each `npm` task can be run separately. The most useful ones are:
 
 - `npm install` -- install all NPM dependencies
 - `npm run build` -- build the add-on (copy external libraries, create `.zip` bundle)
-- `npm run yarn-build` -- fast install+build with yarn
-- `npm run docker-build` -- reproducible build using yarn.lock and specific version of yarn and node
+- `npm run yarn-build` -- fast dependency install + build with yarn (installs and updates yarn.lock if needed)
+- `npm run ci` -- reproducible test and build (with frozen yarn.lock)
 - `npm test` -- run entire test suite
 - `npm run lint` -- check for potential syntax problems (run all linters)
 - `npm run lint:standard` -- run [standard](http://standardjs.com) linter ([IPFS JavaScript projects default to standard code style](https://github.com/ipfs/community/blob/master/js-project-guidelines.md#linting--code-style))

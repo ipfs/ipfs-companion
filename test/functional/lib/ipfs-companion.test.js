@@ -8,6 +8,7 @@ describe('init', () => {
   let init
 
   before(function (done) {
+    this.timeout = 1000 * 10
     global.window = {}
     global.browser = browser
     global.URL = URL
@@ -16,6 +17,7 @@ describe('init', () => {
   })
 
   beforeEach(function (done) {
+    this.timeout = 1000 * 10
     browser.flush()
     done()
   })
