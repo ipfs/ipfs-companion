@@ -1,18 +1,30 @@
 node(label: 'linux') {
-    stage('Checkout') {
+    stage('git:checkout') {
         checkout scm
+        sh 'printenv'
     }
     stage('ci:install') {
-        sh 'docker build -t ipfs-companion .'
+        sh 'docker build -t ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} .'
     }
     catchError {
         stage('ci:test') {
-            sh 'docker run -i -v $(pwd)/test/data:/usr/src/app/test/data -e JUNIT_REPORT_PATH=test/data/report.xml ipfs-companion npm run ci:test'
+            sh 'docker run -i --name ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER} -e JUNIT_REPORT_PATH=test/report.xml ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:test'
+            sh 'docker cp ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/test/report.xml test/report.xml || true' // copy test report
         }
     }
-    junit allowEmptyResults: true, testResults: 'test/data/report.xml'
-    stage('ci:build') {
-        sh 'docker run -i -v $(pwd)/build:/usr/src/app/build ipfs-companion npm run ci:build'
-        archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
+    sh 'docker rm ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}'
+    junit allowEmptyResults: true, testResults: 'test/report.xml'
+    catchError {
+        stage('ci:build') {
+            sh 'docker run -i --name ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER} ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:build'
+            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/build/ . || true' // copy package
+            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/add-on/ . || true' // needed for lint:web-ext
+            archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
+        }
+        stage('lint:web-ext') {
+            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run lint:web-ext'
+        }
     }
+    sh 'docker rm ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}'
+    sh 'docker rmi -f ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER}'
 }
