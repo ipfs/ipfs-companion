@@ -4,25 +4,21 @@ const browser = require('sinon-chrome')
 const { URL } = require('url')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
-describe('init', () => {
+describe('init', function () {
   let init
 
-  before(function (done) {
-    this.timeout = 1000 * 10
+  before(function () {
     global.window = {}
     global.browser = browser
     global.URL = URL
     init = require('../../../add-on/src/lib/ipfs-companion')
-    done()
   })
 
-  beforeEach(function (done) {
-    this.timeout = 1000 * 10
+  beforeEach(function () {
     browser.flush()
-    done()
   })
 
-  it('should query local storage for options with hardcoded defaults for fallback', async () => {
+  it('should query local storage for options with hardcoded defaults for fallback', async function () {
     browser.storage.local.get.returns(Promise.resolve(optionDefaults))
     browser.storage.local.set.returns(Promise.resolve())
     const ipfsCompanion = await init()
@@ -30,7 +26,7 @@ describe('init', () => {
     ipfsCompanion.destroy()
   })
 
-  after(() => {
+  after(function () {
     delete global.window
     delete global.browser
     delete global.URL
@@ -41,18 +37,18 @@ describe('init', () => {
 describe.skip('onStorageChange()', function () {
   let init
 
-  before(() => {
+  before(function () {
     global.window = {}
     global.browser = browser
     global.URL = URL
     init = require('../../../add-on/src/lib/ipfs-companion')
   })
 
-  beforeEach(() => {
+  beforeEach(function () {
     browser.flush()
   })
 
-  it('should update ipfs API instance on IPFS API URL change', async () => {
+  it('should update ipfs API instance on IPFS API URL change', async function () {
     browser.storage.local.get.returns(Promise.resolve(optionDefaults))
     browser.storage.local.set.returns(Promise.resolve())
     browser.browserAction.setBadgeBackgroundColor.returns(Promise.resolve())
@@ -74,7 +70,7 @@ describe.skip('onStorageChange()', function () {
     ipfsCompanion.destroy()
   })
 
-  after(() => {
+  after(function () {
     delete global.window
     delete global.browser
     delete global.URL
