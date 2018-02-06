@@ -1,7 +1,18 @@
 node(label: 'linux') {
-  checkout scm
-  sh 'docker build -t ipfs-companion .'
-  sh 'docker run -i ipfs-companion yarn ci:test'
-  sh 'docker run -i -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build'
-  archiveArtifacts artifacts: 'build/*.zip'
+    stage('Checkout') {
+        checkout scm
+    }
+    stage('ci:install') {
+        sh 'docker build -t ipfs-companion .'
+    }
+    catchError {
+        stage('ci:test') {
+            sh 'docker run -i -v $(pwd)/test/data:/usr/src/app/test/data -e JUNIT_REPORT_PATH=test/data/report.xml ipfs-companion npm run ci:test'
+        }
+    }
+    junit allowEmptyResults: true, testResults: 'test/data/report.xml'
+    stage('ci:build') {
+        sh 'docker run -i -v $(pwd)/build:/usr/src/app/build ipfs-companion npm run ci:build'
+        archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
+    }
 }
