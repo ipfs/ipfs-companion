@@ -1,17 +1,15 @@
 'use strict'
 
-function injectScript (src, target, opts) {
+function injectScript (code, opts) {
   opts = opts || {}
   const doc = opts.document || document
 
-  const scriptTag = doc.createElement('script')
-  scriptTag.src = src
-  scriptTag.onload = function () {
-    this.parentNode.removeChild(this)
-  }
+  const scriptTag = document.createElement('script')
+  scriptTag.innerHTML = code
 
-  target = doc.head || doc.documentElement
+  const target = opts.target || doc.head || doc.documentElement
   target.appendChild(scriptTag)
+  scriptTag.parentNode.removeChild(scriptTag)
 }
 
 module.exports = injectScript

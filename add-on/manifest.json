@@ -56,8 +56,20 @@
 
     "web_accessible_resources": [
         "icons/ipfs-logo-on.svg",
-        "icons/ipfs-logo-off.svg",
-        "dist/contentScripts/ipfs-proxy/page.js"
+        "icons/ipfs-logo-off.svg"
+    ],
+
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "js": [
+                "dist/contentScripts/ipfs-proxy/content.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ],
+            "run_at": "document_start"
+        }
     ],
 
 	"protocol_handlers": [
