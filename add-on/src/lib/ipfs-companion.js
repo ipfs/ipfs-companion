@@ -400,6 +400,11 @@ module.exports = async function init () {
   // -------------------------------------------------------------------
 
   async function updateBrowserActionBadge () {
+    if (typeof browser.browserAction.setBadgeBackgroundColor === 'undefined') {
+     // Firefox for Android does not have this UI, so we just skip it
+      return
+    }
+
     let badgeText, badgeColor, badgeIcon
     badgeText = state.peerCount.toString()
     if (state.peerCount > 0) {

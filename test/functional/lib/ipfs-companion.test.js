@@ -7,7 +7,8 @@ const { optionDefaults } = require('../../../add-on/src/lib/options')
 describe('init', () => {
   let init
 
-  before(() => {
+  before(function () {
+    this.timeout = 1000 * 10
     global.window = {}
     global.browser = browser
     global.URL = URL
