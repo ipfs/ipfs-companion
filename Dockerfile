@@ -1,5 +1,5 @@
 FROM node:9.4.0-alpine
-RUN apk add --update make gcc g++ python
+RUN apk add --update make gcc g++ python git
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/package.json
