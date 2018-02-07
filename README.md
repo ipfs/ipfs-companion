@@ -146,18 +146,6 @@ Brave will start up and you should see a badge with your number of connected ipf
 
 ![brave ipfs](https://user-images.githubusercontent.com/58871/34110877-e3080b0a-e3ff-11e7-8667-72fcef369386.gif)
 
-### Enable Embedded IPFS Support via [js-ipfs](https://github.com/ipfs/js-ipfs)
-
-We are testing out embedding an ipfs node in the add-on background page. It's hidden by default currently.
-
-To enable it, edit the `package.json` file to remove...
-
-```json
-  "ipfs": false
-```
-
-...from the `browser` section and run `npm run build`. Note, don't set it to `true`, as that's not how the [browser module stubbing works](https://github.com/defunctzombie/package-browser-field-spec#ignore-a-module)
-
 ## Contribute
 
 [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/contributing.md)
