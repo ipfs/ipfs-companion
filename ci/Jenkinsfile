@@ -17,8 +17,8 @@ node(label: 'linux') {
     catchError {
         stage('ci:build') {
             sh 'docker run -i --name ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER} ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:build'
-            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/build/ . || true' // copy package
-            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/add-on/ . || true' // needed for lint:web-ext
+            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/build/. build/ || true' // copy package
+            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/add-on/. add-on/ || true' // needed for lint:web-ext
             archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
         }
         stage('lint:web-ext') {
@@ -27,4 +27,6 @@ node(label: 'linux') {
     }
     sh 'docker rm ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}'
     sh 'docker rmi -f ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER}'
+    sh 'ls -R add-on'
+    sh 'ls -R build'
 }

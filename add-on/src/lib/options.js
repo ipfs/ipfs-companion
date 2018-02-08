@@ -13,7 +13,7 @@ const optionDefaults = Object.freeze({
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001',
   ipfsApiPollMs: 3000,
-  ipfsProxy: false
+  ipfsProxy: true
 })
 
 exports.optionDefaults = optionDefaults
