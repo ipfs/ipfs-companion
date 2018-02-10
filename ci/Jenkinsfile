@@ -9,7 +9,7 @@ node(label: 'linux') {
     catchError {
         stage('ci:test') {
             sh 'docker run -i --name ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER} -e JUNIT_REPORT_PATH=test/report.xml ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:test'
-            sh 'docker cp ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/test/report.xml test/report.xml || true' // copy test report
+            sh 'docker cp ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/test/report.xml test/report.xml' // copy test report
         }
     }
     sh 'docker rm ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}'
@@ -17,16 +17,17 @@ node(label: 'linux') {
     catchError {
         stage('ci:build') {
             sh 'docker run -i --name ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER} ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:build'
-            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/build/. build/ || true' // copy package
-            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/add-on/. add-on/ || true' // needed for lint:web-ext
+            sh 'docker wait ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}' // fix random 'docker cp' errors that copy nothing
+            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/build/. build/' // copy package
             archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
         }
         stage('lint:web-ext') {
+            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/add-on/. add-on/' // add-on/dist dir is crucial
             sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run lint:web-ext'
         }
     }
     sh 'docker rm ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}'
     sh 'docker rmi -f ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER}'
-    sh 'ls -R add-on'
-    sh 'ls -R build'
+    sh 'ls -Rlh add-on'
+    sh 'ls -Rlh build'
 }
