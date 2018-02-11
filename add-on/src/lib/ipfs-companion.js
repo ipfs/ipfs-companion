@@ -3,7 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const { optionDefaults, storeMissingOptions } = require('./options')
-const { initState } = require('./state')
+const { initState, offlinePeerCount, inFirefox, browserWithNativeProtocol, embeddedNodeIsActive } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier } = require('./ipfs-request')
@@ -28,7 +28,6 @@ module.exports = async function init () {
   var contextMenus
   var apiStatusUpdateInterval
   var ipfsProxy
-  const offlinePeerCount = -1
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
 
@@ -74,11 +73,11 @@ module.exports = async function init () {
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
    // browser.protocol exists only in Brave
-    if (browser.protocol && browser.protocol.registerStringProtocol) {
+    if (browserWithNativeProtocol()) {
       console.log(`[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler`)
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
-      console.log(`[ipfs-companion] registerStringProtocol not available, native protocol will not be registered`, browser.protocol)
+      console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
     }
   }
 
@@ -181,10 +180,6 @@ module.exports = async function init () {
   // GUI
   // ===================================================================
 
-  function inFirefox () {
-    return !!navigator.userAgent.match('Firefox')
-  }
-
   function preloadAtPublicGateway (path) {
     // asynchronous HTTP HEAD request preloads triggers content without downloading it
     return new Promise((resolve, reject) => {
@@ -251,23 +246,23 @@ module.exports = async function init () {
   }
 
   // TODO: feature detect and push to client type specific modules.
-  function getIpfsPathAndLocalAddress (hash) {
+  function getIpfsPathAndNativeAddress (hash) {
     const path = `/ipfs/${hash}`
-    if (state.ipfsNodeType === 'embedded' && browser && browser.protocol && browser.protocol.registerStringProtocol) {
-      return {path, localAddress: `ipfs://${hash}`}
+    if (embeddedNodeIsActive(state) && browserWithNativeProtocol()) {
+      return {path, nativeAddress: `ipfs://${hash}`}
     } else {
-      // Use the chosen gateway... local or public
-      const url = new URL(path, state.gwURLString).toString()
-      return {path, localAddress: url}
+      // open at public GW (will be redirected to local elsewhere, if enabled)
+      const url = new URL(path, state.pubGwURLString).toString()
+      return {path, nativeAddress: url}
     }
   }
 
   function uploadResultHandler (result) {
     result.forEach(function (file) {
       if (file && file.hash) {
-        const {path, localAddress} = getIpfsPathAndLocalAddress(file.hash)
+        const {path, nativeAddress} = getIpfsPathAndNativeAddress(file.hash)
         browser.tabs.create({
-          'url': localAddress
+          'url': nativeAddress
         })
         console.info('[ipfs-companion] successfully stored', path)
         if (state.preloadAtPublicGateway) {
@@ -350,11 +345,14 @@ module.exports = async function init () {
   }
 
   async function apiStatusUpdate () {
+    // update peer count
     let oldPeerCount = state.peerCount
     state.peerCount = await getSwarmPeerCount()
-    state.repoStats = await getRepoStats()
     updatePeerCountDependentStates(oldPeerCount, state.peerCount)
-    sendStatusUpdateToBrowserAction()
+    // update repo stats
+    state.repoStats = await getRepoStats()
+    // trigger pending updates
+    await sendStatusUpdateToBrowserAction()
   }
 
   function updatePeerCountDependentStates (oldPeerCount, newPeerCount) {
@@ -482,11 +480,11 @@ module.exports = async function init () {
     // enable/disable gw redirect based on API going online or offline
     // newPeerCount === -1 currently implies node is offline.
     // TODO: use `node.isOnline()` if available (js-ipfs)
-    if (state.automaticMode) {
-      if (oldPeerCount === -1 && newPeerCount > -1 && !state.redirect) {
+    if (state.automaticMode && !embeddedNodeIsActive(state)) {
+      if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         browser.storage.local.set({useCustomGateway: true})
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
-      } else if (oldPeerCount > -1 && newPeerCount === -1 && state.redirect) {
+      } else if (newPeerCount === offlinePeerCount && state.redirect) {
         browser.storage.local.set({useCustomGateway: false})
           .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
       }

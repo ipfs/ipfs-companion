@@ -1,10 +1,15 @@
 'use strict'
-/* eslint-env browser */
+/* eslint-env browser, webextensions */
+
+// The State
+// ===================================================================
+const offlinePeerCount = -1
 
 function initState (options) {
   const state = {}
   // we store the most used values in optimized form
   // to minimize performance impact on overall browsing experience
+  state.peerCount = offlinePeerCount
   state.ipfsNodeType = options.ipfsNodeType
   state.pubGwURL = new URL(options.publicGatewayUrl)
   state.pubGwURLString = state.pubGwURL.toString()
@@ -23,4 +28,21 @@ function initState (options) {
   return state
 }
 
+// Browser Feature Detection
+// ===================================================================
+
+exports.inFirefox = function () {
+  // TODO: switch to (await browser.runtime.getBrowserInfo()).name
+  return !!navigator.userAgent.match('Firefox')
+}
+
+exports.browserWithNativeProtocol = function () {
+  return browser && browser.protocol && browser.protocol.registerStringProtocol
+}
+
+exports.embeddedNodeIsActive = function (state) {
+  return state.ipfsNodeType === 'embedded'
+}
+
 exports.initState = initState
+exports.offlinePeerCount = offlinePeerCount
