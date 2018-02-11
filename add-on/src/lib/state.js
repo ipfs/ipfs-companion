@@ -1,5 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
+const browser = require('webextension-polyfill')
 
 // The State
 // ===================================================================
