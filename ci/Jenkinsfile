@@ -1,7 +1,31 @@
 node(label: 'linux') {
-  checkout scm
-  sh 'docker build -t ipfs-companion .'
-  sh 'docker run -i ipfs-companion yarn test'
-  sh 'docker run -i -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn build'
-  archiveArtifacts artifacts: 'build/*.zip'
+    stage('git:checkout') {
+        cleanWs()
+        checkout scm
+        sh 'printenv'
+    }
+    stage('ci:install') {
+        sh 'docker build -t ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} .'
+    }
+    catchError {
+        stage('ci:test') {
+            sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:test'
+        }
+    }
+    junit allowEmptyResults: true, testResults: 'test/report.xml'
+    catchError {
+        stage('ci:build') {
+            sh 'mkdir -p $(pwd)/build'
+            sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:build'
+            archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
+        }
+        stage('lint:web-ext') {
+            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run lint:web-ext'
+        }
+    }
+    sh 'docker rmi -f ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER}'
+    sh 'ls -lh .'
+    sh 'ls -Rlh add-on'
+    sh 'ls -Rlh build'
+    cleanWs()
 }
