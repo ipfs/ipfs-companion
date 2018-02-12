@@ -1,5 +1,6 @@
 node(label: 'linux') {
     stage('git:checkout') {
+        cleanWs()
         checkout scm
         sh 'printenv'
     }
@@ -30,4 +31,5 @@ node(label: 'linux') {
     sh 'ls -lh .'
     sh 'ls -Rlh add-on'
     sh 'ls -Rlh build'
+    cleanWs()
 }
