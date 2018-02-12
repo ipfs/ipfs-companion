@@ -38,7 +38,7 @@
     "prepush": "run-s -s precommit test build",
     "firefox": "web-ext run -s add-on/ --browser-console",
     "ci": "run-s ci:*",
-    "ci:install": "npx yarn@1.3.2 install --frozen-lockfile",
+    "ci:install": "npx yarn@1.3.2 install --frozen-lockfile || npx yarn@1.3.2 install --frozen-lockfile",
     "ci:test": "npx yarn@1.3.2 test",
     "ci:build": "npx yarn@1.3.2 build && shx chmod -R g=u,o=u build/ add-on/",
     "yarn-build": "npx yarn@1.3.2 && npx yarn@1.3.2 build"
