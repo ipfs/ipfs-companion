@@ -9,24 +9,20 @@ node(label: 'linux') {
     }
     catchError {
         stage('ci:test') {
-            sh 'docker run -i --name ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER} -e JUNIT_REPORT_PATH=test/report.xml ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:test'
-            sh 'docker cp ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/test/report.xml test/report.xml' // copy test report
+            sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:test'
         }
     }
-    sh 'docker rm ipfs-companion-test-${JOB_BASE_NAME}-${BUILD_NUMBER}'
     junit allowEmptyResults: true, testResults: 'test/report.xml'
     catchError {
         stage('ci:build') {
-            sh 'docker run -i --name ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER} ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:build'
-            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/build .' // copy package
+            sh 'mkdir -p $(pwd)/build'
+            sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run ci:build'
             archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
         }
         stage('lint:web-ext') {
-            sh 'docker cp ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}:/usr/src/app/add-on/. add-on/' // add-on/dist dir is crucial
-            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run lint:web-ext'
+            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER} npm run lint:web-ext'
         }
     }
-    sh 'docker rm ipfs-companion-build-${JOB_BASE_NAME}-${BUILD_NUMBER}'
     sh 'docker rmi -f ipfs-companion:${JOB_BASE_NAME}-${BUILD_NUMBER}'
     sh 'ls -lh .'
     sh 'ls -Rlh add-on'
