@@ -4374,7 +4374,7 @@ ipfs-block@^0.6.1, ipfs-block@~0.6.1:
   dependencies:
     cids "^0.5.2"
 
-ipfs-css@^0.1.0:
+ipfs-css@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.1.0.tgz#0337e7e3aeddf391bbd1b7b7fb427f98b6ec5ca3"
 
@@ -9315,7 +9315,7 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
 
-uglifyify@^4.0.5:
+uglifyify@4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/uglifyify/-/uglifyify-4.0.5.tgz#49c1fca9828c10a5a8e8d70f191a95f7ab475911"
   dependencies:
