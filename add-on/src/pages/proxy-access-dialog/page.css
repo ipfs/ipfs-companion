@@ -1,0 +1,10 @@
+@import url('node_modules/tachyons/css/tachyons.css');
+@import url('node_modules/ipfs-css/ipfs.css');
+
+.hover-bg-aqua-muted:hover {
+  background-color: #9ad4db;
+}
+
+.hover-bg-red-muted:hover {
+  background-color: #f36149;
+}

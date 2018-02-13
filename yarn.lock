@@ -4374,6 +4374,10 @@ ipfs-block@^0.6.1, ipfs-block@~0.6.1:
   dependencies:
     cids "^0.5.2"
 
+ipfs-css@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.1.0.tgz#0337e7e3aeddf391bbd1b7b7fb427f98b6ec5ca3"
+
 ipfs-multipart@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/ipfs-multipart/-/ipfs-multipart-0.1.0.tgz#5a8ed13f42e82d8bef7d2e151d8eaf5e3a30e3ea"
