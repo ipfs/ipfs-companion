@@ -53,6 +53,10 @@ class AccessControl extends EventEmitter {
 
     const grants = await this._getGrants(origin)
 
+    if (grants.has('*')) {
+      return { origin, permission, allow: grants.get('*') }
+    }
+
     return grants.has(permission)
       ? { origin, permission, allow: grants.get(permission) }
       : null
@@ -66,6 +70,23 @@ class AccessControl extends EventEmitter {
     return this._writeQ.add(async () => {
       const access = { origin, permission, allow }
       const grants = await this._getGrants(origin)
+
+      // Trying to set access for non-wildcard permission, when wildcard
+      // permission is already granted?
+      if (grants.has('*') && permission !== '*') {
+        if (grants.get('*') === allow) {
+          // Noop if requested access is the same as access for wildcard grant
+          return access
+        } else {
+          // Fail if requested access is the different to access for wildcard grant
+          throw new Error(`Illegal set access for ${permission} when wildcard exists`)
+        }
+      }
+
+      // If setting a wildcard permission, remove existing grants
+      if (permission === '*') {
+        grants.clear()
+      }
 
       grants.set(permission, allow)
       await this._setGrants(origin, grants)

@@ -1,86 +1,92 @@
 'use strict'
-/* eslint-env browser */
-
-const browser = require('webextension-polyfill')
 
 const DIALOG_WIDTH = 540
 const DIALOG_HEIGHT = 200
+const DIALOG_PATH = 'dist/pages/proxy-access-dialog/index.html'
+const DIALOG_PORT_NAME = 'proxy-access-dialog'
 
-async function requestAccess (origin, permission) {
-  const url = browser.extension.getURL('dist/pages/proxy-access-dialog/index.html')
-  const currentWin = await browser.windows.getCurrent()
-  const { tabs } = await browser.windows.create({
-    url,
-    width: DIALOG_WIDTH,
-    height: DIALOG_HEIGHT,
-    top: Math.round(((screen.width / 2) - (DIALOG_WIDTH / 2)) + currentWin.left),
-    left: Math.round(((screen.height / 2) - (DIALOG_HEIGHT / 2)) + currentWin.top),
-    type: 'popup'
-  })
+function createRequestAccess (browser, screen) {
+  return async function requestAccess (origin, permission, opts) {
+    opts = opts || {}
 
-  // Resolves with { allow, remember }
-  const userResponse = getUserResponse(tabs[0].id, origin, permission)
-  // Never resolves, might reject if user closes the tab
-  const userTabRemoved = getUserTabRemoved(tabs[0].id, origin, permission)
+    const width = opts.dialogWidth || DIALOG_WIDTH
+    const height = opts.dialogHeight || DIALOG_HEIGHT
 
-  let response
+    const url = browser.extension.getURL(opts.dialogPath || DIALOG_PATH)
+    const currentWin = await browser.windows.getCurrent()
 
-  try {
-    // Will the user respond to or close the dialog?
-    response = await Promise.race([userTabRemoved, userResponse])
-  } finally {
-    userTabRemoved.destroy()
-    userResponse.destroy()
-  }
+    const top = Math.round(((screen.width / 2) - (width / 2)) + currentWin.left)
+    const left = Math.round(((screen.height / 2) - (height / 2)) + currentWin.top)
 
-  await browser.tabs.remove(tabs[0].id)
+    const { tabs } = await browser.windows.create({ url, width, height, top, left, type: 'popup' })
 
-  return response
-}
+    // Resolves with { allow, remember }
+    const userResponse = getUserResponse(tabs[0].id, origin, permission, opts)
+    // Never resolves, might reject if user closes the tab
+    const userTabRemoved = getUserTabRemoved(tabs[0].id, origin, permission)
 
-function getUserResponse (tabId, origin, permission) {
-  let onPortConnect
+    let response
 
-  const userResponse = new Promise((resolve, reject) => {
-    onPortConnect = port => {
-      if (port.name !== 'proxy-access-dialog') return
-
-      browser.runtime.onConnect.removeListener(onPortConnect)
-
-      // Tell the dialog what origin/permission it is about
-      port.postMessage({ origin, permission })
-
-      // Wait for the user response
-      const onMessage = ({ allow, remember }) => {
-        port.onMessage.removeListener(onMessage)
-        resolve({ allow, remember })
-      }
-
-      port.onMessage.addListener(onMessage)
+    try {
+      // Will the user respond to or close the dialog?
+      response = await Promise.race([userTabRemoved, userResponse])
+    } finally {
+      userTabRemoved.destroy()
+      userResponse.destroy()
     }
 
-    browser.runtime.onConnect.addListener(onPortConnect)
-  })
+    await browser.tabs.remove(tabs[0].id)
 
-  userResponse.destroy = () => browser.runtime.onConnect.removeListener(onPortConnect)
+    return response
+  }
 
-  return userResponse
+  function getUserResponse (tabId, origin, permission, opts) {
+    opts = opts || {}
+
+    const dialogPortName = opts.dialogPortName || DIALOG_PORT_NAME
+    let onPortConnect
+
+    const userResponse = new Promise((resolve, reject) => {
+      onPortConnect = port => {
+        if (port.name !== dialogPortName) return
+
+        browser.runtime.onConnect.removeListener(onPortConnect)
+
+        // Tell the dialog what origin/permission it is about
+        port.postMessage({ origin, permission })
+
+        // Wait for the user response
+        const onMessage = ({ allow, remember }) => {
+          port.onMessage.removeListener(onMessage)
+          resolve({ allow, remember })
+        }
+
+        port.onMessage.addListener(onMessage)
+      }
+
+      browser.runtime.onConnect.addListener(onPortConnect)
+    })
+
+    userResponse.destroy = () => browser.runtime.onConnect.removeListener(onPortConnect)
+
+    return userResponse
+  }
+
+  // Since the dialog is a tab not a real dialog it can be closed by the user
+  // with no response, this function creates a promise that will reject if the tab
+  // is removed.
+  function getUserTabRemoved (tabId, origin, permission) {
+    let onTabRemoved
+
+    const userTabRemoved = new Promise((resolve, reject) => {
+      onTabRemoved = () => reject(new Error(`Failed to obtain access response for ${permission} at ${origin}`))
+      browser.tabs.onRemoved.addListener(onTabRemoved)
+    })
+
+    userTabRemoved.destroy = () => browser.tabs.onRemoved.removeListener(onTabRemoved)
+
+    return userTabRemoved
+  }
 }
 
-// Since the dialog is a tab not a real dialog it can be closed by the user
-// with no response, this function creates a promise that will reject if the tab
-// is removed.
-function getUserTabRemoved (tabId, origin, permission) {
-  let onTabRemoved
-
-  const userTabRemoved = new Promise((resolve, reject) => {
-    onTabRemoved = () => reject(new Error(`Failed to obtain access response for ${permission} at ${origin}`))
-    browser.tabs.onRemoved.addListener(onTabRemoved)
-  })
-
-  userTabRemoved.destroy = () => browser.tabs.onRemoved.removeListener(onTabRemoved)
-
-  return userTabRemoved
-}
-
-module.exports = requestAccess
+module.exports = createRequestAccess
