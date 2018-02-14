@@ -17,11 +17,13 @@ function createProxyAccessDialogPage (i18n) {
         <div class="flex-auto">
           ${loading ? null : html`
             <div>
-              <h1 class="sans-serif f5 lh-copy charcoal mt0">Allow ${origin} to access ipfs.${permission}?</h1>
+              <h1 class="sans-serif f5 lh-copy charcoal mt0">
+                ${i18n.getMessage('page_proxyAccessDialog_title', [origin, permission])}
+              </h1>
               <p class="sans-serif f6 lh-copy charcoal-muted">
                 <label>
                   <input type="checkbox" checked=${state.remember} onclick=${onRememberToggle} class="mr1" />
-                  Apply to all permissions for ${origin}
+                  ${i18n.getMessage('page_proxyAccessDialog_rememberCheckbox_label', origin)}
                 </label>
               </p>
             </div>
@@ -30,13 +32,31 @@ function createProxyAccessDialogPage (i18n) {
         <div class="tr">
           ${loading ? html`
             <div>
-              <span class="mr2">${button({ text: 'Deny', disabled: true })}</span>
-              ${button({ text: 'Allow', disabled: true })}
+              <span class="mr2">
+                ${button({
+                  text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'),
+                  disabled: true
+                })}
+              </span>
+              ${button({
+                text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'),
+                disabled: true
+              })}
             </div>
           ` : html`
             <div>
-              <span class="mr2">${button({ text: 'Deny', onClick: onDeny, color: 'red' })}</span>
-              ${button({ text: 'Allow', onClick: onAllow, color: 'aqua' })}
+              <span class="mr2">
+                ${button({
+                  text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'),
+                  onClick: onDeny,
+                  color: 'red'
+                })}
+              </span>
+              ${button({
+                text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'),
+                onClick: onAllow,
+                color: 'aqua'
+              })}
             </div>
           `}
         </div>

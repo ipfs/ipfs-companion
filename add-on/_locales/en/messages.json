@@ -400,8 +400,37 @@
       }
     }
   },
+  "page_proxyAccessDialog_title": {
+    "message": "Allow $ORIGIN$ to access ipfs.$PERMISSION$?",
+    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)",
+    "placeholders": {
+      "origin": {
+        "content": "$1"
+      },
+      "permission": {
+        "content": "$2"
+      }
+    }
+  },
+  "page_proxyAccessDialog_rememberCheckbox_label": {
+    "message": "Apply to all permissions for $ORIGIN$",
+    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_rememberCheckbox_label)",
+    "placeholders": {
+      "origin": {
+        "content": "$1"
+      }
+    }
+  },
   "page_proxyAcl_revoke_all_button_title": {
     "message": "Revoke all permissions",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
+  },
+  "page_proxyAccessDialog_allowButton_text": {
+    "message": "Allow",
+    "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
+  },
+  "page_proxyAccessDialog_denyButton_text": {
+    "message": "Deny",
+    "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   }
 }
