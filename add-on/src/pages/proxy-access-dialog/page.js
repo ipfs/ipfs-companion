@@ -6,8 +6,8 @@ require('./page.css')
 
 function createProxyAccessDialogPage (i18n) {
   return function proxyAccessDialogPage (state, emit) {
-    const onAllow = () => emit('allow', false)
-    const onDeny = () => emit('deny', false)
+    const onAllow = () => emit('allow')
+    const onDeny = () => emit('deny')
     const onRememberToggle = () => emit('rememberToggle')
 
     const { loading, origin, permission } = state

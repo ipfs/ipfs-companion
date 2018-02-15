@@ -22,8 +22,8 @@ function createProxyAccessDialogStore (i18n, runtime) {
 
     port.onMessage.addListener(onMessage)
 
-    emitter.on('allow', (remember) => port.postMessage({ allow: true, remember }))
-    emitter.on('deny', (remember) => port.postMessage({ allow: false, remember }))
+    emitter.on('allow', () => port.postMessage({ allow: true, remember: state.remember }))
+    emitter.on('deny', () => port.postMessage({ allow: false, remember: state.remember }))
 
     emitter.on('rememberToggle', () => {
       state.remember = !state.remember
