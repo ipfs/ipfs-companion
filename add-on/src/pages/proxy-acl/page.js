@@ -3,8 +3,6 @@
 const html = require('choo/html')
 const logo = require('../../popup/logo')
 
-require('./page.css')
-
 function createProxyAclPage (i18n) {
   return function proxyAclPage (state, emit) {
     const onRevoke = (e) => emit('revoke', e)

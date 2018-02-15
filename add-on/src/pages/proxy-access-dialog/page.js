@@ -2,8 +2,6 @@
 
 const html = require('choo/html')
 
-require('./page.css')
-
 function createProxyAccessDialogPage (i18n) {
   return function proxyAccessDialogPage (state, emit) {
     const onAllow = () => emit('allow')

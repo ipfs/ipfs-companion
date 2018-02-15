@@ -6,8 +6,6 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 
-require('./quick-upload.css')
-
 const app = choo()
 
 app.use(quickUploadStore)

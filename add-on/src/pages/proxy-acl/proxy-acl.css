@@ -1,4 +1,5 @@
-@import url('node_modules/tachyons/css/tachyons.css');
+@import url('../../../tachyons.css');
+@import url('../../popup/heartbeat.css');
 
 html, body {
   height: 100%;

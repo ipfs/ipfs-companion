@@ -2,7 +2,6 @@
 /* eslint-env browser, webextensions */
 
 const html = require('choo/html')
-require('./heartbeat.css')
 
 function logo ({ path, size = 52, ipfsNodeType = 'external', isIpfsOnline = true, heartbeat = true }) {
   const logoTypePrefix = ipfsNodeType === 'embedded' ? 'js-' : ''

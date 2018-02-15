@@ -1,5 +1,5 @@
-@import url('node_modules/tachyons/css/tachyons.css');
-@import url('./mdc.switch.css');
+@import url('../../../tachyons.css');
+@import url('mdc.switch.css');
 
 .bg-near-white--hover:hover {
   background-color: #F4F4F4;

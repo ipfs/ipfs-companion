@@ -7,8 +7,6 @@ const contextActions = require('./context-actions')
 const operations = require('./operations')
 const gatewayStatus = require('./gateway-status')
 
-require('./page.css')
-
 // Render the browser action page:
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
