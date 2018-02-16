@@ -16,11 +16,14 @@ class AccessControl extends EventEmitter {
 
   async _onStorageChange (changes) {
     const prefix = this._storageKeyPrefix
-    const aclChangeKeys = Object.keys(changes).filter((key) => key.startsWith(prefix))
+    const scopesKey = this._getScopesKey()
+    const aclChangeKeys = Object.keys(changes).filter((key) => {
+      return key !== scopesKey && key.startsWith(prefix)
+    })
 
     if (!aclChangeKeys.length) return
 
-    // Map { origin => Map { permission => allow } }
+    // Map { scope => Map { permission => allow } }
     this.emit('change', aclChangeKeys.reduce((aclChanges, key) => {
       return aclChanges.set(
         key.slice(prefix.length + 1),
@@ -29,103 +32,154 @@ class AccessControl extends EventEmitter {
     }, new Map()))
   }
 
-  _getGrantsKey (origin) {
-    return `${this._storageKeyPrefix}.${origin}`
+  _getScopesKey () {
+    return `${this._storageKeyPrefix}.scopes`
   }
 
-  // Get a Map of granted permissions for a given origin
+  // Get the list of scopes stored in the acl
+  async _getScopes () {
+    const key = this._getScopesKey()
+    return new Set(
+      JSON.parse((await this._storage.local.get({ [key]: '[]' }))[key])
+    )
+  }
+
+  async _addScope (scope) {
+    const scopes = await this._getScopes()
+    scopes.add(scope)
+
+    const key = this._getScopeKey()
+    await this._storage.local.set({ [key]: JSON.stringify(Array.from(scopes)) })
+  }
+
+  // ordered by longest first
+  async _getMatchingScopes (scope) {
+    const scopes = await this._getScopes()
+    const origin = new URL(scope).origin
+
+    return Array.from(scopes)
+      .filter(s => {
+        if (origin !== new URL(s).origin) return false
+        return scope.startsWith(s)
+      })
+      .sort((a, b) => b.length - a.length)
+  }
+
+  _getAccessKey (scope) {
+    return `${this._storageKeyPrefix}.access.${scope}`
+  }
+
+  // Get a Map of granted permissions for a given scope
   // e.g. Map { 'files.add' => true, 'object.new' => false }
-  async _getGrants (origin) {
-    const key = this._getGrantsKey(origin)
+  async _getAllAccess (scope) {
+    const key = this._getAccessKey(scope)
     return new Map(
       JSON.parse((await this._storage.local.get({ [key]: '[]' }))[key])
     )
   }
 
-  async _setGrants (origin, grants) {
-    const key = this._getGrantsKey(origin)
-    return this._storage.local.set({ [key]: JSON.stringify(Array.from(grants)) })
-  }
-
-  async getAccess (origin, permission) {
-    if (!isOrigin(origin)) throw new TypeError('Invalid origin')
+  async getAccess (scope, permission) {
+    if (!isScope(scope)) throw new TypeError('Invalid scope')
     if (!isString(permission)) throw new TypeError('Invalid permission')
 
-    const grants = await this._getGrants(origin)
+    const matchingScopes = await this._getMatchingScopes(scope)
 
-    if (grants.has('*')) {
-      return { origin, permission, allow: grants.get('*') }
+    let allow = null
+    let matchingScope
+
+    for (matchingScope of matchingScopes) {
+      const allAccess = await this._getAllAccess(matchingScope)
+
+      if (allAccess.has('*')) {
+        allow = allAccess.get('*')
+        break
+      }
+
+      if (allAccess.has(permission)) {
+        allow = allAccess.get(permission)
+        break
+      }
     }
 
-    return grants.has(permission)
-      ? { origin, permission, allow: grants.get(permission) }
-      : null
+    return allow == null ? null : { scope: matchingScope, permission, allow }
   }
 
-  async setAccess (origin, permission, allow) {
-    if (!isOrigin(origin)) throw new TypeError('Invalid origin')
+  async setAccess (scope, permission, allow) {
+    if (!isScope(scope)) throw new TypeError('Invalid scope')
     if (!isString(permission)) throw new TypeError('Invalid permission')
     if (!isBoolean(allow)) throw new TypeError('Invalid allow')
 
     return this._writeQ.add(async () => {
-      const access = { origin, permission, allow }
-      const grants = await this._getGrants(origin)
+      const matchingScopes = await this._getMatchingScopes(scope)
 
-      // Trying to set access for non-wildcard permission, when wildcard
-      // permission is already granted?
-      if (grants.has('*') && permission !== '*') {
-        if (grants.get('*') === allow) {
-          // Noop if requested access is the same as access for wildcard grant
-          return access
-        } else {
-          // Fail if requested access is the different to access for wildcard grant
-          throw new Error(`Illegal set access for ${permission} when wildcard exists`)
+      for (let matchingScope of matchingScopes) {
+        const allAccess = await this._getAllAccess(matchingScope)
+
+        // Trying to set access for non-wildcard permission, when wildcard
+        // permission is already granted?
+        if (allAccess.has('*') && permission !== '*') {
+          if (allAccess.get('*') === allow) {
+            // Noop if requested access is the same as access for wildcard grant
+            return { scope: matchingScope, permission, allow }
+          } else {
+            // Fail if requested access is the different to access for wildcard grant
+            throw new Error(`Illegal set access for ${permission} when wildcard exists`)
+          }
         }
       }
 
+      const allAccess = await this._getAllAccess(scope)
+
       // If setting a wildcard permission, remove existing grants
       if (permission === '*') {
-        grants.clear()
+        allAccess.clear()
       }
 
-      grants.set(permission, allow)
-      await this._setGrants(origin, grants)
+      allAccess.set(permission, allow)
 
-      return access
+      const accessKey = this._getAccessKey(scope)
+      await this._storage.local.set({ [accessKey]: JSON.stringify(Array.from(allAccess)) })
+
+      await this._addScope(scope)
+
+      return { scope, permission, allow }
     })
   }
 
-  // Map { origin => Map { permission => allow } }
+  // Map { scope => Map { permission => allow } }
   async getAcl () {
-    const data = await this._storage.local.get()
-    const prefix = this._storageKeyPrefix
+    const scopes = await this._getScopes()
+    const acl = new Map()
 
-    return Object.keys(data)
-      .reduce((acl, key) => {
-        return key.startsWith(prefix)
-          ? acl.set(key.slice(prefix.length + 1), new Map(JSON.parse(data[key])))
-          : acl
-      }, new Map())
+    await Promise.all(Array.from(scopes).map(scope => {
+      return (async () => {
+        const allAccess = await this._getAllAccess(scope)
+        acl.set(scope, allAccess)
+      })()
+    }))
+
+    return acl
   }
 
   // Revoke access to the given permission
   // if permission is null, revoke all access
-  async revokeAccess (origin, permission = null) {
-    if (!isOrigin(origin)) throw new TypeError('Invalid origin')
+  async revokeAccess (scope, permission = null) {
+    if (!isScope(scope)) throw new TypeError('Invalid scope')
     if (permission && !isString(permission)) throw new TypeError('Invalid permission')
 
     return this._writeQ.add(async () => {
-      let grants
+      let allAccess
 
       if (permission) {
-        grants = await this._getGrants(origin)
-        if (!grants.has(permission)) return
-        grants.delete(permission)
+        allAccess = await this._getAllAccess(scope)
+        if (!allAccess.has(permission)) return
+        allAccess.delete(permission)
       } else {
-        grants = new Map()
+        allAccess = new Map()
       }
 
-      await this._setGrants(origin, grants)
+      const key = this._getAccessKey(scope)
+      await this._storage.local.set({ [key]: JSON.stringify(Array.from(allAccess)) })
     })
   }
 
@@ -136,7 +190,7 @@ class AccessControl extends EventEmitter {
 
 module.exports = AccessControl
 
-const isOrigin = (value) => {
+const isScope = (value) => {
   if (!isString(value)) return false
 
   let url
@@ -147,7 +201,7 @@ const isOrigin = (value) => {
     return false
   }
 
-  return url.origin === value
+  return url.origin + url.pathname === value
 }
 
 const isString = (value) => Object.prototype.toString.call(value) === '[object String]'
