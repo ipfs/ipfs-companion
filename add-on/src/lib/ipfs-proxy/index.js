@@ -20,14 +20,15 @@ function createIpfsProxy (getIpfs, getState) {
   const onPortConnect = (port) => {
     if (port.name !== 'ipfs-proxy') return
 
-    const { origin } = new URL(port.sender.url)
+    const { origin, pathname } = new URL(port.sender.url)
+    const scope = origin + pathname
 
     const proxy = createProxyServer(getIpfs, {
       addListener: (_, handler) => port.onMessage.addListener(handler),
       removeListener: (_, handler) => port.onMessage.removeListener(handler),
       postMessage: (data) => port.postMessage(data),
       getMessageData: (d) => d,
-      pre: (fnName) => createPreAcl(getState, accessControl, origin, fnName, requestAccess)
+      pre: (fnName) => createPreAcl(getState, accessControl, scope, fnName, requestAccess)
     })
 
     const close = () => {

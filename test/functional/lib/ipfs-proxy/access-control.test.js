@@ -6,7 +6,7 @@ const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-cont
 const Storage = require('mem-storage-area/Storage')
 const { objToAcl } = require('../../../helpers/acl')
 
-describe('lib/ipfs-proxy/access-control', () => {
+describe.only('lib/ipfs-proxy/access-control', () => {
   before(() => {
     global.URL = URL
   })
@@ -19,23 +19,23 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(acl).to.deep.equal(new Map())
 
     const sets = [
-      ['http://ipfs.io', 'ipfs.files.add', true],
-      ['https://ipld.io', 'ipfs.object.new', false],
-      ['https://filecoin.io', 'ipfs.pubsub.subscribe', true],
-      ['https://filecoin.io', 'ipfs.pubsub.subscribe', false],
-      ['https://filecoin.io', 'ipfs.pubsub.publish', true]
+      ['http://ipfs.io/', 'ipfs.files.add', true],
+      ['https://ipld.io/', 'ipfs.object.new', false],
+      ['https://filecoin.io/', 'ipfs.pubsub.subscribe', true],
+      ['https://filecoin.io/', 'ipfs.pubsub.subscribe', false],
+      ['https://filecoin.io/', 'ipfs.pubsub.publish', true]
     ]
 
     await Promise.all(sets.map(s => accessControl.setAccess(...s)))
 
     const expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': true
       },
-      'https://ipld.io': {
+      'https://ipld.io/': {
         'ipfs.object.new': false
       },
-      'https://filecoin.io': {
+      'https://filecoin.io/': {
         'ipfs.pubsub.subscribe': false,
         'ipfs.pubsub.publish': true
       }
@@ -48,32 +48,32 @@ describe('lib/ipfs-proxy/access-control', () => {
 
   it('should allow access for wildcard allow', async () => {
     const accessControl = new AccessControl(new Storage())
-    let access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    let access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
     expect(access).to.equal(null)
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', true)
+    await accessControl.setAccess('https://ipfs.io/', '*', true)
 
-    access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
-    const expectedAccess = { origin: 'https://ipfs.io', permission: 'files.add', allow: true }
+    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
   })
 
   it('should deny access for wildcard deny', async () => {
     const accessControl = new AccessControl(new Storage())
-    let access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    let access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
     expect(access).to.equal(null)
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
-    access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
-    const expectedAccess = { origin: 'https://ipfs.io', permission: 'files.add', allow: false }
+    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: false }
 
     expect(access).to.deep.equal(expectedAccess)
   })
@@ -81,14 +81,14 @@ describe('lib/ipfs-proxy/access-control', () => {
   it('should clear existing grants when setting wildcard access', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    await accessControl.setAccess('https://ipfs.io', 'files.add', false)
-    await accessControl.setAccess('https://ipfs.io', 'object.new', true)
-    await accessControl.setAccess('https://ipfs.io', 'config.set', false)
+    await accessControl.setAccess('https://ipfs.io/', 'files.add', false)
+    await accessControl.setAccess('https://ipfs.io/', 'object.new', true)
+    await accessControl.setAccess('https://ipfs.io/', 'config.set', false)
 
     let acl = await accessControl.getAcl()
 
     let expectedAcl = objToAcl({
-      'https://ipfs.io': {
+      'https://ipfs.io/': {
         'files.add': false,
         'object.new': true,
         'config.set': false
@@ -98,12 +98,12 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(acl).to.deep.equal(expectedAcl)
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
     acl = await accessControl.getAcl()
 
     expectedAcl = objToAcl({
-      'https://ipfs.io': {
+      'https://ipfs.io/': {
         '*': false
       }
     })
@@ -115,12 +115,12 @@ describe('lib/ipfs-proxy/access-control', () => {
     const accessControl = new AccessControl(new Storage())
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
     let error
 
     try {
-      await accessControl.setAccess('https://ipfs.io', 'files.add', true)
+      await accessControl.setAccess('https://ipfs.io/', 'files.add', true)
     } catch (err) {
       error = err
     }
@@ -132,12 +132,12 @@ describe('lib/ipfs-proxy/access-control', () => {
     const accessControl = new AccessControl(new Storage())
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
     let error
 
     try {
-      await accessControl.setAccess('https://ipfs.io', 'files.add', false)
+      await accessControl.setAccess('https://ipfs.io/', 'files.add', false)
     } catch (err) {
       error = err
     }
@@ -145,20 +145,20 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(() => { if (error) throw error }).to.not.throw()
   })
 
-  it('should get granted access for origin and permission', async () => {
+  it('should get granted access for scope and permission', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    let access = await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', true)
-    const expectedAccess = { origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: true }
+    let access = await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', true)
+    const expectedAccess = { scope: 'http://ipfs.io/', permission: 'ipfs.files.add', allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
 
-    access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
     expect(access).to.deep.equal(expectedAccess)
   })
 
-  it('should not get access if origin is invalid', async () => {
+  it('should not get access if scope is invalid', async () => {
     const accessControl = new AccessControl(new Storage())
     let error
 
@@ -168,7 +168,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
   })
 
   it('should not get access if permission is invalid', async () => {
@@ -176,7 +176,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.getAccess('http://ipfs.io', 138)
+      await accessControl.getAccess('http://ipfs.io/', 138)
     } catch (err) {
       error = err
     }
@@ -186,12 +186,12 @@ describe('lib/ipfs-proxy/access-control', () => {
 
   it('should return null for missing grant', async () => {
     const accessControl = new AccessControl(new Storage())
-    const access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    const access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
     expect(access).to.equal(null)
   })
 
-  it('should not set access if origin is invalid', async () => {
+  it('should not set access if scope is invalid', async () => {
     const accessControl = new AccessControl(new Storage())
     let error
 
@@ -201,7 +201,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
 
     try {
       await accessControl.setAccess(138, 'ipfs.files.add', true)
@@ -209,7 +209,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
   })
 
   it('should not set access if permission is invalid', async () => {
@@ -217,7 +217,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.setAccess('http://ipfs.io', 138, true)
+      await accessControl.setAccess('http://ipfs.io/', 138, true)
     } catch (err) {
       error = err
     }
@@ -230,7 +230,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', 'true')
+      await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', 'true')
     } catch (err) {
       error = err
     }
@@ -244,14 +244,14 @@ describe('lib/ipfs-proxy/access-control', () => {
 
       accessControl.on('change', changes => {
         expect(changes).to.deep.equal(objToAcl({
-          'http://ipfs.io': {
+          'http://ipfs.io/': {
             'ipfs.files.add': false
           }
         }))
         resolve()
       })
 
-      accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
+      accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
     })
   })
 
@@ -271,14 +271,14 @@ describe('lib/ipfs-proxy/access-control', () => {
   it('should revoke granted access', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    let access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    let access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
-    expect(access).to.deep.equal({ origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: false })
+    expect(access).to.deep.equal({ scope: 'http://ipfs.io/', permission: 'ipfs.files.add', allow: false })
 
-    await accessControl.revokeAccess('http://ipfs.io', 'ipfs.files.add')
+    await accessControl.revokeAccess('http://ipfs.io/', 'ipfs.files.add')
 
-    access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
     expect(access).to.equal(null)
   })
@@ -286,26 +286,26 @@ describe('lib/ipfs-proxy/access-control', () => {
   it('should revoke all granted access if no permission specified', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.block.put', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.block.put', false)
 
     let acl = await accessControl.getAcl()
 
     expect(acl).to.deep.equal(objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': false,
         'ipfs.block.put': false
       }
     }))
 
-    await accessControl.revokeAccess('http://ipfs.io')
+    await accessControl.revokeAccess('http://ipfs.io/')
 
     acl = await accessControl.getAcl()
 
-    expect(acl).to.deep.equal(objToAcl({ 'http://ipfs.io': {} }))
+    expect(acl).to.deep.equal(objToAcl({ 'http://ipfs.io/': {} }))
   })
 
-  it('should not revoke access if origin is invalid', async () => {
+  it('should not revoke access if scope is invalid', async () => {
     const accessControl = new AccessControl(new Storage())
     let error
 
@@ -315,7 +315,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
   })
 
   it('should not revoke access if permission is invalid', async () => {
@@ -323,7 +323,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.revokeAccess('http://ipfs.io', 138)
+      await accessControl.revokeAccess('http://ipfs.io/', 138)
     } catch (err) {
       error = err
     }

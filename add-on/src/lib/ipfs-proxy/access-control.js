@@ -26,7 +26,7 @@ class AccessControl extends EventEmitter {
     // Map { scope => Map { permission => allow } }
     this.emit('change', aclChangeKeys.reduce((aclChanges, key) => {
       return aclChanges.set(
-        key.slice(prefix.length + 1),
+        key.slice(prefix.length + ('.access'.length) + 1),
         new Map(JSON.parse(changes[key].newValue))
       )
     }, new Map()))
@@ -48,7 +48,7 @@ class AccessControl extends EventEmitter {
     const scopes = await this._getScopes()
     scopes.add(scope)
 
-    const key = this._getScopeKey()
+    const key = this._getScopesKey()
     await this._storage.local.set({ [key]: JSON.stringify(Array.from(scopes)) })
   }
 
