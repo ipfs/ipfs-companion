@@ -90,7 +90,7 @@
 		}
 	],
 
-    "content_security_policy": "script-src 'self'; object-src 'self'; child-src 'self';",
+    "content_security_policy": "script-src 'self'; object-src 'self'; frame-src 'self';",
 
     "default_locale": "en"
 }

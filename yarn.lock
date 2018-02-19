@@ -4299,9 +4299,9 @@ ipfs-multipart@~0.1.0:
     content "^3.0.0"
     dicer "^0.2.5"
 
-ipfs-postmsg-proxy@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.3.0.tgz#7706f08ac29d0ade07411b72dd5c25ed6e643bc9"
+ipfs-postmsg-proxy@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.7.0.tgz#7dc55f8efab6d7d673d9a9fcdd56e7d2d65712ed"
   dependencies:
     callbackify "^1.1.0"
     cids "^0.5.2"
