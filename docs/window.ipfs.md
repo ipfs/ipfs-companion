@@ -1,4 +1,25 @@
-# Creating applications using `window.ipfs`
+# Notes on exposing IPFS API as `window.ipfs`
+
+- [Background](#background)
+- [Creating applications using window.ipfs](#creating-applications-using-windowipfs)
+    - [Error messages](#error-messages)
+- [Q&A](#qa)
+    - [What is a window.ipfs?](#what-is-a-windowipfs)
+    - [What about IPFS node configuration?](#what-about-ipfs-node-configuration)
+    - [Is there a Permission Control (ACL)?](#is-there-a-permission-control-acl)
+    - [Do I need to confirm every API call?](#do-i-need-to-confirm-every-api-call)
+    - [Can I disable this for now?](#can-i-disable-this-for-now)
+    - [How are permissions scoped?](#how-are-permissions-scoped)
+
+## Background
+
+IPFS Companion is exposing a subset of IPFS APIs as `window.ipfs` on every webpage ✨
+
+This means websites can detect that `window.ipfs` already exists and use it instead of spawning own `js-ipfs` node, which saves resources, battery etc.
+
+For more context, see original issue: [Expose IPFS API as window.ipfs #330](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
+
+## Creating applications using `window.ipfs`
 
 If a user has installed IPFS companion, `window.ipfs` will be available as soon as the first script runs on your web page, so you'll be able to detect it using a simple `if` statement:
 
@@ -33,28 +54,6 @@ if (window.ipfs) {
 
 Note that IPFS Companion also adds `window.Buffer` if it doesn't already exist.
 
-## What _is_ a `window.ipfs`?
-
-Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-api` or a `js-ipfs` daemon over `js-ipfs-api` and potentially others in the future.
-
-Note that `window.ipfs` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
-
-See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://github.com/ipfs/js-ipfs-api#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
-
-## Node configuration
-
-You can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
-
-## Permissions
-
-IPFS companion users are able to selectively control access to `window.ipfs` functions so calls may reject (or callback) with an error if a user decides to deny access.
-
-The first time you call a `window.ipfs` function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
-
-Not all function calls require a decision from the user. You will be able to call [whitelisted](add-on/src/lib/ipfs-proxy/acl-whitelist.json) IPFS functions and users will _not_ be prompted to allow/deny access.
-
-Users can modify their permission decisions after the fact so you should not expect to always be allowed to call a function if it was successfully called previously. Additionally, **users can also deny access to _all_ IPFS functions**.
-
 ### Error messages
 
 If access was denied:
@@ -77,7 +76,49 @@ User disabled access to IPFS
 
 Note these might have been re-worded already. Please send a PR.
 
-### Scopes
+
+
+# Q&A
+
+## What _is_ a `window.ipfs`?
+
+Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-api` or a `js-ipfs` daemon over `js-ipfs-api` and potentially others in the future.
+
+Note that `window.ipfs` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
+
+See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://github.com/ipfs/js-ipfs-api#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
+
+## What about IPFS node configuration?
+
+You can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
+
+## Is there a Permission Control (ACL)?
+
+Yes.
+
+IPFS companion users are able to selectively control access to `window.ipfs` functions so calls may reject (or callback) with [an error](#error-messages) if a user decides to deny access.
+
+The first time you call a `window.ipfs` function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
+
+It looks like this:
+
+> ![permission dialog in Firefox](https://user-images.githubusercontent.com/152863/36159691-3cf44eea-10d7-11e8-81d1-988dfd70a2f7.png)
+
+
+## Do I need to confirm every API call?
+
+Not all function calls require a decision from the user. You will be able to call [whitelisted](../add-on/src/lib/ipfs-proxy/acl-whitelist.json) IPFS functions and users will _not_ be prompted to allow/deny access.
+
+Functions that are not whitelisted need to be confirmed only once [per scope](#how-are-permissions-scoped).
+
+Note that users can modify their permission decisions after the fact so you should not expect to always be allowed to call a function if it was successfully called previously.
+
+
+## Can I disable this for now?
+
+Users can permanently deny access to all IPFS functions by disabling `window.ipfs` experiment on _Preferences_ screen.
+
+## How are permissions scoped?
 
 Permissions are scoped to the **origin and path** (and sub-paths) of the file from which the permission was requested.
 
@@ -112,3 +153,4 @@ e.g.
         * `https://domain.com/`
         * `https://domain.com/files`
         * etc.
+
