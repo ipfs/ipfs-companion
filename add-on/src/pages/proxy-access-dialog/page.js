@@ -6,7 +6,7 @@ function createProxyAccessDialogPage (i18n) {
   return function proxyAccessDialogPage (state, emit) {
     const onAllow = () => emit('allow')
     const onDeny = () => emit('deny')
-    const onRememberToggle = () => emit('rememberToggle')
+    const onWildcardToggle = () => emit('wildcardToggle')
 
     const { loading, origin, permission } = state
 
@@ -20,8 +20,8 @@ function createProxyAccessDialogPage (i18n) {
               </h1>
               <p class="sans-serif f6 lh-copy charcoal-muted">
                 <label>
-                  <input type="checkbox" checked=${state.remember} onclick=${onRememberToggle} class="mr1" />
-                  ${i18n.getMessage('page_proxyAccessDialog_rememberCheckbox_label', origin)}
+                  <input type="checkbox" checked=${state.wildcard} onclick=${onWildcardToggle} class="mr1" />
+                  ${i18n.getMessage('page_proxyAccessDialog_wildcardCheckbox_label', origin)}
                 </label>
               </p>
             </div>

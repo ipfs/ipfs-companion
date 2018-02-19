@@ -16,8 +16,8 @@ function createPreAcl (getState, accessControl, origin, permission, requestAcces
     let access = await accessControl.getAccess(origin, permission)
 
     if (!access) {
-      const { allow, remember } = await requestAccess(origin, permission)
-      access = await accessControl.setAccess(origin, remember ? '*' : permission, allow)
+      const { allow, wildcard } = await requestAccess(origin, permission)
+      access = await accessControl.setAccess(origin, wildcard ? '*' : permission, allow)
     }
 
     if (!access.allow) throw new Error(`User denied access to ${permission}`)

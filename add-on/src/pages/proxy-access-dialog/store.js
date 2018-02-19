@@ -5,7 +5,7 @@ function createProxyAccessDialogStore (i18n, runtime) {
     state.origin = null
     state.permission = null
     state.loading = true
-    state.remember = false
+    state.wildcard = false
 
     const port = runtime.connect({ name: 'proxy-access-dialog' })
 
@@ -22,11 +22,11 @@ function createProxyAccessDialogStore (i18n, runtime) {
 
     port.onMessage.addListener(onMessage)
 
-    emitter.on('allow', () => port.postMessage({ allow: true, remember: state.remember }))
-    emitter.on('deny', () => port.postMessage({ allow: false, remember: state.remember }))
+    emitter.on('allow', () => port.postMessage({ allow: true, wildcard: state.wildcard }))
+    emitter.on('deny', () => port.postMessage({ allow: false, wildcard: state.wildcard }))
 
-    emitter.on('rememberToggle', () => {
-      state.remember = !state.remember
+    emitter.on('wildcardToggle', () => {
+      state.wildcard = !state.wildcard
       emitter.emit('render')
     })
   }

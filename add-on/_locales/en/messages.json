@@ -412,9 +412,9 @@
       }
     }
   },
-  "page_proxyAccessDialog_rememberCheckbox_label": {
+  "page_proxyAccessDialog_wildcardCheckbox_label": {
     "message": "Apply to all permissions for $ORIGIN$",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_rememberCheckbox_label)",
+    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)",
     "placeholders": {
       "origin": {
         "content": "$1"

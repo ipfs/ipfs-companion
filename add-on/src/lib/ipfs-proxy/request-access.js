@@ -20,7 +20,7 @@ function createRequestAccess (browser, screen) {
 
     const { tabs } = await browser.windows.create({ url, width, height, top, left, type: 'popup' })
 
-    // Resolves with { allow, remember }
+    // Resolves with { allow, wildcard }
     const userResponse = getUserResponse(tabs[0].id, origin, permission, opts)
     // Never resolves, might reject if user closes the tab
     const userTabRemoved = getUserTabRemoved(tabs[0].id, origin, permission)
@@ -56,9 +56,9 @@ function createRequestAccess (browser, screen) {
         port.postMessage({ origin, permission })
 
         // Wait for the user response
-        const onMessage = ({ allow, remember }) => {
+        const onMessage = ({ allow, wildcard }) => {
           port.onMessage.removeListener(onMessage)
-          resolve({ allow, remember })
+          resolve({ allow, wildcard })
         }
 
         port.onMessage.addListener(onMessage)
