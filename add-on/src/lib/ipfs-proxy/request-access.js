@@ -6,7 +6,7 @@ const DIALOG_PATH = 'dist/pages/proxy-access-dialog/index.html'
 const DIALOG_PORT_NAME = 'proxy-access-dialog'
 
 function createRequestAccess (browser, screen) {
-  return async function requestAccess (origin, permission, opts) {
+  return async function requestAccess (scope, permission, opts) {
     opts = opts || {}
 
     const width = opts.dialogWidth || DIALOG_WIDTH
@@ -21,9 +21,9 @@ function createRequestAccess (browser, screen) {
     const { tabs } = await browser.windows.create({ url, width, height, top, left, type: 'popup' })
 
     // Resolves with { allow, wildcard }
-    const userResponse = getUserResponse(tabs[0].id, origin, permission, opts)
+    const userResponse = getUserResponse(tabs[0].id, scope, permission, opts)
     // Never resolves, might reject if user closes the tab
-    const userTabRemoved = getUserTabRemoved(tabs[0].id, origin, permission)
+    const userTabRemoved = getUserTabRemoved(tabs[0].id, scope, permission)
 
     let response
 
@@ -40,7 +40,7 @@ function createRequestAccess (browser, screen) {
     return response
   }
 
-  function getUserResponse (tabId, origin, permission, opts) {
+  function getUserResponse (tabId, scope, permission, opts) {
     opts = opts || {}
 
     const dialogPortName = opts.dialogPortName || DIALOG_PORT_NAME
@@ -52,8 +52,8 @@ function createRequestAccess (browser, screen) {
 
         browser.runtime.onConnect.removeListener(onPortConnect)
 
-        // Tell the dialog what origin/permission it is about
-        port.postMessage({ origin, permission })
+        // Tell the dialog what scope/permission it is about
+        port.postMessage({ scope, permission })
 
         // Wait for the user response
         const onMessage = ({ allow, wildcard }) => {
@@ -75,11 +75,11 @@ function createRequestAccess (browser, screen) {
   // Since the dialog is a tab not a real dialog it can be closed by the user
   // with no response, this function creates a promise that will reject if the tab
   // is removed.
-  function getUserTabRemoved (tabId, origin, permission) {
+  function getUserTabRemoved (tabId, scope, permission) {
     let onTabRemoved
 
     const userTabRemoved = new Promise((resolve, reject) => {
-      onTabRemoved = () => reject(new Error(`Failed to obtain access response for ${permission} at ${origin}`))
+      onTabRemoved = () => reject(new Error(`Failed to obtain access response for ${permission} at ${scope}`))
       browser.tabs.onRemoved.addListener(onTabRemoved)
     })
 

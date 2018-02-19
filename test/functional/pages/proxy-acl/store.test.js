@@ -121,7 +121,7 @@ describe('pages/proxy-acl/store', () => {
       emitter.emit.callThrough()
 
       // Now revoke this grant
-      const e = createMockEvent({ 'data-origin': 'http://ipfs.io/', 'data-permission': 'ipfs.files.add' })
+      const e = createMockEvent({ 'data-scope': 'http://ipfs.io/', 'data-permission': 'ipfs.files.add' })
       emitter.emit('revoke', e)
     })
 
@@ -184,7 +184,7 @@ describe('pages/proxy-acl/store', () => {
       emitter.emit.callThrough()
 
       // Now revoke all grants
-      const e = createMockEvent({ 'data-origin': 'http://ipfs.io/' })
+      const e = createMockEvent({ 'data-scope': 'http://ipfs.io/' })
       emitter.emit('revoke', e)
     })
 
@@ -239,7 +239,7 @@ describe('pages/proxy-acl/store', () => {
     emitter.emit.callThrough()
 
     // Now attempt revoke all grants
-    const e = createMockEvent({ 'data-origin': 'http://ipfs.io/' })
+    const e = createMockEvent({ 'data-scope': 'http://ipfs.io/' })
     emitter.emit('revoke', e)
 
     acl = await accessControl.getAcl()
@@ -295,7 +295,7 @@ describe('pages/proxy-acl/store', () => {
       emitter.emit.callThrough()
 
       // Now toggle the access right
-      const e = createMockEvent({ 'data-origin': 'http://ipfs.io/', 'data-permission': 'ipfs.files.add', 'data-allow': 'false' })
+      const e = createMockEvent({ 'data-scope': 'http://ipfs.io/', 'data-permission': 'ipfs.files.add', 'data-allow': 'false' })
       emitter.emit('toggleAllow', e)
     })
 

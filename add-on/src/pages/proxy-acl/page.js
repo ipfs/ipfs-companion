@@ -9,8 +9,8 @@ function createProxyAclPage (i18n) {
     const onToggleAllow = (e) => emit('toggleAllow', e)
 
     const { acl } = state
-    const origins = Array.from(state.acl.keys())
-    const hasGrants = origins.some((origin) => !!acl.get(origin).size)
+    const scopes = Array.from(state.acl.keys())
+    const hasGrants = scopes.some((scope) => !!acl.get(scope).size)
 
     return html`
       <div class="avenir pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); min-height:100%;">
@@ -32,16 +32,16 @@ function createProxyAclPage (i18n) {
           </header>
           ${hasGrants ? html`
             <table class="w-100 mb4" style="border-spacing: 0">
-              ${origins.reduce((rows, origin) => {
-                const permissions = acl.get(origin)
+              ${scopes.reduce((rows, scope) => {
+                const permissions = acl.get(scope)
 
                 if (!permissions.size) return rows
 
                 return rows.concat(
-                  originRow({ onRevoke, origin, i18n }),
+                  scopeRow({ onRevoke, scope, i18n }),
                   Array.from(permissions.keys())
                     .sort()
-                    .map((permission) => accessRow({ origin, permission, allow: permissions.get(permission), onRevoke, onToggleAllow, i18n }))
+                    .map((permission) => accessRow({ scope, permission, allow: permissions.get(permission), onRevoke, onToggleAllow, i18n }))
                 )
               }, [])}
             </table>
@@ -56,16 +56,16 @@ function createProxyAclPage (i18n) {
 
 module.exports = createProxyAclPage
 
-function originRow ({ origin, onRevoke, i18n }) {
+function scopeRow ({ scope, onRevoke, i18n }) {
   return html`
     <tr class="">
-      <th class="f3 normal tl light-gray pv3 ph2 bb b--white-40" colspan="2">${origin}</th>
-      <th class="tr pv3 ph0 bb b--white-40">${revokeButton({ onRevoke, origin, i18n })}</th>
+      <th class="f3 normal tl light-gray pv3 ph2 bb b--white-40" colspan="2">${scope}</th>
+      <th class="tr pv3 ph0 bb b--white-40">${revokeButton({ onRevoke, scope, i18n })}</th>
     </tr>
   `
 }
 
-function accessRow ({ origin, permission, allow, onRevoke, onToggleAllow, i18n }) {
+function accessRow ({ scope, permission, allow, onRevoke, onToggleAllow, i18n }) {
   const title = i18n.getMessage(
     allow
       ? 'page_proxyAcl_toggle_to_deny_button_title'
@@ -78,7 +78,7 @@ function accessRow ({ origin, permission, allow, onRevoke, onToggleAllow, i18n }
         class="f5 white ph3 pv2 ${allow ? 'bg-green' : 'bg-red'} tc bb b--white-10 pointer"
         style="width: 75px"
         onclick=${onToggleAllow}
-        data-origin="${origin}"
+        data-scope="${scope}"
         data-permission="${permission}"
         data-allow=${allow}
         title="${title}">
@@ -89,14 +89,14 @@ function accessRow ({ origin, permission, allow, onRevoke, onToggleAllow, i18n }
       <td class="f5 light-gray ph3 pv2 bb b--white-10">${permission}</td>
       <td class="tr bb b--white-10">
         <div class="child">
-          ${revokeButton({ onRevoke, origin, permission, i18n })}
+          ${revokeButton({ onRevoke, scope, permission, i18n })}
         </div>
       </td>
     </tr>
   `
 }
 
-function revokeButton ({ onRevoke, origin, permission = null, i18n }) {
+function revokeButton ({ onRevoke, scope, permission = null, i18n }) {
   const title = permission
     ? i18n.getMessage('page_proxyAcl_revoke_button_title', permission)
     : i18n.getMessage('page_proxyAcl_revoke_all_button_title')
@@ -105,7 +105,7 @@ function revokeButton ({ onRevoke, origin, permission = null, i18n }) {
     <button
       class="button-reset outline-0 bg-transparent bw0 pointer ph3 pv1 light-gray hover-red"
       onclick=${onRevoke}
-      data-origin="${origin}"
+      data-scope="${scope}"
       data-permission="${permission || ''}"
       title="${title}">
       ${closeIcon()}

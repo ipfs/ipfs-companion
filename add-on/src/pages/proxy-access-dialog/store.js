@@ -2,7 +2,7 @@
 
 function createProxyAccessDialogStore (i18n, runtime) {
   return function proxyAccessDialogStore (state, emitter) {
-    state.origin = null
+    state.scope = null
     state.permission = null
     state.loading = true
     state.wildcard = false
@@ -10,10 +10,10 @@ function createProxyAccessDialogStore (i18n, runtime) {
     const port = runtime.connect({ name: 'proxy-access-dialog' })
 
     const onMessage = (data) => {
-      if (!data || !data.origin || !data.permission) return
+      if (!data || !data.scope || !data.permission) return
       port.onMessage.removeListener(onMessage)
 
-      state.origin = data.origin
+      state.scope = data.scope
       state.permission = data.permission
       state.loading = false
 

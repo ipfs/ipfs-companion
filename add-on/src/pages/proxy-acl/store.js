@@ -11,23 +11,23 @@ function createProxyAclStore (accessControl, i18n, confirm = window.confirm) {
     })
 
     emitter.on('revoke', (e) => {
-      const origin = e.currentTarget.getAttribute('data-origin')
+      const scope = e.currentTarget.getAttribute('data-scope')
       const permission = e.currentTarget.getAttribute('data-permission')
 
       const msg = permission
-        ? i18n.getMessage('page_proxyAcl_confirm_revoke', [permission, origin])
-        : i18n.getMessage('page_proxyAcl_confirm_revoke_all', origin)
+        ? i18n.getMessage('page_proxyAcl_confirm_revoke', [permission, scope])
+        : i18n.getMessage('page_proxyAcl_confirm_revoke_all', scope)
 
       if (!confirm(msg)) return
 
-      accessControl.revokeAccess(origin, permission)
+      accessControl.revokeAccess(scope, permission)
     })
 
     emitter.on('toggleAllow', (e) => {
-      const origin = e.currentTarget.getAttribute('data-origin')
+      const scope = e.currentTarget.getAttribute('data-scope')
       const permission = e.currentTarget.getAttribute('data-permission')
       const allow = e.currentTarget.getAttribute('data-allow') === 'true'
-      accessControl.setAccess(origin, permission, !allow)
+      accessControl.setAccess(scope, permission, !allow)
     })
 
     async function onAclChange (changes) {

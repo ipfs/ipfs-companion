@@ -226,7 +226,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.setAccess('NOT A VALID ORIGIN', 'ipfs.files.add', true)
+      await accessControl.setAccess('NOT A VALID SCOPE', 'ipfs.files.add', true)
     } catch (err) {
       error = err
     }
@@ -340,7 +340,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.revokeAccess('NOT A VALID ORIGIN', 'ipfs.files.add')
+      await accessControl.revokeAccess('NOT A VALID SCOPE', 'ipfs.files.add')
     } catch (err) {
       error = err
     }
