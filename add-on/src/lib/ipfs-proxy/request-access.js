@@ -1,7 +1,7 @@
 'use strict'
 
 const DIALOG_WIDTH = 540
-const DIALOG_HEIGHT = 200
+const DIALOG_HEIGHT = 220
 const DIALOG_PATH = 'dist/pages/proxy-access-dialog/index.html'
 const DIALOG_PORT_NAME = 'proxy-access-dialog'
 

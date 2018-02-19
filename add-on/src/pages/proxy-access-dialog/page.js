@@ -12,7 +12,7 @@ function createProxyAccessDialogPage (i18n) {
 
     return html`
       <div class="flex flex-column pa3 h-100">
-        <div class="flex-auto">
+        <div class="flex-auto" style="min-height:auto">
           ${loading ? null : html`
             <div>
               <h1 class="sans-serif f5 lh-copy charcoal mt0">

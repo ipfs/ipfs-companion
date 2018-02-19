@@ -413,13 +413,8 @@
     }
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply to all permissions for $SCOPE$",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)",
-    "placeholders": {
-      "scope": {
-        "content": "$1"
-      }
-    }
+    "message": "Apply this decision to all permissions in this scope",
+    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
     "message": "Revoke all permissions",
