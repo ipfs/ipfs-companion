@@ -62,6 +62,7 @@ _(some are disabled by default, use Preferences screen to enable)_
 - Detect domains with [dnslink](https://github.com/jbenet/go-dnslink) in DNS TXT record and load them from IPFS
 - Make plaintext IPFS links clickable
 - Mirror to IPFS by right click on any image or video
+- [`window.ipfs`](docs/window.ipfs.md) - web pages can access your IPFS node
 
 ## Install
 
