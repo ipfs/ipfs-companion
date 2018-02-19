@@ -3,6 +3,7 @@ const { describe, it } = require('mocha')
 const { expect } = require('chai')
 const createProxyAclPage = require('../../../../add-on/src/pages/proxy-acl/page')
 const { objToAcl } = require('../../../helpers/acl')
+const createMockI18n = require('../../../helpers/mock-i18n')
 
 describe('pages/proxy-acl/page', () => {
   it('should render with empty ACL', async () => {
@@ -102,5 +103,3 @@ describe('pages/proxy-acl/page', () => {
     expect(res).to.have.string('ipfs.block.put')
   })
 })
-
-const createMockI18n = () => ({ getMessage: key => key })

@@ -8,6 +8,7 @@ const { URL } = require('url')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const createProxyAclStore = require('../../../../add-on/src/pages/proxy-acl/store')
 const { objToAcl } = require('../../../helpers/acl')
+const createMockI18n = require('../../../helpers/mock-i18n')
 
 describe('pages/proxy-acl/store', () => {
   before(() => {
@@ -315,8 +316,6 @@ describe('pages/proxy-acl/store', () => {
     delete global.URL
   })
 })
-
-const createMockI18n = () => ({ getMessage: key => key })
 
 const createMockConfirm = (res = true) => () => res
 

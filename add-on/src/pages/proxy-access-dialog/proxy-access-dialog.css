@@ -1,0 +1,10 @@
+@import url('../../../ui-kit/tachyons.css');
+@import url('../../../ui-kit/ipfs.css');
+
+.hover-bg-aqua-muted:hover {
+  background-color: #9ad4db;
+}
+
+.hover-bg-red-muted:hover {
+  background-color: #f36149;
+}

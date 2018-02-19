@@ -11,6 +11,7 @@ describe('init', function () {
     global.window = {}
     global.browser = browser
     global.URL = URL
+    global.screen = {}
     init = require('../../../add-on/src/lib/ipfs-companion')
   })
 
@@ -74,6 +75,7 @@ describe.skip('onStorageChange()', function () {
     delete global.window
     delete global.browser
     delete global.URL
+    delete global.screen
     browser.flush()
   })
 })

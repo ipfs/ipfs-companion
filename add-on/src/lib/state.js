@@ -19,6 +19,7 @@ function initState (options) {
   state.preloadAtPublicGateway = options.preloadAtPublicGateway
   state.catchUnhandledProtocols = options.catchUnhandledProtocols
   state.displayNotifications = options.displayNotifications
+  state.ipfsProxy = options.ipfsProxy
   return state
 }
 

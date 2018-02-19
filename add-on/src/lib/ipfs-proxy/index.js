@@ -5,11 +5,13 @@ const browser = require('webextension-polyfill')
 const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
 const AccessControl = require('./access-control')
 const createPreAcl = require('./pre-acl')
+const createRequestAccess = require('./request-access')
 
 // Creates an object that manages the "server side" of the IPFS proxy
 function createIpfsProxy (getIpfs, getState) {
   let connections = []
   const accessControl = new AccessControl(browser.storage)
+  const requestAccess = createRequestAccess(browser, screen)
 
   // Port connection events are emitted when a content script attempts to
   // communicate with us. Each new URL visited by the user will open a port.
@@ -25,7 +27,7 @@ function createIpfsProxy (getIpfs, getState) {
       removeListener: (_, handler) => port.onMessage.removeListener(handler),
       postMessage: (data) => port.postMessage(data),
       getMessageData: (d) => d,
-      pre: (fnName) => createPreAcl(getState, accessControl, origin, fnName)
+      pre: (fnName) => createPreAcl(getState, accessControl, origin, fnName, requestAccess)
     })
 
     const close = () => {

@@ -7,8 +7,6 @@ const gatewaysForm = require('./forms/gateways-form')
 const apiForm = require('./forms/api-form')
 const experimentsForm = require('./forms/experiments-form')
 
-require('./page.css')
-
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.

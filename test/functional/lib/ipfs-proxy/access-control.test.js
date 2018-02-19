@@ -46,6 +46,105 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(acl).to.deep.equal(expectedAcl)
   })
 
+  it('should allow access for wildcard allow', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+
+    expect(access).to.equal(null)
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io', '*', true)
+
+    access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+
+    const expectedAccess = { origin: 'https://ipfs.io', permission: 'files.add', allow: true }
+
+    expect(access).to.deep.equal(expectedAccess)
+  })
+
+  it('should deny access for wildcard deny', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+
+    expect(access).to.equal(null)
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io', '*', false)
+
+    access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+
+    const expectedAccess = { origin: 'https://ipfs.io', permission: 'files.add', allow: false }
+
+    expect(access).to.deep.equal(expectedAccess)
+  })
+
+  it('should clear existing grants when setting wildcard access', async () => {
+    const accessControl = new AccessControl(new Storage())
+
+    await accessControl.setAccess('https://ipfs.io', 'files.add', false)
+    await accessControl.setAccess('https://ipfs.io', 'object.new', true)
+    await accessControl.setAccess('https://ipfs.io', 'config.set', false)
+
+    let acl = await accessControl.getAcl()
+
+    let expectedAcl = objToAcl({
+      'https://ipfs.io': {
+        'files.add': false,
+        'object.new': true,
+        'config.set': false
+      }
+    })
+
+    expect(acl).to.deep.equal(expectedAcl)
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io', '*', false)
+
+    acl = await accessControl.getAcl()
+
+    expectedAcl = objToAcl({
+      'https://ipfs.io': {
+        '*': false
+      }
+    })
+
+    expect(acl).to.deep.equal(expectedAcl)
+  })
+
+  it('should not be able to set different access to specific permission if wildcard access grant exists', async () => {
+    const accessControl = new AccessControl(new Storage())
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io', '*', false)
+
+    let error
+
+    try {
+      await accessControl.setAccess('https://ipfs.io', 'files.add', true)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('Illegal set access for files.add when wildcard exists')
+  })
+
+  it('should be able set same access to specific permission if wildcard access grant exists', async () => {
+    const accessControl = new AccessControl(new Storage())
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io', '*', false)
+
+    let error
+
+    try {
+      await accessControl.setAccess('https://ipfs.io', 'files.add', false)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.not.throw()
+  })
+
   it('should get granted access for origin and permission', async () => {
     const accessControl = new AccessControl(new Storage())
 
