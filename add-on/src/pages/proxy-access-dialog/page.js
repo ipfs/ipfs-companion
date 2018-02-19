@@ -15,7 +15,7 @@ function createProxyAccessDialogPage (i18n) {
         <div class="flex-auto" style="min-height:auto">
           ${loading ? null : html`
             <div>
-              <h1 class="sans-serif f5 lh-copy charcoal mt0">
+              <h1 class="sans-serif f5 lh-copy charcoal mt0" style="word-break:break-word">
                 ${i18n.getMessage('page_proxyAccessDialog_title', [scope, permission])}
               </h1>
               <p class="sans-serif f6 lh-copy charcoal-muted">
