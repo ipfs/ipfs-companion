@@ -16,10 +16,10 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should throw if access is disabled', async () => {
     const getState = () => ({ ipfsProxy: false })
     const accessControl = new AccessControl(new Storage())
-    const origin = 'https://ipfs.io'
+    const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
 
-    const preAcl = createPreAcl(getState, accessControl, origin, permission)
+    const preAcl = createPreAcl(getState, accessControl, getScope, permission)
 
     let error
 
@@ -35,14 +35,14 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should allow access if permission is on whitelist', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
-    const origin = 'https://ipfs.io'
+    const getScope = () => 'https://ipfs.io/'
     const requestAccess = async () => { throw new Error('Requested access for whitelist permission') }
 
     let error
 
     try {
       await Promise.all(ACL_WHITELIST.map(permission => {
-        const preAcl = createPreAcl(getState, accessControl, origin, permission, requestAccess)
+        const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
         return preAcl()
       }))
     } catch (err) {
@@ -55,10 +55,10 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should request access if no grant exists', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
-    const origin = 'https://ipfs.io'
+    const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: true }))
-    const preAcl = createPreAcl(getState, accessControl, origin, permission, requestAccess)
+    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
 
     await preAcl()
 
@@ -68,10 +68,10 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should deny access when user denies request', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
-    const origin = 'https://ipfs.io'
+    const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: false }))
-    const preAcl = createPreAcl(getState, accessControl, origin, permission, requestAccess)
+    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
 
     let error
 
@@ -88,10 +88,10 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should not re-request if denied', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
-    const origin = 'https://ipfs.io'
+    const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: false }))
-    const preAcl = createPreAcl(getState, accessControl, origin, permission, requestAccess)
+    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
 
     let error
 
@@ -120,10 +120,10 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should not re-request if allowed', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
-    const origin = 'https://ipfs.io'
+    const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: true }))
-    const preAcl = createPreAcl(getState, accessControl, origin, permission, requestAccess)
+    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
 
     await preAcl()
     expect(requestAccess.callCount).to.equal(1)

@@ -110,25 +110,19 @@ class AccessControl extends EventEmitter {
     if (!isBoolean(allow)) throw new TypeError('Invalid allow')
 
     return this._writeQ.add(async () => {
-      const matchingScopes = await this._getMatchingScopes(scope)
+      const allAccess = await this._getAllAccess(scope)
 
-      for (let matchingScope of matchingScopes) {
-        const allAccess = await this._getAllAccess(matchingScope)
-
-        // Trying to set access for non-wildcard permission, when wildcard
-        // permission is already granted?
-        if (allAccess.has('*') && permission !== '*') {
-          if (allAccess.get('*') === allow) {
-            // Noop if requested access is the same as access for wildcard grant
-            return { scope: matchingScope, permission, allow }
-          } else {
-            // Fail if requested access is the different to access for wildcard grant
-            throw new Error(`Illegal set access for ${permission} when wildcard exists`)
-          }
+      // Trying to set access for non-wildcard permission, when wildcard
+      // permission is already granted?
+      if (allAccess.has('*') && permission !== '*') {
+        if (allAccess.get('*') === allow) {
+          // Noop if requested access is the same as access for wildcard grant
+          return { scope, permission, allow }
+        } else {
+          // Fail if requested access is the different to access for wildcard grant
+          throw new Error(`Illegal set access for ${permission} when wildcard exists`)
         }
       }
-
-      const allAccess = await this._getAllAccess(scope)
 
       // If setting a wildcard permission, remove existing grants
       if (permission === '*') {

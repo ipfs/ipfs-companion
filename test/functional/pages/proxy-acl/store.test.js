@@ -46,7 +46,7 @@ describe('pages/proxy-acl/store', () => {
     const emitter = new EventEmitter()
     const state = {}
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', true)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', true)
 
     store(state, emitter)
 
@@ -65,7 +65,7 @@ describe('pages/proxy-acl/store', () => {
     const acl = await accessControl.getAcl()
 
     const expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': true
       }
     })
@@ -82,8 +82,8 @@ describe('pages/proxy-acl/store', () => {
     const emitter = new EventEmitter()
     const state = {}
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', true)
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.object.new', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', true)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.object.new', false)
 
     store(state, emitter)
 
@@ -102,7 +102,7 @@ describe('pages/proxy-acl/store', () => {
     let acl = await accessControl.getAcl()
 
     let expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': true,
         'ipfs.object.new': false
       }
@@ -121,14 +121,14 @@ describe('pages/proxy-acl/store', () => {
       emitter.emit.callThrough()
 
       // Now revoke this grant
-      const e = createMockEvent({ 'data-origin': 'http://ipfs.io', 'data-permission': 'ipfs.files.add' })
+      const e = createMockEvent({ 'data-origin': 'http://ipfs.io/', 'data-permission': 'ipfs.files.add' })
       emitter.emit('revoke', e)
     })
 
     acl = await accessControl.getAcl()
 
     expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.object.new': false
       }
     })
@@ -145,8 +145,8 @@ describe('pages/proxy-acl/store', () => {
     const emitter = new EventEmitter()
     const state = {}
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.object.new', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.object.new', false)
 
     store(state, emitter)
 
@@ -165,7 +165,7 @@ describe('pages/proxy-acl/store', () => {
     let acl = await accessControl.getAcl()
 
     let expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': false,
         'ipfs.object.new': false
       }
@@ -184,14 +184,14 @@ describe('pages/proxy-acl/store', () => {
       emitter.emit.callThrough()
 
       // Now revoke all grants
-      const e = createMockEvent({ 'data-origin': 'http://ipfs.io' })
+      const e = createMockEvent({ 'data-origin': 'http://ipfs.io/' })
       emitter.emit('revoke', e)
     })
 
     acl = await accessControl.getAcl()
 
     expectedAcl = objToAcl({
-      'http://ipfs.io': {}
+      'http://ipfs.io/': {}
     })
 
     expect(acl).to.deep.equal(expectedAcl)
@@ -206,8 +206,8 @@ describe('pages/proxy-acl/store', () => {
     const emitter = new EventEmitter()
     const state = {}
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.object.new', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.object.new', false)
 
     store(state, emitter)
 
@@ -226,7 +226,7 @@ describe('pages/proxy-acl/store', () => {
     let acl = await accessControl.getAcl()
 
     const expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': false,
         'ipfs.object.new': false
       }
@@ -239,7 +239,7 @@ describe('pages/proxy-acl/store', () => {
     emitter.emit.callThrough()
 
     // Now attempt revoke all grants
-    const e = createMockEvent({ 'data-origin': 'http://ipfs.io' })
+    const e = createMockEvent({ 'data-origin': 'http://ipfs.io/' })
     emitter.emit('revoke', e)
 
     acl = await accessControl.getAcl()
@@ -256,8 +256,8 @@ describe('pages/proxy-acl/store', () => {
     const emitter = new EventEmitter()
     const state = {}
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.object.new', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.object.new', false)
 
     store(state, emitter)
 
@@ -276,7 +276,7 @@ describe('pages/proxy-acl/store', () => {
     let acl = await accessControl.getAcl()
 
     let expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': false,
         'ipfs.object.new': false
       }
@@ -295,14 +295,14 @@ describe('pages/proxy-acl/store', () => {
       emitter.emit.callThrough()
 
       // Now toggle the access right
-      const e = createMockEvent({ 'data-origin': 'http://ipfs.io', 'data-permission': 'ipfs.files.add', 'data-allow': 'false' })
+      const e = createMockEvent({ 'data-origin': 'http://ipfs.io/', 'data-permission': 'ipfs.files.add', 'data-allow': 'false' })
       emitter.emit('toggleAllow', e)
     })
 
     acl = await accessControl.getAcl()
 
     expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': true,
         'ipfs.object.new': false
       }
