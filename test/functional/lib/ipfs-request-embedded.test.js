@@ -3,7 +3,9 @@ const { describe, it, before, beforeEach, after } = require('mocha')
 const sinon = require('sinon')
 const { expect } = require('chai')
 const { URL } = require('url')
+const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
+const createFeatureDetector = require('../../../add-on/src/lib/feature-detector')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
 const createDnsLink = require('../../../add-on/src/lib/dns-link')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
@@ -14,13 +16,14 @@ const url2request = (string) => {
 }
 
 describe('modifyRequest with embedded ipfsNodeType', function () {
-  let state, dnsLink, ipfsPathValidator, modifyRequest
+  let state, featureDetector, dnsLink, ipfsPathValidator, modifyRequest
 
   before(() => {
     global.URL = URL
+    global.browser = browser
   })
 
-  beforeEach(() => {
+  beforeEach(async () => {
     state = Object.assign(initState(optionDefaults), {
       ipfsNodeType: 'embedded',
       peerCount: 1,
@@ -30,9 +33,10 @@ describe('modifyRequest with embedded ipfsNodeType', function () {
       pubGwURLString: 'https://ipfs.io'
     })
     const getState = () => state
-    dnsLink = createDnsLink(getState)
+    featureDetector = await createFeatureDetector(getState, browser)
+    dnsLink = createDnsLink(getState, featureDetector)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
+    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, featureDetector)
   })
 
   describe('request for a path matching /ipfs/{CIDv0}', function () {
@@ -242,5 +246,7 @@ describe('modifyRequest with embedded ipfsNodeType', function () {
 
   after(() => {
     delete global.URL
+    delete global.browser
+    browser.flush()
   })
 })

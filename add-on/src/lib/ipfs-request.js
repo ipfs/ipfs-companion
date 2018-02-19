@@ -3,9 +3,8 @@
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
-const { embeddedNodeIsActive } = require('./state')
 
-function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
+function createRequestModifier (getState, dnsLink, ipfsPathValidator, featureDetector) {
   return function modifyRequest (request) {
     const state = getState()
 
@@ -37,9 +36,9 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
     }
 
     // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
-    if (embeddedNodeIsActive(state) && request.url.startsWith(state.pubGwURLString)) {
+    if (featureDetector.embeddedNodeIsActive() && request.url.startsWith(state.pubGwURLString)) {
       return
-      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if browserWithNativeProtocol() === true
+      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if inBrowserWithNativeProtocol() === true
     }
 
     // handle redirects to custom gateway
@@ -50,7 +49,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       }
       // Detect valid /ipfs/ and /ipns/ on any site
       if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url)) {
-        return redirectToIpfsTransport(request.url, state)
+        return redirectToIpfsTransport(request.url, state, featureDetector)
       }
       // Look for dnslink in TXT records of visited sites
       if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
@@ -62,9 +61,9 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
 
 exports.createRequestModifier = createRequestModifier
 
-function redirectToIpfsTransport (requestUrl, state) {
-  // TODO: redirect to `ipfs://` if browserWithNativeProtocol() === true
-  const gwUrl = embeddedNodeIsActive(state) ? state.pubGwURL : state.gwURL
+function redirectToIpfsTransport (requestUrl, state, featureDetector) {
+  // TODO: redirect to `ipfs://` if inBrowserWithNativeProtocol() === true
+  const gwUrl = featureDetector.embeddedNodeIsActive() ? state.pubGwURL : state.gwURL
   const url = new URL(requestUrl)
   url.protocol = gwUrl.protocol
   url.host = gwUrl.host
