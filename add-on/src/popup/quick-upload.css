@@ -1,4 +1,4 @@
-@import url('../../tachyons.css');
+@import url('../../ui-kit/tachyons.css');
 @import url('heartbeat.css');
 
 html, body, #root {
