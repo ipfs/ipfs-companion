@@ -18,12 +18,17 @@ function createRequestAccess (browser, screen) {
     const top = Math.round(((screen.width / 2) - (width / 2)) + currentWin.left)
     const left = Math.round(((screen.height / 2) - (height / 2)) + currentWin.top)
 
-    const { tabs } = await browser.windows.create({ url, width, height, top, left, type: 'popup' })
+    const dialogWindow = await browser.windows.create({ url, width, height, top, left, type: 'popup' })
+    const dialogTabId = dialogWindow.tabs[0].id
+    // Fix for Fx57 bug where bundled page loaded using
+    // browser.windows.create won't show contents unless resized.
+    // See https://bugzilla.mozilla.org/show_bug.cgi?id=1402110
+    await browser.windows.update(dialogWindow.id, {width: dialogWindow.width + 1})
 
     // Resolves with { allow, wildcard }
-    const userResponse = getUserResponse(tabs[0].id, scope, permission, opts)
+    const userResponse = getUserResponse(dialogTabId, scope, permission, opts)
     // Never resolves, might reject if user closes the tab
-    const userTabRemoved = getUserTabRemoved(tabs[0].id, scope, permission)
+    const userTabRemoved = getUserTabRemoved(dialogTabId, scope, permission)
 
     let response
 
@@ -35,7 +40,7 @@ function createRequestAccess (browser, screen) {
       userResponse.destroy()
     }
 
-    await browser.tabs.remove(tabs[0].id)
+    await browser.tabs.remove(dialogTabId)
 
     return response
   }
