@@ -4,7 +4,7 @@
 const IsIpfs = require('is-ipfs')
 const { LRUMap } = require('lru_map')
 
-module.exports = function createDnsLink (getState, featureDetector) {
+module.exports = function createDnsLink (getState) {
   const cache = new LRUMap(1000)
 
   const dnsLink = {
@@ -85,10 +85,10 @@ module.exports = function createDnsLink (getState, featureDetector) {
     },
 
     redirectToIpnsPath (originalUrl) {
-      // TODO: redirect to `ipns://` if inBrowserWithNativeProtocol() === true
+      // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
       const fqdn = originalUrl.hostname
       const state = getState()
-      const gwUrl = featureDetector.embeddedNodeIsActive() ? state.pubGwURL : state.gwURL
+      const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
       const url = new URL(originalUrl)
       url.protocol = gwUrl.protocol
       url.host = gwUrl.host

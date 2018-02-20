@@ -5,7 +5,6 @@ const { expect } = require('chai')
 const { URL } = require('url')
 const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
-const createFeatureDetector = require('../../../add-on/src/lib/feature-detector')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
 const createDnsLink = require('../../../add-on/src/lib/dns-link')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
@@ -16,7 +15,7 @@ const url2request = (string) => {
 }
 
 describe('modifyRequest with external ipfsNodeType', function () {
-  let state, featureDetector, dnsLink, ipfsPathValidator, modifyRequest
+  let state, dnsLink, ipfsPathValidator, modifyRequest
 
   before(() => {
     global.URL = URL
@@ -32,10 +31,9 @@ describe('modifyRequest with external ipfsNodeType', function () {
       gwURLString: 'http://127.0.0.1:8080'
     })
     const getState = () => state
-    featureDetector = await createFeatureDetector(getState, browser)
-    dnsLink = createDnsLink(getState, featureDetector)
+    dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, featureDetector)
+    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
   })
 
   describe('request for a path matching /ipfs/{CIDv0}', function () {

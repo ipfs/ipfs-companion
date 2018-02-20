@@ -15,7 +15,7 @@ function getPlatformInfo (browser) {
   return Promise.resolve()
 }
 
-async function createFeatureDetector (getState, browser) {
+async function createRuntimeChecks (browser) {
   // browser
   const browserInfo = await getBrowserInfo(browser)
   const runtimeBrowserName = browserInfo ? browserInfo.name : 'unknown'
@@ -25,27 +25,11 @@ async function createFeatureDetector (getState, browser) {
   const platformInfo = await getPlatformInfo(browser)
   const runtimeIsAndroid = platformInfo ? platformInfo.os === 'android' : false
   //
-  return {
-    getState () {
-      return getState()
-    },
-
-    inFirefox () {
-      return runtimeIsFirefox
-    },
-
-    inAndroid () {
-      return runtimeIsAndroid
-    },
-
-    embeddedNodeIsActive () {
-      return getState().ipfsNodeType === 'embedded'
-    },
-
-    inBrowserWithNativeProtocol () {
-      return runtimeHasNativeProtocol
-    }
-  }
+  return Object.freeze({
+    isFirefox: runtimeIsFirefox,
+    isAndroid: runtimeIsAndroid,
+    hasNativeProtocolHandler: runtimeHasNativeProtocol
+  })
 }
 
-module.exports = createFeatureDetector
+module.exports = createRuntimeChecks

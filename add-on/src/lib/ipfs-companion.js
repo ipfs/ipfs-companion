@@ -11,7 +11,7 @@ const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
-const createFeatureDetector = require('./feature-detector')
+const createRuntimeChecks = require('./runtime-checks')
 const { createContextMenus, findUrlForContext } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 
@@ -26,7 +26,7 @@ module.exports = async function init () {
   var modifyRequest
   var notify
   var copier
-  var featureDetector
+  var runtime
   var contextMenus
   var apiStatusUpdateInterval
   var ipfsProxy
@@ -35,19 +35,19 @@ module.exports = async function init () {
 
   try {
     const options = await browser.storage.local.get(optionDefaults)
+    runtime = await createRuntimeChecks(browser)
     state = initState(options)
     ipfs = await initIpfsClient(state)
     notify = createNotifier(getState)
     copier = createCopier(getState, notify)
-    featureDetector = await createFeatureDetector(getState, browser)
-    dnsLink = createDnsLink(getState, featureDetector)
+    dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
     contextMenus = createContextMenus(getState, ipfsPathValidator, {
       onUploadToIpfs: addFromURL,
       onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, featureDetector)
+    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
     ipfsProxy = createIpfsProxy(() => ipfs, getState)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -76,7 +76,7 @@ module.exports = async function init () {
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
    // browser.protocol exists only in Brave
-    if (featureDetector.inBrowserWithNativeProtocol()) {
+    if (runtime.hasNativeProtocolHandler) {
       console.log(`[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler`)
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
@@ -209,7 +209,7 @@ module.exports = async function init () {
     const srcUrl = await findUrlForContext(info)
     let result
     try {
-      if (featureDetector.inFirefox()) {
+      if (runtime.isFirefox) {
         // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
         const fetchOptions = {
           cache: 'force-cache',
@@ -251,21 +251,21 @@ module.exports = async function init () {
   // TODO: feature detect and push to client type specific modules.
   function getIpfsPathAndNativeAddress (hash) {
     const path = `/ipfs/${hash}`
-    if (featureDetector.embeddedNodeIsActive() && featureDetector.inBrowserWithNativeProtocol()) {
-      return {path, nativeAddress: `ipfs://${hash}`}
+    if (runtime.hasNativeProtocolHandler) {
+      return {path, url: `ipfs://${hash}`}
     } else {
       // open at public GW (will be redirected to local elsewhere, if enabled)
       const url = new URL(path, state.pubGwURLString).toString()
-      return {path, nativeAddress: url}
+      return {path, url: url}
     }
   }
 
   function uploadResultHandler (result) {
     result.forEach(function (file) {
       if (file && file.hash) {
-        const {path, nativeAddress} = getIpfsPathAndNativeAddress(file.hash)
+        const {path, url} = getIpfsPathAndNativeAddress(file.hash)
         browser.tabs.create({
-          'url': nativeAddress
+          'url': url
         })
         console.info('[ipfs-companion] successfully stored', path)
         if (state.preloadAtPublicGateway) {
@@ -483,7 +483,7 @@ module.exports = async function init () {
     // enable/disable gw redirect based on API going online or offline
     // newPeerCount === -1 currently implies node is offline.
     // TODO: use `node.isOnline()` if available (js-ipfs)
-    if (state.automaticMode && !featureDetector.embeddedNodeIsActive()) {
+    if (state.automaticMode && state.ipfsNodeType !== 'embedded') {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         browser.storage.local.set({useCustomGateway: true})
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))

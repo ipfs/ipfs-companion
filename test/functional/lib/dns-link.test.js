@@ -3,7 +3,6 @@ const { describe, it, before, after } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
 const createDnsLink = require('../../../add-on/src/lib/dns-link')
-const createFeatureDetector = require('../../../add-on/src/lib/feature-detector')
 
 // https://github.com/ipfs/ipfs-companion/issues/303
 describe('DNSLINK', function () {
@@ -19,8 +18,7 @@ describe('DNSLINK', function () {
         pubGwURL: new URL('https://ipfs.io'),
         ipfsNodeType: 'external'
       })
-      const featureDetector = await createFeatureDetector(getState)
-      const dnsLink = createDnsLink(getState, featureDetector)
+      const dnsLink = createDnsLink(getState)
       expect(dnsLink.redirectToIpnsPath(url).redirectUrl)
         .to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
     })
@@ -34,8 +32,7 @@ describe('DNSLINK', function () {
         pubGwURL: new URL('https://ipfs.io'),
         ipfsNodeType: 'embedded'
       })
-      const featureDetector = await createFeatureDetector(getState)
-      const dnsLink = createDnsLink(getState, featureDetector)
+      const dnsLink = createDnsLink(getState)
       expect(dnsLink.redirectToIpnsPath(url).redirectUrl)
         .to.equal('https://ipfs.io/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
     })

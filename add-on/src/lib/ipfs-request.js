@@ -4,7 +4,7 @@
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
 
-function createRequestModifier (getState, dnsLink, ipfsPathValidator, featureDetector) {
+function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
   return function modifyRequest (request) {
     const state = getState()
 
@@ -36,9 +36,9 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, featureDet
     }
 
     // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
-    if (featureDetector.embeddedNodeIsActive() && request.url.startsWith(state.pubGwURLString)) {
+    if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
       return
-      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if inBrowserWithNativeProtocol() === true
+      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
     }
 
     // handle redirects to custom gateway
@@ -49,7 +49,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, featureDet
       }
       // Detect valid /ipfs/ and /ipns/ on any site
       if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url)) {
-        return redirectToIpfsTransport(request.url, state, featureDetector)
+        return redirectToGateway(request.url, state)
       }
       // Look for dnslink in TXT records of visited sites
       if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
@@ -61,9 +61,9 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, featureDet
 
 exports.createRequestModifier = createRequestModifier
 
-function redirectToIpfsTransport (requestUrl, state, featureDetector) {
-  // TODO: redirect to `ipfs://` if inBrowserWithNativeProtocol() === true
-  const gwUrl = featureDetector.embeddedNodeIsActive() ? state.pubGwURL : state.gwURL
+function redirectToGateway (requestUrl, state) {
+  // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
+  const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
   const url = new URL(requestUrl)
   url.protocol = gwUrl.protocol
   url.host = gwUrl.host
