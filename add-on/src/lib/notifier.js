@@ -11,7 +11,7 @@ function createNotifier (getState) {
     } else {
       message = messageKey
     }
-    if (getState().displayNotifications) {
+    if (getState().displayNotifications && browser && browser.notifications.create) {
       browser.notifications.create({
         type: 'basic',
         iconUrl: browser.extension.getURL('icons/ipfs-logo-on.svg'),

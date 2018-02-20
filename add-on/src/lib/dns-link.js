@@ -84,10 +84,15 @@ module.exports = function createDnsLink (getState) {
       }
     },
 
-    redirectToIpnsPath (url) {
-      const fqdn = url.hostname
-      url.protocol = getState().gwURL.protocol
-      url.host = getState().gwURL.host
+    redirectToIpnsPath (originalUrl) {
+      // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
+      const fqdn = originalUrl.hostname
+      const state = getState()
+      const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
+      const url = new URL(originalUrl)
+      url.protocol = gwUrl.protocol
+      url.host = gwUrl.host
+      url.port = gwUrl.port
       url.pathname = `/ipns/${fqdn}${url.pathname}`
       return { redirectUrl: url.toString() }
     }

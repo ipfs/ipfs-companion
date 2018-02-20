@@ -21,7 +21,7 @@ async function copyTextToClipboard (copyText) {
 
   // In Firefox you can't select text or focus an input field in background pages,
   // so you can't write to the clipboard from a background page.
-  // We work around this limitation by injecting content scropt into a tab and copying there.
+  // We work around this limitation by injecting content script into a tab and copying there.
   // Yes, this is 2017.
   try {
     const copyHelperPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof copyToClipboardIn2017 === 'function';" }))[0]
