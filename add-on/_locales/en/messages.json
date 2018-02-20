@@ -355,22 +355,22 @@
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $PERMISSION$ for $ORIGIN$?",
-    "description": "Confirmation message for revoking a permission for an origin (page_proxyAcl_confirm_revoke)",
+    "message": "Revoke permission $PERMISSION$ for $SCOPE$?",
+    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)",
     "placeholders": {
       "permission": {
         "content": "$1"
       },
-      "origin": {
+      "scope": {
         "content": "$2"
       }
     }
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $ORIGIN$?",
-    "description": "Confirmation message for revoking all permissions for an origin (page_proxyAcl_confirm_revoke_all)",
+    "message": "Revoke all permissions for $SCOPE$?",
+    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)",
     "placeholders": {
-      "origin": {
+      "scope": {
         "content": "$1"
       }
     }
@@ -401,10 +401,10 @@
     }
   },
   "page_proxyAccessDialog_title": {
-    "message": "Allow $ORIGIN$ to access ipfs.$PERMISSION$?",
+    "message": "Allow $SCOPE$ to access ipfs.$PERMISSION$?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)",
     "placeholders": {
-      "origin": {
+      "scope": {
         "content": "$1"
       },
       "permission": {
@@ -413,13 +413,8 @@
     }
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply to all permissions for $ORIGIN$",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)",
-    "placeholders": {
-      "origin": {
-        "content": "$1"
-      }
-    }
+    "message": "Apply this decision to all permissions in this scope",
+    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
     "message": "Revoke all permissions",

@@ -8,20 +8,20 @@ function createProxyAccessDialogPage (i18n) {
     const onDeny = () => emit('deny')
     const onWildcardToggle = () => emit('wildcardToggle')
 
-    const { loading, origin, permission } = state
+    const { loading, scope, permission } = state
 
     return html`
       <div class="flex flex-column pa3 h-100">
-        <div class="flex-auto">
+        <div class="flex-auto" style="min-height:auto">
           ${loading ? null : html`
             <div>
-              <h1 class="sans-serif f5 lh-copy charcoal mt0">
-                ${i18n.getMessage('page_proxyAccessDialog_title', [origin, permission])}
+              <h1 class="sans-serif f5 lh-copy charcoal mt0" style="word-break:break-word">
+                ${i18n.getMessage('page_proxyAccessDialog_title', [scope, permission])}
               </h1>
               <p class="sans-serif f6 lh-copy charcoal-muted">
                 <label>
                   <input type="checkbox" checked=${state.wildcard} onclick=${onWildcardToggle} class="mr1" />
-                  ${i18n.getMessage('page_proxyAccessDialog_wildcardCheckbox_label', origin)}
+                  ${i18n.getMessage('page_proxyAccessDialog_wildcardCheckbox_label', scope)}
                 </label>
               </p>
             </div>

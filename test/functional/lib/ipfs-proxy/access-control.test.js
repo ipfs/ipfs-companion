@@ -19,23 +19,23 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(acl).to.deep.equal(new Map())
 
     const sets = [
-      ['http://ipfs.io', 'ipfs.files.add', true],
-      ['https://ipld.io', 'ipfs.object.new', false],
-      ['https://filecoin.io', 'ipfs.pubsub.subscribe', true],
-      ['https://filecoin.io', 'ipfs.pubsub.subscribe', false],
-      ['https://filecoin.io', 'ipfs.pubsub.publish', true]
+      ['http://ipfs.io/', 'ipfs.files.add', true],
+      ['https://ipld.io/', 'ipfs.object.new', false],
+      ['https://filecoin.io/', 'ipfs.pubsub.subscribe', true],
+      ['https://filecoin.io/', 'ipfs.pubsub.subscribe', false],
+      ['https://filecoin.io/', 'ipfs.pubsub.publish', true]
     ]
 
     await Promise.all(sets.map(s => accessControl.setAccess(...s)))
 
     const expectedAcl = objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': true
       },
-      'https://ipld.io': {
+      'https://ipld.io/': {
         'ipfs.object.new': false
       },
-      'https://filecoin.io': {
+      'https://filecoin.io/': {
         'ipfs.pubsub.subscribe': false,
         'ipfs.pubsub.publish': true
       }
@@ -48,32 +48,62 @@ describe('lib/ipfs-proxy/access-control', () => {
 
   it('should allow access for wildcard allow', async () => {
     const accessControl = new AccessControl(new Storage())
-    let access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    let access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
     expect(access).to.equal(null)
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', true)
+    await accessControl.setAccess('https://ipfs.io/', '*', true)
 
-    access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
-    const expectedAccess = { origin: 'https://ipfs.io', permission: 'files.add', allow: true }
+    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
   })
 
-  it('should deny access for wildcard deny', async () => {
+  it('should allow access for wildcard allow with deeper scope', async () => {
     const accessControl = new AccessControl(new Storage())
-    let access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    let access = await accessControl.getAccess('https://ipfs.io/docs/install/', 'files.add')
 
     expect(access).to.equal(null)
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', true)
 
-    access = await accessControl.getAccess('https://ipfs.io', 'files.add')
+    access = await accessControl.getAccess('https://ipfs.io/docs/install/', 'files.add')
 
-    const expectedAccess = { origin: 'https://ipfs.io', permission: 'files.add', allow: false }
+    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: true }
+
+    expect(access).to.deep.equal(expectedAccess)
+  })
+
+  it('should not have access for wildcard allow with shallower scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access = await accessControl.getAccess('https://ipfs.io/docs/', 'files.add')
+
+    expect(access).to.equal(null)
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io/docs/install/', '*', true)
+
+    access = await accessControl.getAccess('https://ipfs.io/docs/', 'files.add')
+
+    expect(access).to.equal(null)
+  })
+
+  it('should deny access for wildcard deny', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
+
+    expect(access).to.equal(null)
+
+    // Add wildcard
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
+
+    access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
+
+    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: false }
 
     expect(access).to.deep.equal(expectedAccess)
   })
@@ -81,14 +111,14 @@ describe('lib/ipfs-proxy/access-control', () => {
   it('should clear existing grants when setting wildcard access', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    await accessControl.setAccess('https://ipfs.io', 'files.add', false)
-    await accessControl.setAccess('https://ipfs.io', 'object.new', true)
-    await accessControl.setAccess('https://ipfs.io', 'config.set', false)
+    await accessControl.setAccess('https://ipfs.io/', 'files.add', false)
+    await accessControl.setAccess('https://ipfs.io/', 'object.new', true)
+    await accessControl.setAccess('https://ipfs.io/', 'config.set', false)
 
     let acl = await accessControl.getAcl()
 
     let expectedAcl = objToAcl({
-      'https://ipfs.io': {
+      'https://ipfs.io/': {
         'files.add': false,
         'object.new': true,
         'config.set': false
@@ -98,12 +128,12 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(acl).to.deep.equal(expectedAcl)
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
     acl = await accessControl.getAcl()
 
     expectedAcl = objToAcl({
-      'https://ipfs.io': {
+      'https://ipfs.io/': {
         '*': false
       }
     })
@@ -115,12 +145,12 @@ describe('lib/ipfs-proxy/access-control', () => {
     const accessControl = new AccessControl(new Storage())
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
     let error
 
     try {
-      await accessControl.setAccess('https://ipfs.io', 'files.add', true)
+      await accessControl.setAccess('https://ipfs.io/', 'files.add', true)
     } catch (err) {
       error = err
     }
@@ -132,12 +162,12 @@ describe('lib/ipfs-proxy/access-control', () => {
     const accessControl = new AccessControl(new Storage())
 
     // Add wildcard
-    await accessControl.setAccess('https://ipfs.io', '*', false)
+    await accessControl.setAccess('https://ipfs.io/', '*', false)
 
     let error
 
     try {
-      await accessControl.setAccess('https://ipfs.io', 'files.add', false)
+      await accessControl.setAccess('https://ipfs.io/', 'files.add', false)
     } catch (err) {
       error = err
     }
@@ -145,20 +175,20 @@ describe('lib/ipfs-proxy/access-control', () => {
     expect(() => { if (error) throw error }).to.not.throw()
   })
 
-  it('should get granted access for origin and permission', async () => {
+  it('should get granted access for scope and permission', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    let access = await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', true)
-    const expectedAccess = { origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: true }
+    let access = await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', true)
+    const expectedAccess = { scope: 'http://ipfs.io/', permission: 'ipfs.files.add', allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
 
-    access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
     expect(access).to.deep.equal(expectedAccess)
   })
 
-  it('should not get access if origin is invalid', async () => {
+  it('should not get access if scope is invalid', async () => {
     const accessControl = new AccessControl(new Storage())
     let error
 
@@ -168,7 +198,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
   })
 
   it('should not get access if permission is invalid', async () => {
@@ -176,7 +206,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.getAccess('http://ipfs.io', 138)
+      await accessControl.getAccess('http://ipfs.io/', 138)
     } catch (err) {
       error = err
     }
@@ -186,22 +216,22 @@ describe('lib/ipfs-proxy/access-control', () => {
 
   it('should return null for missing grant', async () => {
     const accessControl = new AccessControl(new Storage())
-    const access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    const access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
     expect(access).to.equal(null)
   })
 
-  it('should not set access if origin is invalid', async () => {
+  it('should not set access if scope is invalid', async () => {
     const accessControl = new AccessControl(new Storage())
     let error
 
     try {
-      await accessControl.setAccess('NOT A VALID ORIGIN', 'ipfs.files.add', true)
+      await accessControl.setAccess('NOT A VALID SCOPE', 'ipfs.files.add', true)
     } catch (err) {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
 
     try {
       await accessControl.setAccess(138, 'ipfs.files.add', true)
@@ -209,7 +239,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
   })
 
   it('should not set access if permission is invalid', async () => {
@@ -217,7 +247,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.setAccess('http://ipfs.io', 138, true)
+      await accessControl.setAccess('http://ipfs.io/', 138, true)
     } catch (err) {
       error = err
     }
@@ -230,7 +260,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', 'true')
+      await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', 'true')
     } catch (err) {
       error = err
     }
@@ -244,14 +274,14 @@ describe('lib/ipfs-proxy/access-control', () => {
 
       accessControl.on('change', changes => {
         expect(changes).to.deep.equal(objToAcl({
-          'http://ipfs.io': {
+          'http://ipfs.io/': {
             'ipfs.files.add': false
           }
         }))
         resolve()
       })
 
-      accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
+      accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
     })
   })
 
@@ -271,14 +301,14 @@ describe('lib/ipfs-proxy/access-control', () => {
   it('should revoke granted access', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    let access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    let access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
-    expect(access).to.deep.equal({ origin: 'http://ipfs.io', permission: 'ipfs.files.add', allow: false })
+    expect(access).to.deep.equal({ scope: 'http://ipfs.io/', permission: 'ipfs.files.add', allow: false })
 
-    await accessControl.revokeAccess('http://ipfs.io', 'ipfs.files.add')
+    await accessControl.revokeAccess('http://ipfs.io/', 'ipfs.files.add')
 
-    access = await accessControl.getAccess('http://ipfs.io', 'ipfs.files.add')
+    access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
     expect(access).to.equal(null)
   })
@@ -286,36 +316,36 @@ describe('lib/ipfs-proxy/access-control', () => {
   it('should revoke all granted access if no permission specified', async () => {
     const accessControl = new AccessControl(new Storage())
 
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.files.add', false)
-    await accessControl.setAccess('http://ipfs.io', 'ipfs.block.put', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
+    await accessControl.setAccess('http://ipfs.io/', 'ipfs.block.put', false)
 
     let acl = await accessControl.getAcl()
 
     expect(acl).to.deep.equal(objToAcl({
-      'http://ipfs.io': {
+      'http://ipfs.io/': {
         'ipfs.files.add': false,
         'ipfs.block.put': false
       }
     }))
 
-    await accessControl.revokeAccess('http://ipfs.io')
+    await accessControl.revokeAccess('http://ipfs.io/')
 
     acl = await accessControl.getAcl()
 
-    expect(acl).to.deep.equal(objToAcl({ 'http://ipfs.io': {} }))
+    expect(acl).to.deep.equal(objToAcl({ 'http://ipfs.io/': {} }))
   })
 
-  it('should not revoke access if origin is invalid', async () => {
+  it('should not revoke access if scope is invalid', async () => {
     const accessControl = new AccessControl(new Storage())
     let error
 
     try {
-      await accessControl.revokeAccess('NOT A VALID ORIGIN', 'ipfs.files.add')
+      await accessControl.revokeAccess('NOT A VALID SCOPE', 'ipfs.files.add')
     } catch (err) {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Invalid origin')
+    expect(() => { if (error) throw error }).to.throw('Invalid scope')
   })
 
   it('should not revoke access if permission is invalid', async () => {
@@ -323,12 +353,436 @@ describe('lib/ipfs-proxy/access-control', () => {
     let error
 
     try {
-      await accessControl.revokeAccess('http://ipfs.io', 138)
+      await accessControl.revokeAccess('http://ipfs.io/', 138)
     } catch (err) {
       error = err
     }
 
     expect(() => { if (error) throw error }).to.throw('Invalid permission')
+  })
+
+  it('should allow to all paths above root scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/', 'files.add', true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(true)
+  })
+
+  it('should deny to all paths below root scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/', 'files.add', false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(false)
+  })
+
+  it('should allow to paths in scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', 'files.add', true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/other', 'files.add')
+    expect(access).to.equal(null)
+  })
+
+  it('should deny to paths in scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', 'files.add', false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/other', 'files.add')
+    expect(access).to.equal(null)
+  })
+
+  it('should allow to paths in scope and no access for paths above scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps/uk', 'files.add', true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/', 'files.add')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/', 'files.add')
+    expect(access).to.equal(null)
+  })
+
+  it('should deny to paths in scope and no access for paths above scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps/uk', 'files.add', false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/', 'files.add')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/', 'files.add')
+    expect(access).to.equal(null)
+  })
+
+  it('should shadow allow with deny in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', 'files.add', true)
+    await accessControl.setAccess('https://www.google.com/maps/uk', 'files.add', false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(false)
+  })
+
+  it('should shadow deny with allow in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', 'files.add', false)
+    await accessControl.setAccess('https://www.google.com/maps/uk', 'files.add', true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(true)
+  })
+
+  it('should shadow allow with deny wildcard in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', 'files.add', true)
+    await accessControl.setAccess('https://www.google.com/maps/uk', '*', false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'object.new')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'object.new')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'object.new')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'object.new')
+    expect(access.allow).to.equal(false)
+  })
+
+  it('should shadow deny with allow wildcard in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', 'files.add', false)
+    await accessControl.setAccess('https://www.google.com/maps/uk', '*', true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'object.new')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'object.new')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'object.new')
+    expect(access).to.equal(null)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'object.new')
+    expect(access.allow).to.equal(true)
+  })
+
+  it('should shadow allow wildcard with deny in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', '*', true)
+    await accessControl.setAccess('https://www.google.com/maps/uk', 'files.add', false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'object.new')
+    expect(access.allow).to.equal(true)
+  })
+
+  it('should shadow deny wildcard with allow in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', '*', false)
+    await accessControl.setAccess('https://www.google.com/maps/uk', 'files.add', true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'object.new')
+    expect(access.allow).to.equal(false)
+  })
+
+  it('should shadow allow wildcard with deny wildcard in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', '*', true)
+    await accessControl.setAccess('https://www.google.com/maps/uk', '*', false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'object.new')
+    expect(access.allow).to.equal(false)
+  })
+
+  it('should shadow deny wildcard with allow wildcard in below scope', async () => {
+    const accessControl = new AccessControl(new Storage())
+    let access
+
+    await accessControl.setAccess('https://www.google.com/maps', '*', false)
+    await accessControl.setAccess('https://www.google.com/maps/uk', '*', true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/mapsearch', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'files.add')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/usa', 'object.new')
+    expect(access.allow).to.equal(false)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/ukraine', 'object.new')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'files.add')
+    expect(access.allow).to.equal(true)
+
+    access = await accessControl.getAccess('https://www.google.com/maps/uk/london', 'object.new')
+    expect(access.allow).to.equal(true)
   })
 
   it('should destroy itself', () => {

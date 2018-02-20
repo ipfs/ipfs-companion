@@ -16,11 +16,11 @@ describe('pages/proxy-acl/page', () => {
     expect(res.toString()).to.have.string('page_proxyAcl_no_perms')
   })
 
-  it('should render with single origin ACL and single allowed permission', async () => {
+  it('should render with single scope ACL and single allowed permission', async () => {
     const i18n = createMockI18n()
     const state = {
       acl: objToAcl({
-        'https://ipfs.io': {
+        'https://ipfs.io/': {
           'ipfs.files.add': true
         }
       })
@@ -35,11 +35,11 @@ describe('pages/proxy-acl/page', () => {
     expect(res).to.have.string('ipfs.files.add')
   })
 
-  it('should render with single origin ACL and single denied permission', async () => {
+  it('should render with single scope ACL and single denied permission', async () => {
     const i18n = createMockI18n()
     const state = {
       acl: objToAcl({
-        'https://ipfs.io': {
+        'https://ipfs.io/': {
           'ipfs.files.add': false
         }
       })
@@ -54,11 +54,11 @@ describe('pages/proxy-acl/page', () => {
     expect(res).to.have.string('ipfs.files.add')
   })
 
-  it('should render with single origin ACL and multiple permissions', async () => {
+  it('should render with single scope ACL and multiple permissions', async () => {
     const i18n = createMockI18n()
     const state = {
       acl: objToAcl({
-        'https://ipfs.io': {
+        'https://ipfs.io/': {
           'ipfs.files.add': true,
           'ipfs.object.new': false
         }
@@ -76,15 +76,15 @@ describe('pages/proxy-acl/page', () => {
     expect(res).to.have.string('ipfs.object.new')
   })
 
-  it('should render with multiple origins and multiple permissions', async () => {
+  it('should render with multiple scopes and multiple permissions', async () => {
     const i18n = createMockI18n()
     const state = {
       acl: objToAcl({
-        'https://ipfs.io': {
+        'https://ipfs.io/': {
           'ipfs.files.add': false,
           'ipfs.object.new': true
         },
-        'https://ipld.io': {
+        'https://ipld.io/': {
           'ipfs.block.put': true
         }
       })
@@ -94,8 +94,8 @@ describe('pages/proxy-acl/page', () => {
 
     expect(() => { res = createProxyAclPage(i18n)(state).toString() }).to.not.throw()
 
-    expect(res).to.have.string('https://ipfs.io')
-    expect(res).to.have.string('https://ipld.io')
+    expect(res).to.have.string('https://ipfs.io/')
+    expect(res).to.have.string('https://ipld.io/')
     expect(res).to.have.string('page_proxyAcl_toggle_to_allow_button_title')
     expect(res).to.have.string('page_proxyAcl_toggle_to_deny_button_title')
     expect(res).to.have.string('ipfs.files.add')
