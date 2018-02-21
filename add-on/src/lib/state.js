@@ -1,10 +1,13 @@
 'use strict'
-/* eslint-env browser */
+/* eslint-env browser, webextensions */
+
+const offlinePeerCount = -1
 
 function initState (options) {
   const state = {}
   // we store the most used values in optimized form
   // to minimize performance impact on overall browsing experience
+  state.peerCount = offlinePeerCount
   state.ipfsNodeType = options.ipfsNodeType
   state.pubGwURL = new URL(options.publicGatewayUrl)
   state.pubGwURLString = state.pubGwURL.toString()
@@ -24,3 +27,4 @@ function initState (options) {
 }
 
 exports.initState = initState
+exports.offlinePeerCount = offlinePeerCount
