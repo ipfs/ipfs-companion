@@ -1,4 +1,5 @@
 @import url('../../../ui-kit/tachyons.css');
+@import url('../heartbeat.css');
 @import url('mdc.switch.css');
 
 .bg-near-white--hover:hover {
