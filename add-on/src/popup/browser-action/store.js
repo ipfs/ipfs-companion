@@ -156,13 +156,13 @@ module.exports = (state, emitter) => {
   async function updatePageActionsState (status) {
     // IPFS contexts require access to background page
     // which is denied in Private Browsing mode
-    const bg = await getBackgroundPage(status)
+    const bg = await getBackgroundPage()
 
     // Check if current page is an IPFS one
     const ipfsContext = bg && status && status.ipfsPageActionsContext
 
     state.isIpfsContext = !!ipfsContext
-    state.currentTabUrl = status.currentTab.url
+    state.currentTabUrl = status.currentTab ? status.currentTab.url : null
 
     if (state.isIpfsContext) {
       // There is no point in displaying actions that require API interaction if API is down

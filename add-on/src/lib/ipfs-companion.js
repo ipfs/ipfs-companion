@@ -73,12 +73,12 @@ module.exports = async function init () {
     browser.tabs.onActivated.addListener(onActivatedTab)
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
-   // browser.protocol exists only in Brave
+    // browser.protocol exists only in Brave
     if (browser.protocol && browser.protocol.registerStringProtocol) {
-      console.log(`[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler`)
+      console.log('[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler')
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
-      console.log(`[ipfs-companion] registerStringProtocol not available, native protocol will not be registered`, browser.protocol)
+      console.log('[ipfs-companion] registerStringProtocol not available, native protocol will not be registered', browser.protocol)
     }
   }
 
@@ -156,7 +156,11 @@ module.exports = async function init () {
     const info = {
       ipfsNodeType: state.ipfsNodeType,
       peerCount: state.peerCount,
-      repoStats: state.repoStats,
+      // Convert big.js numbers into strings before sending.
+      // Chrome uses JSON.stringify to send objects over port.postMessage whereas
+      // Firefox uses structured clone. It means that on the other side FF gets
+      // a weird object (not a big.js number object) unless we stringify first.
+      repoStats: JSON.parse(JSON.stringify(state.repoStats)),
       gwURLString: state.gwURLString,
       pubGwURLString: state.pubGwURLString,
       currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
@@ -401,7 +405,7 @@ module.exports = async function init () {
 
   async function updateBrowserActionBadge () {
     if (typeof browser.browserAction.setBadgeBackgroundColor === 'undefined') {
-     // Firefox for Android does not have this UI, so we just skip it
+      // Firefox for Android does not have this UI, so we just skip it
       return
     }
 
