@@ -6,6 +6,7 @@ const html = require('choo/html')
 const navItem = require('./nav-item')
 
 module.exports = function contextActions ({
+  ipfsNodeType,
   isIpfsContext,
   isPinning,
   isUnPinning,
@@ -17,6 +18,7 @@ module.exports = function contextActions ({
   onUnPin
 }) {
   if (!isIpfsContext) return null
+  const isPinningSupported = (ipfsNodeType !== 'embedded')
 
   return html`
     <div class="bb b--black-20 mv2 pb2">
@@ -28,14 +30,14 @@ module.exports = function contextActions ({
         text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
         onClick: onCopyPublicGwAddr
       })}
-      ${isIpfsOnline && isPinned ? null : (
+      ${isIpfsOnline && isPinningSupported && !isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
           disabled: isPinning,
           onClick: onPin
         })
-      )}
-      ${isIpfsOnline && isPinned ? (
+      ) : null}
+      ${isIpfsOnline && isPinningSupported && isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
           disabled: isUnPinning,

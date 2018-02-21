@@ -107,3 +107,5 @@ Each `npm` task can be run separately. The most useful ones are:
   ```bash
   export PATH="/path/to/alternative/version/of/firefox/:${PATH}"
   ```
+
+- [Testing persistent and restart features](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)

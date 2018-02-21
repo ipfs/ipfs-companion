@@ -35,6 +35,12 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       }
     }
 
+    // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
+    if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
+      return
+      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
+    }
+
     // handle redirects to custom gateway
     if (state.redirect) {
       // Ignore preload requests
@@ -43,7 +49,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       }
       // Detect valid /ipfs/ and /ipns/ on any site
       if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url)) {
-        return redirectToCustomGateway(request.url, state.gwURL)
+        return redirectToGateway(request.url, state)
       }
       // Look for dnslink in TXT records of visited sites
       if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
@@ -55,7 +61,9 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
 
 exports.createRequestModifier = createRequestModifier
 
-function redirectToCustomGateway (requestUrl, gwUrl) {
+function redirectToGateway (requestUrl, state) {
+  // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
+  const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
   const url = new URL(requestUrl)
   url.protocol = gwUrl.protocol
   url.host = gwUrl.host
