@@ -12,7 +12,8 @@ module.exports = function operations ({
   onQuickUpload,
   onOpenWebUi,
   onOpenPrefs,
-  onToggleRedirect
+  onToggleRedirect,
+  onOpenChat
 }) {
   return html`
     <div class="bb b--black-20 mv2 pb2">
@@ -27,6 +28,12 @@ module.exports = function operations ({
         navItem({
           text: browser.i18n.getMessage('panel_openWebui'),
           onClick: onOpenWebUi
+        })
+      ) : null}
+      ${ipfsNodeType === 'embedded' && isIpfsOnline ? (
+        navItem({
+          text: 'Open Chat',
+          onClick: onOpenChat
         })
       ) : null}
       ${navItem({

@@ -114,6 +114,16 @@ module.exports = (state, emitter) => {
     }
   })
 
+  emitter.on('openChat', async () => {
+    try {
+      const url = browser.extension.getURL('dist/pages/chat/index.html')
+      await browser.tabs.create({ url })
+      window.close()
+    } catch (err) {
+      console.error('Failed ot open chat', err)
+    }
+  })
+
   emitter.on('openPrefs', () => {
     browser.runtime.openOptionsPage()
       .then(() => window.close())
