@@ -23,7 +23,7 @@ function createChatPage (i18n) {
           </a>
           <h1 class="aqua fw2 montserrat dib ma0 pv2 ph1 v-mid fr f3 lh-copy">Chat</h1>
         </header>
-        <div class="mw8 center">
+        <div class="mw8 center ph2 ph3-l">
           <div class="mb3">
             <label for="name" class="db pb2 w-100 fw2 tracked ttu f5 teal">Name</label>
             <input id="name" type="text" class="f6 db w-100 ph1 pv2 ba border-gray-muted monospace" value=${name} oninput=${onNameChange} />
