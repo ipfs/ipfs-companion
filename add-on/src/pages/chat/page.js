@@ -17,7 +17,7 @@ function createChatPage (i18n) {
 
     return html`
       <div class="sans-serif">
-        <header class="pv3 ph2 ph3-l bg-navy cf mb3">
+        <header class="pv3 ph2 ph3-l bg-navy cf mb4">
           <a href="https://multiformats.io/" title="ipfs.io">
             <img src="https://ipfs.io/images/ipfs-logo.svg" class="v-mid" style="height:50px">
           </a>
@@ -40,8 +40,8 @@ function createChatPage (i18n) {
           </div>
           ${error ? html`<div>${error.message}</div>` : null}
           ${messages.map(msg => html`
-            <div class="mb3 bg-white pa3">
-              <div class="f5 teal mb2">${msg.data.name} @ ${msg.from}</div>
+            <div class="bg-white pv2 ph3">
+              <div class="f7 gray mb2 truncate"><b class="f5 teal">${msg.data.name}</b> <a class="ml1 gray hover-charcoal link" href="https://ipfs.io/ipfs/${msg.from}">${msg.from}</a></div>
               <div class="f5 charcoal">${msg.data.text}</div>
             </div>
           `)}
