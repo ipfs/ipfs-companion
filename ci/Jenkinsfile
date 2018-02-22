@@ -3,29 +3,29 @@ node(label: 'linux') {
         cleanWs()
         checkout scm
         sh 'printenv'
-        sh 'git show-ref --head HEAD | head -c 7 > HEAD'
-        sh 'cat HEAD'
+        sh 'git show-ref --head HEAD | head -c 7 > git-HEAD'
+        sh 'cat git-HEAD'
     }
     stage('ci:install') {
-        sh 'docker build -t ipfs-companion:$(cat HEAD) .'
+        sh 'docker build -t ipfs-companion:$(cat git-HEAD) .'
     }
     catchError {
         stage('ci:test') {
-            sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:$(cat HEAD) npm run ci:test'
+            sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:$(cat git-HEAD) npm run ci:test'
         }
     }
     junit allowEmptyResults: true, testResults: 'test/report.xml'
     catchError {
         stage('ci:build') {
             sh 'mkdir -p $(pwd)/build'
-            sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat HEAD) npm run ci:build'
+            sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat git-HEAD) npm run ci:build'
             archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
         }
         stage('lint:web-ext') {
-            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat HEAD) npm run lint:web-ext'
+            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat git-HEAD) npm run lint:web-ext'
         }
     }
-    sh 'docker rmi -f ipfs-companion:$(cat HEAD)'
+    sh 'docker rmi -f ipfs-companion:$(cat git-HEAD)'
     sh 'ls -lh .'
     sh 'ls -Rlh add-on'
     sh 'ls -Rlh build'
