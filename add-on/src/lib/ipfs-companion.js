@@ -524,6 +524,10 @@ module.exports = async function init () {
           state.ipfsNodeType = change.newValue
           ipfs = await initIpfsClient(state)
           apiStatusUpdate()
+        } else if (key === 'ipfsNodeConfig') {
+          state.ipfsNodeConfig = change.newValue
+          ipfs = await initIpfsClient(state)
+          apiStatusUpdate()
         } else if (key === 'ipfsApiUrl') {
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()

@@ -32,6 +32,7 @@ module.exports = function optionsPage (state, emit) {
     <div>
       ${ipfsNodeForm({
         ipfsNodeType: state.options.ipfsNodeType,
+        ipfsNodeConfig: state.options.ipfsNodeConfig,
         onOptionChange
       })}
       ${gatewaysForm({

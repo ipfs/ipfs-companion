@@ -51,7 +51,7 @@ div:hover {
 div:hover > label > dl > dd {
   color: #333;
 }
-input, select {
+input, textarea, select {
   flex: 1;
   padding: .5em;
   font-family: monospace;
@@ -63,6 +63,7 @@ input, select {
 input[type=text],
 input[type=url],
 input[type=number],
+textarea,
 select {
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
@@ -71,6 +72,7 @@ select {
 input[type=text]:focus,
 input[type=url]:focus,
 input[type=number]:focus,
+textarea:focus,
 select:focus {
   outline: none;
   border: 1px solid #3E9398;
