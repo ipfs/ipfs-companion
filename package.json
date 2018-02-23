@@ -85,7 +85,7 @@
     "ipfs": "0.27.7",
     "ipfs-api": "18.1.1",
     "ipfs-css": "0.2.0",
-    "ipfs-postmsg-proxy": "2.8.0",
+    "ipfs-postmsg-proxy": "2.8.3",
     "is-ipfs": "0.3.2",
     "is-svg": "3.0.0",
     "lru_map": "0.3.3",
