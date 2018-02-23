@@ -4427,9 +4427,9 @@ ipfs-multipart@~0.1.0:
     content "^3.0.0"
     dicer "^0.2.5"
 
-ipfs-postmsg-proxy@2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.8.0.tgz#c247663f078cedf0001c2b107eca5797a5b8b87e"
+ipfs-postmsg-proxy@2.8.3:
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.8.3.tgz#a8ebb6b7ae0ae76d388d6a3422cdb4b469cc45a2"
   dependencies:
     big.js "^5.0.3"
     callbackify "^1.1.0"
