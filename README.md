@@ -82,7 +82,7 @@ Make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your com
 
 Developers and enthusiasts can opt-in for Beta-quality channel with hand-picked Dev Builds:
 
-- Beta for Firefox: [Self-hosted Signed Dev Build](https://ipfs-shipyard.github.io/ipfs-companion/ci/firefox/)
+- Beta for Firefox: [Self-hosted Signed Dev Build](https://ipfs.io/ipfs/QmR8W5wg8BuAyBTruHnHovfWRavwvidVh3qtyinXi6NnLa)
 - Beta for Chrome: [Dev Build at Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
 
 It is also possible to [grab the last successful build from `master`](https://ci.ipfs.team/job/IPFS%20Shipyard/job/ipfs-companion/job/master/lastSuccessfulBuild/),
