@@ -37,7 +37,7 @@
     "test": "run-s test:*",
     "test:functional": " nyc --reporter=lcov --reporter=text mocha --timeout 15000 --require ignore-styles --reporter mocha-jenkins-reporter 'test/functional/**/*.test.js'",
     "lint": "run-s lint:*",
-    "lint:standard": "standard --fix -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
+    "lint:standard": "standard -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s add-on/",
     "precommit": "run-s lint:standard",
     "prepush": "run-s clean build lint test",
