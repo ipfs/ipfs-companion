@@ -62,33 +62,32 @@ _(some are disabled by default, use Preferences screen to enable)_
 - Detect domains with [dnslink](https://github.com/jbenet/go-dnslink) in DNS TXT record and load them from IPFS
 - Make plaintext IPFS links clickable
 - Mirror to IPFS by right click on any image or video
+- Embedded node can be used for uploads even when external API is down
 - [`window.ipfs`](docs/window.ipfs.md) - web pages can access your IPFS node
 
 ## Install
 
-We recommend installing the add-on via your browser's add-on store.
+### Release Channel
+
+We recommend installing the stable release via your browser's add-on store.
 
 | Firefox | Chrome / Chromium |
 |---------|-------------------|
 | [![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/) | [![](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
-`ipfs-companion` is designed to retrieve content from a locally running IPFS daemon. so make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer.
+**Note:** `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.  
+Make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer.
 
-### Modern Firefox (> 53)
+### Beta Channel
 
-Install the latest signed release from [AMO](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/).
+Developers and enthusiasts can opt-in for Beta-quality channel with hand-picked Dev Builds:
 
-It will guarantee automatic updates to the latest version reviewed by Mozilla community.
+- Beta for Firefox: [Self-hosted Signed Dev Build](https://ipfs-shipyard.github.io/ipfs-companion/ci/firefox/)
+- Beta for Chrome: [Dev Build at Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
 
-#### Legacy Firefox (< 53) and XUL-Compatible Browsers
-
-Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
-While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
-For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
-
-### Chrome / Chromium
-
-Install the latest signed release from [Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch).
+It is also possible to [grab the last successful build from `master`](https://ci.ipfs.team/job/IPFS%20Shipyard/job/ipfs-companion/job/master/lastSuccessfulBuild/),
+but these builds are not signed nor will automatically update:
+`.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chrome) or `about:debugging` (Firefox) for the purpose of quick smoke-testing.
 
 
 ## Development or other Browsers Supporting WebExtensions API
@@ -124,6 +123,13 @@ docker run -it -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn build
 ```
 
 Now you can install the extension directly from `build/`
+
+### Legacy Firefox (< 53) and XUL-Compatible Browsers
+
+Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
+While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
+For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
+
 
 ### Brave
 

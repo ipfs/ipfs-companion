@@ -1,0 +1,13 @@
+{
+    "addons": {
+        "ipfs-companion-dev-build@ci.ipfs.team": {
+            "updates": [
+                {
+                    "version": "2.2.0.7583",
+                    "update_hash": "sha256:607a9400dfe198198fd29de2ca4fcee8d195f6835d049e8caf457d6078fcb472",
+                    "update_link": "https://ipfs.io/ipfs/QmXQLH4ib98NLgfhveitd1uK1rGuaKiimKVmrjdg6G7Lp6/ipfs_companion_dev_build_ea5c2af-2.2.0.7583-an+fx.xpi"
+                }
+            ]
+        }
+    }
+}

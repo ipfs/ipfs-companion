@@ -1,7 +1,7 @@
 vendor
 node_modules
 package-lock.json
-firefox
+./firefox/
 cache
 build
 npm-debug.log

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>IPFS Companion: Signed Dev Build for Firefox</title>
+    <link href="https://ipfs-shipyard.github.io/ipfs-companion/assets/css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <h1>IPFS Companion: Signed Dev Build for Firefox</h1>
+      <p id="content">Please wait, fetching dev build info.. :-)</p>
+      <p>(<a href="https://support.mozilla.org/en-US/kb/unable-install-add-ons-extensions-or-themes#w_you-are-asked-to-download-the-add-on-rather-than-installing-it">Read this if you are asked to download the add-on, rather than installing it</a>)
+    </div>
+    <script>
+      const updateManifestUrl = 'https://ipfs-shipyard.github.io/ipfs-companion/ci/firefox/update.json'
+      const fallbackInstallUrl = 'https://ipfs.io/ipfs/QmXQLH4ib98NLgfhveitd1uK1rGuaKiimKVmrjdg6G7Lp6/ipfs_companion_dev_build_ea5c2af-2.2.0.7583-an+fx.xpi'
+
+      function parseVersionString (str) {
+        if (typeof(str) != 'string') { return false }
+        let x = str.split('.')
+        let maj = parseInt(x[0]) || 0
+        let min = parseInt(x[1]) || 0
+        let pat = parseInt(x[2]) || 0
+        let bui = parseInt(x[3]) || 0
+        return { major: maj, minor: min, patch: pat, build: bui }
+      }
+
+      async function init(url)  {
+        let content = document.getElementById('content')
+        try {
+          let manifest = await (await fetch(url)).json()
+          console.log('fetched data', manifest)
+
+          // find latest build
+          let updates = manifest.addons['ipfs-companion-dev-build@ci.ipfs.team'].updates
+          let latest = updates.reduce((acc, val) => {
+            let a = acc ? parseVersionString(acc.version) : null
+            let b = parseVersionString(val.version)
+            if (a && a.major > b.major && a.minor > b.minor &&  a.patch > b.patch && a.build && b.build) {
+              return acc
+            }
+            return val
+          }, null)
+          console.log('latest build', latest.version)
+
+          // Add Install Button
+          let a = document.createElement('a')
+          a.href = latest.update_link
+          a.innerText = latest.version
+          content.innerText = 'Click to install the latest Dev Build: '
+          content.appendChild(a)
+
+        } catch(error) {
+          console.error('error while fetching ' + updateManifestUrl, error)
+          content.innerHTML = `Failed to fetch update.json :-( Try <a href="${fallbackInstallUrl}">this version</a> and then manually force-update via Extensions screen`
+        }
+      }
+
+      init(updateManifestUrl)
+
+    </script>
+  </body>
+</html>
