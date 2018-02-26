@@ -39,6 +39,8 @@
     "lint": "run-s lint:*",
     "lint:standard": "standard -v \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "lint:web-ext": "web-ext lint -s add-on/",
+    "fix:lint": "run-s fix:lint:*",
+    "fix:lint:standard": "standard -v --fix \"add-on/src/**/*.js\" \"test/**/*.js\"",
     "precommit": "run-s lint:standard",
     "prepush": "run-s clean build lint test",
     "firefox": "web-ext run -s add-on/ --browser-console",
