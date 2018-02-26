@@ -53,8 +53,6 @@
   "private": true,
   "preferGlobal": false,
   "devDependencies": {
-    "babel-preset-env": "1.6.1",
-    "babelify": "8.0.0",
     "brfs": "1.4.4",
     "browserify": "16.1.0",
     "browserify-package-json": "1.0.1",
