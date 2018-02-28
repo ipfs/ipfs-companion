@@ -19,8 +19,11 @@ async function initIpfsClient (opts) {
 
 async function destroyIpfsClient () {
   if (client && client.destroy) {
-    await client.destroy()
-    client = null
+    try {
+      await client.destroy()
+    } finally {
+      client = null
+    }
   }
 }
 

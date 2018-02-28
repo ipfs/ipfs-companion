@@ -8,15 +8,9 @@ let node = null
 exports.init = function init (opts) {
   console.log('[ipfs-companion] Embedded ipfs init')
 
-  let config = JSON.parse(optionDefaults.ipfsNodeConfig)
-
-  try {
-    config = JSON.parse(opts.ipfsNodeConfig)
-  } catch (err) {
-    console.warn('[ipfs-companion] Ignoring invalid node config', err)
-  }
-
-  node = new Ipfs(config)
+  node = new Ipfs(
+    JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig)
+  )
 
   if (node.isOnline()) {
     return Promise.resolve(node)
