@@ -14,21 +14,24 @@ const url2request = (string) => {
   return {url: string, type: 'main_frame'}
 }
 
-describe('modifyRequest with external ipfsNodeType', function () {
+const nodeTypes = ['external', 'embedded']
+
+describe('modifyRequest', function () {
   let state, dnsLink, ipfsPathValidator, modifyRequest
 
-  before(() => {
+  before(function () {
     global.URL = URL
     global.browser = browser
   })
 
-  beforeEach(async () => {
+  beforeEach(function () {
     state = Object.assign(initState(optionDefaults), {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
       catchUnhandledProtocols: true,
-      gwURLString: 'http://127.0.0.1:8080'
+      gwURLString: 'http://127.0.0.1:8080',
+      pubGwURLString: 'https://ipfs.io'
     })
     const getState = () => state
     dnsLink = createDnsLink(getState)
@@ -37,54 +40,110 @@ describe('modifyRequest with external ipfsNodeType', function () {
   })
 
   describe('request for a path matching /ipfs/{CIDv0}', function () {
-    it('should be served from custom gateway if redirect is enabled', function () {
-      const request = url2request('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+    describe('with external node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'external'
+      })
+      it('should be served from custom gateway if redirect is enabled', function () {
+        const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
     })
-    it('should be left untouched if redirect is disabled', function () {
-      state.redirect = false
-      const request = url2request('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
+    describe('with embedded node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'embedded'
+      })
+      it('should be served from public gateway if redirect is enabled', function () {
+        const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
     })
-    it('should be left untouched if CID is invalid', function () {
-      const request = url2request('https://ipfs.io/ipfs/notacid?argTest#hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
+    describe('with every node type', function () {
+      // tests in which results should be the same for all node types
+      nodeTypes.forEach(function (nodeType) {
+        beforeEach(function () {
+          state.ipfsNodeType = nodeType
+        })
+        it(`should be left untouched if redirect is disabled (${nodeType} node)`, function () {
+          state.redirect = false
+          const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
+          const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+      })
     })
   })
 
   describe('request for a path matching /ipns/{path}', function () {
-    it('should be served from custom gateway if {path} points to a FQDN with existing dnslink', function () {
-      const request = url2request('https://ipfs.io/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
-      // stub the existence of valid dnslink
-      const fqdn = 'ipfs.git.sexy'
-      dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
-      // pretend API is online and we can do dns lookups with it
-      state.peerCount = 1
-      expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+    describe('with external node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'external'
+      })
+      it('should be served from custom gateway if {path} points to a FQDN with existing dnslink', function () {
+        const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+        // stub the existence of valid dnslink
+        const fqdn = 'ipfs.git.sexy'
+        dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+        // pretend API is online and we can do dns lookups with it
+        state.peerCount = 1
+        expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+      })
+      it('should be served from custom gateway if {path} starts with a valid CID', function () {
+        const request = url2request('https://google.com/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+        dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
+        expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+      })
     })
-    it('should be served from custom gateway if {path} starts with a valid CID', function () {
-      const request = url2request('https://ipfs.io/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
-      dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
-      expect(modifyRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+
+    describe('with embedded node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'embedded'
+      })
+      it('should be served from public gateway if {path} points to a FQDN with existing dnslink', function () {
+        const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+        // stub the existence of valid dnslink
+        const fqdn = 'ipfs.git.sexy'
+        dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+        // pretend API is online and we can do dns lookups with it
+        state.peerCount = 1
+        expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+      })
+      it('should be served from public gateway if {path} starts with a valid CID', function () {
+        const request = url2request('https://google.com/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+        dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
+        expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+      })
     })
-    it('should be left untouched if redirect is disabled', function () {
-      state.redirect = false
-      const request = url2request('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be left untouched if FQDN is not a real domain nor a valid CID', function () {
-      const request = url2request('https://ipfs.io/ipns/notafqdnorcid?argTest#hashTest')
-      dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be left untouched if {path} points to a FQDN but API is offline', function () {
-      const request = url2request('https://ipfs.io/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
-      // stub the existence of valid dnslink in dnslink cache
-      const fqdn = 'ipfs.git.sexy'
-      dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
-      // pretend API is offline and we can do dns lookups with it
-      state.peerCount = 0
-      expect(modifyRequest(request)).to.equal(undefined)
+
+    describe('with every node type', function () {
+      // tests in which results should be the same for all node types
+      nodeTypes.forEach(function (nodeType) {
+        beforeEach(function () {
+          state.ipfsNodeType = nodeType
+        })
+        it(`should be left untouched if redirect is disabled' (${nodeType} node)`, function () {
+          state.redirect = false
+          const request = url2request('https://google.com/ipns/ipfs.io?argTest#hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it(`should be left untouched if FQDN is not a real domain nor a valid CID (${nodeType} node)`, function () {
+          const request = url2request('https://google.com/ipns/notafqdnorcid?argTest#hashTest')
+          dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it(`should be left untouched if {path} points to a FQDN but API is offline (${nodeType} node)`, function () {
+          const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+          // stub the existence of valid dnslink in dnslink cache
+          const fqdn = 'ipfs.git.sexy'
+          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          // pretend API is offline and we can do dns lookups with it
+          state.peerCount = 0
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+      })
     })
   })
 
@@ -241,7 +300,7 @@ describe('modifyRequest with external ipfsNodeType', function () {
     })
   })
 
-  after(() => {
+  after(function () {
     delete global.URL
     delete global.browser
     browser.flush()
