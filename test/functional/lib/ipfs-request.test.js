@@ -147,156 +147,166 @@ describe('modifyRequest', function () {
     })
   })
 
-  describe('request made via "web+" handler from manifest.json/protocol_handlers', function () {
-    it('should not be normalized if web+ipfs:/{CID}', function () {
-      const request = url2request('https://ipfs.io/web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
+  // tests in which results should be the same for all node types
+  nodeTypes.forEach(function (nodeType) {
+    beforeEach(function () {
+      state.ipfsNodeType = nodeType
     })
-    it('should be normalized if web+ipfs://{CID}', function () {
-      const request = url2request('https://ipfs.io/web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-    })
-    it('should not be normalized if web+ipns:/{foo}', function () {
-      const request = url2request('https://ipfs.io/web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if web+ipns://{foo}', function () {
-      const request = url2request('https://ipfs.io/web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
-    })
-    it('should be normalized if web+dweb:/ipfs/{CID}', function () {
-      const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-    })
-    it('should not be normalized if web+dweb://ipfs/{CID}', function () {
-      const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if web+dweb:/ipns/{foo}', function () {
-      const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
-      expect(modifyRequest(request).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
-    })
-    it('should not be normalized if web+dweb://ipns/{foo}', function () {
-      const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should not be normalized if web+{foo}:/bar', function () {
-      const request = url2request('https://ipfs.io/web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should not be normalized if web+{foo}://bar', function () {
-      const request = url2request('https://ipfs.io/web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-  })
+    describe(`with ${nodeType} node:`, function () {
+      describe('request made via "web+" handler from manifest.json/protocol_handlers', function () {
+        // requests done with custom protocol handler are always  normalized to public gateway
+        // (if external node is enabled, redirect will happen in next iteration of modifyRequest)
+        it('should not be normalized if web+ipfs:/{CID}', function () {
+          const request = url2request('https://ipfs.io/web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if web+ipfs://{CID}', function () {
+          const request = url2request('https://ipfs.io/web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        })
+        it('should not be normalized if web+ipns:/{foo}', function () {
+          const request = url2request('https://ipfs.io/web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if web+ipns://{foo}', function () {
+          const request = url2request('https://ipfs.io/web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+        })
+        it('should be normalized if web+dweb:/ipfs/{CID}', function () {
+          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        })
+        it('should not be normalized if web+dweb://ipfs/{CID}', function () {
+          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if web+dweb:/ipns/{foo}', function () {
+          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+        })
+        it('should not be normalized if web+dweb://ipns/{foo}', function () {
+          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should not be normalized if web+{foo}:/bar', function () {
+          const request = url2request('https://ipfs.io/web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should not be normalized if web+{foo}://bar', function () {
+          const request = url2request('https://ipfs.io/web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+      })
 
-  describe('catching unhandled custom protocol request', function () {
-    it('should not be normalized if ipfs:/{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if ipfs://{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-    })
-    it('should not be normalized if ipns:/{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=ipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if ipns://{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=ipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
-    })
-    it('should be normalized if dweb:/ipfs/{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
-    })
-    it('should not be normalized if dweb://ipfs/{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if dweb:/ipns/{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
-    })
-    it('should not be normalized if dweb://ipns/{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
+      describe('catching unhandled custom protocol request', function () {
+        it('should not be normalized if ipfs:/{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if ipfs://{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        })
+        it('should not be normalized if ipns:/{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=ipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if ipns://{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=ipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+        })
+        it('should be normalized if dweb:/ipfs/{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
+        })
+        it('should not be normalized if dweb://ipfs/{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if dweb:/ipns/{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
+        })
+        it('should not be normalized if dweb://ipns/{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
 
-    it('should not be normalized if web+ipfs:/{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if web+ipfs://{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-    })
-    it('should not be normalized if web+ipns:/{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if web+ipns://{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
-    })
-    it('should be normalized if web+dweb:/ipfs/{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
-    })
-    it('should not be normalized if web+dweb://ipfs/{CID}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be normalized if web+dweb:/ipns/{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
-      expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
-    })
-    it('should not be normalized if web+dweb://ipns/{foo}', function () {
-      const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
+        it('should not be normalized if web+ipfs:/{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if web+ipfs://{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        })
+        it('should not be normalized if web+ipns:/{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if web+ipns://{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+        })
+        it('should be normalized if web+dweb:/ipfs/{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
+        })
+        it('should not be normalized if web+dweb://ipfs/{CID}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if web+dweb:/ipns/{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
+        })
+        it('should not be normalized if web+dweb://ipns/{foo}', function () {
+          const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
 
-    it('should not be normalized if disabled in Preferences', function () {
-      state.catchUnhandledProtocols = false
-      const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should not be normalized if CID is invalid', function () {
-      state.catchUnhandledProtocols = false
-      const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FnotARealIpfsPathWithCid%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should not be normalized if presence of %3A%2F is a false-positive', function () {
-      state.catchUnhandledProtocols = false
-      const request = url2request('https://duckduckgo.com/?q=foo%3A%2Fbar%3FargTest%23hashTest&foo=bar')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should not be normalized if request.type != main_frame', function () {
-      const xhrRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'xmlhttprequest'}
-      expect(modifyRequest(xhrRequest)).to.equal(undefined)
-    })
-  })
+        it('should not be normalized if disabled in Preferences', function () {
+          state.catchUnhandledProtocols = false
+          const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should not be normalized if CID is invalid', function () {
+          state.catchUnhandledProtocols = false
+          const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2FnotARealIpfsPathWithCid%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should not be normalized if presence of %3A%2F is a false-positive', function () {
+          state.catchUnhandledProtocols = false
+          const request = url2request('https://duckduckgo.com/?q=foo%3A%2Fbar%3FargTest%23hashTest&foo=bar')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should not be normalized if request.type != main_frame', function () {
+          const xhrRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'xmlhttprequest'}
+          expect(modifyRequest(xhrRequest)).to.equal(undefined)
+        })
+      })
 
-  describe('request for IPFS path at a localhost', function () {
-    // we do not touch local requests, as it may interfere with other nodes running at the same machine
-    // or could produce false-positives such as redirection from 127.0.0.1:5001/ipfs/path to 127.0.0.1:8080/ipfs/path
-    it('should be left untouched if 127.0.0.1 is used', function () {
-      state.redirect = true
-      const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be left untouched if localhost is used', function () {
-      // https://github.com/ipfs/ipfs-companion/issues/291
-      state.redirect = true
-      const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-      expect(modifyRequest(request)).to.equal(undefined)
-    })
-    it('should be left untouched if [::1] is used', function () {
-      // https://github.com/ipfs/ipfs-companion/issues/291
-      state.redirect = true
-      const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-      expect(modifyRequest(request)).to.equal(undefined)
+      describe('request for IPFS path at a localhost', function () {
+        // we do not touch local requests, as it may interfere with other nodes running at the same machine
+        // or could produce false-positives such as redirection from 127.0.0.1:5001/ipfs/path to 127.0.0.1:8080/ipfs/path
+        it('should be left untouched if 127.0.0.1 is used', function () {
+          state.redirect = true
+          const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be left untouched if localhost is used', function () {
+          // https://github.com/ipfs/ipfs-companion/issues/291
+          state.redirect = true
+          const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be left untouched if [::1] is used', function () {
+          // https://github.com/ipfs/ipfs-companion/issues/291
+          state.redirect = true
+          const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+      })
     })
   })
 
