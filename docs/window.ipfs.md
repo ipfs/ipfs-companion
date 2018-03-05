@@ -54,6 +54,8 @@ if (window.ipfs) {
 
 Note that IPFS Companion also adds `window.Buffer` if it doesn't already exist.
 
+See also: [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
+
 ### Error messages
 
 If access was denied:
@@ -90,7 +92,7 @@ See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://git
 
 ## How do I fallback if `window.ipfs` is not available?
 
-See the [example code](docs/examples/window.ipfs-fallback.html) for getting an IPFS instance with a fallback.
+See the [example code](examples/window.ipfs-fallback.html) (and [live demo](https://ipfs-shipyard.github.io/ipfs-companion/docs/examples/window.ipfs-fallback.html)) for getting an IPFS instance with a fallback.
 
 ## What about IPFS node configuration?
 
