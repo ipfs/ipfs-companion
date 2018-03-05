@@ -1,0 +1,35 @@
+<!doctype html>
+<div id="output"></div>
+<script>
+  (() => {
+    const output = document.getElementById('output')
+    const log = (msg) => {
+      console.log(msg)
+      const div = document.createElement('div')
+      div.appendChild(document.createTextNode(msg.toString()))
+      output.appendChild(div)
+    }
+
+    const getIpfs = () => new Promise((resolve, reject) => {
+      if (window.ipfs) {
+        log('window.ipfs is available!')
+        return resolve(window.ipfs)
+      }
+
+      log('window.ipfs is not available, downloading from CDN...')
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/ipfs/dist/index.min.js'
+      script.onload = () => {
+        log('starting IPFS node')
+        const ipfs = new window.Ipfs()
+        ipfs.once('ready', () => resolve(ipfs))
+      }
+      script.onerror = reject
+      document.body.appendChild(script)
+    })
+
+    getIpfs()
+      .then(ipfs => ipfs.id().then(id => log(`running ${id.agentVersion} with ID ${id.id}`)))
+      .catch(log)
+  })()
+</script>
