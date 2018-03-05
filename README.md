@@ -89,8 +89,9 @@ It is also possible to [grab the last successful build from `master`](https://ci
 but these builds are not signed nor will automatically update:
 `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chrome) or `about:debugging` (Firefox) for the purpose of quick smoke-testing.
 
+## Development or Other Browsers Supporting WebExtensions API
 
-## Development or other Browsers Supporting WebExtensions API
+### Build from Sources
 
 Try manual installation:
 
@@ -111,15 +112,21 @@ Try manual installation:
         1. Enter `about:debugging` in the URL bar
         2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 
+4. If you plan to code, make sure to read [`docs/developer-notes.md`](docs/developer-notes.md) first
+
 ### Reproducible Build in Docker
 
-You can also do the build via Docker. Run the following commands for ending up
+Want to ensure prebuilt bundle does not include any additional code?  
+Don't want to install JS dependencies such as NodeJS and yarn?  
+
+Do an isolated build inside of Docker!
+
+Run the following commands for ending up
 with a built extension inside the `build/` directory.
 
 ```sh
 docker build -t ipfs-companion .
-docker run -it ipfs-companion yarn test # Make sure all tests are passing before building
-docker run -it -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn build
+docker run -it -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build
 ```
 
 Now you can install the extension directly from `build/`
@@ -133,28 +140,12 @@ For historical background on the rewrite see [Issue #20: Move to WebExtensions](
 
 ### Brave
 
-`ipfs-companion` works in Brave. To try it out today you need to run brave from source, but we are working with Brave to get seamless IPFS support working out of the box. Track our progress [here](https://github.com/ipfs/ipfs-companion/issues/312)
+See [`docs/brave.md`](docs/brave.md)
 
-- Configure your local ipfs gateway to run on port 9090 (_the default, port 8080, conflicts with the brave webpack dev server_)
-- Clone and build `ipfs-companion` as above
-- Clone [`brave/browser-laptop`](https://github.com/brave/browser-laptop)
-- Symlink the `ipfs-companion/add-on` dir to `browser-laptop/app/extensions/ipfs`
-- Add the following to `browser-laptop/app/extensions.js`
-```js
-  // Enable IPFS
-  extensionInfo.setState('ipfs', extensionStates.REGISTERED)
-  loadExtension('ipfs', getExtensionsPath('ipfs'), undefined, 'component')
-```
-https://github.com/ipfs-shipyard/browser-laptop/blob/66f38870fced0dbc55aae7fe1ed905bff602f88e/app/extensions.js#L500-L502
-- In the `browser-laptop` project run `npm install` then in separate shells run `npm run watch` and `npm start`. If you have any trouble running Brave from source, check: https://github.com/brave/browser-laptop#installation
-
-Brave will start up and you should see a badge with your number of connected ipfs peers next to the brave button, top right. (_the ipfs-companion badge currently doesn't appear [issue](https://github.com/brave/browser-laptop/issues/11797), [pr](https://github.com/brave/browser-laptop/pull/11143)_). Click on the badge and update your gateway settings to use port `9090`, then go share something with your peers...
-
-![brave ipfs](https://user-images.githubusercontent.com/58871/34110877-e3080b0a-e3ff-11e7-8667-72fcef369386.gif)
 
 ## Contribute
 
-[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/contributing.md)
+[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](CONTRIBUTING.md)
 
 Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/ipfs-companion/issues)!
 
