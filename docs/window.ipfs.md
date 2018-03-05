@@ -88,6 +88,10 @@ Note that `window.ipfs` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but i
 
 See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://github.com/ipfs/js-ipfs-api#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
 
+## How do I fallback if `window.ipfs` is not available?
+
+See the [example code](docs/examples/window.ipfs-fallback.html) for getting an IPFS instance with a fallback.
+
 ## What about IPFS node configuration?
 
 You can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
@@ -153,4 +157,3 @@ e.g.
         * `https://domain.com/`
         * `https://domain.com/files`
         * etc.
-
