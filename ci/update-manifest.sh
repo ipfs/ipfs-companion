@@ -8,11 +8,6 @@ MANIFEST=add-on/manifest.json
 # restore original (make this script immutable)
 git checkout $MANIFEST
 
-# Switch to self-hosted dev-build for Firefox (https://github.com/ipfs-shipyard/ipfs-companion/issues/385)
-DEV_BUILD_ADDON_ID="ipfs-companion-dev-build@ci.ipfs.team"
-UPDATE_URL="https://ipfs-shipyard.github.io/ipfs-companion/ci/firefox/update.json"
-
-
 # Use jq for JSON operations
 function set-manifest {
   jq -M --indent 2 "$1" < $MANIFEST > tmp.json && mv tmp.json $MANIFEST
@@ -34,12 +29,18 @@ BUILD_VERSION=$(($COMMITS_IN_MASTER*10+$NEW_COMMITS_IN_CURRENT_BRANCH))
 set-manifest ".version = (.version + \".${BUILD_VERSION}\")"
 grep \"version\" $MANIFEST
 
+# addon-linter throws error on 'update_url' so it is disabled in dev build
+# and needs to be manually opted-in when beta build is run
+if [ "$1" == "firefox-beta" ]; then
+    # Switch to self-hosted dev-build for Firefox (https://github.com/ipfs-shipyard/ipfs-companion/issues/385)
+    DEV_BUILD_ADDON_ID="ipfs-companion-dev-build@ci.ipfs.team"
+    UPDATE_URL="https://ipfs-shipyard.github.io/ipfs-companion/ci/firefox/update.json"
 
-## Set ADD-ON ID
-set-manifest ".applications.gecko[\"id\"] = \"$DEV_BUILD_ADDON_ID\""
-grep ipfs-companion-dev-build $MANIFEST
+    ## Set ADD-ON ID
+    set-manifest ".applications.gecko[\"id\"] = \"$DEV_BUILD_ADDON_ID\""
+    grep ipfs-companion-dev-build $MANIFEST
 
-## Add UPDATE_URL
-set-manifest ".applications.gecko[\"update_url\"] = \"$UPDATE_URL\""
-grep update_url $MANIFEST
-
+    ## Add UPDATE_URL
+    set-manifest ".applications.gecko[\"update_url\"] = \"$UPDATE_URL\""
+    grep update_url $MANIFEST
+fi
