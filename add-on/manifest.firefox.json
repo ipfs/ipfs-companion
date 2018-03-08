@@ -1,4 +1,10 @@
 {
+  "browser_action": {
+    "browser_style": false
+  },
+  "options_ui": {
+    "browser_style": false
+  },
   "applications": {
     "gecko": {
       "id": "ipfs-firefox-addon@lidel.org",

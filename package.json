@@ -28,6 +28,7 @@
     "build:content-scripts:ipfs-proxy:cleanup": "shx rm add-on/dist/contentScripts/ipfs-proxy/page.js",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib",
     "build:bundle-all": "run-s bundle:generic bundle:firefox",
+    "bundle": "run-s bundle:*",
     "bundle:generic": "shx cp add-on/manifest.common.json add-on/manifest.json && web-ext build -s add-on/ -i src/ -a build/generic -o",
     "bundle:firefox": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json | json --deep-merge > add-on/manifest.json && web-ext build -s add-on/ -i src/ -a build/firefox/ -o",
     "bundle:firefox:beta": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json add-on/manifest.firefox-beta.json | json --deep-merge > add-on/manifest.json && web-ext build -s add-on/ -i src/ -a build/firefox/beta/ -o",
