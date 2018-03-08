@@ -35,7 +35,7 @@ npm start        # all-in-one
 
 To do each step manually:
 ```bash
-npm run build    # build
+npm run build    # build runs bundle:firefox at the end, so manifest will be ok
 npm run test     # test suite
 npm run firefox  # spawn new Firefox
 ```
@@ -48,7 +48,7 @@ then click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 First, build it manually:
 
 ```bash
-npm run build
+npm run build bundle:generic # last part is important: it overwrites manifest
 ```
 
 Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`
@@ -63,7 +63,9 @@ See [`docs/firefox-for-android.md`](firefox-for-android.md)
 Each `npm` task can be run separately. The most useful ones are:
 
 - `npm install` -- install all NPM dependencies
-- `npm run build` -- build the add-on (copy external libraries, create `.zip` bundle)
+- `npm run build` -- build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
+- `npm run bundle:generic` -- overwrites manifest and packages a Brave/Chrome-compatible version
+- `npm run bundle:firefox` -- overwrites manifest and packages a Firefox-compatible version
 - `npm run yarn-build` -- fast dependency install + build with yarn (installs and updates yarn.lock if needed)
 - `npm run ci` -- reproducible test and build (with frozen yarn.lock)
 - `npm test` -- run entire test suite
