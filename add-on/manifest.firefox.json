@@ -1,0 +1,25 @@
+{
+  "applications": {
+    "gecko": {
+      "id": "ipfs-firefox-addon@lidel.org",
+      "strict_min_version": "58.0"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+dweb",
+      "name": "IPFS Add-On: DWEB protocol handler",
+      "uriTemplate": "https://ipfs.io/%s"
+    },
+    {
+      "protocol": "web+ipns",
+      "name": "IPFS Add-On: IPNS protocol handler",
+      "uriTemplate": "https://ipfs.io/%s"
+    },
+    {
+      "protocol": "web+ipfs",
+      "name": "IPFS Add-On: IPFS protocol handler",
+      "uriTemplate": "https://ipfs.io/%s"
+    }
+  ]
+}
