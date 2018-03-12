@@ -75,6 +75,18 @@
     "message": "Copy Public Gateway URL",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "pageAction_titleIpfsAtPublicGateway": {
+    "message": "IPFS resource loaded via Public Gateway",
+    "description": "A tooltip displayed over pageAction in location bar (pageAction_titleIpfsAtPublicGateway)"
+  },
+  "pageAction_titleIpfsAtCustomGateway": {
+    "message": "IPFS resource loaded via Custom Gateway",
+    "description": "A tooltip displayed over pageAction in location bar (pageAction_titleIpfsAtCustomGateway)"
+  },
+  "pageAction_titleNonIpfs": {
+    "message": "Non-IPFS resource",
+    "description": "Default label for icon hidden in pageAction sub-menu (pageAction_titleNonIpfs)"
+  },
   "contextMenu_uploadToIpfs": {
     "message": "Upload to IPFS",
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"

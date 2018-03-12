@@ -11,6 +11,12 @@
       "strict_min_version": "58.0"
     }
   },
+  "page_action": {
+    "default_icon": {
+      "128": "icons/ipfs-logo-off.svg"
+    },
+    "default_title": "__MSG_pageAction_titleNonIpfs__"
+  },
   "protocol_handlers": [
     {
       "protocol": "web+dweb",
