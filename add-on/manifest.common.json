@@ -11,12 +11,6 @@
     "38": "icons/png/ipfs-logo-on_38.png",
     "128": "icons/png/ipfs-logo-on_128.png"
   },
-  "applications": {
-    "gecko": {
-      "id": "ipfs-firefox-addon@lidel.org",
-      "strict_min_version": "58.0"
-    }
-  },
   "permissions": [
     "<all_urls>",
     "idle",
@@ -35,7 +29,6 @@
     "page": "dist/background/background.html"
   },
   "browser_action": {
-    "browser_style": false,
     "default_icon": {
       "19": "icons/png/ipfs-logo-off_19.png",
       "38": "icons/png/ipfs-logo-off_38.png",
@@ -45,7 +38,6 @@
     "default_popup": "dist/popup/browser-action/index.html"
   },
   "options_ui": {
-    "browser_style": false,
     "page": "dist/options/options.html"
   },
   "web_accessible_resources": [
@@ -62,23 +54,6 @@
         "<all_urls>"
       ],
       "run_at": "document_start"
-    }
-  ],
-  "protocol_handlers": [
-    {
-      "protocol": "web+dweb",
-      "name": "IPFS Add-On: DWEB protocol handler",
-      "uriTemplate": "https://ipfs.io/%s"
-    },
-    {
-      "protocol": "web+ipns",
-      "name": "IPFS Add-On: IPNS protocol handler",
-      "uriTemplate": "https://ipfs.io/%s"
-    },
-    {
-      "protocol": "web+ipfs",
-      "name": "IPFS Add-On: IPFS protocol handler",
-      "uriTemplate": "https://ipfs.io/%s"
     }
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'; frame-src 'self';",

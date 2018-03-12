@@ -12,3 +12,4 @@ add-on/dist
 coverage
 .nyc_output
 add-on/ui-kit/**/*
+add-on/manifest.json

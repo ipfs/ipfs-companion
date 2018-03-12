@@ -19,7 +19,7 @@ node(label: 'linux') {
         stage('ci:build') {
             sh 'mkdir -p $(pwd)/build'
             sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat git-HEAD) npm run ci:build'
-            archiveArtifacts artifacts: 'build/*.zip', fingerprint: true
+            archiveArtifacts artifacts: 'build/**/*.zip', fingerprint: true
         }
         stage('lint:web-ext') {
             sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat git-HEAD) npm run lint:web-ext'
