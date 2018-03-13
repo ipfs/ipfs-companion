@@ -3,6 +3,7 @@
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
+const { optionDefaults } = require('./options')
 
 function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
   return function modifyRequest (request) {
