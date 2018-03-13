@@ -75,7 +75,7 @@ function redirectToGateway (requestUrl, state) {
 // PROTOCOL HANDLERS: web+ in Firefox (protocol_handlers from manifest.json)
 // ===================================================================
 
-const webPlusProtocolHandler = 'https://ipfs.io/web%2B'
+const webPlusProtocolHandler = optionDefaults.publicGatewayUrl + '/web%2B'
 
 function webPlusProtocolRequest (request) {
   return request.url.startsWith(webPlusProtocolHandler)
