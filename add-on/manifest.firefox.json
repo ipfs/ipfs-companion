@@ -15,7 +15,8 @@
     "default_icon": {
       "128": "icons/ipfs-logo-off.svg"
     },
-    "default_title": "__MSG_pageAction_titleNonIpfs__"
+    "default_title": "__MSG_pageAction_titleNonIpfs__",
+    "default_popup": "dist/popup/page-action/index.html"
   },
   "protocol_handlers": [
     {

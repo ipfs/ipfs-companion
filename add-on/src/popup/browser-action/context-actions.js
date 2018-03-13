@@ -21,7 +21,7 @@ module.exports = function contextActions ({
   const isPinningSupported = (ipfsNodeType !== 'embedded')
 
   return html`
-    <div class="bb b--black-20 mv2 pb2">
+    <div class="bb b--black-20 mt1 pb2">
       ${navItem({
         text: browser.i18n.getMessage('panelCopy_currentIpfsAddress'),
         onClick: onCopyIpfsAddr
