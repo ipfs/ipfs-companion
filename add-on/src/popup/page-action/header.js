@@ -8,14 +8,14 @@ module.exports = function header ({ isIpfsContext, pageActionTitle }) {
   if (!isIpfsContext) return null
   return html`
     <div class="ph2 pv1 br2 br--top bg-light-gray">
-      <h2 class="f6 mt2 mb2 tl fw1">
+      <h2 class="f6 mv2 tl fw1">
         ${logo({
           size: 19,
           path: '../../../icons',
           ipfsNodeType: 'external',
           isIpfsOnline: true,
           heartbeat: false
-        })} <span class="pl1">${pageActionTitle || '(checking status...)'}</span>
+        })} <span class="pl1">${pageActionTitle || browser.i18n.getMessage('pageAction_statusPlaceholder')}</span>
       </h2>
     </div>
   `

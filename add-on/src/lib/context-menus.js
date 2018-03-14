@@ -31,6 +31,7 @@ const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 function createContextMenus (getState, runtime, ipfsPathValidator, { onUploadToIpfs, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
   let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
   if (runtime.isFirefox) {
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
     copyAddressContexts.push('page_action')
   }
   try {

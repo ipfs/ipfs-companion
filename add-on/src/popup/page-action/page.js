@@ -5,7 +5,7 @@ const html = require('choo/html')
 const header = require('./header')
 const contextActions = require('../browser-action/context-actions')
 
-// Render the page action page:
+// Render the page-action page:
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
 module.exports = function pageActionPage (state, emit) {
@@ -15,7 +15,7 @@ module.exports = function pageActionPage (state, emit) {
   const onUnPin = () => emit('unPin')
   const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
 
-  // instant init: page action is shown only in ipfsContext
+  // Instant init: page-action is shown only in ipfsContext
   contextActionsProps.isIpfsContext = true
 
   return html`

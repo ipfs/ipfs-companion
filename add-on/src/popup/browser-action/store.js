@@ -12,7 +12,7 @@ module.exports = (state, emitter) => {
     isPinning: false,
     isUnPinning: false,
     isPinned: false,
-    currentTabUrl: null,
+    currentTab: null,
     // IPFS status
     ipfsNodeType: 'external',
     isIpfsOnline: false,
@@ -57,7 +57,7 @@ module.exports = (state, emitter) => {
 
     try {
       const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
+      const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
       const pinResult = await ipfsCompanion.ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       state.isPinned = true
@@ -76,7 +76,7 @@ module.exports = (state, emitter) => {
 
     try {
       const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
+      const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
       const result = await ipfsCompanion.ipfs.pin.rm(currentPath, {recursive: true})
       state.isPinned = false
       console.log('ipfs.pin.rm result', result)
@@ -162,17 +162,16 @@ module.exports = (state, emitter) => {
     const ipfsContext = bg && status && status.ipfsPageActionsContext
 
     state.isIpfsContext = !!ipfsContext
-    state.currentTabUrl = status.currentTab ? status.currentTab.url : null
-    state.currentTabId = status.currentTab ? status.currentTab.id : null
+    state.currentTab = status.currentTab || null
 
     if (state.isIpfsContext) {
       // There is no point in displaying actions that require API interaction if API is down
       const apiIsUp = status && status.peerCount >= 0
       if (apiIsUp) await updatePinnedState(status)
-      if (state.currentTabId && browser.pageAction) {
+      if (state.currentTab && browser.pageAction) {
         // Get title stored on page load so that valid transport is displayed
         // even if user toggles between public/custom gateway
-        state.pageActionTitle = await browser.pageAction.getTitle({tabId: state.currentTabId})
+        state.pageActionTitle = await browser.pageAction.getTitle({tabId: state.currentTab.id})
       }
     }
   }

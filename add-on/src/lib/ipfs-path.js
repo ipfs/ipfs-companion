@@ -53,28 +53,28 @@ function createIpfsPathValidator (getState, dnsLink) {
 exports.createIpfsPathValidator = createIpfsPathValidator
 
 function validIpfsOrIpnsUrl (url, dnsLink) {
-  // /ipfs/ is easy to validate, we just check if CID is correct and return if true
+  // `/ipfs/` is easy to validate, we just check if CID is correct
   if (IsIpfs.ipfsUrl(url)) {
     return true
   }
-  // /ipns/ requires multiple stages/branches, as it can be FQDN with dnslink or CID
+  // `/ipns/` requires multiple stages/branches (can be FQDN with dnslink or CID)
   if (validIpnsPath(new URL(url).pathname, dnsLink)) {
     return true
   }
-  // everything else is not ipfs-related
+  // everything else is not IPFS-related
   return false
 }
 
 function validIpfsOrIpnsPath (path, dnsLink) {
-  // /ipfs/ is easy to validate, we just check if CID is correct and return if true
+  // `/ipfs/` is easy to validate, we just check if CID is correct
   if (IsIpfs.ipfsPath(path)) {
     return true
   }
-  // /ipns/ requires multiple stages/branches, as it can be FQDN with dnslink or CID
+  // `/ipns/` requires multiple stages/branches (can be FQDN with dnslink or CID)
   if (validIpnsPath(path, dnsLink)) {
     return true
   }
-  // everything else is not ipfs-related
+  // everything else is not IPFS-related
   return false
 }
 
