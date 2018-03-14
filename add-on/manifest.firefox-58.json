@@ -8,7 +8,7 @@
   "applications": {
     "gecko": {
       "id": "ipfs-firefox-addon@lidel.org",
-      "strict_min_version": "59.0"
+      "strict_min_version": "58.0"
     }
   },
   "page_action": {
@@ -31,21 +31,6 @@
     },
     {
       "protocol": "web+ipfs",
-      "name": "IPFS Companion: IPFS Protocol Handler",
-      "uriTemplate": "https://ipfs.io/#redirect/%s"
-    },
-    {
-      "protocol": "dweb",
-      "name": "IPFS Companion: DWEB Protocol Handler",
-      "uriTemplate": "https://ipfs.io/#redirect/%s"
-    },
-    {
-      "protocol": "ipns",
-      "name": "IPFS Companion: IPNS Protocol Handler",
-      "uriTemplate": "https://ipfs.io/#redirect/%s"
-    },
-    {
-      "protocol": "ipfs",
       "name": "IPFS Companion: IPFS Protocol Handler",
       "uriTemplate": "https://ipfs.io/#redirect/%s"
     }

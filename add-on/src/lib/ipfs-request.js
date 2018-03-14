@@ -27,9 +27,9 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
     }
 
     // handler for protocol_handlers from manifest.json
-    if (webPlusProtocolRequest(request)) {
+    if (redirectingProtocolRequest(request)) {
       // fix path passed via custom protocol
-      const fix = normalizedWebPlusRequest(request, state.pubGwURLString)
+      const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
       if (fix) {
         return fix
       }
@@ -71,28 +71,40 @@ function redirectToGateway (requestUrl, state) {
   return { redirectUrl: url.toString() }
 }
 
-// PROTOCOL HANDLERS: web+ in Firefox (protocol_handlers from manifest.json)
+// REDIRECT-BASED PROTOCOL HANDLERS
+// This API is available only Firefox (protocol_handlers from manifest.json)
+// Background: https://github.com/ipfs-shipyard/ipfs-companion/issues/164#issuecomment-282513891
+// Notes on removal of web+ in Firefox 59: https://github.com/ipfs-shipyard/ipfs-companion/issues/164#issuecomment-355708883
 // ===================================================================
 
-const webPlusProtocolHandler = 'https://ipfs.io/web%2B'
+// This is just a placeholder that we had to provide -- removed in normalizedRedirectingProtocolRequest()
+const redirectingProtocolHandler = 'https://ipfs.io/#redirect/'
 
-function webPlusProtocolRequest (request) {
-  return request.url.startsWith(webPlusProtocolHandler)
+function redirectingProtocolRequest (request) {
+  return request.url.startsWith(redirectingProtocolHandler)
 }
 
-function normalizedWebPlusRequest (request, pubGwUrl) {
-  const oldPath = decodeURIComponent(new URL(request.url).pathname)
+function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
+  const oldPath = decodeURIComponent(new URL(request.url).hash)
   let path = oldPath
-  path = path.replace(/^\/web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
-  path = path.replace(/^\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
+  // prefixed (Firefox < 59)
+  path = path.replace(/^#redirect\/web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^#redirect\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
+  path = path.replace(/^#redirect\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
+  // without prefix (Firefox >= 59)
+  path = path.replace(/^#redirect\/dweb:\//i, '/') // dweb:/ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^#redirect\/ipfs:\/\//i, '/ipfs/') // ipfs://Qm → /ipfs/Qm
+  path = path.replace(/^#redirect\/ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
+  // console.log(`oldPath: '${oldPath}' new: '${path}'`)
   if (oldPath !== path && IsIpfs.path(path)) {
     return { redirectUrl: urlAtPublicGw(path, pubGwUrl) }
   }
   return null
 }
 
-// PROTOCOL HANDLERS: UNIVERSAL FALLBACK FOR UNHANDLED PROTOCOLS
+// SEARCH-HIJACK HANDLERS: UNIVERSAL FALLBACK FOR UNHANDLED PROTOCOLS
+// (Used in Chrome and other browsers that do not provide better alternatives)
+// Background: https://github.com/ipfs-shipyard/ipfs-companion/issues/164#issuecomment-328374052
 // ===================================================================
 
 const unhandledIpfsRE = /=(?:web%2B|)(ipfs(?=%3A%2F%2F)|ipns(?=%3A%2F%2F)|dweb(?=%3A%2Fip[f|n]s))%3A(?:%2F%2F|%2F)([^&]+)/

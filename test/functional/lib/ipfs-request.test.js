@@ -153,47 +153,83 @@ describe('modifyRequest', function () {
       state.ipfsNodeType = nodeType
     })
     describe(`with ${nodeType} node:`, function () {
-      describe('request made via "web+" handler from manifest.json/protocol_handlers', function () {
-        // requests done with custom protocol handler are always  normalized to public gateway
+      describe('request made via redirect-based protocol handler from manifest.json/protocol_handlers', function () {
+        // Note: requests done with custom protocol handler are always  normalized to public gateway
         // (if external node is enabled, redirect will happen in next iteration of modifyRequest)
+
+        // without web+ prefix (Firefox > 59: https://github.com/ipfs-shipyard/ipfs-companion/issues/164#issuecomment-356301174)
+        it('should not be normalized if ipfs:/{CID}', function () {
+          const request = url2request('https://ipfs.io/#redirect/ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if ipfs://{CID}', function () {
+          const request = url2request('https://ipfs.io/#redirect/ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        })
+        it('should not be normalized if ipns:/{foo}', function () {
+          const request = url2request('https://ipfs.io/#redirect/ipns%3A%2Fipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if ipns://{foo}', function () {
+          const request = url2request('https://ipfs.io/#redirect/ipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+        })
+        it('should be normalized if dweb:/ipfs/{CID}', function () {
+          const request = url2request('https://ipfs.io/#redirect/dweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        })
+        it('should not be normalized if dweb://ipfs/{CID}', function () {
+          const request = url2request('https://ipfs.io/#redirect/dweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it('should be normalized if dweb:/ipns/{foo}', function () {
+          const request = url2request('https://ipfs.io/#redirect/dweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+        })
+        it('should not be normalized if dweb://ipns/{foo}', function () {
+          const request = url2request('https://ipfs.io/#redirect/dweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
+
+        // web+ prefixed versions (Firefox < 59 and Chrome)
         it('should not be normalized if web+ipfs:/{CID}', function () {
-          const request = url2request('https://ipfs.io/web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should be normalized if web+ipfs://{CID}', function () {
-          const request = url2request('https://ipfs.io/web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
         it('should not be normalized if web+ipns:/{foo}', function () {
-          const request = url2request('https://ipfs.io/web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should be normalized if web+ipns://{foo}', function () {
-          const request = url2request('https://ipfs.io/web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should be normalized if web+dweb:/ipfs/{CID}', function () {
-          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
         it('should not be normalized if web+dweb://ipfs/{CID}', function () {
-          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should be normalized if web+dweb:/ipns/{foo}', function () {
-          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
           expect(modifyRequest(request).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should not be normalized if web+dweb://ipns/{foo}', function () {
-          const request = url2request('https://ipfs.io/web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if web+{foo}:/bar', function () {
-          const request = url2request('https://ipfs.io/web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if web+{foo}://bar', function () {
-          const request = url2request('https://ipfs.io/web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
+          const request = url2request('https://ipfs.io/#redirect/web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
       })
