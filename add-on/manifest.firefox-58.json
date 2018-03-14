@@ -1,0 +1,38 @@
+{
+  "browser_action": {
+    "browser_style": false
+  },
+  "options_ui": {
+    "browser_style": false
+  },
+  "applications": {
+    "gecko": {
+      "id": "ipfs-firefox-addon@lidel.org",
+      "strict_min_version": "58.0"
+    }
+  },
+  "page_action": {
+    "default_icon": {
+      "128": "icons/ipfs-logo-off.svg"
+    },
+    "default_title": "__MSG_pageAction_titleNonIpfs__",
+    "default_popup": "dist/popup/page-action/index.html"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+dweb",
+      "name": "IPFS Companion: DWEB Protocol Handler",
+      "uriTemplate": "https://ipfs.io/#redirect/%s"
+    },
+    {
+      "protocol": "web+ipns",
+      "name": "IPFS Companion: IPNS Protocol Handler",
+      "uriTemplate": "https://ipfs.io/#redirect/%s"
+    },
+    {
+      "protocol": "web+ipfs",
+      "name": "IPFS Companion: IPFS Protocol Handler",
+      "uriTemplate": "https://ipfs.io/#redirect/%s"
+    }
+  ]
+}
