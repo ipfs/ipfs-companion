@@ -28,7 +28,12 @@ const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 
-function createContextMenus (getState, ipfsPathValidator, { onUploadToIpfs, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
+function createContextMenus (getState, runtime, ipfsPathValidator, { onUploadToIpfs, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
+  let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
+  if (runtime.isFirefox) {
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
+    copyAddressContexts.push('page_action')
+  }
   try {
     browser.contextMenus.create({
       id: contextMenuUploadToIpfs,
@@ -42,7 +47,7 @@ function createContextMenus (getState, ipfsPathValidator, { onUploadToIpfs, onCo
     browser.contextMenus.create({
       id: contextMenuCopyCanonicalAddress,
       title: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-      contexts: ['page', 'image', 'video', 'audio', 'link'],
+      contexts: copyAddressContexts,
       documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
       onclick: onCopyCanonicalAddress
     })
@@ -50,7 +55,7 @@ function createContextMenus (getState, ipfsPathValidator, { onUploadToIpfs, onCo
     browser.contextMenus.create({
       id: contextMenuCopyAddressAtPublicGw,
       title: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-      contexts: ['page', 'image', 'video', 'audio', 'link'],
+      contexts: copyAddressContexts,
       documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
       onclick: onCopyAddressAtPublicGw
     })

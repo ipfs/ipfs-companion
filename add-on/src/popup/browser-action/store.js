@@ -12,7 +12,7 @@ module.exports = (state, emitter) => {
     isPinning: false,
     isUnPinning: false,
     isPinned: false,
-    currentTabUrl: null,
+    currentTab: null,
     // IPFS status
     ipfsNodeType: 'external',
     isIpfsOnline: false,
@@ -27,12 +27,12 @@ module.exports = (state, emitter) => {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
+    // initial render with status stub
+    emitter.emit('render')
     // initialize connection to the background script which will trigger UI updates
     port = browser.runtime.connect({name: 'browser-action-port'})
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
-        // quick initial redraw with cached values
-        emitter.emit('render')
         console.log('In browser action, received message from background:', message)
         await updateBrowserActionState(message.statusUpdate)
         // another redraw after laggy state update finished
@@ -57,7 +57,7 @@ module.exports = (state, emitter) => {
 
     try {
       const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
+      const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
       const pinResult = await ipfsCompanion.ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       state.isPinned = true
@@ -76,7 +76,7 @@ module.exports = (state, emitter) => {
 
     try {
       const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTabUrl).pathname)
+      const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
       const result = await ipfsCompanion.ipfs.pin.rm(currentPath, {recursive: true})
       state.isPinned = false
       console.log('ipfs.pin.rm result', result)
@@ -162,19 +162,23 @@ module.exports = (state, emitter) => {
     const ipfsContext = bg && status && status.ipfsPageActionsContext
 
     state.isIpfsContext = !!ipfsContext
-    state.currentTabUrl = status.currentTab ? status.currentTab.url : null
+    state.currentTab = status.currentTab || null
 
     if (state.isIpfsContext) {
       // There is no point in displaying actions that require API interaction if API is down
       const apiIsUp = status && status.peerCount >= 0
       if (apiIsUp) await updatePinnedState(status)
+      if (state.currentTab && browser.pageAction) {
+        // Get title stored on page load so that valid transport is displayed
+        // even if user toggles between public/custom gateway
+        state.pageActionTitle = await browser.pageAction.getTitle({tabId: state.currentTab.id})
+      }
     }
   }
 
   async function updateBrowserActionState (status) {
-    await updatePageActionsState(status)
-    const options = await browser.storage.local.get()
     if (status) {
+      const options = await browser.storage.local.get()
       if (options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
         state.gatewayAddress = options.customGatewayUrl
       } else {
@@ -186,11 +190,13 @@ module.exports = (state, emitter) => {
       state.swarmPeers = status.peerCount === -1 ? 0 : status.peerCount
       state.isIpfsOnline = status.peerCount > -1
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
+      await updatePageActionsState(status) // state.isIpfsContext
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null
       state.isIpfsOnline = false
       state.gatewayVersion = null
+      state.isIpfsContext = false
     }
   }
 

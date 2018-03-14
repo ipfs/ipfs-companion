@@ -42,7 +42,7 @@ module.exports = async function init () {
     copier = createCopier(getState, notify)
     dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
-    contextMenus = createContextMenus(getState, ipfsPathValidator, {
+    contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onUploadToIpfs: addFromURL,
       onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
@@ -288,6 +288,22 @@ module.exports = async function init () {
 
   async function onNavigationCommitted (details) {
     await contextMenus.update(details.tabId)
+    await updatePageActionIndicator(details.tabId, details.url)
+  }
+
+  async function updatePageActionIndicator (tabId, url) {
+    // Chrome does not permit for both pageAction and browserAction to be enabled at the same time
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
+    if (runtime.isFirefox && ipfsPathValidator.validIpfsOrIpnsUrl(url)) {
+      if (url.startsWith(state.gwURLString) || url.startsWith(state.apiURLString)) {
+        await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-on.svg' })
+        await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
+      } else {
+        await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-off.svg' })
+        await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtPublicGateway') })
+      }
+      await browser.pageAction.show(tabId)
+    }
   }
 
   async function onUpdatedTab (tabId, changeInfo, tab) {
