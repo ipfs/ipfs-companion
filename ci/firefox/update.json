@@ -3,14 +3,16 @@
         "ipfs-companion-dev-build@ci.ipfs.team": {
             "updates": [
                 {
-                    "version": "2.2.0.7583",
-                    "update_hash": "sha256:607a9400dfe198198fd29de2ca4fcee8d195f6835d049e8caf457d6078fcb472",
-                    "update_link": "https://ipfs.io/ipfs/QmXQLH4ib98NLgfhveitd1uK1rGuaKiimKVmrjdg6G7Lp6/ipfs_companion_dev_build_ea5c2af-2.2.0.7583-an+fx.xpi"
-                },
-                {
                     "version": "2.2.0.7921",
                     "update_hash": "sha256:5d95de35f53b818117157aabe0b6eefd732e7d62b029895ea175d201a147035a",
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.2.0beta3/ipfs_companion_dev_build_e9f77f7-2.2.0.7921-an.fx.xpi"
+                },
+                {
+                    "version": "2.2.0.8050",
+                    "applications": { "gecko": { "strict_min_version": "59" } },
+                    "update_hash": "sha256:4220a7e2e6672a346582d9523eb479a40a62a541f5ed57f02b5396e11d271069",
+                    "update_info_url": "https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v2.2.0beta4",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.2.0beta4/ipfs_companion_dev_build_b439a7d-2.2.0.8050-an.fx.xpi"
                 }
             ]
         }
