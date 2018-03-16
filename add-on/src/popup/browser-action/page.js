@@ -30,8 +30,12 @@ module.exports = function browserActionPage (state, emit) {
   return html`
     <div class="helvetica">
       ${header(headerProps)}
-      ${contextActions(contextActionsProps)}
-      ${operations(opsProps)}
+      <div class="bb b--black-20">
+        ${contextActions(contextActionsProps)}
+      </div>
+      <div class="bb b--black-20">
+        ${operations(opsProps)}
+      </div>
       ${gatewayStatus(gwStatusProps)}
     </div>
   `
