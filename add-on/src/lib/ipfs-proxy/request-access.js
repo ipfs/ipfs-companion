@@ -12,7 +12,8 @@ function createRequestAccess (browser, screen) {
     const url = browser.extension.getURL(opts.dialogPath || DIALOG_PATH)
 
     let dialogTabId
-    if (browser && browser.windows && browser.windows.create) {
+
+    if (browser.windows && browser.windows.create) {
       // display modal dialog in a centered popup window
       const currentWin = await browser.windows.getCurrent()
       const width = opts.dialogWidth || DIALOG_WIDTH
@@ -22,10 +23,6 @@ function createRequestAccess (browser, screen) {
 
       const dialogWindow = await browser.windows.create({ url, width, height, top, left, type: 'popup' })
       dialogTabId = dialogWindow.tabs[0].id
-      // Fix for Fx57 bug where bundled page loaded using
-      // browser.windows.create won't show contents unless resized.
-      // See https://bugzilla.mozilla.org/show_bug.cgi?id=1402110
-      await browser.windows.update(dialogWindow.id, {width: dialogWindow.width + 1})
     } else {
       // fallback: opening dialog as a new active tab
       // (runtimes without browser.windows.create, eg. Andorid)
