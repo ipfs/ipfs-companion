@@ -169,6 +169,14 @@
     },
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
+  "notify_startIpfsNodeTitle": {
+    "message": "Failed to start IPFS node",
+    "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeTitle)"
+  },
+  "notify_stopIpfsNodeTitle": {
+    "message": "Failed to stop IPFS node",
+    "description": "System notification title displayed when stopping an IPFS node fails (notify_startIpfsNodeTitle)"
+  },
   "option_header_nodeType" : {
     "message": "IPFS Node",
     "description": "A section header on the Preferences screen (option_header_nodeType)"

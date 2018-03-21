@@ -37,8 +37,19 @@ module.exports = async function init () {
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
-    ipfs = await initIpfsClient(state)
     notify = createNotifier(getState)
+
+    // It's ok for this to fail, node might be unavailable or mis-configured
+    try {
+      ipfs = await initIpfsClient(state)
+    } catch (err) {
+      console.error('[ipfs-companion] Failed to init IPFS client', err)
+      notify(
+        'notify_startIpfsNodeTitle',
+        err.name === 'ValidationError' ? err.details[0].message : err.message
+      )
+    }
+
     copier = createCopier(getState, notify)
     dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
@@ -385,6 +396,7 @@ module.exports = async function init () {
   }
 
   async function getSwarmPeerCount () {
+    if (!ipfs) return offlinePeerCount
     try {
       const peerInfos = await ipfs.swarm.peers()
       return peerInfos.length
@@ -395,7 +407,7 @@ module.exports = async function init () {
   }
 
   async function getRepoStats () {
-    if (!ipfs.stats || !ipfs.stats.repo) return {}
+    if (!ipfs || !ipfs.stats || !ipfs.stats.repo) return {}
     try {
       const repoStats = await ipfs.stats.repo()
       return repoStats
@@ -556,6 +568,7 @@ module.exports = async function init () {
         case 'preloadAtPublicGateway':
         case 'ipfsProxy':
           state[key] = change.newValue
+          break
       }
     }
 
@@ -564,7 +577,7 @@ module.exports = async function init () {
         await destroyIpfsClient()
       } catch (err) {
         console.error('[ipfs-companion] Failed to destroy IPFS client', err)
-        notify('Failed to stop IPFS node', err.message)
+        notify('notify_stopIpfsNodeTitle', err.message)
       } finally {
         ipfs = null
       }
@@ -573,7 +586,10 @@ module.exports = async function init () {
         ipfs = await initIpfsClient(state)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
-        notify('Failed to start IPFS node', err.message)
+        notify(
+          'notify_startIpfsNodeTitle',
+          err.name === 'ValidationError' ? err.details[0].message : err.message
+        )
       }
 
       apiStatusUpdate()

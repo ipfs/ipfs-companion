@@ -4,7 +4,7 @@ const browser = require('webextension-polyfill')
 
 function createNotifier (getState) {
   return (titleKey, messageKey, messageParam) => {
-    const title = browser.i18n.getMessage(titleKey)
+    const title = browser.i18n.getMessage(titleKey) || titleKey
     let message
     if (messageKey.startsWith('notify_')) {
       message = messageParam ? browser.i18n.getMessage(messageKey, messageParam) : browser.i18n.getMessage(messageKey)
