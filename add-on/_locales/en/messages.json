@@ -175,7 +175,7 @@
   },
   "notify_stopIpfsNodeTitle": {
     "message": "Failed to stop IPFS node",
-    "description": "System notification title displayed when stopping an IPFS node fails (notify_startIpfsNodeTitle)"
+    "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeTitle)"
   },
   "option_header_nodeType" : {
     "message": "IPFS Node",
