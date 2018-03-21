@@ -1,3 +1,9 @@
+html {
+  /* allocate proper width in Chrome */
+  min-width: 650px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 form * {
   font: caption;
   font-size: 1em;
@@ -45,10 +51,10 @@ label > dl > dd {
   margin-left: 0;
   margin-right: .2em;
 }
-div:hover {
+fieldset > div:hover {
   background-color: rgba(62, 148, 152, 0.05);
 }
-div:hover > label > dl > dd {
+fieldset > div:hover > label > dl > dd {
   color: #333;
 }
 input, select {
