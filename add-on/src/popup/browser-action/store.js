@@ -204,6 +204,8 @@ module.exports = (state, emitter) => {
   }
 
   async function updatePinnedState (ipfs, status) {
+    // skip update if there is an ongoing pin or unpin
+    if (state.isPinning || state.isUnPinning) return
     try {
       const currentPath = await resolveToIPFS(ipfs, new URL(status.currentTab.url).pathname)
       const response = await ipfs.pin.ls(currentPath, {quiet: true})
