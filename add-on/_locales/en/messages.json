@@ -169,13 +169,13 @@
     },
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
-  "notify_startIpfsNodeTitle": {
+  "notify_startIpfsNodeErrorTitle": {
     "message": "Failed to start IPFS node",
-    "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeTitle)"
+    "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
-  "notify_stopIpfsNodeTitle": {
+  "notify_stopIpfsNodeErrorTitle": {
     "message": "Failed to stop IPFS node",
-    "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeTitle)"
+    "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_header_nodeType" : {
     "message": "IPFS Node",

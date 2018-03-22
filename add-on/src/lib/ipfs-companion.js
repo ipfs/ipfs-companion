@@ -45,7 +45,7 @@ module.exports = async function init () {
     } catch (err) {
       console.error('[ipfs-companion] Failed to init IPFS client', err)
       notify(
-        'notify_startIpfsNodeTitle',
+        'notify_startIpfsNodeErrorTitle',
         err.name === 'ValidationError' ? err.details[0].message : err.message
       )
     }
@@ -577,7 +577,7 @@ module.exports = async function init () {
         await destroyIpfsClient()
       } catch (err) {
         console.error('[ipfs-companion] Failed to destroy IPFS client', err)
-        notify('notify_stopIpfsNodeTitle', err.message)
+        notify('notify_stopIpfsNodeErrorTitle', err.message)
       } finally {
         ipfs = null
       }
@@ -587,7 +587,7 @@ module.exports = async function init () {
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
-          'notify_startIpfsNodeTitle',
+          'notify_startIpfsNodeErrorTitle',
           err.name === 'ValidationError' ? err.details[0].message : err.message
         )
       }
