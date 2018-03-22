@@ -2,13 +2,11 @@ html.is-chrome {
   overflow: hidden;
 }
 .is-chrome body {
+  margin: 0;
   min-width: 650px;
   height: 450px;
   padding: 15px;
   overflow-y: auto;
-}
-body {
-  margin: 0;
 }
 form * {
   font: caption;

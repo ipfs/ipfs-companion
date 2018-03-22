@@ -16,6 +16,7 @@ app.route('*', optionsPage)
 // Start the application and render it to the given querySelector
 app.mount('#root')
 
+// Fix for Chrome in OSX https://github.com/ipfs-shipyard/ipfs-companion/pull/429
 if (window.navigator.vendor === 'Google Inc.') {
   document.querySelector('html').className = 'is-chrome'
 }
