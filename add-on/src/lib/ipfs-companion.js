@@ -37,8 +37,19 @@ module.exports = async function init () {
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
-    ipfs = await initIpfsClient(state)
     notify = createNotifier(getState)
+
+    // It's ok for this to fail, node might be unavailable or mis-configured
+    try {
+      ipfs = await initIpfsClient(state)
+    } catch (err) {
+      console.error('[ipfs-companion] Failed to init IPFS client', err)
+      notify(
+        'notify_startIpfsNodeErrorTitle',
+        err.name === 'ValidationError' ? err.details[0].message : err.message
+      )
+    }
+
     copier = createCopier(getState, notify)
     dnsLink = createDnsLink(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
@@ -385,6 +396,7 @@ module.exports = async function init () {
   }
 
   async function getSwarmPeerCount () {
+    if (!ipfs) return offlinePeerCount
     try {
       const peerInfos = await ipfs.swarm.peers()
       return peerInfos.length
@@ -395,7 +407,7 @@ module.exports = async function init () {
   }
 
   async function getRepoStats () {
-    if (!ipfs.stats || !ipfs.stats.repo) return {}
+    if (!ipfs || !ipfs.stats || !ipfs.stats.repo) return {}
     try {
       const repoStats = await ipfs.stats.repo()
       return repoStats
@@ -515,46 +527,72 @@ module.exports = async function init () {
   }
 
   async function onStorageChange (changes, area) {
+    let shouldRestartIpfsClient = false
+
     for (let key in changes) {
-      let change = changes[key]
-      if (change.oldValue !== change.newValue) {
-        // debug info
-        // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
-        if (key === 'ipfsNodeType') {
-          state.ipfsNodeType = change.newValue
-          ipfs = await initIpfsClient(state)
-          apiStatusUpdate()
-        } else if (key === 'ipfsApiUrl') {
+      const change = changes[key]
+      if (change.oldValue === change.newValue) continue
+
+      // debug info
+      // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
+      switch (key) {
+        case 'ipfsNodeType':
+        case 'ipfsNodeConfig':
+          shouldRestartIpfsClient = true
+          state[key] = change.newValue
+          break
+        case 'ipfsApiUrl':
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()
-          ipfs = await initIpfsClient(state)
-          apiStatusUpdate()
-        } else if (key === 'ipfsApiPollMs') {
+          shouldRestartIpfsClient = true
+          break
+        case 'ipfsApiPollMs':
           setApiStatusUpdateInterval(change.newValue)
-        } else if (key === 'customGatewayUrl') {
+          break
+        case 'customGatewayUrl':
           state.gwURL = new URL(change.newValue)
           state.gwURLString = state.gwURL.toString()
-        } else if (key === 'publicGatewayUrl') {
+          break
+        case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)
           state.pubGwURLString = state.pubGwURL.toString()
-        } else if (key === 'useCustomGateway') {
+          break
+        case 'useCustomGateway':
           state.redirect = change.newValue
-        } else if (key === 'linkify') {
-          state.linkify = change.newValue
-        } else if (key === 'catchUnhandledProtocols') {
-          state.catchUnhandledProtocols = change.newValue
-        } else if (key === 'displayNotifications') {
-          state.displayNotifications = change.newValue
-        } else if (key === 'automaticMode') {
-          state.automaticMode = change.newValue
-        } else if (key === 'dnslink') {
-          state.dnslink = change.newValue
-        } else if (key === 'preloadAtPublicGateway') {
-          state.preloadAtPublicGateway = change.newValue
-        } else if (key === 'ipfsProxy') {
-          state.ipfsProxy = change.newValue
-        }
+          break
+        case 'linkify':
+        case 'catchUnhandledProtocols':
+        case 'displayNotifications':
+        case 'automaticMode':
+        case 'dnslink':
+        case 'preloadAtPublicGateway':
+        case 'ipfsProxy':
+          state[key] = change.newValue
+          break
       }
+    }
+
+    if (shouldRestartIpfsClient) {
+      try {
+        await destroyIpfsClient()
+      } catch (err) {
+        console.error('[ipfs-companion] Failed to destroy IPFS client', err)
+        notify('notify_stopIpfsNodeErrorTitle', err.message)
+      } finally {
+        ipfs = null
+      }
+
+      try {
+        ipfs = await initIpfsClient(state)
+      } catch (err) {
+        console.error('[ipfs-companion] Failed to init IPFS client', err)
+        notify(
+          'notify_startIpfsNodeErrorTitle',
+          err.name === 'ValidationError' ? err.details[0].message : err.message
+        )
+      }
+
+      apiStatusUpdate()
     }
   }
 

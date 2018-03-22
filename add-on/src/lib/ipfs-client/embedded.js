@@ -1,19 +1,16 @@
 'use strict'
 
 const Ipfs = require('ipfs')
+const { optionDefaults } = require('../options')
 
 let node = null
 
-exports.init = function init () {
+exports.init = function init (opts) {
   console.log('[ipfs-companion] Embedded ipfs init')
 
-  node = new Ipfs({
-    config: {
-      Addresses: {
-        Swarm: []
-      }
-    }
-  })
+  node = new Ipfs(
+    JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig)
+  )
 
   if (node.isOnline()) {
     return Promise.resolve(node)

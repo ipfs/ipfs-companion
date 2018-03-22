@@ -3,7 +3,7 @@
 const external = require('./external')
 const embedded = require('./embedded')
 
-let client = null
+let client
 
 async function initIpfsClient (opts) {
   await destroyIpfsClient()
@@ -19,7 +19,11 @@ async function initIpfsClient (opts) {
 
 async function destroyIpfsClient () {
   if (client && client.destroy) {
-    return client.destroy()
+    try {
+      await client.destroy()
+    } finally {
+      client = null
+    }
   }
 }
 

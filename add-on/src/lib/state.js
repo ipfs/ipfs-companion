@@ -9,6 +9,7 @@ function initState (options) {
   // to minimize performance impact on overall browsing experience
   state.peerCount = offlinePeerCount
   state.ipfsNodeType = options.ipfsNodeType
+  state.ipfsNodeConfig = options.ipfsNodeConfig
   state.pubGwURL = new URL(options.publicGatewayUrl)
   state.pubGwURLString = state.pubGwURL.toString()
   state.redirect = options.useCustomGateway

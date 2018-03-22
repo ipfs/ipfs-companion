@@ -2,6 +2,13 @@
 
 const optionDefaults = Object.freeze({
   ipfsNodeType: 'external',
+  ipfsNodeConfig: JSON.stringify({
+    config: {
+      Addresses: {
+        Swarm: []
+      }
+    }
+  }, null, 2),
   publicGatewayUrl: 'https://ipfs.io',
   useCustomGateway: true,
   automaticMode: true,
