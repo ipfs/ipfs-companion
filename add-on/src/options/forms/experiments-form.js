@@ -11,8 +11,6 @@ function experimentsForm ({
   linkify,
   dnslink,
   ipfsProxy,
-  ipfsNodeType,
-  ipfsNodeConfig,
   onOptionChange,
   onOptionsReset
 }) {
@@ -22,7 +20,6 @@ function experimentsForm ({
   const onLinkifyChange = onOptionChange('linkify')
   const onDnsLinkChange = onOptionChange('dnslink')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
-  const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
 
   return html`
     <form>
@@ -90,17 +87,6 @@ function experimentsForm ({
           </label>
           <input type="checkbox" id="ipfs-proxy" onchange=${onIpfsProxyChange} checked=${ipfsProxy} />
         </div>
-        ${ipfsNodeType === 'embedded' ? html`
-          <div>
-            <label for="ipfsNodeConfig">
-              <dl>
-                <dt>${browser.i18n.getMessage('option_ipfsNodeConfig_title')}</dt>
-                <dd>${browser.i18n.getMessage('option_ipfsNodeConfig_description')}</dd>
-              </dl>
-            </label>
-            <textarea id="ipfsNodeConfig" rows="4" onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
-          </div>
-        ` : null}
         <div>
           <label for="resetAllOptions">
             <dl>

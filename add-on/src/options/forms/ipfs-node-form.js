@@ -4,8 +4,9 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
-function ipfsNodeForm ({ ipfsNodeType, onOptionChange }) {
+function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
+  const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
 
   return html`
     <form>
@@ -31,6 +32,17 @@ function ipfsNodeForm ({ ipfsNodeType, onOptionChange }) {
             </option>
           </select>
         </div>
+        ${ipfsNodeType === 'embedded' ? html`
+          <div>
+            <label for="ipfsNodeConfig">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_ipfsNodeConfig_title')}</dt>
+                <dd>${browser.i18n.getMessage('option_ipfsNodeConfig_description')}</dd>
+              </dl>
+            </label>
+            <textarea id="ipfsNodeConfig" rows="4" onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
+          </div>
+        ` : null}
       </fieldset>
     </form>
   `
