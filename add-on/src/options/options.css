@@ -1,8 +1,14 @@
-html {
-  /* allocate proper width in Chrome */
+html.is-chrome {
+  overflow: hidden;
+}
+.is-chrome body {
   min-width: 650px;
-  overflow-x: hidden;
+  height: 450px;
+  padding: 15px;
   overflow-y: auto;
+}
+body {
+  margin: 0;
 }
 form * {
   font: caption;
