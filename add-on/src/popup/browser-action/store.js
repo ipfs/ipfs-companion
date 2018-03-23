@@ -169,14 +169,19 @@ module.exports = (state, emitter) => {
     state.currentTab = status.currentTab || null
 
     if (state.isIpfsContext) {
+      // browser.pageAction-specific items that can be rendered earlier (snappy UI)
+      requestAnimationFrame(async () => {
+        const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
+        if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
+          // Get title stored on page load so that valid transport is displayed
+          // even if user toggles between public/custom gateway after the load
+          state.pageActionTitle = await browser.pageAction.getTitle(tabId)
+          emitter.emit('render')
+        }
+      })
       // There is no point in displaying actions that require API interaction if API is down
       const apiIsUp = status && status.peerCount >= 0
       if (apiIsUp) await updatePinnedState(ipfs, status)
-      if (browser.pageAction && state.currentTab) {
-        // Get title stored on page load so that valid transport is displayed
-        // even if user toggles between public/custom gateway after the load
-        state.pageActionTitle = await browser.pageAction.getTitle({tabId: state.currentTab.id})
-      }
     }
   }
 

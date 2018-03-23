@@ -87,10 +87,6 @@
     "message": "Non-IPFS resource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
-  "pageAction_statusPlaceholder": {
-    "message": "(checking status...)",
-    "description": "Placeholder label for status header in Page Action menu (pageAction_statusPlaceholder)"
-  },
   "contextMenu_uploadToIpfs": {
     "message": "Upload to IPFS",
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
