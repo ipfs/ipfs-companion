@@ -97,9 +97,10 @@ To work on the extension you need to install it from source rather than from the
 2. Build it:
     ```bash
     npm install
-    npm run build
-    # Below is only required for chrome dev, but allows you to try out in both FF and Chrome
-    npm run bundle:generic
+    npm run build    
+    npm run bundle:generic # for Chrome dev
+    # or
+    npm run bundle:firefox # for Firefox dev (build default)
     ```
 
 3. Load it into browser:
@@ -113,7 +114,7 @@ To work on the extension you need to install it from source rather than from the
         1. Enter `about:debugging` in the URL bar
         2. Check "Enable add-on debugging"
         3. Click "Load Temporary Add-on"
-        4. Pick the _file_ `add-on/manifest-firefox.json`
+        4. Pick the _file_ `add-on/manifest.json`
 
 **See [`docs/developer-notes.md`](docs/developer-notes.md) for more detailed instructions**
 
