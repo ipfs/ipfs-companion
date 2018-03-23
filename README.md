@@ -89,30 +89,34 @@ It is also possible to [grab the last successful build from `master`](https://ci
 but these builds are not signed nor will automatically update:
 `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chrome) or `about:debugging` (Firefox) for the purpose of quick smoke-testing.
 
-## Development or Other Browsers Supporting WebExtensions API
+## Development
 
-### Build from Sources
+To work on the extension you need to install it from source rather than from the add on store.
 
-Try manual installation:
-
-1. Download Sources
+1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
 2. Build it:
-
     ```bash
     npm install
-    npm run build
+    npm run build    
+    npm run bundle:generic # for Chrome dev
+    # or
+    npm run bundle:firefox # for Firefox dev (build default)
     ```
 
 3. Load it into browser:
     * Chromium-based
         1. Enter `chrome://extensions` in the URL bar
         2. Enable "Developer mode"
-        3. Click "Load unpacked extension..." and point it at `add-on/manifest.json`
+        3. Click "Load unpacked extension..."
+        4. Pick the _directory_ `add-on`
+
     * Firefox
         1. Enter `about:debugging` in the URL bar
-        2. Click "Load Temporary Add-on" and point it at `add-on/manifest.json`
+        2. Check "Enable add-on debugging"
+        3. Click "Load Temporary Add-on"
+        4. Pick the _file_ `add-on/manifest.json`
 
-4. If you plan to code, make sure to read [`docs/developer-notes.md`](docs/developer-notes.md) first
+**See [`docs/developer-notes.md`](docs/developer-notes.md) for more detailed instructions**
 
 ### Reproducible Build in Docker
 
