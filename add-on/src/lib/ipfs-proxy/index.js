@@ -34,7 +34,7 @@ function createIpfsProxy (getIpfs, getState) {
       getMessageData: (d) => d,
       pre: (fnName) => [
         createPreAcl(fnName, getState, getScope, accessControl, requestAccess),
-        createPreMfsScope(fnName, getScope)
+        createPreMfsScope(fnName, getScope, getIpfs)
       ]
     })
 

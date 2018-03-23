@@ -4,8 +4,8 @@ const DEFAULT_ROOT_PATH = '/dapps'
 // Creates a "pre" function that is called prior to calling a real function
 // on the IPFS instance. It modifies the arguments to MFS functions to scope
 // file access to a directory designated to the web page
-function createPreMfsScope (fnName, getScope, rootPath = DEFAULT_ROOT_PATH) {
-  return MfsPre[fnName] ? MfsPre[fnName](getScope, rootPath) : null
+function createPreMfsScope (fnName, getScope, getIpfs, rootPath = DEFAULT_ROOT_PATH) {
+  return MfsPre[fnName] ? MfsPre[fnName](getScope, getIpfs, rootPath) : null
 }
 
 module.exports = createPreMfsScope
@@ -14,8 +14,8 @@ const MfsPre = {
   'files.cp': createSrcDestPre,
   'files.mkdir': createSrcPre,
   'files.stat': createSrcPre,
-  'files.rm' (getScope, rootPath) {
-    const srcPre = createSrcPre(getScope, rootPath)
+  'files.rm' (getScope, getIpfs, rootPath) {
+    const srcPre = createSrcPre(getScope, getIpfs, rootPath)
     // Do not allow rm app root
     // Need to explicitly deny because it's ok to rm -rf /a/path that's not /
     return (...args) => {
@@ -24,8 +24,8 @@ const MfsPre = {
     }
   },
   'files.read': createSrcPre,
-  'files.write' (getScope, rootPath) {
-    const srcPre = createSrcPre(getScope, rootPath)
+  'files.write' (getScope, getIpfs, rootPath) {
+    const srcPre = createSrcPre(getScope, getIpfs, rootPath)
     // Do not allow write to app root
     // Need to explicitly deny because app path might not exist yet
     return (...args) => {
@@ -39,9 +39,9 @@ const MfsPre = {
 }
 
 // Scope a src/dest tuple to the app path
-function createSrcDestPre (getScope, rootPath) {
+function createSrcDestPre (getScope, getIpfs, rootPath) {
   return async (...args) => {
-    const appPath = getAppPath(await getScope(), rootPath)
+    const appPath = await getAppPath(getScope, getIpfs, rootPath)
     args[0][0] = Path.join(appPath, safePath(args[0][0]))
     args[0][1] = Path.join(appPath, safePath(args[0][1]))
     return args
@@ -49,18 +49,18 @@ function createSrcDestPre (getScope, rootPath) {
 }
 
 // Scope a src path to the app path
-function createSrcPre (getScope, rootPath) {
+function createSrcPre (getScope, getIpfs, rootPath) {
   return async (...args) => {
-    const appPath = getAppPath(await getScope(), rootPath)
+    const appPath = await getAppPath(getScope, getIpfs, rootPath)
     args[0] = Path.join(appPath, safePath(args[0]))
     return args
   }
 }
 
 // Scope an optional src path to the app path
-function createOptionalSrcPre (getScope, rootPath) {
+function createOptionalSrcPre (getScope, getIpfs, rootPath) {
   return async (...args) => {
-    const appPath = getAppPath(await getScope(), rootPath)
+    const appPath = await getAppPath(getScope, getIpfs, rootPath)
 
     if (Object.prototype.toString.call(args[0]) === '[object String]') {
       args[0] = Path.join(appPath, safePath(args[0]))
@@ -76,12 +76,22 @@ function createOptionalSrcPre (getScope, rootPath) {
   }
 }
 
-// Get the app path for a scope, prefixed with rootPath
-const getAppPath = (scope, rootPath) => rootPath + scopeToPath(scope)
+// Get the app path (create if not exists) for a scope, prefixed with rootPath
+const getAppPath = async (getScope, getIpfs, rootPath) => {
+  const appPath = rootPath + scopeToPath(await getScope())
+  await getIpfs().files.mkdir(appPath, { parents: true })
+  return appPath
+}
 
 // Turn http://ipfs.io/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn
-// into /http:/ipfs.io/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn
-const scopeToPath = (scope) => ('/' + scope).replace(/\/\//g, '/')
+// into /http%3A/ipfs.io/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn
+const scopeToPath = (scope) => {
+  return ('/' + scope)
+    .replace(/\/\//g, '/')
+    .split('/')
+    .map(encodeURIComponent)
+    .join('/')
+}
 
 // Make a path "safe" by resolving any directory traversal segments relative to
 // '/'. Allows us to then prefix the app path without worrying about the user
