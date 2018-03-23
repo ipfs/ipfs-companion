@@ -19,7 +19,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
 
-    const preAcl = createPreAcl(getState, accessControl, getScope, permission)
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl)
 
     let error
 
@@ -42,7 +42,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
 
     try {
       await Promise.all(ACL_WHITELIST.map(permission => {
-        const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
+        const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
         return preAcl()
       }))
     } catch (err) {
@@ -58,7 +58,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: true }))
-    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
 
     await preAcl()
 
@@ -71,7 +71,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: false }))
-    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
 
     let error
 
@@ -91,7 +91,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: false }))
-    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
 
     let error
 
@@ -123,7 +123,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
     const requestAccess = Sinon.spy(async () => ({ allow: true }))
-    const preAcl = createPreAcl(getState, accessControl, getScope, permission, requestAccess)
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
 
     await preAcl()
     expect(requestAccess.callCount).to.equal(1)
