@@ -33,10 +33,16 @@ module.exports = (state, emitter) => {
     port = browser.runtime.connect({name: 'browser-action-port'})
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
+        let status = message.statusUpdate
         console.log('In browser action, received message from background:', message)
-        await updateBrowserActionState(message.statusUpdate)
-        // another redraw after laggy state update finished
+        await updateBrowserActionState(status)
         emitter.emit('render')
+        if (status.ipfsPageActionsContext) {
+          // calculating pageActions states is expensive (especially pin-related checks)
+          // we update them in separate step to keep UI snappy
+          await updatePageActionsState(status)
+          emitter.emit('render')
+        }
       }
     })
   })
@@ -56,9 +62,9 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
-      const pinResult = await ipfsCompanion.ipfs.pin.add(currentPath, { recursive: true })
+      const ipfs = await getIpfsApi()
+      const currentPath = await resolveToIPFS(ipfs, new URL(state.currentTab.url).pathname)
+      const pinResult = await ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       state.isPinned = true
       notify('notify_pinnedIpfsResourceTitle', currentPath)
@@ -75,9 +81,9 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(state.currentTab.url).pathname)
-      const result = await ipfsCompanion.ipfs.pin.rm(currentPath, {recursive: true})
+      const ipfs = await getIpfsApi()
+      const currentPath = await resolveToIPFS(ipfs, new URL(state.currentTab.url).pathname)
+      const result = await ipfs.pin.rm(currentPath, {recursive: true})
       state.isPinned = false
       console.log('ipfs.pin.rm result', result)
       notify('notify_unpinnedIpfsResourceTitle', currentPath)
@@ -154,25 +160,28 @@ module.exports = (state, emitter) => {
   })
 
   async function updatePageActionsState (status) {
-    // IPFS contexts require access to background page
-    // which is denied in Private Browsing mode
-    const bg = await getBackgroundPage()
+    // IPFS contexts require access to ipfs API object from background page
+    // Note: access to background page is denied in Private Browsing mode
+    const ipfs = await getIpfsApi()
 
     // Check if current page is an IPFS one
-    const ipfsContext = bg && status && status.ipfsPageActionsContext
-
-    state.isIpfsContext = !!ipfsContext
+    state.isIpfsContext = !!(ipfs && status && status.ipfsPageActionsContext)
     state.currentTab = status.currentTab || null
 
     if (state.isIpfsContext) {
+      // browser.pageAction-specific items that can be rendered earlier (snappy UI)
+      requestAnimationFrame(async () => {
+        const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
+        if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
+          // Get title stored on page load so that valid transport is displayed
+          // even if user toggles between public/custom gateway after the load
+          state.pageActionTitle = await browser.pageAction.getTitle(tabId)
+          emitter.emit('render')
+        }
+      })
       // There is no point in displaying actions that require API interaction if API is down
       const apiIsUp = status && status.peerCount >= 0
-      if (apiIsUp) await updatePinnedState(status)
-      if (state.currentTab && browser.pageAction) {
-        // Get title stored on page load so that valid transport is displayed
-        // even if user toggles between public/custom gateway
-        state.pageActionTitle = await browser.pageAction.getTitle({tabId: state.currentTab.id})
-      }
+      if (apiIsUp) await updatePinnedState(ipfs, status)
     }
   }
 
@@ -190,7 +199,6 @@ module.exports = (state, emitter) => {
       state.swarmPeers = status.peerCount === -1 ? 0 : status.peerCount
       state.isIpfsOnline = status.peerCount > -1
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
-      await updatePageActionsState(status) // state.isIpfsContext
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null
@@ -200,11 +208,12 @@ module.exports = (state, emitter) => {
     }
   }
 
-  async function updatePinnedState (status) {
+  async function updatePinnedState (ipfs, status) {
+    // skip update if there is an ongoing pin or unpin
+    if (state.isPinning || state.isUnPinning) return
     try {
-      const { ipfsCompanion } = await getBackgroundPage()
-      const currentPath = await resolveToIPFS(new URL(status.currentTab.url).pathname)
-      const response = await ipfsCompanion.ipfs.pin.ls(currentPath, {quiet: true})
+      const currentPath = await resolveToIPFS(ipfs, new URL(status.currentTab.url).pathname)
+      const response = await ipfs.pin.ls(currentPath, {quiet: true})
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {
@@ -227,11 +236,15 @@ function getBackgroundPage () {
   return browser.runtime.getBackgroundPage()
 }
 
-async function resolveToIPFS (path) {
+async function getIpfsApi () {
+  const bg = await getBackgroundPage()
+  return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfs : null
+}
+
+async function resolveToIPFS (ipfs, path) {
   path = safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
-    const { ipfsCompanion } = await getBackgroundPage()
-    const response = await ipfsCompanion.ipfs.name.resolve(path, {recursive: true, nocache: false})
+    const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
     return response.Path
   }
   return path

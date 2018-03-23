@@ -9,3 +9,11 @@
 .outline-0--focus:focus {
   outline: 0;
 }
+
+.fade-in {
+  animation: fade-in 600ms;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

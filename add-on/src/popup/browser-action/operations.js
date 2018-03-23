@@ -15,7 +15,7 @@ module.exports = function operations ({
   onToggleRedirect
 }) {
   return html`
-    <div class="pv1">
+    <div class="fade-in pv1">
       ${isIpfsOnline ? (
         navItem({
           text: browser.i18n.getMessage('panel_quickUpload'),

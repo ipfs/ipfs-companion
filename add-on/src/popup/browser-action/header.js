@@ -8,7 +8,7 @@ const logo = require('../logo')
 module.exports = function header ({ ipfsNodeType, onToggleNodeType, isIpfsOnline }) {
   return html`
     <div class="pv3 br2 br--top ba bw1 b--white" style="background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%); background-size: auto 100%">
-      <div class="tc mb2" title="${isIpfsOnline ? '' : 'offline'}">
+      <div class="fade-in tc mb2" title="${isIpfsOnline ? '' : 'offline'}">
         ${logo({
           size: 52,
           path: '../../../icons',
