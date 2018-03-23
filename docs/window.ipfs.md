@@ -11,6 +11,7 @@
     - [Do I need to confirm every API call?](#do-i-need-to-confirm-every-api-call)
     - [Can I disable this for now?](#can-i-disable-this-for-now)
     - [How are permissions scoped?](#how-are-permissions-scoped)
+    - [Are mutable file system (MFS) files sandboxed to a directory?](#are-mutable-file-system-mfs-files-sandboxed-to-a-directory)
 
 ## Background
 
@@ -163,7 +164,7 @@ e.g.
 
 ## Are mutable file system (MFS) files sandboxed to a directory?
 
-Yes. To avoid conflicts, each app gets it's own MFS directory where it can store files. When using MFS functions (see [docs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)) this directory will be prefixed to paths you pass automatically. Your app's MFS directory is based on the **origin and path** where your application is running.
+Yes. To avoid conflicts, each app gets it's own MFS directory where it can store files. When using MFS functions (see [docs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)) this directory will be automatically added to paths you pass. Your app's MFS directory is based on the **origin and path** where your application is running.
 
 e.g.
 
