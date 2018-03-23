@@ -16,15 +16,12 @@ function quickUploadStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
   state.filesCount = ''
-  state.repoSize = ''
   state.ipfsNodeType = 'external'
 
   function updateState ({ipfsNodeType, peerCount, repoStats = {}}) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
-    state.filesCount = repoStats.NumObjects || ''
-    const repoSizeInMB = ((repoStats.RepoSize || 0) / 1000000)
-    state.repoSize = `${repoSizeInMB}MB`
+    state.filesCount = repoStats.numObjects || ''
   }
 
   let port
