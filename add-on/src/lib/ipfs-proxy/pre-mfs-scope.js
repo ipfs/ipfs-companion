@@ -16,7 +16,9 @@ const MfsPre = {
   'files.stat': createSrcPre,
   'files.rm' (getScope, rootPath) {
     const srcPre = createSrcPre(getScope, rootPath)
-    return (...args) => { // Do not allow rm app root
+    // Do not allow rm app root
+    // Need to explicitly deny because it's ok to rm -rf /a/path that's not /
+    return (...args) => {
       if (isRoot(args[0])) throw new Error('cannot delete root')
       return srcPre(...args)
     }
@@ -24,7 +26,9 @@ const MfsPre = {
   'files.read': createSrcPre,
   'files.write' (getScope, rootPath) {
     const srcPre = createSrcPre(getScope, rootPath)
-    return (...args) => { // Do not allow write to app root
+    // Do not allow write to app root
+    // Need to explicitly deny because app path might not exist yet
+    return (...args) => {
       if (isRoot(args[0])) throw new Error('/ was not a file')
       return srcPre(...args)
     }
@@ -62,9 +66,10 @@ function createOptionalSrcPre (getScope, rootPath) {
       args[0] = Path.join(appPath, safePath(args[0]))
     } else {
       switch (args.length) {
-        case 0: return [appPath]          // e.g. ipfs.files.ls()
+        case 0: return [appPath] // e.g. ipfs.files.ls()
         case 1: return [appPath, args[0]] // e.g. ipfs.files.ls(options)
         case 2: return [appPath, args[1]] // e.g. ipfs.files.ls(null, options)
+        default: throw new Error('Unexpected number of arguments')
       }
     }
     return args
