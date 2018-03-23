@@ -97,9 +97,9 @@ To work on the extension you need to install it from source rather than from the
 2. Build it:
     ```bash
     npm install
-    # Only required for chrome dev, but allows you to try out in both FF and Chrome
-    npm run bundle:generic
     npm run build
+    # Below is only required for chrome dev, but allows you to try out in both FF and Chrome
+    npm run bundle:generic
     ```
 
 3. Load it into browser:
