@@ -51,7 +51,11 @@ First, build it manually:
 npm run build bundle:generic # last part is important: it overwrites manifest
 ```
 
-Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on/manifest.json`
+Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on`
+
+| Chrome "unpacked extension" | Firefox "temporary add on" |
+|-----------------------------|----------------------------|
+| ![installing ipfs-companion as an unpacked extension in chrome](gifs/ipfs-companion-install-chrome-dev.gif) | ![installing ipfs-companion as a temporary add on in firefox](gifs/ipfs-companion-install-firefox-dev.gif) |
 
 
 ### Firefox for Android
