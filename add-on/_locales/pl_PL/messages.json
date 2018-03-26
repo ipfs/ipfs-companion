@@ -309,18 +309,6 @@
     "message": "Rozszerzenie przeglądarki ułatwiające dostęp do zasobów IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers_and_files": {
-    "message": "Połączono z $PEERCOUNT$ węzłami, udostępniając $FILESCOUNT$ plików",
-    "description": "Info stats beneath the header on the share files page (quickUpload_subhead_peers_and_files)",
-    "placeholders": {
-      "peerCount": {
-        "content": "$1"
-      },
-      "filesCount": {
-        "content": "$2"
-      }
-    }
-  },
   "quickUpload_subhead_peers": {
     "message": "Połączono z $PEERCOUNT$ węzłami",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",

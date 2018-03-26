@@ -309,18 +309,6 @@
     "message": "Ekstensi peramban nyang meunyederhanakan akses u sumber daya IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers_and_files": {
-    "message": "Meuhubong u rekan-rekan $PEERCOUNT$ dan berbagi file $FILESCOUNT$",
-    "description": "Info stats beneath the header on the share files page (quickUpload_subhead_peers_and_files)",
-    "placeholders": {
-      "peerCount": {
-        "content": "$1"
-      },
-      "filesCount": {
-        "content": "$2"
-      }
-    }
-  },
   "quickUpload_subhead_peers": {
     "message": "Meuhubong u rekan-rekan $PEERCOUNT$",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",
