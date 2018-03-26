@@ -309,18 +309,6 @@
     "message": "Extension de navigateur qui simplifie l’accès aux ressources de IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers_and_files": {
-    "message": "Connecté à $PEERCOUNT$ paires et partages $FILESCOUNT$ fichiers",
-    "description": "Info stats beneath the header on the share files page (quickUpload_subhead_peers_and_files)",
-    "placeholders": {
-      "peerCount": {
-        "content": "$1"
-      },
-      "filesCount": {
-        "content": "$2"
-      }
-    }
-  },
   "quickUpload_subhead_peers": {
     "message": "Connecté à $PEERCOUNT$ paires",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",

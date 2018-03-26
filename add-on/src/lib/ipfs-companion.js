@@ -169,11 +169,6 @@ module.exports = async function init () {
     const info = {
       ipfsNodeType: state.ipfsNodeType,
       peerCount: state.peerCount,
-      // Convert big.js numbers into strings before sending.
-      // Chrome uses JSON.stringify to send objects over port.postMessage whereas
-      // Firefox uses structured clone. It means that on the other side FF gets
-      // a weird object (not a big.js number object) unless we stringify first.
-      repoStats: JSON.parse(JSON.stringify(state.repoStats)),
       gwURLString: state.gwURLString,
       pubGwURLString: state.pubGwURLString,
       currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
@@ -383,8 +378,6 @@ module.exports = async function init () {
     let oldPeerCount = state.peerCount
     state.peerCount = await getSwarmPeerCount()
     updatePeerCountDependentStates(oldPeerCount, state.peerCount)
-    // update repo stats
-    state.repoStats = await getRepoStats()
     // trigger pending updates
     await sendStatusUpdateToBrowserAction()
   }
@@ -403,17 +396,6 @@ module.exports = async function init () {
     } catch (error) {
       console.error(`Error while ipfs.swarm.peers: ${error}`)
       return offlinePeerCount
-    }
-  }
-
-  async function getRepoStats () {
-    if (!ipfs || !ipfs.stats || !ipfs.stats.repo) return {}
-    try {
-      const repoStats = await ipfs.stats.repo()
-      return repoStats
-    } catch (error) {
-      console.error(`Error while ipfs.stats.repo: ${error}`)
-      return {}
     }
   }
 

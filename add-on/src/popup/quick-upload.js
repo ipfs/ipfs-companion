@@ -15,16 +15,11 @@ app.mount('#root')
 function quickUploadStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
-  state.filesCount = ''
-  state.repoSize = ''
   state.ipfsNodeType = 'external'
 
-  function updateState ({ipfsNodeType, peerCount, repoStats = {}}) {
+  function updateState ({ipfsNodeType, peerCount}) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
-    state.filesCount = repoStats.NumObjects || ''
-    const repoSizeInMB = ((repoStats.RepoSize || 0) / 1000000)
-    state.repoSize = `${repoSizeInMB}MB`
   }
 
   let port
@@ -69,14 +64,8 @@ function quickUploadStore (state, emitter) {
 
 function quickUploadPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
-  const {filesCount, peerCount} = state
-  let subhead = ''
-  if (filesCount && peerCount) {
-    subhead = browser.i18n.getMessage('quickUpload_subhead_peers_and_files', [peerCount, filesCount])
-  }
-  if (!filesCount && peerCount) {
-    subhead = browser.i18n.getMessage('quickUpload_subhead_peers', [peerCount])
-  }
+  const {peerCount} = state
+
   return html`
     <div class="avenir pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); height:100%;">
       <div class="mw8 center pa3 white">
@@ -91,7 +80,7 @@ function quickUploadPage (state, emit) {
               ${browser.i18n.getMessage('panel_quickUpload')}
             </h1>
             <p class="f3 fw2 lh-copy ma0 light-gray">
-              ${subhead}
+              ${browser.i18n.getMessage('quickUpload_subhead_peers', [peerCount])}
             </p>
           </div>
         </header>
