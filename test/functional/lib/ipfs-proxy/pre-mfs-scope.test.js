@@ -183,7 +183,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     expect(() => { if (error) throw error }).to.throw('cannot delete root')
   })
 
-  it.only('should scope dweb paths', async () => {
+  it('should scope dweb paths', async () => {
     const testData = [
       // 0: scope, 1: expected path (after mkdir('/dir') call)
       ['/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
