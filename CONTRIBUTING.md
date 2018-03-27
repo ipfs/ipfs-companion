@@ -25,7 +25,7 @@ See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for de
 
 ## Translations
 
-Submit PR with a new locale or improve existing ones via [Crowdin](https://crowdin.com/project/ipfs-companion).
+Submit PR with a new locale or improve existing ones. Make sure to read [Localization Notes](docs/localization-notes.md).
 
 ## Writing Code
 

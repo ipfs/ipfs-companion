@@ -87,5 +87,6 @@ Each `npm` task can be run separately. The most useful ones are:
   export PATH="/path/to/alternative/version/of/firefox/:${PATH}"
   ```
 
+- [Localization Notes](localization-notes.md) (running browsers with specific locale etc)
 - [Testing persistent and restart features](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
 
