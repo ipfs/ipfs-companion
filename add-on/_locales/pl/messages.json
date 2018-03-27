@@ -88,7 +88,7 @@
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Wyślij do IPFS",
+    "message": "Dodaj do IPFS",
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
   },
   "notify_addonIssueTitle": {
