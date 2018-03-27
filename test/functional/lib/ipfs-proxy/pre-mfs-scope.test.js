@@ -18,8 +18,8 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre(['/source.txt', '/destination.txt'])
-    expect(args[0][0]).to.equal('/test-dapps/https%3A/ipfs.io/source.txt')
-    expect(args[0][1]).to.equal('/test-dapps/https%3A/ipfs.io/destination.txt')
+    expect(args[0][0]).to.equal('/test-dapps/https/ipfs.io/source.txt')
+    expect(args[0][1]).to.equal('/test-dapps/https/ipfs.io/destination.txt')
   })
 
   it('should scope src path for files.mkdir', async () => {
@@ -28,7 +28,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/dir')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/dir')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/dir')
   })
 
   it('should scope src path for files.stat', async () => {
@@ -37,7 +37,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should scope src path for files.rm', async () => {
@@ -46,7 +46,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/file')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/file')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/file')
   })
 
   it('should scope src path for files.read', async () => {
@@ -55,7 +55,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/path/to/file.md')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/path/to/file.md')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/path/to/file.md')
   })
 
   it('should scope src path for files.write', async () => {
@@ -64,7 +64,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/path/to/file.md')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/path/to/file.md')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/path/to/file.md')
   })
 
   it('should scope src/dest paths for files.mv', async () => {
@@ -73,8 +73,8 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre(['/source.txt', '/destination.txt'])
-    expect(args[0][0]).to.equal('/test-dapps/https%3A/ipfs.io/source.txt')
-    expect(args[0][1]).to.equal('/test-dapps/https%3A/ipfs.io/destination.txt')
+    expect(args[0][0]).to.equal('/test-dapps/https/ipfs.io/source.txt')
+    expect(args[0][1]).to.equal('/test-dapps/https/ipfs.io/destination.txt')
   })
 
   it('should scope src path for files.flush', async () => {
@@ -83,7 +83,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/path/to/file.md')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/path/to/file.md')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/path/to/file.md')
   })
 
   it('should scope src path for files.flush with no path and no options', async () => {
@@ -92,7 +92,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre()
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should scope src path for files.flush with no path and options', async () => {
@@ -101,7 +101,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre({})
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should scope src path for files.flush with null path and options', async () => {
@@ -110,7 +110,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre(null, {})
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should scope src path for files.ls', async () => {
@@ -119,7 +119,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre('/path/to/file.md')
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/path/to/file.md')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/path/to/file.md')
   })
 
   it('should scope src path for files.ls with no path and no options', async () => {
@@ -128,7 +128,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre()
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should scope src path for files.ls with no path and options', async () => {
@@ -137,7 +137,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre({})
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should scope src path for files.ls with null path and options', async () => {
@@ -146,7 +146,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
     const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
     const args = await pre(null, {})
-    expect(args[0]).to.equal('/test-dapps/https%3A/ipfs.io/')
+    expect(args[0]).to.equal('/test-dapps/https/ipfs.io/')
   })
 
   it('should not allow write to root', async () => {
@@ -181,5 +181,34 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     }
 
     expect(() => { if (error) throw error }).to.throw('cannot delete root')
+  })
+
+  it.only('should scope dweb paths', async () => {
+    const testData = [
+      // 0: scope, 1: expected path (after mkdir('/dir') call)
+      ['/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['ipfs:/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['ipfs://QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['/ipns/arewedistributedyet.com', '/test-dapps/ipns/arewedistributedyet.com/dir'],
+      ['ipns:/arewedistributedyet.com', '/test-dapps/ipns/arewedistributedyet.com/dir'],
+      ['ipns://arewedistributedyet.com', '/test-dapps/ipns/arewedistributedyet.com/dir'],
+      ['dweb:/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/dweb/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['dweb://ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/dweb/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['web+ipfs:/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/web%2Bipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['web+ipfs://QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn', '/test-dapps/web%2Bipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn/dir'],
+      ['web+ipns:/arewedistributedyet.com', '/test-dapps/web%2Bipns/arewedistributedyet.com/dir'],
+      ['web+ipns://arewedistributedyet.com', '/test-dapps/web%2Bipns/arewedistributedyet.com/dir'],
+      ['web+dweb://ipns/arewedistributedyet.com', '/test-dapps/web%2Bdweb/ipns/arewedistributedyet.com/dir']
+    ]
+
+    const fnName = 'files.mkdir'
+    const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
+
+    for (let i = 0; i < testData.length; i++) {
+      const getScope = () => testData[i][0]
+      const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
+      const args = await pre('/dir')
+      expect(args[0]).to.equal(testData[i][1])
+    }
   })
 })

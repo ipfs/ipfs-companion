@@ -169,12 +169,12 @@ Yes. To avoid conflicts, each app gets it's own MFS directory where it can store
 e.g.
 
 * `files.write` to `/myfile.txt` on `https://domain.com/`
-    * writes to `/dapps/https:/domain.com/myfile.txt`
+    * writes to `/dapps/https/domain.com/myfile.txt`
 * `files.write` to `/path/to/myfile.txt` on `https://domain.com/feature`
-    * writes to `/dapps/https:/domain.com/feature/path/to/myfile.txt`
+    * writes to `/dapps/https/domain.com/feature/path/to/myfile.txt`
 * `files.read` from `/feature/path/to/myfile.txt` on `https://domain.com/`
-    * reads from `/dapps/https:/domain.com/feature/path/to/myfile.txt`
+    * reads from `/dapps/https/domain.com/feature/path/to/myfile.txt`
 * `files.stat` to `/` on `https://domain.com/feature`
-    * stats `/dapps/https:/domain.com/feature`
+    * stats `/dapps/https/domain.com/feature`
 * `files.read` from `/../myfile.txt` on `https://domain.com/feature`
-    * reads from `/dapps/https:/domain.com/feature/myfile.txt` (no traverse above your app's root)
+    * reads from `/dapps/https/domain.com/feature/myfile.txt` (no traverse above your app's root)

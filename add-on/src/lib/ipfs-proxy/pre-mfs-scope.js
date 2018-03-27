@@ -84,11 +84,13 @@ const getAppPath = async (getScope, getIpfs, rootPath) => {
 }
 
 // Turn http://ipfs.io/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn
-// into /http%3A/ipfs.io/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn
+// into /http/ipfs.io/ipfs/QmUmaEnH1uMmvckMZbh3yShaasvELPW4ZLPWnB4entMTEn
 const scopeToPath = (scope) => {
   return ('/' + scope)
     .replace(/\/\//g, '/')
     .split('/')
+    // Special case for protocol in scope, remove : from the end
+    .map((seg, i) => i === 1 && seg.endsWith(':') ? seg.slice(0, -1) : seg)
     .map(encodeURIComponent)
     .join('/')
 }
