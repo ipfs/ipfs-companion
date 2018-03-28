@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeEmbedded": {
-    "message": "Встроенный",
+    "message": "Embedded",
     "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
   },
   "panel_headerIpfsNodeEmbeddedTitle": {
@@ -12,7 +12,7 @@
     "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
   },
   "panel_headerIpfsNodeExternal": {
-    "message": "Внешний",
+    "message": "External",
     "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
   },
   "panel_headerIpfsNodeExternalTitle": {
@@ -20,7 +20,7 @@
     "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
   },
   "panel_statusGatewayAddress": {
-    "message": "HTTP шлюз",
+    "message": "gateway",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusApiAddress": {
@@ -28,111 +28,123 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusGatewayVersion": {
-    "message": "версия",
+    "message": "versione",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
-    "message": "пиры",
+    "message": "nodi connessi",
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
     "message": "The number of other IPFS nodes you can connect to",
-    "description": "A label tool-tip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
+    "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
-    "message": "Быстрая загрузка",
+    "message": "Upload veloce",
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
-    "message": "Веб-интерфейс",
+    "message": "Apri WebUI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
-    "message": "Настройки",
+    "message": "Apri Preferenze",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_switchToCustomGateway": {
-    "message": "Подключиться к собственному шлюзу",
+    "message": "Switch to Custom Gateway",
     "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
   },
   "panel_switchToPublicGateway": {
-    "message": "Подключиться к публичному шлюзу",
+    "message": "Switch to Public Gateway",
     "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Закрепить ресурс",
+    "message": "Spillare Risorsa IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Открепить ресурс",
+    "message": "Rimuovi la risorsa IPFS spillata",
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Скопировать каноничный адрес",
+    "message": "Copia indirizzo canonico",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Скопировать URL публичного шлюза",
+    "message": "Copia l'URL del Gateway Pubblico",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "pageAction_titleIpfsAtPublicGateway": {
+    "message": "IPFS resource loaded via Public Gateway",
+    "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
+  },
+  "pageAction_titleIpfsAtCustomGateway": {
+    "message": "IPFS resource loaded via Custom Gateway",
+    "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
+  },
+  "pageAction_titleNonIpfs": {
+    "message": "Non-IPFS resource",
+    "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
+  },
   "contextMenu_uploadToIpfs": {
-    "message": "Загрузить в IPFS",
+    "message": "Carica su IPFS",
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS Add-on Issue",
+    "message": "Problema con moduli aggiuntivi (add-on) IPFS",
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Откройте консоль браузера, чтобы увидеть детальную информацию",
+    "message": "Apri la console del browser per maggiori dettagli",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Публичный URL скопирован",
+    "message": "URL pubblico copiato",
     "description": "A title of system notification (notify_copiedPublicURLTitle)"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Канонический адрес скопирован",
+    "message": "Indirizzo canonico copiato",
     "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS ресурс закреплен",
+    "message": "La Risorsa IPFS è ora mantenuta",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "IPFS ресурс откреплен",
+    "message": "La risorsa IPFS non sara piu mantenuta",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Ошибка при прикреплении IPFS ресурса",
+    "message": "Errore mentre mantenevo la risorsa IPFS",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Ошибка при откреплении IPFS ресурса",
+    "message": "Errore mentre rimuovevo il mantenimento della risorsa IPFS",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API доступно",
+    "message": "Le API di IPFS sono Online",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatic Mode: Custom Gateway Redirect is active",
+    "message": "Modalità automatica: Il reindirizzamento ad un Gateway personalizzato è attivo",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API недоступно",
+    "message": "Le API di IPFS sono Offline",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Автоматический решим: Публичный шлюз будет использоваться по-умолчанию",
+    "message": "Modalità automatica: Il Gateway pubblico verrà utilizzato come un fallback",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
-    "message": "Не удается загрузить через IPFS API",
+    "message": "Impossibile caricare tramite le API di IPFS",
     "description": "A title of system notification (notify_uploadErrorTitle)"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Попробуйте отключить защиту от служения (нажмите ctr+shift+j для получения подробностей)",
+    "message": "Prova a disattivare la protezione del monitoraggio (premere ctrl\/cmd + shift + j per maggiori dettagli)",
     "description": "(notify_uploadTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -145,13 +157,21 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$ERROR$ (нажмите ctrl+shift+j для получения подробностей)",
+    "message": "$ERROR$ (premi ctrl\/cmd + shift + j per maggiori dettagli)",
     "placeholders": {
       "error": {
         "content": "$1"
       }
     },
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
+  },
+  "notify_startIpfsNodeErrorTitle": {
+    "message": "Failed to start IPFS node",
+    "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
+  },
+  "notify_stopIpfsNodeErrorTitle": {
+    "message": "Failed to stop IPFS node",
+    "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_header_nodeType": {
     "message": "IPFS Node",
@@ -165,40 +185,48 @@
     "message": "External: Connect to an IPFS daemon over HTTP. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
+  "option_ipfsNodeConfig_title": {
+    "message": "IPFS Node Config",
+    "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
+  },
+  "option_ipfsNodeConfig_description": {
+    "message": "Configuration for the embedded IPFS node. Must be valid JSON.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
+  },
   "option_ipfsNodeType_external": {
     "message": "External",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
     "message": "Embedded",
-    "description": "An option on the Preferences screeni (option_ipfsNodeType_embedded)"
+    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_header_gateways": {
-    "message": "Шлюзы",
+    "message": "Gateways",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Пользовательский локальный шлюз",
+    "message": "Gateway locale personalizzato",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL или предпочитаемый HTTP2IPFS шлюз",
+    "message": "URL del preferito Gateway HTTP2IPFS",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_useCustomGateway_title": {
-    "message": "Использовать пользовательский шлюз",
+    "message": "Usa un Gateway personalizzato",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Перенаправлять запросы на IPFS ресурсы к пользовательскому шлюзу",
+    "message": "Reindirizza le richieste per risorse IPFS al Gateway Personalizzato",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Публичный шлюз по-умолчанию",
+    "message": "Default Gateway pubblico",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "URL используемый для копирования публичных ссылок и используемый по-умолчанию, когда пользовательский шлюз недоступен",
+    "message": "Fallback URL utilizzato quando il Gateway personalizzato non è disponibile e per la copia link condivisibile",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_header_api": {
@@ -210,59 +238,59 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Подсказка: здесь находится \/webui",
+    "message": "Suggerimento: questo è dove vive \/webui",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Интервал опроса состояния",
+    "message": "Intervallo di Polling dello Stato",
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Частота обновления количества пиров (в миллисекундах)",
+    "message": "Quanto spesso il conteggio delle connessioni viene aggiornato (in millisecondi)",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Автоматический режим",
+    "message": "Modalità automatica",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Toggle use of Custom Gateway when IPFS API availability changes",
+    "message": "Attiva\/Disattiva uso di Custom Gateway quando la disponibilità delle API di IPFS cambia",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_experiments": {
-    "message": "Эксперименты",
+    "message": "Esperimenti",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experiments_warning": {
-    "message": "Осторожно: данные функции введены недавно либо находятся в разработке. Используйте их на свой страх и риск.",
+    "message": "Attenzione: queste caratteristiche sono nuove o work-in-progress. Usa a tuo rischio.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_displayNotifications_title": {
-    "message": "Включить уведомления",
+    "message": "Abilita Notifiche",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Показывать системные уведомления при изменении состояния API, копировании ссылки и тп",
+    "message": "Visualizza le notifiche di sistema quando: cambia lo stato di API, un collegamento viene copiato, etc... etc",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Catch Unhandled IPFS Protocols",
+    "message": "Analizza i protocolli IPFS non gestiti",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enables support for ipfs:\/\/$cid, ipns:\/\/$peerid and dweb:\/ipfs\/$cid by normalizing links and requests done with unhandled protocols",
+    "message": "Attiva il supporto per ipfs:\/\/$cid, ipns:\/\/$peerid e dweb:\/ipfs\/$cid normalizzando i collegamenti e le richieste fatte con protocolli non gestiti",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
-    "message": "Linkify IPFS Addresses",
+    "message": "Trasforma gli indirizzi IPFS in link",
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Turn plaintext \/ipfs\/ paths into clickable links",
+    "message": "Trasformare i percorsi \/ipfs\/ di testo normale in link cliccabili",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslink_title": {
-    "message": "DNSLINK Support",
+    "message": "Supporto a DNSLINK",
     "description": "An option title on the Preferences screen (option_dnslink_title)"
   },
   "option_ipfsProxy_title": {
@@ -278,23 +306,23 @@
     "description": "Link text for managing permissions"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "Precaricare gli Uploads",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Consente il caricamento anticipato delle unita´ caricate mediante una richiesta HTTP HEAD asincrona ad una Gateway pubblica",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_dnslink_description": {
-    "message": "Perform DNS lookup for every visited website and use Custom Gateway if DNSLINK is present in its DNS TXT record (known to slow down the browser)",
+    "message": "Esegui una ricerca DNS per ogni sito Web visitato ed utilizza il Custom Gateway se DNSLINK è presente nel suo record DNS TXT (potrebbe rallentare il browser)",
     "description": "An option description on the Preferences screen (option_dnslink_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Reset Everything",
+    "message": "Azzera tutto",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Replaces user preferences with default ones (can't be undone!)",
+    "message": "Sostituisce le preferenze dell'utente con quelle di default (non può essere annullata!)",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -306,7 +334,7 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Browser extension that simplifies access to IPFS resources",
+    "message": "Estensione per il browser che semplifica l'accesso alle risorse IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers": {
