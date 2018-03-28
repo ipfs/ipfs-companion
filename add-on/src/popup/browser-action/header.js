@@ -16,7 +16,9 @@ module.exports = function header ({ ipfsNodeType, onToggleNodeType, isIpfsOnline
           isIpfsOnline
         })}
       </div>
-      <h1 class="f5 mt2 mb2 tc white normal">IPFS node</h1>
+      <h1 class="f5 mt2 mb2 tc white normal">
+        ${browser.i18n.getMessage('panel_headerIpfsNodeIconLabel')}
+      </h1>
       <div class="pt1">
         <div class="flex flex-row justify-center mb2">
           <label for="node" class="mdc-switch-label w-40 tr f7 white" title="${browser.i18n.getMessage('panel_headerIpfsNodeEmbeddedTitle')}">

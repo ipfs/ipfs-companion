@@ -3,6 +3,10 @@
     "message": "Asystent IPFS",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
+  "panel_headerIpfsNodeIconLabel": {
+    "message": "Węzeł IPFS",
+    "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
+  },
   "panel_headerIpfsNodeEmbedded": {
     "message": "Wbudowany",
     "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
@@ -68,7 +72,7 @@
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Skopiuj kanoniczny adres",
+    "message": "Skopiuj ścieżkę IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -88,7 +92,7 @@
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Dodaj do IPFS",
+    "message": "Wyślij do IPFS",
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
   },
   "notify_addonIssueTitle": {
@@ -104,7 +108,7 @@
     "description": "A title of system notification (notify_copiedPublicURLTitle)"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Skopiowano kanoniczny adres",
+    "message": "Skopiowano ścieżkę IPFS",
     "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {

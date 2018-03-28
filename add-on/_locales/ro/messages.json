@@ -3,6 +3,10 @@
     "message": "Companionul IPFS",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
+  "panel_headerIpfsNodeIconLabel": {
+    "message": "IPFS node",
+    "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
+  },
   "panel_headerIpfsNodeEmbedded": {
     "message": "Embedded",
     "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
