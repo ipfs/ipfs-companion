@@ -9,10 +9,25 @@
                 },
                 {
                     "version": "2.2.0.8050",
-                    "applications": { "gecko": { "strict_min_version": "59" } },
+                    "applications": {
+                        "gecko": {
+                            "strict_min_version": "59"
+                        }
+                    },
                     "update_hash": "sha256:4220a7e2e6672a346582d9523eb479a40a62a541f5ed57f02b5396e11d271069",
                     "update_info_url": "https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v2.2.0beta4",
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.2.0beta4/ipfs_companion_dev_build_b439a7d-2.2.0.8050-an.fx.xpi"
+                },
+                {
+                    "version": "2.2.0.8540",
+                    "applications": {
+                        "gecko": {
+                            "strict_min_version": "59"
+                        }
+                    },
+                    "update_hash": "sha256:11cd21ac7dc0d99e6b4bf147f4bafb8c412347beca8e8dc377c47ff06e47f883",
+                    "update_info_url": "https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v2.2.0rc1",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.2.0rc1/ipfs_companion_beta_build-2.2.0.8540-an.fx.xpi"
                 }
             ]
         }
