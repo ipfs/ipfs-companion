@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS node",
+    "message": "Nó IPFS",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerIpfsNodeEmbedded": {
@@ -20,7 +20,7 @@
     "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
   },
   "panel_headerIpfsNodeExternalTitle": {
-    "message": "Ligar a um IPFS node por HTTP",
+    "message": "Ligar a um nó IPFS por HTTP",
     "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
   },
   "panel_statusGatewayAddress": {
@@ -36,11 +36,11 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
-    "message": "Peers",
+    "message": "Pares",
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "O número de outros IPFS nodes aos quais consegues ligar",
+    "message": "O número de outros nós aos quais consegues ligar",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
@@ -56,11 +56,11 @@
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_switchToCustomGateway": {
-    "message": "Mudar para uma Gateway Personalizada",
+    "message": "Escolher uma Gateway Personalizada",
     "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
   },
   "panel_switchToPublicGateway": {
-    "message": "Mudar para a Gateway Pública",
+    "message": "Escolher a Gateway Pública",
     "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -72,43 +72,43 @@
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy Canonical Address",
+    "message": "Copiar Endereço Canónico",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Public Gateway URL",
+    "message": "Copiar URL da Gateway Pública",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "IPFS resource loaded via Public Gateway",
+    "message": "Recurso IPFS carregado via Gateway Pública",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS resource loaded via Custom Gateway",
+    "message": "Recurso IPFS carregado via Gateway Personalizada",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Non-IPFS resource",
+    "message": "Recurso não IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_uploadToIpfs": {
-    "message": "Upload to IPFS",
+    "message": "Enviar para o IPFS",
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS Add-on Issue",
+    "message": "Problema com a extensão IPFS",
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "See Browser Console for more details",
+    "message": "Veja a Browser Console para mais detalhes",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Copied Public URL",
+    "message": "URL Público Copiado",
     "description": "A title of system notification (notify_copiedPublicURLTitle)"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Copied Canonical Address",
+    "message": "Endereço Canónico Copiado",
     "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
@@ -128,23 +128,23 @@
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API is Online",
+    "message": "IPFS API está Online",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatic Mode: Custom Gateway Redirect is active",
+    "message": "Modo Automático: Redirecionamento para Gateway Personalizada está ativado",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API is Offline",
+    "message": "IPFS API está Offline",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatic Mode: Public Gateway will be used as a fallback",
+    "message": "Modo Automático: Gateway Pública será utilizada como alternativa",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
-    "message": "Unable to upload via IPFS API",
+    "message": "Não foi possível efetuar o upload através da IPFS API",
     "description": "A title of system notification (notify_uploadErrorTitle)"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
@@ -178,11 +178,11 @@
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_header_nodeType" : {
-    "message": "IPFS Node",
+    "message": "Nó IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS Node Type",
+    "message": "Tipo do Nó IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_description": {
@@ -190,11 +190,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "Configuração do Nó IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configuration for the embedded IPFS node. Must be valid JSON.",
+    "message": "Configuração para o nó embutido. Tem que ser JSON válido.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -210,7 +210,7 @@
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Custom Local Gateway",
+    "message": "Gateway Local Personalizada",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
