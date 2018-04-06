@@ -1,12 +1,19 @@
 'use strict'
 
+const { piggyback } = require('piggybacker')
+
 const DIALOG_WIDTH = 540
 const DIALOG_HEIGHT = 220
 const DIALOG_PATH = 'dist/pages/proxy-access-dialog/index.html'
 const DIALOG_PORT_NAME = 'proxy-access-dialog'
 
 function createRequestAccess (browser, screen) {
-  return async function requestAccess (scope, permission, opts) {
+  // piggybacker allows multiple requests for access to the same permission to
+  // receive the same response i.e. don't popup multiple dialogs for the
+  // same permission request.
+  return piggyback(requestAccess, (scope, permission) => `${scope}/${permission}`)
+
+  async function requestAccess (scope, permission, opts) {
     opts = opts || {}
 
     const url = browser.extension.getURL(opts.dialogPath || DIALOG_PATH)

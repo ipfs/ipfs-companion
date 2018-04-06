@@ -101,6 +101,7 @@
     "lru_map": "0.3.3",
     "mime-types": "2.1.18",
     "p-queue": "2.3.0",
+    "piggybacker": "2.0.0",
     "prundupify": "1.0.0",
     "tachyons": "4.9.1",
     "webextension-polyfill": "0.1.2"
