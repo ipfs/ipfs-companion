@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS node",
+    "message": "IPFS-Knoten",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerIpfsNodeEmbedded": {
@@ -170,11 +170,11 @@
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Failed to start IPFS node",
+    "message": "IPFS-Knoten konnte nicht gestartet werden",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Failed to stop IPFS node",
+    "message": "IPFS-Knoten konnte nicht beendet werden",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_header_nodeType": {
@@ -190,11 +190,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "IPFS-Knoten Konfiguration",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configuration for the embedded IPFS node. Must be valid JSON.",
+    "message": "Konfiguration für den eingebetteten IPFS-Knoten. Muss gültiges JSON sein.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
