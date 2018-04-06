@@ -7169,6 +7169,10 @@ pify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
+piggybacker@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/piggybacker/-/piggybacker-2.0.0.tgz#571526babe029cf7332fa5d96ee010ad5da88787"
+
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pinkie-promise/-/pinkie-promise-2.0.1.tgz#2135d6dfa7a358c069ac9b178776288228450ffa"
