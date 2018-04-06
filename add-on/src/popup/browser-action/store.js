@@ -52,7 +52,6 @@ module.exports = (state, emitter) => {
         // final render that should fix macOS UI issues
         requestAnimationFrame(() => {
           document.body.style.removeProperty('height')
-          emitter.emit('render')
         })
       }, 100)
     }, 200)
