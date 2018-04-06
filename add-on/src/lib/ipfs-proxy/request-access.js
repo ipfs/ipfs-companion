@@ -58,6 +58,7 @@ function createRequestAccess (browser, screen) {
     const userResponse = new Promise((resolve, reject) => {
       onPortConnect = port => {
         if (port.name !== dialogPortName) return
+        if (!port.sender || !port.sender.tab || port.sender.tab.id !== tabId) return
 
         browser.runtime.onConnect.removeListener(onPortConnect)
 
@@ -88,7 +89,10 @@ function createRequestAccess (browser, screen) {
     let onTabRemoved
 
     const userTabRemoved = new Promise((resolve, reject) => {
-      onTabRemoved = () => reject(new Error(`Failed to obtain access response for ${permission} at ${scope}`))
+      onTabRemoved = (id) => {
+        if (id !== tabId) return
+        reject(new Error(`Failed to obtain access response for ${permission} at ${scope}`))
+      }
       browser.tabs.onRemoved.addListener(onTabRemoved)
     })
 
