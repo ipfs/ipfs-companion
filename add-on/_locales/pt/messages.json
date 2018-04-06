@@ -177,7 +177,7 @@
     "message": "Não conseguímos parar o nó IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "Nó IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -242,7 +242,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Dica: aqui é onde está a /webui",
+    "message": "Dica: aqui é onde está a \/webui",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -282,7 +282,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Ativa o suporte para ipfs://$cid, ipns://$peerid e dweb:/ipfs/$cid ao normalizar links e pedidos para protocolos não tratados",
+    "message": "Ativa o suporte para ipfs:\/\/$cid, ipns:\/\/$peerid e dweb:\/ipfs\/$cid ao normalizar links e pedidos para protocolos não tratados",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -290,7 +290,7 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Transforma caminhos /ipfs/ em links clicáveis",
+    "message": "Transforma caminhos \/ipfs\/ em links clicáveis",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslink_title": {
@@ -299,10 +299,10 @@
   },
   "option_ipfsProxy_title": {
     "message": "window.ipfs",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
+    "description": "An option title for enabling\/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "IPFS é adicionado ao objeto window em todas as páginas. Ative/desative acesso às funções expostas.",
+    "message": "IPFS é adicionado ao objeto window em todas as páginas. Ative\/desative acesso às funções expostas.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
