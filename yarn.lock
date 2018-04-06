@@ -1502,6 +1502,10 @@ circular-json@^0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
 
+class-is@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/class-is/-/class-is-1.1.0.tgz#9d3c0fba0440d211d843cec3dedfa48055005825"
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
@@ -4146,18 +4150,20 @@ ipfs-multipart@~0.1.0:
     content "^3.0.0"
     dicer "^0.2.5"
 
-ipfs-postmsg-proxy@2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.13.0.tgz#9f5b3e872060e78d53042ada7968597f96806cab"
+ipfs-postmsg-proxy@2.13.1:
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.13.1.tgz#9fe5d3c6fea0148323a5c0b3aaf5874e02ddf406"
   dependencies:
     big.js "^5.0.3"
     callbackify "^1.1.0"
     cids "^0.5.3"
     ipfs-block "^0.6.1"
+    ipld-dag-pb "^0.13.1"
     is-pull-stream "0.0.0"
     is-stream "^1.1.0"
+    multiaddr "^4.0.0"
     peer-id "^0.10.4"
-    peer-info "^0.11.4"
+    peer-info "^0.14.0"
     postmsg-rpc "^2.4.0"
     prepost "^1.1.0"
     pull-abortable "^4.1.1"
@@ -4336,9 +4342,9 @@ ipld-dag-cbor@~0.12.0:
     multihashing-async "~0.4.7"
     traverse "^0.6.6"
 
-ipld-dag-pb@~0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.13.0.tgz#62092b9cb0a3970b8d8466ca1f3d3a3f5fb64622"
+ipld-dag-pb@^0.13.1, ipld-dag-pb@~0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.13.1.tgz#4c879ae11ef602db857d71e954fda18fd3d6ae2a"
   dependencies:
     async "^2.6.0"
     bs58 "^4.0.1"
@@ -4353,9 +4359,9 @@ ipld-dag-pb@~0.13.0:
     pull-traverse "^1.0.3"
     stable "^0.1.6"
 
-ipld-dag-pb@~0.13.1:
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.13.1.tgz#4c879ae11ef602db857d71e954fda18fd3d6ae2a"
+ipld-dag-pb@~0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.13.0.tgz#62092b9cb0a3970b8d8466ca1f3d3a3f5fb64622"
   dependencies:
     async "^2.6.0"
     bs58 "^4.0.1"
@@ -6239,6 +6245,19 @@ multiaddr@^3.0.1, multiaddr@^3.0.2:
     varint "^5.0.0"
     xtend "^4.0.1"
 
+multiaddr@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-4.0.0.tgz#70a8857c4f737350bc2c56914a70f1263889db33"
+  dependencies:
+    bs58 "^4.0.1"
+    class-is "^1.1.0"
+    ip "^1.1.5"
+    ip-address "^5.8.9"
+    lodash.filter "^4.6.0"
+    lodash.map "^4.6.0"
+    varint "^5.0.0"
+    xtend "^4.0.1"
+
 multibase@~0.3.4:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/multibase/-/multibase-0.3.4.tgz#fba8b0aac9724f62e24782557e2a062e30d3ae7f"
@@ -7085,13 +7104,30 @@ peer-id@^0.10.2, peer-id@^0.10.4, peer-id@^0.10.5, peer-id@^0.10.6, peer-id@~0.1
     lodash "^4.17.5"
     multihashes "~0.4.13"
 
-peer-info@^0.11.0, peer-info@^0.11.4, peer-info@^0.11.6, peer-info@~0.11.0, peer-info@~0.11.6:
+peer-id@~0.10.7:
+  version "0.10.7"
+  resolved "https://registry.yarnpkg.com/peer-id/-/peer-id-0.10.7.tgz#6c12634636fc90a0e7bc76360c95f73564461fdd"
+  dependencies:
+    async "^2.6.0"
+    libp2p-crypto "~0.12.1"
+    lodash "^4.17.5"
+    multihashes "~0.4.13"
+
+peer-info@^0.11.0, peer-info@^0.11.6, peer-info@~0.11.0, peer-info@~0.11.6:
   version "0.11.6"
   resolved "https://registry.yarnpkg.com/peer-info/-/peer-info-0.11.6.tgz#0480b0030d2df8fd4f09879b269a715b2bd2ba12"
   dependencies:
     lodash.uniqby "^4.7.0"
     multiaddr "^3.0.2"
     peer-id "~0.10.5"
+
+peer-info@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/peer-info/-/peer-info-0.14.0.tgz#79656535bc099e77ea884afb06d0898347f66a41"
+  dependencies:
+    lodash.uniqby "^4.7.0"
+    multiaddr "^4.0.0"
+    peer-id "~0.10.7"
 
 pelo@^0.1.0:
   version "0.1.0"
