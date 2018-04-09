@@ -1,6 +1,6 @@
 # IPFS Companion
 
-![demo of v2.0.13](https://ipfs.io/ipfs/QmUxZrrjUGZVMjqc2noCRkQZr8B9JyGNj7sPpRoJ6uPQq1)
+![demo of v2.2.0](https://user-images.githubusercontent.com/157609/38491868-6c9dbaa0-3bed-11e8-975a-52bea908f1cb.gif)
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
@@ -34,12 +34,30 @@ Learn more at [ipfs.io](https://ipfs.io) (it is really cool, we promise!)
 
 #### Automagical Detection of IPFS Resources
 
-  Requests for resources at IPFS-like paths (`/ipfs/$cid` or `/ipns/$peerid_or_fqdn`) are detected on any website.  
+  Requests for IPFS-like paths (`/ipfs/$cid` or `/ipns/$peerid_or_fqdn-with-dnslink`) are detected on any website.  
   If tested path is a valid IPFS address it gets redirected and loaded from a local gateway, e.g:  
   `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
   → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
 
-#### IPFS Status and Action Menu
+#### IPFS API as `window.ipfs`
+
+Your IPFS node is exposed as `window.ipfs` on every webpage.
+Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
+It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
+Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
+
+#### Embedded `js-ipfs` Node
+
+The Browser Action menu provides a toggle for switching  between embedded,
+in-memory `js-ipfs` and external IPFS node accessed over HTTP API.
+The embedded node is great for quickly sharing files with someone, or for
+testing a dapp that uses `window.ipfs` without having to install and start up
+your own IPFS daemon.  
+Power users can provide own config (eg. to enable experimental pubsub) via _Preferences_.
+
+**Note:** The embedded node _does not run_ when external node is selected. Every time you switch back to the embedded node, a new instance is created on-demand. It can take [a few seconds](https://user-images.githubusercontent.com/157609/38493690-4a77bd9e-3bf3-11e8-85da-ba06fd94cdbf.gif) for a brand-new node to find peers.
+
+#### IPFS Status and Context Actions
 
 - IPFS API and Gateway status
 - Quick Upload of local files
@@ -63,7 +81,6 @@ _(some are disabled by default, use Preferences screen to enable)_
 - Make plaintext IPFS links clickable
 - Mirror to IPFS by right click on any image or video
 - Embedded node can be used for uploads even when external API is down
-- [`window.ipfs`](docs/window.ipfs.md) - web pages can access your IPFS node
 
 ## Install
 
@@ -155,9 +172,14 @@ Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/ipfs-
 
 If you want to help in developing this extension, please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
 
+The browser extension team hangs out at the [#ipfs-in-web-browsers](https://webchat.freenode.net/?channels=ipfs-in-web-browsers) channel on Freenode.
+
 This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
 
 ### TROUBLESHOOTING
+
+The best place to ask your questions about IPFS in general, how it works and what you can do with it is at [discuss.ipfs.io](https://discuss.ipfs.io/).  
+We are also available at the [#ipfs](https://webchat.freenode.net/?channels=ipfs) channel, where most of IPFS community hangs out.
 
 #### Upload via Right-Click Does Not Work in Firefox
 
