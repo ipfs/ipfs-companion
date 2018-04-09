@@ -39,20 +39,23 @@ Learn more at [ipfs.io](https://ipfs.io) (it is really cool, we promise!)
   `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
   → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
 
-#### IPFS API exposed as `window.ipfs`
+#### IPFS API as `window.ipfs`
 
-A safe subset of IPFS APIs of user's node is exposed as `window.ipfs` on every webpage.  
-This means websites can detect if `window.ipfs` exists and opt-in to use it instead of spawning own `js-ipfs` node.  This saves resources, battery etc.
+Your IPFS node is exposed as `window.ipfs` on every webpage.
+Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
+It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
 
 #### Embedded `js-ipfs` Node
 
-Browser Action menu provides a toggle for switching  between embedded, in-memory `js-ipfs` and external IPFS node accessed over HTTP API.
-
-Embedded node is a fine fallback for situations when user needs to quickly share a file with someone or just wants to run a dapp against `window.ipfs` but has no third party IPFS daemon running locally.
+The Browser Action menu provides a toggle for switching  between embedded,
+in-memory `js-ipfs` and external IPFS node accessed over HTTP API.
+The embedded node is great for quickly sharing files with someone, or for
+testing a dapp that uses `window.ipfs` without having to install and start up
+your own IPFS daemon.  
 Power users can provide own config (eg. to enable experimental pubsub) via _Preferences_.
 
-**UX Note:** Embedded node does not run when external one is used. Every time you switch back to Embedded node, a new instance is spawned on-demand, so it takes [a few seconds](https://user-images.githubusercontent.com/157609/38493690-4a77bd9e-3bf3-11e8-85da-ba06fd94cdbf.gif) for a brand-new node to find peers.
+**Note:** The embedded node _does not run_ when external node is selected. Every time you switch back to the embedded node, a new instance is created on-demand. It can take [a few seconds](https://user-images.githubusercontent.com/157609/38493690-4a77bd9e-3bf3-11e8-85da-ba06fd94cdbf.gif) for a brand-new node to find peers.
 
 #### IPFS Status and Context Actions
 
@@ -169,7 +172,7 @@ Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/ipfs-
 
 If you want to help in developing this extension, please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
 
-Browser extension team hangs out at the [#ipfs-in-web-browsers](https://webchat.freenode.net/?channels=ipfs-in-web-browsers) channel on Freenode.  
+The browser extension team hangs out at the [#ipfs-in-web-browsers](https://webchat.freenode.net/?channels=ipfs-in-web-browsers) channel on Freenode.
 
 This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
 
