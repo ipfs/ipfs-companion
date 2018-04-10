@@ -88,9 +88,9 @@ _(some are disabled by default, use Preferences screen to enable)_
 
 We recommend installing the stable release via your browser's add-on store.
 
-| Firefox | Chrome / Chromium |
-|---------|-------------------|
-| [![Get the add-on](https://blog.mozilla.org/addons/files/2015/11/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/) | [![](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+| Firefox                                                                                                                                                    | Chrome / Chromium                                                                                                                                                                              |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![Install From AMO](https://ipfs.io/ipfs/QmSX44XockQifmxE8Wdevkaa6vaqTXtGdH9t9aHWXZkuJq)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmPinSJKFYCMuTDh484dLk5Av4HpZRzBRR1KPv7TM7CBVF)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
 **Note:** `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.  
 Make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer.
