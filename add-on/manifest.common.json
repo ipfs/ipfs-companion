@@ -2,10 +2,10 @@
   "manifest_version": 2,
   "name": "__MSG_manifest_extensionName__",
   "short_name": "__MSG_manifest_shortExtensionName__",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "__MSG_manifest_extensionDescription__",
-  "homepage_url": "https://github.com/ipfs/ipfs-companion",
-  "author": "Marcin Rataj",
+  "homepage_url": "https://github.com/ipfs-shipyard/ipfs-companion",
+  "author": "IPFS Community",
   "icons": {
     "19": "icons/png/ipfs-logo-on_19.png",
     "38": "icons/png/ipfs-logo-on_38.png",
