@@ -1,5 +1,7 @@
 # Notes on exposing IPFS API as `window.ipfs`
 
+> ### Disclaimer: this is a new, experimental feature. We are actively working on refining security and UX constraints for this interface, YMMV. <br> Want to contribute? See [#454](https://github.com/ipfs-shipyard/ipfs-companion/issues/454) and other [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
+
 - [Background](#background)
 - [Creating applications using window.ipfs](#creating-applications-using-windowipfs)
     - [Error messages](#error-messages)
