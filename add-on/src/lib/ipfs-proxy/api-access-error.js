@@ -1,7 +1,6 @@
 'use strict'
 /* eslint-env browser */
 
-
 /**
  * An Error that indicates API access was somehow denied by the user
  * @type {IpfsApiAccessError}
@@ -14,10 +13,12 @@
  *     }
  *   }
  */
-export default class IpfsApiAccessError extends Error {
+class IpfsApiAccessError extends Error {
   constructor (message, permission, scope) {
     super(message)
     this.permission = permission
     this.scope = scope
   }
 }
+
+module.exports = IpfsApiAccessError
