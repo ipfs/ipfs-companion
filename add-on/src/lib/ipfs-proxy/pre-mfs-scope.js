@@ -1,4 +1,4 @@
-const Path = require('path')
+const Path = require('path').posix
 const DEFAULT_ROOT_PATH = '/dapps'
 
 // Creates a "pre" function that is called prior to calling a real function
