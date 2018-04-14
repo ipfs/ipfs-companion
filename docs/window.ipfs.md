@@ -38,19 +38,19 @@ if (window.ipfs) {
 To add and get content, you could do something like this:
 
 ```js
-if (window.ipfs) {  
+if (window.ipfs) {
   try {
-    await ipfs.add(Buffer.from('=^.^='))
-   } catch (err) {
-     if (err.message === 'User denied access to ipfs.files.add') {
-       // Fallback
-     } else {
-       throw err
-     }
-   }
-
-   const data = await ipfs.cat('QmS5RzFV9v4fucVtjATPxoxABgEmNhhduykzUbQeGyyS3N')
-   console.log(data.toString()) // =^.^=
+    const [{ hash }] = await ipfs.add(Buffer.from('=^.^='))
+    const data = await ipfs.cat(hash)
+    console.log(data.toString()) // =^.^=
+  } catch (err) {
+    if (err instanceof ipfs.types.IpfsApiAccessError) {
+      // Fallback
+      console.log(':(')
+    } else {
+      throw err
+    }
+  }
 } else {
   // Fallback
 }
