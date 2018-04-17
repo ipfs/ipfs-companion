@@ -4259,15 +4259,15 @@ ipfs-multipart@~0.1.0:
     content "^3.0.0"
     dicer "^0.2.5"
 
-ipfs-postmsg-proxy@2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.14.0.tgz#38526e9808cb5c30f22e02a64e96682d9851fa35"
+ipfs-postmsg-proxy@2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-2.15.0.tgz#689d0bcd90e88d792bac50dfc4f8df85b6ba5f26"
   dependencies:
     big.js "^5.0.3"
     callbackify "^1.1.0"
     cids "^0.5.3"
     ipfs-block "^0.7.1"
-    ipld-dag-pb "^0.14.1"
+    ipld-dag-pb "^0.14.3"
     is-pull-stream "0.0.0"
     is-stream "^1.1.0"
     multiaddr "^4.0.0"
@@ -4451,9 +4451,9 @@ ipld-dag-cbor@~0.12.0:
     multihashing-async "~0.4.7"
     traverse "^0.6.6"
 
-ipld-dag-pb@^0.14.1:
-  version "0.14.2"
-  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.14.2.tgz#a2bd007a7420836d3a431a2a4af0e6688b583de8"
+ipld-dag-pb@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.14.3.tgz#c951863e4801659bfc94e252d68a3eb667b34df8"
   dependencies:
     async "^2.6.0"
     bs58 "^4.0.1"
@@ -4466,7 +4466,7 @@ ipld-dag-pb@^0.14.1:
     protons "^1.0.1"
     pull-stream "^3.6.7"
     pull-traverse "^1.0.3"
-    stable "~0.1.6"
+    stable "0.1.6"
 
 ipld-dag-pb@~0.13.0:
   version "0.13.0"
@@ -8999,7 +8999,7 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
-stable@^0.1.6, stable@~0.1.6:
+stable@0.1.6, stable@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/stable/-/stable-0.1.6.tgz#910f5d2aed7b520c6e777499c1f32e139fdecb10"
 
