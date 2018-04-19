@@ -1,4 +1,5 @@
-const Path = require('path').posix
+// Use path-browserify for consistent behavior between browser and tests on windows
+const Path = require('path-browserify')
 const DEFAULT_ROOT_PATH = '/dapps'
 
 // Creates a "pre" function that is called prior to calling a real function
