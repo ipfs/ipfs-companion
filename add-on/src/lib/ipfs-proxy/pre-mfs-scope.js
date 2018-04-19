@@ -1,4 +1,4 @@
-// Use path-browserify for consistent behavior between browser and tests on windows
+// Use path-browserify for consistent behavior between browser and tests on Windows
 const Path = require('path-browserify')
 const DEFAULT_ROOT_PATH = '/dapps'
 
