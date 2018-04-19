@@ -1,7 +1,6 @@
 'use strict'
 
 const { piggyback } = require('piggybacker')
-const IpfsApiAccessError = require('./api-access-error')
 
 const DIALOG_WIDTH = 540
 const DIALOG_HEIGHT = 220
@@ -99,11 +98,9 @@ function createRequestAccess (browser, screen) {
     const userTabRemoved = new Promise((resolve, reject) => {
       onTabRemoved = (id) => {
         if (id !== tabId) return
-        reject(new IpfsApiAccessError(
-          `Failed to obtain access response for ${permission} at ${scope}`,
-          permission,
-          scope
-        ))
+        const err = new Error(`Failed to obtain access response for ${permission} at ${scope}`)
+        err.output = { payload: { isIpfsProxyAclError: true, scope, permission } }
+        reject(err)
       }
       browser.tabs.onRemoved.addListener(onTabRemoved)
     })

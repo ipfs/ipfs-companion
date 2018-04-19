@@ -1,5 +1,3 @@
-const IpfsApiAccessError = require('./api-access-error')
-
 // This are the functions that DO NOT require an allow/deny decision by the user.
 // All other IPFS functions require authorization.
 const ACL_WHITELIST = Object.freeze(require('./acl-whitelist.json'))
@@ -24,7 +22,9 @@ function createPreAcl (permission, getState, getScope, accessControl, requestAcc
     }
 
     if (!access.allow) {
-      throw new IpfsApiAccessError(`User denied access to ${permission}`, permission, scope)
+      const err = new Error(`User denied access to ${permission}`)
+      err.output = { payload: { isIpfsProxyAclError: true, permission, scope } }
+      throw err
     }
 
     return args

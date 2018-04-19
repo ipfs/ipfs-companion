@@ -44,7 +44,7 @@ if (window.ipfs) {
     const data = await ipfs.cat(hash)
     console.log(data.toString()) // =^.^=
   } catch (err) {
-    if (err instanceof ipfs.types.IpfsApiAccessError) {
+    if (err.isIpfsProxyAclError) {
       // Fallback
       console.log(':(')
     } else {

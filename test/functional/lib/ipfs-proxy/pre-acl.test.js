@@ -7,7 +7,6 @@ const Sinon = require('sinon')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const createPreAcl = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
 const ACL_WHITELIST = require('../../../../add-on/src/lib/ipfs-proxy/acl-whitelist.json')
-const IpfsApiAccessError = require('../../../../add-on/src/lib/ipfs-proxy/api-access-error')
 
 describe('lib/ipfs-proxy/pre-acl', () => {
   before(() => {
@@ -118,7 +117,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     expect(() => { if (error) throw error }).to.throw(`User denied access to ${permission}`)
   })
 
-  it('should have a well-formed IpfsApiAccessError if denied', async () => {
+  it('should have a well-formed Error if denied', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
@@ -134,9 +133,11 @@ describe('lib/ipfs-proxy/pre-acl', () => {
       error = err
     }
 
-    expect(error).to.be.an.instanceOf(IpfsApiAccessError)
-    expect(error.permission).to.eql(permission)
-    expect(error.scope).to.eql(getScope())
+    expect(error.output.payload).to.deep.eql({
+      isIpfsProxyAclError: true,
+      permission,
+      scope: getScope()
+    })
   })
 
   it('should not re-request if allowed', async () => {
