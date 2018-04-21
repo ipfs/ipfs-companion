@@ -185,7 +185,11 @@ We are also available at the [#ipfs](https://webchat.freenode.net/?channels=ipfs
 
 See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
 
-#### Rule To Work with NoScript with ABE Enabled
+#### Workaround for HTTP Redirect to Work with Ghostery
+
+[Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways. More details in [#466](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until it is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected site. 
+
+#### Rule to Work with NoScript with ABE Enabled
 
 By default [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks this addon by blocking assets loaded from IPFS Gateway running on localhost.    
 To make it work, one needs to extend the SYSTEM Rulset and prepend it with IPFS whitelist:
