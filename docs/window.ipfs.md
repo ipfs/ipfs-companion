@@ -46,7 +46,7 @@ if (window.ipfs) {
   } catch (err) {
     if (err.isIpfsProxyAclError) {
       // Fallback
-      console.log(':(')
+      console.log('Unable to get ACL decision from user :(', err)
     } else {
       throw err
     }
