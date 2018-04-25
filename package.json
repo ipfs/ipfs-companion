@@ -57,6 +57,7 @@
     "ci:install": "npx yarn@1.6.0 install --frozen-lockfile || npx yarn@1.6.0 install --frozen-lockfile",
     "ci:test": "npx yarn@1.6.0 test",
     "ci:build": "./ci/update-manifest.sh ; npx yarn@1.6.0 build ; chmod -R ugo+rwX build/ add-on/",
+    "beta-build": "run-s ci:build bundle:firefox:beta",
     "yarn-build": "npx yarn@1.6.0 && npx yarn@1.6.0 build"
   },
   "private": true,
