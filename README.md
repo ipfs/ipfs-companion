@@ -48,6 +48,8 @@ Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/
 
 #### Toggle Between Embedded and External Node
 
+> ![screenshot of node type toggle](https://user-images.githubusercontent.com/157609/39421672-59010924-4c6a-11e8-9e64-6b5d5f5f2768.png)
+
 The Browser Action menu provides a toggle for switching  between embedded,
 in-memory `js-ipfs` and external IPFS node accessed over HTTP API.
 Read about differences at [docs/node-types](docs/node-types.md).

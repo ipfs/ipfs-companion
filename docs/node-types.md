@@ -2,7 +2,8 @@
 
 ![screenshot of node type toggle](https://user-images.githubusercontent.com/157609/39421672-59010924-4c6a-11e8-9e64-6b5d5f5f2768.png)
 
-> **TL;DR** When in doubt, run go-ipfs as External node
+> **TL;DR** When in doubt, run go-ipfs as External node (see: [Getting Started](https://ipfs.io/docs/getting-started/))
+
 
 ## External
 
@@ -19,8 +20,10 @@ A good practice is to run it on localhost (`127.0.0.1`) as it provides:
 - Better UX in web browser (no mixed-content warnings)
 - Improved performance (local loopback is used, no network overhead)
 
-## Embedded
+Don't know where to start? See [Getting Started](https://ipfs.io/docs/getting-started/) instructions.
 
+
+## Embedded
 
 _Embedded_ node is a js-ipfs instance running in browser (in-memory), without need for
 any external software.
@@ -37,7 +40,7 @@ Power users can provide [custom config](https://github.com/ipfs/js-ipfs#faq) (eg
   ([#450](https://github.com/ipfs-shipyard/ipfs-companion/issues/450),
   [ipfs/js-ipfs#1190](https://github.com/ipfs/js-ipfs/issues/1190)) over time,
 - Lack of connection closing
-  ([ipfs/js-ipfs#962](https://github.com/ipfs/js-ipfs/issues/962)
+  ([ipfs/js-ipfs#962](https://github.com/ipfs/js-ipfs/issues/962))
 - The Embedded node _does not run_ when External node is selected.  Every time
   you switch back to the embedded node, a new instance is created on-demand. It
   can take [a few
@@ -46,8 +49,8 @@ Power users can provide [custom config](https://github.com/ipfs/js-ipfs#faq) (eg
 
 When in doubt, run go-ipfs as External node instead.
 
-## (Public)
+## Public
 
-Public node is used as an implicit fallback for its Gateway functionality when External node is offline or Embedded node is used.
+Public node is not a part of the toggle UI. It is used as an implicit fallback for its Gateway functionality when External node is offline or Embedded node is used.
 It does not expose API port.
 
