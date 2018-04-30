@@ -21,7 +21,11 @@ function createPreAcl (permission, getState, getScope, accessControl, requestAcc
       access = await accessControl.setAccess(scope, wildcard ? '*' : permission, allow)
     }
 
-    if (!access.allow) throw new Error(`User denied access to ${permission}`)
+    if (!access.allow) {
+      const err = new Error(`User denied access to ${permission}`)
+      err.output = { payload: { isIpfsProxyAclError: true, permission, scope } }
+      throw err
+    }
 
     return args
   }

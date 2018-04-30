@@ -117,6 +117,29 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     expect(() => { if (error) throw error }).to.throw(`User denied access to ${permission}`)
   })
 
+  it('should have a well-formed Error if denied', async () => {
+    const getState = () => ({ ipfsProxy: true })
+    const accessControl = new AccessControl(new Storage())
+    const getScope = () => 'https://ipfs.io/'
+    const permission = 'files.add'
+    const requestAccess = Sinon.spy(async () => ({ allow: false }))
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
+
+    let error
+
+    try {
+      await preAcl()
+    } catch (err) {
+      error = err
+    }
+
+    expect(error.output.payload).to.deep.eql({
+      isIpfsProxyAclError: true,
+      permission,
+      scope: getScope()
+    })
+  })
+
   it('should not re-request if allowed', async () => {
     const getState = () => ({ ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())

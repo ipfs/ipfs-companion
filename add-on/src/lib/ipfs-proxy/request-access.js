@@ -98,7 +98,9 @@ function createRequestAccess (browser, screen) {
     const userTabRemoved = new Promise((resolve, reject) => {
       onTabRemoved = (id) => {
         if (id !== tabId) return
-        reject(new Error(`Failed to obtain access response for ${permission} at ${scope}`))
+        const err = new Error(`Failed to obtain access response for ${permission} at ${scope}`)
+        err.output = { payload: { isIpfsProxyAclError: true, scope, permission } }
+        reject(err)
       }
       browser.tabs.onRemoved.addListener(onTabRemoved)
     })
