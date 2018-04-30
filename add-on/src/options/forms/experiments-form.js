@@ -82,6 +82,9 @@ function experimentsForm ({
                       ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md" target="_blank">
+                  ${browser.i18n.getMessage('option_legend_readMore')}
+                </a></p>
               </dd>
             </dl>
           </label>
