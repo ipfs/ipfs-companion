@@ -13,6 +13,11 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       return
     }
 
+    // skip websocket handshake (not supported by HTTP2IPFS gateways)
+    if (request.type === 'websocket') {
+      return
+    }
+
     // skip all local requests
     if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
       return

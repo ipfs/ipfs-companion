@@ -99,6 +99,10 @@ module.exports = async function init () {
   // ===================================================================
 
   function onBeforeSendHeaders (request) {
+    // skip websocket handshake (not supported by HTTP2IPFS gateways)
+    if (request.type === 'websocket') {
+      return
+    }
     if (request.url.startsWith(state.apiURLString)) {
       // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
       // which produced '403 - Forbidden' error.
