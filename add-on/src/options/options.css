@@ -23,7 +23,7 @@ code {
 }
 fieldset {
   border: none;
-  border-top: 3px solid #3E9398;
+  border-top: 3px solid #6BC4CE;
   display: flex;
   flex-direction: column;
   margin-bottom: .5em;
@@ -60,6 +60,16 @@ fieldset > div:hover {
 }
 fieldset > div:hover > label > dl > dd {
   color: #333;
+}
+label a {
+  color: #3B6177;
+}
+label a:hover {
+  color: #073A53;
+}
+label a[href^="http"]:after {
+  content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfiBQIJABWXvYi2AAAAfklEQVQY05XPuw3CQBBF0YPZjHLINmDbAEEFliiACiBHcgWsXIcTSwSUQ4hEgD9LQMBEV/P0rmb4MYsZ993MOYURz93KceADqjE4pbtLoQpsJ8WmCCpotZZqUT+1wmj9rBtc5wa1h17jJaennKYgWmvchjMKFVH8ejDAzh/zBh37F0UDekL1AAAAAElFTkSuQmCC);
+  padding-left: 0.25em;
 }
 input, textarea, select {
   flex: 1;

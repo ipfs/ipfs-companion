@@ -46,16 +46,13 @@ Websites can detect if `window.ipfs` exists and opt-in to use it instead of crea
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
 
-#### Embedded `js-ipfs` Node
+#### Toggle Between Embedded and External Node
+
+> ![screenshot of node type toggle](https://user-images.githubusercontent.com/157609/39421672-59010924-4c6a-11e8-9e64-6b5d5f5f2768.png)
 
 The Browser Action menu provides a toggle for switching  between embedded,
 in-memory `js-ipfs` and external IPFS node accessed over HTTP API.
-The embedded node is great for quickly sharing files with someone, or for
-testing a dapp that uses `window.ipfs` without having to install and start up
-your own IPFS daemon.  
-Power users can provide own config (eg. to enable experimental pubsub) via _Preferences_.
-
-**Note:** The embedded node _does not run_ when external node is selected. Every time you switch back to the embedded node, a new instance is created on-demand. It can take [a few seconds](https://user-images.githubusercontent.com/157609/38493690-4a77bd9e-3bf3-11e8-85da-ba06fd94cdbf.gif) for a brand-new node to find peers.
+Read about differences at [docs/node-types](docs/node-types.md).
 
 #### IPFS Status and Context Actions
 

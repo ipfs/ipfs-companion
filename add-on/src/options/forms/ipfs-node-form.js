@@ -16,7 +16,12 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
           <label for="ipfsNodeType">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsNodeType_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_ipfsNodeType_description')}</dd>
+              <dd>
+                ${browser.i18n.getMessage('option_ipfsNodeType_description')}
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md" target="_blank">
+                  ${browser.i18n.getMessage('option_legend_readMore')}
+                </a></p>
+              </dd>
             </dl>
           </label>
           <select id="ipfsNodeType" name='ipfsNodeType' onchange=${onIpfsNodeTypeChange}>
