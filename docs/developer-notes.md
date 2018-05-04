@@ -64,20 +64,24 @@ See [`docs/firefox-for-android.md`](firefox-for-android.md)
 
 ## Useful Tasks
 
-Each `npm` task can be run separately. The most useful ones are:
+Each `npm` task can be run separately, but for most of time `dev-build`, `test` and `fix:lint` are all you need.
 
 - `npm install` -- install all NPM dependencies
 - `npm run build` -- build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
 - `npm run bundle:generic` -- overwrites manifest and packages a Brave/Chrome-compatible version
 - `npm run bundle:firefox` -- overwrites manifest and packages a Firefox-compatible version
-- `npm run yarn-build` -- fast dependency install + build with yarn (installs and updates yarn.lock if needed)
-- `npm run ci` -- reproducible test and build (with frozen yarn.lock)
+- `npm run ci` -- runs tests and build (with frozen yarn.lock)
 - `npm test` -- run entire test suite
 - `npm run lint` -- read-only check for potential syntax problems (run all linters)
 - `npm run fix:lint` -- try to fix simple syntax problems (run `standard` with `--fix` etc)
 - `npm run lint:standard` -- run [standard](http://standardjs.com) linter ([IPFS JavaScript projects default to standard code style](https://github.com/ipfs/community/blob/master/js-code-guidelines.md#linting--code-style))
 - `npm run lint:web-ext` -- run [addons-linter](https://github.com/mozilla/addons-linter) shipped with `web-ext` tool
 - `npm run firefox` -- run as temporary add-on in Firefox
+
+Release build shortcuts:
+- `npm run dev-build` -- all-in-one: fast dependency install, build with yarn (updates yarn.lock if needed)
+- `npm run beta-build` -- reproducible beta build in docker with frozen yarn.lock
+- `npm run release-build` -- reproducible release build in docker with frozen yarn.lock
 
 ## Tips
 

@@ -29,7 +29,7 @@
     "build:content-scripts:ipfs-proxy:content": "browserify -p prundupify -g uglifyify -t brfs -t [ browserify-package-json --global ] -s IpfsProxyContent add-on/src/contentScripts/ipfs-proxy/content.js -o add-on/dist/contentScripts/ipfs-proxy/content.js",
     "build:content-scripts:ipfs-proxy:cleanup": "shx rm add-on/dist/contentScripts/ipfs-proxy/page.js",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib",
-    "build:bundle-all": "run-s bundle:generic bundle:firefox",
+    "build:bundle-all": "run-s bundle:generic && test \"$RELEASE_CHANNEL\" = \"beta\" && run-s bundle:firefox:beta || run-s bundle:firefox",
     "bundle": "run-s bundle:*",
     "bundle:generic": "shx cp add-on/manifest.common.json add-on/manifest.json && web-ext build -a build/generic",
     "bundle:firefox": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/firefox/",
@@ -57,8 +57,10 @@
     "ci:install": "npx yarn@1.6.0 install --frozen-lockfile || npx yarn@1.6.0 install --frozen-lockfile",
     "ci:test": "npx yarn@1.6.0 test",
     "ci:build": "./ci/update-manifest.sh ; npx yarn@1.6.0 build ; chmod -R ugo+rwX build/ add-on/",
-    "beta-build": "run-s ci:build bundle:firefox:beta",
-    "yarn-build": "npx yarn@1.6.0 && npx yarn@1.6.0 build"
+    "beta-build": "docker build -t ipfs-companion . && docker run -it -e RELEASE_CHANNEL=beta -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build",
+    "release-build": "docker build -t ipfs-companion . && docker run -it -e RELEASE_CHANNEL=stable -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build",
+    "dev-build": "npx yarn@1.6.0 && npx yarn@1.6.0 build",
+    "yarn-build": "run-s dev-build"
   },
   "private": true,
   "preferGlobal": false,

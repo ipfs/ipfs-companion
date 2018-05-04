@@ -5,8 +5,14 @@ set -e
 
 MANIFEST=add-on/manifest.common.json
 
-# restore original (make this script immutable)
+# restore original in case it was modified manually
 git checkout $MANIFEST
+
+# skip all manifest mutations when building for stable channel
+if [ "$RELEASE_CHANNEL" = "stable" ]; then
+    echo "Skipping manifest modification (RELEASE_CHANNEL=${RELEASE_CHANNEL})"
+    exit 0
+fi
 
 # Use jq for JSON operations
 function set-manifest {
@@ -16,7 +22,11 @@ function set-manifest {
 ## Set NAME
 # Name includes git revision to make QA and bug reporting easier for users :-)
 REVISION=$(git show-ref --head HEAD | head -c 7)
-set-manifest ".name = \"IPFS Companion (Dev Build @ $REVISION)\""
+if [ "$RELEASE_CHANNEL" = "beta" ]; then
+    set-manifest ".name = \"IPFS Companion (Beta @ $REVISION)\""
+else
+    set-manifest ".name = \"IPFS Companion (Dev Build @ $REVISION)\""
+fi
 grep $REVISION $MANIFEST
 
 ## Set VERSION

@@ -139,15 +139,14 @@ Don't want to install JS dependencies such as NodeJS and yarn?
 
 Do an isolated build inside of Docker!
 
-Run the following commands for ending up
-with a built extension inside the `build/` directory.
+Run the following command for ending up
+with a built extension inside the `build/` directory:
 
 ```sh
-docker build -t ipfs-companion .
-docker run -it -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build
+npm run release-build
 ```
 
-Now you can install the extension directly from `build/`
+It is an alias for running `ci:build` script inside of immutable Docker image, which guarantees the same output on all platforms.
 
 ### Legacy Firefox (< 53) and XUL-Compatible Browsers
 
