@@ -1,33 +1,88 @@
-node(label: 'linux') {
-    stage('git:checkout') {
-        cleanWs()
-        checkout scm
-        sh 'printenv'
-        sh 'git show-ref --head HEAD | head -c 7 > git-HEAD'
-        sh 'cat git-HEAD'
+parallel(
+    // the 'proper' CI pipeline runs in docker
+    "docker":  {
+        node(label: 'linux') { ws("${env.WORKSPACE}/docker") {
+            def ciContext = 'continuous-integration/jenkins/docker/'
+            githubNotify description: 'Build in progress', status: 'PENDING', context: ciContext
+            stage('ci:checkout') {
+                githubNotify description: STAGE_NAME, status: 'PENDING', context: ciContext
+                cleanWs()
+                checkout scm
+                // sh 'printenv'
+                sh 'git show-ref --head HEAD | head -c 7 > git-HEAD'
+                sh 'cat git-HEAD'
+            }
+            try {
+                stage('ci:install') {
+                    githubNotify description: STAGE_NAME, status: 'PENDING', context: ciContext
+                    sh 'docker build -t ipfs-companion:$(cat git-HEAD) .'
+                }
+                try {
+                    stage('ci:test') {
+                        githubNotify description: STAGE_NAME, status: 'PENDING', context: ciContext
+                        sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:$(cat git-HEAD) npm run ci:test'
+                    }
+                } finally {
+                    junit allowEmptyResults: true, testResults: 'test/report.xml'
+                }
+                stage('ci:build') {
+                    githubNotify description: STAGE_NAME, status: 'PENDING', context: ciContext
+                    sh 'mkdir -p $(pwd)/build'
+                    sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat git-HEAD) npm run ci:build'
+                    archiveArtifacts artifacts: 'build/**/*.zip', fingerprint: true
+                }
+                stage('lint:web-ext') {
+                    githubNotify description: STAGE_NAME, status: 'PENDING', context: ciContext
+                    sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat git-HEAD) npm run lint:web-ext'
+                }
+                githubNotify description: 'Docker build is OK', status: 'SUCCESS', context: ciContext
+            } catch (err) {
+                echo "Caught: ${err}"
+                currentBuild.result = 'FAILURE'
+                githubNotify description: 'Docker build failed', status: 'FAILURE', context: ciContext
+            } finally {
+                sh 'docker rmi -f ipfs-companion:$(cat git-HEAD)'
+                // sh 'ls -lh .'
+                // sh 'ls -Rlh add-on'
+                sh 'ls -Rlh build'
+                cleanWs()
+            }
+        }}
+    },
+    // we also run dev-build under windows as a smoke-test to ensure it can be built on that platform
+    "windows": {
+        node(label: 'windows') { ansiColor('xterm') { withEnv(['CI=true']) { ws("${env.JOB_NAME}/windows") {
+            def ciContext = 'continuous-integration/jenkins/windows/'
+            githubNotify description: 'Build in progress', status: 'PENDING', context: ciContext
+            stage('win:checkout') {
+                cleanWs()
+                bat 'git config --global core.autocrlf input'
+                checkout scm
+            }
+            try {
+                stage('win:dev-build') {
+                    // remove node_modules if any
+                    bat 'del /s /q node_modules >nul 2>&1'
+                    // https://github.com/yarnpkg/yarn/issues/3110#issuecomment-293347341
+                    bat 'npx yarn@1.6.0 config set msvs_version 2015 --global'
+                    // run developer build as a smoke-test for windows
+                    bat 'npm run dev-build'
+                }
+                stage('win:test') {
+                    bat 'npm test'
+                }
+                githubNotify description: 'Windows build is OK', status: 'SUCCESS', context: ciContext
+            } catch (err) {
+                echo "Caught: ${err}"
+                currentBuild.result = 'FAILURE'
+                githubNotify description: 'Windows build failed', status: 'FAILURE', context: ciContext
+            } finally {
+                // bat 'node node_modules/.bin/shx ls -lh .'
+                // bat 'node node_modules/.bin/shx ls -Rlh add-on'
+                bat 'node node_modules/.bin/shx ls -Rlh build'
+                cleanWs()
+            }
+        }}}}
     }
-    stage('ci:install') {
-        sh 'docker build -t ipfs-companion:$(cat git-HEAD) .'
-    }
-    catchError {
-        stage('ci:test') {
-            sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:$(cat git-HEAD) npm run ci:test'
-        }
-    }
-    junit allowEmptyResults: true, testResults: 'test/report.xml'
-    catchError {
-        stage('ci:build') {
-            sh 'mkdir -p $(pwd)/build'
-            sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat git-HEAD) npm run ci:build'
-            archiveArtifacts artifacts: 'build/**/*.zip', fingerprint: true
-        }
-        stage('lint:web-ext') {
-            sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat git-HEAD) npm run lint:web-ext'
-        }
-    }
-    sh 'docker rmi -f ipfs-companion:$(cat git-HEAD)'
-    sh 'ls -lh .'
-    sh 'ls -Rlh add-on'
-    sh 'ls -Rlh build'
-    cleanWs()
-}
+)
+
