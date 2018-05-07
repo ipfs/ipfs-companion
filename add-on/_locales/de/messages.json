@@ -177,6 +177,10 @@
     "message": "IPFS-Knoten konnte nicht beendet werden",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
+  "option_legend_readMore": {
+    "message": "Mehr …",
+    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
+  },
   "option_header_nodeType": {
     "message": "IPFS-Knoten",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
