@@ -219,7 +219,7 @@ module.exports = async function init () {
   // URL Uploader
   // -------------------------------------------------------------------
 
-  async function addFromURL (info) {
+  async function addFromURL (info, options) {
     const srcUrl = await findUrlForContext(info)
     let result
     try {
@@ -233,17 +233,19 @@ module.exports = async function init () {
         // console.log('addFromURL.fetchOptions', fetchOptions)
         const response = await fetch(srcUrl, fetchOptions)
         const blob = await response.blob()
-
         const buffer = await new Promise((resolve, reject) => {
           const reader = new FileReader()
           reader.onloadend = () => resolve(Buffer.from(reader.result))
           reader.onerror = reject
           reader.readAsArrayBuffer(blob)
         })
-
-        result = await ipfs.files.add(buffer)
+        const data = {
+          path: decodeURIComponent(new URL(response.url).pathname.split('/').pop()),
+          content: buffer
+        }
+        result = await ipfs.files.add(data, options)
       } else {
-        result = await ipfs.util.addFromURL(srcUrl)
+        result = await ipfs.util.addFromURL(srcUrl, options)
       }
     } catch (error) {
       console.error('Error in upload to IPFS context menu', error)
@@ -274,19 +276,25 @@ module.exports = async function init () {
     }
   }
 
-  function uploadResultHandler (result) {
-    result.forEach(function (file) {
+  async function uploadResultHandler (result) {
+    for (let file of result) {
       if (file && file.hash) {
         const {path, url} = getIpfsPathAndNativeAddress(file.hash)
-        browser.tabs.create({
-          'url': url
-        })
-        console.info('[ipfs-companion] successfully stored', path)
+        console.log('uploadResultHandler.file-' + result.indexOf(file), file)
+        // open the wrapping directory (or the CID if wrapping was disabled)
+        if (result.length === 1 || file.path === '' || file.path === file.hash) {
+          await browser.tabs.create({
+            'url': url
+          })
+        }
+        // preload every item
         if (state.preloadAtPublicGateway) {
           preloadAtPublicGateway(path)
         }
+        console.info('[ipfs-companion] successfully stored', file)
       }
-    })
+    }
+    return result
   }
 
   // Page-specific Actions
@@ -589,17 +597,16 @@ module.exports = async function init () {
       return ipfs
     },
 
-    async ipfsAddAndShow (buffer) {
+    async ipfsAddAndShow (data, options) {
       let result
       try {
-        result = await api.ipfs.files.add(buffer)
+        result = await api.ipfs.files.add(data, options)
       } catch (err) {
         console.error('Failed to IPFS add', err)
         notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
         throw err
       }
-      uploadResultHandler(result)
-      return result
+      return uploadResultHandler(result)
     },
 
     async destroy () {

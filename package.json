@@ -94,7 +94,7 @@
     "doc-sniff": "1.0.1",
     "file-type": "7.6.0",
     "ipfs": "0.28.2",
-    "ipfs-api": "18.2.0",
+    "ipfs-api": "21.0.0",
     "ipfs-css": "0.3.0",
     "ipfs-postmsg-proxy": "2.16.0",
     "is-ipfs": "0.3.2",

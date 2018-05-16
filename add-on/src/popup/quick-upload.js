@@ -6,6 +6,8 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 
+document.title = browser.i18n.getMessage('panel_quickUpload')
+
 const app = choo()
 
 app.use(quickUploadStore)
@@ -16,6 +18,8 @@ function quickUploadStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
   state.ipfsNodeType = 'external'
+  state.wrapWithDirectory = true
+  state.pinUpload = true
 
   function updateState ({ipfsNodeType, peerCount}) {
     state.ipfsNodeType = ipfsNodeType
@@ -48,7 +52,15 @@ function quickUploadStore (state, emitter) {
         reader.readAsArrayBuffer(file)
       })
 
-      await ipfsCompanion.ipfsAddAndShow(buffer)
+      const uploadOptions = {
+        wrapWithDirectory: state.wrapWithDirectory,
+        pin: state.pinUpload
+      }
+      const result = await ipfsCompanion.ipfsAddAndShow({
+        path: file.name,
+        content: buffer
+      }, uploadOptions)
+      console.log('Upload result', result)
 
       // close upload tab as it will be replaced with a new tab with uploaded content
       const tab = await browser.tabs.getCurrent()
@@ -64,12 +76,14 @@ function quickUploadStore (state, emitter) {
 
 function quickUploadPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
+  const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
+  const onPinUploadChange = (e) => { state.pinUpload = e.target.checked }
   const {peerCount} = state
 
   return html`
-    <div class="avenir pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); height:100%;">
+    <div class="montserrat pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); height:100%;">
       <div class="mw8 center pa3 white">
-        <header class="flex items-center">
+        <header class="flex items-center no-user-select">
           ${logo({
             size: 80,
             path: '../../icons',
@@ -84,7 +98,7 @@ function quickUploadPage (state, emit) {
             </p>
           </div>
         </header>
-        <label for="quickUploadInput" class='db relative mv5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
+        <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
           <input class="db absolute pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
@@ -101,6 +115,21 @@ function quickUploadPage (state, emit) {
             </div>
           </div>
         </label>
+         <!-- TODO: enable wrapping in embedded node after js-ipfs release -->
+        ${state.ipfsNodeType === 'external' ? html`
+          <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy no-user-select' style='color: #6ACAD1'>
+              <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
+                <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
+                <span class='mark db flex items-center relative mr2 br2'></span>
+                ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
+              </label>
+              <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
+                <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
+                <span class='mark db flex items-center relative mr2 br2'></span>
+                ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
+              </label>
+          </div>
+       ` : null}
       </div>
     </div>
   `

@@ -366,6 +366,14 @@
     "message": "drop it here to share",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
+  "quickUpload_options_wrapWithDirectory": {
+    "message": "preserve the filename when adding a single item",
+    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  },
+  "quickUpload_options_pinUpload": {
+    "message": "resursively pin added data",
+    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  },
   "page_proxyAcl_title": {
     "message": "Manage Permissions",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
