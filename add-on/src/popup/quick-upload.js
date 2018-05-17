@@ -14,6 +14,15 @@ app.use(quickUploadStore)
 app.route('*', quickUploadPage)
 app.mount('#root')
 
+function file2buffer (file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(Buffer.from(reader.result))
+    reader.onerror = reject
+    reader.readAsArrayBuffer(file)
+  })
+}
+
 function quickUploadStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
@@ -41,30 +50,25 @@ function quickUploadStore (state, emitter) {
   })
 
   emitter.on('fileInputChange', async (event) => {
-    const file = event.target.files[0]
     try {
       const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
-
-      const buffer = await new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(Buffer.from(reader.result))
-        reader.onerror = reject
-        reader.readAsArrayBuffer(file)
-      })
-
+      const uploadTab = await browser.tabs.getCurrent()
+      const files = []
+      for (let file of event.target.files) {
+        const buffer = await file2buffer(file)
+        files.push({
+          path: file.name,
+          content: buffer
+        })
+      }
       const uploadOptions = {
-        wrapWithDirectory: state.wrapWithDirectory,
+        wrapWithDirectory: state.wrapWithDirectory || files.length > 1,
         pin: state.pinUpload
       }
-      const result = await ipfsCompanion.ipfsAddAndShow({
-        path: file.name,
-        content: buffer
-      }, uploadOptions)
+      const result = await ipfsCompanion.ipfsAddAndShow(files, uploadOptions)
       console.log('Upload result', result)
-
       // close upload tab as it will be replaced with a new tab with uploaded content
-      const tab = await browser.tabs.getCurrent()
-      browser.tabs.remove(tab.id)
+      browser.tabs.remove(uploadTab.id)
     } catch (err) {
       console.error('Unable to perform quick upload', err)
       // keep upload tab and display error message in it
@@ -99,7 +103,7 @@ function quickUploadPage (state, emit) {
           </div>
         </header>
         <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
-          <input class="db absolute pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" onchange=${onFileInputChange} />
+          <input class="db absolute pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" multiple onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
               <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
