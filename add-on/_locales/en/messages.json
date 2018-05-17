@@ -367,7 +367,7 @@
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
   "quickUpload_options_show": {
-    "message": "upload options »",
+    "message": "upload options",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_wrapWithDirectory": {
