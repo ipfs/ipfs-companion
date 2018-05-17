@@ -29,6 +29,7 @@ function quickUploadStore (state, emitter) {
   state.ipfsNodeType = 'external'
   state.wrapWithDirectory = true
   state.pinUpload = true
+  state.expandOptions = false
 
   function updateState ({ipfsNodeType, peerCount}) {
     state.ipfsNodeType = ipfsNodeType
@@ -78,10 +79,35 @@ function quickUploadStore (state, emitter) {
   })
 }
 
-function quickUploadPage (state, emit) {
-  const onFileInputChange = (e) => emit('fileInputChange', e)
+function quickUploadOptions (state, emit) {
+  const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
   const onPinUploadChange = (e) => { state.pinUpload = e.target.checked }
+  if (state.expandOptions) {
+    return html`
+      <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
+        <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
+          <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
+          <span class='mark db flex items-center relative mr2 br2'></span>
+          ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
+        </label>
+        <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
+          <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
+          <span class='mark db flex items-center relative mr2 br2'></span>
+          ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
+        </label>
+      </div>
+    `
+  }
+  return html`
+    <button class='f6 link dim bn bg-transparent moon-gray dib pa0 pointer ma0' style='color: #6ACAD1' onclick=${onExpandOptions}>
+      ${browser.i18n.getMessage('quickUpload_options_show')}
+    </button>
+  `
+}
+
+function quickUploadPage (state, emit) {
+  const onFileInputChange = (e) => emit('fileInputChange', e)
   const {peerCount} = state
 
   return html`
@@ -120,20 +146,7 @@ function quickUploadPage (state, emit) {
           </div>
         </label>
          <!-- TODO: enable wrapping in embedded node after js-ipfs release -->
-        ${state.ipfsNodeType === 'external' ? html`
-          <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy no-user-select' style='color: #6ACAD1'>
-              <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
-                <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
-                <span class='mark db flex items-center relative mr2 br2'></span>
-                ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
-              </label>
-              <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
-                <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
-                <span class='mark db flex items-center relative mr2 br2'></span>
-                ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
-              </label>
-          </div>
-       ` : null}
+        ${state.ipfsNodeType === 'external' ? quickUploadOptions(state, emit) : null}
       </div>
     </div>
   `
