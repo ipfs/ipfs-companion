@@ -280,7 +280,6 @@ module.exports = async function init () {
     for (let file of result) {
       if (file && file.hash) {
         const {path, url} = getIpfsPathAndNativeAddress(file.hash)
-        console.log('uploadResultHandler.file-' + result.indexOf(file), file)
         // open the wrapping directory (or the CID if wrapping was disabled)
         if (result.length === 1 || file.path === '' || file.path === file.hash) {
           await browser.tabs.create({

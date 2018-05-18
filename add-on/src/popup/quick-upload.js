@@ -100,7 +100,7 @@ function quickUploadOptions (state, emit) {
     `
   }
   return html`
-    <button class='f6 link dim bn bg-transparent moon-gray dib pa0 pointer ma0' style='color: #6ACAD1' onclick=${onExpandOptions}>
+    <button class='mt3 f6 lh-copy link bn bg-transparent moon-gray dib pa0 pointer' style='color: #6ACAD1' onclick=${onExpandOptions}>
       ${browser.i18n.getMessage('quickUpload_options_show')} »
     </button>
   `
