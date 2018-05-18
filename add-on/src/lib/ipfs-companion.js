@@ -597,9 +597,13 @@ module.exports = async function init () {
     },
 
     async ipfsAddAndShow (data, options) {
+      options = options || {}
       let result
       try {
         result = await api.ipfs.files.add(data, options)
+        if (options.wrapWithDirectory && result.length !== data.length + 1) {
+          throw new Error(`ipfs.files.add result should include an entry for every uploaded file plus additional one for a wrapping directory (${data.length + 1} in total), but found only ${result.length} entries`)
+        }
       } catch (err) {
         console.error('Failed to IPFS add', err)
         notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
