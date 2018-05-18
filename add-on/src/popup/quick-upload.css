@@ -1,4 +1,5 @@
 @import url('../../ui-kit/tachyons.css');
+@import url('../../ui-kit/ipfs.css');
 @import url('heartbeat.css');
 
 html, body, #root {
@@ -10,4 +11,38 @@ html, body, #root {
 }
 .hover-inner-shadow:hover {
   box-shadow: inset 0 0 10px 5px rgba(211, 235, 237, 0.2);
+}
+
+.no-user-select {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Temporary CSS for custom checkbox (TODO: move/replace with ipfs-css */
+input[type='checkbox'] {
+  display:none;
+}
+
+input[type=checkbox] + .mark {
+  background: transparent;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  padding: 0;
+  border: 1px #6ACAD1 solid;
+  position: relative;
+}
+
+input[type=checkbox]:checked + .mark::after {
+  color: #6ACAD1;
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  content: "";
+  height: 6px;
+  width: 6px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(-45deg);
 }
