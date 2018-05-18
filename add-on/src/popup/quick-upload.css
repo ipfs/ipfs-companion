@@ -21,23 +21,28 @@ html, body, #root {
 
 /* Temporary CSS for custom checkbox (TODO: move/replace with ipfs-css */
 input[type='checkbox'] {
+  display:none;
+}
+
+input[type=checkbox] + .mark {
+  background: transparent;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  padding: 0;
+  border: 1px #6ACAD1 solid;
+  position: relative;
+}
+
+input[type=checkbox]:checked + .mark::after {
+  color: #6ACAD1;
   position: absolute;
-   opacity: 0;
-}
-.mark {
-  padding: .1em;
-  border: 1px #6ACAD1 solid;
-}
-label input ~ .mark  {
-  height: .9em;
-  width: .9em;
-}
-label input:checked ~ .mark  {
-  color: #79D6DF;
-  border: 1px #6ACAD1 solid;
-}
-label input:checked ~ .mark:after  {
-  content: '✔';
-  text-align: center;
-  vertical-align: middle;
+  left: 4px;
+  top: 2px;
+  content: "";
+  height: 6px;
+  width: 6px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(-45deg);
 }
