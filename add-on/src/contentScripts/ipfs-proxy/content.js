@@ -26,4 +26,8 @@ function init () {
   injectScript(code)
 }
 
-init()
+// Restricting window.ipfs to Secure Context
+// See: https://github.com/ipfs-shipyard/ipfs-companion/issues/476
+if (window.isSecureContext) {
+  init()
+}
