@@ -84,6 +84,15 @@ function quickUploadStore (state, emitter) {
         })
         totalSize += file.size
       }
+      if (!browser.runtime.id.includes('@')) {
+        // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
+        if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
+          // avoid crashing Chrome until the source of issue is fixed in js-ipfs-api
+          // - https://github.com/ipfs-shipyard/ipfs-companion/issues/464
+          // - https://github.com/ipfs/js-ipfs-api/issues/654
+          throw new Error('Unable to process payload bigger than 128MiB in Chrome. See: js-ipfs-api/issues/654')
+        }
+      }
       progressHandler(0, totalSize, state, emitter)
       emitter.emit('render')
       // TODO: update flag below after wrapping support is released with new js-ipfs
@@ -103,8 +112,8 @@ function quickUploadStore (state, emitter) {
     } catch (err) {
       console.error('Unable to perform quick upload', err)
       // keep upload tab and display error message in it
-      state.message = `Unable to upload to IPFS API: ${err.name ? err.name : err}`
-      state.progress = ''
+      state.message = `Unable to upload to IPFS API:`
+      state.progress = `${err}`
       emitter.emit('render')
     }
   })
