@@ -366,6 +366,14 @@
     "message": "drop it here to share",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
+  "quickUpload_state_uploading": {
+    "message": "Upload in progress..",
+    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  },
+  "quickUpload_state_buffering": {
+    "message": "(buffering, please wait)",
+    "description": "Status label on the share files page (quickUpload_state_buffering)"
+  },
   "quickUpload_options_show": {
     "message": "upload options",
     "description": "Button on the share files page (quickUpload_options_show)"

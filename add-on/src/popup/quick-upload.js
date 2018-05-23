@@ -5,6 +5,8 @@ const browser = require('webextension-polyfill')
 const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
+const fileReaderPullStream = require('filereader-pull-stream')
+const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('panel_quickUpload')
 
@@ -14,6 +16,7 @@ app.use(quickUploadStore)
 app.route('*', quickUploadPage)
 app.mount('#root')
 
+/* disabled in favor of fileReaderPullStream
 function file2buffer (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -21,6 +24,23 @@ function file2buffer (file) {
     reader.onerror = reject
     reader.readAsArrayBuffer(file)
   })
+} */
+
+function progressHandler (doneBytes, totalBytes, state, emitter) {
+  state.message = browser.i18n.getMessage('quickUpload_state_uploading')
+  // console.log('Upload progress:', doneBytes)
+  if (doneBytes && doneBytes > 0) {
+    const format = { standard: 'iec', round: 0, output: 'object' }
+    const done = filesize(doneBytes, format)
+    const total = filesize(totalBytes, format)
+    const percent = ((doneBytes / totalBytes) * 100).toFixed(0)
+    state.progress = `${done.value} ${done.symbol} / ${total.value} ${total.symbol} (${percent}%)`
+  } else {
+    // This is a gracefull fallback for environments in which progress reporting is delayed
+    // until entire file/chunk is bufferend into memory (eg. js-ipfs-api)
+    state.progress = browser.i18n.getMessage('quickUpload_state_buffering')
+  }
+  emitter.emit('render')
 }
 
 function quickUploadStore (state, emitter) {
@@ -55,25 +75,45 @@ function quickUploadStore (state, emitter) {
       const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
       const uploadTab = await browser.tabs.getCurrent()
       const files = []
+      let totalSize = 0
       for (let file of event.target.files) {
-        const buffer = await file2buffer(file)
+        // const uploadContent = await file2buffer(file)
+        const uploadContent = fileReaderPullStream(file, {chunkSize: 32 * 1024 * 1024})
         files.push({
           path: file.name,
-          content: buffer
+          content: uploadContent
         })
+        totalSize += file.size
       }
+      if (!browser.runtime.id.includes('@')) {
+        // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
+        if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
+          // avoid crashing Chrome until the source of issue is fixed in js-ipfs-api
+          // - https://github.com/ipfs-shipyard/ipfs-companion/issues/464
+          // - https://github.com/ipfs/js-ipfs-api/issues/654
+          throw new Error('Unable to process payload bigger than 128MiB in Chrome. See: js-ipfs-api/issues/654')
+        }
+      }
+      progressHandler(0, totalSize, state, emitter)
+      emitter.emit('render')
+      // TODO: update flag below after wrapping support is released with new js-ipfs
+      // TODO: also enable multiple file selection in <input type=file> (blocked for js-ipfs for now)
+      const wrapFlag = (state.wrapWithDirectory || files.length > 1) && state.ipfsNodeType !== 'embedded'
       const uploadOptions = {
-        wrapWithDirectory: state.wrapWithDirectory || files.length > 1,
+        progress: (len) => progressHandler(len, totalSize, state, emitter),
+        wrapWithDirectory: wrapFlag,
         pin: state.pinUpload
       }
       const result = await ipfsCompanion.ipfsAddAndShow(files, uploadOptions)
+      emitter.emit('render')
       console.log('Upload result', result)
       // close upload tab as it will be replaced with a new tab with uploaded content
-      browser.tabs.remove(uploadTab.id)
+      await browser.tabs.remove(uploadTab.id)
     } catch (err) {
       console.error('Unable to perform quick upload', err)
       // keep upload tab and display error message in it
-      state.message = `Unable to upload to IPFS API: ${err}`
+      state.message = `Unable to upload to IPFS API:`
+      state.progress = `${err}`
       emitter.emit('render')
     }
   })
@@ -129,7 +169,7 @@ function quickUploadPage (state, emit) {
           </div>
         </header>
         <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
-          <input class="db absolute pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" multiple onchange=${onFileInputChange} />
+          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" ${state.ipfsNodeType === 'external' ? 'multiple' : null} onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
               <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
@@ -141,7 +181,7 @@ function quickUploadPage (state, emit) {
                 </emph>
                 ${browser.i18n.getMessage('quickUpload_drop_it_here')}
               </span>
-              <p class='f4'>${state.message}</p>
+              <p class='f4 db'>${state.message}<span class='code db absolute fr pv2'>${state.progress}</span></p>
             </div>
           </div>
         </label>

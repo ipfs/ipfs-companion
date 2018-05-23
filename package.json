@@ -93,6 +93,8 @@
     "choo": "6.8.0",
     "doc-sniff": "1.0.1",
     "file-type": "7.6.0",
+    "filereader-pull-stream": "1.0.0",
+    "filesize": "3.6.1",
     "ipfs": "0.28.2",
     "ipfs-api": "21.0.0",
     "ipfs-css": "0.3.0",
