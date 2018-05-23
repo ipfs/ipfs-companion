@@ -6,7 +6,7 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 const fileReaderPullStream = require('filereader-pull-stream')
-const byteSize = require('byte-size')
+const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('panel_quickUpload')
 
@@ -30,10 +30,11 @@ function progressHandler (doneBytes, totalBytes, state, emitter) {
   state.message = browser.i18n.getMessage('quickUpload_state_uploading')
   // console.log('Upload progress:', doneBytes)
   if (doneBytes && doneBytes > 0) {
-    const done = byteSize(doneBytes, { units: 'iec', precision: 2 })
-    const total = byteSize(totalBytes, { units: 'iec', precision: 2 })
+    const format = { standard: 'iec', round: 0, output: 'object' }
+    const done = filesize(doneBytes, format)
+    const total = filesize(totalBytes, format)
     const percent = ((doneBytes / totalBytes) * 100).toFixed(0)
-    state.progress = `${done.value} ${done.unit} / ${total.value} ${total.unit} (${percent}%)`
+    state.progress = `${done.value} ${done.symbol} / ${total.value} ${total.symbol} (${percent}%)`
   } else {
     // This is a gracefull fallback for environments in which progress reporting is delayed
     // until entire file/chunk is bufferend into memory (eg. js-ipfs-api)
@@ -103,7 +104,6 @@ function quickUploadStore (state, emitter) {
         wrapWithDirectory: wrapFlag,
         pin: state.pinUpload
       }
-      console.log('Calling background.ipfsAddAndShow', files)
       const result = await ipfsCompanion.ipfsAddAndShow(files, uploadOptions)
       emitter.emit('render')
       console.log('Upload result', result)
@@ -169,7 +169,7 @@ function quickUploadPage (state, emit) {
           </div>
         </header>
         <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
-          <input class="db absolute pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" ${state.ipfsNodeType === 'external' ? 'multiple' : null} onchange=${onFileInputChange} />
+          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" ${state.ipfsNodeType === 'external' ? 'multiple' : null} onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
               <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
@@ -181,7 +181,7 @@ function quickUploadPage (state, emit) {
                 </emph>
                 ${browser.i18n.getMessage('quickUpload_drop_it_here')}
               </span>
-              <p class='f4 db relative'>${state.message}<span class='code db absolute fr pv2'>${state.progress}</span></p>
+              <p class='f4 db'>${state.message}<span class='code db absolute fr pv2'>${state.progress}</span></p>
             </div>
           </div>
         </label>
