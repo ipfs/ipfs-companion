@@ -1,0 +1,20 @@
+[
+    "add",
+    "block",
+    "cat",
+    "dag",
+    "dht",
+    "dns",
+    "files",
+    "get",
+    "id",
+    "ls",
+    "name.resolve",
+    "object",
+    "pin",
+    "pubsub",
+    "repo",
+    "stats",
+    "swarm",
+    "version"
+]

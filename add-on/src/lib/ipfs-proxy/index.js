@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
 const AccessControl = require('./access-control')
+const createPreApiWhitelist = require('./pre-api-whitelist')
 const createPreAcl = require('./pre-acl')
 const createPreMfsScope = require('./pre-mfs-scope')
 const createRequestAccess = require('./request-access')
@@ -33,6 +34,7 @@ function createIpfsProxy (getIpfs, getState) {
       postMessage: (data) => port.postMessage(data),
       getMessageData: (d) => d,
       pre: (fnName) => [
+        createPreApiWhitelist(fnName),
         createPreAcl(fnName, getState, getScope, accessControl, requestAccess),
         createPreMfsScope(fnName, getScope, getIpfs)
       ]
