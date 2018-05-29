@@ -4202,9 +4202,9 @@ ip@^1.1.0, ip@^1.1.4, ip@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
 
-ipfs-api@21.0.0:
-  version "21.0.0"
-  resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-21.0.0.tgz#fd8611025e8eff91cde0fad1ca2386d73ff05cd8"
+ipfs-api@22.0.0:
+  version "22.0.0"
+  resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-22.0.0.tgz#2592df148ed9a51097057d08c0229b27e88edab5"
   dependencies:
     async "^2.6.0"
     big.js "^5.0.3"
@@ -4240,7 +4240,7 @@ ipfs-api@21.0.0:
     stream-http "^2.8.2"
     stream-to-pull-stream "^1.7.2"
     streamifier "^0.1.1"
-    tar-stream "^1.6.0"
+    tar-stream "^1.6.1"
 
 ipfs-api@^18.1.2:
   version "18.2.0"
@@ -4323,9 +4323,9 @@ ipfs-block@~0.6.1:
   dependencies:
     cids "^0.5.2"
 
-ipfs-css@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.3.0.tgz#a941ca14e3b345109d9353dde424492cd737bf8c"
+ipfs-css@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.5.0.tgz#94330da145b647efafe6ff00c4a77603c115115e"
 
 ipfs-multipart@~0.1.0:
   version "0.1.0"
@@ -8064,7 +8064,7 @@ readable-stream@1.1.x, "readable-stream@>=1.1.13-1 <1.2.0-0", readable-stream@^1
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-readable-stream@2, readable-stream@^2.3.6:
+readable-stream@2, readable-stream@^2.3.0, readable-stream@^2.3.6:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
   dependencies:
@@ -9625,15 +9625,15 @@ tar-stream@^1.1.2, tar-stream@^1.5.0, tar-stream@^1.5.5:
     readable-stream "^2.0.0"
     xtend "^4.0.0"
 
-tar-stream@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-1.6.0.tgz#a50efaa7b17760b82c27b3cae4a301a8254a5715"
+tar-stream@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-1.6.1.tgz#f84ef1696269d6223ca48f6e1eeede3f7e81f395"
   dependencies:
     bl "^1.0.0"
     buffer-alloc "^1.1.0"
     end-of-stream "^1.0.0"
     fs-constants "^1.0.0"
-    readable-stream "^2.0.0"
+    readable-stream "^2.3.0"
     to-buffer "^1.1.0"
     xtend "^4.0.0"
 
