@@ -87,7 +87,7 @@
     "standard": "10.0.3",
     "uglifyify": "4.0.5",
     "watchify": "3.11.0",
-    "web-ext": "2.6.0"
+    "web-ext": "2.7.0"
   },
   "dependencies": {
     "choo": "6.8.0",
