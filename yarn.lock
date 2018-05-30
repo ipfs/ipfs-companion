@@ -4295,7 +4295,47 @@ ip@^1.1.4, ip@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
 
-ipfs-api@22.0.0, ipfs-api@^22.0.0:
+ipfs-api@22.0.1:
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-22.0.1.tgz#c539d5f5a91d8212aed81595bab66c8416070f9c"
+  dependencies:
+    async "^2.6.0"
+    big.js "^5.0.3"
+    bs58 "^4.0.1"
+    cids "~0.5.3"
+    concat-stream "^1.6.2"
+    detect-node "^2.0.3"
+    flatmap "0.0.3"
+    glob "^7.1.2"
+    ipfs-block "~0.7.1"
+    ipfs-unixfs "~0.1.14"
+    ipld-dag-cbor "~0.12.0"
+    ipld-dag-pb "~0.14.4"
+    is-ipfs "~0.3.2"
+    is-pull-stream "0.0.0"
+    is-stream "^1.1.0"
+    libp2p-crypto "~0.13.0"
+    lru-cache "^4.1.3"
+    multiaddr "^5.0.0"
+    multibase "~0.4.0"
+    multihashes "~0.4.13"
+    ndjson "^1.5.0"
+    once "^1.4.0"
+    peer-id "~0.10.7"
+    peer-info "~0.14.1"
+    promisify-es6 "^1.0.3"
+    pull-defer "~0.2.2"
+    pull-pushable "^2.2.0"
+    pull-stream-to-stream "^1.3.4"
+    pump "^3.0.0"
+    qs "^6.5.2"
+    readable-stream "^2.3.6"
+    stream-http "^2.8.2"
+    stream-to-pull-stream "^1.7.2"
+    streamifier "~0.1.1"
+    tar-stream "^1.6.1"
+
+ipfs-api@^22.0.0:
   version "22.0.0"
   resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-22.0.0.tgz#2592df148ed9a51097057d08c0229b27e88edab5"
   dependencies:
@@ -9563,7 +9603,7 @@ stream-to-pull-stream@^1.7.2:
     looper "^3.0.0"
     pull-stream "^3.2.3"
 
-streamifier@^0.1.1:
+streamifier@^0.1.1, streamifier@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/streamifier/-/streamifier-0.1.1.tgz#97e98d8fa4d105d62a2691d1dc07e820db8dfc4f"
 
