@@ -96,9 +96,7 @@ function quickUploadStore (state, emitter) {
       }
       progressHandler(0, totalSize, state, emitter)
       emitter.emit('render')
-      // TODO: update flag below after wrapping support is released with new js-ipfs
-      // TODO: also enable multiple file selection in <input type=file> (blocked for js-ipfs for now)
-      const wrapFlag = (state.wrapWithDirectory || files.length > 1) && state.ipfsNodeType !== 'embedded'
+      const wrapFlag = (state.wrapWithDirectory || files.length > 1)
       const uploadOptions = {
         progress: (len) => progressHandler(len, totalSize, state, emitter),
         wrapWithDirectory: wrapFlag,
@@ -123,6 +121,7 @@ function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
   const onPinUploadChange = (e) => { state.pinUpload = e.target.checked }
+  const isPinningSupported = state.ipfsNodeType === 'external'
   if (state.expandOptions) {
     return html`
       <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
@@ -131,11 +130,13 @@ function quickUploadOptions (state, emit) {
           <span class='mark db flex items-center relative mr2 br2'></span>
           ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
         </label>
+      ${isPinningSupported ? (html`
         <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
           <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
           <span class='mark db flex items-center relative mr2 br2'></span>
           ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
-        </label>
+        </label>`)
+      : null}
       </div>
     `
   }
@@ -169,7 +170,7 @@ function quickUploadPage (state, emit) {
           </div>
         </header>
         <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
-          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" ${state.ipfsNodeType === 'external' ? 'multiple' : null} onchange=${onFileInputChange} />
+          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" multiple onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
               <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
@@ -185,8 +186,7 @@ function quickUploadPage (state, emit) {
             </div>
           </div>
         </label>
-         <!-- TODO: enable wrapping in embedded node after js-ipfs release -->
-        ${state.ipfsNodeType === 'external' ? quickUploadOptions(state, emit) : null}
+        ${quickUploadOptions(state, emit)}
       </div>
     </div>
   `
