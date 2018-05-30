@@ -105,7 +105,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     expect(() => { if (error) throw error }).to.throw(`User denied access to ${permission}`)
 
     error = null
-    requestAccess.reset()
+    requestAccess.resetHistory()
 
     try {
       await preAcl()
