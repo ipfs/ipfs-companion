@@ -21,7 +21,8 @@ module.exports = (state, emitter) => {
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,
-    redirectEnabled: false
+    redirectEnabled: false,
+    uploadEnabled: false
   })
 
   let port
@@ -201,6 +202,8 @@ module.exports = (state, emitter) => {
       state.ipfsNodeType = status.ipfsNodeType
       state.ipfsApiUrl = options.ipfsApiUrl
       state.redirectEnabled = options.useCustomGateway
+      // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
+      state.uploadEnabled = !!(await browser.runtime.getBackgroundPage())
       state.swarmPeers = status.peerCount === -1 ? 0 : status.peerCount
       state.isIpfsOnline = status.peerCount > -1
       state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
