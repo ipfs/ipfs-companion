@@ -9,6 +9,7 @@ module.exports = function operations ({
   ipfsNodeType,
   isIpfsOnline,
   redirectEnabled,
+  uploadEnabled,
   onQuickUpload,
   onOpenWebUi,
   onOpenPrefs,
@@ -16,7 +17,7 @@ module.exports = function operations ({
 }) {
   return html`
     <div class="fade-in pv1">
-      ${isIpfsOnline ? (
+      ${isIpfsOnline && uploadEnabled ? (
         navItem({
           text: browser.i18n.getMessage('panel_quickUpload'),
           bold: true,
