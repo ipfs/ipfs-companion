@@ -366,6 +366,26 @@
     "message": "peurhoet di sinoe untok berbagi",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
+  "quickUpload_state_uploading": {
+    "message": "Upload in progress..",
+    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  },
+  "quickUpload_state_buffering": {
+    "message": "(buffering, please wait)",
+    "description": "Status label on the share files page (quickUpload_state_buffering)"
+  },
+  "quickUpload_options_show": {
+    "message": "upload options",
+    "description": "Button on the share files page (quickUpload_options_show)"
+  },
+  "quickUpload_options_wrapWithDirectory": {
+    "message": "Wrap single files in a directory to preserve their filenames.",
+    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  },
+  "quickUpload_options_pinUpload": {
+    "message": "Pin files so they are retained when performing garbage collection on your IPFS repo.",
+    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  },
   "page_proxyAcl_title": {
     "message": "Manage Permissions",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"

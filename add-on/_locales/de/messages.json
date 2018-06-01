@@ -366,6 +366,26 @@
     "message": "hier ablegen zum Teilen",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
+  "quickUpload_state_uploading": {
+    "message": "Upload wird ausgeführt",
+    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  },
+  "quickUpload_state_buffering": {
+    "message": "(Pufferung, bitte warten)",
+    "description": "Status label on the share files page (quickUpload_state_buffering)"
+  },
+  "quickUpload_options_show": {
+    "message": "Upload-Optionen",
+    "description": "Button on the share files page (quickUpload_options_show)"
+  },
+  "quickUpload_options_wrapWithDirectory": {
+    "message": "Fügen Sie einzelne Dateien in ein Verzeichnis ein, um deren Dateinamen zu erhalten.",
+    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  },
+  "quickUpload_options_pinUpload": {
+    "message": "Heften Sie Dateien an, um diese während einer Garbagecollection in Ihrem IPFS-Repository zu behalten.",
+    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  },
   "page_proxyAcl_title": {
     "message": "Berechtigungen verwalten",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"

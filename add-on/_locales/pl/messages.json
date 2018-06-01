@@ -178,7 +178,7 @@
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_legend_readMore": {
-    "message": "Read more",
+    "message": "Dowiedz się więcej",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType": {
@@ -365,6 +365,26 @@
   "quickUpload_drop_it_here": {
     "message": "upuść go tu, aby udostępnić",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+  },
+  "quickUpload_state_uploading": {
+    "message": "Trwa wysyłanie..",
+    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  },
+  "quickUpload_state_buffering": {
+    "message": "(buforowanie, proszę czekać)",
+    "description": "Status label on the share files page (quickUpload_state_buffering)"
+  },
+  "quickUpload_options_show": {
+    "message": "opcje wysyłania",
+    "description": "Button on the share files page (quickUpload_options_show)"
+  },
+  "quickUpload_options_wrapWithDirectory": {
+    "message": "Opakuj pojedyncze pliki w katalog, aby zachować ich nazwy.",
+    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  },
+  "quickUpload_options_pinUpload": {
+    "message": "Przypnij pliki, aby zostały zachowane podczas odzyskiwania pamięci (repo gc) na twoim węźle IPFS.",
+    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
   },
   "page_proxyAcl_title": {
     "message": "Zarządzanie uprawnieniami",
