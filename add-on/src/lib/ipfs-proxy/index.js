@@ -41,9 +41,9 @@ function createIpfsProxy (getIpfs, getState) {
     })
 
     const close = () => {
-      closeProxyServer(proxy)
       port.onDisconnect.removeListener(onDisconnect)
       connections = connections.filter(c => c.close !== close)
+      return closeProxyServer(proxy)
     }
 
     const onDisconnect = () => close()
@@ -60,8 +60,8 @@ function createIpfsProxy (getIpfs, getState) {
 
   const handle = {
     destroy () {
-      connections.forEach(c => c.destroy)
       browser.runtime.onConnect.removeListener(onPortConnect)
+      return Promise.all(connections.map(c => c.close()))
     }
   }
 

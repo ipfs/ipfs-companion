@@ -95,7 +95,7 @@
     "file-type": "8.0.0",
     "filereader-pull-stream": "1.0.0",
     "filesize": "3.6.1",
-    "ipfs": "0.29.0",
+    "ipfs": "0.29.2",
     "ipfs-api": "22.0.1",
     "ipfs-css": "0.5.0",
     "ipfs-postmsg-proxy": "2.16.1",
