@@ -49,7 +49,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
     // handle redirects to custom gateway
     if (state.redirect) {
       // Ignore preload requests
-      if (request.method === 'HEAD' && state.preloadAtPublicGateway && request.url.startsWith(state.pubGwURLString)) {
+      if (request.method === 'HEAD') {
         return
       }
       // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox

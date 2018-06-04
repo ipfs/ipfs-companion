@@ -73,6 +73,11 @@ describe('modifyRequest', function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
+        it(`should be left untouched if its is a preload request (${nodeType} node)`, function () {
+          // HTTP HEAD is often used for preloading data at arbitrary gateways - it should arrive at original destination
+          const headRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', method: 'HEAD'}
+          expect(modifyRequest(headRequest)).to.equal(undefined)
+        })
       })
     })
   })
