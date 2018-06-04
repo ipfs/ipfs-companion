@@ -77,6 +77,53 @@ describe('modifyRequest', function () {
     })
   })
 
+  describe('XHR request for a path matching /ipfs/{CIDv0}', function () {
+    describe('with external node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'external'
+      })
+      it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Chrome', function () {
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+    })
+    describe('with embedded node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'embedded'
+      })
+      it('should be served from public gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from public gateway if fetched from the same origin and redirect is enabled in Chrome', function () {
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+    })
+    describe('with every node type', function () {
+      // tests in which results should be the same for all node types
+      nodeTypes.forEach(function (nodeType) {
+        beforeEach(function () {
+          state.ipfsNodeType = nodeType
+        })
+        it(`should be left untouched if request is a cross-origin XHR (Firefox, ${nodeType} node)`, function () {
+          // Context: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+          const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html'}
+          expect(modifyRequest(xhrRequest)).to.equal(undefined)
+        })
+        it(`should be left untouched if request is a cross-origin XHR (Chrome, ${nodeType} node)`, function () {
+          // Context: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+          const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html'}
+          expect(modifyRequest(xhrRequest)).to.equal(undefined)
+        })
+      })
+    })
+  })
+
   describe('request for a path matching /ipns/{path}', function () {
     describe('with external node', function () {
       beforeEach(function () {
@@ -317,8 +364,8 @@ describe('modifyRequest', function () {
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if request.type != main_frame', function () {
-          const xhrRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'xmlhttprequest'}
-          expect(modifyRequest(xhrRequest)).to.equal(undefined)
+          const mediaRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'media'}
+          expect(modifyRequest(mediaRequest)).to.equal(undefined)
         })
       })
 

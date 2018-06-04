@@ -1,5 +1,5 @@
 'use strict'
-/* eslint-env browser */
+/* eslint-env browser, webextensions */
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
@@ -51,6 +51,21 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       // Ignore preload requests
       if (request.method === 'HEAD' && state.preloadAtPublicGateway && request.url.startsWith(state.pubGwURLString)) {
         return
+      }
+      // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
+      // - We want the same behaviour on all browsers, so we conform to the Firefox limitation
+      // - More context: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+      if (request.type === 'xmlhttprequest') {
+        // XHR Origin is fuzzy right now: Firefox 60 uses request.originUrl, Chrome 63 uses request.initiator
+        const originUrl = request.originUrl || request.initiator
+        if (originUrl) {
+          const sourceOrigin = new URL(originUrl).origin
+          const targetOrigin = new URL(request.url).origin
+          if (sourceOrigin !== targetOrigin) {
+            console.warn('[ipfs-companion] skipping XHR redirect due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436', request)
+            return
+          }
+        }
       }
       // Detect valid /ipfs/ and /ipns/ on any site
       if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url)) {
