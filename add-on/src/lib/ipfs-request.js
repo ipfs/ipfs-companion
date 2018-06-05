@@ -4,7 +4,7 @@
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
 
-function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
+function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
   return function modifyRequest (request) {
     const state = getState()
 
@@ -52,23 +52,8 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
       if (request.method === 'HEAD') {
         return
       }
-      // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
-      // - We want the same behaviour on all browsers, so we conform to the Firefox limitation
-      // - More context: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-      if (request.type === 'xmlhttprequest') {
-        // XHR Origin is fuzzy right now: Firefox 60 uses request.originUrl, Chrome 63 uses request.initiator
-        const originUrl = request.originUrl || request.initiator
-        if (originUrl) {
-          const sourceOrigin = new URL(originUrl).origin
-          const targetOrigin = new URL(request.url).origin
-          if (sourceOrigin !== targetOrigin) {
-            console.warn('[ipfs-companion] skipping XHR redirect due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436', request)
-            return
-          }
-        }
-      }
       // Detect valid /ipfs/ and /ipns/ on any site
-      if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url)) {
+      if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
         return redirectToGateway(request.url, state)
       }
       // Look for dnslink in TXT records of visited sites
@@ -89,6 +74,24 @@ function redirectToGateway (requestUrl, state) {
   url.host = gwUrl.host
   url.port = gwUrl.port
   return { redirectUrl: url.toString() }
+}
+
+function isSafeToRedirect (request, runtime) {
+  // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
+  // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+  // TODO: revisit when upstream bug is addressed
+  if (runtime.isFirefox && request.type === 'xmlhttprequest') {
+    // Sidenote on XHR Origin: Firefox 60 uses request.originUrl, Chrome 63 uses request.initiator
+    if (request.originUrl) {
+      const sourceOrigin = new URL(request.originUrl).origin
+      const targetOrigin = new URL(request.url).origin
+      if (sourceOrigin !== targetOrigin) {
+        console.warn('[ipfs-companion] skipping redirect of cross-origin XHR due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436', request)
+        return false
+      }
+    }
+  }
+  return true
 }
 
 // REDIRECT-BASED PROTOCOL HANDLERS
