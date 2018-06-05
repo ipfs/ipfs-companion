@@ -58,7 +58,7 @@ module.exports = async function init () {
       onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
+    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(() => ipfs, getState)
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
