@@ -1,10 +1,11 @@
 {
   "name": "ipfs-companion",
-  "homepage": "https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/",
+  "homepage": "https://github.com/ipfs-shipyard/ipfs-companion",
   "license": "CC0-1.0",
+  "leadMaintainer": "Marcin Rataj <lidel@lidel.org>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipfs/ipfs-companion.git"
+    "url": "https://github.com/ipfs-shipyard/ipfs-companion.git"
   },
   "scripts": {
     "start": "run-s clean build test firefox",
