@@ -30,6 +30,7 @@ module.exports = async function init () {
   var contextMenus
   var apiStatusUpdateInterval
   var ipfsProxy
+  var ipfsProxyContentScript
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
 
@@ -60,6 +61,7 @@ module.exports = async function init () {
     })
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(() => ipfs, getState)
+    ipfsProxyContentScript = await registerIpfsProxyContentScript()
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await storeMissingOptions(
@@ -93,6 +95,33 @@ module.exports = async function init () {
     } else {
       console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
     }
+  }
+
+  // Register Content Script responsible for loading window.ipfs (ipfsProxy)
+  //
+  // The key difference between tabs.executeScript and contentScripts API
+  // is the latter provides guarantee to execute before anything else.
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/451#issuecomment-382669093
+  async function registerIpfsProxyContentScript (previousHandle) {
+    previousHandle = previousHandle || ipfsProxyContentScript
+    if (previousHandle) {
+      previousHandle.unregister()
+    }
+    if (!state.ipfsProxy || !browser.contentScripts) {
+      // no-op if window.ipfs is disabled in Preferences
+      // or if runtime has no contentScript API
+      // (Chrome loads content script via manifest)
+      return
+    }
+    const newHandle = await browser.contentScripts.register({
+      matches: ['<all_urls>'],
+      js: [
+        {file: '/dist/contentScripts/ipfs-proxy/content.js'}
+      ],
+      allFrames: true,
+      runAt: 'document_start'
+    })
+    return newHandle
   }
 
   // HTTP Request Hooks
@@ -544,13 +573,16 @@ module.exports = async function init () {
         case 'useCustomGateway':
           state.redirect = change.newValue
           break
+        case 'ipfsProxy':
+          state[key] = change.newValue
+          ipfsProxyContentScript = await registerIpfsProxyContentScript()
+          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
         case 'automaticMode':
         case 'dnslink':
         case 'preloadAtPublicGateway':
-        case 'ipfsProxy':
           state[key] = change.newValue
           break
       }
@@ -616,6 +648,10 @@ module.exports = async function init () {
       contextMenus = null
       ipfsProxy.destroy()
       ipfsProxy = null
+      if (ipfsProxyContentScript) {
+        ipfsProxyContentScript.unregister()
+        ipfsProxyContentScript = null
+      }
       await destroyIpfsClient()
     }
   }
