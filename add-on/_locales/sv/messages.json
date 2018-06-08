@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS node",
+    "message": "IPFS-nod",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerIpfsNodeEmbedded": {
@@ -12,7 +12,7 @@
     "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
   },
   "panel_headerIpfsNodeEmbeddedTitle": {
-    "message": "Experimental: Use IPFS embedded in your browser via js-ipfs",
+    "message": "Experimentellt: Använd IPFS inbäddat i din webbläsare via js-ipfs",
     "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
   },
   "panel_headerIpfsNodeExternal": {
@@ -20,7 +20,7 @@
     "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
   },
   "panel_headerIpfsNodeExternalTitle": {
-    "message": "Connect to an IPFS node over HTTP",
+    "message": "Anslut till en IFPS-nod över HTTP",
     "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
   },
   "panel_statusGatewayAddress": {
@@ -40,7 +40,7 @@
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "The number of other IPFS nodes you can connect to",
+    "message": "Antalet andra IPFS-noder du kan ansluta till",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
@@ -80,15 +80,15 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "IPFS resource loaded via Public Gateway",
+    "message": "IPFS-resurs inläst via offentlig Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS resource loaded via Custom Gateway",
+    "message": "IPFS-resurs laddad via egen Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Non-IPFS resource",
+    "message": "Icke-IPFS resurs",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_uploadToIpfs": {
@@ -96,59 +96,59 @@
     "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS Add-on Issue",
+    "message": "Problem med IPFS-tillägg",
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "See Browser Console for more details",
+    "message": "See webbläsarens konsol för mer information",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedPublicURLTitle": {
-    "message": "Copied Public URL",
+    "message": "Kopierade offentlig URL",
     "description": "A title of system notification (notify_copiedPublicURLTitle)"
   },
   "notify_copiedCanonicalAddressTitle": {
-    "message": "Copied Canonical Address",
+    "message": "Kopierade kanonisk adress",
     "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS Resource is now pinned",
+    "message": "IPFS-resurs är nu fastnålad",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Removed IPFS Pin",
+    "message": "Tog bort fastnålad IPFS-resurs",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Error while pinning IPFS Resource",
+    "message": "Ett fel uppstod vid fastnålning av IPFS-resurs",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Error while removing IPFS Pin",
+    "message": "Ett fel uppstod vid borttagning av fastnålad IPFS-resurs",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API is Online",
+    "message": "IPFS API:n är online",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatic Mode: Custom Gateway Redirect is active",
+    "message": "Automatiskt läge: Omdirigering till egen Gateway är aktiv",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API is Offline",
+    "message": "IPFS API:n är offline",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatic Mode: Public Gateway will be used as a fallback",
+    "message": "Automatisk läge: Den offentliga Gatewayen kommer att användas som reserv",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
-    "message": "Unable to upload via IPFS API",
+    "message": "Kan inte ladda up via IPFS API:n",
     "description": "A title of system notification (notify_uploadErrorTitle)"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)",
+    "message": "Prova att inaktivera spårningsskydd (tryck ctrl+skift+j för mer detaljer)",
     "description": "(notify_uploadTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -161,7 +161,7 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$ERROR$ (press ctrl+shift+j for more details)",
+    "message": "$ERROR$ (tryck ctrl+skift+j för mer detaljer)",
     "placeholders": {
       "error": {
         "content": "$1"
@@ -170,43 +170,43 @@
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Failed to start IPFS node",
+    "message": "Det gick inte att starta IPFS noden",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Failed to stop IPFS node",
+    "message": "Det gick inte att stoppa IPFS-noden",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_legend_readMore": {
-    "message": "Read more",
+    "message": "Läs mer",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType": {
-    "message": "IPFS Node",
+    "message": "IFPS-nod",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS Node Type",
+    "message": "IPFS nodtyp",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_description": {
-    "message": "External: Connect to an IPFS daemon over HTTP. \n\n Embedded: Run an IPFS node in your browser via ipfs-js *Experimental*",
+    "message": "Externt: Anslut till en IPFS-daemon över HTTP. \n Inbäddat: Kör en IPFS-nod i dinn webbläsare via ipfs-js *Experimentellt*",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "Konfiguration av IPFS-nod",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configuration for the embedded IPFS node. Must be valid JSON.",
+    "message": "Konfiguration för den inbäddade IPFS-noden. Måste vara gitlitgt JSON.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "External",
+    "message": "Extern",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Embedded",
+    "message": "Inbäddad",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_header_gateways": {
@@ -214,7 +214,7 @@
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Custom Local Gateway",
+    "message": "Egen lokal Gateway",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
