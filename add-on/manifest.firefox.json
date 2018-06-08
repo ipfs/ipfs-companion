@@ -18,7 +18,7 @@
     "default_title": "__MSG_pageAction_titleNonIpfs__",
     "default_popup": "dist/popup/page-action/index.html"
   },
-  "content_scripts": null,
+  "content_scripts": [ ],
   "protocol_handlers": [
     {
       "protocol": "web+dweb",
