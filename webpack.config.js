@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -65,6 +66,9 @@ module.exports = {
       maxSize: 4194304
     }),
     */
+    new SimpleProgressWebpackPlugin({
+      format: process.env.CI ? 'expanded' : 'minimal'
+    }),
     new webpack.DefinePlugin({
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.env': {
