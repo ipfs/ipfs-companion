@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
@@ -16,23 +15,6 @@ module.exports = {
     proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js'
   },
   optimization: {
-    /*
-    occurrenceOrder: true,
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true,
-        uglifyOptions: {
-          keep_classnames: true,
-          keep_fnames: true,
-          compress: {
-            inline: 0
-          },
-        }
-      })
-    ],
-    */
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
@@ -55,17 +37,8 @@ module.exports = {
       }
     }
   },
-  /*
-  */
   // plugins: [new BundleAnalyzerPlugin()]
   plugins: [
-    /*
-    // Keep bundle size below 4MB: https://github.com/mozilla/addons-linter/pull/892
-    // TODO: revisit if this can be automated (for now we do semi-manual split in splitChunks.cacheGroups)
-    new webpack.optimize.AggressiveSplittingPlugin({
-      maxSize: 4194304
-    }),
-    */
     new SimpleProgressWebpackPlugin({
       format: process.env.CI ? 'expanded' : 'minimal'
     }),
@@ -89,19 +62,6 @@ module.exports = {
         loader: 'transform-loader?brfs'
       }
     ]
-  },
-  resolve: {
-    modules: [
-      'node_modules'
-    ],
-    alias: {
-      // These are needed because node-libs-browser depends on outdated
-      // versions
-      // zlib: can be dropped once https://github.com/devongovett/browserify-zlib/pull/18 is shipped
-      zlib: 'browserify-zlib',
-      // http: can be dropped once https://github.com/webpack/node-libs-browser/pull/41 is shipped
-      http: 'stream-http'
-    }
   },
   node: {
     global: false, // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
