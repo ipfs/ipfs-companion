@@ -11,6 +11,10 @@
 
 > Browser extension that simplifies access to IPFS resources
 
+## Lead Maintainer
+
+[Marcin Rataj](https://github.com/lidel)
+
 ## Table of Contents
 
 - [Background](#background)
