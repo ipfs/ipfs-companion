@@ -20,7 +20,7 @@ function init () {
     }
   })
 
-  // browserify inlines contents of this file
+  // webpack's transform-loader?brfs inlines contents of this file
   const code = fs.readFileSync(`${__dirname}/../../../dist/contentScripts/ipfs-proxy/page.js`, 'utf8')
 
   injectScript(code)
