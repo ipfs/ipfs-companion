@@ -48,7 +48,7 @@
     {
       "all_frames": true,
       "js": [
-        "dist/contentScripts/ipfs-proxy/content.js"
+        "dist/bundles/ipfsProxyContentScript.bundle.js"
       ],
       "matches": [
         "<all_urls>"
