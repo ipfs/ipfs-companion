@@ -116,7 +116,7 @@ module.exports = async function init () {
     const newHandle = await browser.contentScripts.register({
       matches: ['<all_urls>'],
       js: [
-        {file: '/dist/contentScripts/ipfs-proxy/content.js'}
+        {file: '/dist/bundles/ipfsProxyContentScript.bundle.js'}
       ],
       allFrames: true,
       runAt: 'document_start'
