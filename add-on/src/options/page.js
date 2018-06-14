@@ -36,6 +36,7 @@ module.exports = function optionsPage (state, emit) {
         onOptionChange
       })}
       ${gatewaysForm({
+        ipfsNodeType: state.options.ipfsNodeType,
         customGatewayUrl: state.options.customGatewayUrl,
         useCustomGateway: state.options.useCustomGateway,
         publicGatewayUrl: state.options.publicGatewayUrl,
