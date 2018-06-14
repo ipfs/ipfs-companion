@@ -6,10 +6,10 @@ module.exports = {
   sourceDir: 'add-on/',
   ignoreFiles: [
     'src/',
-    'manifest.*.json',
+    'manifest.*.json'
   ],
   // Command options:
   build: {
-    overwriteDest: true,
+    overwriteDest: true
   }
 }

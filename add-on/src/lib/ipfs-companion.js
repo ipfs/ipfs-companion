@@ -328,17 +328,8 @@ module.exports = async function init () {
       if (state.linkify) {
         console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
         try {
-          const browserApiPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof browser !== 'undefined'" }))[0]
-          if (!browserApiPresent) {
-            await browser.tabs.executeScript(tabId, {
-              file: '/dist/contentScripts/browser-polyfill.min.js',
-              matchAboutBlank: false,
-              allFrames: true,
-              runAt: 'document_start'
-            })
-          }
           await browser.tabs.executeScript(tabId, {
-            file: '/dist/contentScripts/linkifyDOM.js',
+            file: '/dist/bundles/linkifyContentScript.bundle.js',
             matchAboutBlank: false,
             allFrames: true,
             runAt: 'document_idle'
@@ -360,7 +351,7 @@ module.exports = async function init () {
           })
           // inject script that normalizes `href` and `src` containing unhandled protocols
           await browser.tabs.executeScript(tabId, {
-            file: '/dist/contentScripts/normalizeLinksWithUnhandledProtocols.js',
+            file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
             matchAboutBlank: false,
             allFrames: true,
             runAt: 'document_end'
