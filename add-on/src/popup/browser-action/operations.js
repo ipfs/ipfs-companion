@@ -6,6 +6,7 @@ const html = require('choo/html')
 const navItem = require('./nav-item')
 
 module.exports = function operations ({
+  active,
   ipfsNodeType,
   isIpfsOnline,
   redirectEnabled,
@@ -34,7 +35,7 @@ module.exports = function operations ({
         text: browser.i18n.getMessage('panel_openPreferences'),
         onClick: onOpenPrefs
       })}
-      ${ipfsNodeType === 'external' ? (
+      ${active && ipfsNodeType === 'external' ? (
         navItem({
           text: browser.i18n.getMessage(
             redirectEnabled

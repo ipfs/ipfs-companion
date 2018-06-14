@@ -7,6 +7,8 @@ const { safeIpfsPath } = require('../../lib/ipfs-path')
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
   Object.assign(state, {
+    // Global ON/OFF
+    active: true,
     // UI state
     isIpfsContext: false,
     isPinning: false,
@@ -165,6 +167,22 @@ module.exports = (state, emitter) => {
     }
   })
 
+  emitter.on('toggleActive', async () => {
+    const prev = state.active
+    state.active = !prev
+    if (!state.active) {
+      state.isIpfsOnline = false
+    }
+    emitter.emit('render')
+    try {
+      await browser.storage.local.set({active: state.active})
+    } catch (error) {
+      console.error(`Unable to update global Active flag due to ${error}`)
+      state.active = prev
+      emitter.emit('render')
+    }
+  })
+
   async function updatePageActionsState (status) {
     // IPFS contexts require access to ipfs API object from background page
     // Note: access to background page is denied in Private Browsing mode
@@ -174,17 +192,18 @@ module.exports = (state, emitter) => {
     state.isIpfsContext = !!(ipfs && status && status.ipfsPageActionsContext)
     state.currentTab = status.currentTab || null
 
+    // browser.pageAction-specific items that can be rendered earlier (snappy UI)
+    requestAnimationFrame(async () => {
+      const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
+      if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
+        // Get title stored on page load so that valid transport is displayed
+        // even if user toggles between public/custom gateway after the load
+        state.pageActionTitle = await browser.pageAction.getTitle(tabId)
+        emitter.emit('render')
+      }
+    })
+
     if (state.isIpfsContext) {
-      // browser.pageAction-specific items that can be rendered earlier (snappy UI)
-      requestAnimationFrame(async () => {
-        const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
-        if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
-          // Get title stored on page load so that valid transport is displayed
-          // even if user toggles between public/custom gateway after the load
-          state.pageActionTitle = await browser.pageAction.getTitle(tabId)
-          emitter.emit('render')
-        }
-      })
       // There is no point in displaying actions that require API interaction if API is down
       const apiIsUp = status && status.peerCount >= 0
       if (apiIsUp) await updatePinnedState(ipfs, status)
@@ -194,6 +213,7 @@ module.exports = (state, emitter) => {
   async function updateBrowserActionState (status) {
     if (status) {
       const options = await browser.storage.local.get()
+      state.active = status.active
       if (options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
         state.gatewayAddress = options.customGatewayUrl
       } else {

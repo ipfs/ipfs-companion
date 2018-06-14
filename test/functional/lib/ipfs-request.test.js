@@ -71,6 +71,12 @@ describe('modifyRequest', function () {
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
         })
+        it(`should be left untouched if redirect is enabled but global active flag is OFF (${nodeType} node)`, function () {
+          state.active = false
+          state.redirect = true
+          const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+        })
         it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
           expect(modifyRequest(request)).to.equal(undefined)

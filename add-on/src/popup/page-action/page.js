@@ -19,7 +19,7 @@ module.exports = function pageActionPage (state, emit) {
   contextActionsProps.isIpfsContext = true
 
   return html`
-    <div class="helvetica">
+    <div class="sans-serif" style="text-rendering: optimizeLegibility;">
       ${header(contextActionsProps)}
       ${contextActions(contextActionsProps)}
     </div>

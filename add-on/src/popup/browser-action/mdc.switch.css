@@ -57,13 +57,13 @@
     background-color: #f1f1f1; }
   .mdc-switch .mdc-switch__native-control:enabled:checked ~ .mdc-switch__background::before {
     /* @alternate */
-    background-color: #469ea2; }
+    background-color: #fafafa; }
   .mdc-switch .mdc-switch__native-control:enabled:checked ~ .mdc-switch__background .mdc-switch__knob {
     /* @alternate */
-    background-color: #469ea2; }
+    background-color: #fafafa; }
   .mdc-switch .mdc-switch__native-control:enabled:checked ~ .mdc-switch__background .mdc-switch__knob::before {
     /* @alternate */
-    background-color: #469ea2; }
+  background-color: #9e9e9e; }
   .mdc-switch__native-control {
     position: absolute;
     top: -14px;

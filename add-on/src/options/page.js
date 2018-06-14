@@ -42,12 +42,12 @@ module.exports = function optionsPage (state, emit) {
         publicGatewayUrl: state.options.publicGatewayUrl,
         onOptionChange
       })}
-      ${apiForm({
+      ${state.options.ipfsNodeType === 'external' ? apiForm({
         ipfsApiUrl: state.options.ipfsApiUrl,
         ipfsApiPollMs: state.options.ipfsApiPollMs,
         automaticMode: state.options.automaticMode,
         onOptionChange
-      })}
+      }) : null}
       ${experimentsForm({
         displayNotifications: state.options.displayNotifications,
         preloadAtPublicGateway: state.options.preloadAtPublicGateway,

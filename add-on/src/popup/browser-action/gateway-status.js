@@ -16,22 +16,22 @@ module.exports = function gatewayStatus ({
 }) {
   const api = ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`
-    <ul class="fade-in list mv3 ph3 bg-white black">
-      <li class="flex mb2">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
-        <code class="w-60 f7 tr">${gatewayAddress == null ? 'unknown' : gatewayAddress}</code>
+    <ul class="fade-in list mv0 pv2 ph3 white">
+      <li class="flex mb1">
+        <span class="w-40 f7 ttu no-user-select">${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
+        <span class="w-60 f7 tr monospace truncate force-select-all" title="${gatewayAddress}">${gatewayAddress == null ? 'unknown' : gatewayAddress}</span>
       </li>
-      <li class="flex mb2">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusApiAddress')}</span>
-        <code class="w-60 f7 tr">${api}</code>
+      <li class="flex mb1">
+        <span class="w-40 f7 ttu no-user-select">${browser.i18n.getMessage('panel_statusApiAddress')}</span>
+        <span class="w-60 f7 tr monospace truncate force-select-all" title="${api}">${api}</span>
       </li>
-      <li class="flex mb2">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusGatewayVersion')}</span>
-        <code class="w-60 f7 tr">${gatewayVersion == null ? 'offline' : gatewayVersion}</code>
+      <li class="flex mb1">
+        <span class="w-40 f7 ttu no-user-select">${browser.i18n.getMessage('panel_statusGatewayVersion')}</span>
+        <span class="w-60 f7 tr monospace truncate force-select-all">${gatewayVersion == null ? 'offline' : gatewayVersion}</span>
       </li>
-      <li class="flex mb2" title="${browser.i18n.getMessage('panel_statusSwarmPeersTitle')}">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusSwarmPeers')}</span>
-        <code class="w-60 f7 tr fw9">${swarmPeers == null ? 'offline' : swarmPeers}</code>
+      <li class="flex" title="${browser.i18n.getMessage('panel_statusSwarmPeersTitle')}">
+        <span class="w-40 f7 ttu no-user-select">${browser.i18n.getMessage('panel_statusSwarmPeers')}</span>
+        <span class="w-60 f7 tr fw9 monospace truncate force-select-all">${swarmPeers == null ? 'offline' : swarmPeers}</span>
       </li>
     </ul>
   `

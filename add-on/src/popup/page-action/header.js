@@ -8,7 +8,7 @@ module.exports = function header ({ isIpfsContext, pageActionTitle }) {
   if (!isIpfsContext) return null
   return html`
     <div class="fade-in ph2 br2 br--top bg-light-gray bb b--black-20">
-      <h2 class="ma0 pt1 pb2 pl2 tl">
+      <h2 class="ma0 pt1 pb2 pl2 tl nowrap no-user-select">
         ${logo({
           size: 20,
           path: '../../../icons',
