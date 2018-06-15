@@ -23,6 +23,10 @@
     "message": "Disabled gateway redirect and all active API integrations",
     "description": "Label for an external IPFS node (panel_headerOffLabelTitle)"
   },
+  "panel_statusOffline": {
+    "message": "offline",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
+  },
   "panel_statusGatewayAddress": {
     "message": "Gateway",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"

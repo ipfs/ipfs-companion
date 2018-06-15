@@ -171,6 +171,11 @@ module.exports = (state, emitter) => {
     const prev = state.active
     state.active = !prev
     if (!state.active) {
+      const options = await browser.storage.local.get()
+      state.gatewayAddress = options.publicGatewayUrl
+      state.ipfsApiUrl = null
+      state.gatewayVersion = null
+      state.swarmPeers = null
       state.isIpfsOnline = false
     }
     emitter.emit('render')
@@ -214,19 +219,19 @@ module.exports = (state, emitter) => {
     if (status) {
       const options = await browser.storage.local.get()
       state.active = status.active
-      if (options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
+      if (state.active && options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
         state.gatewayAddress = options.customGatewayUrl
       } else {
         state.gatewayAddress = options.publicGatewayUrl
       }
       state.ipfsNodeType = status.ipfsNodeType
-      state.ipfsApiUrl = options.ipfsApiUrl
-      state.redirectEnabled = options.useCustomGateway
+      state.redirectEnabled = state.active && options.useCustomGateway
       // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.uploadEnabled = !!(await browser.runtime.getBackgroundPage())
-      state.swarmPeers = status.peerCount === -1 ? 0 : status.peerCount
-      state.isIpfsOnline = status.peerCount > -1
-      state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
+      state.uploadEnabled = state.active && !!(await browser.runtime.getBackgroundPage())
+      state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
+      state.isIpfsOnline = state.active && status.peerCount > -1
+      state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
+      state.ipfsApiUrl = state.active ? options.ipfsApiUrl : null
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null

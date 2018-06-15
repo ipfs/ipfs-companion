@@ -38,8 +38,8 @@ module.exports = function header (props) {
             ${browser.i18n.getMessage('panel_headerOffLabel')}
           </label>
         </div>
+        ${gatewayStatus(props)}
       </div>
-      ${active ? gatewayStatus(props) : null}
     </div>
   `
 }
