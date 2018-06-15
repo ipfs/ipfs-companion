@@ -12,14 +12,14 @@ module.exports = function contextActions ({
   isUnPinning,
   isPinned,
   isIpfsOnline,
+  isApiAvailable,
   onCopyIpfsAddr,
   onCopyPublicGwAddr,
   onPin,
   onUnPin
 }) {
   if (!isIpfsContext) return null
-  const isPinningSupported = (ipfsNodeType !== 'embedded')
-
+  const showPinControls = isIpfsOnline && isApiAvailable && (ipfsNodeType !== 'embedded')
   return html`
     <div class='fade-in pv1'>
       ${navItem({
@@ -30,14 +30,14 @@ module.exports = function contextActions ({
         text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
         onClick: onCopyPublicGwAddr
       })}
-      ${isIpfsOnline && isPinningSupported && !isPinned ? (
+      ${showPinControls && !isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
           disabled: isPinning,
           onClick: onPin
         })
       ) : null}
-      ${isIpfsOnline && isPinningSupported && isPinned ? (
+      ${showPinControls && isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
           disabled: isUnPinning,

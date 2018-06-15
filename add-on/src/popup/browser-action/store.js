@@ -24,7 +24,7 @@ module.exports = (state, emitter) => {
     swarmPeers: null,
     gatewayVersion: null,
     redirectEnabled: false,
-    uploadEnabled: false
+    isApiAvailable: false
   })
 
   let port
@@ -189,12 +189,8 @@ module.exports = (state, emitter) => {
   })
 
   async function updatePageActionsState (status) {
-    // IPFS contexts require access to ipfs API object from background page
-    // Note: access to background page is denied in Private Browsing mode
-    const ipfs = await getIpfsApi()
-
     // Check if current page is an IPFS one
-    state.isIpfsContext = !!(ipfs && status && status.ipfsPageActionsContext)
+    state.isIpfsContext = status.ipfsPageActionsContext || false
     state.currentTab = status.currentTab || null
 
     // browser.pageAction-specific items that can be rendered earlier (snappy UI)
@@ -209,8 +205,11 @@ module.exports = (state, emitter) => {
     })
 
     if (state.isIpfsContext) {
+      // IPFS contexts require access to ipfs API object from background page
+      // Note: access to background page will be denied in Private Browsing mode
+      const ipfs = await getIpfsApi()
       // There is no point in displaying actions that require API interaction if API is down
-      const apiIsUp = status && status.peerCount >= 0
+      const apiIsUp = ipfs && status && status.peerCount >= 0
       if (apiIsUp) await updatePinnedState(ipfs, status)
     }
   }
@@ -227,7 +226,7 @@ module.exports = (state, emitter) => {
       state.ipfsNodeType = status.ipfsNodeType
       state.redirectEnabled = state.active && options.useCustomGateway
       // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.uploadEnabled = state.active && !!(await browser.runtime.getBackgroundPage())
+      state.isApiAvailable = state.active && !!(await browser.runtime.getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
