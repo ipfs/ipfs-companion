@@ -1,10 +1,10 @@
 'use strict'
-/* eslint-env browser */
+/* eslint-env browser, webextensions */
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
 
-function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
+function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
   return function modifyRequest (request) {
     const state = getState()
 
@@ -49,11 +49,11 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator) {
     // handle redirects to custom gateway
     if (state.redirect) {
       // Ignore preload requests
-      if (request.method === 'HEAD' && state.preloadAtPublicGateway && request.url.startsWith(state.pubGwURLString)) {
+      if (request.method === 'HEAD') {
         return
       }
       // Detect valid /ipfs/ and /ipns/ on any site
-      if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url)) {
+      if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
         return redirectToGateway(request.url, state)
       }
       // Look for dnslink in TXT records of visited sites
@@ -74,6 +74,24 @@ function redirectToGateway (requestUrl, state) {
   url.host = gwUrl.host
   url.port = gwUrl.port
   return { redirectUrl: url.toString() }
+}
+
+function isSafeToRedirect (request, runtime) {
+  // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
+  // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+  // TODO: revisit when upstream bug is addressed
+  if (runtime.isFirefox && request.type === 'xmlhttprequest') {
+    // Sidenote on XHR Origin: Firefox 60 uses request.originUrl, Chrome 63 uses request.initiator
+    if (request.originUrl) {
+      const sourceOrigin = new URL(request.originUrl).origin
+      const targetOrigin = new URL(request.url).origin
+      if (sourceOrigin !== targetOrigin) {
+        console.warn('[ipfs-companion] skipping redirect of cross-origin XHR due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436', request)
+        return false
+      }
+    }
+  }
+  return true
 }
 
 // REDIRECT-BASED PROTOCOL HANDLERS

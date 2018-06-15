@@ -21,19 +21,19 @@ parallel(
                 }
                 try {
                     stage('ci:test') {
-                        sh 'docker run -i --rm -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:$(cat git-HEAD) npm run ci:test'
+                        sh 'docker run -i --rm -e CI=true -e JUNIT_REPORT_PATH=test/report.xml -v $(pwd)/test:/usr/src/app/test:rw ipfs-companion:$(cat git-HEAD) npm run ci:test'
                     }
                 } finally {
                     junit allowEmptyResults: true, testResults: 'test/report.xml'
                 }
                 stage('ci:build') {
                     sh 'mkdir -p $(pwd)/build'
-                    sh 'docker run -i --rm -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat git-HEAD) npm run ci:build'
+                    sh 'docker run -i --rm -e CI=true -v $(pwd)/build:/usr/src/app/build:rw -v $(pwd)/add-on:/usr/src/app/add-on:rw  ipfs-companion:$(cat git-HEAD) npm run ci:build'
                     sh 'ls -Rlh build'
                     archiveArtifacts artifacts: 'build/**/*.zip', fingerprint: true
                 }
                 stage('lint:web-ext') {
-                    sh 'docker run -i --rm -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat git-HEAD) npm run lint:web-ext'
+                    sh 'docker run -i --rm -e CI=true -v $(pwd)/add-on:/usr/src/app/add-on:ro ipfs-companion:$(cat git-HEAD) npm run lint:web-ext'
                 }
                 githubNotify description: 'Reproducible build looks good', status: 'SUCCESS', context: ciContext
             } catch (err) {

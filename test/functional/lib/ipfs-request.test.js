@@ -5,6 +5,7 @@ const { expect } = require('chai')
 const { URL } = require('url')
 const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
+const createRuntimeChecks = require('../../../add-on/src/lib/runtime-checks')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
 const createDnsLink = require('../../../add-on/src/lib/dns-link')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
@@ -17,14 +18,14 @@ const url2request = (string) => {
 const nodeTypes = ['external', 'embedded']
 
 describe('modifyRequest', function () {
-  let state, dnsLink, ipfsPathValidator, modifyRequest
+  let state, dnsLink, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
     global.URL = URL
     global.browser = browser
   })
 
-  beforeEach(function () {
+  beforeEach(async function () {
     state = Object.assign(initState(optionDefaults), {
       ipfsNodeType: 'external',
       peerCount: 1,
@@ -35,8 +36,9 @@ describe('modifyRequest', function () {
     })
     const getState = () => state
     dnsLink = createDnsLink(getState)
+    runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
     ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator)
+    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
   })
 
   describe('request for a path matching /ipfs/{CIDv0}', function () {
@@ -72,6 +74,69 @@ describe('modifyRequest', function () {
         it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it(`should be left untouched if its is a preload request (${nodeType} node)`, function () {
+          // HTTP HEAD is often used for preloading data at arbitrary gateways - it should arrive at original destination
+          const headRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', method: 'HEAD'}
+          expect(modifyRequest(headRequest)).to.equal(undefined)
+        })
+      })
+    })
+  })
+
+  describe('XHR request for a path matching /ipfs/{CIDv0}', function () {
+    describe('with external node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'external'
+      })
+      it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
+        runtime.isFirefox = true
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from custom gateway if fetched from the same origin and redirect is enabled in non-Firefox', function () {
+        runtime.isFirefox = false
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from custom gateway if fetch is cross-origin and redirect is enabled in non-Firefox', function () {
+        runtime.isFirefox = false
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+    })
+    describe('with embedded node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'embedded'
+      })
+      it('should be served from public gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
+        runtime.isFirefox = true
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from public gateway if fetched from the same origin and redirect is enabled in non-Firefox', function () {
+        runtime.isFirefox = false
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from public gateway if fetch is cross-origin and redirect is enabled in non-Firefox', function () {
+        runtime.isFirefox = false
+        const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html'}
+        expect(modifyRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+    })
+    describe('with every node type', function () {
+      // tests in which results should be the same for all node types
+      nodeTypes.forEach(function (nodeType) {
+        beforeEach(function () {
+          state.ipfsNodeType = nodeType
+        })
+        it(`should be left untouched if request is a cross-origin XHR (Firefox, ${nodeType} node)`, function () {
+          // ==> This behavior is intentional
+          // Context for XHR & bogus CORS problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+          runtime.isFirefox = true
+          const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html'}
+          expect(modifyRequest(xhrRequest)).to.equal(undefined)
         })
       })
     })
@@ -317,8 +382,8 @@ describe('modifyRequest', function () {
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if request.type != main_frame', function () {
-          const xhrRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'xmlhttprequest'}
-          expect(modifyRequest(xhrRequest)).to.equal(undefined)
+          const mediaRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'media'}
+          expect(modifyRequest(mediaRequest)).to.equal(undefined)
         })
       })
 

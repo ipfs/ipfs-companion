@@ -1,6 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const browser = require('webextension-polyfill')
+
 /*
  * This content script is responsible for performing the logic of replacing
  * plain text with IPFS addresses with clickable links.
