@@ -362,6 +362,7 @@ module.exports = async function init () {
   }
 
   async function onUpdatedTab (tabId, changeInfo, tab) {
+    if (!state.active) return // skip content script injection when off
     if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
       if (state.linkify) {
         console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
