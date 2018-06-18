@@ -7,21 +7,9 @@
     "message": "IPFS Companion",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
-  "panel_headerOnLabel": {
-    "message": "On",
-    "description": "Label for global on-off switch (panel_headerOnLabel)"
-  },
-  "panel_headerOnLabelTitle": {
-    "message": "Enabled gateway redirect and all active API integrations",
-    "description": "Label for an embedded IPFS node (panel_headerOnLabelTitle)"
-  },
-  "panel_headerOffLabel": {
-    "message": "Off",
-    "description": "Label for an external IPFS node (panel_headerOffLabel)"
-  },
-  "panel_headerOffLabelTitle": {
-    "message": "Disabled gateway redirect and all active API integrations",
-    "description": "Label for an external IPFS node (panel_headerOffLabelTitle)"
+  "panel_headerActiveToggleTitle": {
+    "message": "Toggle to activate or suspend gateway redirect and all active API integrations",
+    "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "offline",

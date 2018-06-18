@@ -5,6 +5,8 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
 module.exports = function gatewayStatus ({
+  active,
+  onToggleActive,
   ipfsApiUrl,
   gatewayAddress,
   gatewayVersion,

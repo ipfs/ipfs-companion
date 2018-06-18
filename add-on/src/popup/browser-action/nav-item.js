@@ -4,12 +4,12 @@
 const html = require('choo/html')
 
 function navItem ({ icon, text, bold, disabled, onClick }) {
-  let className = 'button-reset db w-100 bg-white b--none outline-0--focus pv2 ph3 f5 tl'
+  let className = 'black button-reset db w-100 bg-white b--none outline-0--focus pv2 ph3 f5 tl'
   if (bold) className += ' b'
   if (disabled) {
-    className += ' silver'
+    className += ' o-40'
   } else {
-    className += ' pointer black bg-near-white--hover'
+    className += ' pointer bg-near-white--hover'
   }
 
   return html`

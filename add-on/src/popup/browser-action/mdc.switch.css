@@ -38,6 +38,8 @@
  * context (e.g. when active or disabled).
  */
 .mdc-switch {
+  z-index: 1;
+  transform: rotate(180deg) scale(0.7);
   display: inline-block;
   position: relative; }
   .mdc-switch .mdc-switch__native-control:enabled:not(:checked) ~ .mdc-switch__background::before {
