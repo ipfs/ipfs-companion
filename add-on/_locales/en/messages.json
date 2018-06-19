@@ -8,7 +8,7 @@
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Toggle to activate or suspend gateway redirect and all active API integrations",
+    "message": "Global toggle: activate or suspend all IPFS integrations",
     "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {

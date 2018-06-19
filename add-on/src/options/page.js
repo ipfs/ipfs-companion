@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const html = require('choo/html')
+const globalToggleForm = require('./forms/global-toggle-form')
 const ipfsNodeForm = require('./forms/ipfs-node-form')
 const gatewaysForm = require('./forms/gateways-form')
 const apiForm = require('./forms/api-form')
@@ -28,8 +29,24 @@ module.exports = function optionsPage (state, emit) {
     emit('optionsReset')
   }
 
+  if (!state.options.active) {
+    // we don't want to confuse users by showing "active" checkboxes
+    // when global toggle is in "suspended" state
+    return html`
+    <div>
+      ${globalToggleForm({
+        active: state.options.active,
+        onOptionChange
+      })}
+    </div>
+    `
+  }
   return html`
     <div>
+      ${globalToggleForm({
+        active: state.options.active,
+        onOptionChange
+      })}
       ${ipfsNodeForm({
         ipfsNodeType: state.options.ipfsNodeType,
         ipfsNodeConfig: state.options.ipfsNodeConfig,
