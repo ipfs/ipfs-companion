@@ -4820,9 +4820,9 @@ ipfs-block@~0.6.1:
   dependencies:
     cids "^0.5.2"
 
-ipfs-css@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.5.0.tgz#94330da145b647efafe6ff00c4a77603c115115e"
+ipfs-css@0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.5.1.tgz#cf51645706c61e8c7daa88f8418895f7a95c35af"
 
 ipfs-multipart@~0.1.0:
   version "0.1.0"

@@ -33,7 +33,7 @@ module.exports = function optionsPage (state, emit) {
     // we don't want to confuse users by showing "active" checkboxes
     // when global toggle is in "suspended" state
     return html`
-    <div>
+    <div class="sans-serif">
       ${globalToggleForm({
         active: state.options.active,
         onOptionChange
@@ -42,7 +42,7 @@ module.exports = function optionsPage (state, emit) {
     `
   }
   return html`
-    <div>
+    <div class="sans-serif">
       ${globalToggleForm({
         active: state.options.active,
         onOptionChange
