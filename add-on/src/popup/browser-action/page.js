@@ -5,7 +5,6 @@ const html = require('choo/html')
 const header = require('./header')
 const contextActions = require('./context-actions')
 const operations = require('./operations')
-const gatewayStatus = require('./gateway-status')
 
 // Render the browser action page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -21,14 +20,14 @@ module.exports = function browserActionPage (state, emit) {
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleRedirect = () => emit('toggleRedirect')
   const onToggleNodeType = () => emit('toggleNodeType')
+  const onToggleActive = () => emit('toggleActive')
 
-  const headerProps = Object.assign({ onToggleNodeType }, state)
+  const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onOpenPrefs }, state)
   const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
-  const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onOpenPrefs, onToggleRedirect }, state)
-  const gwStatusProps = Object.assign({}, state)
+  const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleRedirect }, state)
 
   return html`
-    <div class="helvetica">
+    <div class="sans-serif" style="text-rendering: optimizeLegibility;">
       ${header(headerProps)}
       <div class="bb b--black-20">
         ${contextActions(contextActionsProps)}
@@ -36,7 +35,6 @@ module.exports = function browserActionPage (state, emit) {
       <div class="bb b--black-20">
         ${operations(opsProps)}
       </div>
-      ${gatewayStatus(gwStatusProps)}
     </div>
   `
 }

@@ -6,20 +6,21 @@ const html = require('choo/html')
 const navItem = require('./nav-item')
 
 module.exports = function contextActions ({
+  active,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
   isUnPinning,
   isPinned,
   isIpfsOnline,
+  isApiAvailable,
   onCopyIpfsAddr,
   onCopyPublicGwAddr,
   onPin,
   onUnPin
 }) {
   if (!isIpfsContext) return null
-  const isPinningSupported = (ipfsNodeType !== 'embedded')
-
+  const activePinControls = active && isIpfsOnline && isApiAvailable && (ipfsNodeType !== 'embedded') && !(isPinning || isUnPinning)
   return html`
     <div class='fade-in pv1'>
       ${navItem({
@@ -30,17 +31,17 @@ module.exports = function contextActions ({
         text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
         onClick: onCopyPublicGwAddr
       })}
-      ${isIpfsOnline && isPinningSupported && !isPinned ? (
+      ${!isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-          disabled: isPinning,
+          disabled: !activePinControls,
           onClick: onPin
         })
       ) : null}
-      ${isIpfsOnline && isPinningSupported && isPinned ? (
+      ${isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
-          disabled: isUnPinning,
+          disabled: !activePinControls,
           onClick: onUnPin
         })
       ) : null}

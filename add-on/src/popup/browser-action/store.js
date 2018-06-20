@@ -7,6 +7,8 @@ const { safeIpfsPath } = require('../../lib/ipfs-path')
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
   Object.assign(state, {
+    // Global ON/OFF
+    active: true,
     // UI state
     isIpfsContext: false,
     isPinning: false,
@@ -22,7 +24,7 @@ module.exports = (state, emitter) => {
     swarmPeers: null,
     gatewayVersion: null,
     redirectEnabled: false,
-    uploadEnabled: false
+    isApiAvailable: false
   })
 
   let port
@@ -165,28 +167,49 @@ module.exports = (state, emitter) => {
     }
   })
 
-  async function updatePageActionsState (status) {
-    // IPFS contexts require access to ipfs API object from background page
-    // Note: access to background page is denied in Private Browsing mode
-    const ipfs = await getIpfsApi()
+  emitter.on('toggleActive', async () => {
+    const prev = state.active
+    state.active = !prev
+    if (!state.active) {
+      const options = await browser.storage.local.get()
+      state.gatewayAddress = options.publicGatewayUrl
+      state.ipfsApiUrl = null
+      state.gatewayVersion = null
+      state.swarmPeers = null
+      state.isIpfsOnline = false
+    }
+    emitter.emit('render')
+    try {
+      await browser.storage.local.set({active: state.active})
+    } catch (error) {
+      console.error(`Unable to update global Active flag due to ${error}`)
+      state.active = prev
+      emitter.emit('render')
+    }
+  })
 
+  async function updatePageActionsState (status) {
     // Check if current page is an IPFS one
-    state.isIpfsContext = !!(ipfs && status && status.ipfsPageActionsContext)
+    state.isIpfsContext = status.ipfsPageActionsContext || false
     state.currentTab = status.currentTab || null
 
+    // browser.pageAction-specific items that can be rendered earlier (snappy UI)
+    requestAnimationFrame(async () => {
+      const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
+      if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
+        // Get title stored on page load so that valid transport is displayed
+        // even if user toggles between public/custom gateway after the load
+        state.pageActionTitle = await browser.pageAction.getTitle(tabId)
+        emitter.emit('render')
+      }
+    })
+
     if (state.isIpfsContext) {
-      // browser.pageAction-specific items that can be rendered earlier (snappy UI)
-      requestAnimationFrame(async () => {
-        const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
-        if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
-          // Get title stored on page load so that valid transport is displayed
-          // even if user toggles between public/custom gateway after the load
-          state.pageActionTitle = await browser.pageAction.getTitle(tabId)
-          emitter.emit('render')
-        }
-      })
+      // IPFS contexts require access to ipfs API object from background page
+      // Note: access to background page will be denied in Private Browsing mode
+      const ipfs = await getIpfsApi()
       // There is no point in displaying actions that require API interaction if API is down
-      const apiIsUp = status && status.peerCount >= 0
+      const apiIsUp = ipfs && status && status.peerCount >= 0
       if (apiIsUp) await updatePinnedState(ipfs, status)
     }
   }
@@ -194,19 +217,20 @@ module.exports = (state, emitter) => {
   async function updateBrowserActionState (status) {
     if (status) {
       const options = await browser.storage.local.get()
-      if (options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
+      state.active = status.active
+      if (state.active && options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
         state.gatewayAddress = options.customGatewayUrl
       } else {
         state.gatewayAddress = options.publicGatewayUrl
       }
       state.ipfsNodeType = status.ipfsNodeType
-      state.ipfsApiUrl = options.ipfsApiUrl
-      state.redirectEnabled = options.useCustomGateway
+      state.redirectEnabled = state.active && options.useCustomGateway
       // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.uploadEnabled = !!(await browser.runtime.getBackgroundPage())
-      state.swarmPeers = status.peerCount === -1 ? 0 : status.peerCount
-      state.isIpfsOnline = status.peerCount > -1
-      state.gatewayVersion = status.gatewayVersion ? status.gatewayVersion : null
+      state.isApiAvailable = state.active && !!(await browser.runtime.getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
+      state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
+      state.isIpfsOnline = state.active && status.peerCount > -1
+      state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
+      state.ipfsApiUrl = state.active ? options.ipfsApiUrl : null
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null

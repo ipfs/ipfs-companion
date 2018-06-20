@@ -6,44 +6,41 @@ const html = require('choo/html')
 const navItem = require('./nav-item')
 
 module.exports = function operations ({
+  active,
   ipfsNodeType,
   isIpfsOnline,
   redirectEnabled,
-  uploadEnabled,
+  isApiAvailable,
   onQuickUpload,
   onOpenWebUi,
-  onOpenPrefs,
   onToggleRedirect
 }) {
+  const activeQuickUpload = active && isIpfsOnline && isApiAvailable
+  const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
+  const activeGatewaySwitch = active && ipfsNodeType === 'external'
+
   return html`
     <div class="fade-in pv1">
-      ${isIpfsOnline && uploadEnabled ? (
-        navItem({
-          text: browser.i18n.getMessage('panel_quickUpload'),
-          bold: true,
-          onClick: onQuickUpload
-        })
-      ) : null}
-      ${ipfsNodeType === 'external' && isIpfsOnline ? (
-        navItem({
-          text: browser.i18n.getMessage('panel_openWebui'),
-          onClick: onOpenWebUi
-        })
-      ) : null}
       ${navItem({
-        text: browser.i18n.getMessage('panel_openPreferences'),
-        onClick: onOpenPrefs
+        text: browser.i18n.getMessage('panel_quickUpload'),
+        bold: true,
+        disabled: !activeQuickUpload,
+        onClick: onQuickUpload
       })}
-      ${ipfsNodeType === 'external' ? (
-        navItem({
-          text: browser.i18n.getMessage(
-            redirectEnabled
-              ? 'panel_switchToPublicGateway'
-              : 'panel_switchToCustomGateway'
-          ),
-          onClick: onToggleRedirect
-        })
-      ) : null}
+      ${navItem({
+        text: browser.i18n.getMessage(
+          redirectEnabled && activeGatewaySwitch
+            ? 'panel_switchToPublicGateway'
+            : 'panel_switchToCustomGateway'
+        ),
+        disabled: !activeGatewaySwitch,
+        onClick: onToggleRedirect
+      })}
+      ${navItem({
+        text: browser.i18n.getMessage('panel_openWebui'),
+        disabled: !activeWebUI,
+        onClick: onOpenWebUi
+      })}
     </div>
   `
 }

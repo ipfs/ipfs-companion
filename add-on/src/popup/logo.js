@@ -9,9 +9,8 @@ function logo ({ path, size = 52, ipfsNodeType = 'external', isIpfsOnline = true
   return html`
     <img
       alt="IPFS"
-      title='IPFS'
       src="${path}/${logoFileName}"
-      class="v-mid ${isIpfsOnline && heartbeat ? 'heartbeat' : ''}"
+      class="v-mid ${isIpfsOnline ? '' : 'o-40'} ${isIpfsOnline && heartbeat ? 'heartbeat' : ''}"
       style="width:${size}px; height:${size}px" />
   `
 }

@@ -1,4 +1,6 @@
-html.is-chrome {
+@import url('/ui-kit/tachyons.css');
+@import url('/ui-kit/ipfs.css');
+html {
   overflow: hidden;
 }
 .is-chrome body {

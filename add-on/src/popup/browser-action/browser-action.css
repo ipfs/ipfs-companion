@@ -1,6 +1,6 @@
-@import url('../../../ui-kit/tachyons.css');
+@import url('/ui-kit/tachyons.css');
+@import url('/ui-kit/ipfs.css');
 @import url('../heartbeat.css');
-@import url('mdc.switch.css');
 
 .bg-near-white--hover:hover {
   background-color: #F4F4F4;
@@ -8,6 +8,20 @@
 
 .outline-0--focus:focus {
   outline: 0;
+}
+
+.no-user-select {
+  -webkit-user-select: none; /* Old Chrome, Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge */
+  user-select: none;         /* Non-prefixed version, Chrome and Opera */
+}
+
+.force-select-all {
+  -webkit-user-select: all;  /* Chrome 49+ */
+  -moz-user-select: all;     /* Firefox 43+ */
+  -ms-user-select: all;      /* No support yet */
+  user-select: all;          /* Likely future */
 }
 
 .fade-in {

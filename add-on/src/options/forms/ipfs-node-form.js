@@ -17,7 +17,8 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsNodeType_title')}</dt>
               <dd>
-                ${browser.i18n.getMessage('option_ipfsNodeType_description')}
+                <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
+                <p>${browser.i18n.getMessage('option_ipfsNodeType_embedded_description')}</p>
                 <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>

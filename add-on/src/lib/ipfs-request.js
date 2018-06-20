@@ -47,7 +47,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
     }
 
     // handle redirects to custom gateway
-    if (state.redirect) {
+    if (state.active && state.redirect) {
       // Ignore preload requests
       if (request.method === 'HEAD') {
         return
