@@ -12,8 +12,8 @@ module.exports = function header (props) {
   const { ipfsNodeType, active, onToggleActive, onOpenPrefs, isIpfsOnline } = props
   return html`
     <div class="pt3 pb1 br2 br--top ba bw1 b--white" style="background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%); background-size: 100%; background-repeat: repeat;">
-      <div class="no-user-select ${active ? '' : 'o-40'}">
-        <div class="tc mb2 transition-all" style="${!active ? 'filter: blur( .15em )' : ''}">
+      <div class="no-user-select">
+        <div class="tc mb2 transition-all ${active ? '' : 'o-40'}" style="${active ? '' : 'filter: blur( .15em )'}">
           ${logo({
             size: 52,
             path: '../../../icons',
@@ -21,7 +21,7 @@ module.exports = function header (props) {
             isIpfsOnline: (active && isIpfsOnline)
           })}
         </div>
-        <h1 class="mb1 montserrat f5 mt2 tc white normal">
+        <h1 class="mb1 montserrat f5 mt2 tc white normal ${active ? '' : 'o-40'}">
           ${browser.i18n.getMessage('panel_headerIpfsNodeIconLabel')}
         </h1>
         <div class="tc ma0 pa0">

@@ -13,7 +13,6 @@ module.exports = function operations ({
   isApiAvailable,
   onQuickUpload,
   onOpenWebUi,
-  onOpenPrefs,
   onToggleRedirect
 }) {
   const activeQuickUpload = active && isIpfsOnline && isApiAvailable
@@ -36,10 +35,6 @@ module.exports = function operations ({
         ),
         disabled: !activeGatewaySwitch,
         onClick: onToggleRedirect
-      })}
-      ${navItem({
-        text: browser.i18n.getMessage('panel_openPreferences'),
-        onClick: onOpenPrefs
       })}
       ${navItem({
         text: browser.i18n.getMessage('panel_openWebui'),

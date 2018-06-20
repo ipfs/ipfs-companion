@@ -44,7 +44,7 @@
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
-    "message": "Open Preferences",
+    "message": "Open Preferences of Browser Extension",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_switchToCustomGateway": {
