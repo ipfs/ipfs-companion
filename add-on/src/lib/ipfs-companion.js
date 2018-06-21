@@ -652,7 +652,8 @@ module.exports = async function init () {
       return uploadResultHandler(result)
     },
 
-    async destroy () {
+    destroy () {
+      let destroyTasks = []
       clearInterval(apiStatusUpdateInterval)
       apiStatusUpdateInterval = null
       ipfs = null
@@ -663,20 +664,16 @@ module.exports = async function init () {
       notify = null
       copier = null
       contextMenus = null
-      ipfsProxy.destroy()
-      ipfsProxy = null
       if (ipfsProxyContentScript) {
         ipfsProxyContentScript.unregister()
         ipfsProxyContentScript = null
       }
-      await destroyIpfsClient()
+      destroyTasks.push(ipfsProxy.destroy())
+      ipfsProxy = null
+      destroyTasks.push(destroyIpfsClient())
+      return Promise.all(destroyTasks)
     }
   }
 
   return api
 }
-
-// OTHER
-// ===================================================================
-
-// It's always worse than it seems
