@@ -1,7 +1,8 @@
 'use strict'
 
 const optionDefaults = Object.freeze({
-  ipfsNodeType: 'external',
+  active: true, // global ON/OFF switch, overrides everything else
+  ipfsNodeType: 'external', // or 'embedded'
   ipfsNodeConfig: JSON.stringify({
     config: {
       Addresses: {

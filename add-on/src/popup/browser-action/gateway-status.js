@@ -4,9 +4,23 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
+function statusEntry ({label, labelLegend, value, check, itemClass = '', valueClass = ''}) {
+  const offline = browser.i18n.getMessage('panel_statusOffline')
+  label = label ? browser.i18n.getMessage(label) : null
+  labelLegend = labelLegend ? browser.i18n.getMessage(labelLegend) : label
+  value = value || value === 0 ? value : offline
+  return html`
+      <li class="flex ${check ? '' : 'o-60'} ${itemClass}" title="${labelLegend}">
+        <span class="w-40 f7 ttu no-user-select">${label}</span>
+        <span class="w-60 f7 tr monospace truncate force-select-all ${valueClass}" title="${value}">${value}</span>
+      </li>
+    `
+}
+
 module.exports = function gatewayStatus ({
+  active,
+  onToggleActive,
   ipfsApiUrl,
-  publicGatewayUrl,
   gatewayAddress,
   gatewayVersion,
   swarmPeers,
@@ -14,25 +28,34 @@ module.exports = function gatewayStatus ({
   ipfsNodeType,
   redirectEnabled
 }) {
-  const api = ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
+  const api = ipfsApiUrl && ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`
-    <ul class="fade-in list mv3 ph3 bg-white black">
-      <li class="flex mb2">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusGatewayAddress')}</span>
-        <code class="w-60 f7 tr">${gatewayAddress == null ? 'unknown' : gatewayAddress}</code>
-      </li>
-      <li class="flex mb2">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusApiAddress')}</span>
-        <code class="w-60 f7 tr">${api}</code>
-      </li>
-      <li class="flex mb2">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusGatewayVersion')}</span>
-        <code class="w-60 f7 tr">${gatewayVersion == null ? 'offline' : gatewayVersion}</code>
-      </li>
-      <li class="flex mb2" title="${browser.i18n.getMessage('panel_statusSwarmPeersTitle')}">
-        <span class="w-40 f7 ttu">${browser.i18n.getMessage('panel_statusSwarmPeers')}</span>
-        <code class="w-60 f7 tr fw9">${swarmPeers == null ? 'offline' : swarmPeers}</code>
-      </li>
+    <ul class="fade-in list mv0 pv2 ph3 white">
+      ${statusEntry({
+        label: 'panel_statusGatewayAddress',
+        value: gatewayAddress,
+        check: gatewayAddress,
+        itemClass: 'mb1'
+      })}
+      ${statusEntry({
+        label: 'panel_statusApiAddress',
+        value: api,
+        check: gatewayVersion,
+        itemClass: 'mb1'
+      })}
+      ${statusEntry({
+        label: 'panel_statusGatewayVersion',
+        value: gatewayVersion,
+        check: gatewayVersion,
+        itemClass: 'mb1'
+      })}
+      ${statusEntry({
+        label: 'panel_statusSwarmPeers',
+        labelLegend: 'panel_statusSwarmPeersTitle',
+        value: swarmPeers,
+        check: swarmPeers,
+        valueClass: 'fw9'
+      })}
     </ul>
   `
 }

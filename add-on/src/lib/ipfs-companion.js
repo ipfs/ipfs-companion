@@ -40,15 +40,17 @@ module.exports = async function init () {
     state = initState(options)
     notify = createNotifier(getState)
 
-    // It's ok for this to fail, node might be unavailable or mis-configured
-    try {
-      ipfs = await initIpfsClient(state)
-    } catch (err) {
-      console.error('[ipfs-companion] Failed to init IPFS client', err)
-      notify(
-        'notify_startIpfsNodeErrorTitle',
-        err.name === 'ValidationError' ? err.details[0].message : err.message
-      )
+    if (state.active) {
+      // It's ok for this to fail, node might be unavailable or mis-configured
+      try {
+        ipfs = await initIpfsClient(state)
+      } catch (err) {
+        console.error('[ipfs-companion] Failed to init IPFS client', err)
+        notify(
+          'notify_startIpfsNodeErrorTitle',
+          err.name === 'ValidationError' ? err.details[0].message : err.message
+        )
+      }
     }
 
     copier = createCopier(getState, notify)
@@ -60,7 +62,7 @@ module.exports = async function init () {
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
     modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
-    ipfsProxy = createIpfsProxy(() => ipfs, getState)
+    ipfsProxy = createIpfsProxy(getIpfs, getState)
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
@@ -77,6 +79,12 @@ module.exports = async function init () {
 
   function getState () {
     return state
+  }
+
+  function getIpfs () {
+    if (state.active && ipfs) return ipfs
+    console.error('[ipfs-companion] Refused access to IPFS API client, check if extension is enabled')
+    throw new Error('IPFS Companion: API client is disabled')
   }
 
   function registerListeners () {
@@ -107,8 +115,8 @@ module.exports = async function init () {
     if (previousHandle) {
       previousHandle.unregister()
     }
-    if (!state.ipfsProxy || !browser.contentScripts) {
-      // no-op if window.ipfs is disabled in Preferences
+    if (!state.active || !state.ipfsProxy || !browser.contentScripts) {
+      // no-op if global toggle is off, window.ipfs is disabled in Preferences
       // or if runtime has no contentScript API
       // (Chrome loads content script via manifest)
       return
@@ -200,6 +208,7 @@ module.exports = async function init () {
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
     const info = {
+      active: state.active,
       ipfsNodeType: state.ipfsNodeType,
       peerCount: state.peerCount,
       gwURLString: state.gwURLString,
@@ -353,6 +362,7 @@ module.exports = async function init () {
   }
 
   async function onUpdatedTab (tabId, changeInfo, tab) {
+    if (!state.active) return // skip content script injection when off
     if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
       if (state.linkify) {
         console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
@@ -549,6 +559,11 @@ module.exports = async function init () {
       // debug info
       // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       switch (key) {
+        case 'active':
+          state[key] = change.newValue
+          ipfsProxyContentScript = await registerIpfsProxyContentScript()
+          shouldRestartIpfsClient = true
+          break
         case 'ipfsNodeType':
         case 'ipfsNodeConfig':
           shouldRestartIpfsClient = true
@@ -597,6 +612,8 @@ module.exports = async function init () {
       } finally {
         ipfs = null
       }
+
+      if (!state.active) return
 
       try {
         ipfs = await initIpfsClient(state)
