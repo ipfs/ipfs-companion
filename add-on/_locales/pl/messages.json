@@ -7,21 +7,13 @@
     "message": "Węzeł IPFS",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
-  "panel_headerIpfsNodeEmbedded": {
-    "message": "Wbudowany",
-    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
+  "panel_headerActiveToggleTitle": {
+    "message": "Globalny przełącznik: włącza lub wstrzymuje wszystkie integracje IPFS w przeglądarce",
+    "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
-  "panel_headerIpfsNodeEmbeddedTitle": {
-    "message": "Eksperyment: uruchom instancję JS-IPFS w przeglądarce",
-    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
-  },
-  "panel_headerIpfsNodeExternal": {
-    "message": "Zewnętrzny",
-    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
-  },
-  "panel_headerIpfsNodeExternalTitle": {
-    "message": "Połącz do węzła IPFS po HTTP",
-    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
+  "panel_statusOffline": {
+    "message": "niedostępne",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
     "message": "Brama HTTP",
@@ -189,8 +181,12 @@
     "message": "Typ węzła IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
-  "option_ipfsNodeType_description": {
-    "message": "Zdalny: Połącz z usługą IPFS po HTTP. \n\nWbudowany: Uruchom instancję JS-IPFS w przeglądarce *Eksperyment*",
+  "option_ipfsNodeType_external_description": {
+    "message": "Zewnętrzny (zalecany): połącz się z API węzła IPFS przy użyciu protokołu HTTP.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
+  "option_ipfsNodeType_embedded_description": {
+    "message": "Wbudowany (eksperyment): uruchamia węzeł js-ipfs w procesie przeglądarki (może powodować szybsze rozładowanie baterii itp).",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {

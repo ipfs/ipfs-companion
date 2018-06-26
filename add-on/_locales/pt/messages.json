@@ -7,21 +7,13 @@
     "message": "Nó IPFS",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
-  "panel_headerIpfsNodeEmbedded": {
-    "message": "Embutido",
-    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
+  "panel_headerActiveToggleTitle": {
+    "message": "Global toggle: activate or suspend all IPFS integrations",
+    "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
-  "panel_headerIpfsNodeEmbeddedTitle": {
-    "message": "Experimental: Utilizar o IPFS embutido no browser através do js-ipfs",
-    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
-  },
-  "panel_headerIpfsNodeExternal": {
-    "message": "Externo",
-    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
-  },
-  "panel_headerIpfsNodeExternalTitle": {
-    "message": "Ligar a um nó IPFS por HTTP",
-    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
+  "panel_statusOffline": {
+    "message": "offline",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
     "message": "Gateway",
@@ -189,8 +181,12 @@
     "message": "Tipo do Nó IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
-  "option_ipfsNodeType_description": {
-    "message": "Externo: Ligar a um nó IPFS através de HTTP. \n\n Embutido: Correr um nó IPFS diretamente através do seu browser. *Experimental*",
+  "option_ipfsNodeType_external_description": {
+    "message": "External (suggested): connect to an IPFS daemon over HTTP.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
+  "option_ipfsNodeType_embedded_description": {
+    "message": "Embedded (experimental): run a js-ipfs node in your browser (YMMV, may drain your battery etc).",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {

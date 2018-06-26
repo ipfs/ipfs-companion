@@ -4,24 +4,16 @@
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS node",
+    "message": "IPFS Companion",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
-  "panel_headerIpfsNodeEmbedded": {
-    "message": "Tertancap",
-    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbedded)"
+  "panel_headerActiveToggleTitle": {
+    "message": "Global toggle: activate or suspend all IPFS integrations",
+    "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
-  "panel_headerIpfsNodeEmbeddedTitle": {
-    "message": "Eksperimental: Gunakan IPFS yang disematkan di peramban Anda melalui js-ipfs",
-    "description": "Label for an embedded IPFS node (panel_headerIpfsNodeEmbeddedTitle)"
-  },
-  "panel_headerIpfsNodeExternal": {
-    "message": "Eksternal",
-    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternal)"
-  },
-  "panel_headerIpfsNodeExternalTitle": {
-    "message": "Sambungkan ke simpul IPFS melalui HTTP",
-    "description": "Label for an external IPFS node (panel_headerIpfsNodeExternalTitle)"
+  "panel_statusOffline": {
+    "message": "offline",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
     "message": "Gerbang",
@@ -189,8 +181,12 @@
     "message": "Jenis Node IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
-  "option_ipfsNodeType_description": {
-    "message": "Eksternal: Sambungkan ke daemon IPFS melalui HTTP. \n\n Tertanam: Menjalankan node IPFS di peramban melalui ipfs-js *eksperimental*",
+  "option_ipfsNodeType_external_description": {
+    "message": "External (suggested): connect to an IPFS daemon over HTTP.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
+  "option_ipfsNodeType_embedded_description": {
+    "message": "Embedded (experimental): run a js-ipfs node in your browser (YMMV, may drain your battery etc).",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
