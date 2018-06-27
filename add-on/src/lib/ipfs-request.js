@@ -3,23 +3,14 @@
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
+const redirectOptOutHint = 'x-ipfs-no-redirect'
 
 function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
   return function modifyRequest (request) {
     const state = getState()
 
-    // skip requests to the custom gateway or API (otherwise we have too much recursion)
-    if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
-      return
-    }
-
-    // skip websocket handshake (not supported by HTTP2IPFS gateways)
-    if (request.type === 'websocket') {
-      return
-    }
-
-    // skip all local requests
-    if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
+    // early sanity checks
+    if (preNormalizationSkip(state, request)) {
       return
     }
 
@@ -40,16 +31,10 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
       }
     }
 
-    // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
-    if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
-      return
-      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
-    }
-
     // handle redirects to custom gateway
     if (state.active && state.redirect) {
-      // Ignore preload requests
-      if (request.method === 'HEAD') {
+      // late sanity checks
+      if (postNormalizationSkip(state, request)) {
         return
       }
       // Detect valid /ipfs/ and /ipns/ on any site
@@ -57,14 +42,51 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         return redirectToGateway(request.url, state)
       }
       // Look for dnslink in TXT records of visited sites
-      if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
+      if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url) && isSafeToRedirect(request, runtime)) {
         return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
       }
     }
   }
 }
 
+exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
+
+// types of requests to be skipped before any normalization happens
+function preNormalizationSkip (state, request) {
+  // skip requests to the custom gateway or API (otherwise we have too much recursion)
+  if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
+    return true
+  }
+
+  // skip websocket handshake (not supported by HTTP2IPFS gateways)
+  if (request.type === 'websocket') {
+    return true
+  }
+
+  // skip all local requests
+  if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
+    return true
+  }
+
+  return false
+}
+
+// types of requests to be skipped after expensive normalization happens
+function postNormalizationSkip (state, request) {
+  // Ignore preload requests
+  if (request.method === 'HEAD') {
+    return true
+  }
+
+  // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
+  if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
+    return true
+    // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
+  }
+
+  return false
+}
 
 function redirectToGateway (requestUrl, state) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
@@ -77,6 +99,11 @@ function redirectToGateway (requestUrl, state) {
 }
 
 function isSafeToRedirect (request, runtime) {
+  // Do not redirect if URL includes opt-out hint
+  if (request.url.includes('x-ipfs-no-redirect')) {
+    return false
+  }
+
   // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
   // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
   // TODO: revisit when upstream bug is addressed

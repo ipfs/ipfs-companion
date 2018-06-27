@@ -38,10 +38,13 @@ Learn more at [ipfs.io](https://ipfs.io) (it is really cool, we promise!)
 
 #### Automagical Detection of IPFS Resources
 
-  Requests for IPFS-like paths (`/ipfs/$cid` or `/ipns/$peerid_or_fqdn-with-dnslink`) are detected on any website.  
-  If tested path is a valid IPFS address it gets redirected and loaded from a local gateway, e.g:  
-  `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
-  → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+Requests for IPFS-like paths (`/ipfs/$cid` or `/ipns/$peerid_or_fqdn-with-dnslink`) are detected on any website.  
+If tested path is a valid IPFS address it gets redirected and loaded from a local gateway, e.g:  
+> `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
+> → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+
+  It is possible to temporarily opt-out from redirect by suspending extension via global toggle,
+  or by including `x-ipfs-no-redirect` in the URL ([as a hash or query parameter](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-no-redirect#x-ipfs-no-redirect)).
 
 #### IPFS API as `window.ipfs`
 

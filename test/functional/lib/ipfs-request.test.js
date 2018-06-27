@@ -6,7 +6,7 @@ const { URL } = require('url')
 const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
 const createRuntimeChecks = require('../../../add-on/src/lib/runtime-checks')
-const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
+const { createRequestModifier, redirectOptOutHint } = require('../../../add-on/src/lib/ipfs-request')
 const createDnsLink = require('../../../add-on/src/lib/dns-link')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
@@ -76,6 +76,11 @@ describe('modifyRequest', function () {
           state.redirect = true
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
+        })
+        it(`should be left untouched if URL includes opt-out hint (${nodeType} node)`, function () {
+          const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-no-redirect#hashTest')
+          expect(modifyRequest(request)).to.equal(undefined)
+          expect(redirectOptOutHint).to.equal('x-ipfs-no-redirect')
         })
         it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
