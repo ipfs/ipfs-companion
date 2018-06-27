@@ -74,11 +74,6 @@ function preNormalizationSkip (state, request) {
 
 // types of requests to be skipped after expensive normalization happens
 function postNormalizationSkip (state, request) {
-  // Ignore preload requests
-  if (request.method === 'HEAD') {
-    return true
-  }
-
   // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
   if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
     return true
