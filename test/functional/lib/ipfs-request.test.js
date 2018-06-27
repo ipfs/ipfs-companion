@@ -78,6 +78,7 @@ describe('modifyRequest', function () {
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it(`should be left untouched if URL includes opt-out hint (${nodeType} node)`, function () {
+          // A safe way for preloading data at arbitrary gateways - it should arrive at original destination
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-no-redirect#hashTest')
           expect(modifyRequest(request)).to.equal(undefined)
           expect(redirectOptOutHint).to.equal('x-ipfs-no-redirect')
@@ -87,7 +88,7 @@ describe('modifyRequest', function () {
           expect(modifyRequest(request)).to.equal(undefined)
         })
         it(`should be left untouched if its is a preload request (${nodeType} node)`, function () {
-          // HTTP HEAD is often used for preloading data at arbitrary gateways - it should arrive at original destination
+          // HTTP HEAD is a legacy way for preloading data at arbitrary gateways - it should arrive at original destination
           const headRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', method: 'HEAD'}
           expect(modifyRequest(headRequest)).to.equal(undefined)
         })

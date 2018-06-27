@@ -6,7 +6,7 @@ const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
-const { createRequestModifier } = require('./ipfs-request')
+const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
@@ -239,7 +239,9 @@ module.exports = async function init () {
     // asynchronous HTTP HEAD request preloads triggers content without downloading it
     return new Promise((resolve, reject) => {
       const http = new XMLHttpRequest()
-      http.open('HEAD', urlAtPublicGw(path, state.pubGwURLString))
+      // Make sure preload request is excluded from global redirect
+      const preloadUrl = urlAtPublicGw(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
+      http.open('HEAD', preloadUrl)
       http.onreadystatechange = function () {
         if (this.readyState === this.DONE) {
           console.info(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)
