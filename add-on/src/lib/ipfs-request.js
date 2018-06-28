@@ -6,46 +6,74 @@ const { urlAtPublicGw } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-no-redirect'
 
 function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
-  return function modifyRequest (request) {
-    const state = getState()
-
-    // early sanity checks
-    if (preNormalizationSkip(state, request)) {
-      return
-    }
-
-    // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
-    if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-      const fix = normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
-      if (fix) {
-        return fix
-      }
-    }
-
-    // handler for protocol_handlers from manifest.json
-    if (redirectingProtocolRequest(request)) {
-      // fix path passed via custom protocol
-      const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
-      if (fix) {
-        return fix
-      }
-    }
-
-    // handle redirects to custom gateway
-    if (state.active && state.redirect) {
-      // late sanity checks
-      if (postNormalizationSkip(state, request)) {
+  // Request modifier provides event listeners for the various stages of making an HTTP request
+  // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
+  return {
+    onBeforeRequest (request) {
+      // This event is triggered when a request is about to be made, and before headers are available.
+      // This is a good place to listen if you want to cancel or redirect the request.
+      const state = getState()
+      // early sanity checks
+      if (preNormalizationSkip(state, request)) {
         return
       }
-      // Detect valid /ipfs/ and /ipns/ on any site
-      if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-        return redirectToGateway(request.url, state)
+      // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
+      if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
+        const fix = normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
+        if (fix) {
+          return fix
+        }
       }
-      // Look for dnslink in TXT records of visited sites
-      if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url) && isSafeToRedirect(request, runtime)) {
-        return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+      // handler for protocol_handlers from manifest.json
+      if (redirectingProtocolRequest(request)) {
+        // fix path passed via custom protocol
+        const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
+        if (fix) {
+          return fix
+        }
+      }
+      // handle redirects to custom gateway
+      if (state.active && state.redirect) {
+        // late sanity checks
+        if (postNormalizationSkip(state, request)) {
+          return
+        }
+        // Detect valid /ipfs/ and /ipns/ on any site
+        if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
+          return redirectToGateway(request.url, state)
+        }
+        // Look for dnslink in TXT records of visited sites
+        if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url) && isSafeToRedirect(request, runtime)) {
+          return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+        }
+      }
+    },
+
+    onBeforeSendHeaders (request) {
+      // This event is triggered before sending any HTTP data, but after all HTTP headers are available.
+      // This is a good place to listen if you want to modify HTTP request headers.
+      const state = getState()
+      // ignore websocket handshake (not supported by HTTP2IPFS gateways)
+      if (request.type === 'websocket') {
+        return
+      }
+      if (request.url.startsWith(state.apiURLString)) {
+        // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
+        // which produced '403 - Forbidden' error.
+        // This workaround removes bogus header from API requests
+        for (let i = 0; i < request.requestHeaders.length; i++) {
+          let header = request.requestHeaders[i]
+          if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
+            request.requestHeaders.splice(i, 1)
+            break
+          }
+        }
+      }
+      return {
+        requestHeaders: request.requestHeaders
       }
     }
+
   }
 }
 

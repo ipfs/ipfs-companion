@@ -43,8 +43,9 @@ If tested path is a valid IPFS address it gets redirected and loaded from a loca
 > `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
 > → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
 
-  It is possible to temporarily opt-out from redirect by suspending extension via global toggle,
-  or by including `x-ipfs-no-redirect` in the URL ([as a hash or query parameter](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-no-redirect#x-ipfs-no-redirect)).
+It is possible to opt-out from redirect by
+a) suspending extension via global toggle
+b) including `x-ipfs-no-redirect` in the URL ([as a hash or query parameter](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-no-redirect#x-ipfs-no-redirect)).
 
 #### IPFS API as `window.ipfs`
 

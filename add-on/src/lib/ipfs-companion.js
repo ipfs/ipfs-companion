@@ -136,29 +136,11 @@ module.exports = async function init () {
   // ===================================================================
 
   function onBeforeSendHeaders (request) {
-    // skip websocket handshake (not supported by HTTP2IPFS gateways)
-    if (request.type === 'websocket') {
-      return
-    }
-    if (request.url.startsWith(state.apiURLString)) {
-      // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
-      // which produced '403 - Forbidden' error.
-      // This workaround removes bogus header from API requests
-      for (let i = 0; i < request.requestHeaders.length; i++) {
-        let header = request.requestHeaders[i]
-        if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
-          request.requestHeaders.splice(i, 1)
-          break
-        }
-      }
-    }
-    return {
-      requestHeaders: request.requestHeaders
-    }
+    return modifyRequest.onBeforeSendHeaders(request)
   }
 
   function onBeforeRequest (request) {
-    return modifyRequest(request)
+    return modifyRequest.onBeforeRequest(request)
   }
 
   // RUNTIME MESSAGES (one-off messaging)
