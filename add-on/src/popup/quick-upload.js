@@ -26,6 +26,20 @@ function file2buffer (file) {
   })
 } */
 
+function files2streams (files) {
+  const streams = []
+  let totalSize = 0
+  for (let file of files) {
+    const fileStream = fileReaderPullStream(file, {chunkSize: 32 * 1024 * 1024})
+    streams.push({
+      path: file.name,
+      content: fileStream
+    })
+    totalSize += file.size
+  }
+  return { streams, totalSize }
+}
+
 function progressHandler (doneBytes, totalBytes, state, emitter) {
   state.message = browser.i18n.getMessage('quickUpload_state_uploading')
   // console.log('Upload progress:', doneBytes)
@@ -74,17 +88,7 @@ function quickUploadStore (state, emitter) {
     try {
       const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
       const uploadTab = await browser.tabs.getCurrent()
-      const files = []
-      let totalSize = 0
-      for (let file of event.target.files) {
-        // const uploadContent = await file2buffer(file)
-        const uploadContent = fileReaderPullStream(file, {chunkSize: 32 * 1024 * 1024})
-        files.push({
-          path: file.name,
-          content: uploadContent
-        })
-        totalSize += file.size
-      }
+      let {streams, totalSize} = files2streams(event.target.files)
       if (!browser.runtime.id.includes('@')) {
         // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
         if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
@@ -96,13 +100,29 @@ function quickUploadStore (state, emitter) {
       }
       progressHandler(0, totalSize, state, emitter)
       emitter.emit('render')
-      const wrapFlag = (state.wrapWithDirectory || files.length > 1)
-      const uploadOptions = {
+      const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
+      const options = {
         progress: (len) => progressHandler(len, totalSize, state, emitter),
         wrapWithDirectory: wrapFlag,
         pin: state.pinUpload
       }
-      const result = await ipfsCompanion.ipfsAddAndShow(files, uploadOptions)
+      let result
+      try {
+        result = await ipfsCompanion.ipfs.files.add(streams, options)
+        // This is just an additional safety check, as in past combination
+        // of specific go-ipfs/js-ipfs-api versions
+        // produced silent errors in form of partial responses:
+        // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
+        const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
+        if (partialResponse) {
+          throw new Error('Result of ipfs.files.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
+        }
+        await ipfsCompanion.uploadResultHandler({result, openRootInNewTab: true})
+      } catch (err) {
+        console.error('Failed to IPFS add', err)
+        ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
+        throw err
+      }
       emitter.emit('render')
       console.log('Upload result', result)
       // close upload tab as it will be replaced with a new tab with uploaded content
