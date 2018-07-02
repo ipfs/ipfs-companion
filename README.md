@@ -45,7 +45,7 @@ If tested path is a valid IPFS address it gets redirected and loaded from a loca
 
 It is possible to opt-out from redirect by
 a) suspending extension via global toggle
-b) including `x-ipfs-companion-no-redirect` in the URL ([as a hash or query parameter](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect#x-ipfs-companion-no-redirect)).
+b) including `x-ipfs-companion-no-redirect` in the URL (as a [hash](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect) or [query](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect) parameter).
 
 #### IPFS API as `window.ipfs`
 
