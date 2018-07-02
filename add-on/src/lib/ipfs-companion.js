@@ -6,7 +6,7 @@ const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
-const { createRequestModifier } = require('./ipfs-request')
+const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
@@ -136,42 +136,11 @@ module.exports = async function init () {
   // ===================================================================
 
   function onBeforeSendHeaders (request) {
-    // skip websocket handshake (not supported by HTTP2IPFS gateways)
-    if (request.type === 'websocket') {
-      return
-    }
-    if (request.url.startsWith(state.apiURLString)) {
-      // There is a bug in go-ipfs related to keep-alive connections
-      // that results in partial response for ipfs.files.add
-      // mangled by error "http: invalid Read on closed Body"
-      // More info: https://github.com/ipfs/go-ipfs/issues/5168
-      if (request.url.includes('api/v0/add')) {
-        for (let header of request.requestHeaders) {
-          if (header.name === 'Connection') {
-            console.log('[ipfs-companion] Executing "Connection: close" workaround for https://github.com/ipfs/go-ipfs/issues/5168')
-            header.value = 'close'
-            break
-          }
-        }
-      }
-      // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
-      // which produced '403 - Forbidden' error.
-      // This workaround removes bogus header from API requests
-      for (let i = 0; i < request.requestHeaders.length; i++) {
-        let header = request.requestHeaders[i]
-        if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
-          request.requestHeaders.splice(i, 1)
-          break
-        }
-      }
-    }
-    return {
-      requestHeaders: request.requestHeaders
-    }
+    return modifyRequest.onBeforeSendHeaders(request)
   }
 
   function onBeforeRequest (request) {
-    return modifyRequest(request)
+    return modifyRequest.onBeforeRequest(request)
   }
 
   // RUNTIME MESSAGES (one-off messaging)
@@ -253,7 +222,9 @@ module.exports = async function init () {
     // asynchronous HTTP HEAD request preloads triggers content without downloading it
     return new Promise((resolve, reject) => {
       const http = new XMLHttpRequest()
-      http.open('HEAD', urlAtPublicGw(path, state.pubGwURLString))
+      // Make sure preload request is excluded from global redirect
+      const preloadUrl = urlAtPublicGw(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
+      http.open('HEAD', preloadUrl)
       http.onreadystatechange = function () {
         if (this.readyState === this.DONE) {
           console.info(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)

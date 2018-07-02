@@ -3,68 +3,126 @@
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
+const redirectOptOutHint = 'x-ipfs-no-redirect'
 
 function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
-  return function modifyRequest (request) {
-    const state = getState()
-
-    // skip requests to the custom gateway or API (otherwise we have too much recursion)
-    if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
-      return
-    }
-
-    // skip websocket handshake (not supported by HTTP2IPFS gateways)
-    if (request.type === 'websocket') {
-      return
-    }
-
-    // skip all local requests
-    if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
-      return
-    }
-
-    // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
-    if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-      const fix = normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
-      if (fix) {
-        return fix
-      }
-    }
-
-    // handler for protocol_handlers from manifest.json
-    if (redirectingProtocolRequest(request)) {
-      // fix path passed via custom protocol
-      const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
-      if (fix) {
-        return fix
-      }
-    }
-
-    // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
-    if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
-      return
-      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
-    }
-
-    // handle redirects to custom gateway
-    if (state.active && state.redirect) {
-      // Ignore preload requests
-      if (request.method === 'HEAD') {
+  // Request modifier provides event listeners for the various stages of making an HTTP request
+  // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
+  return {
+    onBeforeRequest (request) {
+      // This event is triggered when a request is about to be made, and before headers are available.
+      // This is a good place to listen if you want to cancel or redirect the request.
+      const state = getState()
+      // early sanity checks
+      if (preNormalizationSkip(state, request)) {
         return
       }
-      // Detect valid /ipfs/ and /ipns/ on any site
-      if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-        return redirectToGateway(request.url, state)
+      // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
+      if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
+        const fix = normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
+        if (fix) {
+          return fix
+        }
       }
-      // Look for dnslink in TXT records of visited sites
-      if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
-        return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+      // handler for protocol_handlers from manifest.json
+      if (redirectingProtocolRequest(request)) {
+        // fix path passed via custom protocol
+        const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
+        if (fix) {
+          return fix
+        }
+      }
+      // handle redirects to custom gateway
+      if (state.active && state.redirect) {
+        // late sanity checks
+        if (postNormalizationSkip(state, request)) {
+          return
+        }
+        // Detect valid /ipfs/ and /ipns/ on any site
+        if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
+          return redirectToGateway(request.url, state)
+        }
+        // Look for dnslink in TXT records of visited sites
+        if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url) && isSafeToRedirect(request, runtime)) {
+          return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+        }
+      }
+    },
+
+    onBeforeSendHeaders (request) {
+      // This event is triggered before sending any HTTP data, but after all HTTP headers are available.
+      // This is a good place to listen if you want to modify HTTP request headers.
+      const state = getState()
+      // ignore websocket handshake (not supported by HTTP2IPFS gateways)
+      if (request.type === 'websocket') {
+        return
+      }
+      if (request.url.startsWith(state.apiURLString)) {
+        // There is a bug in go-ipfs related to keep-alive connections
+        // that results in partial response for ipfs.files.add
+        // mangled by error "http: invalid Read on closed Body"
+        // More info: https://github.com/ipfs/go-ipfs/issues/5168
+        if (request.url.includes('/api/v0/add')) {
+          for (let header of request.requestHeaders) {
+            if (header.name === 'Connection') {
+              console.log('[ipfs-companion] Executing "Connection: close" workaround for https://github.com/ipfs/go-ipfs/issues/5168')
+              header.value = 'close'
+              break
+            }
+          }
+        }
+        // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
+        // which produced '403 - Forbidden' error.
+        // This workaround removes bogus header from API requests
+        for (let i = 0; i < request.requestHeaders.length; i++) {
+          let header = request.requestHeaders[i]
+          if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
+            request.requestHeaders.splice(i, 1)
+            break
+          }
+        }
+      }
+      return {
+        requestHeaders: request.requestHeaders
       }
     }
+
   }
 }
 
+exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
+
+// types of requests to be skipped before any normalization happens
+function preNormalizationSkip (state, request) {
+  // skip requests to the custom gateway or API (otherwise we have too much recursion)
+  if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
+    return true
+  }
+
+  // skip websocket handshake (not supported by HTTP2IPFS gateways)
+  if (request.type === 'websocket') {
+    return true
+  }
+
+  // skip all local requests
+  if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
+    return true
+  }
+
+  return false
+}
+
+// types of requests to be skipped after expensive normalization happens
+function postNormalizationSkip (state, request) {
+  // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
+  if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
+    return true
+    // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
+  }
+
+  return false
+}
 
 function redirectToGateway (requestUrl, state) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
@@ -77,6 +135,11 @@ function redirectToGateway (requestUrl, state) {
 }
 
 function isSafeToRedirect (request, runtime) {
+  // Do not redirect if URL includes opt-out hint
+  if (request.url.includes('x-ipfs-no-redirect')) {
+    return false
+  }
+
   // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
   // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
   // TODO: revisit when upstream bug is addressed
