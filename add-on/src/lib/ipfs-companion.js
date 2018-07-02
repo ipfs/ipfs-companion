@@ -141,6 +141,19 @@ module.exports = async function init () {
       return
     }
     if (request.url.startsWith(state.apiURLString)) {
+      // There is a bug in go-ipfs related to keep-alive connections
+      // that results in partial response for ipfs.files.add
+      // mangled by error "http: invalid Read on closed Body"
+      // More info: https://github.com/ipfs/go-ipfs/issues/5168
+      if (request.url.includes('api/v0/add')) {
+        for (let header of request.requestHeaders) {
+          if (header.name === 'Connection') {
+            console.log('[ipfs-companion] Executing "Connection: close" workaround for https://github.com/ipfs/go-ipfs/issues/5168')
+            header.value = 'close'
+            break
+          }
+        }
+      }
       // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
       // which produced '403 - Forbidden' error.
       // This workaround removes bogus header from API requests
@@ -236,6 +249,7 @@ module.exports = async function init () {
   // ===================================================================
 
   function preloadAtPublicGateway (path) {
+    if (!state.preloadAtPublicGateway) return
     // asynchronous HTTP HEAD request preloads triggers content without downloading it
     return new Promise((resolve, reject) => {
       const http = new XMLHttpRequest()
@@ -299,7 +313,7 @@ module.exports = async function init () {
       return
     }
 
-    return uploadResultHandler(result)
+    return uploadResultHandler({result, openRootInNewTab: true})
   }
 
   // TODO: feature detect and push to client type specific modules.
@@ -314,21 +328,18 @@ module.exports = async function init () {
     }
   }
 
-  async function uploadResultHandler (result) {
+  async function uploadResultHandler ({result, openRootInNewTab = false}) {
     for (let file of result) {
       if (file && file.hash) {
         const {path, url} = getIpfsPathAndNativeAddress(file.hash)
+        preloadAtPublicGateway(path)
+        console.info('[ipfs-companion] successfully stored', file)
         // open the wrapping directory (or the CID if wrapping was disabled)
-        if (result.length === 1 || file.path === '' || file.path === file.hash) {
+        if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.hash)) {
           await browser.tabs.create({
             'url': url
           })
         }
-        // preload every item
-        if (state.preloadAtPublicGateway) {
-          preloadAtPublicGateway(path)
-        }
-        console.info('[ipfs-companion] successfully stored', file)
       }
     }
     return result
@@ -636,20 +647,12 @@ module.exports = async function init () {
       return ipfs
     },
 
-    async ipfsAddAndShow (data, options) {
-      options = options || {}
-      let result
-      try {
-        result = await api.ipfs.files.add(data, options)
-        if (options.wrapWithDirectory && result.length !== data.length + 1) {
-          throw new Error(`ipfs.files.add result should include an entry for every uploaded file plus additional one for a wrapping directory (${data.length + 1} in total), but found only ${result.length} entries`)
-        }
-      } catch (err) {
-        console.error('Failed to IPFS add', err)
-        notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
-        throw err
-      }
-      return uploadResultHandler(result)
+    get notify () {
+      return notify
+    },
+
+    get uploadResultHandler () {
+      return uploadResultHandler
     },
 
     destroy () {
