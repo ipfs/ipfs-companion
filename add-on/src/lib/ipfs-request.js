@@ -164,24 +164,25 @@ function isSafeToRedirect (request, runtime) {
 // ===================================================================
 
 // This is just a placeholder that we had to provide -- removed in normalizedRedirectingProtocolRequest()
-const redirectingProtocolHandler = 'https://ipfs.io/#redirect/'
+// It has to match URL from manifest.json/protocol_handlers
+const redirectingProtocolEndpoint = 'https://gateway.ipfs.io/ipfs/QmXQY7mKr28B964Uj4ouq3fPgkNLqzaKiajTA7surAiQuD#'
 
 function redirectingProtocolRequest (request) {
-  return request.url.startsWith(redirectingProtocolHandler)
+  return request.url.startsWith(redirectingProtocolEndpoint)
 }
 
 function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   const oldPath = decodeURIComponent(new URL(request.url).hash)
   let path = oldPath
   // prefixed (Firefox < 59)
-  path = path.replace(/^#redirect\/web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^#redirect\/web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
-  path = path.replace(/^#redirect\/web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
+  path = path.replace(/^#web\+dweb:\//i, '/') // web+dweb:/ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^#web\+ipfs:\/\//i, '/ipfs/') // web+ipfs://Qm → /ipfs/Qm
+  path = path.replace(/^#web\+ipns:\/\//i, '/ipns/') // web+ipns://Qm → /ipns/Qm
   // without prefix (Firefox >= 59)
-  path = path.replace(/^#redirect\/dweb:\//i, '/') // dweb:/ipfs/Qm → /ipfs/Qm
-  path = path.replace(/^#redirect\/ipfs:\/\//i, '/ipfs/') // ipfs://Qm → /ipfs/Qm
-  path = path.replace(/^#redirect\/ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
-  // console.log(`oldPath: '${oldPath}' new: '${path}'`)
+  path = path.replace(/^#dweb:\//i, '/') // dweb:/ipfs/Qm → /ipfs/Qm
+  path = path.replace(/^#ipfs:\/\//i, '/ipfs/') // ipfs://Qm → /ipfs/Qm
+  path = path.replace(/^#ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
+  console.log(`oldPath: '${oldPath}' new: '${path}'`)
   if (oldPath !== path && IsIpfs.path(path)) {
     return { redirectUrl: urlAtPublicGw(path, pubGwUrl) }
   }
