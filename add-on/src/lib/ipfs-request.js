@@ -58,6 +58,19 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         return
       }
       if (request.url.startsWith(state.apiURLString)) {
+        // There is a bug in go-ipfs related to keep-alive connections
+        // that results in partial response for ipfs.files.add
+        // mangled by error "http: invalid Read on closed Body"
+        // More info: https://github.com/ipfs/go-ipfs/issues/5168
+        if (request.url.includes('/api/v0/add')) {
+          for (let header of request.requestHeaders) {
+            if (header.name === 'Connection') {
+              console.log('[ipfs-companion] Executing "Connection: close" workaround for https://github.com/ipfs/go-ipfs/issues/5168')
+              header.value = 'close'
+              break
+            }
+          }
+        }
         // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
         // which produced '403 - Forbidden' error.
         // This workaround removes bogus header from API requests
