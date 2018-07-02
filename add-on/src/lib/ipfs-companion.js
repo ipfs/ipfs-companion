@@ -218,6 +218,7 @@ module.exports = async function init () {
   // ===================================================================
 
   function preloadAtPublicGateway (path) {
+    if (!state.preloadAtPublicGateway) return
     // asynchronous HTTP HEAD request preloads triggers content without downloading it
     return new Promise((resolve, reject) => {
       const http = new XMLHttpRequest()
@@ -283,7 +284,7 @@ module.exports = async function init () {
       return
     }
 
-    return uploadResultHandler(result)
+    return uploadResultHandler({result, openRootInNewTab: true})
   }
 
   // TODO: feature detect and push to client type specific modules.
@@ -298,21 +299,18 @@ module.exports = async function init () {
     }
   }
 
-  async function uploadResultHandler (result) {
+  async function uploadResultHandler ({result, openRootInNewTab = false}) {
     for (let file of result) {
       if (file && file.hash) {
         const {path, url} = getIpfsPathAndNativeAddress(file.hash)
+        preloadAtPublicGateway(path)
+        console.info('[ipfs-companion] successfully stored', file)
         // open the wrapping directory (or the CID if wrapping was disabled)
-        if (result.length === 1 || file.path === '' || file.path === file.hash) {
+        if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.hash)) {
           await browser.tabs.create({
             'url': url
           })
         }
-        // preload every item
-        if (state.preloadAtPublicGateway) {
-          preloadAtPublicGateway(path)
-        }
-        console.info('[ipfs-companion] successfully stored', file)
       }
     }
     return result
@@ -620,20 +618,12 @@ module.exports = async function init () {
       return ipfs
     },
 
-    async ipfsAddAndShow (data, options) {
-      options = options || {}
-      let result
-      try {
-        result = await api.ipfs.files.add(data, options)
-        if (options.wrapWithDirectory && result.length !== data.length + 1) {
-          throw new Error(`ipfs.files.add result should include an entry for every uploaded file plus additional one for a wrapping directory (${data.length + 1} in total), but found only ${result.length} entries`)
-        }
-      } catch (err) {
-        console.error('Failed to IPFS add', err)
-        notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
-        throw err
-      }
-      return uploadResultHandler(result)
+    get notify () {
+      return notify
+    },
+
+    get uploadResultHandler () {
+      return uploadResultHandler
     },
 
     destroy () {
