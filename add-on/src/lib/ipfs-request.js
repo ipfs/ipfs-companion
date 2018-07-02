@@ -3,7 +3,7 @@
 
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
-const redirectOptOutHint = 'x-ipfs-no-redirect'
+const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 
 function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
   // Request modifier provides event listeners for the various stages of making an HTTP request
@@ -136,7 +136,7 @@ function redirectToGateway (requestUrl, state) {
 
 function isSafeToRedirect (request, runtime) {
   // Do not redirect if URL includes opt-out hint
-  if (request.url.includes('x-ipfs-no-redirect')) {
+  if (request.url.includes('x-ipfs-companion-no-redirect')) {
     return false
   }
 

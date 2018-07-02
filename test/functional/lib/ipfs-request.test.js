@@ -79,9 +79,9 @@ describe('modifyRequest.onBeforeRequest', function () {
         })
         it(`should be left untouched if URL includes opt-out hint (${nodeType} node)`, function () {
           // A safe way for preloading data at arbitrary gateways - it should arrive at original destination
-          const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-no-redirect#hashTest')
+          const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect#hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
-          expect(redirectOptOutHint).to.equal('x-ipfs-no-redirect')
+          expect(redirectOptOutHint).to.equal('x-ipfs-companion-no-redirect')
         })
         it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
@@ -89,7 +89,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         })
         it(`should be left untouched if its is a HEAD preload with explicit opt-out in URL hash (${nodeType} node)`, function () {
           // HTTP HEAD is a popular way for preloading data at arbitrary gateways, so we have a dedicated test to make sure it works as expected
-          const headRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#x-ipfs-no-redirect', method: 'HEAD'}
+          const headRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#x-ipfs-companion-no-redirect', method: 'HEAD'}
           expect(modifyRequest.onBeforeRequest(headRequest)).to.equal(undefined)
         })
       })
