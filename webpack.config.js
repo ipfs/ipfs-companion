@@ -6,6 +6,7 @@ const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 // common configuration shared by all targets
 const commonConfig = {
   target: 'web',
+  bail: true,
   output: {
     path: path.resolve(__dirname, 'add-on/dist/bundles'),
     publicPath: '/dist/bundles/',

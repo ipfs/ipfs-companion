@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const PQueue = require('p-queue')
 
 /*
  * This content script is responsible for performing the logic of replacing
@@ -28,9 +29,6 @@ const browser = require('webextension-polyfill')
 
   const urlRE = /(?:\s+|^)(\/ip(?:f|n)s\/|dweb:\/ip(?:f|n)s\/|ipns:\/\/|ipfs:\/\/)([^\s+"<>:]+)/g
 
-  // Chrome compatibility
-  // var browser = browser || chrome
-
   // tags we will scan looking for un-hyperlinked IPFS addresses
   const allowedParents = [
     'abbr', 'acronym', 'address', 'applet', 'b', 'bdo', 'big', 'blockquote', 'body',
@@ -47,33 +45,42 @@ const browser = require('webextension-polyfill')
     ']'
 
   function init () {
-    linkifyContainer(document.body)
-
-    // body.appendChild(document.createTextNode('fooo /ipfs/QmTAsnXoWmLZQEpvyZscrReFzqxP3pvULfGVgpJuayrp1w bar'))
-    new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (mutation.type === 'childList') {
-          for (let addedNode of mutation.addedNodes) {
-            if (addedNode.nodeType === Node.TEXT_NODE) {
-              setTimeout(() => linkifyTextNode(addedNode), 0)
-            } else {
-              setTimeout(() => linkifyContainer(addedNode), 0)
-            }
-          }
-        }
-        if (mutation.type === 'characterData') {
-          setTimeout(() => linkifyTextNode(mutation.target), 0)
-        }
+    // Linkify jobs are executed one by one
+    // (fixes race-conditions in huge DOMs, does not lock UI)
+    const linkifyJobs = new PQueue({ concurrency: 1 })
+    // console.log('[ipfs-companion] running Linkify experiment')
+    linkifyContainer(document.body, linkifyJobs)
+    .then(() => {
+      // console.log('[ipfs-companion] registering MutationObserver for Linkify experiment')
+      new MutationObserver(function (mutations) {
+        mutations.forEach(async (mutation) => linkifyMutation(mutation, linkifyJobs))
+      }).observe(document.body, {
+        characterData: true,
+        childList: true,
+        subtree: true
       })
-    }).observe(document.body, {
-      characterData: true,
-      childList: true,
-      subtree: true
     })
   }
 
-  function linkifyContainer (container) {
-    if (!container || !container.nodeType) {
+  async function linkifyMutation (mutation, linkifyJobs) {
+    linkifyJobs = linkifyJobs || new PQueue({ concurrency: 1 })
+    if (mutation.type === 'childList') {
+      for (let addedNode of mutation.addedNodes) {
+        if (addedNode.nodeType === Node.TEXT_NODE) {
+          linkifyJobs.add(async () => linkifyTextNode(addedNode))
+        } else {
+          linkifyJobs.add(async () => linkifyContainer(addedNode))
+        }
+      }
+    }
+    if (mutation.type === 'characterData') {
+      linkifyJobs.add(async () => linkifyTextNode(mutation.target))
+    }
+    await linkifyJobs.onIdle()
+  }
+
+  async function linkifyContainer (container, linkifyJobs) {
+    if (!container || !container.nodeType || container.isContentEditable) {
       return
     }
     if (container.className && container.className.match && container.className.match(/\blinkifiedIpfsAddress\b/)) {
@@ -82,26 +89,17 @@ const browser = require('webextension-polyfill')
     }
     const xpathResult = document.evaluate(textNodeXpath, container, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
     let i = 0
-    async function continuation () {
-      let node = null
-      let counter = 0
-      while ((node = xpathResult.snapshotItem(i++))) {
-        const parent = node.parentNode
-        // Skip if no longer in visible DOM
-        if (!parent || !container.contains(node)) continue
-        // Skip already linkified nodes
-        if (parent.className && parent.className.match(/\blinkifiedIpfsAddress\b/)) continue
-        // Skip styled <pre> -- often highlighted by script.
-        if (parent.tagName === 'PRE' && parent.className) continue
-        // Skip forms, textareas
-        if (parent.isContentEditable) continue
-        await linkifyTextNode(node)
-        if (++counter > 10) {
-          return setTimeout(continuation, 0)
-        }
-      }
+    let node = null
+
+    linkifyJobs = linkifyJobs || new PQueue({ concurrency: 1 })
+    while ((node = xpathResult.snapshotItem(i++))) {
+      const parent = node.parentNode
+      // Skip if no longer in visible DOM
+      if (!parent || !container.contains(node)) continue
+      const currentNode = node
+      linkifyJobs.add(async () => linkifyTextNode(currentNode))
     }
-    setTimeout(continuation, 0)
+    await linkifyJobs.onIdle()
   }
 
   function textToIpfsResource (match) {
@@ -142,44 +140,55 @@ const browser = require('webextension-polyfill')
   }
 
   async function linkifyTextNode (node) {
+    const parent = node.parentNode
+    // Skip if no longer in visible DOM
+    if (!parent) return
+    // Skip already linkified nodes
+    if (parent.className && parent.className.match(/\blinkifiedIpfsAddress\b/)) return
+    // Skip styled <pre> -- often highlighted by script.
+    if (parent.tagName === 'PRE' && parent.className) return
+    // Skip forms, textareas
+    if (parent.isContentEditable) return
+
     let link
     let match
     const txt = node.textContent
     let span = null
     let point = 0
+
     while ((match = urlRE.exec(txt))) {
       link = await textToIpfsResource(match)
+      const textChunk = document.createTextNode(match[0])
       if (span == null) {
-          // Create a span to hold the new text with links in it.
+        // Create a span to hold the new text with links in it.
         span = document.createElement('span')
         span.className = 'linkifiedIpfsAddress'
       }
-      const replaceLength = match[0].length
       if (link) {
         // put in text up to the link
         span.appendChild(document.createTextNode(txt.substring(point, match.index)))
         // create a link and put it in the span
         const a = document.createElement('a')
         a.className = 'linkifiedIpfsAddress'
-        a.appendChild(document.createTextNode(match[0]))
         a.setAttribute('href', link)
+        a.appendChild(textChunk)
         span.appendChild(a)
       } else {
         // wrap text in span to exclude it from future processing
-        span.appendChild(document.createTextNode(match[0]))
+        span.appendChild(textChunk)
       }
-        // track insertion point
+      // track insertion point
+      const replaceLength = match[0].length
       point = match.index + replaceLength
     }
-    if (span) {
-      // take the text after the last link
-      span.appendChild(document.createTextNode(txt.substring(point, txt.length)))
-      // replace the original text with the new span
+    if (span && node.parentNode) {
       try {
+        // take the text after the last link
+        span.appendChild(document.createTextNode(txt.substring(point, txt.length)))
+        // replace the original text with the new span
         node.parentNode.replaceChild(span, node)
       } catch (e) {
         console.error(e)
-        // console.log(node)
       }
     }
   }
