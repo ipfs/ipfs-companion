@@ -91,6 +91,7 @@ module.exports = async function init () {
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
     browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, {urls: ['<all_urls>']}, ['blocking'])
+    browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, {urls: ['<all_urls>']})
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
     browser.tabs.onUpdated.addListener(onUpdatedTab)
@@ -146,6 +147,10 @@ module.exports = async function init () {
 
   function onHeadersReceived (request) {
     return modifyRequest.onHeadersReceived(request)
+  }
+
+  function onErrorOccurred (request) {
+    return modifyRequest.onErrorOccurred(request)
   }
 
   // RUNTIME MESSAGES (one-off messaging)
