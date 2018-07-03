@@ -5,6 +5,9 @@ const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 
+// Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+const onHeadersReceivedRedirect = new Set()
+
 function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
   // Request modifier provides event listeners for the various stages of making an HTTP request
   // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
@@ -65,7 +68,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         if (request.url.includes('/api/v0/add')) {
           for (let header of request.requestHeaders) {
             if (header.name === 'Connection') {
-              console.log('[ipfs-companion] Executing "Connection: close" workaround for https://github.com/ipfs/go-ipfs/issues/5168')
+              console.warn('[ipfs-companion] Executing "Connection: close" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168')
               header.value = 'close'
               break
             }
@@ -85,6 +88,29 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
       return {
         requestHeaders: request.requestHeaders
       }
+    },
+
+    onHeadersReceived (request) {
+      // Fired when the HTTP response headers associated with a request have been received.
+      // You can use this event to modify HTTP response headers or do a very late redirect.
+
+      // Late redirect as a workaround for edge cases such as:
+      // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+      if (onHeadersReceivedRedirect.has(request.requestId)) {
+        const state = getState()
+        onHeadersReceivedRedirect.delete(request.requestId)
+        return redirectToGateway(request.url, state)
+      }
+    },
+
+    onErrorOccurred (request) {
+      // Fired when a request could not be processed due to an error:
+      // for example, a lack of Internet connectivity.
+
+      // Cleanup after https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+      if (onHeadersReceivedRedirect.has(request.requestId)) {
+        onHeadersReceivedRedirect.delete(request.requestId)
+      }
     }
 
   }
@@ -92,6 +118,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
 
 exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
+exports.onHeadersReceivedRedirect = onHeadersReceivedRedirect
 
 // types of requests to be skipped before any normalization happens
 function preNormalizationSkip (state, request) {
@@ -149,7 +176,8 @@ function isSafeToRedirect (request, runtime) {
       const sourceOrigin = new URL(request.originUrl).origin
       const targetOrigin = new URL(request.url).origin
       if (sourceOrigin !== targetOrigin) {
-        console.warn('[ipfs-companion] skipping redirect of cross-origin XHR due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436', request)
+        console.warn('[ipfs-companion] Delaying redirect of CORS XHR until onHeadersReceived due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436 :', request.url)
+        onHeadersReceivedRedirect.add(request.requestId)
         return false
       }
     }
