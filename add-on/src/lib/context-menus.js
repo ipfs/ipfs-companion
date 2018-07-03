@@ -38,7 +38,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onUploadToI
     browser.contextMenus.create({
       id: contextMenuUploadToIpfs,
       title: browser.i18n.getMessage(contextMenuUploadToIpfs),
-      contexts: ['image', 'video', 'audio'],
+      contexts: ['image', 'video', 'audio', 'link'],
       documentUrlPatterns: ['<all_urls>'],
       enabled: false,
       onclick: onUploadToIpfs
