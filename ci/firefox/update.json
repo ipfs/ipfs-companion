@@ -3,26 +3,6 @@
         "ipfs-companion-dev-build@ci.ipfs.team": {
             "updates": [
                 {
-                    "version": "2.3.0.9590",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "59"
-                        }
-                    },
-                    "update_hash": "sha256:ceb0af0b1cbaf4f212265f426bee9b84c7ee7ba260dec8235144bc744876456a",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.3.0.9590/ipfs_companion_beta_build-2.3.0.9590-an.fx.xpi"
-                },
-                {
-                    "version": "2.3.1.9890",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "59"
-                        }
-                    },
-                    "update_hash": "sha256:b70df7f12465bc671c08ed1030abc9c0674e523d51bce3cfc74f43f95b75af53",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.3.1.9890/ipfs_companion_beta_build-2.3.1.9890-an.fx.xpi"
-                },
-                {
                     "version": "2.4.0.10120",
                     "applications": {
                         "gecko": {
@@ -31,6 +11,16 @@
                     },
                     "update_hash": "sha256:95a93b50a1b7f6153dc503b00c1bf7eaeb9ff08a7865b8ee9ef457164275b4c6",
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.4.0.10120/ipfs_companion_beta_build-2.4.0.10120-an.fx.xpi"
+                },
+                {
+                    "version": "2.4.0.10190",
+                    "applications": {
+                        "gecko": {
+                            "strict_min_version": "59"
+                        }
+                    },
+                    "update_hash": "sha256:ed5cff03f0b59fa127127664abe8a4f2aa2fd7ab972f1f2576c900d1864c1210",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.4.0.10190/ipfs_companion_beta_build-2.4.0.10190-an.fx.xpi"
                 }
             ]
         }
