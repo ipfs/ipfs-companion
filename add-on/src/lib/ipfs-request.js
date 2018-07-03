@@ -68,7 +68,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         if (request.url.includes('/api/v0/add')) {
           for (let header of request.requestHeaders) {
             if (header.name === 'Connection') {
-              console.warn('[ipfs-companion] Executing "Connection: close" workaround for go-ipfs/issues/5168')
+              console.warn('[ipfs-companion] Executing "Connection: close" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168')
               header.value = 'close'
               break
             }
@@ -176,7 +176,7 @@ function isSafeToRedirect (request, runtime) {
       const sourceOrigin = new URL(request.originUrl).origin
       const targetOrigin = new URL(request.url).origin
       if (sourceOrigin !== targetOrigin) {
-        console.warn('[ipfs-companion] Delaying redirect of CORS XHR until onHeadersReceived due to ipfs-companion/issues/436:', request.url)
+        console.warn('[ipfs-companion] Delaying redirect of CORS XHR until onHeadersReceived due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436 :', request.url)
         onHeadersReceivedRedirect.add(request.requestId)
         return false
       }
