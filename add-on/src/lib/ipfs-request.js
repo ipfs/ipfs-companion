@@ -43,11 +43,14 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         }
         // Detect valid /ipfs/ and /ipns/ on any site
         if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-          return redirectToGateway(request.url, state)
+          return redirectToGateway(request.url, state, dnsLink)
         }
         // Look for dnslink in TXT records of visited sites
-        if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url) && isSafeToRedirect(request, runtime)) {
-          return dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+        if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
+          const dnslinkRedirect = dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+          if (dnslinkRedirect && isSafeToRedirect(request, runtime)) {
+            return dnslinkRedirect
+          }
         }
       }
     },
@@ -99,7 +102,7 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
       if (onHeadersReceivedRedirect.has(request.requestId)) {
         const state = getState()
         onHeadersReceivedRedirect.delete(request.requestId)
-        return redirectToGateway(request.url, state)
+        return redirectToGateway(request.url, state, dnsLink)
       }
     },
 
@@ -151,10 +154,14 @@ function postNormalizationSkip (state, request) {
   return false
 }
 
-function redirectToGateway (requestUrl, state) {
+function redirectToGateway (requestUrl, state, dnsLink) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
-  const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
   const url = new URL(requestUrl)
+  if (state.dnslink && dnsLink.canRedirectToIpns(url)) {
+    // late dnslink in onHeadersReceived
+    return dnsLink.redirectToIpnsPath(url)
+  }
+  const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
   url.protocol = gwUrl.protocol
   url.host = gwUrl.host
   url.port = gwUrl.port
@@ -210,7 +217,7 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   path = path.replace(/^#dweb:\//i, '/') // dweb:/ipfs/Qm → /ipfs/Qm
   path = path.replace(/^#ipfs:\/\//i, '/ipfs/') // ipfs://Qm → /ipfs/Qm
   path = path.replace(/^#ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
-  console.log(`oldPath: '${oldPath}' new: '${path}'`)
+  // console.log(`oldPath: '${oldPath}' new: '${path}'`)
   if (oldPath !== path && IsIpfs.path(path)) {
     return { redirectUrl: urlAtPublicGw(path, pubGwUrl) }
   }

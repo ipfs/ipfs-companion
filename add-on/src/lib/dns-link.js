@@ -39,21 +39,22 @@ module.exports = function createDnsLink (getState) {
       let dnslink = cache.get(fqdn)
       if (typeof dnslink === 'undefined') {
         try {
-          console.info('dnslink cache miss for: ' + fqdn)
+          console.info(`[ipfs-companion] dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = dnsLink.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
             cache.set(fqdn, dnslink)
-            console.info(`Resolved dnslink: '${fqdn}' -> '${dnslink}'`)
+            console.info(`[ipfs-companion] found dnslink: '${fqdn}' -> '${dnslink}'`)
           } else {
             cache.set(fqdn, false)
-            console.info(`Resolved NO dnslink for '${fqdn}'`)
+            console.info(`[ipfs-companion] found NO dnslink for '${fqdn}'`)
           }
         } catch (error) {
-          console.error(`Error in dnslinkLookupAndOptionalRedirect for '${fqdn}'`)
+          console.error(`[ipfs-companion] Error in dnslinkLookupAndOptionalRedirect for '${fqdn}'`)
           console.error(error)
         }
       } else {
-        console.info(`Resolved via cached dnslink: '${fqdn}' -> '${dnslink}'`)
+        // Most of the time we will hit cache, which makes below line is too noisy
+        // console.info(`[ipfs-companion] using cached dnslink: '${fqdn}' -> '${dnslink}'`)
       }
       return dnslink
     },
@@ -82,6 +83,17 @@ module.exports = function createDnsLink (getState) {
       } else {
         throw new Error(xhr.statusText)
       }
+    },
+
+    canRedirectToIpns (url) {
+      if (!url.pathname.startsWith('/ipfs/') && !url.pathname.startsWith('/ipns/')) {
+        const fqdn = url.hostname
+        const dnslink = dnsLink.cachedDnslinkLookup(fqdn)
+        if (dnslink) {
+          return true
+        }
+      }
+      return false
     },
 
     redirectToIpnsPath (originalUrl) {
