@@ -432,6 +432,59 @@ describe('modifyRequest.onBeforeRequest', function () {
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
       })
+
+      describe('request to FQDN with dnslink experiment enabled', function () {
+        let activeGateway
+        beforeEach(function () {
+          // pretend API is online and we can do dns lookups with it
+          state.dnslink = true
+          state.peerCount = 1
+          // embedded node (js-ipfs) defaults to public gw
+          activeGateway = (state.ipfsNodeType === 'external' ? state.gwURLString : state.pubGwURLString)
+        })
+        it('should be redirected to active gateway if dnslink exists', function () {
+          // stub the existence of valid dnslink
+          const fqdn = 'ipfs.git.sexy'
+          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          //
+          const request = url2request('http://ipfs.git.sexy/index.html?argTest#hashTest')
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal(activeGateway + '/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+        })
+        it('should be redirected to active gateway if fetched from the same origin and redirect is enabled in non-Firefox', function () {
+          // stub the existence of valid dnslink
+          const fqdn = 'ipfs.git.sexy'
+          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          //
+          runtime.isFirefox = false
+          const xhrRequest = {url: 'http://ipfs.git.sexy/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+        })
+        it('should be redirected to active gateway via late redirect if dnslink exists and XHR is cross-origin in Firefox', function () {
+          // stub the existence of valid dnslink
+          const fqdn = 'ipfs.git.sexy'
+          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          //
+          // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+          runtime.isFirefox = true
+          const xhrRequest = {url: 'http://ipfs.git.sexy/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
+          expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
+          // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
+          expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+        })
+        it('should be left unouched if dnslink does not exist and XHR is cross-origin in Firefox', function () {
+          // stub no dnslink
+          const fqdn = 'youtube.com'
+          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(undefined)
+          // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+          runtime.isFirefox = true
+          const xhrRequest = {url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          // onBeforeRequest should not change anything
+          expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
+          // onHeadersReceived should not change anything
+          expect(modifyRequest.onHeadersReceived(xhrRequest)).to.equal(undefined)
+        })
+      })
     })
   })
 
