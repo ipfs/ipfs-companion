@@ -24,11 +24,12 @@ async function findUrlForContext (context) {
 
 module.exports.findUrlForContext = findUrlForContext
 
-const contextMenuUploadToIpfs = 'contextMenu_UploadToIpfs'
+const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
+const contextMenuAddToIpfsKeepFilename = 'contextMenu_AddToIpfsKeepFilename'
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 
-function createContextMenus (getState, runtime, ipfsPathValidator, { onUploadToIpfs, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
+function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfsRawCid, onAddToIpfsKeepFilename, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
   let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
   if (runtime.isFirefox) {
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
@@ -36,12 +37,21 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onUploadToI
   }
   try {
     browser.contextMenus.create({
-      id: contextMenuUploadToIpfs,
-      title: browser.i18n.getMessage(contextMenuUploadToIpfs),
-      contexts: ['image', 'video', 'audio'],
+      id: contextMenuAddToIpfsRawCid,
+      title: browser.i18n.getMessage(contextMenuAddToIpfsRawCid),
+      contexts: ['image', 'video', 'audio', 'link'],
       documentUrlPatterns: ['<all_urls>'],
       enabled: false,
-      onclick: onUploadToIpfs
+      onclick: onAddToIpfsRawCid
+    })
+
+    browser.contextMenus.create({
+      id: contextMenuAddToIpfsKeepFilename,
+      title: browser.i18n.getMessage(contextMenuAddToIpfsKeepFilename),
+      contexts: ['image', 'video', 'audio', 'link'],
+      documentUrlPatterns: ['<all_urls>'],
+      enabled: false,
+      onclick: onAddToIpfsKeepFilename
     })
 
     browser.contextMenus.create({
@@ -76,7 +86,9 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onUploadToI
   return {
     async update (changedTabId) {
       try {
-        await browser.contextMenus.update(contextMenuUploadToIpfs, {enabled: getState().peerCount > 0})
+        const canUpload = getState().peerCount > 0
+        await browser.contextMenus.update(contextMenuAddToIpfsRawCid, {enabled: canUpload})
+        await browser.contextMenus.update(contextMenuAddToIpfsKeepFilename, {enabled: canUpload})
         if (changedTabId) {
           // recalculate tab-dependant menu items
           const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
