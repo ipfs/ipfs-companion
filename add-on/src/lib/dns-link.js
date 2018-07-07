@@ -25,9 +25,7 @@ module.exports = function createDnsLink (getState) {
 
     dnslinkLookupAndOptionalRedirect (requestUrl) {
       const url = new URL(requestUrl)
-      const fqdn = url.hostname
-      const dnslink = dnsLink.cachedDnslinkLookup(fqdn)
-      if (dnslink) {
+      if (dnsLink.canRedirectToIpns(url)) {
         // redirect to IPNS and leave it up to the gateway
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
@@ -86,7 +84,16 @@ module.exports = function createDnsLink (getState) {
     },
 
     canRedirectToIpns (url) {
-      if (!url.pathname.startsWith('/ipfs/') && !url.pathname.startsWith('/ipns/')) {
+      // Safety check: detect and skip gateway paths
+      // Public gateways such as ipfs.io are often exposed under the same domain name.
+      // We don't want dnslink to interfere with content-addressing redirects,
+      // or things like /api/v0 paths exposed by the writable gateway
+      // so we ignore known namespaces exposed by HTTP2IPFS gateways
+      // and ignore them even if things like CID are invalid
+      // -- we don't want to skew errors from gateway
+      const path = url.pathname
+      const httpGatewayPath = path.startsWith('/ipfs/') || path.startsWith('/ipns/') || path.startsWith('/api/v')
+      if (!httpGatewayPath) {
         const fqdn = url.hostname
         const dnslink = dnsLink.cachedDnslinkLookup(fqdn)
         if (dnslink) {
