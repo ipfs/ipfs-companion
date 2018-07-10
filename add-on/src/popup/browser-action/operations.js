@@ -13,7 +13,8 @@ module.exports = function operations ({
   isApiAvailable,
   onQuickUpload,
   onOpenWebUi,
-  onToggleRedirect
+  onToggleRedirect,
+  onTakeScreenshot
 }) {
   const activeQuickUpload = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
@@ -26,6 +27,12 @@ module.exports = function operations ({
         bold: true,
         disabled: !activeQuickUpload,
         onClick: onQuickUpload
+      })}
+      ${navItem({
+        text: browser.i18n.getMessage('panel_takeScreenshot'),
+        bold: false,
+        disabled: !activeQuickUpload,
+        onClick: onTakeScreenshot
       })}
       ${navItem({
         text: browser.i18n.getMessage(

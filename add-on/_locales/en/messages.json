@@ -39,6 +39,10 @@
     "message": "Share files via IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
+  "panel_takeScreenshot": {
+    "message": "Take Screenshot",
+    "description": "A menu item in Browser Action pop-up (panel_takeScreenshot)"
+  },
   "panel_openWebui": {
     "message": "Open WebUI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"

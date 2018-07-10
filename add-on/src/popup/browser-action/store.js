@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const dataUriToBuffer = require('data-uri-to-buffer')
 const { safeIpfsPath } = require('../../lib/ipfs-path')
 
 // The store contains and mutates the state for the app
@@ -115,6 +116,14 @@ module.exports = (state, emitter) => {
   emitter.on('quickUpload', () => {
     browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-upload.html') })
     window.close()
+  })
+
+  emitter.on('takeScreenshot', async () => {
+    const dataUri = await browser.tabs.captureVisibleTab()
+    const data = dataUriToBuffer(dataUri)
+    const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
+    const result = await ipfsCompanion.ipfs.files.add(data)
+    await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
   })
 
   emitter.on('openWebUi', async () => {

@@ -21,10 +21,11 @@ module.exports = function browserActionPage (state, emit) {
   const onToggleRedirect = () => emit('toggleRedirect')
   const onToggleNodeType = () => emit('toggleNodeType')
   const onToggleActive = () => emit('toggleActive')
+  const onTakeScreenshot = () => emit('takeScreenshot')
 
   const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onOpenPrefs }, state)
   const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
-  const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleRedirect }, state)
+  const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleRedirect, onTakeScreenshot }, state)
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">
