@@ -1,7 +1,7 @@
 'use strict'
 
 const filesize = require('filesize')
-const mainStyle = require('ipfs/src/http/gateway/dir-view/style')
+const mainStyle = require('ipfs-http-response/src/dir-view/style')
 
 function buildFilesList (path, links) {
   const rows = links.map((link) => {
