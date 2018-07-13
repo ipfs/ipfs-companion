@@ -184,6 +184,15 @@ This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/c
 The best place to ask your questions about IPFS in general, how it works and what you can do with it is at [discuss.ipfs.io](https://discuss.ipfs.io/).  
 We are also available at the [#ipfs](https://webchat.freenode.net/?channels=ipfs) channel, where most of IPFS community hangs out.
 
+Questions specific to this browser companion can be asked directly at [`#ipfs-in-web-browsers`](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
+
+#### Cross-Origin XHR are executed "twice" in Firefox
+
+Due to CORS bug XHRs in Firefox are handled via late redirects in `onHeadersReceived`.
+Original request is cancelled after response headers are received, so there is no overhead of reading response payload twice.
+
+For more details on this see [PR #511](https://github.com/ipfs-shipyard/ipfs-companion/pull/511).
+
 #### Upload via Right-Click Does Not Work in Firefox
 
 See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
