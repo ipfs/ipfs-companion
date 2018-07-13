@@ -1,6 +1,6 @@
 # IPFS Companion
 
-![demo of v2.2.0](https://user-images.githubusercontent.com/157609/38491868-6c9dbaa0-3bed-11e8-975a-52bea908f1cb.gif)
+![demo of v2.4.2](https://user-images.githubusercontent.com/157609/42695172-d35ede9c-86b4-11e8-9165-0471a60fd60d.gif)
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
@@ -54,18 +54,16 @@ Websites can detect if `window.ipfs` exists and opt-in to use it instead of crea
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
 
-#### Toggle Between Embedded and External Node
+#### Toggle IPFS Integrations
 
-> ![screenshot of node type toggle](https://user-images.githubusercontent.com/157609/39421672-59010924-4c6a-11e8-9e64-6b5d5f5f2768.png)
+> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/42685002-18c7cee4-8692-11e8-9171-970866d91ae0.gif)
 
-The Browser Action menu provides a toggle for switching  between embedded,
-in-memory `js-ipfs` and external IPFS node accessed over HTTP API.
-Read about differences at [docs/node-types](docs/node-types.md).
+The Browser Action pop-up provides a toggle for suspending all active IPFS integrations with a single click.
 
 #### IPFS Status and Context Actions
 
 - IPFS API and Gateway status
-- Quick Upload of local files
+- Add local (quick upload) or remote files (context menu) to IPFS with option to preserve filename
 - Easy access to [WebUI](https://github.com/ipfs/webui/) and add-on Preferences
 - Toggle redirection to local gateway (automatic by default, manual mode can be enabled in Preferences)
 - Additional actions for pages loaded from IPFS
@@ -83,9 +81,10 @@ _(some are disabled by default, use Preferences screen to enable)_
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
 - Detect domains with [dnslink](https://github.com/jbenet/go-dnslink) in DNS TXT record and load them from IPFS
-- Make plaintext IPFS links clickable
+- Make plaintext IPFS links clickable ([demo](https://ipfs.io/ipfs/bafybeidvtwx54qr44kidymvhfzefzxhgkieigwth6oswk75zhlzjdmunoy/linkify-demo.html))
 - Mirror to IPFS by right click on any image or video
-- Embedded node can be used for uploads even when external API is down
+- Switch between _External_ HTTP API and _Embedded_ js-ipfs node. Read about differences at [docs/node-types](docs/node-types.md).
+  > [![screenshot of node type switch](https://user-images.githubusercontent.com/157609/42382479-b4d98768-8134-11e8-979c-69b758846bf0.png)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md)
 
 ## Install
 
