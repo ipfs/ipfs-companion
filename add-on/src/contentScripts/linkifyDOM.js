@@ -139,16 +139,28 @@ const PQueue = require('p-queue')
     return window.ipfsCompanionLinkifyValidationCache.get(path)
   }
 
-  async function linkifyTextNode (node) {
-    const parent = node.parentNode
+  function isParentTreeSafe (node) {
+    let parent = node.parentNode
     // Skip if no longer in visible DOM
-    if (!parent) return
-    // Skip already linkified nodes
-    if (parent.className && parent.className.match(/\blinkifiedIpfsAddress\b/)) return
-    // Skip styled <pre> -- often highlighted by script.
-    if (parent.tagName === 'PRE' && parent.className) return
-    // Skip forms, textareas
-    if (parent.isContentEditable) return
+    if (!parent) return false
+    // Walk back over parent tree and check each of them
+    while (parent) {
+      // Skip forms, textareas
+      if (parent.isContentEditable) return false
+      // Skip already linkified nodes
+      if (parent.className && parent.className.match(/\blinkifiedIpfsAddress\b/)) return false
+      // Skip styled <pre> -- often highlighted by scripts
+      if (parent.tagName === 'PRE' && parent.className) return false
+      // Skip if no longer in visible DOM
+      if (!(parent instanceof HTMLDocument) && !parent.parentNode) return false
+      parent = parent.parentNode
+    }
+    return true
+  }
+
+  async function linkifyTextNode (node) {
+    // Skip if node belongs to a parent from unsafe tree
+    if (!isParentTreeSafe(node)) return
 
     let link
     let match
