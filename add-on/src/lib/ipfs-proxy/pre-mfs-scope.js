@@ -1,5 +1,6 @@
 // Use path-browserify for consistent behavior between browser and tests on Windows
 const Path = require('path-browserify')
+const IsIpfs = require('is-ipfs')
 const DEFAULT_ROOT_PATH = '/dapps'
 
 // Creates a "pre" function that is called prior to calling a real function
@@ -42,11 +43,24 @@ const MfsPre = {
 // Scope a src/dest tuple to the app path
 function createSrcDestPre (getScope, getIpfs, rootPath) {
   return async (...args) => {
+    // console.log('createSrcDestPre.args.before: ' + JSON.stringify(args))
     const appPath = await getAppPath(getScope, getIpfs, rootPath)
-    args[0][0] = Path.join(appPath, safePath(args[0][0]))
+    // console.log('createSrcDestPre.args.appPath', appPath)
+    args[0][0] = safeSourcePathPrefix(appPath, args[0][0])
     args[0][1] = Path.join(appPath, safePath(args[0][1]))
+    // console.log('createSrcDestPre.args.after: ' + JSON.stringify(args))
     return args
   }
+}
+
+// Add a prefix to a src path in a safe way
+function safeSourcePathPrefix (prefix, path) {
+  const realPath = safePath(path)
+  if (IsIpfs.ipfsPath(realPath)) {
+    // we don't prefix valid /ipfs/ paths (public and immutable, so safe as-is)
+    return realPath
+  }
+  return Path.join(prefix, realPath)
 }
 
 // Scope a src path to the app path

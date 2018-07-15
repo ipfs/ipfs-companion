@@ -22,6 +22,17 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     expect(args[0][1]).to.equal('/test-dapps/https/ipfs.io/destination.txt')
   })
 
+  it('should not scope src path if it is valid /ipfs/ path for files.cp', async () => {
+    // Bug B from https://github.com/ipfs-shipyard/ipfs-companion/issues/530#issue-341352979
+    const fnName = 'files.cp'
+    const getScope = () => 'https://ipfs.io/'
+    const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
+    const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
+    const args = await pre(['/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy', '/destination.jpg'])
+    expect(args[0][0]).to.equal('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
+    expect(args[0][1]).to.equal('/test-dapps/https/ipfs.io/destination.jpg')
+  })
+
   it('should scope src path for files.mkdir', async () => {
     const fnName = 'files.mkdir'
     const getScope = () => 'https://ipfs.io/'
