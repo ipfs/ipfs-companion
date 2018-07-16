@@ -45,12 +45,28 @@ function createSrcDestPre (getScope, getIpfs, rootPath) {
   return async (...args) => {
     // console.log('createSrcDestPre.args.before: ' + JSON.stringify(args))
     const appPath = await getAppPath(getScope, getIpfs, rootPath)
-    // console.log('createSrcDestPre.args.appPath', appPath)
-    args[0][0] = safeSourcePathPrefix(appPath, args[0][0])
-    args[0][1] = Path.join(appPath, safePath(args[0][1]))
-    // console.log('createSrcDestPre.args.after: ' + JSON.stringify(args))
+    // console.log('createSrcDestPre.appPath:     ', appPath)
+    args = prefixSrcDestArgs(appPath, args)
+    // console.log('createSrcDestPre.args.after:  ' + JSON.stringify(args))
     return args
   }
+}
+
+// Prefix src and dest args where applicable
+function prefixSrcDestArgs (prefix, args) {
+  return args.map((item) => {
+    if (typeof item === 'string') {
+      return safeSourcePathPrefix(prefix, item)
+    } else if (Array.isArray(item)) {
+      // The syntax recently changed to remove passing an array,
+      // but we allow for both versions until js-ipfs-api is updated to remove
+      // support for it
+      console.warn('[ipfs-companion] use of array in ipfs.files.cp|mv is deprecated, see https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filescp')
+      return prefixSrcDestArgs(prefix, item)
+    }
+    // at this point its probably {options} or callback
+    return item
+  })
 }
 
 // Add a prefix to a src path in a safe way
