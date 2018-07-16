@@ -4790,7 +4790,7 @@ ipfs-css@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.5.2.tgz#5aa5620bd6df1b838b0f0fbce7e18b5ec4b39f6d"
 
-ipfs-http-response@^0.1.2, ipfs-http-response@~0.1.2:
+ipfs-http-response@0.1.2, ipfs-http-response@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ipfs-http-response/-/ipfs-http-response-0.1.2.tgz#4a131892fc0394b8d0255b0538da22155add4148"
   dependencies:
