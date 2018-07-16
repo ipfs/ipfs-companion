@@ -71,6 +71,10 @@
     "message": "Copy Public Gateway URL",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_copyResolveIpns": {
+    "message": "Copy IPNS Resolved to IPFS",
+    "description": "A menu item in Browser Action pop-up (panel_copyResolveIpns)"
+  },
   "pageAction_titleIpfsAtPublicGateway": {
     "message": "IPFS resource loaded via Public Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
@@ -106,6 +110,10 @@
   "notify_copiedCanonicalAddressTitle": {
     "message": "Copied Canonical Address",
     "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+  },
+  "notify_copiedResolvedIpns": {
+    "message": "Copied Resolved IPFS Address",
+    "description": "A title of system notification (notify_copiedResolvedIpns)"
   },
   "notify_pinnedIpfsResourceTitle": {
     "message": "IPFS Resource is now pinned",

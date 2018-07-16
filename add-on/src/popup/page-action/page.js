@@ -11,9 +11,10 @@ const contextActions = require('../browser-action/context-actions')
 module.exports = function pageActionPage (state, emit) {
   const onCopyIpfsAddr = () => emit('copyIpfsAddr')
   const onCopyPublicGwAddr = () => emit('copyPublicGwAddr')
+  const onCopyResolvedIpnsAddr = () => emit('copyResolvedIpnsAddr')
   const onPin = () => emit('pin')
   const onUnPin = () => emit('unPin')
-  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
+  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onCopyResolvedIpnsAddr, onPin, onUnPin }, state)
 
   // Instant init: page-action is shown only in ipfsContext
   contextActionsProps.isIpfsContext = true

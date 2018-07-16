@@ -14,6 +14,7 @@ module.exports = function browserActionPage (state, emit) {
   const onCopyPublicGwAddr = () => emit('copyPublicGwAddr')
   const onPin = () => emit('pin')
   const onUnPin = () => emit('unPin')
+  const onCopyResolvedIpnsAddr = () => emit('copyResolvedIpnsAddr')
 
   const onQuickUpload = () => emit('quickUpload')
   const onOpenWebUi = () => emit('openWebUi')
@@ -23,7 +24,7 @@ module.exports = function browserActionPage (state, emit) {
   const onToggleActive = () => emit('toggleActive')
 
   const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onOpenPrefs }, state)
-  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
+  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin, onCopyResolvedIpnsAddr }, state)
   const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleRedirect }, state)
 
   return html`

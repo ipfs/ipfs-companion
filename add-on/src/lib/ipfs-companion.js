@@ -189,7 +189,8 @@ module.exports = async function init () {
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
     copyCanonicalAddress: () => copier.copyCanonicalAddress(),
-    copyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+    copyAddressAtPublicGw: () => copier.copyAddressAtPublicGw(),
+    copyResolvedIpnsAddress: (message) => copier.copy(message.text, 'notify_copiedResolvedIpns')
   }
 
   function handleMessageFromBrowserAction (message) {

@@ -35,21 +35,30 @@ async function copyTextToClipboard (copyText) {
 }
 
 function createCopier (getState, notify) {
+  const copy = (text, notificationTitle) => {
+    copyTextToClipboard(text)
+    if (notify && notificationTitle) {
+      notify(notificationTitle, text)
+    }
+  }
   return {
     async copyCanonicalAddress (context) {
       const url = await findUrlForContext(context)
       const rawIpfsAddress = safeIpfsPath(url)
-      copyTextToClipboard(rawIpfsAddress)
-      notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
+      copy(rawIpfsAddress, 'notify_copiedCanonicalAddressTitle')
     },
 
     async copyAddressAtPublicGw (context) {
       const url = await findUrlForContext(context)
       const state = getState()
       const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
-      copyTextToClipboard(urlAtPubGw)
-      notify('notify_copiedPublicURLTitle', urlAtPubGw)
+      copy(urlAtPubGw, 'notify_copiedPublicURLTitle')
+    },
+
+    async copy (text, notificationTitle) {
+      copy(text, notificationTitle)
     }
+
   }
 }
 

@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { safeIpfsPath } = require('../../lib/ipfs-path')
+const { resolveIpfsPath } = require('../../lib/ipfs-path')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -11,6 +11,7 @@ module.exports = (state, emitter) => {
     active: true,
     // UI state
     isIpfsContext: false,
+    isIpnsContext: false,
     isPinning: false,
     isUnPinning: false,
     isPinned: false,
@@ -65,13 +66,25 @@ module.exports = (state, emitter) => {
     window.close()
   })
 
+  emitter.on('copyResolvedIpnsAddr', async function copyResolvedIpnsAddress () {
+    try {
+      const ipfs = await getIpfsApi()
+      const currentPath = await resolveIpfsPath(ipfs, new URL(state.currentTab.url).pathname)
+      port.postMessage({ event: 'copyResolvedIpnsAddress', text: currentPath })
+    } catch (error) {
+      console.error('Unable to resolve and copy IPNS address due to', error)
+      notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
+    }
+    window.close()
+  })
+
   emitter.on('pin', async function pinCurrentResource () {
     state.isPinning = true
     emitter.emit('render')
 
     try {
       const ipfs = await getIpfsApi()
-      const currentPath = await resolveToIPFS(ipfs, new URL(state.currentTab.url).pathname)
+      const currentPath = await resolveIpfsPath(ipfs, new URL(state.currentTab.url).pathname)
       const pinResult = await ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       state.isPinned = true
@@ -90,7 +103,7 @@ module.exports = (state, emitter) => {
 
     try {
       const ipfs = await getIpfsApi()
-      const currentPath = await resolveToIPFS(ipfs, new URL(state.currentTab.url).pathname)
+      const currentPath = await resolveIpfsPath(ipfs, new URL(state.currentTab.url).pathname)
       const result = await ipfs.pin.rm(currentPath, {recursive: true})
       state.isPinned = false
       console.log('ipfs.pin.rm result', result)
@@ -192,6 +205,7 @@ module.exports = (state, emitter) => {
     // Check if current page is an IPFS one
     state.isIpfsContext = status.ipfsPageActionsContext || false
     state.currentTab = status.currentTab || null
+    state.isIpnsContext = state.isIpfsContext && state.currentTab && new URL(status.currentTab.url).pathname.startsWith('/ipns/')
 
     // browser.pageAction-specific items that can be rendered earlier (snappy UI)
     requestAnimationFrame(async () => {
@@ -244,7 +258,7 @@ module.exports = (state, emitter) => {
     // skip update if there is an ongoing pin or unpin
     if (state.isPinning || state.isUnPinning) return
     try {
-      const currentPath = await resolveToIPFS(ipfs, new URL(status.currentTab.url).pathname)
+      const currentPath = await resolveIpfsPath(ipfs, new URL(status.currentTab.url).pathname)
       const response = await ipfs.pin.ls(currentPath, {quiet: true})
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
@@ -271,13 +285,4 @@ function getBackgroundPage () {
 async function getIpfsApi () {
   const bg = await getBackgroundPage()
   return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfs : null
-}
-
-async function resolveToIPFS (ipfs, path) {
-  path = safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
-  if (/^\/ipns/.test(path)) {
-    const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
-    return response.Path
-  }
-  return path
 }

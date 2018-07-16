@@ -9,6 +9,7 @@ module.exports = function contextActions ({
   active,
   ipfsNodeType,
   isIpfsContext,
+  isIpnsContext,
   isPinning,
   isUnPinning,
   isPinned,
@@ -17,10 +18,12 @@ module.exports = function contextActions ({
   onCopyIpfsAddr,
   onCopyPublicGwAddr,
   onPin,
-  onUnPin
+  onUnPin,
+  onCopyResolvedIpnsAddr
 }) {
   if (!isIpfsContext) return null
   const activePinControls = active && isIpfsOnline && isApiAvailable && !(isPinning || isUnPinning)
+  const activeIpnsResolver = active && isIpfsOnline && isApiAvailable
   return html`
     <div class='fade-in pv1'>
       ${navItem({
@@ -31,6 +34,13 @@ module.exports = function contextActions ({
         text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
         onClick: onCopyPublicGwAddr
       })}
+      ${isIpnsContext ? (
+        navItem({
+          text: browser.i18n.getMessage('panel_copyResolveIpns'),
+          disabled: !activeIpnsResolver,
+          onClick: onCopyResolvedIpnsAddr
+        })
+      ) : null}
       ${!isPinned ? (
         navItem({
           text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
