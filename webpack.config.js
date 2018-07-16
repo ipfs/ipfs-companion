@@ -1,6 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
+const merge = require('webpack-merge')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // common configuration shared by all targets
@@ -11,6 +13,19 @@ const commonConfig = {
     path: path.resolve(__dirname, 'add-on/dist/bundles'),
     publicPath: '/dist/bundles/',
     filename: '[name].bundle.js'
+  },
+  optimization: {
+    minimizer: [
+      // Default flags break js-ipfs: https://github.com/ipfs-shipyard/ipfs-companion/issues/521
+      new UglifyJsPlugin({
+        parallel: true,
+        extractComments: true,
+        uglifyOptions: {
+          compress: { unused: false },
+          mangle: true
+        }
+      })
+    ]
   },
   // plugins: [new BundleAnalyzerPlugin()]
   plugins: [
@@ -47,7 +62,7 @@ const commonConfig = {
 }
 
 // background page bundle (with heavy dependencies)
-const bgConfig = Object.assign({}, commonConfig, {
+const bgConfig = merge(commonConfig, {
   name: 'background',
   entry: {
     backgroundPage: './add-on/src/background/background.js'
@@ -71,7 +86,7 @@ const bgConfig = Object.assign({}, commonConfig, {
 })
 
 // user interface pages with shared common libraries
-const uiConfig = Object.assign({}, commonConfig, {
+const uiConfig = merge(commonConfig, {
   name: 'ui',
   entry: {
     browserAction: './add-on/src/popup/browser-action/index.js',
@@ -100,7 +115,7 @@ const uiConfig = Object.assign({}, commonConfig, {
 })
 
 // content scripts injected into tabs
-const contentScriptsConfig = Object.assign({}, commonConfig, {
+const contentScriptsConfig = merge(commonConfig, {
   name: 'contentScripts',
   entry: {
     ipfsProxyContentScriptPayload: './add-on/src/contentScripts/ipfs-proxy/page.js',
@@ -111,7 +126,7 @@ const contentScriptsConfig = Object.assign({}, commonConfig, {
 
 // special content script that injects window.ipfs into REAL window object
 // (by default scripts executed via tabs.executeScript get a sandbox version)
-const proxyContentScriptConfig = Object.assign({}, commonConfig, {
+const proxyContentScriptConfig = merge(commonConfig, {
   name: 'proxyContentScript',
   dependencies: ['contentScripts'],
   entry: {
