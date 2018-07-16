@@ -20,7 +20,7 @@ module.exports = function contextActions ({
   onUnPin
 }) {
   if (!isIpfsContext) return null
-  const activePinControls = active && isIpfsOnline && isApiAvailable && (ipfsNodeType !== 'embedded') && !(isPinning || isUnPinning)
+  const activePinControls = active && isIpfsOnline && isApiAvailable && !(isPinning || isUnPinning)
   return html`
     <div class='fade-in pv1'>
       ${navItem({

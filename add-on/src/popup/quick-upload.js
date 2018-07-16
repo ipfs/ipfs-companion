@@ -141,7 +141,6 @@ function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
   const onPinUploadChange = (e) => { state.pinUpload = e.target.checked }
-  const isPinningSupported = state.ipfsNodeType === 'external'
   if (state.expandOptions) {
     return html`
       <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
@@ -150,13 +149,11 @@ function quickUploadOptions (state, emit) {
           <span class='mark db flex items-center relative mr2 br2'></span>
           ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
         </label>
-      ${isPinningSupported ? (html`
         <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
           <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
           <span class='mark db flex items-center relative mr2 br2'></span>
           ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
-        </label>`)
-      : null}
+        </label>
       </div>
     `
   }
