@@ -1,0 +1,23 @@
+{
+  "applications": {
+    "gecko": {
+      "id": "ipfs-companion-libdweb-build@ci.ipfs.team"
+    }
+  },
+  "experiment_apis": {
+    "protocol": {
+      "schema": "../libdweb/src/protocol/protocol.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["protocol"]],
+        "script": "../libdweb/src/protocol/client.js"
+      },
+      "parent": {
+        "events": ["startup"],
+        "scopes": ["addon_parent"],
+        "paths": [["protocol"]],
+        "script": "../libdweb/src/protocol/host.js"
+      }
+    }
+  }
+}

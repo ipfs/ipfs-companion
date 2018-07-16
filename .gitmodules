@@ -1,0 +1,3 @@
+[submodule "libdweb"]
+	path = libdweb
+	url = https://github.com/mozilla/libdweb.git
