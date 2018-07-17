@@ -8,7 +8,6 @@ const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
-const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createRuntimeChecks = require('./runtime-checks')
@@ -100,12 +99,18 @@ module.exports = async function init () {
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
-    if (runtime.hasNativeProtocolHandler) {
-      console.log('[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler')
+    if (runtime.hasNativeProtocolHandler && browser.protocol.registerStringProtocol) {
+      console.log('[ipfs-companion] registerStringProtocol from Muon-Brave is available. Adding ipfs:// handler')
+      const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol-muon-brave')
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
+    } else if (runtime.hasNativeProtocolHandler && browser.protocol.registerProtocol) {
+      console.log('[ipfs-companion] registerProtocol from mozilla/libdweb is available. Adding ipfs:// handler')
+      const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol-libdweb')
+      browser.protocol.registerProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
       console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
     }
+    console.log(`[ipfs-companion] registerProtocol: ${browser.protocol.registerProtocol}`, browser.protocol.registerProtocol)
   }
 
   // Register Content Script responsible for loading window.ipfs (ipfsProxy)

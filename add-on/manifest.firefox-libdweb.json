@@ -4,6 +4,7 @@
       "id": "ipfs-companion-libdweb-build@ci.ipfs.team"
     }
   },
+  "protocol_handlers": [],
   "experiment_apis": {
     "protocol": {
       "schema": "../libdweb/src/protocol/protocol.json",

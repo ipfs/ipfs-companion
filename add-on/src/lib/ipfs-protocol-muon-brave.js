@@ -1,3 +1,4 @@
+/* this file requires Muon-Brave */
 const { mimeSniff } = require('./mime-sniff')
 const dirView = require('./dir-view')
 const PathUtils = require('ipfs/src/http/gateway/utils/path')

@@ -56,9 +56,14 @@
   },
   "private": true,
   "preferGlobal": false,
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "devDependencies": {
     "babel-core": "6.26.3",
+    "babel-eslint": "8.2.6",
     "babel-loader": "7.1.4",
+    "babel-plugin-syntax-async-generators": "6.13.0",
     "babel-preset-env": "1.7.0",
     "chai": "4.1.2",
     "cross-env": "5.2.0",
@@ -104,6 +109,7 @@
     "path-browserify": "0.0.1",
     "piggybacker": "2.0.0",
     "tachyons": "4.9.1",
+    "to-arraybuffer": "1.0.1",
     "webextension-polyfill": "0.1.2"
   }
 }
