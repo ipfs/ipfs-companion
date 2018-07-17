@@ -13,8 +13,7 @@ See also:
 
 1. Having `firefox-nightly` in `$PATH`, execute commands below to build and run Companion extension in libdweb-enabled context:
    ```
-   yarn libdweb-build
-   yarn firefox:libdweb
+   yarn libdweb
    ```
 
 2. Optional Smoke-Test:
@@ -35,12 +34,12 @@ See also:
 git submodule update --init --checkout --depth 1 libdweb
 yarn
 yarn build
-yarn bundle:firefox:libdweb
+yarn libdweb:bundle
 ```
 
 or use all-in-one alias:
 ```
-yarn libdweb-build
+yarn libdweb:build
 ```
 
 
@@ -56,15 +55,15 @@ web-ext run --firefox=/path/to/nightly/firefox-bin --browser-console --url about
 or use alias:
 
 ```
-yarn firefox:libdweb
+yarn libdweb:firefox
 ```
 
 
 Additional notes:
 
-- If you want `firefox:libdweb` to work, ensure `firefox-nightly` is on your `$PATH`
+- If you want `libdweb:firefox` to work, ensure `firefox-nightly` is on your `$PATH`
    - if `firefox-nightly` is missing, create it in unpacked directory via `ln -s firefox firefox-nightly`
-- After calling `libdweb-build` it is ok to use `yarn watch` – it will work as expected
+- After initially running `libdweb:build` it is ok to use `yarn watch` – it will work as expected
 
 ## Appendix: Smoke-Testing libdweb APIs
 

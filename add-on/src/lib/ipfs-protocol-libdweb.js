@@ -14,16 +14,16 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
 
     try {
       return {
+        // Notes:
+        // - omitted  contentType on purpose to enable mime-sniffing by browser
+        //
         // TODO:
         // - support directory listing
         // - support streaming
-        // - either support mime-sniffing of read data in userland,
-        //   or fix crash when contentType is omited (https://github.com/mozilla/libdweb/issues/20)
-        contentType: 'image/jpeg',
         content: (async function * () {
           const data = await ipfs.files.cat(path)
           const mimeType = mimeSniff(data, path) || 'text/plain'
-          console.log(`[ipfs-companion] ipfs:// content generator read ${path} and mime-sniffed ${mimeType}`)
+          console.log(`[ipfs-companion] [ipfs://] content generator read ${path} and internally mime-sniffed ${mimeType}`)
           yield toArrayBuffer(data)
         })()
       }
