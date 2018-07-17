@@ -7,6 +7,7 @@
     * [Build and Run in Firefox](#build-and-run-in-firefox)
     * [Build and Manual Install in Chromium](#build-and-manual-install-in-chromium)
     * [Firefox for Android](#firefox-for-android)
+    * [Libdweb with Firefox Nightly](#libdweb)
 * [Useful Tasks](#useful-tasks)
 * [Tips](#tips)
 
@@ -61,6 +62,10 @@ Then open up `chrome://extensions` in Chromium-based browser, enable "Developer 
 ### Firefox for Android
 
 See [`docs/firefox-for-android.md`](firefox-for-android.md)
+
+### libdweb
+
+See [`docs/libdweb.md`](libdweb.md)
 
 ## Useful Tasks
 

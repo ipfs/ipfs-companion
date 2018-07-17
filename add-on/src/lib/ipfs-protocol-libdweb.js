@@ -17,7 +17,7 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
         // TODO:
         // - support directory listing
         // - support streaming
-        // - either support mime-sniffing of read data,
+        // - either support mime-sniffing of read data in userland,
         //   or fix crash when contentType is omited (https://github.com/mozilla/libdweb/issues/20)
         contentType: 'image/jpeg',
         content: (async function * () {

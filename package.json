@@ -43,7 +43,7 @@
     "precommit": "run-s lint:standard",
     "prepush": "run-s clean build lint test",
     "firefox": "web-ext run --browser-console",
-    "firefox:libdweb": "cross-env MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly --browser-console --url about:debugging",
+    "firefox:libdweb": "run-s bundle:firefox:libdweb && cross-env MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly --browser-console --url about:debugging",
     "ci": "run-s ci:*",
     "ci:install": "npx yarn@1.7.0 install --frozen-lockfile || npx yarn@1.7.0 install --frozen-lockfile",
     "ci:test": "npx yarn@1.7.0 test",
