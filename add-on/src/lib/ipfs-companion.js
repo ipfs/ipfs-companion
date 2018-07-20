@@ -110,7 +110,6 @@ module.exports = async function init () {
     } else {
       console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
     }
-    console.log(`[ipfs-companion] registerProtocol: ${browser.protocol.registerProtocol}`, browser.protocol.registerProtocol)
   }
 
   // Register Content Script responsible for loading window.ipfs (ipfsProxy)

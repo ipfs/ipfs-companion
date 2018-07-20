@@ -14,6 +14,7 @@ const commonConfig = {
     publicPath: '/dist/bundles/',
     filename: '[name].bundle.js'
   },
+  devtool: 'source-map',
   optimization: {
     minimizer: [
       // Default flags break js-ipfs: https://github.com/ipfs-shipyard/ipfs-companion/issues/521

@@ -7,10 +7,8 @@
       "env",
       {
         "targets": {
-          "browsers": [
-            "firefox >= 59",
-            "chrome >= 67"
-          ]
+          "firefox": 61,
+          "chrome": 67
         }
       }
     ]
