@@ -33,7 +33,7 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     expect(args[2]).to.equal('/test-dapps/https/ipfs.io/destinationDir')
   })
 
-  it('should not scope src path if it is valid /ipfs/ path for files.cp', async () => {
+  it('should not scope src path if it is a valid /ipfs/ path for files.cp', async () => {
     // Bug B from https://github.com/ipfs-shipyard/ipfs-companion/issues/530#issue-341352979
     const fnName = 'files.cp'
     const getScope = () => 'https://ipfs.io/'
@@ -42,6 +42,17 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const args = await pre('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy', '/destination.jpg')
     expect(args[0]).to.equal('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
     expect(args[1]).to.equal('/test-dapps/https/ipfs.io/destination.jpg')
+  })
+
+  it('should scope dest path even if it is a valid /ipfs/ path for files.cp', async () => {
+    // https://github.com/ipfs-shipyard/ipfs-companion/pull/531#pullrequestreview-139053285
+    const fnName = 'files.cp'
+    const getScope = () => 'https://ipfs.io/'
+    const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
+    const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
+    const args = await pre('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy', '/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
+    expect(args[0]).to.equal('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
+    expect(args[1]).to.equal('/test-dapps/https/ipfs.io/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
   })
 
   // array-wrapping is deprecated, but we support it until removed from js-ipfs-api
@@ -65,6 +76,18 @@ describe('lib/ipfs-proxy/pre-mfs-scope', () => {
     const args = await pre(['/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy', '/destination.jpg'])
     expect(args[0][0]).to.equal('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
     expect(args[0][1]).to.equal('/test-dapps/https/ipfs.io/destination.jpg')
+  })
+
+  // array-wrapping is deprecated, but we support it until removed from js-ipfs-api
+  it('should scope array-wrapped dest path even if it is a valid /ipfs/ path for files.cp', async () => {
+    // https://github.com/ipfs-shipyard/ipfs-companion/pull/531#pullrequestreview-139053285
+    const fnName = 'files.cp'
+    const getScope = () => 'https://ipfs.io/'
+    const getIpfs = () => ({ files: { mkdir: () => Promise.resolve() } })
+    const pre = createPreMfsScope(fnName, getScope, getIpfs, '/test-dapps')
+    const args = await pre(['/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy', '/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy'])
+    expect(args[0][0]).to.equal('/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
+    expect(args[0][1]).to.equal('/test-dapps/https/ipfs.io/ipfs/bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy')
   })
 
   it('should scope src path for files.mkdir', async () => {

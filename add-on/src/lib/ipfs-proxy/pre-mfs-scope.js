@@ -54,26 +54,44 @@ function createSrcDestPre (getScope, getIpfs, rootPath) {
 
 // Prefix src and dest args where applicable
 function prefixSrcDestArgs (prefix, args) {
-  return args.map((item) => {
+  const prefixedArgs = []
+  const destPosition = destinationPosition(args)
+  for (let i = 0; i < args.length; i++) {
+    const item = args[i]
     if (typeof item === 'string') {
-      return safeSourcePathPrefix(prefix, item)
+      const isDestination = (i === destPosition)
+      prefixedArgs[i] = safePathPrefix(prefix, item, isDestination)
     } else if (Array.isArray(item)) {
       // The syntax recently changed to remove passing an array,
       // but we allow for both versions until js-ipfs-api is updated to remove
       // support for it
       console.warn('[ipfs-companion] use of array in ipfs.files.cp|mv is deprecated, see https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filescp')
-      return prefixSrcDestArgs(prefix, item)
+      prefixedArgs[i] = prefixSrcDestArgs(prefix, item)
+    } else {
+      // {options} or callback, passing as-is
+      prefixedArgs[i] = item
     }
-    // at this point its probably {options} or callback
-    return item
-  })
+  }
+  return prefixedArgs
 }
 
-// Add a prefix to a src path in a safe way
-function safeSourcePathPrefix (prefix, path) {
+// Find the last string argument and save as the position of destination path
+function destinationPosition (args) {
+  let destPosition
+  for (let i = 0; i < args.length; i++) {
+    if (typeof args[i] === 'string') {
+      destPosition = i
+    }
+  }
+  return destPosition
+}
+
+// Add a prefix to a path in a safe way
+function safePathPrefix (prefix, path, isDestination) {
   const realPath = safePath(path)
-  if (IsIpfs.ipfsPath(realPath)) {
-    // we don't prefix valid /ipfs/ paths (public and immutable, so safe as-is)
+  if (!isDestination && IsIpfs.ipfsPath(realPath)) {
+    // we don't prefix valid /ipfs/ paths in source paths
+    // (those are public and immutable, so safe as-is)
     return realPath
   }
   return Path.join(prefix, realPath)
