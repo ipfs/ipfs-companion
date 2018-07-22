@@ -29,7 +29,7 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
         // TODO:
         // - detect invalid addrs and display error page
         // - support streaming
-        content: streamRespond(ipfs, path)
+        content: streamRespond(ipfs, path, request)
       }
     } catch (err) {
       console.error('[ipfs-companion] failed to get data for ' + request.url, err)
@@ -39,11 +39,16 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
   }
 }
 
-async function * streamRespond (ipfs, path) {
-  const response = await getResponse(ipfs, path)
+async function * streamRespond (ipfs, path, request) {
+  let response
+  try {
+    response = await getResponse(ipfs, path)
+  } catch (error) {
+    yield toErrorResponse(request, error)
+    return
+  }
   if (isStream(response)) {
     for await (const chunk of asyncIterateStream(response, false)) {
-    // for await (const chunk of new S2A(response)) {
       // Buffer to ArrayBuffer
       yield toArrayBuffer(chunk)
     }
@@ -53,19 +58,24 @@ async function * streamRespond (ipfs, path) {
   }
 }
 
-/*
-function toAsyncIterator(stream) {
-  // console.log('toAsyncIterator.stream', stream)
-  //const s2a = new S2A(stream)
-  const s2a = asyncIterateStream(stream, false)
-  // console.log('toAsyncIterator.s2a', s2a)
-  return s2a
+// Prepare response with a meaningful error
+function toErrorResponse (request, error) {
+  console.error(`IPFS Error while getting response for ${request.url}`, error)
+  // TODO
+  // - create proper error page
+  // - find a way to communicate common errors (eg. not found, invalid CID, timeout)
+  const textBuffer = text => new TextEncoder('utf-8').encode(text).buffer
+  if (error.message === 'file does not exist') {
+    // eg. when trying to access a non-existing file in a directory (basically http 404)
+    return textBuffer('Not found')
+  } else if (error.message === 'selected encoding not supported') {
+    // eg. when trying to access invalid CID
+    return textBuffer('IPFS Error: selected encoding is not supported in browser context.  Make sure your CID is a valid CIDv1 in Base32.')
+  }
+  return textBuffer(`Unable to produce IPFS response for "${request.url}": ${error}`)
 }
-*/
 
 async function getResponse (ipfs, path) {
-  let listing
-
   // We're using ipfs.ls to figure out if a path is a file or a directory.
   //
   // If the listing is empty then it's (likely) a file
@@ -82,15 +92,7 @@ async function getResponse (ipfs, path) {
   //
   // The second alternative would be to resolve the path ourselves using the
   // object API, but that could take a while for long paths.
-  try {
-    listing = await ipfs.ls(path)
-  } catch (err) {
-    if (err.message === 'file does not exist') {
-     // eg. when trying to access a non-existing file in a directory
-      return new TextEncoder('utf-8').encode('Not found').buffer
-    }
-    throw err
-  }
+  const listing = await ipfs.ls(path)
 
   if (isDirectory(listing)) {
     return getDirectoryListingOrIndexResponse(ipfs, path, listing)
