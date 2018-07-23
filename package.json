@@ -93,7 +93,7 @@
     "ipfs-css": "0.5.2",
     "ipfs-http-response": "0.1.2",
     "ipfs-postmsg-proxy": "3.0.0",
-    "is-ipfs": "0.3.2",
+    "is-ipfs": "0.4.2",
     "is-svg": "3.0.0",
     "lru_map": "0.3.3",
     "mime-types": "2.1.18",

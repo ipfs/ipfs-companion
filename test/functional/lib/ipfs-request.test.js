@@ -433,6 +433,21 @@ describe('modifyRequest.onBeforeRequest', function () {
         })
       })
 
+      describe('request to FQDN with valid CID in subdomain', function () {
+        // we do not touch such requests for now, as HTTP-based local node usually can't provide the same origin-based guarantees
+        // we will redirect subdomains to ipfs:// when native handler is available
+        it('should be left untouched for IPFS', function () {
+          state.redirect = true
+          const request = url2request('http://bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge.ipfs.dweb.link/')
+          expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+        })
+        it('should be left untouched for IPNS', function () {
+          state.redirect = true
+          const request = url2request('http://bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge.ipns.dweb.link/')
+          expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+        })
+      })
+
       describe('request to FQDN with dnslink experiment enabled', function () {
         let activeGateway
         beforeEach(function () {

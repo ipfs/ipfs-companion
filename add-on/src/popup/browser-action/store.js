@@ -71,7 +71,7 @@ module.exports = (state, emitter) => {
 
     try {
       const ipfs = await getIpfsApi()
-      const currentPath = await resolveToIPFS(ipfs, new URL(state.currentTab.url).pathname)
+      const currentPath = await resolveToIPFS(ipfs, state.currentTab.url)
       const pinResult = await ipfs.pin.add(currentPath, { recursive: true })
       console.log('ipfs.pin.add result', pinResult)
       state.isPinned = true
@@ -90,7 +90,7 @@ module.exports = (state, emitter) => {
 
     try {
       const ipfs = await getIpfsApi()
-      const currentPath = await resolveToIPFS(ipfs, new URL(state.currentTab.url).pathname)
+      const currentPath = await resolveToIPFS(ipfs, state.currentTab.url)
       const result = await ipfs.pin.rm(currentPath, {recursive: true})
       state.isPinned = false
       console.log('ipfs.pin.rm result', result)
@@ -244,7 +244,7 @@ module.exports = (state, emitter) => {
     // skip update if there is an ongoing pin or unpin
     if (state.isPinning || state.isUnPinning) return
     try {
-      const currentPath = await resolveToIPFS(ipfs, new URL(status.currentTab.url).pathname)
+      const currentPath = await resolveToIPFS(ipfs, status.currentTab.url)
       const response = await ipfs.pin.ls(currentPath, {quiet: true})
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
@@ -273,8 +273,8 @@ async function getIpfsApi () {
   return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfs : null
 }
 
-async function resolveToIPFS (ipfs, path) {
-  path = safeIpfsPath(path) // https://github.com/ipfs/ipfs-companion/issues/303
+async function resolveToIPFS (ipfs, urlOrPath) {
+  let path = safeIpfsPath(urlOrPath) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
     const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
     return response.Path
