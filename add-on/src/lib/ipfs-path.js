@@ -10,6 +10,18 @@ function safeIpfsPath (urlOrPath) {
 
 exports.safeIpfsPath = safeIpfsPath
 
+async function resolveIpfsPath (ipfs, urlOrPath) {
+  const path = safeIpfsPath(urlOrPath) // https://github.com/ipfs/ipfs-companion/issues/303
+  if (/^\/ipns/.test(path)) {
+    const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
+    // old versions of API used object with Path field
+    return response.Path ? response.Path : response
+  }
+  return path
+}
+
+exports.resolveIpfsPath = resolveIpfsPath
+
 function urlAtPublicGw (path, pubGwUrl) {
   return new URL(`${pubGwUrl}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
 }
