@@ -1,5 +1,6 @@
 // Use path-browserify for consistent behavior between browser and tests on Windows
 const Path = require('path-browserify')
+const IsIpfs = require('is-ipfs')
 const DEFAULT_ROOT_PATH = '/dapps'
 
 // Creates a "pre" function that is called prior to calling a real function
@@ -42,11 +43,58 @@ const MfsPre = {
 // Scope a src/dest tuple to the app path
 function createSrcDestPre (getScope, getIpfs, rootPath) {
   return async (...args) => {
+    // console.log('createSrcDestPre.args.before: ' + JSON.stringify(args))
     const appPath = await getAppPath(getScope, getIpfs, rootPath)
-    args[0][0] = Path.join(appPath, safePath(args[0][0]))
-    args[0][1] = Path.join(appPath, safePath(args[0][1]))
+    // console.log('createSrcDestPre.appPath:     ', appPath)
+    args = prefixSrcDestArgs(appPath, args)
+    // console.log('createSrcDestPre.args.after:  ' + JSON.stringify(args))
     return args
   }
+}
+
+// Prefix src and dest args where applicable
+function prefixSrcDestArgs (prefix, args) {
+  const prefixedArgs = []
+  const destPosition = destinationPosition(args)
+  for (let i = 0; i < args.length; i++) {
+    const item = args[i]
+    if (typeof item === 'string') {
+      const isDestination = (i === destPosition)
+      prefixedArgs[i] = safePathPrefix(prefix, item, isDestination)
+    } else if (Array.isArray(item)) {
+      // The syntax recently changed to remove passing an array,
+      // but we allow for both versions until js-ipfs-api is updated to remove
+      // support for it
+      console.warn('[ipfs-companion] use of array in ipfs.files.cp|mv is deprecated, see https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filescp')
+      prefixedArgs[i] = prefixSrcDestArgs(prefix, item)
+    } else {
+      // {options} or callback, passing as-is
+      prefixedArgs[i] = item
+    }
+  }
+  return prefixedArgs
+}
+
+// Find the last string argument and save as the position of destination path
+function destinationPosition (args) {
+  let destPosition
+  for (let i = 0; i < args.length; i++) {
+    if (typeof args[i] === 'string') {
+      destPosition = i
+    }
+  }
+  return destPosition
+}
+
+// Add a prefix to a path in a safe way
+function safePathPrefix (prefix, path, isDestination) {
+  const realPath = safePath(path)
+  if (!isDestination && IsIpfs.ipfsPath(realPath)) {
+    // we don't prefix valid /ipfs/ paths in source paths
+    // (those are public and immutable, so safe as-is)
+    return realPath
+  }
+  return Path.join(prefix, realPath)
 }
 
 // Scope a src path to the app path
