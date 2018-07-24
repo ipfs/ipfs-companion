@@ -8,7 +8,7 @@
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Global toggle: activate or suspend all IPFS integrations",
+    "message": "Global växel: aktivera eller pausa alla IPFS-integrationer",
     "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -83,9 +83,13 @@
     "message": "Icke-IPFS resurs",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
-  "contextMenu_uploadToIpfs": {
-    "message": "Ladda upp till IPFS",
-    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
+  "contextMenu_AddToIpfsRawCid": {
+    "message": "Lägg till till IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
+  },
+  "contextMenu_AddToIpfsKeepFilename": {
+    "message": "Lägg till till IPFS (Behåll Filnamn)",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "notify_addonIssueTitle": {
     "message": "Problem med IPFS-tillägg",
@@ -182,11 +186,11 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "External (suggested): connect to an IPFS daemon over HTTP.",
+    "message": "Extern: koppla till en nod över HTTP API",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded (experimental): run a js-ipfs node in your browser (YMMV, may drain your battery etc).",
+    "message": "Inbäddad (experimentell): kör js-ipfs nod i din webbläsare (använd endast för utveckling, läs om dess begränsningar i länken nedan)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -214,23 +218,23 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL of preferred HTTP2IPFS Gateway",
+    "message": "URL till rekommenderad HTTP2IPFS Gateway",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_useCustomGateway_title": {
-    "message": "Use Custom Gateway",
+    "message": "Använd Specifierad Gateway",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Redirect requests for IPFS resources to the Custom gateway",
+    "message": "Omdirigera begäran för IPFS-resurser till den Speciferade Gatewayen",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Default Public Gateway",
+    "message": "Offentlig Standardgateway",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Fallback URL used when Custom Gateway is not available and for copying shareable links",
+    "message": "Reserv-URL att användas när Specifierad Gateway inte är tillgänglig och för delbara länkar",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_header_api": {
@@ -238,11 +242,11 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "URL för IPFS API",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where \/webui lives",
+    "message": "Tips: här bor \/webui",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {

@@ -83,9 +83,13 @@
     "message": "Non-IPFS resource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
-  "contextMenu_uploadToIpfs": {
-    "message": "Unggah ke IPFS",
-    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
+  "contextMenu_AddToIpfsRawCid": {
+    "message": "Add to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
+  },
+  "contextMenu_AddToIpfsKeepFilename": {
+    "message": "Add to IPFS (Keep Filename)",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "notify_addonIssueTitle": {
     "message": "Masalah Add-on IPFS",
@@ -182,11 +186,11 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "External (suggested): connect to an IPFS daemon over HTTP.",
+    "message": "External: connect to a node over HTTP API",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded (experimental): run a js-ipfs node in your browser (YMMV, may drain your battery etc).",
+    "message": "Embedded (experimental): run js-ipfs node in your browser (use only for development, read about its limitations under the link below)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
