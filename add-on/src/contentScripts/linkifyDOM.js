@@ -170,13 +170,13 @@ const PQueue = require('p-queue')
 
     while ((match = urlRE.exec(txt))) {
       link = await textToIpfsResource(match)
-      const textChunk = document.createTextNode(match[0])
-      if (span == null) {
-        // Create a span to hold the new text with links in it.
-        span = document.createElement('span')
-        span.className = 'linkifiedIpfsAddress'
-      }
       if (link) {
+        const textChunk = document.createTextNode(match[0])
+        if (span == null) {
+          // Create a span to hold the new text with links in it.
+          span = document.createElement('span')
+          span.className = 'linkifiedIpfsAddress'
+        }
         // put in text up to the link
         span.appendChild(document.createTextNode(txt.substring(point, match.index)))
         // create a link and put it in the span
@@ -185,13 +185,10 @@ const PQueue = require('p-queue')
         a.setAttribute('href', link)
         a.appendChild(textChunk)
         span.appendChild(a)
-      } else {
-        // wrap text in span to exclude it from future processing
-        span.appendChild(textChunk)
+        // track insertion point
+        const replaceLength = match[0].length
+        point = match.index + replaceLength
       }
-      // track insertion point
-      const replaceLength = match[0].length
-      point = match.index + replaceLength
     }
     if (span && node.parentNode) {
       try {
