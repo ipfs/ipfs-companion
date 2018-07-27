@@ -277,7 +277,8 @@ async function resolveToIPFS (ipfs, urlOrPath) {
   let path = safeIpfsPath(urlOrPath) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
     const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
-    return response.Path
+    // old API returned object, latest one returns string ¯\_(ツ)_/¯
+    return response.Path ? response.Path : response
   }
   return path
 }
