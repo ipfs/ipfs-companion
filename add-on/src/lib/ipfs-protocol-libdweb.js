@@ -14,11 +14,18 @@ const isStream = require('is-stream')
 
 exports.createIpfsUrlProtocolHandler = (getIpfs) => {
   return request => {
-    console.time('[ipfs-companion] IpfsUrlProtocolHandler')
+    console.time('[ipfs-companion] LibdwebProtocolHandler')
     console.log(`[ipfs-companion] handling ${request.url}`)
 
-    let path = request.url.replace('ipfs://', '/')
-    path = path.startsWith('/ipfs') ? path : `/ipfs${path}`
+    let path
+    if (request.url.startsWith('ipfs:')) {
+      path = request.url.replace('ipfs://', '/')
+      path = path.startsWith('/ipfs') ? path : `/ipfs${path}`
+    } else if (request.url.startsWith('ipns:')) {
+      path = request.url.replace('ipns://', '/')
+      path = path.startsWith('/ipns') ? path : `/ipns${path}`
+    }
+
     const ipfs = getIpfs()
 
     try {
@@ -35,7 +42,7 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
       console.error('[ipfs-companion] failed to get data for ' + request.url, err)
     }
 
-    console.timeEnd('[ipfs-companion] IpfsUrlProtocolHandler')
+    console.timeEnd('[ipfs-companion] LibdwebProtocolHandler')
   }
 }
 
@@ -76,6 +83,12 @@ function toErrorResponse (request, error) {
 }
 
 async function getResponse (ipfs, path) {
+  // TODO: move IPNS resolv  just before cat, so that directory listing uses correct protocol
+  if (path.startsWith('/ipns/')) {
+    const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
+    path = response.Path ? response.Path : response
+  }
+
   // We're using ipfs.ls to figure out if a path is a file or a directory.
   //
   // If the listing is empty then it's (likely) a file
@@ -134,6 +147,13 @@ function getDirectoryListingOrIndexResponse (ipfs, path, listing) {
     */
     return ipfs.files.catReadableStream(PathUtils.joinURLParts(path, index.name))
   }
-  const response = dirView.render(path.replace(/^\/ipfs\//, 'ipfs://'), listing)
+
+  // TODO: deuglify ;-)
+  if (path.startsWith('/ipfs/')) {
+    path = path.replace(/^\/ipfs\//, 'ipfs://')
+  } else if (path.startsWith('/ipns/')) {
+    path = path.replace(/^\/ipns\//, 'ipns://')
+  }
+  const response = dirView.render(path, listing)
   return new TextEncoder('utf-8').encode(response).buffer
 }
