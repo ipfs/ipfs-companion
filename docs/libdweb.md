@@ -11,13 +11,15 @@ See also:
 
 ## TL;DR
 
-1. Having `firefox-nightly` in `$PATH`, execute commands below to build and run Companion extension in libdweb-enabled context:
+1. Having `firefox-nightly` in `$PATH`, execute commands below to checkout, build and run Companion extension in libdweb-enabled context:
    ```
-   yarn libdweb
+   git clone -b libdweb --recurse-submodules --depth 1 https://github.com/ipfs-shipyard/ipfs-companion.git
+   npm run libdweb
    ```
 
 2. Optional Smoke-Test:
    - Open `ipfs://bafkreickb4yq3sr3q2xqn3z3wzimilsa4wkbx25azqbvcnihq65moyjcvi`
+   - Open `ipns://docs.ipfs.io`
    - Confirm `ipfs://` protocol remains in Location Bar ([example](https://ipfs.io/ipfs/bafybeie5gq4jxvzmsym6hjlwxej4rwdoxt7wadqvmmwbqi7r27fclha2va))
 
 ## Developer Notes
@@ -28,22 +30,21 @@ See also:
 - Get latest Nightly from http://nightly.mozilla.org/
    - libdweb won't run in regular release, it has to be nightly or developer edition
 
-### Build libdweb-enabled bundle
+### How to Build and run libdweb-enabled bundle
 
 ```
-git submodule update --init --checkout --depth 1 libdweb
-yarn
-yarn build
-yarn libdweb:bundle
+# checkout libdweb branch into a new directory
+# including submodules (namely ./libdweb)
+git clone -b libdweb --recurse-submodules --depth 1 https://github.com/ipfs-shipyard/ipfs-companion.git
+
+# install deps and build
+npm run libdweb:build
+
+# run  (assumes firefox-nightly on PATH)
+npm run libdweb:firefox
 ```
 
-or use all-in-one alias:
-```
-yarn libdweb:build
-```
-
-
-### Deploy in Firefox with libdweb APIs ✂️
+### Manually Deploy in Firefox with libdweb APIs ✂️
 
 To run your extension in libdweb context:
 
@@ -55,7 +56,7 @@ web-ext run --firefox=/path/to/nightly/firefox-bin --browser-console --url about
 or use alias:
 
 ```
-yarn libdweb:firefox
+npm run libdweb:firefox
 ```
 
 
@@ -70,6 +71,7 @@ Additional notes:
 #### Protocol Handler API
 
 1. Open `ipfs://bafkreickb4yq3sr3q2xqn3z3wzimilsa4wkbx25azqbvcnihq65moyjcvi`
+1. Open `ipns://docs.ipfs.io`
 1. Confirm `ipfs://` protocol remains in Location Bar ([example](https://ipfs.io/ipfs/bafybeie5gq4jxvzmsym6hjlwxej4rwdoxt7wadqvmmwbqi7r27fclha2va))
 
 ## References
