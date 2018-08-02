@@ -6,6 +6,7 @@ module.exports = {
   sourceDir: 'add-on/',
   ignoreFiles: [
     'src/',
+    'libdweb/',
     'manifest.*.json'
   ],
   // Command options:

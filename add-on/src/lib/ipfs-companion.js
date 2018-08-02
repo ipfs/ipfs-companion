@@ -106,8 +106,8 @@ module.exports = async function init () {
     } else if (runtime.hasNativeProtocolHandler && browser.protocol.registerProtocol) {
       console.log('[ipfs-companion] registerProtocol from mozilla/libdweb is available. Adding ipfs:// handler')
       const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol-libdweb')
-      browser.protocol.registerProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
-      browser.protocol.registerProtocol('ipns', createIpfsUrlProtocolHandler(() => ipfs))
+      browser.protocol.registerProtocol('ipfs', createIpfsUrlProtocolHandler(getIpfs))
+      browser.protocol.registerProtocol('ipns', createIpfsUrlProtocolHandler(getIpfs))
     } else {
       console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
     }

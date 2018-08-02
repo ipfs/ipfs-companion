@@ -26,8 +26,6 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
       path = path.startsWith('/ipns') ? path : `/ipns${path}`
     }
 
-    const ipfs = getIpfs()
-
     try {
       return {
         // Notes:
@@ -36,7 +34,7 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
         // TODO:
         // - detect invalid addrs and display error page
         // - support streaming
-        content: streamRespond(ipfs, path, request)
+        content: streamRespond(getIpfs, path, request)
       }
     } catch (err) {
       console.error('[ipfs-companion] failed to get data for ' + request.url, err)
@@ -46,9 +44,10 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
   }
 }
 
-async function * streamRespond (ipfs, path, request) {
+async function * streamRespond (getIpfs, path, request) {
   let response
   try {
+    const ipfs = getIpfs()
     response = await getResponse(ipfs, path)
   } catch (error) {
     yield toErrorResponse(request, error)
