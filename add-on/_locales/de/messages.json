@@ -83,9 +83,13 @@
     "message": "Nicht-IPFS-Ressource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
-  "contextMenu_uploadToIpfs": {
-    "message": "Auf IPFS hochladen",
-    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
+  "contextMenu_AddToIpfsRawCid": {
+    "message": "Add to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
+  },
+  "contextMenu_AddToIpfsKeepFilename": {
+    "message": "Add to IPFS (Keep Filename)",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "notify_addonIssueTitle": {
     "message": "IPFS Add-on-Problem",

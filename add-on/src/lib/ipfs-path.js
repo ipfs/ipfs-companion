@@ -4,8 +4,19 @@
 const IsIpfs = require('is-ipfs')
 
 function safeIpfsPath (urlOrPath) {
+  if (IsIpfs.subdomain(urlOrPath)) {
+    urlOrPath = subdomainToIpfsPath(urlOrPath)
+  }
   // better safe than sorry: https://github.com/ipfs/ipfs-companion/issues/303
   return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
+}
+
+function subdomainToIpfsPath (urlString) {
+  const url = new URL(urlString)
+  const fqdn = url.hostname.split('.')
+  const cid = fqdn[0]
+  const protocol = fqdn[1]
+  return `/${protocol}/${cid}${url.pathname}`
 }
 
 exports.safeIpfsPath = safeIpfsPath
@@ -41,9 +52,8 @@ function createIpfsPathValidator (getState, dnsLink) {
     },
 
     // Test if actions such as 'copy URL', 'pin/unpin' should be enabled for the URL
-    // (we explicitly disable IPNS for now as there is no support for pins)
     isIpfsPageActionsContext (url) {
-      return IsIpfs.url(url) && !url.startsWith(getState().apiURLString)
+      return (IsIpfs.url(url) && !url.startsWith(getState().apiURLString)) || IsIpfs.subdomain(url)
     }
   }
 

@@ -99,4 +99,24 @@ describe('ipfs-path.js', function () {
       })
     })
   })
+  describe('isIpfsPageActionsContext', function () {
+    it('should return true for URL at IPFS Gateway', function () {
+      const url = 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
+      expect(ipfsPathValidator.isIpfsPageActionsContext(url)).to.equal(true)
+    })
+    it('should return true for URL at IPFS Gateway with Base32 CIDv1 in subdomain', function () {
+      // context-actions are shown on publick gateways that use CID in subdomain as well
+      const url = 'http://bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy.ipfs.dweb.link/'
+      expect(ipfsPathValidator.isIpfsPageActionsContext(url)).to.equal(true)
+    })
+    it('should return false for URL at IPFS Gateway with Base58 CIDv0 in subdomain', function () {
+      // context-actions are shown on publick gateways that use CID in subdomain as well
+      const url = 'http://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR.ipfs.dweb.link/'
+      expect(ipfsPathValidator.isIpfsPageActionsContext(url)).to.equal(false)
+    })
+    it('should return false for non-IPFS URL', function () {
+      const url = 'https://ipfs.io/ipfs/NotACid?argTest#hashTest'
+      expect(ipfsPathValidator.isIpfsPageActionsContext(url)).to.equal(false)
+    })
+  })
 })

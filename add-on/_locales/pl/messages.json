@@ -4,7 +4,7 @@
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "Węzeł IPFS",
+    "message": "Asystent IPFS",
     "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
@@ -83,9 +83,13 @@
     "message": "Brak zasobu IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
-  "contextMenu_uploadToIpfs": {
-    "message": "Wyślij do IPFS",
-    "description": "An item in right-click context menu (contextMenu_uploadToIpfs)"
+  "contextMenu_AddToIpfsRawCid": {
+    "message": "Dodaj do IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
+  },
+  "contextMenu_AddToIpfsKeepFilename": {
+    "message": "Dodaj do IPFS (zachowaj nazwę pliku)",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "notify_addonIssueTitle": {
     "message": "Problem z Asystentem IPFS",
