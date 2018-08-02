@@ -85,7 +85,9 @@ function toErrorResponse (request, error) {
 async function getResponse (ipfs, path) {
   // TODO: move IPNS resolv  just before cat, so that directory listing uses correct protocol
   if (path.startsWith('/ipns/')) {
-    const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
+    // const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
+    const fqdn = path.replace(/^\/ipns\//, '')
+    const response = await ipfs.dns(fqdn)
     path = response.Path ? response.Path : response
   }
 
