@@ -45,7 +45,7 @@
     "precommit": "run-s lint:standard",
     "prepush": "run-s clean build lint test",
     "firefox": "web-ext run --browser-console --url about:debugging",
-    "libdweb": "npm run ci:install && npm run libdweb:build && npm run libdweb:firefox",
+    "libdweb": "npx yarn@1.7.0 && npm run libdweb:build && npm run libdweb:firefox",
     "libdweb:build": "git submodule update --init --checkout --depth 1 libdweb && cross-env-shell RELEASE_CHANNEL=libdweb npm run dev-build",
     "libdweb:firefox": "npm run get-firefox-nightly && cross-env MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=./firefox/firefox --browser-console --url about:debugging",
     "get-firefox-nightly": "shx test -e ./firefox/firefox || get-firefox -b nightly -e",
