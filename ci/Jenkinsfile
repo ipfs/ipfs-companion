@@ -78,6 +78,36 @@ parallel(
             }}
         }}}}
     },
+    // run libdweb:build under windows as a smoke-test to ensure it can be built on that platform
+    "windows-libdweb": {
+        node(label: 'windows') { ansiColor('xterm') { withEnv(['CI=true']) { ws("${env.JOB_NAME}/windows-libdweb") {
+            def ciContext = 'continuous-integration/jenkins/windows/'
+            githubNotify description: 'Build in progress', status: 'PENDING', context: ciContext
+            cleanWs()
+            bat 'git config --global core.autocrlf input'
+            checkout scm
+            fileExists 'package.json'
+            nodejs(nodeVersion) { try {
+                stage('win:libdweb:build') {
+                    // remove node_modules if any
+                    bat 'del /s /q node_modules >nul 2>&1'
+                    // https://github.com/yarnpkg/yarn/issues/3110#issuecomment-293347341
+                    bat 'npx yarn@1.7.0 config set msvs_version 2015 --global'
+                    // run libdweb developer build as a smoke-test for windows
+                    bat 'npm run ci:install'
+                    bat 'npm run libdweb:build'
+                    bat 'dir /s /b /o:gn build'
+                }
+                githubNotify description: 'Dev build looks good', status: 'SUCCESS', context: ciContext
+            } catch (err) {
+                echo "Caught: ${err}"
+                currentBuild.result = 'FAILURE'
+                githubNotify description: 'Dev build failed', status: 'FAILURE', context: ciContext
+            } finally {
+                cleanWs()
+            }}
+        }}}}
+    },
     // run dev-build under macos as a smoke-test to ensure it can be built on that platform
     "macos": {
         node(label: 'macos') { ansiColor('xterm') { withEnv(['CI=true']) { ws("${env.JOB_NAME}/macos") {
