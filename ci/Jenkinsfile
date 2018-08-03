@@ -1,7 +1,7 @@
 import groovy.transform.Field
 // Global for which node version to use on macos and windows
 // When in doubt, should follow https://github.com/ipfs/jenkins-libs/blob/master/vars/javascript.groovy
-@Field final String nodeVersion = '8.11.3'
+@Field final String nodeVersion = '10.4.1'
 
 // Run targets in parallel
 parallel(
@@ -64,7 +64,7 @@ parallel(
                     bat 'npx yarn@1.7.0 config set msvs_version 2015 --global'
                     // run developer build as a smoke-test for windows
                     // bat 'npm run dev-build'
-                    bat 'npx yarn@1.7.0'
+                    bat 'npx yarn@1.7.0 --mutex network --no-lockfile'
                     bat 'npm run libdweb:build'
                     bat 'dir /s /b /o:gn build'
                 }
@@ -94,7 +94,7 @@ parallel(
                     sh 'rm -rf node_modules/'
                     // run developer build as a smoke-test
                     // sh 'npm run dev-build'
-                    sh 'npx yarn@1.7.0'
+                    sh 'npx yarn@1.7.0 --mutex network --no-lockfile'
                     sh 'npm run libdweb:build'
                     sh 'ls -Rlh build'
                 }
