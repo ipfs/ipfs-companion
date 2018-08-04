@@ -11,15 +11,17 @@ See also:
 
 ## TL;DR
 
-1. Having `firefox-nightly` in `$PATH`, execute commands below to checkout, build and run Companion extension in libdweb-enabled context:
+1. Execute commands below to fetch Firefox Nightly, build and run Companion extension in libdweb-enabled context:
    ```
-   git clone -b libdweb --recurse-submodules --depth 1 https://github.com/ipfs-shipyard/ipfs-companion.git
+   git clone -b libdweb --depth 1 https://github.com/ipfs-shipyard/ipfs-companion.git
+   cd ipfs-companion
    npm run libdweb
    ```
 
 2. Optional Smoke-Test:
    - Open `ipfs://bafkreickb4yq3sr3q2xqn3z3wzimilsa4wkbx25azqbvcnihq65moyjcvi`
    - Open `ipns://docs.ipfs.io`
+   - Open `ipns://tr.wikipedia-on-ipfs.org`
    - Confirm `ipfs://` protocol remains in Location Bar ([example](https://ipfs.io/ipfs/bafybeie5gq4jxvzmsym6hjlwxej4rwdoxt7wadqvmmwbqi7r27fclha2va))
 
 ## Developer Notes
@@ -35,35 +37,29 @@ See also:
 ```
 # checkout libdweb branch into a new directory
 # including submodules (namely ./libdweb)
-git clone -b libdweb --recurse-submodules --depth 1 https://github.com/ipfs-shipyard/ipfs-companion.git
+git clone -b libdweb --depth 1 https://github.com/ipfs-shipyard/ipfs-companion.git
+cd ipfs-companion
 
 # install deps and build
 npm run libdweb:build
 
-# run  (assumes firefox-nightly on PATH)
+# run in firefox-nightly
 npm run libdweb:firefox
 ```
 
-### Manually Deploy in Firefox with libdweb APIs ✂️
+### Manually run with different firefox binary✂️
 
 To run your extension in libdweb context:
 
 ```
+npm run libdweb:build
 export MOZ_DISABLE_CONTENT_SANDBOX=1
 web-ext run --firefox=/path/to/nightly/firefox-bin --browser-console --url about:debugging
 ```
 
-or use alias:
-
-```
-npm run libdweb:firefox
-```
-
-
 Additional notes:
 
-- If you want `libdweb:firefox` to work, ensure `firefox-nightly` is on your `$PATH`
-   - if `firefox-nightly` is missing, create it in unpacked directory via `ln -s firefox firefox-nightly`
+- Script `libdweb:firefox` will download latest Firefox Nightly to `./firefox/firefox`
 - After initially running `libdweb:build` it is ok to use `yarn watch` – it will work as expected
 
 ## Appendix: Smoke-Testing libdweb APIs

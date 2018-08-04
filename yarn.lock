@@ -6255,6 +6255,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libdweb@mozilla/libdweb.git#fbff435b33542b02bc35c0bb8c27bc203e6d4e6e:
+  version "0.0.0"
+  resolved "https://codeload.github.com/mozilla/libdweb/tar.gz/fbff435b33542b02bc35c0bb8c27bc203e6d4e6e"
+
 libp2p-bootstrap@~0.9.3:
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/libp2p-bootstrap/-/libp2p-bootstrap-0.9.3.tgz#90d68f890ebdc6aa54e14bb1f257173ad20575f9"
