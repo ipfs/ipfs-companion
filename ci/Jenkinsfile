@@ -1,6 +1,7 @@
 import groovy.transform.Field
 // Global for which node version to use on macos and windows
-@Field final String nodeVersion = '9.2.0'
+// When in doubt, should follow https://github.com/ipfs/jenkins-libs/blob/master/vars/javascript.groovy
+@Field final String nodeVersion = '10.4.1'
 
 // Run targets in parallel
 parallel(
