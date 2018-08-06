@@ -1,4 +1,4 @@
-FROM node:9.5.0
+FROM node:10.4.1
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH="/usr/src/app/node_modules/.bin:${PATH}"
