@@ -2778,6 +2778,10 @@ dot-prop@^4.1.0:
   dependencies:
     is-obj "^1.0.0"
 
+drag-and-drop-files@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/drag-and-drop-files/-/drag-and-drop-files-0.0.1.tgz#adcb1dd0e9d01d510da8131909e47c43e05c3c02"
+
 drbg.js@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/drbg.js/-/drbg.js-1.0.1.tgz#3e36b6c42b37043823cdbc332d58f31e2445480b"
