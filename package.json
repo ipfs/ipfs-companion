@@ -98,7 +98,7 @@
     "lru_map": "0.3.3",
     "mime-types": "2.1.19",
     "p-queue": "2.4.2",
-    "path-browserify": "0.0.1",
+    "path-browserify": "1.0.0",
     "piggybacker": "2.0.0",
     "tachyons": "4.11.1",
     "webextension-polyfill": "0.1.2"
