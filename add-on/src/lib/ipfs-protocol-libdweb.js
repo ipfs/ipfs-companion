@@ -12,19 +12,10 @@ const isStream = require('is-stream')
 
 /* protocol handler for mozilla/libdweb */
 
-exports.createIpfsUrlProtocolHandler = (getIpfs) => {
+exports.createIpfsUrlProtocolHandler = (getIpfs, dnsLink) => {
   return request => {
     console.time('[ipfs-companion] LibdwebProtocolHandler')
     console.log(`[ipfs-companion] handling ${request.url}`)
-
-    let path
-    if (request.url.startsWith('ipfs:')) {
-      path = request.url.replace('ipfs://', '/')
-      path = path.startsWith('/ipfs') ? path : `/ipfs${path}`
-    } else if (request.url.startsWith('ipns:')) {
-      path = request.url.replace('ipns://', '/')
-      path = path.startsWith('/ipns') ? path : `/ipns${path}`
-    }
 
     try {
       return {
@@ -33,22 +24,24 @@ exports.createIpfsUrlProtocolHandler = (getIpfs) => {
         //
         // TODO:
         // - detect invalid addrs and display error page
-        // - support streaming
-        content: streamRespond(getIpfs, path, request)
+        content: streamRespond(getIpfs, dnsLink, request)
       }
     } catch (err) {
-      console.error('[ipfs-companion] failed to get data for ' + request.url, err)
+      console.error(`[ipfs-companion] failed to get data for ${request.url}`, err)
     }
-
     console.timeEnd('[ipfs-companion] LibdwebProtocolHandler')
   }
 }
 
-async function * streamRespond (getIpfs, path, request) {
+async function * streamRespond (getIpfs, dnsLink, request) {
   let response
   try {
     const ipfs = getIpfs()
-    response = await getResponse(ipfs, path)
+    const url = request.url
+    // Get /ipfs/ path for URL (resolve to immutable snapshot if ipns://)
+    const path = immutableIpfsPath(url, dnsLink)
+    // Then, fetch response from IPFS
+    response = await getResponse(ipfs, url, path)
   } catch (error) {
     yield toErrorResponse(request, error)
     return
@@ -81,15 +74,24 @@ function toErrorResponse (request, error) {
   return textBuffer(`Unable to produce IPFS response for "${request.url}": ${error}`)
 }
 
-async function getResponse (ipfs, path) {
-  // TODO: move IPNS resolv  just before cat, so that directory listing uses correct protocol
+function immutableIpfsPath (url, dnsLink) {
+  // Move protocol to IPFS-like path
+  let path = url.replace(/^([^:]+):\/\/*/, '/$1/')
+  // Handle IPNS (if present)
   if (path.startsWith('/ipns/')) {
+    // js-ipfs does not implement  ipfs.name.resolve yet, so we only do dnslink lookup
     // const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
-    const fqdn = path.replace(/^\/ipns\//, '')
-    const response = await ipfs.dns(fqdn)
-    path = response.Path ? response.Path : response
+    const fqdn = path.split('/')[2]
+    const dnslinkRecord = dnsLink.cachedDnslinkLookup(fqdn)
+    if (!dnslinkRecord) {
+      throw new Error(`Missing DNS TXT with dnslink for '${fqdn}'`)
+    }
+    path = path.replace(`/ipns/${fqdn}`, dnslinkRecord)
   }
+  return path
+}
 
+async function getResponse (ipfs, url, path) {
   // We're using ipfs.ls to figure out if a path is a file or a directory.
   //
   // If the listing is empty then it's (likely) a file
@@ -109,7 +111,7 @@ async function getResponse (ipfs, path) {
   const listing = await ipfs.ls(path)
 
   if (isDirectory(listing)) {
-    return getDirectoryListingOrIndexResponse(ipfs, path, listing)
+    return getDirectoryListingOrIndexResponse(ipfs, url, path, listing)
   }
 
   // Efficient mime-sniff over initial bytes
@@ -135,7 +137,7 @@ function isDirectory (listing) {
   return !listing.every(f => f.path === path)
 }
 
-function getDirectoryListingOrIndexResponse (ipfs, path, listing) {
+function getDirectoryListingOrIndexResponse (ipfs, url, path, listing) {
   const indexFileNames = ['index', 'index.html', 'index.htm']
   const index = listing.find((l) => indexFileNames.includes(l.name))
 
@@ -149,12 +151,6 @@ function getDirectoryListingOrIndexResponse (ipfs, path, listing) {
     return ipfs.files.catReadableStream(PathUtils.joinURLParts(path, index.name))
   }
 
-  // TODO: deuglify ;-)
-  if (path.startsWith('/ipfs/')) {
-    path = path.replace(/^\/ipfs\//, 'ipfs://')
-  } else if (path.startsWith('/ipns/')) {
-    path = path.replace(/^\/ipns\//, 'ipns://')
-  }
-  const response = dirView.render(path, listing)
+  const response = dirView.render(url, listing)
   return new TextEncoder('utf-8').encode(response).buffer
 }
