@@ -6521,7 +6521,7 @@ libp2p-tcp@~0.12.0:
 
 libp2p-webext-mdns@alanshaw/js-libp2p-webext-mdns:
   version "0.1.0"
-  resolved "https://codeload.github.com/alanshaw/js-libp2p-webext-mdns/tar.gz/d08a6e93e6129af92e450681467fb68198d8616f"
+  resolved "https://codeload.github.com/alanshaw/js-libp2p-webext-mdns/tar.gz/4ae6c06d32f82fadf58e055d9880d46c08513ce5"
   dependencies:
     async "^2.6.1"
     libp2p-tcp "~0.12.0"
