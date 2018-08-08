@@ -61,10 +61,10 @@ parallel(
                     // remove node_modules if any
                     bat 'del /s /q node_modules >nul 2>&1'
                     // https://github.com/yarnpkg/yarn/issues/3110#issuecomment-293347341
-                    bat 'npx yarn@1.7.0 config set msvs_version 2015 --global'
+                    bat 'npx yarn@1.9.4 config set msvs_version 2015 --global'
                     // run developer build as a smoke-test for windows
                     // bat 'npm run dev-build'
-                    bat 'npx yarn@1.7.0 --mutex network --no-lockfile'
+                    bat 'npx yarn@1.9.4 --mutex network --no-lockfile'
                     bat 'npm run libdweb:build'
                     bat 'dir /s /b /o:gn build'
                 }
@@ -94,7 +94,7 @@ parallel(
                     sh 'rm -rf node_modules/'
                     // run developer build as a smoke-test
                     // sh 'npm run dev-build'
-                    sh 'npx yarn@1.7.0 --mutex network --no-lockfile'
+                    sh 'npx yarn@1.9.4 --mutex network --no-lockfile'
                     sh 'npm run libdweb:build'
                     sh 'ls -Rlh build'
                 }
