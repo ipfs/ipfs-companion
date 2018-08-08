@@ -43,18 +43,18 @@ cd ipfs-companion
 # install deps and build
 npm run libdweb:build
 
-# run in firefox-nightly
+# run in firefox-nightly (linux only)
 npm run libdweb:firefox
 ```
 
-### Manually run with different firefox binary
+### Manually run with different firefox binary (or on macOS)
 
 To run your extension in libdweb context:
 
 ```
 npm run libdweb:build
 export MOZ_DISABLE_CONTENT_SANDBOX=1
-web-ext run --firefox=/path/to/nightly/firefox-bin --browser-console --url about:debugging
+npx web-ext run --firefox="/Applications/Firefox Nightly.app" --browser-console --url about:debugging
 ```
 
 Additional notes:
