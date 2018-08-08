@@ -19,6 +19,19 @@
         "paths": [["protocol"]],
         "script": "../node_modules/libdweb/src/protocol/host.js"
       }
+    },
+    "ServiceDiscovery": {
+      "schema": "../node_modules/libdweb/src/ServiceDiscovery/ServiceDiscovery.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["ServiceDiscovery"]],
+        "script": "../node_modules/libdweb/src/ServiceDiscovery/client.js"
+      },
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["ServiceDiscovery"]],
+        "script": "../node_modules/libdweb/src/ServiceDiscovery/host.js"
+      }
     }
   }
 }

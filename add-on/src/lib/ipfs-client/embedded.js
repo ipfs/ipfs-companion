@@ -1,6 +1,7 @@
 'use strict'
 
 const Ipfs = require('ipfs')
+const WebExtMdns = require('libp2p-webext-mdns')
 const { optionDefaults } = require('../options')
 
 let node = null
@@ -8,9 +9,18 @@ let node = null
 exports.init = function init (opts) {
   console.log('[ipfs-companion] Embedded ipfs init')
 
-  node = new Ipfs(
-    JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig)
+  const ipfsOpts = Object.assign(
+    JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig),
+    {
+      libp2p: {
+        modules: {
+          peerDiscovery: [WebExtMdns]
+        }
+      }
+    }
   )
+
+  node = new Ipfs(ipfsOpts)
 
   if (node.isOnline()) {
     return Promise.resolve(node)
