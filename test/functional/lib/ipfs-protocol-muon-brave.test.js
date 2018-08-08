@@ -1,7 +1,7 @@
 'use strict'
 const { describe, it } = require('mocha')
 const { expect } = require('chai')
-const { createIpfsUrlProtocolHandler } = require('../../../add-on/src/lib/ipfs-protocol')
+const { createIpfsUrlProtocolHandler } = require('../../../add-on/src/lib/ipfs-protocol-muon-brave.js')
 
 describe('ipfs-protocol', () => {
   it('should serve an IPFS file', async () => {
