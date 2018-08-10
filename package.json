@@ -110,7 +110,7 @@
     "ipfs": "0.31.2",
     "ipfs-api": "22.3.0",
     "ipfs-css": "0.7.0",
-    "ipfs-http-response": "0.1.4",
+    "ipfs-http-response": "lidel/js-ipfs-http-response.git#7382681983809d6661e33664fc9b9adac0b9d201",
     "ipfs-postmsg-proxy": "3.0.0",
     "is-ipfs": "0.4.2",
     "is-stream": "1.1.0",
