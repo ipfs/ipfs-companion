@@ -1,3 +1,6 @@
+'use strict'
+/* eslint-env browser, webextensions */
+
 const docSniff = require('doc-sniff')
 const fileType = require('file-type')
 const isSvg = require('is-svg')

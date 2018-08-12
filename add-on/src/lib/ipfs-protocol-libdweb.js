@@ -2,51 +2,54 @@
 /* eslint-env browser, webextensions */
 
 import {asyncIterateStream} from 'async-iterate-stream/asyncIterateStream'
+// import streamHead from 'stream-head'
 
 const { resolver } = require('ipfs-http-response')
 const { mimeSniff } = require('./mime-sniff')
+// const detectContentType = require('ipfs-http-response/src/utils/content-type')
 const toArrayBuffer = require('to-arraybuffer')
 const peek = require('buffer-peek-stream')
 // const dirView = require('./dir-view')
 const PathUtils = require('ipfs/src/http/gateway/utils/path')
 const isStream = require('is-stream')
 
+const textBuffer = (data) => new TextEncoder('utf-8').encode(data).buffer
+
 /* protocol handler for mozilla/libdweb */
 
 exports.createIpfsUrlProtocolHandler = (getIpfs, dnsLink) => {
-  return request => {
+  return async (request) => {
     console.time('[ipfs-companion] LibdwebProtocolHandler')
     console.log(`[ipfs-companion] handling ${request.url}`)
-
     try {
+      const ipfs = getIpfs()
+      const url = request.url
+      // Get /ipfs/ path for URL (resolve to immutable snapshot if ipns://)
+      const path = immutableIpfsPath(url, dnsLink)
+      // Then, fetch response from IPFS
+      const {content, contentType, contentEncoding} = await getResponse(ipfs, url, path)
+
+      // console.log(`contentType=${contentType}, contentEncoding=${contentEncoding}, content`, content)
+
       return {
-        // Notes:
-        // - omitted  contentType on purpose to enable mime-sniffing by browser
-        //
-        // TODO:
-        // - detect invalid addrs and display error page
-        content: streamRespond(getIpfs, dnsLink, request)
+        contentEncoding,
+        contentType,
+        content: streamRespond(content)
       }
     } catch (err) {
       console.error(`[ipfs-companion] failed to get data for ${request.url}`, err)
+      return {
+        contentEncoding: 'utf-8',
+        contentType: 'text/plain',
+        content: streamRespond(toErrorResponse(request, err))
+      }
+    } finally {
+      console.timeEnd('[ipfs-companion] LibdwebProtocolHandler')
     }
-    console.timeEnd('[ipfs-companion] LibdwebProtocolHandler')
   }
 }
 
-async function * streamRespond (getIpfs, dnsLink, request) {
-  let response
-  try {
-    const ipfs = getIpfs()
-    const url = request.url
-    // Get /ipfs/ path for URL (resolve to immutable snapshot if ipns://)
-    const path = immutableIpfsPath(url, dnsLink)
-    // Then, fetch response from IPFS
-    response = await getResponse(ipfs, url, path)
-  } catch (error) {
-    yield toErrorResponse(request, error)
-    return
-  }
+async function * streamRespond (response) {
   if (isStream(response)) {
     for await (const chunk of asyncIterateStream(response, false)) {
       // Buffer to ArrayBuffer
@@ -60,11 +63,10 @@ async function * streamRespond (getIpfs, dnsLink, request) {
 
 // Prepare response with a meaningful error
 function toErrorResponse (request, error) {
-  console.error(`IPFS Error while getting response for ${request.url}`, error)
+  // console.error(`IPFS Error while getting response for ${request.url}`, error)
   // TODO
   // - create proper error page
   // - find a way to communicate common errors (eg. not found, invalid CID, timeout)
-  const textBuffer = text => new TextEncoder('utf-8').encode(text).buffer
   if (error.message === 'file does not exist') {
     // eg. when trying to access a non-existing file in a directory (basically http 404)
     return textBuffer('Not found')
@@ -76,6 +78,9 @@ function toErrorResponse (request, error) {
 }
 
 function immutableIpfsPath (url, dnsLink) {
+  // TODO:
+  // - detect invalid addrs and display error page
+
   // Move protocol to IPFS-like path
   let path = url.replace(/^([^:]+):\/\/*/, '/$1/')
   // Handle IPNS (if present)
@@ -95,41 +100,82 @@ function immutableIpfsPath (url, dnsLink) {
 async function getResponse (ipfs, url, path) {
   let cid
   try {
-    // try direct resolver
+    // try direct resolver, then fallback to manual one
     const dag = await resolver.cid(ipfs, path)
-    // console.log('resolver.cid: ', dag)
     cid = dag.cid
+    console.log('resolver.cid', cid.toBaseEncodedString())
   } catch (err) {
-    const errorToString = err.toString()
+    // console.error('error in resolver.cid', err)
     // handle directories
-    if (errorToString === 'Error: This dag node is a directory') {
+    if (err.cid && err.dagDirType) {
       const dirCid = err.cid
+      console.log('resolver.directory', dirCid.toBaseEncodedString())
       const data = await resolver.directory(ipfs, url, dirCid)
-      // console.log('resolver.directory', data)
+      console.log('resolver.directory', data)
       // TODO: redirect so directory always end with `/`
       if (typeof data === 'string') {
         // return HTML with directory listing
-        return new TextEncoder('utf-8').encode(data).buffer
+        return {
+          content: textBuffer(data),
+          contentType: 'text/html',
+          contentEncoding: 'utf-8'
+        }
       } else if (Array.isArray(data)) {
+        console.log('resolver.directory.indexes', data)
         // return first index file
         path = PathUtils.joinURLParts(path, data[0].name)
         return getResponse(ipfs, url, path)
       }
       throw new Error('Invalid output of resolver.directory')
+    } else if (err.parentDagNode && err.missingLinkName) {
+      // It may be legitimate error, but it could also be a part of hamt-sharded-directory
+      // (example: ipns://tr.wikipedia-on-ipfs.org/wiki/Anasayfa.html)
+      // which is not supported by resolver.cid from ipfs-http-response at this time.
+      // Until ipfs.resolve support with sharding is added upstream, we use fallback below.
+      // TODO remove this after ipfs-http-response switch to ipfs.resolve
+      // or sharding is supported by some other means
+      try {
+        const matchingLinks = (await ipfs.ls(err.parentDagNode)).filter(item => item.name === err.missingLinkName)
+        if (matchingLinks.length > 0) {
+          cid = path
+        } else {
+          throw err
+        }
+      } catch (err) {
+        if (err.message === 'invalid node type') {
+          throw new Error('hamt-sharded-directory support is spotty with js-ipfs at this time, try go-ipfs until a fix is found')
+        } else {
+          // TODO: investigate issue with js-ipfs and ipns://tr.wikipedia-on-ipfs.org/wiki/Anasayfa.html
+          // (probably edge case relate to sharding)
+          // For now we fallback to ipfs.files.catReadableStream(full path)
+          cid = path
+        }
+      }
+    } else {
+      // unexpected issue, return error
+      throw err
     }
-    throw err
   }
 
   // Efficient mime-sniff over initial bytes
-  // TODO: rignt now it is only logged, use contentType somehow
+  // const { stream, head } = await streamHead(ipfs.files.catReadableStream(cid), {bytes: 512})
+  // const contentType = mimeSniff(head, new URL(url).pathname) || undefined
+  // below old version with buffer-peek-stream
   const { stream, contentType } = await new Promise((resolve, reject) => {
-    peek(ipfs.files.catReadableStream(cid), 512, (err, data, stream) => {
-      if (err) return reject(err)
-      const contentType = mimeSniff(data, url) || 'application/octet-stream'
-      resolve({ stream, contentType })
-    })
+    try {
+      console.log(`ipfs.files.catReadableStream(${cid})`)
+      const catStream = ipfs.files.catReadableStream(cid)
+      peek(catStream, 512, (err, data, stream) => {
+        if (err) return reject(err)
+        const contentType = mimeSniff(data, new URL(url).pathname) || undefined
+        // TODO: switch to upstream const contentType = detectContentType(new URL(url).pathname, data) || 'application/octet-stream'
+        resolve({ stream, contentType })
+      })
+    } catch (err) {
+      reject(err)
+    }
   })
   console.log(`[ipfs-companion] [ipfs://] handler read ${path} and internally mime-sniffed it as ${contentType}`)
-  //
-  return stream
+
+  return {content: stream, contentType}
 }

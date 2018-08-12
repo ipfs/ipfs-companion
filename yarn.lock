@@ -4285,19 +4285,20 @@ get-caller-file@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.3.tgz#f978fa4c90d1dfe7ff2d6beda2a515e713bdcf4a"
 
-get-firefox@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/get-firefox/-/get-firefox-2.1.1.tgz#1dbafe1e357fb292e816d4c64b6fc7a5153bf7a7"
+get-firefox@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/get-firefox/-/get-firefox-2.2.0.tgz#7ea8fc874bb952295de33705aea21db14ce2a55e"
   dependencies:
     chalk "^2.4.1"
     decompress "^4.2.0"
+    is-ci "^1.1.0"
     listr "^0.14.0"
     meow "^5.0.0"
     moz-download-url "^2.0.0"
-    node-fetch "^2.1.2"
+    node-fetch "^2.2.0"
     sha "^2.0.1"
     stream-to-promise "^2.2.0"
-    taskcluster-client "^11.0.0"
+    taskcluster-client "^11.0.3"
 
 get-folder-size@^2.0.0:
   version "2.0.0"
@@ -4992,7 +4993,48 @@ ipaddr.js@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.8.0.tgz#eaa33d6ddd7ace8f7f6fe0c9ca0440e706738b1e"
 
-ipfs-api@22.3.0, ipfs-api@^22.2.4:
+ipfs-api@23.0.0:
+  version "23.0.0"
+  resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-23.0.0.tgz#112207ea421d4aeda3724de91a0319b9fe303f3e"
+  dependencies:
+    async "^2.6.1"
+    big.js "^5.1.2"
+    bs58 "^4.0.1"
+    cids "~0.5.3"
+    concat-stream "^1.6.2"
+    debug "^3.1.0"
+    detect-node "^2.0.3"
+    flatmap "0.0.3"
+    glob "^7.1.2"
+    ipfs-block "~0.7.1"
+    ipfs-unixfs "~0.1.15"
+    ipld-dag-cbor "~0.12.1"
+    ipld-dag-pb "~0.14.6"
+    is-ipfs "~0.4.2"
+    is-pull-stream "0.0.0"
+    is-stream "^1.1.0"
+    libp2p-crypto "~0.13.0"
+    lru-cache "^4.1.3"
+    multiaddr "^5.0.0"
+    multibase "~0.4.0"
+    multihashes "~0.4.13"
+    ndjson "^1.5.0"
+    once "^1.4.0"
+    peer-id "~0.11.0"
+    peer-info "~0.14.1"
+    promisify-es6 "^1.0.3"
+    pull-defer "~0.2.2"
+    pull-pushable "^2.2.0"
+    pull-stream-to-stream "^1.3.4"
+    pump "^3.0.0"
+    qs "^6.5.2"
+    readable-stream "^2.3.6"
+    stream-http "^2.8.3"
+    stream-to-pull-stream "^1.7.2"
+    streamifier "~0.1.1"
+    tar-stream "^1.6.1"
+
+ipfs-api@^22.2.4:
   version "22.3.0"
   resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-22.3.0.tgz#29935c5d9ca533cefef62288e00a8b7eab412ab7"
   dependencies:
@@ -5082,9 +5124,9 @@ ipfs-css@0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.7.0.tgz#d612d4f85535268483859663b4bf6326edaae1a3"
 
-ipfs-http-response@lidel/js-ipfs-http-response.git#7382681983809d6661e33664fc9b9adac0b9d201:
+"ipfs-http-response@github:lidel/js-ipfs-http-response.git#65f22ad654843946fdff8f26c7b3a69e2905bdaf":
   version "0.1.4"
-  resolved "https://codeload.github.com/lidel/js-ipfs-http-response/tar.gz/7382681983809d6661e33664fc9b9adac0b9d201"
+  resolved "https://codeload.github.com/lidel/js-ipfs-http-response/tar.gz/65f22ad654843946fdff8f26c7b3a69e2905bdaf"
   dependencies:
     async "^2.6.0"
     cids "^0.5.3"
@@ -5114,9 +5156,9 @@ ipfs-http-response@~0.1.2:
     promisify-es6 "^1.0.3"
     stream-to-blob "^1.0.1"
 
-ipfs-mfs@~0.2.3:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/ipfs-mfs/-/ipfs-mfs-0.2.5.tgz#d093c6d2dd5060b2ac29febe0dbae98bc2460ec8"
+ipfs-mfs@~0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/ipfs-mfs/-/ipfs-mfs-0.3.0.tgz#2da1d98832b3140d40d9e79dd89c29bb925b7edd"
   dependencies:
     async "^2.6.1"
     blob "~0.0.4"
@@ -5126,7 +5168,7 @@ ipfs-mfs@~0.2.3:
     filereader-stream "^2.0.0"
     interface-datastore "~0.4.2"
     ipfs-unixfs "~0.1.15"
-    ipfs-unixfs-engine "~0.31.3"
+    ipfs-unixfs-engine "~0.32.1"
     is-pull-stream "~0.0.0"
     is-stream "^1.1.0"
     joi "^13.4.0"
@@ -5135,6 +5177,7 @@ ipfs-mfs@~0.2.3:
     once "^1.4.0"
     promisify-es6 "^1.0.3"
     pull-cat "^1.1.11"
+    pull-defer "~0.2.2"
     pull-paramap "^1.2.2"
     pull-pushable "^2.2.0"
     pull-stream "^3.6.8"
@@ -5194,20 +5237,18 @@ ipfs-repo@~0.22.1:
     multiaddr "^4.0.0"
     pull-stream "^3.6.7"
 
-ipfs-unixfs-engine@~0.31.3:
-  version "0.31.3"
-  resolved "https://registry.yarnpkg.com/ipfs-unixfs-engine/-/ipfs-unixfs-engine-0.31.3.tgz#79e220395c3f30476cacfa481220623110b20429"
+ipfs-unixfs-engine@~0.32.1:
+  version "0.32.1"
+  resolved "https://registry.yarnpkg.com/ipfs-unixfs-engine/-/ipfs-unixfs-engine-0.32.1.tgz#21a5f01147a6db116ea580681e095df5ddf4063e"
   dependencies:
     async "^2.6.1"
-    bs58 "^4.0.1"
     cids "~0.5.3"
     deep-extend "~0.6.0"
     ipfs-unixfs "~0.1.15"
-    ipld "~0.17.2"
-    ipld-dag-pb "~0.14.5"
+    ipld "~0.17.3"
+    ipld-dag-pb "~0.14.6"
     left-pad "^1.3.0"
     lodash "^4.17.10"
-    multihashes "~0.4.13"
     multihashing-async "~0.5.1"
     pull-batch "^1.0.0"
     pull-block "^1.4.0"
@@ -5220,7 +5261,9 @@ ipfs-unixfs-engine@~0.31.3:
     pull-through "^1.0.18"
     pull-traverse "^1.0.3"
     pull-write "^1.1.4"
+    rabin "^1.6.0"
     sparse-array "^1.3.1"
+    stream-to-pull-stream "^1.7.2"
 
 ipfs-unixfs@^0.1.14, ipfs-unixfs@~0.1.15:
   version "0.1.15"
@@ -5228,9 +5271,9 @@ ipfs-unixfs@^0.1.14, ipfs-unixfs@~0.1.15:
   dependencies:
     protons "^1.0.0"
 
-ipfs@0.31.2:
-  version "0.31.2"
-  resolved "https://registry.yarnpkg.com/ipfs/-/ipfs-0.31.2.tgz#d297122d23a379ebee0a65d0df7b9540ccb6445a"
+ipfs@0.31.4:
+  version "0.31.4"
+  resolved "https://registry.yarnpkg.com/ipfs/-/ipfs-0.31.4.tgz#3b55c6b051b500e491cddfac9e9509b82a80beaa"
   dependencies:
     "@nodeutils/defaults-deep" "^1.1.0"
     async "^2.6.1"
@@ -5258,11 +5301,11 @@ ipfs@0.31.2:
     ipfs-block "~0.7.1"
     ipfs-block-service "~0.14.0"
     ipfs-http-response "~0.1.2"
-    ipfs-mfs "~0.2.3"
+    ipfs-mfs "~0.3.0"
     ipfs-multipart "~0.1.0"
     ipfs-repo "~0.22.1"
     ipfs-unixfs "~0.1.15"
-    ipfs-unixfs-engine "~0.31.3"
+    ipfs-unixfs-engine "~0.32.1"
     ipld "~0.17.3"
     ipld-dag-cbor "~0.12.1"
     ipld-dag-pb "~0.14.6"
@@ -5408,7 +5451,7 @@ ipld-zcash@~0.1.4:
     multihashing-async "~0.5.1"
     zcash-bitcore-lib "~0.13.20-rc3"
 
-ipld@~0.17.2, ipld@~0.17.3:
+ipld@~0.17.3:
   version "0.17.3"
   resolved "https://registry.yarnpkg.com/ipld/-/ipld-0.17.3.tgz#ede5440a5b8469b1f0280502e21a5d83011d8630"
   dependencies:
@@ -5493,7 +5536,7 @@ is-callable@^1.1.1, is-callable@^1.1.3:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.1.4.tgz#1e1adf219e1eeb684d691f9d6a05ff0d30a24d75"
 
-is-ci@^1.0.10:
+is-ci@^1.0.10, is-ci@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-ci/-/is-ci-1.1.0.tgz#247e4162e7860cebbdaf30b774d6b0ac7dcfe7a5"
   dependencies:
@@ -6262,9 +6305,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libdweb@mozilla/libdweb.git#fbff435b33542b02bc35c0bb8c27bc203e6d4e6e:
+"libdweb@github:mozilla/libdweb.git#185290fb35dc2846e7f31b0a52d0afbb412ab7b5":
   version "0.0.0"
-  resolved "https://codeload.github.com/mozilla/libdweb/tar.gz/fbff435b33542b02bc35c0bb8c27bc203e6d4e6e"
+  resolved "https://codeload.github.com/mozilla/libdweb/tar.gz/185290fb35dc2846e7f31b0a52d0afbb412ab7b5"
 
 libp2p-bootstrap@~0.9.3:
   version "0.9.3"
@@ -7515,7 +7558,7 @@ mz@2.7.0, mz@^2.6.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nan@^2.10.0, nan@^2.2.1, nan@^2.9.2, nan@~2.10.0:
+nan@^2.1.0, nan@^2.10.0, nan@^2.2.1, nan@^2.9.2, nan@~2.10.0:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
 
@@ -7729,7 +7772,7 @@ node-abi@^2.2.0:
   dependencies:
     semver "^5.4.1"
 
-node-fetch@^2.1.2:
+node-fetch@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.2.0.tgz#4ee79bde909262f9775f731e3656d0db55ced5b5"
 
@@ -8521,6 +8564,26 @@ postmsg-rpc@^2.4.0:
   dependencies:
     shortid "^2.2.8"
 
+prebuild-install@^2.1.0:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-2.5.3.tgz#9f65f242782d370296353710e9bc843490c19f69"
+  dependencies:
+    detect-libc "^1.0.3"
+    expand-template "^1.0.2"
+    github-from-package "0.0.0"
+    minimist "^1.2.0"
+    mkdirp "^0.5.1"
+    node-abi "^2.2.0"
+    noop-logger "^0.1.1"
+    npmlog "^4.0.1"
+    os-homedir "^1.0.1"
+    pump "^2.0.1"
+    rc "^1.1.6"
+    simple-get "^2.7.0"
+    tar-fs "^1.13.0"
+    tunnel-agent "^0.6.0"
+    which-pm-runs "^1.0.0"
+
 prebuild-install@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-4.0.0.tgz#206ce8106ce5efa4b6cf062fc8a0a7d93c17f3a8"
@@ -8937,6 +9000,18 @@ quick-format-unescaped@^3.0.0:
 quick-lru@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-1.1.0.tgz#4360b17c61136ad38078397ff11416e186dcfbb8"
+
+rabin@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/rabin/-/rabin-1.6.0.tgz#e05690b13056f08c80098e3ad71b90530038e355"
+  dependencies:
+    bindings "^1.2.1"
+    bl "^1.0.0"
+    debug "^2.2.0"
+    minimist "^1.2.0"
+    nan "^2.1.0"
+    prebuild-install "^2.1.0"
+    readable-stream "^2.0.4"
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.3, randombytes@^2.0.5:
   version "2.0.6"
@@ -10535,7 +10610,7 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-taskcluster-client@^11.0.0:
+taskcluster-client@^11.0.3:
   version "11.0.3"
   resolved "https://registry.yarnpkg.com/taskcluster-client/-/taskcluster-client-11.0.3.tgz#f71fd2d75dc4912ecc6c69fc56994eae088265aa"
   dependencies:
@@ -10582,9 +10657,10 @@ term-size@^1.2.0:
   dependencies:
     execa "^0.7.0"
 
-terser@3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-3.8.0.tgz#66a4f4f500d2c829faab840f318c49cc471d73ae"
+terser@3.8.1, uglify-es@^3.3.4, "uglify-es@npm:terser":
+  name uglify-es
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-3.8.1.tgz#cb70070ac9e0a71add169dfb63c0a64fca2738ac"
   dependencies:
     commander "~2.16.0"
     source-map "~0.6.1"
@@ -10849,14 +10925,6 @@ typedarray@^0.0.6:
 typeforce@^1.11.3:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.12.0.tgz#ca40899919f1466d7819e37be039406beb912a2e"
-
-uglify-es@^3.3.4, "uglify-es@npm:terser":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-3.8.1.tgz#cb70070ac9e0a71add169dfb63c0a64fca2738ac"
-  dependencies:
-    commander "~2.16.0"
-    source-map "~0.6.1"
-    source-map-support "~0.5.6"
 
 uglify-js@^2.6:
   version "2.8.29"
