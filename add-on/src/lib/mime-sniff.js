@@ -3,13 +3,11 @@
 
 const docSniff = require('doc-sniff')
 const fileType = require('file-type')
-const isSvg = require('is-svg')
 const mime = require('mime-types')
 
 /*
  * A quick, best effort mime sniffing fn, via:
  * @see https://github.com/sindresorhus/file-type
- * @see https://github.com/sindresorhus/is-svg
  * @see https://github.com/bitinn/doc-sniff
  *
  *  buffer => 'mime/type'
@@ -19,12 +17,16 @@ const mime = require('mime-types')
 exports.mimeSniff = function (buff, path) {
   // deals with buffers, and uses magic number detection
   const fileTypeRes = fileType(buff)
-  if (fileTypeRes) return fileTypeRes.mime
+  if (fileTypeRes) {
+    const pathSniffRes = mime.lookup(path)
+    if (fileTypeRes.mime === 'application/xml' && pathSniffRes === 'image/svg+xml') {
+      // detected SVGs
+      return pathSniffRes
+    }
+    return fileTypeRes.mime
+  }
 
   const str = buff.toString('utf8')
-
-  // You gotta read the file to figure out if something is an svg
-  if (isSvg(str)) return 'image/svg+xml'
 
   // minimal whatwg style doc sniff.
   const docSniffRes = docSniff(false, str)

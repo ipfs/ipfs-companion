@@ -4686,10 +4686,6 @@ hosted-git-info@^2.1.4:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
 
-html-comment-regex@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/html-comment-regex/-/html-comment-regex-1.1.1.tgz#668b93776eaae55ebde8f3ad464b307a4963625e"
-
 htmlparser2@^3.9.1:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
@@ -5124,9 +5120,9 @@ ipfs-css@0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.7.0.tgz#d612d4f85535268483859663b4bf6326edaae1a3"
 
-"ipfs-http-response@github:lidel/js-ipfs-http-response.git#65f22ad654843946fdff8f26c7b3a69e2905bdaf":
+"ipfs-http-response@https://github.com/lidel/js-ipfs-http-response/tarball/65f22ad654843946fdff8f26c7b3a69e2905bdaf/js-ipfs-http-response.tar.gz":
   version "0.1.4"
-  resolved "https://codeload.github.com/lidel/js-ipfs-http-response/tar.gz/65f22ad654843946fdff8f26c7b3a69e2905bdaf"
+  resolved "https://github.com/lidel/js-ipfs-http-response/tarball/65f22ad654843946fdff8f26c7b3a69e2905bdaf/js-ipfs-http-response.tar.gz#a63a85c67f2b2564a31f9ce20ca1e80e24cd4dda"
   dependencies:
     async "^2.6.0"
     cids "^0.5.3"
@@ -5758,12 +5754,6 @@ is-stream@1.1.0, is-stream@^1.0.0, is-stream@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
 
-is-svg@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/is-svg/-/is-svg-3.0.0.tgz#9321dbd29c212e5ca99c4fa9794c714bcafa2f75"
-  dependencies:
-    html-comment-regex "^1.1.0"
-
 is-symbol@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/is-symbol/-/is-symbol-1.0.1.tgz#3cc59f00025194b6ab2e38dbae6689256b660572"
@@ -6305,9 +6295,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"libdweb@github:mozilla/libdweb.git#185290fb35dc2846e7f31b0a52d0afbb412ab7b5":
+"libdweb@https://github.com/mozilla/libdweb/tarball/185290fb35dc2846e7f31b0a52d0afbb412ab7b5/libdweb.tar.gz":
   version "0.0.0"
-  resolved "https://codeload.github.com/mozilla/libdweb/tar.gz/185290fb35dc2846e7f31b0a52d0afbb412ab7b5"
+  resolved "https://github.com/mozilla/libdweb/tarball/185290fb35dc2846e7f31b0a52d0afbb412ab7b5/libdweb.tar.gz#2cbc2efba6ecfdc0afb552e389ecfefff0f0f763"
 
 libp2p-bootstrap@~0.9.3:
   version "0.9.3"
