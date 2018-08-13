@@ -47,7 +47,7 @@ npm run libdweb:build
 npm run libdweb:firefox
 ```
 
-### Manually run with different firefox binary✂️
+### Manually run with different firefox binary
 
 To run your extension in libdweb context:
 
@@ -62,6 +62,13 @@ Additional notes:
 - Script `libdweb:firefox` will download latest Firefox Nightly to `./firefox/firefox`
 - After initially running `libdweb:build` it is ok to use `yarn watch` – it will work as expected
 
+## Known Issues
+
+If you are using `yarn` it may not update github-based dependencies and produce bogus `this.content is undefined` errors.
+
+Fix is to make sure you run the latest versions of `libdweb` and other dev deps by removing yarn cache.
+Execute `yarn cache clean`.
+
 ## Appendix: Smoke-Testing libdweb APIs
 
 #### Protocol Handler API
@@ -73,6 +80,7 @@ Additional notes:
 ## References
 
 - [ipfs-companion/issues/#343](https://github.com/ipfs-shipyard/ipfs-companion/issues/343) – Create WebExtensions Experiments to Prototype Missing APIs
+  - [ipfs-companion/pr/533](https://github.com/ipfs-shipyard/ipfs-companion/pull/533) - `ipfs://` and `ipns://` protocol handlers with libdweb API
 - https://github.com/mozilla/libdweb/ – Extension context containing an experimental libdweb APIs
 - https://github.com/orgs/libdweb – API adapters for seamless libdweb integration
 - `#dweb` @ [irc.mozilla.org](https://wiki.mozilla.org/IRC#Connect_to_the_Mozilla_IRC_server)
