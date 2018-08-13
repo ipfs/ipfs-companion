@@ -31,6 +31,11 @@ exports.mimeSniff = function (buff, path) {
   // minimal whatwg style doc sniff.
   const docSniffRes = docSniff(false, str)
 
+  if (docSniffRes === 'text/plain' && mime.lookup(path) === 'text/markdown') {
+    // force plain text, otherwise browser triggers download of .md files
+    return 'text/plain'
+  }
+
   if (!docSniffRes || docSniffRes === 'text/plain') {
     // fallback to guessing by file extension
     return mime.lookup(path)
