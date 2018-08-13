@@ -83,6 +83,8 @@ function immutableIpfsPath (url, dnsLink) {
 
   // Move protocol to IPFS-like path
   let path = url.replace(/^([^:]+):\/\/*/, '/$1/')
+  // Unescape special characters, eg. ipns://tr.wikipedia-on-ipfs.org/wiki/G%C3%BCne%C5%9F_r%C3%BCzg%C3%A2r%C4%B1.html
+  path = decodeURI(path)
   // Handle IPNS (if present)
   if (path.startsWith('/ipns/')) {
     // js-ipfs does not implement  ipfs.name.resolve yet, so we only do dnslink lookup
