@@ -32,6 +32,14 @@
         "paths": [["ServiceDiscovery"]],
         "script": "../node_modules/libdweb/src/ServiceDiscovery/host.js"
       }
+    },
+    "TCPSocket": {
+      "schema": "../node_modules/libdweb/src/TCPSocket/TCPSocket.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["TCPSocket"]],
+        "script": "../node_modules/libdweb/src/TCPSocket/Socket.js"
+      }
     }
   }
 }

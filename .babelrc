@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "syntax-async-generators"
+    "syntax-async-generators",
+    "syntax-object-rest-spread"
   ],
   "presets": [
     [

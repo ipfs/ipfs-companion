@@ -1085,6 +1085,10 @@ babel-plugin-syntax-exponentiation-operator@^6.8.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-exponentiation-operator/-/babel-plugin-syntax-exponentiation-operator-6.13.0.tgz#9ee7e8337290da95288201a6a57f4170317830de"
 
+babel-plugin-syntax-object-rest-spread@6.13.0:
+  version "6.13.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-object-rest-spread/-/babel-plugin-syntax-object-rest-spread-6.13.0.tgz#fd6536f2bce13836ffa3a5458c4903a597bb3bf5"
+
 babel-plugin-syntax-trailing-function-commas@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-6.22.0.tgz#ba0360937f8d06e40180a43fe0d5616fff532cf3"
@@ -6519,9 +6523,9 @@ libp2p-tcp@~0.12.0:
     once "^1.4.0"
     stream-to-pull-stream "^1.7.2"
 
-libp2p-webext-mdns@alanshaw/js-libp2p-webext-mdns:
+"libp2p-webext-mdns@https://github.com/alanshaw/js-libp2p-webext-mdns/tarball/d08a6e93e6129af92e450681467fb68198d8616f/js-libp2p-webext-mdns.tar.gz":
   version "0.1.0"
-  resolved "https://codeload.github.com/alanshaw/js-libp2p-webext-mdns/tar.gz/4ae6c06d32f82fadf58e055d9880d46c08513ce5"
+  resolved "https://github.com/alanshaw/js-libp2p-webext-mdns/tarball/d08a6e93e6129af92e450681467fb68198d8616f/js-libp2p-webext-mdns.tar.gz#f3d838b195b74c7e8755c1aa1d27a8066ba24d47"
   dependencies:
     async "^2.6.1"
     libp2p-tcp "~0.12.0"
@@ -6529,9 +6533,9 @@ libp2p-webext-mdns@alanshaw/js-libp2p-webext-mdns:
     peer-id "~0.11.0"
     peer-info "~0.14.1"
 
-libp2p-webext-tcp@alanshaw/js-libp2p-webext-tcp:
+"libp2p-webext-tcp@https://github.com/alanshaw/js-libp2p-webext-tcp/tarball/4ae6c06d32f82fadf58e055d9880d46c08513ce5/js-libp2p-webext-tcp.tar.gz":
   version "0.0.0"
-  resolved "https://codeload.github.com/alanshaw/js-libp2p-webext-tcp/tar.gz/4ae6c06d32f82fadf58e055d9880d46c08513ce5"
+  resolved "https://github.com/alanshaw/js-libp2p-webext-tcp/tarball/4ae6c06d32f82fadf58e055d9880d46c08513ce5/js-libp2p-webext-tcp.tar.gz#e8b1f1943a422e6bd85ef6f8097fa026cb6ef17e"
   dependencies:
     debug "^3.1.0"
     events "^3.0.0"

@@ -2,6 +2,7 @@
 
 const Ipfs = require('ipfs')
 const WebExtMdns = require('libp2p-webext-mdns')
+const WebExtTcp = require('libp2p-webext-tcp')
 const { optionDefaults } = require('../options')
 
 let node = null
@@ -14,7 +15,8 @@ exports.init = function init (opts) {
     {
       libp2p: {
         modules: {
-          peerDiscovery: [WebExtMdns]
+          peerDiscovery: [WebExtMdns],
+          transport: [WebExtTcp]
         }
       }
     }

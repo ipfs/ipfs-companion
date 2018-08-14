@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-chrome.storage.local.debug = 'libp2p:webext-mdns*'
+chrome.storage.local.debug = 'libp2p:webext*'
 
 const createIpfsCompanion = require('../lib/ipfs-companion')
 
