@@ -6540,7 +6540,6 @@ libp2p-tcp@~0.12.0:
     debug "^3.1.0"
     events "^3.0.0"
     interface-connection "^0.3.2"
-    mafmt "^6.0.0"
     multiaddr "^5.0.0"
     pull-stream "^3.6.8"
 
