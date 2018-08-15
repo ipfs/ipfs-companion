@@ -109,11 +109,11 @@ async function getResponse (ipfs, url, path) {
   } catch (err) {
     // console.error('error in resolver.cid', err)
     // handle directories
-    if (err.cid && err.dagDirType) {
+    if (err.cid && err.message === 'This dag node is a directory') {
       const dirCid = err.cid
       console.log('resolver.directory', dirCid.toBaseEncodedString())
       const data = await resolver.directory(ipfs, url, dirCid)
-      console.log('resolver.directory', data)
+      console.log('resolver.directory', Array.isArray(data) ? data : `returned '${typeof data}'`)
       // TODO: redirect so directory always end with `/`
       if (typeof data === 'string') {
         // return HTML with directory listing
@@ -137,13 +137,18 @@ async function getResponse (ipfs, url, path) {
       // TODO remove this after ipfs-http-response switch to ipfs.resolve
       // or sharding is supported by some other means
       try {
-        const matchingLinks = (await ipfs.ls(err.parentDagNode)).filter(item => item.name === err.missingLinkName)
-        if (matchingLinks.length > 0) {
+        const matchingLink = (await ipfs.ls(err.parentDagNode, {resolveType: false})).find(item => item.name === err.missingLinkName)
+        if (matchingLink) {
+          console.log('resolver.cid.err.matchingLink', matchingLink)
+          path = path.replace(matchingLink.path, matchingLink.hash)
+          console.log('resolver.cid.err.path.after.matchingLink', path)
           cid = path
+          // return getResponse(ipfs, url, path)
         } else {
           throw err
         }
       } catch (err) {
+        console.error('Trying to recover from Error while resolver.cid', err)
         if (err.message === 'invalid node type') {
           throw new Error('hamt-sharded-directory support is spotty with js-ipfs at this time, try go-ipfs until a fix is found')
         } else {
