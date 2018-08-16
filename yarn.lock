@@ -5120,9 +5120,9 @@ ipfs-css@0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.7.0.tgz#d612d4f85535268483859663b4bf6326edaae1a3"
 
-"ipfs-http-response@https://github.com/lidel/js-ipfs-http-response/tarball/65f22ad654843946fdff8f26c7b3a69e2905bdaf/js-ipfs-http-response.tar.gz":
+"ipfs-http-response@https://github.com/lidel/js-ipfs-http-response/tarball/475aead595fbbd77cfa4a248fc27474e8d604cb1/js-ipfs-http-response.tar.gz":
   version "0.1.4"
-  resolved "https://github.com/lidel/js-ipfs-http-response/tarball/65f22ad654843946fdff8f26c7b3a69e2905bdaf/js-ipfs-http-response.tar.gz#a63a85c67f2b2564a31f9ce20ca1e80e24cd4dda"
+  resolved "https://github.com/lidel/js-ipfs-http-response/tarball/475aead595fbbd77cfa4a248fc27474e8d604cb1/js-ipfs-http-response.tar.gz#6ef6ffc602e3c6b21ac6e142d55b74bca1487d2b"
   dependencies:
     async "^2.6.0"
     cids "^0.5.3"
@@ -6295,9 +6295,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"libdweb@https://github.com/mozilla/libdweb/tarball/c30af9fcf9ba2e0c03062403a8c8ac54641be586/libdweb.tar.gz":
+"libdweb@https://github.com/mozilla/libdweb/tarball/dbb9697a8dd09a9ad61ce5e2204400f72d16157a/libdweb.tar.gz":
   version "0.0.0"
-  resolved "https://github.com/mozilla/libdweb/tarball/c30af9fcf9ba2e0c03062403a8c8ac54641be586/libdweb.tar.gz#b0e6bd3587a32ad07c6ed7477f702a09c747db80"
+  resolved "https://github.com/mozilla/libdweb/tarball/dbb9697a8dd09a9ad61ce5e2204400f72d16157a/libdweb.tar.gz#2fcae1f1029940a05c35a8c3ec4293c8a4af6005"
 
 libp2p-bootstrap@~0.9.3:
   version "0.9.3"
