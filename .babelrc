@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "syntax-async-generators"
+  ],
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "firefox": 61,
+          "chrome": 67
+        }
+      }
+    ]
+  ]
+}
