@@ -84,11 +84,11 @@
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_AddToIpfsRawCid": {
-    "message": "Add to IPFS",
+    "message": "Zu IPFS hinzufügen",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS (Keep Filename)",
+    "message": "Zu IPFS hinzufügen (Dateiname beibehalten)",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "notify_addonIssueTitle": {
