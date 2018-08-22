@@ -224,7 +224,7 @@ describe('modifyRequest.onBeforeRequest', function () {
           const fqdn = 'ipfs.git.sexy'
           dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
           // pretend API is offline and we can do dns lookups with it
-          state.peerCount = 0
+          state.peerCount = -1
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
       })
@@ -448,11 +448,17 @@ describe('modifyRequest.onBeforeRequest', function () {
         })
       })
 
-      describe('request to FQDN with dnslink experiment enabled', function () {
+      describe('request to FQDN with dnslink&&dnslinkEagerDnsTxtLookup policy enabled', function () {
         let activeGateway
         beforeEach(function () {
           // pretend API is online and we can do dns lookups with it
           state.dnslink = true
+          // enable eager policy (dns txt lookup for every request)
+          state.dnslinkEagerDnsTxtLookup = true
+          // disable detection of x-ipfs-path to ensure isolated test
+          // TODO: create separate 'describe' section  for detectIpfsPathHeader==true
+          state.detectIpfsPathHeader = false
+          // API is online and has one peer
           state.peerCount = 1
           // embedded node (js-ipfs) defaults to public gw
           activeGateway = (state.ipfsNodeType === 'external' ? state.gwURLString : state.pubGwURLString)

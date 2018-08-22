@@ -5,40 +5,45 @@ const IsIpfs = require('is-ipfs')
 const { LRUMap } = require('lru_map')
 
 module.exports = function createDnsLink (getState) {
+  // TODO: expire keys after 12h-24h
   const cache = new LRUMap(1000)
 
-  const dnsLink = {
+  const dnslinkResolver = {
     isDnslookupPossible () {
       // DNS lookups require IPFS API to be up
-      // and have a confirmed connection to the internet
-      return getState().peerCount > 0
+      return getState().peerCount >= 0
     },
 
     isDnslookupSafeForURL (requestUrl) {
       // skip URLs that could produce infinite recursion or weird loops
-      return dnsLink.isDnslookupPossible() &&
+      return getState().dnslink &&
+        dnslinkResolver.isDnslookupPossible() &&
         requestUrl.startsWith('http') &&
         !IsIpfs.url(requestUrl) &&
         !requestUrl.startsWith(getState().apiURLString) &&
         !requestUrl.startsWith(getState().gwURLString)
     },
 
-    dnslinkLookupAndOptionalRedirect (requestUrl) {
+    dnslinkRedirect (requestUrl, dnslink) {
       const url = new URL(requestUrl)
-      if (dnsLink.canRedirectToIpns(url)) {
+      if (dnslinkResolver.canRedirectToIpns(url, dnslink)) {
         // redirect to IPNS and leave it up to the gateway
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
-        return dnsLink.redirectToIpnsPath(url)
+        return dnslinkResolver.redirectToIpnsPath(url)
       }
     },
 
-    cachedDnslinkLookup (fqdn) {
-      let dnslink = cache.get(fqdn)
+    cachedDnslink (fqdn) {
+      return cache.get(fqdn)
+    },
+
+    readAndCacheDnslink (fqdn) {
+      let dnslink = dnslinkResolver.cachedDnslink(fqdn)
       if (typeof dnslink === 'undefined') {
         try {
           console.info(`[ipfs-companion] dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
-          dnslink = dnsLink.readDnslinkFromTxtRecord(fqdn)
+          dnslink = dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
             cache.set(fqdn, dnslink)
             console.info(`[ipfs-companion] found dnslink: '${fqdn}' -> '${dnslink}'`)
@@ -47,7 +52,7 @@ module.exports = function createDnsLink (getState) {
             console.info(`[ipfs-companion] found NO dnslink for '${fqdn}'`)
           }
         } catch (error) {
-          console.error(`[ipfs-companion] Error in dnslinkLookupAndOptionalRedirect for '${fqdn}'`)
+          console.error(`[ipfs-companion] Error in dnslinkRedirect for '${fqdn}'`)
           console.error(error)
         }
       } else {
@@ -60,10 +65,11 @@ module.exports = function createDnsLink (getState) {
     readDnslinkFromTxtRecord (fqdn) {
       // js-ipfs-api does not provide method for fetching this
       // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
+      // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
       const apiCall = `${getState().apiURLString}api/v0/dns/${fqdn}`
       const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
       // synchronous mode with small timeout
-      // (it is okay, because we do it only once, then it is cached and read via cachedDnslinkLookup)
+      // (it is okay, because we do it only once, then it is cached and read via readAndCacheDnslink)
       xhr.open('GET', apiCall, false)
       xhr.setRequestHeader('Accept', 'application/json')
       xhr.send(null)
@@ -83,7 +89,7 @@ module.exports = function createDnsLink (getState) {
       }
     },
 
-    canRedirectToIpns (url) {
+    canRedirectToIpns (url, dnslink) {
       // Safety check: detect and skip gateway paths
       // Public gateways such as ipfs.io are often exposed under the same domain name.
       // We don't want dnslink to interfere with content-addressing redirects,
@@ -95,8 +101,11 @@ module.exports = function createDnsLink (getState) {
       const httpGatewayPath = path.startsWith('/ipfs/') || path.startsWith('/ipns/') || path.startsWith('/api/v')
       if (!httpGatewayPath) {
         const fqdn = url.hostname
-        const dnslink = dnsLink.cachedDnslinkLookup(fqdn)
-        if (dnslink) {
+        // If dnslinkEagerDnsTxtLookup is enabled lookups will be executed for every unique hostname on every visited website
+        // Until we get efficient  DNS TXT Lookup API it will come with overhead, so it is opt-in for now,
+        // and we do lookup to populate dnslink cache only when X-Ipfs-Path header is found in initial response.
+        const foundDnslink = dnslink || (getState().dnslinkEagerDnsTxtLookup ? dnslinkResolver.readAndCacheDnslink(fqdn) : dnslinkResolver.cachedDnslink(fqdn))
+        if (foundDnslink) {
           return true
         }
       }
@@ -117,5 +126,5 @@ module.exports = function createDnsLink (getState) {
     }
   }
 
-  return dnsLink
+  return dnslinkResolver
 }

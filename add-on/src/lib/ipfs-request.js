@@ -8,7 +8,7 @@ const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
 
-function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
+function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
   // Request modifier provides event listeners for the various stages of making an HTTP request
   // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
   return {
@@ -43,11 +43,11 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         }
         // Detect valid /ipfs/ and /ipns/ on any site
         if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-          return redirectToGateway(request.url, state, dnsLink)
+          return redirectToGateway(request.url, state, dnslinkResolver)
         }
-        // Look for dnslink in TXT records of visited sites
-        if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
-          const dnslinkRedirect = dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+        // Detect dnslink using heuristics enabled in Preferences
+        if (state.dnslink && dnslinkResolver.isDnslookupSafeForURL(request.url)) {
+          const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
           if (dnslinkRedirect && isSafeToRedirect(request, runtime)) {
             return dnslinkRedirect
           }
@@ -96,13 +96,55 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
     onHeadersReceived (request) {
       // Fired when the HTTP response headers associated with a request have been received.
       // You can use this event to modify HTTP response headers or do a very late redirect.
+      const state = getState()
 
-      // Late redirect as a workaround for edge cases such as:
-      // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-      if (onHeadersReceivedRedirect.has(request.requestId)) {
-        const state = getState()
-        onHeadersReceivedRedirect.delete(request.requestId)
-        return redirectToGateway(request.url, state, dnsLink)
+      if (state.active && state.redirect) {
+        // Late redirect as a workaround for edge cases such as:
+        // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+        if (onHeadersReceivedRedirect.has(request.requestId)) {
+          onHeadersReceivedRedirect.delete(request.requestId)
+          return redirectToGateway(request.url, state, dnslinkResolver)
+        }
+
+        // Detect X-Ipfs-Path Header
+        // and upgrade transport to IPFS using path from header value
+        // TODO: hide this behind a flag
+        // https://github.com/ipfs-shipyard/ipfs-companion/issues/548#issuecomment-410891930
+        if (request.responseHeaders && !request.url.startsWith(state.gwURLString) && !request.url.startsWith(state.apiURLString)) {
+          console.log('onHeadersReceived.request', request)
+          for (let header of request.responseHeaders) {
+            if (header.name.toLowerCase() === 'x-ipfs-path' && isSafeToRedirect(request, runtime)) {
+              console.log(`[ipfs-companion] detected x-ipfs-path for ${request.url}: ${header.value}`)
+              // First: Check if dnslink heuristic yields any results
+              // Note: this depends on which dnslink lookup policy is selecten in Preferences
+              // TODO: add tests
+              if (state.dnslink && dnslinkResolver.isDnslookupSafeForURL(request.url)) {
+                // x-ipfs-path is a strong indicator of IPFS support
+                // so we force dnslink lookup to pre-populate dnslink cache
+                // in a way that works even when state.dnslinkEagerDnsTxtLookup is disabled
+                // All the following requests will be upgraded to IPNS
+                const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
+                const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
+                console.log(`[ipfs-companion] onHeadersReceived: dnslinkRedirect for ${request.url}`, dnslinkRedirect)
+                if (dnslinkRedirect) {
+                  return dnslinkRedirect
+                }
+              }
+              // It is possible that someone exposed /ipfs/<cid>/ under /
+              // and our path-based onBeforeRequest heuristics were unable
+              // to identify request as IPFS one until onHeadersReceived revealed
+              // presence of x-ipfs-path header.
+              // TODO: add tests
+              const url = new URL(request.url)
+              // Normalize
+              url.protocol = state.pubGwURL.protocol
+              url.host = state.pubGwURL.host
+              url.pathname = header.value
+              console.log(`[ipfs-companion] onHeadersReceived: normalized ${request.url} to  ${url}`)
+              return redirectToGateway(url, state, dnslinkResolver)
+            }
+          }
+        }
       }
     },
 
@@ -114,6 +156,8 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
       if (onHeadersReceivedRedirect.has(request.requestId)) {
         onHeadersReceivedRedirect.delete(request.requestId)
       }
+
+      // TODO: run dnslookup for request.url and if request was for main frame open it from IPFS in a new tab
     }
 
   }
@@ -154,12 +198,12 @@ function postNormalizationSkip (state, request) {
   return false
 }
 
-function redirectToGateway (requestUrl, state, dnsLink) {
+function redirectToGateway (requestUrl, state, dnslinkResolver) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
   const url = new URL(requestUrl)
-  if (state.dnslink && dnsLink.canRedirectToIpns(url)) {
+  if (state.dnslink && dnslinkResolver.canRedirectToIpns(url)) {
     // late dnslink in onHeadersReceived
-    return dnsLink.redirectToIpnsPath(url)
+    return dnslinkResolver.redirectToIpnsPath(url)
   }
   const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
   url.protocol = gwUrl.protocol
