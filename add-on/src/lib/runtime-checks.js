@@ -26,6 +26,7 @@ async function createRuntimeChecks (browser) {
   const runtimeIsAndroid = platformInfo ? platformInfo.os === 'android' : false
   //
   return Object.freeze({
+    browser,
     isFirefox: runtimeIsFirefox,
     isAndroid: runtimeIsAndroid,
     hasNativeProtocolHandler: runtimeHasNativeProtocol

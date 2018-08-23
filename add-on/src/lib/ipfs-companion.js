@@ -2,10 +2,10 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { optionDefaults, storeMissingOptions } = require('./options')
+const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
-const createDnsLink = require('./dns-link')
+const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
@@ -35,6 +35,7 @@ module.exports = async function init () {
   const browserActionPortName = 'browser-action-port'
 
   try {
+    await migrateOptions(browser.storage.local)
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
@@ -54,7 +55,7 @@ module.exports = async function init () {
     }
 
     copier = createCopier(getState, notify)
-    dnslinkResolver = createDnsLink(getState)
+    dnslinkResolver = createDnslinkResolver(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddToIpfsRawCid: addFromURL,
@@ -585,12 +586,19 @@ module.exports = async function init () {
           state[key] = change.newValue
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
           break
+        case 'dnslinkPolicy':
+          state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
+          if (state.dnslinkPolicy === 'detectIpfsPathHeader' && !state.detectIpfsPathHeader) {
+            await browser.storage.local.set({ detectIpfsPathHeader: true })
+          }
+          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
         case 'automaticMode':
-        case 'dnslink':
+        case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
+          console.log(`state[${key}]=${change.newValue}`)
           state[key] = change.newValue
           break
       }

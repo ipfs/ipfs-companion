@@ -297,9 +297,33 @@
     "message": "Turn plaintext /ipfs/ paths into clickable links",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
-  "option_dnslink_title": {
+  "option_dnslinkPolicy_title": {
     "message": "DNSLINK Support",
-    "description": "An option title on the Preferences screen (option_dnslink_title)"
+    "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
+  },
+  "option_dnslinkPolicy_description": {
+    "message": "Select DNS TXT lookup policy",
+    "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
+  },
+  "option_dnslinkPolicy_disabled": {
+    "message": "Disabled",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
+  },
+  "option_dnslinkPolicy_detectIpfsPathHeader": {
+    "message": "Lookup if x-ipfs-path found",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_detectIpfsPathHeader)"
+  },
+  "option_dnslinkPolicy_eagerDnsTxtLookup": {
+    "message": "Lookup every FQDN",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_)"
+  },
+  "option_detectIpfsPathHeader_title": {
+    "message": "Detect x-ipfs-path Header",
+    "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
+  },
+  "option_detectIpfsPathHeader_description": {
+    "message": "Stop reading data and redirect to IPFS when the header is found in HTTP response",
+    "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
     "message": "window.ipfs",
@@ -320,10 +344,6 @@
   "option_preloadAtPublicGateway_description": {
     "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
-  },
-  "option_dnslink_description": {
-    "message": "Perform DNS lookup for every visited website and use Custom Gateway if DNSLINK is present in its DNS TXT record (known to slow down the browser)",
-    "description": "An option description on the Preferences screen (option_dnslink_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Reset Everything",

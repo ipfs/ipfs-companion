@@ -7,7 +7,7 @@ const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
 const createRuntimeChecks = require('../../../add-on/src/lib/runtime-checks')
 const { createRequestModifier, redirectOptOutHint } = require('../../../add-on/src/lib/ipfs-request')
-const createDnsLink = require('../../../add-on/src/lib/dns-link')
+const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
@@ -22,7 +22,7 @@ const fakeRequestId = () => {
 const nodeTypes = ['external', 'embedded']
 
 describe('modifyRequest.onBeforeRequest', function () {
-  let state, dnsLink, ipfsPathValidator, modifyRequest, runtime
+  let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
     global.URL = URL
@@ -39,10 +39,10 @@ describe('modifyRequest.onBeforeRequest', function () {
       pubGwURLString: 'https://ipfs.io'
     })
     const getState = () => state
-    dnsLink = createDnsLink(getState)
+    dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
-    ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
+    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
+    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
   describe('request for a path matching /ipfs/{CIDv0}', function () {
@@ -170,14 +170,14 @@ describe('modifyRequest.onBeforeRequest', function () {
         const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
         // stub the existence of valid dnslink
         const fqdn = 'ipfs.git.sexy'
-        dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
         // pretend API is online and we can do dns lookups with it
         state.peerCount = 1
         expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
       })
       it('should be served from custom gateway if {path} starts with a valid CID', function () {
         const request = url2request('https://google.com/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
-        dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().returns(false)
         expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
       })
     })
@@ -190,14 +190,14 @@ describe('modifyRequest.onBeforeRequest', function () {
         const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
         // stub the existence of valid dnslink
         const fqdn = 'ipfs.git.sexy'
-        dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
         // pretend API is online and we can do dns lookups with it
         state.peerCount = 1
         expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
       })
       it('should be served from public gateway if {path} starts with a valid CID', function () {
         const request = url2request('https://google.com/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
-        dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().returns(false)
         expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
       })
     })
@@ -215,14 +215,14 @@ describe('modifyRequest.onBeforeRequest', function () {
         })
         it(`should be left untouched if FQDN is not a real domain nor a valid CID (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipns/notafqdnorcid?argTest#hashTest')
-          dnsLink.readDnslinkFromTxtRecord = sinon.stub().returns(false)
+          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().returns(false)
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it(`should be left untouched if {path} points to a FQDN but API is offline (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
           // stub the existence of valid dnslink in dnslink cache
           const fqdn = 'ipfs.git.sexy'
-          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
           // pretend API is offline and we can do dns lookups with it
           state.peerCount = -1
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
@@ -448,13 +448,11 @@ describe('modifyRequest.onBeforeRequest', function () {
         })
       })
 
-      describe('request to FQDN with dnslink&&dnslinkEagerDnsTxtLookup policy enabled', function () {
+      describe('request to FQDN with dnslinkPolicy "eagerDnsTxtLookup"', function () {
         let activeGateway
         beforeEach(function () {
-          // pretend API is online and we can do dns lookups with it
-          state.dnslink = true
-          // enable eager policy (dns txt lookup for every request)
-          state.dnslinkEagerDnsTxtLookup = true
+          // Enable the eager dnslinkPolicy (dns txt lookup for every request)
+          state.dnslinkPolicy = 'eagerDnsTxtLookup'
           // disable detection of x-ipfs-path to ensure isolated test
           // TODO: create separate 'describe' section  for detectIpfsPathHeader==true
           state.detectIpfsPathHeader = false
@@ -466,7 +464,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         it('should be redirected to active gateway if dnslink exists', function () {
           // stub the existence of valid dnslink
           const fqdn = 'ipfs.git.sexy'
-          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
           //
           const request = url2request('http://ipfs.git.sexy/index.html?argTest#hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal(activeGateway + '/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
@@ -474,7 +472,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         it('should be redirected to active gateway if fetched from the same origin and redirect is enabled in non-Firefox', function () {
           // stub the existence of valid dnslink
           const fqdn = 'ipfs.git.sexy'
-          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
           //
           runtime.isFirefox = false
           const xhrRequest = {url: 'http://ipfs.git.sexy/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
@@ -483,7 +481,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         it('should be redirected to active gateway via late redirect if dnslink exists and XHR is cross-origin in Firefox', function () {
           // stub the existence of valid dnslink
           const fqdn = 'ipfs.git.sexy'
-          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
+          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
           //
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
@@ -496,7 +494,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         it('should be left unouched if dnslink does not exist and XHR is cross-origin in Firefox', function () {
           // stub no dnslink
           const fqdn = 'youtube.com'
-          dnsLink.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(undefined)
+          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(undefined)
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
           const xhrRequest = {url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}

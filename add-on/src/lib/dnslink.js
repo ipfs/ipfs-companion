@@ -2,11 +2,12 @@
 /* eslint-env browser */
 
 const IsIpfs = require('is-ipfs')
-const { LRUMap } = require('lru_map')
+const LRU = require('lru-cache')
 
-module.exports = function createDnsLink (getState) {
-  // TODO: expire keys after 12h-24h
-  const cache = new LRUMap(1000)
+module.exports = function createDnslinkResolver (getState) {
+  // DNSLink lookup result cache
+  const cacheOptions = {max: 1000, maxAge: 1000 * 60 * 60}
+  const cache = new LRU(cacheOptions)
 
   const dnslinkResolver = {
     isDnslookupPossible () {
@@ -16,12 +17,13 @@ module.exports = function createDnsLink (getState) {
 
     isDnslookupSafeForURL (requestUrl) {
       // skip URLs that could produce infinite recursion or weird loops
-      return getState().dnslink &&
+      const state = getState()
+      return state.dnslinkPolicy &&
         dnslinkResolver.isDnslookupPossible() &&
         requestUrl.startsWith('http') &&
         !IsIpfs.url(requestUrl) &&
-        !requestUrl.startsWith(getState().apiURLString) &&
-        !requestUrl.startsWith(getState().gwURLString)
+        !requestUrl.startsWith(state.apiURLString) &&
+        !requestUrl.startsWith(state.gwURLString)
     },
 
     dnslinkRedirect (requestUrl, dnslink) {
@@ -32,6 +34,14 @@ module.exports = function createDnsLink (getState) {
         // - https://github.com/ipfs/ipfs-companion/issues/298
         return dnslinkResolver.redirectToIpnsPath(url)
       }
+    },
+
+    setDnslink (fqdn, value) {
+      cache.set(fqdn, value)
+    },
+
+    clearCache() {
+      cache.reset()
     },
 
     cachedDnslink (fqdn) {
@@ -45,14 +55,14 @@ module.exports = function createDnsLink (getState) {
           console.info(`[ipfs-companion] dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
-            cache.set(fqdn, dnslink)
+            dnslinkResolver.setDnslink(fqdn, dnslink)
             console.info(`[ipfs-companion] found dnslink: '${fqdn}' -> '${dnslink}'`)
           } else {
-            cache.set(fqdn, false)
+            dnslinkResolver.setDnslink(fqdn, false)
             console.info(`[ipfs-companion] found NO dnslink for '${fqdn}'`)
           }
         } catch (error) {
-          console.error(`[ipfs-companion] Error in dnslinkRedirect for '${fqdn}'`)
+          console.error(`[ipfs-companion] Error in readAndCacheDnslink for '${fqdn}'`)
           console.error(error)
         }
       } else {
@@ -101,10 +111,13 @@ module.exports = function createDnsLink (getState) {
       const httpGatewayPath = path.startsWith('/ipfs/') || path.startsWith('/ipns/') || path.startsWith('/api/v')
       if (!httpGatewayPath) {
         const fqdn = url.hostname
-        // If dnslinkEagerDnsTxtLookup is enabled lookups will be executed for every unique hostname on every visited website
+        // If dnslink policy is 'eagerDnsTxtLookup' then lookups will be executed for every unique hostname on every visited website
         // Until we get efficient  DNS TXT Lookup API it will come with overhead, so it is opt-in for now,
         // and we do lookup to populate dnslink cache only when X-Ipfs-Path header is found in initial response.
-        const foundDnslink = dnslink || (getState().dnslinkEagerDnsTxtLookup ? dnslinkResolver.readAndCacheDnslink(fqdn) : dnslinkResolver.cachedDnslink(fqdn))
+        const foundDnslink = dnslink ||
+          (getState().dnslinkPolicy === 'eagerDnsTxtLookup'
+            ? dnslinkResolver.readAndCacheDnslink(fqdn)
+            : dnslinkResolver.cachedDnslink(fqdn))
         if (foundDnslink) {
           return true
         }
