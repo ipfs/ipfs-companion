@@ -40,7 +40,7 @@ module.exports = function createDnslinkResolver (getState) {
       cache.set(fqdn, value)
     },
 
-    clearCache() {
+    clearCache () {
       cache.reset()
     },
 
