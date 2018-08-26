@@ -2654,11 +2654,11 @@ debug@2, debug@2.6.9, debug@^2.1.1, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, de
   dependencies:
     ms "2.0.0"
 
-debug@3.1.0, debug@^3.1.0, debug@~3.1.0:
+debug@3.1.0, debug@^3.1.0, "debug@https://github.com/visionmedia/debug/tarball/207a6a2d53507ec9dd57c94c46cc7d3dd272306d/debug.tar.gz", debug@~3.1.0:
   version "3.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  resolved "https://github.com/visionmedia/debug/tarball/207a6a2d53507ec9dd57c94c46cc7d3dd272306d/debug.tar.gz#1f55c7ea8093a60532f82b9caf51b819447f556f"
   dependencies:
-    ms "2.0.0"
+    ms "^2.1.1"
 
 decamelize-keys@^1.0.0:
   version "1.1.0"

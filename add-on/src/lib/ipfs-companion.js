@@ -6,6 +6,7 @@ const { optionDefaults, storeMissingOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
 const createDnsLink = require('./dns-link')
+const { pleaseWait } = require('./please-wait')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
@@ -14,6 +15,12 @@ const createCopier = require('./copier')
 const createRuntimeChecks = require('./runtime-checks')
 const { createContextMenus, findUrlForContext } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
+
+// LOG
+// production: localStorage.debug = 'ipfs-companion:*,-*:debug'
+//        dev: localStorage.debug = 'ipfs-companion:*'
+localStorage.debug = 'ipfs-companion:*,-*:debug'
+const log = require('./log')('background')
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -35,7 +42,9 @@ module.exports = async function init () {
   const browserActionPortName = 'browser-action-port'
 
   try {
+    log('init(): %s', pleaseWait())
     const options = await browser.storage.local.get(optionDefaults)
+    log.debug('loaded options %O', options)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
     notify = createNotifier(getState)
@@ -101,10 +110,10 @@ module.exports = async function init () {
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
     if (runtime.hasNativeProtocolHandler) {
-      console.log('[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler')
+      log('registerStringProtocol available. Adding ipfs:// handler')
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
-      console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
+      log('browser.protocol.* is not available: native protocol will not be registered')
     }
   }
 
@@ -282,7 +291,7 @@ module.exports = async function init () {
         result = await ipfs.util.addFromURL(srcUrl, options)
       }
     } catch (error) {
-      console.error('Error in upload to IPFS context menu', error)
+      log.error('Error in upload to IPFS context menu', error)
       if (error.message === 'NetworkError when attempting to fetch resource.') {
         notify('notify_uploadErrorTitle', 'notify_uploadTrackingProtectionErrorMsg')
         console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
@@ -315,7 +324,7 @@ module.exports = async function init () {
       if (file && file.hash) {
         const {path, url} = getIpfsPathAndNativeAddress(file.hash)
         preloadAtPublicGateway(path)
-        console.info('[ipfs-companion] successfully stored', file)
+        log('successfully stored', file)
         // open the wrapping directory (or the CID if wrapping was disabled)
         if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.hash)) {
           await browser.tabs.create({
@@ -358,7 +367,7 @@ module.exports = async function init () {
     if (!state.active) return // skip content script injection when off
     if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
       if (state.linkify) {
-        console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
+        log(`Running linkify(DOM) at ${tab.url}`)
         try {
           await browser.tabs.executeScript(tabId, {
             file: '/dist/bundles/linkifyContentScript.bundle.js',
@@ -367,7 +376,7 @@ module.exports = async function init () {
             runAt: 'document_idle'
           })
         } catch (error) {
-          console.error(`Unable to linkify DOM at '${tab.url}' due to`, error)
+          log.error(`Unable to linkify DOM at '${tab.url}' due to %O`, error)
         }
       }
       if (state.catchUnhandledProtocols) {
@@ -389,7 +398,7 @@ module.exports = async function init () {
             runAt: 'document_end'
           })
         } catch (error) {
-          console.error(`Unable to normalize links at '${tab.url}' due to`, error)
+          log.error(`Unable to normalize links at '${tab.url}'`, error)
         }
       }
     }

@@ -97,6 +97,7 @@
   },
   "dependencies": {
     "choo": "6.13.0",
+    "debug": "https://github.com/visionmedia/debug/tarball/207a6a2d53507ec9dd57c94c46cc7d3dd272306d/debug.tar.gz",
     "doc-sniff": "1.0.1",
     "drag-and-drop-files": "0.0.1",
     "file-type": "9.0.0",

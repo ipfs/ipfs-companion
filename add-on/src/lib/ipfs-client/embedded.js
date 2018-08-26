@@ -2,11 +2,12 @@
 
 const Ipfs = require('ipfs')
 const { optionDefaults } = require('../options')
+const log = require('../log')('api:embedded')
 
 let node = null
 
 exports.init = function init (opts) {
-  console.log('[ipfs-companion] Embedded ipfs init')
+  log('IPFS init using embedded js-ipfs')
 
   node = new Ipfs(
     JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig)
@@ -24,7 +25,7 @@ exports.init = function init (opts) {
 }
 
 exports.destroy = async function () {
-  console.log('[ipfs-companion] Embedded ipfs destroy')
+  log('js-ipfs node destroy')
   if (!node) return
 
   await node.stop()

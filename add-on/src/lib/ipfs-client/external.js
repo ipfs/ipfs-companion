@@ -2,9 +2,10 @@
 /* eslint-env browser */
 
 const IpfsApi = require('ipfs-api')
+const log = require('../log')('api:external')
 
 exports.init = async function (opts) {
-  console.log('[ipfs-companion] External ipfs init', opts.apiURLString)
+  log('IPFS init using API at %s', opts.apiURLString)
 
   const url = opts.apiURL
   const api = IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
@@ -12,7 +13,7 @@ exports.init = async function (opts) {
 }
 
 exports.destroy = async function () {
-  console.log('[ipfs-companion] External ipfs destroy')
+  log('IPFS API client destroy')
 }
 
 // TODO: Upgrade to a caching proxy for ipfs-api
