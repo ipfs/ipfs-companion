@@ -32,6 +32,8 @@ There is a [DNSLink policy][] enabled by default to execute DNS TXT lookups only
 
 It is a big optimization, effectively removes the need for doing additional TXT lookup for every new hostname on every website.
 
+Note: `x-ipfs-path` starting with `/ipns/` will be ignored if [DNSLink policy][] is "Disabled" or DNS TXT record is missing.
+
 ----
 
 #### See Also:

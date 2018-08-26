@@ -314,7 +314,7 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_detectIpfsPathHeader)"
   },
   "option_dnslinkPolicy_eagerDnsTxtLookup": {
-    "message": "Lookup every FQDN",
+    "message": "Lookup for every new FQDN",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_)"
   },
   "option_detectIpfsPathHeader_title": {

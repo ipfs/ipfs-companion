@@ -17,7 +17,7 @@ const url2request = (string) => {
 
 const nodeTypes = ['external', 'embedded']
 
-describe('modifyRequest.onBeforeRequest', function () {
+describe('modifyRequest.onBeforeRequest:', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {

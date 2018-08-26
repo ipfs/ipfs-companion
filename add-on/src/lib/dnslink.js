@@ -3,6 +3,7 @@
 
 const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
+const { offlinePeerCount } = require('./state')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
@@ -10,16 +11,10 @@ module.exports = function createDnslinkResolver (getState) {
   const cache = new LRU(cacheOptions)
 
   const dnslinkResolver = {
-    isDnslookupPossible () {
-      // DNS lookups require IPFS API to be up
-      return getState().peerCount >= 0
-    },
-
-    isDnslookupSafeForURL (requestUrl) {
+    canLookupURL (requestUrl) {
       // skip URLs that could produce infinite recursion or weird loops
       const state = getState()
       return state.dnslinkPolicy &&
-        dnslinkResolver.isDnslookupPossible() &&
         requestUrl.startsWith('http') &&
         !IsIpfs.url(requestUrl) &&
         !requestUrl.startsWith(state.apiURLString) &&
@@ -32,7 +27,7 @@ module.exports = function createDnslinkResolver (getState) {
         // redirect to IPNS and leave it up to the gateway
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
-        return dnslinkResolver.redirectToIpnsPath(url)
+        return { redirectUrl: dnslinkResolver.convertToIpnsUrl(url) }
       }
     },
 
@@ -73,10 +68,18 @@ module.exports = function createDnslinkResolver (getState) {
     },
 
     readDnslinkFromTxtRecord (fqdn) {
+      const state = getState()
+      let apiProvider
+      if (state.ipfsNodeType === 'external' && state.peerCount !== offlinePeerCount) {
+        apiProvider = state.apiURLString
+      } else {
+        // fallback to resolver at public gateway
+        apiProvider = 'https://ipfs.io/'
+      }
       // js-ipfs-api does not provide method for fetching this
       // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
       // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
-      const apiCall = `${getState().apiURLString}api/v0/dns/${fqdn}`
+      const apiCall = `${apiProvider}api/v0/dns/${fqdn}`
       const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
       // synchronous mode with small timeout
       // (it is okay, because we do it only once, then it is cached and read via readAndCacheDnslink)
@@ -111,9 +114,13 @@ module.exports = function createDnslinkResolver (getState) {
       const httpGatewayPath = path.startsWith('/ipfs/') || path.startsWith('/ipns/') || path.startsWith('/api/v')
       if (!httpGatewayPath) {
         const fqdn = url.hostname
-        // If dnslink policy is 'eagerDnsTxtLookup' then lookups will be executed for every unique hostname on every visited website
-        // Until we get efficient  DNS TXT Lookup API it will come with overhead, so it is opt-in for now,
-        // and we do lookup to populate dnslink cache only when X-Ipfs-Path header is found in initial response.
+        // If dnslink policy is 'eagerDnsTxtLookup' then lookups will be
+        // executed for every unique hostname on every visited website.
+        // Until we get efficient DNS TXT Lookup API there will be an overhead,
+        // so 'eagerDnsTxtLookup' policy is an opt-in for now.  By default we use
+        // 'detectIpfsPathHeader' policy which does lookup to populate dnslink
+        // cache only when X-Ipfs-Path header is found in initial response.
+        // More: https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md
         const foundDnslink = dnslink ||
           (getState().dnslinkPolicy === 'eagerDnsTxtLookup'
             ? dnslinkResolver.readAndCacheDnslink(fqdn)
@@ -125,7 +132,7 @@ module.exports = function createDnslinkResolver (getState) {
       return false
     },
 
-    redirectToIpnsPath (originalUrl) {
+    convertToIpnsUrl (originalUrl) {
       // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
       const fqdn = originalUrl.hostname
       const state = getState()
@@ -135,7 +142,7 @@ module.exports = function createDnslinkResolver (getState) {
       url.host = gwUrl.host
       url.port = gwUrl.port
       url.pathname = `/ipns/${fqdn}${url.pathname}`
-      return { redirectUrl: url.toString() }
+      return url.toString()
     }
   }
 

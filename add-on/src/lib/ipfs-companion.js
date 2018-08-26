@@ -551,7 +551,7 @@ module.exports = async function init () {
       if (change.oldValue === change.newValue) continue
 
       // debug info
-      // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
+      console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       switch (key) {
         case 'active':
           state[key] = change.newValue
@@ -598,7 +598,6 @@ module.exports = async function init () {
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
-          console.log(`state[${key}]=${change.newValue}`)
           state[key] = change.newValue
           break
       }

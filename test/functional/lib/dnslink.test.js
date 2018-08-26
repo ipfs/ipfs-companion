@@ -4,18 +4,143 @@ const { expect } = require('chai')
 const { URL } = require('url')
 const sinon = require('sinon')
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
+const { initState } = require('../../../add-on/src/lib/state')
+const { optionDefaults } = require('../../../add-on/src/lib/options')
 
-function setFakeDnslink (fqdn, dnslinkResolver) {
-  // stub the existence of valid dnslink
-  dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR')
+function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
+  // pass 'false' to spoof "no DNS TXT record"
+  value = String(value) === 'false' ? undefined : '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+  // spoofs existence of valid DNS TXT record (used on cache miss)
+  dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(value)
 }
 
-describe('when dnslinkPolicy is "eagerDnsTxtLookup"', function () {
+function expectNoDnsTxtRecordLookup (fqdn, dnslinkResolver) {
+  dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).throws('unexpected DNS TXT lookup', 'only cache should be used')
+}
+
+// dnslinkPolicy-agnostic tests
+describe('dnslinkResolver', function () {
   before(() => {
     global.URL = URL
   })
 
-  const getState = () => ({
+  const getState = () => Object.assign(initState(optionDefaults), {
+    gwURL: new URL('http://127.0.0.1:8080'),
+    pubGwURL: new URL('https://gateway.foobar.io'),
+    peerCount: 1
+  })
+  const getExternalNodeState = () => Object.assign({}, getState(), {ipfsNodeType: 'external'})
+  const getEmbeddedNodeState = () => Object.assign({}, getState(), {ipfsNodeType: 'embedded'})
+
+  describe('convertToIpnsUrl(url)', function () {
+    it('should return IPNS path at a custom gateway when external API is used', function () {
+      const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
+      expect(dnslinkResolver.convertToIpnsUrl(url))
+        .to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+    })
+    it('should return IPNS path at a public gateway if embedded node is used', function () {
+      const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
+      expect(dnslinkResolver.convertToIpnsUrl(url))
+        .to.equal('https://gateway.foobar.io/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+    })
+  })
+})
+
+// in this mode lookups are triggered externally, so all methods should work 'offline' using data from internal DNSLink cache
+describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
+  before(() => {
+    global.URL = URL
+  })
+
+  const getState = () => Object.assign(initState(optionDefaults), {
+    gwURL: new URL('http://127.0.0.1:8080'),
+    pubGwURL: new URL('https://gateway.foobar.io'),
+    ipfsNodeType: 'external',
+    dnslinkPolicy: 'detectIpfsPathHeader',
+    peerCount: 1
+  })
+  const getExternalNodeState = () => Object.assign({}, getState(), {ipfsNodeType: 'external'})
+  const getEmbeddedNodeState = () => Object.assign({}, getState(), {ipfsNodeType: 'embedded'})
+
+  describe('dnslinkRedirect(url)', function () {
+    ['/api/v0/foo', '/ipfs/foo', '/ipns/foo'].forEach(path => {
+      it('should return nothing if dnslink is present in cache but path starts with ' + path, function () {
+        const url = new URL('https://dnslinksite1.io' + path)
+        const dnslinkResolver = createDnslinkResolver(getState)
+        dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
+        expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+        expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
+      })
+    })
+    it('[external node] should return redirect to custom gateway if dnslink is present in cache', function () {
+      const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
+      dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
+      expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+      expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
+          .to.equal('http://127.0.0.1:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
+    })
+    it('[embedded node] should return redirect to public gateway if dnslink is present in cache', function () {
+      const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
+      dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
+      expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+      expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
+          .to.equal('https://gateway.foobar.io/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
+    })
+    it('[external node] should not return redirect to custom gateway if dnslink is not in cache and path does not belong to a gateway', function () {
+      const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
+      dnslinkResolver.clearCache()
+      expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+      expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
+    })
+    it('[embedded node] should not return redirect to public gateway if dnslink is not in cache and path does not belong to a gateway', function () {
+      const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
+      dnslinkResolver.clearCache()
+      expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+      expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
+    })
+  })
+
+  describe('canRedirectToIpns(url)', function () {
+    const httpGatewayPaths = ['/api/v0/foo', '/ipfs/foo', '/ipns/foo']
+    httpGatewayPaths.forEach(path => {
+      it('should return false if dnslink is present in cache but path starts with /api/v0/', function () {
+        const url = new URL('https://dnslinksite1.io' + path)
+        const dnslinkResolver = createDnslinkResolver(getState)
+        dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
+        expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+        expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
+      })
+    })
+    const dnslinkCacheStates = [true, false]
+    dnslinkCacheStates.forEach(cached => {
+      it(`should return ${cached} if dnslink is ${cached ? 'present' : 'not'} in cache and path does not belong to an HTTP gateway`, function () {
+        const url = new URL('https://dnslinksite4.io/foo/bar')
+        const dnslinkResolver = createDnslinkResolver(getState)
+        if (cached) {
+          dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
+        } else {
+          dnslinkResolver.clearCache()
+        }
+        expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+        expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(cached)
+      })
+    })
+  })
+})
+
+// this policy triggers actual DNS TXT lookups
+describe('dnslinkResolver (dnslinkPolicy=eagerDnsTxtLookup)', function () {
+  before(() => {
+    global.URL = URL
+  })
+
+  const getState = () => Object.assign(initState(optionDefaults), {
     gwURL: new URL('http://127.0.0.1:8080'),
     pubGwURL: new URL('https://gateway.foobar.io'),
     ipfsNodeType: 'external',
@@ -26,57 +151,27 @@ describe('when dnslinkPolicy is "eagerDnsTxtLookup"', function () {
   const getEmbeddedNodeState = () => Object.assign({}, getState(), {ipfsNodeType: 'embedded'})
 
   describe('dnslinkRedirect(url)', function () {
-    it('should return nothing if dnslink is present but path starts with /api/v0/', function () {
-      const url = new URL('https://dnslinksite1.io/api/v0/dns/ipfs.io')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
-      expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
+    ['/api/v0/foo', '/ipfs/foo', '/ipns/foo'].forEach(path => {
+      it('should return nothing if DNS TXT record is present but path starts with ' + path, function () {
+        const url = new URL('https://dnslinksite1.io' + path)
+        const dnslinkResolver = createDnslinkResolver(getState)
+        spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+        expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
+      })
     })
-    it('should return nothing if dnslink is present but path starts with /ipfs/', function () {
-      const url = new URL('https://dnslinksite2.io/ipfs/foo/bar')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
-      expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
-    })
-    it('should return nothing if dnslink is present but path starts with /ipfs/', function () {
-      const url = new URL('https://dnslinksite3.io/ipns/foo/bar')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
-      expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
-    })
-    it('with external node should return redirect to custom gateway if dnslink is present and path does not belong to a gateway', function () {
+    it('[external node] should return redirect to custom gateway if DNS TXT record is present and path does not belong to a gateway', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
       expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
           .to.equal('http://127.0.0.1:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
     })
-    it('with embedded node should return redirect to public gateway if dnslink is present and path does not belong to a gateway', function () {
+    it('[embedded node] should return redirect to public gateway if DNS TXT record is present and path does not belong to a gateway', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
       expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
           .to.equal('https://gateway.foobar.io/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
-    })
-  })
-
-  describe('redirectToIpnsPath(url)', function () {
-    describe('with external gateway', function () {
-      it('should return IPNS path at a custom gateway', function () {
-        const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
-        const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
-        expect(dnslinkResolver.redirectToIpnsPath(url).redirectUrl)
-          .to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
-      })
-    })
-
-    describe('with embedded gateway', function () {
-      it('should return IPNS path at a public gateway', function () {
-        const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
-        const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
-        expect(dnslinkResolver.redirectToIpnsPath(url).redirectUrl)
-          .to.equal('https://gateway.foobar.io/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
-      })
     })
   })
 
@@ -84,26 +179,29 @@ describe('when dnslinkPolicy is "eagerDnsTxtLookup"', function () {
     it('should return false if dnslink is present but path starts with /api/v0/', function () {
       const url = new URL('https://dnslinksite1.io/api/v0/dns/ipfs.io')
       const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
       expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
     })
     it('should return false if dnslink is present but path starts with /ipfs/', function () {
       const url = new URL('https://dnslinksite2.io/ipfs/foo/bar')
       const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
       expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
     })
     it('should return false if dnslink is present but path starts with /ipfs/', function () {
       const url = new URL('https://dnslinksite3.io/ipns/foo/bar')
       const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
       expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
     })
-    it('should return true if dnslink is present and path does not belong to a gateway', function () {
-      const url = new URL('https://dnslinksite4.io/foo/bar')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      setFakeDnslink(url.hostname, dnslinkResolver)
-      expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(true)
+    const dnsTxtRecordPresence = [true, false]
+    dnsTxtRecordPresence.forEach(present => {
+      it(`should return ${present} if DNS TXT record is ${present ? 'present' : 'missing'} and path does not belong to an HTTP gateway`, function () {
+        const url = new URL('https://dnslinksite4.io/foo/bar')
+        const dnslinkResolver = createDnslinkResolver(getState)
+        spoofDnsTxtRecord(url.hostname, dnslinkResolver, present)
+        expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(present)
+      })
     })
   })
 

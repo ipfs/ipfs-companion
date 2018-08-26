@@ -21,7 +21,7 @@ const fakeRequestId = () => {
 
 const nodeTypes = ['external', 'embedded']
 
-describe('modifyRequest.onBeforeRequest', function () {
+describe('modifyRequest.onBeforeRequest:', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
@@ -120,7 +120,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
         expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
-      it('should be served from custom gateway via late redirect if XHR is cross-origin and redirect is enabled in Firefox', function () {
+      it('should be served from custom gateway via late redirect in onHeadersReceived if XHR is cross-origin and redirect is enabled in Firefox', function () {
         // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
         runtime.isFirefox = true
         const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
@@ -149,7 +149,7 @@ describe('modifyRequest.onBeforeRequest', function () {
         const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
         expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
-      it('should be served from public gateway via late redirect if XHR is cross-origin and redirect is enabled in Firefox', function () {
+      it('should be served from public gateway via late redirect in onHeadersReceived if XHR is cross-origin and redirect is enabled in Firefox', function () {
         // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
         runtime.isFirefox = true
         const xhrRequest = {url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
@@ -216,15 +216,6 @@ describe('modifyRequest.onBeforeRequest', function () {
         it(`should be left untouched if FQDN is not a real domain nor a valid CID (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipns/notafqdnorcid?argTest#hashTest')
           dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().returns(false)
-          expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
-        })
-        it(`should be left untouched if {path} points to a FQDN but API is offline (${nodeType} node)`, function () {
-          const request = url2request('https://google.com/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
-          // stub the existence of valid dnslink in dnslink cache
-          const fqdn = 'ipfs.git.sexy'
-          dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
-          // pretend API is offline and we can do dns lookups with it
-          state.peerCount = -1
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
       })

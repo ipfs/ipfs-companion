@@ -16,6 +16,7 @@ function initState (options) {
   state.apiURLString = state.apiURL.toString()
   state.gwURL = new URL(options.customGatewayUrl)
   state.gwURLString = state.gwURL.toString()
+  state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
   return state
 }
 
