@@ -6,9 +6,11 @@ const { urlAtPublicGw } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableErrors = new Set([
   // Firefox
+  'NS_ERROR_NET_TIMEOUT',          // eg. httpd is offline
   'NS_ERROR_NET_RESET',            // failed to load because the server kept reseting the connection
   'NS_ERROR_NET_ON_RESOLVED',      // no network
   // Chrome
+  'net::ERR_CONNECTION_TIMED_OUT', // eg. httpd is offline
   'net::ERR_INTERNET_DISCONNECTED' // no network
 ])
 
@@ -174,7 +176,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 
       if (state.active) {
         console.log('onErrorOccurred:' + request.error)
-        console.dir('onErrorOccurred', request)
+        console.log('onErrorOccurred', request)
         // Check if error is final and can be recovered via DNSLink
         const recoverableViaDnslink =
           state.dnslinkPolicy &&
