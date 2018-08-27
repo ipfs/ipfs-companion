@@ -4,6 +4,13 @@
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
+const recoverableErrors = new Set([
+  // Firefox
+  'NS_ERROR_NET_RESET',            // failed to load because the server kept reseting the connection
+  'NS_ERROR_NET_ON_RESOLVED',      // no network
+  // Chrome
+  'net::ERR_INTERNET_DISCONNECTED' // no network
+])
 
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
@@ -166,11 +173,14 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       const state = getState()
 
       if (state.active) {
-        // Identify first request
-        const mainRequest = request.type === 'main_frame'
-
-        // Try to recover via DNSLink
-        if (mainRequest && dnslinkResolver.canLookupURL(request.url)) {
+        console.log('onErrorOccurred:' + request.error)
+        console.dir('onErrorOccurred', request)
+        // Check if error is final and can be recovered via DNSLink
+        const recoverableViaDnslink =
+          state.dnslinkPolicy &&
+          request.type === 'main_frame' &&
+          recoverableErrors.has(request.error)
+        if (recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)) {
           // Explicit call to ignore global DNSLink policy and force DNS TXT lookup
           const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
           const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
