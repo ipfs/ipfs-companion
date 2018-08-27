@@ -41,10 +41,9 @@ with userland caching are used as a fallback.
 
 ## DNS TXT Caching
 
-Results of DNS TXT lookups are cached in a [LRU](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used) map of size 1000.
+Results of DNS TXT lookups are stored in a [LRU](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used) cache of size 1000 and max-age 12h.
 
-Right now the cache is cleared only when browser/extension restarts, but we
-will introduce time-based expiration in near future.
+The cache is in-memory and is not persisted between restarts.
 
 ----
 

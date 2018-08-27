@@ -7,7 +7,7 @@ const { offlinePeerCount } = require('./state')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
-  const cacheOptions = {max: 1000, maxAge: 1000 * 60 * 60}
+  const cacheOptions = {max: 1000, maxAge: 1000 * 60 * 60 * 12}
   const cache = new LRU(cacheOptions)
 
   const dnslinkResolver = {
