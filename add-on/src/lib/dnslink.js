@@ -79,7 +79,7 @@ module.exports = function createDnslinkResolver (getState) {
       // js-ipfs-api does not provide method for fetching this
       // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
       // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
-      const apiCall = `${apiProvider}api/v0/dns/${fqdn}`
+      const apiCall = `${apiProvider}api/v0/dns/${fqdn}?r=true`
       const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
       // synchronous mode with small timeout
       // (it is okay, because we do it only once, then it is cached and read via readAndCacheDnslink)
@@ -94,7 +94,7 @@ module.exports = function createDnslinkResolver (getState) {
         }
         return dnslink
       } else if (xhr.status === 500) {
-        // go-ipfs returns 500 if host has no dnslink
+        // go-ipfs returns 500 if host has no dnslink or an error occurred
         // TODO: find/fill an upstream bug to make this more intuitive
         return false
       } else {
