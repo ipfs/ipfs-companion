@@ -53,6 +53,6 @@ The cache is in-memory and is not persisted between restarts.
 - [Bug 1449171: Add DNS TXT resolution to dns.resolve WebExtensions API][bug1449171]
 
 [dnslink guide]: https://docs.ipfs.io/guides/concepts/dnslink/
-[x-ipfs-path header]: x-ipfs-header.md
+[x-ipfs-path header]: x-ipfs-path-header.md
 [DoH]: https://en.wikipedia.org/wiki/DNS_over_HTTPS
 [bug1449171]: https://bugzilla.mozilla.org/show_bug.cgi?id=1449171
