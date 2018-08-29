@@ -100,7 +100,6 @@
     "doc-sniff": "1.0.1",
     "drag-and-drop-files": "0.0.1",
     "file-type": "9.0.0",
-    "filereader-pull-stream": "1.0.0",
     "filesize": "3.6.1",
     "ipfs": "0.31.4",
     "ipfs-api": "24.0.0",
@@ -114,6 +113,7 @@
     "p-queue": "2.4.2",
     "path-browserify": "1.0.0",
     "piggybacker": "2.0.0",
+    "pull-file-reader": "1.0.2",
     "tachyons": "4.11.1",
     "webextension-polyfill": "0.1.2"
   }

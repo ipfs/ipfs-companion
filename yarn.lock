@@ -3885,12 +3885,6 @@ file-uri-to-path@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
 
-filereader-pull-stream@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/filereader-pull-stream/-/filereader-pull-stream-1.0.0.tgz#9cd17b66a5085a8770ab58c2882396b3d4f2e030"
-  dependencies:
-    typedarray-to-buffer "^3.1.2"
-
 filereader-stream@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/filereader-stream/-/filereader-stream-2.0.0.tgz#b30d5a5bf6d14c638d7eb55e193abb986f8048a1"
@@ -8784,6 +8778,12 @@ pull-catch@^1.0.0:
 pull-defer@^0.2.2, pull-defer@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/pull-defer/-/pull-defer-0.2.2.tgz#0887b0ffb30af32a56dbecfa72c1672271f07b13"
+
+pull-file-reader@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pull-file-reader/-/pull-file-reader-1.0.2.tgz#d9b0d3d2de56f1a1ebb2ce8d313e79567d92dc48"
+  dependencies:
+    typedarray-to-buffer "^3.1.2"
 
 pull-file@^1.1.0:
   version "1.1.0"

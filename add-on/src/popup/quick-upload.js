@@ -6,7 +6,7 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 const drop = require('drag-and-drop-files')
-const fileReaderPullStream = require('filereader-pull-stream')
+const fileReaderPullStream = require('pull-file-reader')
 const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('panel_quickUpload')
