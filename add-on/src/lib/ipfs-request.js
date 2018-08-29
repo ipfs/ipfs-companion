@@ -175,8 +175,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       const state = getState()
 
       if (state.active) {
-        console.log('onErrorOccurred:' + request.error)
-        console.log('onErrorOccurred', request)
+        // console.log('onErrorOccurred:' + request.error)
+        // console.log('onErrorOccurred', request)
         // Check if error is final and can be recovered via DNSLink
         const recoverableViaDnslink =
           state.dnslinkPolicy &&
