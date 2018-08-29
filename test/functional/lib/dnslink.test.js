@@ -135,7 +135,7 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
 })
 
 // this policy triggers actual DNS TXT lookups
-describe('dnslinkResolver (dnslinkPolicy=eagerDnsTxtLookup)', function () {
+describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
   before(() => {
     global.URL = URL
   })
@@ -144,7 +144,7 @@ describe('dnslinkResolver (dnslinkPolicy=eagerDnsTxtLookup)', function () {
     gwURL: new URL('http://127.0.0.1:8080'),
     pubGwURL: new URL('https://gateway.foobar.io'),
     ipfsNodeType: 'external',
-    dnslinkPolicy: 'eagerDnsTxtLookup',
+    dnslinkPolicy: 'enabled',
     peerCount: 1
   })
   const getExternalNodeState = () => Object.assign({}, getState(), {ipfsNodeType: 'external'})

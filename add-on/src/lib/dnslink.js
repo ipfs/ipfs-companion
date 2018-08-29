@@ -3,14 +3,34 @@
 
 const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
+const PQueue = require('p-queue')
 const { offlinePeerCount } = require('./state')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = {max: 1000, maxAge: 1000 * 60 * 60 * 12}
   const cache = new LRU(cacheOptions)
+  // upper bound for concurrent background lookups done by preloadDnslink(url)
+  const lookupQueue = new PQueue({concurrency: 8})
 
   const dnslinkResolver = {
+
+    get _cache () {
+      return cache
+    },
+
+    setDnslink (fqdn, value) {
+      cache.set(fqdn, value)
+    },
+
+    clearCache () {
+      cache.reset()
+    },
+
+    cachedDnslink (fqdn) {
+      return cache.get(fqdn)
+    },
+
     canLookupURL (requestUrl) {
       // skip URLs that could produce infinite recursion or weird loops
       const state = getState()
@@ -31,18 +51,6 @@ module.exports = function createDnslinkResolver (getState) {
       }
     },
 
-    setDnslink (fqdn, value) {
-      cache.set(fqdn, value)
-    },
-
-    clearCache () {
-      cache.reset()
-    },
-
-    cachedDnslink (fqdn) {
-      return cache.get(fqdn)
-    },
-
     readAndCacheDnslink (fqdn) {
       let dnslink = dnslinkResolver.cachedDnslink(fqdn)
       if (typeof dnslink === 'undefined') {
@@ -50,6 +58,7 @@ module.exports = function createDnslinkResolver (getState) {
           console.info(`[ipfs-companion] dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
+            // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
             dnslinkResolver.setDnslink(fqdn, dnslink)
             console.info(`[ipfs-companion] found dnslink: '${fqdn}' -> '${dnslink}'`)
           } else {
@@ -67,6 +76,23 @@ module.exports = function createDnslinkResolver (getState) {
       return dnslink
     },
 
+    // does not return anything, runs async lookup in the background
+    // and saves result into cache with an optional callback
+    preloadDnslink (url, cb) {
+      if (dnslinkResolver.canLookupURL(url)) {
+        lookupQueue.add(async () => {
+          const fqdn = new URL(url).hostname
+          const result = dnslinkResolver.readAndCacheDnslink(fqdn)
+          if (cb) {
+            cb(result)
+          }
+        })
+      } else if (cb) {
+        cb(null)
+      }
+    },
+
+    // low level lookup without cache
     readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
@@ -114,15 +140,16 @@ module.exports = function createDnslinkResolver (getState) {
       const httpGatewayPath = path.startsWith('/ipfs/') || path.startsWith('/ipns/') || path.startsWith('/api/v')
       if (!httpGatewayPath) {
         const fqdn = url.hostname
-        // If dnslink policy is 'eagerDnsTxtLookup' then lookups will be
+        // If dnslink policy is 'enabled' then lookups will be
         // executed for every unique hostname on every visited website.
         // Until we get efficient DNS TXT Lookup API there will be an overhead,
-        // so 'eagerDnsTxtLookup' policy is an opt-in for now.  By default we use
-        // 'detectIpfsPathHeader' policy which does lookup to populate dnslink
-        // cache only when X-Ipfs-Path header is found in initial response.
+        // so 'enabled' policy is an opt-in for now.  By default we use
+        // 'best-effort' policy which does async lookups to populate dnslink cache
+        // in the background and do blocking lookup only when X-Ipfs-Path header
+        // is found in initial response.
         // More: https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md
         const foundDnslink = dnslink ||
-          (getState().dnslinkPolicy === 'eagerDnsTxtLookup'
+          (getState().dnslinkPolicy === 'enabled'
             ? dnslinkResolver.readAndCacheDnslink(fqdn)
             : dnslinkResolver.cachedDnslink(fqdn))
         if (foundDnslink) {

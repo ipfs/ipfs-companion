@@ -139,11 +139,11 @@ describe('modifyRequest processing', function () {
     })
   })
 
-  describe('a request to FQDN with dnslinkPolicy=eagerDnsTxtLookup', function () {
+  describe('a request to FQDN with dnslinkPolicy=enabled', function () {
     let activeGateway
     beforeEach(function () {
       // Ensure the eager dnslinkPolicy is on (dns txt lookup for every request)
-      state.dnslinkPolicy = 'eagerDnsTxtLookup'
+      state.dnslinkPolicy = 'enabled'
       // disable detection of x-ipfs-path to ensure isolated test
       // TODO: create separate 'describe' section  for detectIpfsPathHeader==true
       state.detectIpfsPathHeader = false
@@ -259,7 +259,7 @@ describe('modifyRequest processing', function () {
         expect(modifyRequest.onHeadersReceived(request)).to.equal(undefined)
       })
       describe('(XHR CORS scenario)', function () {
-        // Test makes more sense for dnslinkPolicy=eagerDnsTxtLookup, but we keep it here for completeness
+        // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness
         it('should redirect in onHeadersReceived if XHR is cross-origin and runtime is not Firefox', function () {
           // stub existence of a valid DNS record
           const fqdn = 'explore.ipld.io'
@@ -271,7 +271,7 @@ describe('modifyRequest processing', function () {
           xhrRequest.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
           expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
-        // Test makes more sense for dnslinkPolicy=eagerDnsTxtLookup, but we keep it here for completeness
+        // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness
         it('should redirect in onHeadersReceived if XHR is cross-origin and runtime is Firefox', function () {
           // stub existence of a valid DNS record
           const fqdn = 'explore.ipld.io'
@@ -286,7 +286,7 @@ describe('modifyRequest processing', function () {
           xhrRequest.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
           expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
-        // Test makes more sense for dnslinkPolicy=eagerDnsTxtLookup, but we keep it here for completeness
+        // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness
         it('should do nothing if DNS TXT record is missing and XHR is cross-origin in Firefox', function () {
           // stub no dnslink
           const fqdn = 'youtube.com'

@@ -14,7 +14,7 @@ exports.optionDefaults = Object.freeze({
   useCustomGateway: true,
   automaticMode: true,
   linkify: false,
-  dnslinkPolicy: 'detectIpfsPathHeader',
+  dnslinkPolicy: 'best-effort',
   detectIpfsPathHeader: true,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
@@ -63,9 +63,9 @@ exports.migrateOptions = async (storage) => {
   // DNSLINK: convert old on/off 'dnslink' flag to text-based 'dnslinkPolicy'
   const { dnslink } = await storage.get('dnslink')
   if (dnslink) {
-    console.log(`[ipfs-companion] migrating old dnslink policy '${dnslink}' to 'detectIpfsPathHeader'`)
+    console.log(`[ipfs-companion] migrating old dnslink policy '${dnslink}' to 'best-effort'`)
     await storage.set({
-      dnslinkPolicy: 'detectIpfsPathHeader',
+      dnslinkPolicy: 'best-effort',
       detectIpfsPathHeader: true
     })
     await storage.remove('dnslink')

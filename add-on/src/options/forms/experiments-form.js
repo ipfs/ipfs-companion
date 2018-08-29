@@ -83,14 +83,14 @@ function experimentsForm ({
               ${browser.i18n.getMessage('option_dnslinkPolicy_disabled')}
             </option>
             <option
-              value='detectIpfsPathHeader'
-              selected=${dnslinkPolicy === 'detectIpfsPathHeader'}>
-              ${browser.i18n.getMessage('option_dnslinkPolicy_detectIpfsPathHeader')}
+              value='best-effort'
+              selected=${dnslinkPolicy === 'best-effort'}>
+              ${browser.i18n.getMessage('option_dnslinkPolicy_bestEffort')}
             </option>
             <option
-              value='eagerDnsTxtLookup'
-              selected=${dnslinkPolicy === 'eagerDnsTxtLookup'}>
-              ${browser.i18n.getMessage('option_dnslinkPolicy_eagerDnsTxtLookup')}
+              value='enabled'
+              selected=${dnslinkPolicy === 'enabled'}>
+              ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
             </option>
           </select>
         </div>
@@ -105,7 +105,7 @@ function experimentsForm ({
               </dd>
             </dl>
           </label>
-          <input type="checkbox" id="detectIpfsPathHeader" onchange=${onDetectIpfsPathHeaderChange} checked=${detectIpfsPathHeader} disabled=${dnslinkPolicy === 'detectIpfsPathHeader'} />
+          <input type="checkbox" id="detectIpfsPathHeader" onchange=${onDetectIpfsPathHeaderChange} checked=${detectIpfsPathHeader} disabled=${dnslinkPolicy === 'best-effort'} />
         </div>
         <div>
           <label for="ipfs-proxy">

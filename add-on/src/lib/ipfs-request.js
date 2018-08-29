@@ -62,6 +62,10 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
             // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
             return dnslinkRedirect
           }
+          if (state.dnslinkPolicy === 'best-effort') {
+            // dnslinkResolver.preloadDnslink(request.url, (dnslink) => console.log(`---> preloadDnslink(${new URL(request.url).hostname})=${dnslink}`))
+            dnslinkResolver.preloadDnslink(request.url)
+          }
         }
       }
     },
@@ -117,9 +121,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           return redirectToGateway(request.url, state, dnslinkResolver)
         }
 
-        // Detect X-Ipfs-Path Header
-        // and upgrade transport to IPFS using path from header value
-        // https://github.com/ipfs-shipyard/ipfs-companion/issues/548#issuecomment-410891930
+        // Detect X-Ipfs-Path Header and upgrade transport to IPFS:
+        // 1. Check if DNSLink exists and redirect to it.
+        // 2. If there is no DNSLink, validate path from the header and redirect
         if (state.detectIpfsPathHeader && request.responseHeaders && !request.url.startsWith(state.gwURLString) && !request.url.startsWith(state.apiURLString)) {
           // console.log('onHeadersReceived.request', request)
           for (let header of request.responseHeaders) {
@@ -132,7 +136,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
               if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
                 // x-ipfs-path is a strong indicator of IPFS support
                 // so we force dnslink lookup to pre-populate dnslink cache
-                // in a way that works even when state.dnslinkPolicy !== 'eagerDnsTxtLookup'
+                // in a way that works even when state.dnslinkPolicy !== 'enabled'
                 // All the following requests will be upgraded to IPNS
                 const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
                 const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)

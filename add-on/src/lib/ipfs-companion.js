@@ -588,7 +588,7 @@ module.exports = async function init () {
           break
         case 'dnslinkPolicy':
           state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
-          if (state.dnslinkPolicy === 'detectIpfsPathHeader' && !state.detectIpfsPathHeader) {
+          if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
           break
@@ -634,6 +634,10 @@ module.exports = async function init () {
   const api = {
     get ipfs () {
       return ipfs
+    },
+
+    get dnslinkResolver () {
+      return dnslinkResolver
     },
 
     get notify () {

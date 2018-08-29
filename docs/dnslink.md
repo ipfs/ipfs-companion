@@ -1,6 +1,6 @@
 # DNSLink Support in IPFS Companion
 
-> ### **TL;DR** when in doubt, enable DNSLink with "Lookup on `x-ipfs-path`" policy
+> ### **TL;DR** when in doubt use "Best-Effort" policy
 
 
 ## What is DNSLink?
@@ -9,27 +9,28 @@ DNSLink is mapping a domain name to an IPFS address by means of DNS TXT record.
 
 Read [DNSLink guide][] for details such as setting it up on yourown website.
 
-## DNS TXT Lookup Policies in Companion
+## DNS TXT Lookup Policies
 
-### Disabled (No Lookup)
+### Disabled
 
 There will be no DNS TXT lookups when this policy is selected.    
 It means DNSLink support is disabled.
 
-### Lookup on `x-ipfs-path`
+### Best-Effort
 
-This is the most efficient lookup strategy.
+This is the most efficient lookup strategy, but in rare cases it may yield
+false-negatives on the first load.
 
-DNSLink redirect is enabled, but DNS TXT lookups are executed only for domains
-which returned at least one HTTP response
-with [x-ipfs-path header][] or returned a connection error.
+DNSLink redirect is enabled, but DNS TXT lookups are executed in the background
+without blocking page load.
 
-Note: initial request is cancelled as soon header is detected and redirected to
-IPNS as well.
+Blocking lookups are done only for domains which returned at least one HTTP
+response with [x-ipfs-path header][] or returned a connection error.
 
-### Eager Lookup for Every Hostname
+### Enabled
 
 DNS TXT lookup is executed for every hostname before any HTTP request is made.
+No false-negatives.
 
 It removes the need for sending HTTP request to remote server if DNSLink is
 present, but may impact browser performance: every request to a new domain name

@@ -306,16 +306,16 @@
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Disabled",
+    "message": "disabled",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
-  "option_dnslinkPolicy_detectIpfsPathHeader": {
-    "message": "Lookup if x-ipfs-path found",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_detectIpfsPathHeader)"
+  "option_dnslinkPolicy_bestEffort": {
+    "message": "best-effort",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
-  "option_dnslinkPolicy_eagerDnsTxtLookup": {
-    "message": "Lookup every new hostname",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_)"
+  "option_dnslinkPolicy_enabled": {
+    "message": "enabled",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_detectIpfsPathHeader_title": {
     "message": "Detect x-ipfs-path Header",
