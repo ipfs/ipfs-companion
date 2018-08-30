@@ -34,48 +34,48 @@ module.exports = function optionsPage (state, emit) {
     // when global toggle is in "suspended" state
     return html`
     <div class="sans-serif">
-      ${globalToggleForm({
-        active: state.options.active,
-        onOptionChange
-      })}
+  ${globalToggleForm({
+    active: state.options.active,
+    onOptionChange
+  })}
     </div>
     `
   }
   return html`
     <div class="sans-serif">
-      ${globalToggleForm({
-        active: state.options.active,
-        onOptionChange
-      })}
-      ${ipfsNodeForm({
-        ipfsNodeType: state.options.ipfsNodeType,
-        ipfsNodeConfig: state.options.ipfsNodeConfig,
-        onOptionChange
-      })}
-      ${gatewaysForm({
-        ipfsNodeType: state.options.ipfsNodeType,
-        customGatewayUrl: state.options.customGatewayUrl,
-        useCustomGateway: state.options.useCustomGateway,
-        publicGatewayUrl: state.options.publicGatewayUrl,
-        onOptionChange
-      })}
-      ${state.options.ipfsNodeType === 'external' ? apiForm({
-        ipfsApiUrl: state.options.ipfsApiUrl,
-        ipfsApiPollMs: state.options.ipfsApiPollMs,
-        automaticMode: state.options.automaticMode,
-        onOptionChange
-      }) : null}
-      ${experimentsForm({
-        displayNotifications: state.options.displayNotifications,
-        preloadAtPublicGateway: state.options.preloadAtPublicGateway,
-        catchUnhandledProtocols: state.options.catchUnhandledProtocols,
-        linkify: state.options.linkify,
-        dnslinkPolicy: state.options.dnslinkPolicy,
-        detectIpfsPathHeader: state.options.detectIpfsPathHeader,
-        ipfsProxy: state.options.ipfsProxy,
-        onOptionChange,
-        onOptionsReset
-      })}
+  ${globalToggleForm({
+    active: state.options.active,
+    onOptionChange
+  })}
+  ${ipfsNodeForm({
+    ipfsNodeType: state.options.ipfsNodeType,
+    ipfsNodeConfig: state.options.ipfsNodeConfig,
+    onOptionChange
+  })}
+  ${gatewaysForm({
+    ipfsNodeType: state.options.ipfsNodeType,
+    customGatewayUrl: state.options.customGatewayUrl,
+    useCustomGateway: state.options.useCustomGateway,
+    publicGatewayUrl: state.options.publicGatewayUrl,
+    onOptionChange
+  })}
+  ${state.options.ipfsNodeType === 'external' ? apiForm({
+    ipfsApiUrl: state.options.ipfsApiUrl,
+    ipfsApiPollMs: state.options.ipfsApiPollMs,
+    automaticMode: state.options.automaticMode,
+    onOptionChange
+  }) : null}
+  ${experimentsForm({
+    displayNotifications: state.options.displayNotifications,
+    preloadAtPublicGateway: state.options.preloadAtPublicGateway,
+    catchUnhandledProtocols: state.options.catchUnhandledProtocols,
+    linkify: state.options.linkify,
+    dnslinkPolicy: state.options.dnslinkPolicy,
+    detectIpfsPathHeader: state.options.detectIpfsPathHeader,
+    ipfsProxy: state.options.ipfsProxy,
+    onOptionChange,
+    onOptionsReset
+  })}
     </div>
   `
 }

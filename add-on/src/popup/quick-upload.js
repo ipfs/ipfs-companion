@@ -25,7 +25,7 @@ function quickUploadStore (state, emitter) {
   state.pinUpload = true
   state.expandOptions = false
 
-  function updateState ({ipfsNodeType, peerCount}) {
+  function updateState ({ ipfsNodeType, peerCount }) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
   }
@@ -34,7 +34,7 @@ function quickUploadStore (state, emitter) {
 
   emitter.on('DOMContentLoaded', async () => {
     // initialize connection to the background script which will trigger UI updates
-    port = browser.runtime.connect({name: 'browser-action-port'})
+    port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
         console.log('In browser action, received message from background:', message)
@@ -61,7 +61,7 @@ async function processFiles (state, emitter, files) {
     }
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
     const uploadTab = await browser.tabs.getCurrent()
-    let {streams, totalSize} = files2streams(files)
+    let { streams, totalSize } = files2streams(files)
     if (!browser.runtime.id.includes('@')) {
       // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
       if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
@@ -90,7 +90,7 @@ async function processFiles (state, emitter, files) {
       if (partialResponse) {
         throw new Error('Result of ipfs.files.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
       }
-      await ipfsCompanion.uploadResultHandler({result, openRootInNewTab: true})
+      await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
     } catch (err) {
       console.error('Failed to IPFS add', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
@@ -129,7 +129,7 @@ function files2streams (files) {
       // looks the same as dropping a directory
       throw new Error(`unable to add "${file.name}", directories and empty files are not supported`)
     }
-    const fileStream = fileReaderPullStream(file, {chunkSize: 32 * 1024 * 1024})
+    const fileStream = fileReaderPullStream(file, { chunkSize: 32 * 1024 * 1024 })
     streams.push({
       path: file.name,
       content: fileStream
@@ -185,17 +185,17 @@ function quickUploadOptions (state, emit) {
 
 function quickUploadPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
-  const {peerCount} = state
+  const { peerCount } = state
 
   return html`
     <div class="montserrat pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); height:100%;">
       <div class="mw8 center pa3 white">
         <header class="flex items-center no-user-select">
-          ${logo({
-            size: 80,
-            path: '../../icons',
-            heartbeat: false
-          })}
+  ${logo({
+    size: 80,
+    path: '../../icons',
+    heartbeat: false
+  })}
           <div class="pl3">
             <h1 class="f2 fw5 ma0">
               ${browser.i18n.getMessage('panel_quickUpload')}

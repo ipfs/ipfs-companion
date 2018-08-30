@@ -6,9 +6,9 @@ const { urlAtPublicGw } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableErrors = new Set([
   // Firefox
-  'NS_ERROR_NET_TIMEOUT',          // eg. httpd is offline
-  'NS_ERROR_NET_RESET',            // failed to load because the server kept reseting the connection
-  'NS_ERROR_NET_ON_RESOLVED',      // no network
+  'NS_ERROR_NET_TIMEOUT', // eg. httpd is offline
+  'NS_ERROR_NET_RESET', // failed to load because the server kept reseting the connection
+  'NS_ERROR_NET_ON_RESOLVED', // no network
   // Chrome
   'net::ERR_CONNECTION_TIMED_OUT', // eg. httpd is offline
   'net::ERR_INTERNET_DISCONNECTED' // no network
@@ -195,7 +195,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           // TODO: add tests and demo
           if (dnslinkRedirect) {
             console.log(`[ipfs-companion] onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
-            const currentTabId = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0].id)
+            const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
             await browser.tabs.create({
               active: true,
               openerTabId: currentTabId,

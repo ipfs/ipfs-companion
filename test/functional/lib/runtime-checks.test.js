@@ -27,13 +27,13 @@ describe('runtime-checks.js', function () {
     }
 
     it('should return true when in Firefox runtime', async function () {
-      browser.runtime.getBrowserInfo = promiseStub({name: 'Firefox'})
+      browser.runtime.getBrowserInfo = promiseStub({ name: 'Firefox' })
       const runtime = await createRuntimeChecks(browser)
       expect(runtime.isFirefox).to.equal(true)
     })
 
     it('should return false when not in Firefox runtime', async function () {
-      browser.runtime.getBrowserInfo = promiseStub({name: 'SomethingElse'})
+      browser.runtime.getBrowserInfo = promiseStub({ name: 'SomethingElse' })
       const runtime = await createRuntimeChecks(browser)
       expect(runtime.isFirefox).to.equal(false)
     })
@@ -45,13 +45,13 @@ describe('runtime-checks.js', function () {
     })
 
     it('should return true when in Android runtime', async function () {
-      browser.runtime.getPlatformInfo.returns({os: 'android'})
+      browser.runtime.getPlatformInfo.returns({ os: 'android' })
       const runtime = await createRuntimeChecks(browser)
       expect(runtime.isAndroid).to.equal(true)
     })
 
     it('should return false when not in Android runtime', async function () {
-      browser.runtime.getPlatformInfo.returns({name: 'SomethingElse'})
+      browser.runtime.getPlatformInfo.returns({ name: 'SomethingElse' })
       const runtime = await createRuntimeChecks(browser)
       expect(runtime.isAndroid).to.equal(false)
     })

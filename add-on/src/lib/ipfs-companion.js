@@ -59,7 +59,7 @@ module.exports = async function init () {
     ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddToIpfsRawCid: addFromURL,
-      onAddToIpfsKeepFilename: (info) => addFromURL(info, {wrapWithDirectory: true}),
+      onAddToIpfsKeepFilename: (info) => addFromURL(info, { wrapWithDirectory: true }),
       onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
@@ -90,10 +90,10 @@ module.exports = async function init () {
   }
 
   function registerListeners () {
-    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
-    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, {urls: ['<all_urls>']}, ['blocking', 'responseHeaders'])
-    browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, {urls: ['<all_urls>']})
+    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, ['blocking', 'requestHeaders'])
+    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
+    browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'] })
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
     browser.tabs.onUpdated.addListener(onUpdatedTab)
@@ -128,7 +128,7 @@ module.exports = async function init () {
     const newHandle = await browser.contentScripts.register({
       matches: ['<all_urls>'],
       js: [
-        {file: '/dist/bundles/ipfsProxyContentScript.bundle.js'}
+        { file: '/dist/bundles/ipfsProxyContentScript.bundle.js' }
       ],
       allFrames: true,
       runAt: 'document_start'
@@ -164,7 +164,7 @@ module.exports = async function init () {
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
       const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? urlAtPublicGw(path, state.pubGwURLString) : null
-      return Promise.resolve({pubGwUrlForIpfsOrIpnsPath: result})
+      return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }
 
@@ -207,7 +207,7 @@ module.exports = async function init () {
       peerCount: state.peerCount,
       gwURLString: state.gwURLString,
       pubGwURLString: state.pubGwURLString,
-      currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+      currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     }
     try {
       let v = await ipfs.version()
@@ -222,7 +222,7 @@ module.exports = async function init () {
     }
     // Still here?
     if (browserActionPort) {
-      browserActionPort.postMessage({statusUpdate: info})
+      browserActionPort.postMessage({ statusUpdate: info })
     }
   }
 
@@ -296,25 +296,25 @@ module.exports = async function init () {
       return
     }
 
-    return uploadResultHandler({result, openRootInNewTab: true})
+    return uploadResultHandler({ result, openRootInNewTab: true })
   }
 
   // TODO: feature detect and push to client type specific modules.
   function getIpfsPathAndNativeAddress (hash) {
     const path = `/ipfs/${hash}`
     if (runtime.hasNativeProtocolHandler) {
-      return {path, url: `ipfs://${hash}`}
+      return { path, url: `ipfs://${hash}` }
     } else {
       // open at public GW (will be redirected to local elsewhere, if enabled)
       const url = new URL(path, state.pubGwURLString).toString()
-      return {path, url: url}
+      return { path, url: url }
     }
   }
 
-  async function uploadResultHandler ({result, openRootInNewTab = false}) {
+  async function uploadResultHandler ({ result, openRootInNewTab = false }) {
     for (let file of result) {
       if (file && file.hash) {
-        const {path, url} = getIpfsPathAndNativeAddress(file.hash)
+        const { path, url } = getIpfsPathAndNativeAddress(file.hash)
         preloadAtPublicGateway(path)
         console.info('[ipfs-companion] successfully stored', file)
         // open the wrapping directory (or the CID if wrapping was disabled)
@@ -472,8 +472,8 @@ module.exports = async function init () {
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
     try {
-      await browser.browserAction.setBadgeBackgroundColor({color: badgeColor})
-      await browser.browserAction.setBadgeText({text: badgeText})
+      await browser.browserAction.setBadgeBackgroundColor({ color: badgeColor })
+      await browser.browserAction.setBadgeText({ text: badgeText })
       await setBrowserActionIcon(badgeIcon)
     } catch (error) {
       console.error('Unable to update browserAction badge due to error', error)
@@ -481,7 +481,7 @@ module.exports = async function init () {
   }
 
   async function setBrowserActionIcon (iconPath) {
-    let iconDefinition = {path: iconPath}
+    let iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.browserAction.setIcon(iconDefinition)
@@ -534,10 +534,10 @@ module.exports = async function init () {
     // TODO: use `node.isOnline()` if available (js-ipfs)
     if (state.automaticMode && state.ipfsNodeType !== 'embedded') {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
-        browser.storage.local.set({useCustomGateway: true})
+        browser.storage.local.set({ useCustomGateway: true })
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
-        browser.storage.local.set({useCustomGateway: false})
+        browser.storage.local.set({ useCustomGateway: false })
           .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
       }
     }

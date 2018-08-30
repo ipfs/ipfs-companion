@@ -18,7 +18,7 @@ async function findUrlForContext (context) {
     }
   }
   // falback to the url of current tab
-  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+  const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
   return currentTab.url
 }
 
@@ -87,15 +87,15 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs
     async update (changedTabId) {
       try {
         const canUpload = getState().peerCount > 0
-        await browser.contextMenus.update(contextMenuAddToIpfsRawCid, {enabled: canUpload})
-        await browser.contextMenus.update(contextMenuAddToIpfsKeepFilename, {enabled: canUpload})
+        await browser.contextMenus.update(contextMenuAddToIpfsRawCid, { enabled: canUpload })
+        await browser.contextMenus.update(contextMenuAddToIpfsKeepFilename, { enabled: canUpload })
         if (changedTabId) {
           // recalculate tab-dependant menu items
-          const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+          const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
           if (currentTab && currentTab.id === changedTabId) {
             const ipfsContext = ipfsPathValidator.isIpfsPageActionsContext(currentTab.url)
-            browser.contextMenus.update(contextMenuCopyCanonicalAddress, {enabled: ipfsContext})
-            browser.contextMenus.update(contextMenuCopyAddressAtPublicGw, {enabled: ipfsContext})
+            browser.contextMenus.update(contextMenuCopyCanonicalAddress, { enabled: ipfsContext })
+            browser.contextMenus.update(contextMenuCopyAddressAtPublicGw, { enabled: ipfsContext })
           }
         }
       } catch (err) {

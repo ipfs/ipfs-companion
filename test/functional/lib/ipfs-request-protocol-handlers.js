@@ -12,7 +12,7 @@ const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
 const url2request = (string) => {
-  return {url: string, type: 'main_frame'}
+  return { url: string, type: 'main_frame' }
 }
 
 const nodeTypes = ['external', 'embedded']
@@ -216,7 +216,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if request.type != main_frame', function () {
-          const mediaRequest = {url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'media'}
+          const mediaRequest = { url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'media' }
           expect(modifyRequest.onBeforeRequest(mediaRequest)).to.equal(undefined)
         })
       })

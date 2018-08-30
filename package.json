@@ -56,9 +56,6 @@
   },
   "private": true,
   "preferGlobal": false,
-  "standard": {
-    "parser": "babel-eslint"
-  },
   "resolutions": {
     "uglify-es": "npm:terser"
   },
@@ -85,7 +82,7 @@
     "simple-progress-webpack-plugin": "1.1.2",
     "sinon": "6.1.5",
     "sinon-chrome": "2.3.2",
-    "standard": "10.0.3",
+    "standard": "12.0.1",
     "terser": "3.8.2",
     "transform-loader": "0.2.4",
     "web-ext": "2.9.0",
