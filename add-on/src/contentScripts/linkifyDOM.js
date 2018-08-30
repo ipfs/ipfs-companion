@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 const PQueue = require('p-queue')
 
-/*
+  /*
  * This content script is responsible for performing the logic of replacing
  * plain text with IPFS addresses with clickable links.
  * Loosely based on https://github.com/mdn/webextensions-examples/blob/master/emoji-substitution/substitute.js
@@ -50,16 +50,16 @@ const PQueue = require('p-queue')
     const linkifyJobs = new PQueue({ concurrency: 1 })
     // console.log('[ipfs-companion] running Linkify experiment')
     linkifyContainer(document.body, linkifyJobs)
-    .then(() => {
-      // console.log('[ipfs-companion] registering MutationObserver for Linkify experiment')
-      new MutationObserver(function (mutations) {
-        mutations.forEach(async (mutation) => linkifyMutation(mutation, linkifyJobs))
-      }).observe(document.body, {
-        characterData: true,
-        childList: true,
-        subtree: true
+      .then(() => {
+        // console.log('[ipfs-companion] registering MutationObserver for Linkify experiment')
+        new MutationObserver(function (mutations) {
+          mutations.forEach(async (mutation) => linkifyMutation(mutation, linkifyJobs))
+        }).observe(document.body, {
+          characterData: true,
+          childList: true,
+          subtree: true
+        })
       })
-    })
   }
 
   async function linkifyMutation (mutation, linkifyJobs) {
@@ -130,7 +130,7 @@ const PQueue = require('p-queue')
     }
     try {
       // Callback wrapped in promise -- Chrome compatibility
-      const checkResult = await browser.runtime.sendMessage({pubGwUrlForIpfsOrIpnsPath: path})
+      const checkResult = await browser.runtime.sendMessage({ pubGwUrlForIpfsOrIpnsPath: path })
       window.ipfsCompanionLinkifyValidationCache.set(path, checkResult.pubGwUrlForIpfsOrIpnsPath)
     } catch (error) {
       window.ipfsCompanionLinkifyValidationCache.set(path, null)

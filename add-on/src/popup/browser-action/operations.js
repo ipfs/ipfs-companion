@@ -21,26 +21,26 @@ module.exports = function operations ({
 
   return html`
     <div class="fade-in pv1">
-      ${navItem({
-        text: browser.i18n.getMessage('panel_quickUpload'),
-        bold: true,
-        disabled: !activeQuickUpload,
-        onClick: onQuickUpload
-      })}
-      ${navItem({
-        text: browser.i18n.getMessage(
-          redirectEnabled && activeGatewaySwitch
-            ? 'panel_switchToPublicGateway'
-            : 'panel_switchToCustomGateway'
-        ),
-        disabled: !activeGatewaySwitch,
-        onClick: onToggleRedirect
-      })}
-      ${navItem({
-        text: browser.i18n.getMessage('panel_openWebui'),
-        disabled: !activeWebUI,
-        onClick: onOpenWebUi
-      })}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_quickUpload'),
+    bold: true,
+    disabled: !activeQuickUpload,
+    onClick: onQuickUpload
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage(
+      redirectEnabled && activeGatewaySwitch
+        ? 'panel_switchToPublicGateway'
+        : 'panel_switchToCustomGateway'
+    ),
+    disabled: !activeGatewaySwitch,
+    onClick: onToggleRedirect
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_openWebui'),
+    disabled: !activeWebUI,
+    onClick: onOpenWebUi
+  })}
     </div>
   `
 }

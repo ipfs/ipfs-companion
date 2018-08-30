@@ -16,11 +16,11 @@ function createProxyAclPage (i18n) {
       <div class="avenir pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); min-height:100%;">
         <div class="mw8 center pa3 white">
           <header class="flex items-center mb4">
-            ${logo({
-              size: 80,
-              path: '../../../icons',
-              heartbeat: false
-            })}
+  ${logo({
+    size: 80,
+    path: '../../../icons',
+    heartbeat: false
+  })}
             <div class="pl3">
               <h1 class="f2 fw5 ma0">
                 ${i18n.getMessage('page_proxyAcl_title')}
@@ -32,18 +32,18 @@ function createProxyAclPage (i18n) {
           </header>
           ${hasGrants ? html`
             <table class="w-100 mb4" style="border-spacing: 0">
-              ${scopes.reduce((rows, scope) => {
-                const permissions = acl.get(scope)
+  ${scopes.reduce((rows, scope) => {
+    const permissions = acl.get(scope)
 
-                if (!permissions.size) return rows
+    if (!permissions.size) return rows
 
-                return rows.concat(
-                  scopeRow({ onRevoke, scope, i18n }),
-                  Array.from(permissions.keys())
-                    .sort()
-                    .map((permission) => accessRow({ scope, permission, allow: permissions.get(permission), onRevoke, onToggleAllow, i18n }))
-                )
-              }, [])}
+    return rows.concat(
+      scopeRow({ onRevoke, scope, i18n }),
+      Array.from(permissions.keys())
+        .sort()
+        .map((permission) => accessRow({ scope, permission, allow: permissions.get(permission), onRevoke, onToggleAllow, i18n }))
+    )
+  }, [])}
             </table>
           ` : html`
             <p class="f5 light-gray i">${i18n.getMessage('page_proxyAcl_no_perms')}</p>
@@ -82,9 +82,7 @@ function accessRow ({ scope, permission, allow, onRevoke, onToggleAllow, i18n })
         data-permission="${permission}"
         data-allow=${allow}
         title="${title}">
-        ${i18n.getMessage(
-          allow ? 'page_proxyAcl_allow_button_value' : 'page_proxyAcl_deny_button_value'
-        )}
+        ${i18n.getMessage(allow ? 'page_proxyAcl_allow_button_value' : 'page_proxyAcl_deny_button_value')}
       </td>
       <td class="f5 light-gray ph3 pv2 bb b--white-10">${permission}</td>
       <td class="tr bb b--white-10">

@@ -33,7 +33,7 @@ module.exports = (state, emitter) => {
     // initial render with status stub
     emitter.emit('render')
     // initialize connection to the background script which will trigger UI updates
-    port = browser.runtime.connect({name: 'browser-action-port'})
+    port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
         let status = message.statusUpdate
@@ -91,7 +91,7 @@ module.exports = (state, emitter) => {
     try {
       const ipfs = await getIpfsApi()
       const currentPath = await resolveToIPFS(ipfs, state.currentTab.url)
-      const result = await ipfs.pin.rm(currentPath, {recursive: true})
+      const result = await ipfs.pin.rm(currentPath, { recursive: true })
       state.isPinned = false
       console.log('ipfs.pin.rm result', result)
       notify('notify_unpinnedIpfsResourceTitle', currentPath)
@@ -145,7 +145,7 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      await browser.storage.local.set({useCustomGateway: !enabled})
+      await browser.storage.local.set({ useCustomGateway: !enabled })
     } catch (error) {
       console.error(`Unable to update redirect state due to ${error}`)
       state.redirectEnabled = enabled
@@ -159,7 +159,7 @@ module.exports = (state, emitter) => {
     state.ipfsNodeType = prev === 'external' ? 'embedded' : 'external'
     emitter.emit('render')
     try {
-      await browser.storage.local.set({ipfsNodeType: state.ipfsNodeType})
+      await browser.storage.local.set({ ipfsNodeType: state.ipfsNodeType })
     } catch (error) {
       console.error(`Unable to update ipfs node type due to ${error}`)
       state.ipfsNodeType = prev
@@ -180,7 +180,7 @@ module.exports = (state, emitter) => {
     }
     emitter.emit('render')
     try {
-      await browser.storage.local.set({active: state.active})
+      await browser.storage.local.set({ active: state.active })
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)
       state.active = prev
@@ -195,7 +195,7 @@ module.exports = (state, emitter) => {
 
     // browser.pageAction-specific items that can be rendered earlier (snappy UI)
     requestAnimationFrame(async () => {
-      const tabId = state.currentTab ? {tabId: state.currentTab.id} : null
+      const tabId = state.currentTab ? { tabId: state.currentTab.id } : null
       if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
         // Get title stored on page load so that valid transport is displayed
         // even if user toggles between public/custom gateway after the load
@@ -245,7 +245,7 @@ module.exports = (state, emitter) => {
     if (state.isPinning || state.isUnPinning) return
     try {
       const currentPath = await resolveToIPFS(ipfs, status.currentTab.url)
-      const response = await ipfs.pin.ls(currentPath, {quiet: true})
+      const response = await ipfs.pin.ls(currentPath, { quiet: true })
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {
@@ -260,7 +260,7 @@ module.exports = (state, emitter) => {
 
   function notify (title, message) {
     // console.log('Sending notification (' + title + '): ' + message + ')')
-    return port.postMessage({event: 'notification', title: title, message: message})
+    return port.postMessage({ event: 'notification', title: title, message: message })
   }
 }
 
@@ -276,7 +276,7 @@ async function getIpfsApi () {
 async function resolveToIPFS (ipfs, urlOrPath) {
   let path = safeIpfsPath(urlOrPath) // https://github.com/ipfs/ipfs-companion/issues/303
   if (/^\/ipns/.test(path)) {
-    const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
+    const response = await ipfs.name.resolve(path, { recursive: true, nocache: false })
     // old API returned object, latest one returns string ¯\_(ツ)_/¯
     return response.Path ? response.Path : response
   }

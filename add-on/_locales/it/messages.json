@@ -297,9 +297,33 @@
     "message": "Trasformare i percorsi \/ipfs\/ di testo normale in link cliccabili",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
-  "option_dnslink_title": {
-    "message": "Supporto a DNSLINK",
-    "description": "An option title on the Preferences screen (option_dnslink_title)"
+  "option_dnslinkPolicy_title": {
+    "message": "DNSLink Support",
+    "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
+  },
+  "option_dnslinkPolicy_description": {
+    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
+    "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
+  },
+  "option_dnslinkPolicy_disabled": {
+    "message": "Off",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
+  },
+  "option_dnslinkPolicy_bestEffort": {
+    "message": "Check after HTTP request",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
+  },
+  "option_dnslinkPolicy_enabled": {
+    "message": "Check before HTTP request",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
+  },
+  "option_detectIpfsPathHeader_title": {
+    "message": "Detect X-Ipfs-Path Header",
+    "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
+  },
+  "option_detectIpfsPathHeader_description": {
+    "message": "Drop HTTP transport and load over IPFS if value is an IPFS path. Redirect of IPNS paths requires DNSLink support to be enabled as well.",
+    "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
     "message": "window.ipfs",
@@ -320,10 +344,6 @@
   "option_preloadAtPublicGateway_description": {
     "message": "Consente il caricamento anticipato delle unita´ caricate mediante una richiesta HTTP HEAD asincrona ad una Gateway pubblica",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
-  },
-  "option_dnslink_description": {
-    "message": "Esegui una ricerca DNS per ogni sito Web visitato ed utilizza il Custom Gateway se DNSLINK è presente nel suo record DNS TXT (potrebbe rallentare il browser)",
-    "description": "An option description on the Preferences screen (option_dnslink_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Azzera tutto",

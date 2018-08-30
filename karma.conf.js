@@ -24,7 +24,7 @@ module.exports = function (config) {
             // across different OS
             return browser.toLowerCase().split(/[ /-]/)[0]
           }
-        }, {type: 'text-summary'}
+        }, { type: 'text-summary' }
       ]
     },
     files: [

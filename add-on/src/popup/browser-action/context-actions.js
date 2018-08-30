@@ -23,28 +23,28 @@ module.exports = function contextActions ({
   const activePinControls = active && isIpfsOnline && isApiAvailable && !(isPinning || isUnPinning)
   return html`
     <div class='fade-in pv1'>
-      ${navItem({
-        text: browser.i18n.getMessage('panelCopy_currentIpfsAddress'),
-        onClick: onCopyIpfsAddr
-      })}
-      ${navItem({
-        text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
-        onClick: onCopyPublicGwAddr
-      })}
-      ${!isPinned ? (
-        navItem({
-          text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-          disabled: !activePinControls,
-          onClick: onPin
-        })
-      ) : null}
-      ${isPinned ? (
-        navItem({
-          text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
-          disabled: !activePinControls,
-          onClick: onUnPin
-        })
-      ) : null}
+  ${navItem({
+    text: browser.i18n.getMessage('panelCopy_currentIpfsAddress'),
+    onClick: onCopyIpfsAddr
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
+    onClick: onCopyPublicGwAddr
+  })}
+  ${!isPinned ? (
+    navItem({
+      text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
+      disabled: !activePinControls,
+      onClick: onPin
+    })
+  ) : null}
+  ${isPinned ? (
+    navItem({
+      text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
+      disabled: !activePinControls,
+      onClick: onUnPin
+    })
+  ) : null}
     </div>
   `
 }

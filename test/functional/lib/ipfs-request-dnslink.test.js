@@ -12,7 +12,7 @@ const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
 const url2request = (string) => {
-  return {url: string, type: 'main_frame'}
+  return { url: string, type: 'main_frame' }
 }
 
 const fakeRequestId = () => {
@@ -102,7 +102,7 @@ describe('modifyRequest processing', function () {
       // onBeforeRequest should not change anything
       expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
       // simulate presence of x-ipfs-path header returned by HTTP gateway
-      request.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipns/value-from-x-ipfs-path.io'}]
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/value-from-x-ipfs-path.io' }]
       // onHeadersReceived should not change anything
       expect(modifyRequest.onHeadersReceived(request)).to.equal(undefined)
     })
@@ -117,7 +117,7 @@ describe('modifyRequest processing', function () {
       // onBeforeRequest should not change anything
       expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
       // simulate presence of x-ipfs-path header returned by HTTP gateway
-      request.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
       // onHeadersReceived should redirect to value from X-Ipfs-Path
       expect(modifyRequest.onHeadersReceived(request).redirectUrl).to.equal(activeGateway + '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd?argTest#hashTest')
     })
@@ -132,7 +132,7 @@ describe('modifyRequest processing', function () {
       // onBeforeRequest should not change anything
       expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
       // simulate presence of x-ipfs-path header returned by HTTP gateway
-      request.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipns/value-from-x-ipfs-path-to-ignore.io'}]
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/value-from-x-ipfs-path-to-ignore.io' }]
       // onHeadersReceived should ignore /ipns/ from x-ipfs-path because dnslink is disabled in preferences
       // and redirect would confuse users
       expect(modifyRequest.onHeadersReceived(request)).to.equal(undefined)
@@ -169,7 +169,7 @@ describe('modifyRequest processing', function () {
       //
       runtime.isFirefox = false
       // Chrome uses 'initiator' for origin
-      const xhrRequest = {url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+      const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
       expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
     })
     it('should redirect later in onHeadersReceived if dnslink exists, XHR is cross-origin and runtime is Firefox', function () {
@@ -180,7 +180,7 @@ describe('modifyRequest processing', function () {
       // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
       runtime.isFirefox = true
       // Firefox uses 'originUrl' for origin
-      const xhrRequest = {url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+      const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
       // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
       expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
       // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
@@ -193,7 +193,7 @@ describe('modifyRequest processing', function () {
       // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
       runtime.isFirefox = true
       // Firefox uses 'originUrl' for origin
-      const xhrRequest = {url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+      const xhrRequest = { url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
       // onBeforeRequest should not change anything
       expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
       // onHeadersReceived should not change anything
@@ -229,7 +229,7 @@ describe('modifyRequest processing', function () {
         const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
         expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         // simulate presence of x-ipfs-path header returned by HTTP gateway
-        request.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
         // DNSLink is present, so we ignore hash from X-Ipfs-Path header and redirect to nice /ipns/ address
         expect(modifyRequest.onHeadersReceived(request).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
       })
@@ -243,7 +243,7 @@ describe('modifyRequest processing', function () {
         const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
         expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         // simulate presence of x-ipfs-path header returned by HTTP gateway
-        request.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
         // Note that DNSLink is missing, so a path from x-ipfs-path is used
         expect(modifyRequest.onHeadersReceived(request).redirectUrl).to.equal(activeGateway + '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd?argTest#hashTest')
       })
@@ -266,9 +266,9 @@ describe('modifyRequest processing', function () {
           dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
           //
           runtime.isFirefox = false
-          const xhrRequest = {url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
-          xhrRequest.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
+          xhrRequest.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
           expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
         // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness
@@ -279,11 +279,11 @@ describe('modifyRequest processing', function () {
           //
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
-          const xhrRequest = {url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
           expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
           // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
-          xhrRequest.responseHeaders = [{name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'}]
+          xhrRequest.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
           expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
         // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness
@@ -293,7 +293,7 @@ describe('modifyRequest processing', function () {
           dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(false)
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
-          const xhrRequest = {url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          const xhrRequest = { url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           // onBeforeRequest should not change anything
           expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
           // onHeadersReceived should not change anything
@@ -318,7 +318,7 @@ describe('modifyRequest processing', function () {
           dnslinkResolver.setDnslink(fqdn, '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
           //
           runtime.isFirefox = false
-          const xhrRequest = {url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
         it('should redirect later in onHeadersReceived if XHR is cross-origin and runtime is Firefox', function () {
@@ -328,7 +328,7 @@ describe('modifyRequest processing', function () {
           //
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
-          const xhrRequest = {url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
           expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
           // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
@@ -340,7 +340,7 @@ describe('modifyRequest processing', function () {
           dnslinkResolver.setDnslink(fqdn, false)
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
-          const xhrRequest = {url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId()}
+          const xhrRequest = { url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           // onBeforeRequest should not change anything
           expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
           // onHeadersReceived should not change anything

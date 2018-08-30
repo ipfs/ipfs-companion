@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
-function statusEntry ({label, labelLegend, value, check, itemClass = '', valueClass = ''}) {
+function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueClass = '' }) {
   const offline = browser.i18n.getMessage('panel_statusOffline')
   label = label ? browser.i18n.getMessage(label) : null
   labelLegend = labelLegend ? browser.i18n.getMessage(labelLegend) : label
@@ -31,31 +31,31 @@ module.exports = function gatewayStatus ({
   const api = ipfsApiUrl && ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`
     <ul class="fade-in list mv0 pv2 ph3 white">
-      ${statusEntry({
-        label: 'panel_statusGatewayAddress',
-        value: gatewayAddress,
-        check: gatewayAddress,
-        itemClass: 'mb1'
-      })}
-      ${statusEntry({
-        label: 'panel_statusApiAddress',
-        value: api,
-        check: gatewayVersion,
-        itemClass: 'mb1'
-      })}
-      ${statusEntry({
-        label: 'panel_statusGatewayVersion',
-        value: gatewayVersion,
-        check: gatewayVersion,
-        itemClass: 'mb1'
-      })}
-      ${statusEntry({
-        label: 'panel_statusSwarmPeers',
-        labelLegend: 'panel_statusSwarmPeersTitle',
-        value: swarmPeers,
-        check: swarmPeers,
-        valueClass: 'fw9'
-      })}
+  ${statusEntry({
+    label: 'panel_statusGatewayAddress',
+    value: gatewayAddress,
+    check: gatewayAddress,
+    itemClass: 'mb1'
+  })}
+  ${statusEntry({
+    label: 'panel_statusApiAddress',
+    value: api,
+    check: gatewayVersion,
+    itemClass: 'mb1'
+  })}
+  ${statusEntry({
+    label: 'panel_statusGatewayVersion',
+    value: gatewayVersion,
+    check: gatewayVersion,
+    itemClass: 'mb1'
+  })}
+  ${statusEntry({
+    label: 'panel_statusSwarmPeers',
+    labelLegend: 'panel_statusSwarmPeersTitle',
+    value: swarmPeers,
+    check: swarmPeers,
+    valueClass: 'fw9'
+  })}
     </ul>
   `
 }

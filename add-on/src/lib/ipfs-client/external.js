@@ -7,7 +7,7 @@ exports.init = async function (opts) {
   console.log('[ipfs-companion] External ipfs init', opts.apiURLString)
 
   const url = opts.apiURL
-  const api = IpfsApi({host: url.hostname, port: url.port, procotol: url.protocol})
+  const api = IpfsApi({ host: url.hostname, port: url.port, procotol: url.protocol })
   return api
 }
 

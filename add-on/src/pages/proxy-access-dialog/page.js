@@ -31,30 +31,16 @@ function createProxyAccessDialogPage (i18n) {
           ${loading ? html`
             <div>
               <span class="mr2">
-                ${button({
-                  text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'),
-                  disabled: true
-                })}
+                ${button({ text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'), disabled: true })}
               </span>
-              ${button({
-                text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'),
-                disabled: true
-              })}
+              ${button({ text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'), disabled: true })}
             </div>
           ` : html`
             <div>
               <span class="mr2">
-                ${button({
-                  text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'),
-                  onClick: onDeny,
-                  color: 'red'
-                })}
+                ${button({ text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'), onClick: onDeny, color: 'red' })}
               </span>
-              ${button({
-                text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'),
-                onClick: onAllow,
-                color: 'aqua'
-              })}
+              ${button({ text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'), onClick: onAllow, color: 'aqua' })}
             </div>
           `}
         </div>
