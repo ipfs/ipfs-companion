@@ -70,13 +70,13 @@ function experimentsForm ({
               <dt>${browser.i18n.getMessage('option_dnslinkPolicy_title')}</dt>
               <dd>
                 ${browser.i18n.getMessage('option_dnslinkPolicy_description')}
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md" target="_blank">
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md#dnslink-support-in-ipfs-companion" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
             </dl>
           </label>
-          <select id="dnslinkPolicy" name='dnslinkPolicy' class="pointer" onchange=${onDnslinkPolicyChange}>
+          <select id="dnslinkPolicy" name='dnslinkPolicy' onchange=${onDnslinkPolicyChange}>
             <option
               value='false'
               selected=${String(dnslinkPolicy) === 'false'}>
@@ -99,13 +99,13 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
               <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/x-ipfs-header.md" target="_blank">
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/x-ipfs-path-header.md#x-ipfs-path-header-support-in-ipfs-companion" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
             </dl>
           </label>
-          <input type="checkbox" id="detectIpfsPathHeader" onchange=${onDetectIpfsPathHeaderChange} checked=${detectIpfsPathHeader} disabled=${dnslinkPolicy === 'best-effort'} />
+          <input type="checkbox" id="detectIpfsPathHeader" onchange=${onDetectIpfsPathHeaderChange} checked=${detectIpfsPathHeader} />
         </div>
         <div>
           <label for="ipfs-proxy">
@@ -118,7 +118,7 @@ function experimentsForm ({
                       ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md" target="_blank">
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md#notes-on-exposing-ipfs-api-as-windowipfs" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>

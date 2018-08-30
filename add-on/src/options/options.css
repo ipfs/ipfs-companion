@@ -51,6 +51,12 @@ fieldset > div > * {
 label {
   flex: 1;
 }
+input[type=checkbox]:hover,
+select:hover,
+button:hover,
+label:hover {
+  cursor: pointer;
+}
 label > dl > dd {
   color: #888;
   margin-top: .2em;
@@ -90,6 +96,11 @@ select {
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
   border: 1px solid #ccc;
+}
+input[type=checkbox]:focus,
+input[type=checkbox]::-moz-focus-inner {
+  border: 0;
+  outline: none;
 }
 input[type=text]:focus,
 input[type=url]:focus,
