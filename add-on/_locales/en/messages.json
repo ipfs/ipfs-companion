@@ -302,19 +302,19 @@
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Select DNS TXT lookup policy",
+    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "disabled",
+    "message": "Off",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "best-effort",
+    "message": "Check after HTTP request",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "enabled",
+    "message": "Check before HTTP request",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_detectIpfsPathHeader_title": {

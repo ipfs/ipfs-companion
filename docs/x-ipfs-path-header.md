@@ -30,7 +30,7 @@ Presence of `x-ipfs-path` header is a clear indicator website uses IPFS.
 
 There is a "best-effort" [DNSLink policy][] enabled by default to execute blocking DNS TXT lookups for FQDNs that returned the header.
 
-Note: `x-ipfs-path` starting with `/ipns/` will be ignored if [DNSLink policy][] is "Disabled" or DNS TXT record is missing.
+Note: `x-ipfs-path` starting with `/ipns/` will be ignored if [DNSLink policy][] is "off" or DNS TXT record is missing.
 
 ----
 
