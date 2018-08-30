@@ -70,7 +70,8 @@ module.exports = function optionsPage (state, emit) {
         preloadAtPublicGateway: state.options.preloadAtPublicGateway,
         catchUnhandledProtocols: state.options.catchUnhandledProtocols,
         linkify: state.options.linkify,
-        dnslink: state.options.dnslink,
+        dnslinkPolicy: state.options.dnslinkPolicy,
+        detectIpfsPathHeader: state.options.detectIpfsPathHeader,
         ipfsProxy: state.options.ipfsProxy,
         onOptionChange,
         onOptionsReset

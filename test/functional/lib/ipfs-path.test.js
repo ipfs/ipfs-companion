@@ -4,18 +4,18 @@ const { expect } = require('chai')
 const { URL } = require('url')
 const { safeIpfsPath, createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { initState } = require('../../../add-on/src/lib/state')
-const createDnsLink = require('../../../add-on/src/lib/dns-link')
+const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
 // https://github.com/ipfs/ipfs-companion/issues/303
 describe('ipfs-path.js', function () {
-  let state, dnsLink, ipfsPathValidator
+  let state, dnslinkResolver, ipfsPathValidator
   beforeEach(function () {
     global.URL = URL
     state = Object.assign(initState(optionDefaults), { peerCount: 1 })
     const getState = () => state
-    dnsLink = createDnsLink(getState)
-    ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
+    dnslinkResolver = createDnslinkResolver(getState)
+    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
   })
   describe('safeIpfsPath(pathOrUrl) should produce no changes', function () {
     it('for URL without special characters', function () {

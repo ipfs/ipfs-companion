@@ -98,7 +98,7 @@ function validIpnsPath (path, dnsLink) {
       // console.log('==> IPNS is a valid CID', ipnsRoot)
       return true
     }
-    if (dnsLink.isDnslookupPossible() && dnsLink.cachedDnslinkLookup(ipnsRoot)) {
+    if (dnsLink.readAndCacheDnslink(ipnsRoot)) {
       // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
       return true
     }

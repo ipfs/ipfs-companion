@@ -1,6 +1,6 @@
 'use strict'
 
-const optionDefaults = Object.freeze({
+exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external', // or 'embedded'
   ipfsNodeConfig: JSON.stringify({
@@ -14,7 +14,8 @@ const optionDefaults = Object.freeze({
   useCustomGateway: true,
   automaticMode: true,
   linkify: false,
-  dnslink: false,
+  dnslinkPolicy: 'best-effort',
+  detectIpfsPathHeader: true,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
@@ -24,10 +25,8 @@ const optionDefaults = Object.freeze({
   ipfsProxy: true
 })
 
-exports.optionDefaults = optionDefaults
-
 // `storage` should be a browser.storage.local or similar
-function storeMissingOptions (read, defaults, storage) {
+exports.storeMissingOptions = (read, defaults, storage) => {
   const requiredKeys = Object.keys(defaults)
   const changes = new Set()
   requiredKeys.map(key => {
@@ -51,8 +50,6 @@ function storeMissingOptions (read, defaults, storage) {
   return Promise.all(changes)
 }
 
-exports.storeMissingOptions = storeMissingOptions
-
 function normalizeGatewayURL (url) {
   // https://github.com/ipfs/ipfs-companion/issues/328
   return url
@@ -60,3 +57,17 @@ function normalizeGatewayURL (url) {
 }
 
 exports.normalizeGatewayURL = normalizeGatewayURL
+
+exports.migrateOptions = async (storage) => {
+  // <= v2.4.4
+  // DNSLINK: convert old on/off 'dnslink' flag to text-based 'dnslinkPolicy'
+  const { dnslink } = await storage.get('dnslink')
+  if (dnslink) {
+    console.log(`[ipfs-companion] migrating old dnslink policy '${dnslink}' to 'best-effort'`)
+    await storage.set({
+      dnslinkPolicy: 'best-effort',
+      detectIpfsPathHeader: true
+    })
+    await storage.remove('dnslink')
+  }
+}

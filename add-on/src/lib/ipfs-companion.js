@@ -2,10 +2,10 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { optionDefaults, storeMissingOptions } = require('./options')
+const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
-const createDnsLink = require('./dns-link')
+const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
@@ -21,7 +21,7 @@ module.exports = async function init () {
   // ===================================================================
   var ipfs // ipfs-api instance
   var state // avoid redundant API reads by utilizing local cache of various states
-  var dnsLink
+  var dnslinkResolver
   var ipfsPathValidator
   var modifyRequest
   var notify
@@ -35,6 +35,7 @@ module.exports = async function init () {
   const browserActionPortName = 'browser-action-port'
 
   try {
+    await migrateOptions(browser.storage.local)
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
@@ -54,15 +55,15 @@ module.exports = async function init () {
     }
 
     copier = createCopier(getState, notify)
-    dnsLink = createDnsLink(getState)
-    ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
+    dnslinkResolver = createDnslinkResolver(getState)
+    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddToIpfsRawCid: addFromURL,
       onAddToIpfsKeepFilename: (info) => addFromURL(info, {wrapWithDirectory: true}),
       onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
+    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(getIpfs, getState)
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
     registerListeners()
@@ -91,7 +92,7 @@ module.exports = async function init () {
   function registerListeners () {
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, {urls: ['<all_urls>']}, ['blocking'])
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, {urls: ['<all_urls>']}, ['blocking', 'responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, {urls: ['<all_urls>']})
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
@@ -550,7 +551,7 @@ module.exports = async function init () {
       if (change.oldValue === change.newValue) continue
 
       // debug info
-      // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
+      console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
       switch (key) {
         case 'active':
           state[key] = change.newValue
@@ -585,11 +586,17 @@ module.exports = async function init () {
           state[key] = change.newValue
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
           break
+        case 'dnslinkPolicy':
+          state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
+          if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
+            await browser.storage.local.set({ detectIpfsPathHeader: true })
+          }
+          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
         case 'automaticMode':
-        case 'dnslink':
+        case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
           state[key] = change.newValue
           break
@@ -629,6 +636,10 @@ module.exports = async function init () {
       return ipfs
     },
 
+    get dnslinkResolver () {
+      return dnslinkResolver
+    },
+
     get notify () {
       return notify
     },
@@ -643,7 +654,7 @@ module.exports = async function init () {
       apiStatusUpdateInterval = null
       ipfs = null
       state = null
-      dnsLink = null
+      dnslinkResolver = null
       modifyRequest = null
       ipfsPathValidator = null
       notify = null
