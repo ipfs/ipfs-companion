@@ -7374,11 +7374,11 @@ mime-db@~1.36.0:
   version "1.36.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.36.0.tgz#5020478db3c7fe93aad7bbcc4dcf869c43363397"
 
-mime-types@2.1.19, mime-types@^2.1.19:
-  version "2.1.19"
-  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.19.tgz#71e464537a7ef81c15f2db9d97e913fc0ff606f0"
+mime-types@2.1.20, mime-types@~2.1.19:
+  version "2.1.20"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.20.tgz#930cb719d571e903738520f8470911548ca2cc19"
   dependencies:
-    mime-db "~1.35.0"
+    mime-db "~1.36.0"
 
 mime-types@^2.1.12, mime-types@^2.1.18, mime-types@~2.1.17, mime-types@~2.1.18:
   version "2.1.18"
@@ -7386,11 +7386,11 @@ mime-types@^2.1.12, mime-types@^2.1.18, mime-types@~2.1.17, mime-types@~2.1.18:
   dependencies:
     mime-db "~1.33.0"
 
-mime-types@~2.1.19:
-  version "2.1.20"
-  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.20.tgz#930cb719d571e903738520f8470911548ca2cc19"
+mime-types@^2.1.19:
+  version "2.1.19"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.19.tgz#71e464537a7ef81c15f2db9d97e913fc0ff606f0"
   dependencies:
-    mime-db "~1.36.0"
+    mime-db "~1.35.0"
 
 mime@1.4.1:
   version "1.4.1"
@@ -11642,9 +11642,9 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-web-ext@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/web-ext/-/web-ext-2.9.0.tgz#360c9e8fe1009af2e8a68b043e938b03a9e21144"
+web-ext@2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/web-ext/-/web-ext-2.9.1.tgz#41aef65dbaea97760607a5009bf0ffa634d9cdb9"
   dependencies:
     "@cliqz-oss/firefox-client" "0.3.1"
     "@cliqz-oss/node-firefox-connect" "1.2.1"
@@ -11684,9 +11684,9 @@ web-ext@2.9.0:
   version "0.1.1"
   resolved "https://codeload.github.com/dignifiedquire/webcrypto-shim/tar.gz/190bc9ec341375df6025b17ae12ddb2428ea49c8"
 
-webextension-polyfill@0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/webextension-polyfill/-/webextension-polyfill-0.1.2.tgz#a625e3d4da33076ca147293566e42ef153dc3002"
+webextension-polyfill@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/webextension-polyfill/-/webextension-polyfill-0.3.1.tgz#fab2aed917a713a5d8221e41febad81c5d0b080f"
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
