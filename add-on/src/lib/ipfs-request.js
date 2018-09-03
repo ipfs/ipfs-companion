@@ -82,19 +82,43 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // There is a bug in go-ipfs related to keep-alive connections
         // that results in partial response for ipfs.files.add
         // mangled by error "http: invalid Read on closed Body"
-        // More info: https://github.com/ipfs/go-ipfs/issues/5168
-        if (request.url.includes('/api/v0/add')) {
+        // More info (ipfs-companion): https://github.com/ipfs-shipyard/ipfs-companion/issues/480
+        // More info (go-ipfs): https://github.com/ipfs/go-ipfs/issues/5168
+        if (request.url.includes('/api/v0/add') && request.url.includes('stream-channels=true')) {
+          let addExpectHeader = true
+          const expectHeader = { name: 'Expect', value: '100-continue' }
+          const warningMsg = '[ipfs-companion] Executing "Expect: 100-continue" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168'
           for (let header of request.requestHeaders) {
-            if (header.name === 'Connection') {
+            // Workaround A: https://github.com/ipfs/go-ipfs/issues/5168#issuecomment-401417420
+            // (works in Firefox, but Chromium does not expose Connection header)
+            /* (disabled so we use the workaround B in all browsers)
+            if (header.name === 'Connection' && header.value !== 'close') {
               console.warn('[ipfs-companion] Executing "Connection: close" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168')
               header.value = 'close'
+              addExpectHeader = false
               break
             }
+            */
+            // Workaround B: https://github.com/ipfs-shipyard/ipfs-companion/issues/480#issuecomment-417657758
+            // (works in Firefox 63 AND Chromium 67)
+            if (header.name === expectHeader.name) {
+              addExpectHeader = false
+              if (header.value !== expectHeader.value) {
+                console.log(warningMsg)
+                header.value = expectHeader.value
+              }
+              break
+            }
+          }
+          if (addExpectHeader) {
+            console.log(warningMsg)
+            request.requestHeaders.push(expectHeader)
           }
         }
         // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
         // which produced '403 - Forbidden' error.
         // This workaround removes bogus header from API requests
+        // TODO: check if still necessary
         for (let i = 0; i < request.requestHeaders.length; i++) {
           let header = request.requestHeaders[i]
           if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
