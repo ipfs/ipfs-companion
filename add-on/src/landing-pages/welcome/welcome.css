@@ -6,3 +6,8 @@
   background-size: 100%;
   background-repeat: repeat;
 }
+
+.underline-under {
+  text-decoration: underline;
+  text-underline-position: under;
+}
