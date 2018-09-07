@@ -148,11 +148,11 @@
         "description": "(notify_uploadTrackingProtectionErrorMsg)"
     },
     "notify_inlineMsg": {
-        "message": "$MSG$",
+        "message": "$1",
         "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
     },
     "notify_inlineErrorMsg": {
-        "message": "$ERROR$ (wciśnij ctrl+shift+j po więcej informacji)",
+        "message": "$1 (press ctrl+shift+j for more details)",
         "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
     },
     "notify_startIpfsNodeErrorTitle": {
@@ -356,7 +356,7 @@
         "description": "Extension description in the Manifest file (manifest_extensionDescription)"
     },
     "quickUpload_subhead_peers": {
-        "message": "Połączono z $PEERCOUNT$ węzłami",
+        "message": "Connected to $1 peers",
         "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
     },
     "quickUpload_pick_file_button": {
@@ -404,11 +404,11 @@
         "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
     },
     "page_proxyAcl_confirm_revoke": {
-        "message": "Wycofać pozwolenie na dostęp do $PERMISSION$ dla $SCOPE$?",
+        "message": "Revoke permission $1 for $2?",
         "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
     },
     "page_proxyAcl_confirm_revoke_all": {
-        "message": "Wycofać wszystkie pozwolenia dla $SCOPE$?",
+        "message": "Revoke all permissions for $1?",
         "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
     },
     "page_proxyAcl_toggle_to_allow_button_title": {
@@ -428,11 +428,11 @@
         "description": "Button value for deny"
     },
     "page_proxyAcl_revoke_button_title": {
-        "message": "Wycofaj $PERMISSION$",
+        "message": "Revoke $1",
         "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
     },
     "page_proxyAccessDialog_title": {
-        "message": "Zezwolić $SCOPE$ na dostęp do ipfs.$PERMISSION$?",
+        "message": "Allow $1 to access ipfs.$2?",
         "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
     },
     "page_proxyAccessDialog_wildcardCheckbox_label": {
