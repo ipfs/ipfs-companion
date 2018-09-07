@@ -8,6 +8,6 @@ const createWelcomePage = require('./page')
 
 const app = choo()
 
-app.use(createWelcomePageStore(browser.i18n))
+app.use(createWelcomePageStore(browser.i18n, browser.runtime))
 app.route('*', createWelcomePage(browser.i18n))
 app.mount('#root')

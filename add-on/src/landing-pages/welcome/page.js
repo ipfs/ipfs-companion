@@ -8,19 +8,15 @@ const libp2pLogo = '../../../images/libp2p.svg'
 const multiformatsLogo = '../../../images/multiformats.svg'
 const ipldLogo = '../../../images/ipld.svg'
 
-// Constants
-const ipfsLogoWidth = 128
-
 function createWelcomePage (i18n) {
   return function welcomePage (state, emit) {
+    const isIpfsOnline = state.isIpfsOnline
+
     return html`
       <div class="flex flex-column flex-row-l">
-
         <div id="hero" class="w-100 min-vh-100 flex flex-column justify-center items-center bg-navy white">
-          <img width="${ipfsLogoWidth}" src="${ipfsLogo}" alt="IPFS Logo">
-          <p class="b f1">IPFS Companion</p>
-          <p class="f5">You are ready to dive into distributed apps and sites built with IPFS!</p>
-          <a class="white" href="https://ipfs.io/" target="_blank">Learn More</a>
+          ${renderCompanionLogo()}
+          ${isIpfsOnline ? renderWelcome() : renderInstallSteps()}
         </div>
 
         <div class="w-100 min-vh-100 flex flex-column justify-around items-center">
@@ -32,6 +28,52 @@ function createWelcomePage (i18n) {
     `
   }
 }
+
+/* ========================================================
+   Render functions for the left side
+   ======================================================== */
+
+const renderCompanionLogo = () => {
+  const ipfsLogoWidth = 128
+
+  return html`
+    <div class="mb4 flex flex-column justify-center items-center">
+      <img width="${ipfsLogoWidth}" src="${ipfsLogo}" alt="IPFS Logo">
+      <p class="mt3 mb0 b f2">IPFS Companion</p>
+    </div>
+  `
+}
+
+const renderWelcome = () => {
+  return html`
+    <div class="flex flex-column items-center justify-center">
+      <p class="f5">You are ready to dive into distributed apps and sites built with IPFS!</p>
+      <a class="white" href="https://ipfs.io/" target="_blank">Learn More</a>
+    </div>
+  `
+}
+
+const renderInstallSteps = () => {
+  const copyClass = 'mv0 white f5 lh-copy'
+  const anchorClass = 'white link underline-under hover-yellow'
+
+  return html`
+    <div class="w-80 mv3 flex flex-column">
+      <p class="mt0 mb2 yellow f4 lh-title">Is your IPFS daemon running?</p>
+      <p class="${copyClass}">If you haven't installed IPFS please do so <a class="${anchorClass}" href="https://ipfs.io/docs/getting-started/" target="_blank">with these instructions</a>.</p>
+      <p class="${copyClass}">Then make sure to have an IPFS daemon running in your terminal:</p>
+      <div className='db w-100 mt3 pa3 bg-black-70 bt bw4 br2 snow f7'>
+        <code className='db'>$ ipfs daemon</code>
+        <code className='db'>Initializing daemon...</code>
+        <code className='db'>API server listening on /ip4/127.0.0.1/tcp/5001</code>
+      </div>
+    </div>
+  `
+}
+
+/* ========================================================
+   Render functions for the right side
+   ======================================================== */
 
 const renderResources = () => {
   const labelClass = 'aqua mb1'
@@ -63,10 +105,10 @@ const renderVideos = () => {
 
   const playSvg = () => html`
     <svg class="aspect-ratio--object" x="0px" y="0px" viewBox="-90 -60 ${videoWidth} ${videoHeight}">
-      <g fill="yellow">
+      <g fill="#f39021">
         <path d="M30,0C13.4,0,0,13.4,0,30s13.4,30,30,30s30-13.4,30-30S46.6,0,30,0z M30,58C14.5,58,2,45.5,2,30C2,14.5,14.5,2,30,2 c15.5,0,28,12.5,28,28C58,45.5,45.5,58,30,58z" />
       </g>
-      <g fill="white">
+      <g fill="#ffffff">
         <polygon points="43,30 23,40 23,20" />
       </g>
     </svg>
