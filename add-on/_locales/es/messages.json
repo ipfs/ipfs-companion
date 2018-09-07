@@ -276,7 +276,7 @@
         "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
     },
     "option_catchUnhandledProtocols_description": {
-        "message": "Habilitar el soporte para pfs://$cid, ipns://$peerid y dweb:/ipfs/$cid por la normalización de enlaces y solicitudes con protocolos no controlados",
+        "message": "Habilitar el soporte para pfs://, ipns:// y dweb:/ipfs/ por la normalización de enlaces y solicitudes con protocolos no controlados",
         "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
     },
     "option_linkify_title": {
