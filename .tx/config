@@ -6,5 +6,4 @@ file_filter = add-on/_locales/<lang>/messages.json
 minimum_perc = 1
 source_file = add-on/_locales/en/messages.json
 source_lang = en
-lang_map = zh_CN: zh
 type = CHROME

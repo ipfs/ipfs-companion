@@ -48,11 +48,11 @@
         "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
     },
     "panel_switchToCustomGateway": {
-        "message": "Switch to Custom Gateway",
+        "message": "切换到自定义网关",
         "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
     },
     "panel_switchToPublicGateway": {
-        "message": "Switch to Public Gateway",
+        "message": "切换到公共网关",
         "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
     },
     "panel_pinCurrentIpfsAddress": {
@@ -80,15 +80,15 @@
         "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
     },
     "pageAction_titleNonIpfs": {
-        "message": "Non-IPFS resource",
+        "message": "非 IPFS 资源",
         "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
     },
     "contextMenu_AddToIpfsRawCid": {
-        "message": "Add to IPFS",
+        "message": "添加到 IPFS",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
     },
     "contextMenu_AddToIpfsKeepFilename": {
-        "message": "Add to IPFS (Keep Filename)",
+        "message": "添加到 IPFS（保持文件名）",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
     },
     "notify_addonIssueTitle": {
@@ -156,11 +156,11 @@
         "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
     },
     "notify_startIpfsNodeErrorTitle": {
-        "message": "Failed to start IPFS node",
+        "message": "启动 IPFS 节点失败",
         "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
     },
     "notify_stopIpfsNodeErrorTitle": {
-        "message": "Failed to stop IPFS node",
+        "message": "停止 IPFS 节点失败",
         "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
     },
     "option_legend_readMore": {
@@ -168,11 +168,11 @@
         "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
     },
     "option_header_nodeType": {
-        "message": "IPFS Node",
+        "message": "IPFS 节点",
         "description": "A section header on the Preferences screen (option_header_nodeType)"
     },
     "option_ipfsNodeType_title": {
-        "message": "IPFS Node Type",
+        "message": "IPFS 节点类型",
         "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
     },
     "option_ipfsNodeType_external_description": {
@@ -184,19 +184,19 @@
         "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
     },
     "option_ipfsNodeConfig_title": {
-        "message": "IPFS Node Config",
+        "message": "IPFS 节点配置",
         "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
     },
     "option_ipfsNodeConfig_description": {
-        "message": "Configuration for the embedded IPFS node. Must be valid JSON.",
+        "message": "配置嵌入式的 IPFS 节点。必须是有效的 JSON。",
         "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
     },
     "option_ipfsNodeType_external": {
-        "message": "External",
+        "message": "外部",
         "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
     },
     "option_ipfsNodeType_embedded": {
-        "message": "Embedded",
+        "message": "嵌入",
         "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
     },
     "option_header_gateways": {
@@ -288,7 +288,7 @@
         "description": "An option description on the Preferences screen (option_linkify_description)"
     },
     "option_dnslinkPolicy_title": {
-        "message": "DNSLink Support",
+        "message": "DNSLink 支持",
         "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
     },
     "option_dnslinkPolicy_description": {
@@ -296,19 +296,19 @@
         "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
     },
     "option_dnslinkPolicy_disabled": {
-        "message": "Off",
+        "message": "关",
         "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
     },
     "option_dnslinkPolicy_bestEffort": {
-        "message": "Check after HTTP request",
+        "message": "HTTP 请求后检查",
         "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
     },
     "option_dnslinkPolicy_enabled": {
-        "message": "Check before HTTP request",
+        "message": "HTTP 请求前检查",
         "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
     },
     "option_detectIpfsPathHeader_title": {
-        "message": "Detect X-Ipfs-Path Header",
+        "message": "检测 X-Ipfs-Path 头",
         "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
     },
     "option_detectIpfsPathHeader_description": {
@@ -324,7 +324,7 @@
         "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
     },
     "option_ipfsProxy_link_manage_permissions": {
-        "message": "Manage permissions",
+        "message": "管理权限",
         "description": "Link text for managing permissions"
     },
     "option_preloadAtPublicGateway_title": {
@@ -360,27 +360,27 @@
         "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
     },
     "quickUpload_pick_file_button": {
-        "message": "Pick a file",
+        "message": "选一个文件",
         "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
     },
     "quickUpload_or": {
-        "message": "or",
+        "message": "或",
         "description": "seperates the pick a file button from the drop message (quickUpload_or)"
     },
     "quickUpload_drop_it_here": {
-        "message": "drop it here to share",
+        "message": "拖放文件到此处以分享",
         "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
     },
     "quickUpload_state_uploading": {
-        "message": "Upload in progress..",
+        "message": "正在上传..",
         "description": "Status label on the share files page (quickUpload_state_uploading)"
     },
     "quickUpload_state_buffering": {
-        "message": "(buffering, please wait)",
+        "message": "（正在缓冲，请稍候）",
         "description": "Status label on the share files page (quickUpload_state_buffering)"
     },
     "quickUpload_options_show": {
-        "message": "upload options",
+        "message": "上传选项",
         "description": "Button on the share files page (quickUpload_options_show)"
     },
     "quickUpload_options_wrapWithDirectory": {
@@ -392,7 +392,7 @@
         "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
     },
     "page_proxyAcl_title": {
-        "message": "Manage Permissions",
+        "message": "管理权限",
         "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
     },
     "page_proxyAcl_subtitle": {
@@ -400,7 +400,7 @@
         "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
     },
     "page_proxyAcl_no_perms": {
-        "message": "No permissions granted.",
+        "message": "没有授予权限。",
         "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
     },
     "page_proxyAcl_confirm_revoke": {
