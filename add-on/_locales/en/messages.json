@@ -5,11 +5,11 @@
   },
   "panel_headerIpfsNodeIconLabel": {
     "message": "IPFS Companion",
-    "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
+    "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
     "message": "Global toggle: activate or suspend all IPFS integrations",
-    "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "offline",
