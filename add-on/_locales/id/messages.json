@@ -276,7 +276,7 @@
         "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
     },
     "option_catchUnhandledProtocols_description": {
-        "message": "Memungkinkan dukungan untuk ipfs://, ipns:// dan dweb:/ipfs/ oleh normalisasi tautan dan permintaan yang dilakukan dengan tidak tertangani protokol",
+        "message": "Memungkinkan dukungan untuk ipfs://, ipns:// dan dweb: oleh normalisasi tautan dan permintaan yang dilakukan dengan tidak tertangani protokol",
         "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
     },
     "option_linkify_title": {
