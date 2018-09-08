@@ -148,7 +148,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // Detect X-Ipfs-Path Header and upgrade transport to IPFS:
         // 1. Check if DNSLink exists and redirect to it.
         // 2. If there is no DNSLink, validate path from the header and redirect
-        if (state.detectIpfsPathHeader && request.responseHeaders && !request.url.startsWith(state.gwURLString) && !request.url.startsWith(state.apiURLString)) {
+        const url = request.url
+        const notActiveGatewayOrApi = !(url.startsWith(state.pubGwURLString) || url.startsWith(state.gwURLString) || url.startsWith(state.apiURLString))
+        if (state.detectIpfsPathHeader && request.responseHeaders && notActiveGatewayOrApi) {
           // console.log('onHeadersReceived.request', request)
           for (let header of request.responseHeaders) {
             if (header.name.toLowerCase() === 'x-ipfs-path' && isSafeToRedirect(request, runtime)) {
