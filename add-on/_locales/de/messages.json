@@ -5,11 +5,11 @@
     },
     "panel_headerIpfsNodeIconLabel": {
         "message": "IPFS-Knoten",
-        "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
+        "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
     },
     "panel_headerActiveToggleTitle": {
         "message": "Globaler Schalter: aktiviere oder deaktiviere alle IPFS Integrationen",
-        "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+        "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
     },
     "panel_statusOffline": {
         "message": "offline",
@@ -152,7 +152,7 @@
         "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
     },
     "notify_inlineErrorMsg": {
-        "message": "$1 (press ctrl+shift+j for more details)",
+        "message": "$1 (strg+umschalt+j für Details)",
         "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
     },
     "notify_startIpfsNodeErrorTitle": {
@@ -356,7 +356,7 @@
         "description": "Extension description in the Manifest file (manifest_extensionDescription)"
     },
     "quickUpload_subhead_peers": {
-        "message": "Connected to $1 peers",
+        "message": "Mit $1 Nachbarn verbunden",
         "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
     },
     "quickUpload_pick_file_button": {
@@ -404,11 +404,11 @@
         "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
     },
     "page_proxyAcl_confirm_revoke": {
-        "message": "Revoke permission $1 for $2?",
+        "message": "Recht $1 für $2 entziehen?",
         "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
     },
     "page_proxyAcl_confirm_revoke_all": {
-        "message": "Revoke all permissions for $1?",
+        "message": "$1 alle Rechte entziehen?",
         "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
     },
     "page_proxyAcl_toggle_to_allow_button_title": {
@@ -428,11 +428,11 @@
         "description": "Button value for deny"
     },
     "page_proxyAcl_revoke_button_title": {
-        "message": "Revoke $1",
+        "message": "Entziehe $1",
         "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
     },
     "page_proxyAccessDialog_title": {
-        "message": "Allow $1 to access ipfs.$2?",
+        "message": "$1 darf auf IPFS zugreifen. $2?",
         "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
     },
     "page_proxyAccessDialog_wildcardCheckbox_label": {
