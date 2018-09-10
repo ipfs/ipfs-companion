@@ -4,15 +4,18 @@
 function createWelcomePageStore (i18n, runtime) {
   return function welcomePageStore (state, emitter) {
     state.isIpfsOnline = null
+    state.peerCount = null
 
     const port = runtime.connect({ name: 'browser-action-port' })
 
     const onMessage = (message) => {
       if (message.statusUpdate) {
-        const isIpfsOnline = message.statusUpdate.peerCount > -1
+        const peerCount = message.statusUpdate.peerCount
+        const isIpfsOnline = peerCount > -1
 
-        if (isIpfsOnline !== state.isIpfsOnline) {
+        if (isIpfsOnline !== state.isIpfsOnline || peerCount !== state.peerCount) {
           state.isIpfsOnline = isIpfsOnline
+          state.peerCount = peerCount
           emitter.emit('render')
         }
       }

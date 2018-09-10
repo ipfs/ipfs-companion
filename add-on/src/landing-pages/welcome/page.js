@@ -8,15 +8,20 @@ const libp2pLogo = '../../../images/libp2p.svg'
 const multiformatsLogo = '../../../images/multiformats.svg'
 const ipldLogo = '../../../images/ipld.svg'
 
+// Colors
+const colorIpfsLogo = '#57cbd0'
+const colorWhite = '#ffffff'
+
 function createWelcomePage (i18n) {
   return function welcomePage (state, emit) {
     const isIpfsOnline = state.isIpfsOnline
+    const peerCount = state.peerCount
 
     return html`
       <div class="flex flex-column flex-row-l">
         <div id="hero" class="w-100 min-vh-100 flex flex-column justify-center items-center bg-navy white">
           ${renderCompanionLogo()}
-          ${isIpfsOnline ? renderWelcome() : renderInstallSteps()}
+          ${isIpfsOnline ? renderWelcome(peerCount) : renderInstallSteps()}
         </div>
 
         <div class="w-100 min-vh-100 flex flex-column justify-around items-center">
@@ -37,28 +42,52 @@ const renderCompanionLogo = () => {
   const ipfsLogoWidth = 128
 
   return html`
-    <div class="mb4 flex flex-column justify-center items-center">
+    <div class="mb5 flex flex-column justify-center items-center">
       <img width="${ipfsLogoWidth}" src="${ipfsLogo}" alt="IPFS Logo">
       <p class="mt3 mb0 b f2">IPFS Companion</p>
     </div>
   `
 }
 
-const renderWelcome = () => {
+const renderWelcome = (peerCount) => {
+  const anchorClass = 'white link underline-under hover-aqua'
+  const copyClass = 'mv0 lh-copy f5'
+  const svgWidth = 80
+
+  const checkmarkSvg = () => html`
+    <svg x="0px" y="0px" viewBox="0 0 84 84" width="${svgWidth}">
+      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-802.000000, -218.000000)">
+          <g transform="translate(805.000000, 221.000000)">
+            <rect stroke="${colorIpfsLogo}" stroke-width="5" x="0" y="0" width="78" height="78" rx="39"/>
+            <g transform="translate(15.000000, 23.000000)" fill="${colorWhite}">
+              <rect transform="translate(10.747845, 24.447908) scale(-1, -1) rotate(-135.000000) translate(-10.747845, -24.447908) " x="-1" y="21.4479076" width="23.495689" height="6" rx="3"/>
+              <rect transform="translate(30.017983, 17.552092) scale(-1, -1) rotate(-45.000000) translate(-30.017983, -17.552092) " x="8.51798323" y="14.5520924" width="43" height="6" rx="3"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  `
+
   return html`
-    <div class="flex flex-column items-center justify-center">
-      <p class="f5">You are ready to dive into distributed apps and sites built with IPFS!</p>
-      <a class="white" href="https://ipfs.io/" target="_blank">Learn More</a>
+    <div class="w-80 flex flex-column justify-center">
+      <div class="mb4 flex flex-column justify-center items-center">
+        ${checkmarkSvg()}
+        <p class="mt2 mb0 f3">You are all set!</p>
+      </div>
+      <p class="${copyClass}">Right now your node is connected to <span class="aqua">${peerCount}</span> peers.</p>
+      <p class="${copyClass}">Discover what you <a class="${anchorClass}" href="https://github.com/ipfs-shipyard/ipfs-companion#features" target="_blank">can do with Companion</a> and dive into the distributed web with IPFS!</p>
     </div>
   `
 }
 
 const renderInstallSteps = () => {
   const copyClass = 'mv0 white f5 lh-copy'
-  const anchorClass = 'white link underline-under hover-yellow'
+  const anchorClass = 'white link underline-under hover-aqua'
 
   return html`
-    <div class="w-80 mv3 flex flex-column">
+    <div class="w-80 mt4 flex flex-column">
       <p class="mt0 mb2 yellow f4 lh-title">Is your IPFS daemon running?</p>
       <p class="${copyClass}">If you haven't installed IPFS please do so <a class="${anchorClass}" href="https://ipfs.io/docs/getting-started/" target="_blank">with these instructions</a>.</p>
       <p class="${copyClass}">Then make sure to have an IPFS daemon running in your terminal:</p>
@@ -100,15 +129,15 @@ const renderVideos = () => {
   const videoHeight = 180
 
   const overlayDiv = () => html`
-    <div class="absolute absolute--fill bg-navy o-80"></div>
+    <div class="absolute absolute--fill bg-navy o-90"></div>
   `
 
   const playSvg = () => html`
     <svg class="aspect-ratio--object" x="0px" y="0px" viewBox="-90 -60 ${videoWidth} ${videoHeight}">
-      <g fill="#f39021">
+      <g fill="${colorIpfsLogo}">
         <path d="M30,0C13.4,0,0,13.4,0,30s13.4,30,30,30s30-13.4,30-30S46.6,0,30,0z M30,58C14.5,58,2,45.5,2,30C2,14.5,14.5,2,30,2 c15.5,0,28,12.5,28,28C58,45.5,45.5,58,30,58z" />
       </g>
-      <g fill="#ffffff">
+      <g fill="${colorWhite}">
         <polygon points="43,30 23,40 23,20" />
       </g>
     </svg>
