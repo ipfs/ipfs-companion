@@ -450,5 +450,49 @@
   "page_proxyAccessDialog_denyButton_text": {
     "message": "Deny",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
+  },
+  "page_landingWelcome_renderLogo_title": {
+    "message": "IPFS Companion",
+    "description": "Extension name after the IPFS logo (page_landingWelcome_renderLogo_title)"
+  },
+  "page_landingWelcome_renderWelcome_title": {
+    "message": "You are all set!",
+    "description": "Ready message title (page_landingWelcome_renderWelcome_title)"
+  },
+  "page_landingWelcome_installSteps_title": {
+    "message": "Is your IPFS daemon running?",
+    "description": "Install steps title (page_landingWelcome_installSteps_title)"
+  },
+  "page_landingWelcome_installSteps_copy_run": {
+    "message": "Then make sure to have an IPFS daemon running in your terminal:",
+    "description": "Install steps run message (page_landingWelcome_installSteps_copy_run)"
+  },
+  "page_landingWelcome_renderResources_title_new_ipfs": {
+    "message": "New to IPFS?",
+    "description": "Resources title (page_landingWelcome_renderResources_title_new_ipfs)"
+  },
+  "page_landingWelcome_renderResources_title_discover": {
+    "message": "Discover!",
+    "description": "Resources title (page_landingWelcome_renderResources_title_discover)"
+  },
+  "page_landingWelcome_renderResources_title_got_questions": {
+    "message": "Got questions?",
+    "description": "Resources title (page_landingWelcome_renderResources_title_got_questions)"
+  },
+  "page_landingWelcome_renderResources_title_want_to_help": {
+    "message": "Want to help?",
+    "description": "Resources title (page_landingWelcome_renderResources_title_want_to_help)"
+  },
+  "page_landingWelcome_renderVideos_alpha_demo": {
+    "message": "IPFS Alpha Demo",
+    "description": "Videos section title (page_landingWelcome_renderVideos_alpha_demo)"
+  },
+  "page_landingWelcome_renderVideos_permanent_web": {
+    "message": "The Permanent Web",
+    "description": "Videos section title (page_landingWelcome_renderVideos_permanent_web)"
+  },
+  "page_landingWelcome_renderProjects_title": {
+    "message": "Related Projects",
+    "description": "Projects section title (page_landingWelcome_renderProjects_title)"
   }
 }

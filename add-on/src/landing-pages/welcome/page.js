@@ -20,14 +20,14 @@ function createWelcomePage (i18n) {
     return html`
       <div class="flex flex-column flex-row-l">
         <div id="hero" class="w-100 min-vh-100 flex flex-column justify-center items-center bg-navy white">
-          ${renderCompanionLogo(isIpfsOnline)}
-          ${isIpfsOnline ? renderWelcome(peerCount) : renderInstallSteps()}
+          ${renderCompanionLogo(i18n, isIpfsOnline)}
+          ${isIpfsOnline ? renderWelcome(i18n, peerCount) : renderInstallSteps(i18n)}
         </div>
 
         <div class="w-100 min-vh-100 flex flex-column justify-around items-center">
-          ${renderResources()}
-          ${renderVideos()}
-          ${renderProjects()}
+          ${renderResources(i18n)}
+          ${renderVideos(i18n)}
+          ${renderProjects(i18n)}
         </div>
       </div>
     `
@@ -38,19 +38,19 @@ function createWelcomePage (i18n) {
    Render functions for the left side
    ======================================================== */
 
-const renderCompanionLogo = (isIpfsOnline) => {
+const renderCompanionLogo = (i18n, isIpfsOnline) => {
   const logoPath = '../../../icons'
   const logoSize = 128
 
   return html`
     <div class="mt4 mb5 flex flex-column justify-center items-center">
       ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
-      <p class="montserrat mt3 mb0 f2">IPFS Companion</p>
+      <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_renderLogo_title')}</p>
     </div>
   `
 }
 
-const renderWelcome = (peerCount) => {
+const renderWelcome = (i18n, peerCount) => {
   const anchorClass = 'white link underline-under hover-aqua'
   const copyClass = 'mv0 tc lh-copy f5'
   const svgWidth = 80
@@ -75,7 +75,7 @@ const renderWelcome = (peerCount) => {
     <div class="w-80 flex flex-column justify-center">
       <div class="mb4 flex flex-column justify-center items-center">
         ${checkmarkSvg()}
-        <p class="mt2 mb0 f3">You are all set!</p>
+        <p class="mt2 mb0 f3">${i18n.getMessage('page_landingWelcome_renderWelcome_title')}</p>
       </div>
       <p class="${copyClass}">Right now your node is connected to <span class="aqua fw6">${peerCount}</span> peers.</p>
       <p class="${copyClass} mb4">Discover what you <a class="${anchorClass}" href="https://github.com/ipfs-shipyard/ipfs-companion#features" target="_blank">can do with Companion</a> and dive into the distributed web with IPFS!</p>
@@ -83,15 +83,15 @@ const renderWelcome = (peerCount) => {
   `
 }
 
-const renderInstallSteps = () => {
+const renderInstallSteps = (i18n) => {
   const copyClass = 'mv0 white f5 lh-copy'
   const anchorClass = 'white link underline-under hover-aqua'
 
   return html`
     <div class="w-80 mv4 flex flex-column">
-      <p class="mt0 mb2 yellow f4 lh-title">Is your IPFS daemon running?</p>
+      <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_title')}</p>
       <p class="${copyClass}">If you haven't installed IPFS please do so <a class="${anchorClass}" href="https://ipfs.io/docs/getting-started/" target="_blank">with these instructions</a>.</p>
-      <p class="${copyClass}">Then make sure to have an IPFS daemon running in your terminal:</p>
+      <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_copy_run')}</p>
       <div className='db w-100 mt3 pa3 bg-black-70 bt bw4 br2 snow f7'>
         <code className='db'>$ ipfs daemon</code>
         <code className='db'>Initializing daemon...</code>
@@ -105,29 +105,29 @@ const renderInstallSteps = () => {
    Render functions for the right side
    ======================================================== */
 
-const renderResources = () => {
-  const labelClass = 'fw6 aqua mb1 ttu tracking'
+const renderResources = (i18n) => {
+  const labelClass = 'aqua mb1'
   const copyClass = 'mt0 mb4 lh-copy'
   const anchorClass = 'navy link underline-under hover-aqua'
 
   return html`
     <div class="w-80 mv4 navy f5">
-      <p class="${labelClass}">New to IPFS?</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_new_ipfs')}</p>
       <p class="${copyClass}">Read the <a class="${anchorClass}" href="https://docs.ipfs.io/" target="_blank">documentation</a> to learn about the basic <a class="${anchorClass}" href="https://docs.ipfs.io/guides/concepts" target="_blank">concepts</a> and working with IPFS.</p>
 
-      <p class="${labelClass}">Discover!</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_discover')}</p>
       <p class="${copyClass}">Find <a class="${anchorClass}" href="https://awesome.ipfs.io" target="_blank">useful resources</a> for using IPFS and <a class="${anchorClass}" href="https://github.com/ipfs/ipfs#project-links" target="_blank">building things</a> on top of it.</p>
 
-      <p class="${labelClass}">Got questions?</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_got_questions')}</p>
       <p class="${copyClass}">Visit the <a class="${anchorClass}" href="https://discuss.ipfs.io/" target="_blank">Discussion and Support Forum</a>.</p>
 
-      <p class="${labelClass}">Want to help?</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_want_to_help')}</p>
       <p class="${copyClass} mv0">Join the <a class="${anchorClass}" href="https://github.com/ipfs/community/#community" target="_blank">IPFS Community</a>! Contribute  <a class="${anchorClass}" href="https://github.com/ipfs/ipfs#project-links" target="_blank">code</a>, <a class="${anchorClass}" href="https://github.com/ipfs/docs" target="_blank">documentation</a>, <a class="${anchorClass}" href="https://www.transifex.com/ipfs/public/" target="_blank">translations</a> or help by <a class="${anchorClass}" href="https://discuss.ipfs.io/c/help" target="_blank">supporting other users</a>.</p>
     </div>
   `
 }
 
-const renderVideos = () => {
+const renderVideos = (i18n) => {
   const anchorClass = 'relative overflow-hidden br2 o-70 glow'
   const videoWidth = 240
   const videoHeight = 180
@@ -147,18 +147,18 @@ const renderVideos = () => {
   return html`
     <div class="w-80 flex flex-column flex-row-ns justify-between-ns aqua f5">
       <div class="flex flex-column mr1">
-        <p>IPFS Alpha Demo</p>
+        <p>${i18n.getMessage('page_landingWelcome_renderVideos_alpha_demo')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=8CMxDNuuAiQ" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/8CMxDNuuAiQ/0.jpg" alt="IPFS Alpha Demo" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/8CMxDNuuAiQ/0.jpg" alt="${i18n.getMessage('page_landingWelcome_renderVideos_alpha_demo')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
       </div>
 
       <div class="flex flex-column">
-        <p>The Permanent Web</p>
+        <p>${i18n.getMessage('page_landingWelcome_renderVideos_permanent_web')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=HUVmypx9HGI" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/HUVmypx9HGI/0.jpg" alt="IPFS and the Permanent Web" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/HUVmypx9HGI/0.jpg" alt="${i18n.getMessage('page_landingWelcome_renderVideos_permanent_web')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
@@ -167,13 +167,13 @@ const renderVideos = () => {
   `
 }
 
-const renderProjects = () => {
+const renderProjects = (i18n) => {
   const anchorClass = 'flex flex-column items-center navy link hover-aqua'
   const logoWidth = 80
 
   return html`
     <div class="w-80 mv4 navy f6">
-      <p class="mb4 aqua f5">Related Projects</p>
+      <p class="mb4 aqua f5">${i18n.getMessage('page_landingWelcome_renderProjects_title')}</p>
 
       <div class="flex justify-between-ns">
         <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">
