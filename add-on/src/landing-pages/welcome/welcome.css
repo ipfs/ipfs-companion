@@ -2,7 +2,7 @@
 @import url('../../../ui-kit/ipfs.css');
 
 #hero {
-  background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%);
+  background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%, #043b55 100%);
   background-size: 100%;
   background-repeat: repeat;
 }

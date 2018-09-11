@@ -1,9 +1,9 @@
 'use strict'
 
 const html = require('choo/html')
+const logo = require('../../popup/logo')
 
 // Assets
-const ipfsLogo = '../../../icons/ipfs-logo-on.svg'
 const libp2pLogo = '../../../images/libp2p.svg'
 const multiformatsLogo = '../../../images/multiformats.svg'
 const ipldLogo = '../../../images/ipld.svg'
@@ -20,7 +20,7 @@ function createWelcomePage (i18n) {
     return html`
       <div class="flex flex-column flex-row-l">
         <div id="hero" class="w-100 min-vh-100 flex flex-column justify-center items-center bg-navy white">
-          ${renderCompanionLogo()}
+          ${renderCompanionLogo(isIpfsOnline)}
           ${isIpfsOnline ? renderWelcome(peerCount) : renderInstallSteps()}
         </div>
 
@@ -38,20 +38,21 @@ function createWelcomePage (i18n) {
    Render functions for the left side
    ======================================================== */
 
-const renderCompanionLogo = () => {
-  const ipfsLogoWidth = 128
+const renderCompanionLogo = (isIpfsOnline) => {
+  const logoPath = '../../../icons'
+  const logoSize = 128
 
   return html`
-    <div class="mb5 flex flex-column justify-center items-center">
-      <img width="${ipfsLogoWidth}" src="${ipfsLogo}" alt="IPFS Logo">
-      <p class="mt3 mb0 b f2">IPFS Companion</p>
+    <div class="mt4 mb5 flex flex-column justify-center items-center">
+      ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
+      <p class="montserrat mt3 mb0 f2">IPFS Companion</p>
     </div>
   `
 }
 
 const renderWelcome = (peerCount) => {
   const anchorClass = 'white link underline-under hover-aqua'
-  const copyClass = 'mv0 lh-copy f5'
+  const copyClass = 'mv0 tc lh-copy f5'
   const svgWidth = 80
 
   const checkmarkSvg = () => html`
@@ -77,7 +78,7 @@ const renderWelcome = (peerCount) => {
         <p class="mt2 mb0 f3">You are all set!</p>
       </div>
       <p class="${copyClass}">Right now your node is connected to <span class="aqua">${peerCount}</span> peers.</p>
-      <p class="${copyClass}">Discover what you <a class="${anchorClass}" href="https://github.com/ipfs-shipyard/ipfs-companion#features" target="_blank">can do with Companion</a> and dive into the distributed web with IPFS!</p>
+      <p class="${copyClass} mb4">Discover what you <a class="${anchorClass}" href="https://github.com/ipfs-shipyard/ipfs-companion#features" target="_blank">can do with Companion</a> and dive into the distributed web with IPFS!</p>
     </div>
   `
 }
@@ -87,7 +88,7 @@ const renderInstallSteps = () => {
   const anchorClass = 'white link underline-under hover-aqua'
 
   return html`
-    <div class="w-80 mt4 flex flex-column">
+    <div class="w-80 mv4 flex flex-column">
       <p class="mt0 mb2 yellow f4 lh-title">Is your IPFS daemon running?</p>
       <p class="${copyClass}">If you haven't installed IPFS please do so <a class="${anchorClass}" href="https://ipfs.io/docs/getting-started/" target="_blank">with these instructions</a>.</p>
       <p class="${copyClass}">Then make sure to have an IPFS daemon running in your terminal:</p>
@@ -110,15 +111,15 @@ const renderResources = () => {
   const anchorClass = 'navy link underline-under hover-aqua'
 
   return html`
-    <div class="w-80 navy f5">
-      <p class="${labelClass}">Want to help?</p>
-      <p class="${copyClass}">Join the <a class="${anchorClass}" href="https://github.com/ipfs/community/" target="_blank">IPFS Community</a>!</p>
-
+    <div class="w-80 mv4 navy f5">
       <p class="${labelClass}">New to IPFS?</p>
       <p class="${copyClass}">Read the <a class="${anchorClass}" href="http://docs.ipfs.io/" target="_blank">documentation</a> to learn about the basic <a class="${anchorClass}" href="http://docs.ipfs.io/guides/concepts" target="_blank">concepts</a> and working with IPFS.</p>
 
       <p class="${labelClass}">Got questions?</p>
-      <p class="${copyClass} mv0">Visit the <a class="${anchorClass}" href="https://discuss.ipfs.io/" target="_blank">Discussion and Support Forum</a>.</p>
+      <p class="${copyClass}">Visit the <a class="${anchorClass}" href="https://discuss.ipfs.io/" target="_blank">Discussion and Support Forum</a>.</p>
+
+      <p class="${labelClass}">Want to help?</p>
+      <p class="${copyClass} mv0">Join the <a class="${anchorClass}" href="https://github.com/ipfs/community/" target="_blank">IPFS Community</a>!</p>
     </div>
   `
 }
@@ -144,8 +145,8 @@ const renderVideos = () => {
   `
 
   return html`
-    <div class="w-80 flex justify-between-ns aqua f5">
-      <div class="flex flex-column">
+    <div class="w-80 flex flex-column flex-row-ns justify-between-ns aqua f5">
+      <div class="flex flex-column mr1">
         <p>IPFS Alpha Demo</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=8CMxDNuuAiQ" target="_blank">
           <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/8CMxDNuuAiQ/0.jpg" alt="IPFS Alpha Demo" />
@@ -155,7 +156,7 @@ const renderVideos = () => {
       </div>
 
       <div class="flex flex-column">
-        <p>IPFS and the Permanent Web</p>
+        <p>The Permanent Web</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=HUVmypx9HGI" target="_blank">
           <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/HUVmypx9HGI/0.jpg" alt="IPFS and the Permanent Web" />
           ${overlayDiv()}
@@ -171,15 +172,10 @@ const renderProjects = () => {
   const logoWidth = 80
 
   return html`
-    <div class="w-80 navy f6">
+    <div class="w-80 mv4 navy f6">
       <p class="mb4 aqua f5">Related Projects</p>
 
       <div class="flex justify-between-ns">
-        <a class="${anchorClass}" href="https://libp2p.io/" target="_blank">
-          <img width="${logoWidth}" src="${libp2pLogo}" alt="libp2p Logo">
-          <p>libp2p.io</p>
-        </a>
-
         <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">
           <img width="${logoWidth}" src="${multiformatsLogo}" alt="Multiformats Logo">
           <p>multiformats.io</p>
@@ -188,6 +184,11 @@ const renderProjects = () => {
         <a class="${anchorClass}" href="https://ipld.io/" target="_blank">
           <img width="${logoWidth}" src="${ipldLogo}" alt="IPLD Logo">
           <p>ipld.io</p>
+        </a>
+
+        <a class="${anchorClass}" href="https://libp2p.io/" target="_blank">
+        <img width="${logoWidth}" src="${libp2pLogo}" alt="libp2p Logo">
+          <p>libp2p.io</p>
         </a>
       </div>
     </div>
