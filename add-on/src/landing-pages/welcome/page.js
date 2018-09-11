@@ -77,7 +77,7 @@ const renderWelcome = (peerCount) => {
         ${checkmarkSvg()}
         <p class="mt2 mb0 f3">You are all set!</p>
       </div>
-      <p class="${copyClass}">Right now your node is connected to <span class="aqua">${peerCount}</span> peers.</p>
+      <p class="${copyClass}">Right now your node is connected to <span class="aqua fw6">${peerCount}</span> peers.</p>
       <p class="${copyClass} mb4">Discover what you <a class="${anchorClass}" href="https://github.com/ipfs-shipyard/ipfs-companion#features" target="_blank">can do with Companion</a> and dive into the distributed web with IPFS!</p>
     </div>
   `
@@ -106,38 +106,38 @@ const renderInstallSteps = () => {
    ======================================================== */
 
 const renderResources = () => {
-  const labelClass = 'aqua mb1'
+  const labelClass = 'fw6 aqua mb1 ttu tracking'
   const copyClass = 'mt0 mb4 lh-copy'
   const anchorClass = 'navy link underline-under hover-aqua'
 
   return html`
     <div class="w-80 mv4 navy f5">
       <p class="${labelClass}">New to IPFS?</p>
-      <p class="${copyClass}">Read the <a class="${anchorClass}" href="http://docs.ipfs.io/" target="_blank">documentation</a> to learn about the basic <a class="${anchorClass}" href="http://docs.ipfs.io/guides/concepts" target="_blank">concepts</a> and working with IPFS.</p>
+      <p class="${copyClass}">Read the <a class="${anchorClass}" href="https://docs.ipfs.io/" target="_blank">documentation</a> to learn about the basic <a class="${anchorClass}" href="https://docs.ipfs.io/guides/concepts" target="_blank">concepts</a> and working with IPFS.</p>
+
+      <p class="${labelClass}">Discover!</p>
+      <p class="${copyClass}">Find <a class="${anchorClass}" href="https://awesome.ipfs.io" target="_blank">useful resources</a> for using IPFS and <a class="${anchorClass}" href="https://github.com/ipfs/ipfs#project-links" target="_blank">building things</a> on top of it.</p>
 
       <p class="${labelClass}">Got questions?</p>
       <p class="${copyClass}">Visit the <a class="${anchorClass}" href="https://discuss.ipfs.io/" target="_blank">Discussion and Support Forum</a>.</p>
 
       <p class="${labelClass}">Want to help?</p>
-      <p class="${copyClass} mv0">Join the <a class="${anchorClass}" href="https://github.com/ipfs/community/" target="_blank">IPFS Community</a>!</p>
+      <p class="${copyClass} mv0">Join the <a class="${anchorClass}" href="https://github.com/ipfs/community/#community" target="_blank">IPFS Community</a>! Contribute  <a class="${anchorClass}" href="https://github.com/ipfs/ipfs#project-links" target="_blank">code</a>, <a class="${anchorClass}" href="https://github.com/ipfs/docs" target="_blank">documentation</a>, <a class="${anchorClass}" href="https://www.transifex.com/ipfs/public/" target="_blank">translations</a> or help by <a class="${anchorClass}" href="https://discuss.ipfs.io/c/help" target="_blank">supporting other users</a>.</p>
     </div>
   `
 }
 
 const renderVideos = () => {
-  const anchorClass = 'relative overflow-hidden br2 o-90 glow'
+  const anchorClass = 'relative overflow-hidden br2 o-70 glow'
   const videoWidth = 240
   const videoHeight = 180
 
   const overlayDiv = () => html`
-    <div class="absolute absolute--fill bg-navy o-90"></div>
+    <div class="absolute absolute--fill bg-navy o-70"></div>
   `
 
   const playSvg = () => html`
     <svg class="aspect-ratio--object" x="0px" y="0px" viewBox="-90 -60 ${videoWidth} ${videoHeight}">
-      <g fill="${colorIpfsLogo}">
-        <path d="M30,0C13.4,0,0,13.4,0,30s13.4,30,30,30s30-13.4,30-30S46.6,0,30,0z M30,58C14.5,58,2,45.5,2,30C2,14.5,14.5,2,30,2 c15.5,0,28,12.5,28,28C58,45.5,45.5,58,30,58z" />
-      </g>
       <g fill="${colorWhite}">
         <polygon points="43,30 23,40 23,20" />
       </g>
