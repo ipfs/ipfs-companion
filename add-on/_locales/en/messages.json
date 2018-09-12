@@ -459,9 +459,27 @@
     "message": "You are all set!",
     "description": "Ready message title (page_landingWelcome_renderWelcome_title)"
   },
+  "page_landingWelcome_renderWelcome_copy_peers": {
+    "message": "Right now your node is connected to <span>$PEERS$</span> peers.",
+    "description": "Ready message copy (page_landingWelcome_renderWelcome_copy_peers)",
+    "placeholders": {
+      "peers": {
+        "content": "$1",
+        "example": "350"
+      }
+    }
+  },
+  "page_landingWelcome_renderWelcome_copy_discover": {
+    "message": "Discover what you <a>can do with Companion</a> and dive into the distributed web with IPFS!",
+    "description": "Ready message copy (page_landingWelcome_renderWelcome_copy_discover)"
+  },
   "page_landingWelcome_installSteps_title": {
     "message": "Is your IPFS daemon running?",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
+  },
+  "page_landingWelcome_installSteps_copy_install": {
+    "message": "If you haven't installed IPFS please do so <a>with these instructions</a>.",
+    "description": "Install steps copy (page_landingWelcome_installSteps_copy_install)"
   },
   "page_landingWelcome_installSteps_copy_run": {
     "message": "Then make sure to have an IPFS daemon running in your terminal:",
@@ -471,17 +489,33 @@
     "message": "New to IPFS?",
     "description": "Resources title (page_landingWelcome_renderResources_title_new_ipfs)"
   },
+  "page_landingWelcome_renderResources_copy_new_ipfs": {
+    "message": "Read the <a>documentation</a> to learn about the basic <a>concepts</a> and working with IPFS.",
+    "description": "Resources copy (page_landingWelcome_renderResources_copy_new_ipfs)"
+  },
   "page_landingWelcome_renderResources_title_discover": {
     "message": "Discover!",
     "description": "Resources title (page_landingWelcome_renderResources_title_discover)"
+  },
+  "page_landingWelcome_renderResources_copy_discover": {
+    "message": "Find <a>useful resources</a> for using IPFS and <a>building things</a> on top of it.",
+    "description": "Resources copy (page_landingWelcome_renderResources_copy_discover)"
   },
   "page_landingWelcome_renderResources_title_got_questions": {
     "message": "Got questions?",
     "description": "Resources title (page_landingWelcome_renderResources_title_got_questions)"
   },
+  "page_landingWelcome_renderResources_copy_got_questions": {
+    "message": "Visit the <a>Discussion and Support Forum</a>.",
+    "description": "Resources copy (page_landingWelcome_renderResources_copy_got_questions)"
+  },
   "page_landingWelcome_renderResources_title_want_to_help": {
     "message": "Want to help?",
     "description": "Resources title (page_landingWelcome_renderResources_title_want_to_help)"
+  },
+  "page_landingWelcome_renderResources_copy_want_to_help": {
+    "message": "Join the <a>IPFS Community</a>! Contribute with <a>code</a>, <a>documentation</a>, <a>translations</a> or help by <a>supporting other users</a>.",
+    "description": "Resources copy (page_landingWelcome_renderResources_copy_want_to_help)"
   },
   "page_landingWelcome_renderVideos_alpha_demo": {
     "message": "IPFS Alpha Demo",

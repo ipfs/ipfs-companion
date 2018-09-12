@@ -2,6 +2,7 @@
 
 const html = require('choo/html')
 const logo = require('../../popup/logo')
+const { renderTranslatedLink, renderTranslatedDynamicSpan } = require('../../utils/i18n')
 
 // Assets
 const libp2pLogo = '../../../images/libp2p.svg'
@@ -77,8 +78,8 @@ const renderWelcome = (i18n, peerCount) => {
         ${checkmarkSvg()}
         <p class="mt2 mb0 f3">${i18n.getMessage('page_landingWelcome_renderWelcome_title')}</p>
       </div>
-      <p class="${copyClass}">Right now your node is connected to <span class="aqua fw6">${peerCount}</span> peers.</p>
-      <p class="${copyClass} mb4">Discover what you <a class="${anchorClass}" href="https://github.com/ipfs-shipyard/ipfs-companion#features" target="_blank">can do with Companion</a> and dive into the distributed web with IPFS!</p>
+      <p class="${copyClass}">${renderTranslatedDynamicSpan('page_landingWelcome_renderWelcome_copy_peers', peerCount, 'class="aqua fw6"')}</p>
+      <p class="${copyClass} mb4">${renderTranslatedLink('page_landingWelcome_renderWelcome_copy_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
@@ -90,7 +91,7 @@ const renderInstallSteps = (i18n) => {
   return html`
     <div class="w-80 mv4 flex flex-column">
       <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_title')}</p>
-      <p class="${copyClass}">If you haven't installed IPFS please do so <a class="${anchorClass}" href="https://ipfs.io/docs/getting-started/" target="_blank">with these instructions</a>.</p>
+      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_installSteps_copy_install', ['https://docs.ipfs.io/introduction/install/'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_copy_run')}</p>
       <div className='db w-100 mt3 pa3 bg-black-70 bt bw4 br2 snow f7'>
         <code className='db'>$ ipfs daemon</code>
@@ -113,16 +114,16 @@ const renderResources = (i18n) => {
   return html`
     <div class="w-80 mv4 navy f5">
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_new_ipfs')}</p>
-      <p class="${copyClass}">Read the <a class="${anchorClass}" href="https://docs.ipfs.io/" target="_blank">documentation</a> to learn about the basic <a class="${anchorClass}" href="https://docs.ipfs.io/guides/concepts" target="_blank">concepts</a> and working with IPFS.</p>
+      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_renderResources_copy_new_ipfs', ['https://docs.ipfs.io', 'https://docs.ipfs.io/guides/concepts'], `target="_blank" class="${anchorClass}"`)}</p>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_discover')}</p>
-      <p class="${copyClass}">Find <a class="${anchorClass}" href="https://awesome.ipfs.io" target="_blank">useful resources</a> for using IPFS and <a class="${anchorClass}" href="https://github.com/ipfs/ipfs#project-links" target="_blank">building things</a> on top of it.</p>
+      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_renderResources_copy_discover', ['https://awesome.ipfs.io', 'https://github.com/ipfs/ipfs#project-links'], `target="_blank" class="${anchorClass}"`)}</p>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_got_questions')}</p>
-      <p class="${copyClass}">Visit the <a class="${anchorClass}" href="https://discuss.ipfs.io/" target="_blank">Discussion and Support Forum</a>.</p>
+      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_renderResources_copy_got_questions', ['https://discuss.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</p>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_want_to_help')}</p>
-      <p class="${copyClass} mv0">Join the <a class="${anchorClass}" href="https://github.com/ipfs/community/#community" target="_blank">IPFS Community</a>! Contribute  <a class="${anchorClass}" href="https://github.com/ipfs/ipfs#project-links" target="_blank">code</a>, <a class="${anchorClass}" href="https://github.com/ipfs/docs" target="_blank">documentation</a>, <a class="${anchorClass}" href="https://www.transifex.com/ipfs/public/" target="_blank">translations</a> or help by <a class="${anchorClass}" href="https://discuss.ipfs.io/c/help" target="_blank">supporting other users</a>.</p>
+      <p class="${copyClass} mv0">${renderTranslatedLink('page_landingWelcome_renderResources_copy_want_to_help', ['https://github.com/ipfs/community/#community', 'https://github.com/ipfs/ipfs#project-links', 'https://github.com/ipfs/docs', 'https://www.transifex.com/ipfs/public', 'https://discuss.ipfs.io/c/help'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
