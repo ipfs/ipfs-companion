@@ -470,7 +470,7 @@
     }
   },
   "page_landingWelcome_renderWelcome_copy_discover": {
-    "message": "Discover what you <a>can do with Companion</a> and dive into the distributed web with IPFS!",
+    "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
     "description": "Ready message copy (page_landingWelcome_renderWelcome_copy_discover)"
   },
   "page_landingWelcome_installSteps_title": {
@@ -478,7 +478,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
   "page_landingWelcome_installSteps_copy_install": {
-    "message": "If you haven't installed IPFS please do so <a>with these instructions</a>.",
+    "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
     "description": "Install steps copy (page_landingWelcome_installSteps_copy_install)"
   },
   "page_landingWelcome_installSteps_copy_run": {
@@ -490,7 +490,7 @@
     "description": "Resources title (page_landingWelcome_renderResources_title_new_ipfs)"
   },
   "page_landingWelcome_renderResources_copy_new_ipfs": {
-    "message": "Read the <a>documentation</a> to learn about the basic <a>concepts</a> and working with IPFS.",
+    "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
     "description": "Resources copy (page_landingWelcome_renderResources_copy_new_ipfs)"
   },
   "page_landingWelcome_renderResources_title_discover": {
@@ -498,7 +498,7 @@
     "description": "Resources title (page_landingWelcome_renderResources_title_discover)"
   },
   "page_landingWelcome_renderResources_copy_discover": {
-    "message": "Find <a>useful resources</a> for using IPFS and <a>building things</a> on top of it.",
+    "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
     "description": "Resources copy (page_landingWelcome_renderResources_copy_discover)"
   },
   "page_landingWelcome_renderResources_title_got_questions": {
@@ -506,7 +506,7 @@
     "description": "Resources title (page_landingWelcome_renderResources_title_got_questions)"
   },
   "page_landingWelcome_renderResources_copy_got_questions": {
-    "message": "Visit the <a>Discussion and Support Forum</a>.",
+    "message": "Visit the <0>Discussion and Support Forum</0>.",
     "description": "Resources copy (page_landingWelcome_renderResources_copy_got_questions)"
   },
   "page_landingWelcome_renderResources_title_want_to_help": {
@@ -514,7 +514,7 @@
     "description": "Resources title (page_landingWelcome_renderResources_title_want_to_help)"
   },
   "page_landingWelcome_renderResources_copy_want_to_help": {
-    "message": "Join the <a>IPFS Community</a>! Contribute with <a>code</a>, <a>documentation</a>, <a>translations</a> or help by <a>supporting other users</a>.",
+    "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
     "description": "Resources copy (page_landingWelcome_renderResources_copy_want_to_help)"
   },
   "page_landingWelcome_renderVideos_alpha_demo": {

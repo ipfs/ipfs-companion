@@ -11,16 +11,19 @@ const browser = require('webextension-polyfill')
  * @return {html} An HTML node with the translated string with anchors.
  */
 const renderTranslatedLink = (message, links, attributes) => {
-  const regex = /<a>(.+?)<\/a>/mg
+  const regexLink = /<\d>(.+?)<\/\d>/mg
+  const regexIndex = /<(\d)>/mg
   const str = browser.i18n.getMessage(message)
-  let match = regex.exec(str)
-
   let output = str
-  let i = 0
-  while (match !== null) {
-    output = output.replace(match[0], `<a href="${links[i]}" ${attributes}>${match[1]}</a>`)
-    match = regex.exec(str)
-    i++
+
+  let matchLink = regexLink.exec(str)
+  while (matchLink !== null) {
+    let matchIndex = regexIndex.exec(matchLink[0])
+    while (matchIndex !== null) {
+      output = output.replace(matchLink[0], `<a href="${links[parseInt(matchIndex[1])]}" ${attributes}>${matchLink[1]}</a>`)
+      matchIndex = regexIndex.exec(str)
+    }
+    matchLink = regexLink.exec(str)
   }
 
   const template = document.createElement('template')
