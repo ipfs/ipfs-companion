@@ -83,6 +83,10 @@
     "message": "Non-IPFS resource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
+  "contextMenu_AddToIpfsSelection": {
+    "message": "Add selected text to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+  },
   "contextMenu_AddToIpfsRawCid": {
     "message": "Add to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
