@@ -58,8 +58,8 @@ module.exports = async function init () {
     dnslinkResolver = createDnslinkResolver(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-      onAddToIpfsRawCid: addFromURL,
-      onAddToIpfsKeepFilename: (info) => addFromURL(info, { wrapWithDirectory: true }),
+      onAddToIpfs: addFromContext,
+      onAddToIpfsKeepFilename: (info) => addFromContext(info, { wrapWithDirectory: true }),
       onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
       onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
     })
@@ -251,21 +251,23 @@ module.exports = async function init () {
     })
   }
 
-  // URL Uploader
+  // Context Menu Uploader
   // -------------------------------------------------------------------
 
-  async function addFromURL (info, options) {
-    const srcUrl = await findUrlForContext(info)
+  async function addFromContext (info, options) {
     let result
     try {
-      if (runtime.isFirefox) {
+      const srcUrl = await findUrlForContext(info)
+      if (info.selectionText) {
+        result = await ipfs.files.add(Buffer.from(info.selectionText), options)
+      } else if (runtime.isFirefox) {
         // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
         const fetchOptions = {
           cache: 'force-cache',
           referrer: info.pageUrl
         }
-        // console.log('addFromURL.info', info)
-        // console.log('addFromURL.fetchOptions', fetchOptions)
+        // console.log('addFromContext.info', info)
+        // console.log('addFromContext.fetchOptions', fetchOptions)
         const response = await fetch(srcUrl, fetchOptions)
         const blob = await response.blob()
         const buffer = await new Promise((resolve, reject) => {
