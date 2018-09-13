@@ -451,6 +451,10 @@
     "message": "Deny",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
+  "page_landingWelcome_title": {
+    "message": "IPFS Companion - Welcome",
+    "description": "Page title (page_landingWelcome_title)"
+  },
   "page_landingWelcome_logo_title": {
     "message": "IPFS Companion",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"

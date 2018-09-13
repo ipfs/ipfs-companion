@@ -18,6 +18,9 @@ function createWelcomePage (i18n) {
     const isIpfsOnline = state.isIpfsOnline
     const peerCount = state.peerCount
 
+    // Set translated title
+    document.title = i18n.getMessage('page_landingWelcome_title')
+
     return html`
       <div class="flex flex-column flex-row-l">
         <div id="hero" class="w-100 min-vh-100 flex flex-column justify-center items-center bg-navy white">
