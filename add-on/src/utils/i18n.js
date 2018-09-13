@@ -10,7 +10,7 @@ const browser = require('webextension-polyfill')
  * @param {Object} attributes HTML attributes to put in the anchor.
  * @return {html} An HTML node with the translated string with anchors.
  */
-const renderTranslatedLink = (message, links, attributes) => {
+const renderTranslatedLinks = (message, links, attributes) => {
   const regexLink = /<\d>(.+?)<\/\d>/mg
   const regexIndex = /<(\d)>/mg
   const str = browser.i18n.getMessage(message)
@@ -57,6 +57,6 @@ const renderTranslatedDynamicSpan = (message, dynamicData, attributes) => {
 }
 
 module.exports = {
-  renderTranslatedLink,
+  renderTranslatedLinks,
   renderTranslatedDynamicSpan
 }

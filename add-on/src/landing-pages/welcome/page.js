@@ -2,7 +2,7 @@
 
 const html = require('choo/html')
 const logo = require('../../popup/logo')
-const { renderTranslatedLink, renderTranslatedDynamicSpan } = require('../../utils/i18n')
+const { renderTranslatedLinks, renderTranslatedDynamicSpan } = require('../../utils/i18n')
 
 // Assets
 const libp2pLogo = '../../../images/libp2p.svg'
@@ -46,7 +46,7 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
   return html`
     <div class="mt4 mb5 flex flex-column justify-center items-center">
       ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
-      <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_renderLogo_title')}</p>
+      <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
     </div>
   `
 }
@@ -76,10 +76,10 @@ const renderWelcome = (i18n, peerCount) => {
     <div class="w-80 flex flex-column justify-center">
       <div class="mb4 flex flex-column justify-center items-center">
         ${checkmarkSvg()}
-        <p class="mt2 mb0 f3">${i18n.getMessage('page_landingWelcome_renderWelcome_title')}</p>
+        <p class="mt2 mb0 f3">${i18n.getMessage('page_landingWelcome_welcome_title')}</p>
       </div>
-      <p class="${copyClass}">${renderTranslatedDynamicSpan('page_landingWelcome_renderWelcome_copy_peers', peerCount, 'class="aqua fw6"')}</p>
-      <p class="${copyClass} mb4">${renderTranslatedLink('page_landingWelcome_renderWelcome_copy_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass}">${renderTranslatedDynamicSpan('page_landingWelcome_welcome_peers', peerCount, 'class="aqua fw6"')}</p>
+      <p class="${copyClass} mb4">${renderTranslatedLinks('page_landingWelcome_welcome_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
@@ -91,8 +91,8 @@ const renderInstallSteps = (i18n) => {
   return html`
     <div class="w-80 mv4 flex flex-column">
       <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_title')}</p>
-      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_installSteps_copy_install', ['https://docs.ipfs.io/introduction/install/'], `target="_blank" class="${anchorClass}"`)}</p>
-      <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_copy_run')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_install', ['https://docs.ipfs.io/introduction/install/'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_run')}</p>
       <div className='db w-100 mt3 pa3 bg-black-70 bt bw4 br2 snow f7'>
         <code className='db'>$ ipfs daemon</code>
         <code className='db'>Initializing daemon...</code>
@@ -113,17 +113,17 @@ const renderResources = (i18n) => {
 
   return html`
     <div class="w-80 mv4 navy f5">
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_new_ipfs')}</p>
-      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_renderResources_copy_new_ipfs', ['https://docs.ipfs.io', 'https://docs.ipfs.io/guides/concepts'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_new_ipfs')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs', ['https://docs.ipfs.io', 'https://docs.ipfs.io/guides/concepts'], `target="_blank" class="${anchorClass}"`)}</p>
 
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_discover')}</p>
-      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_renderResources_copy_discover', ['https://awesome.ipfs.io', 'https://github.com/ipfs/ipfs#project-links'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_discover')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_resources_discover', ['https://awesome.ipfs.io', 'https://github.com/ipfs/ipfs#project-links'], `target="_blank" class="${anchorClass}"`)}</p>
 
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_got_questions')}</p>
-      <p class="${copyClass}">${renderTranslatedLink('page_landingWelcome_renderResources_copy_got_questions', ['https://discuss.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_got_questions')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_resources_got_questions', ['https://discuss.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</p>
 
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_renderResources_title_want_to_help')}</p>
-      <p class="${copyClass} mv0">${renderTranslatedLink('page_landingWelcome_renderResources_copy_want_to_help', ['https://github.com/ipfs/community/#community', 'https://github.com/ipfs/ipfs#project-links', 'https://github.com/ipfs/docs', 'https://www.transifex.com/ipfs/public', 'https://discuss.ipfs.io/c/help'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_want_to_help')}</p>
+      <p class="${copyClass} mv0">${renderTranslatedLinks('page_landingWelcome_resources_want_to_help', ['https://github.com/ipfs/community/#community', 'https://github.com/ipfs/ipfs#project-links', 'https://github.com/ipfs/docs', 'https://www.transifex.com/ipfs/public', 'https://discuss.ipfs.io/c/help'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
@@ -148,18 +148,18 @@ const renderVideos = (i18n) => {
   return html`
     <div class="w-80 flex flex-column flex-row-ns justify-between-ns aqua f5">
       <div class="flex flex-column mr1">
-        <p>${i18n.getMessage('page_landingWelcome_renderVideos_alpha_demo')}</p>
+        <p>${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=8CMxDNuuAiQ" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/8CMxDNuuAiQ/0.jpg" alt="${i18n.getMessage('page_landingWelcome_renderVideos_alpha_demo')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/8CMxDNuuAiQ/0.jpg" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
       </div>
 
       <div class="flex flex-column">
-        <p>${i18n.getMessage('page_landingWelcome_renderVideos_permanent_web')}</p>
+        <p>${i18n.getMessage('page_landingWelcome_videos_permanent_web')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=HUVmypx9HGI" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/HUVmypx9HGI/0.jpg" alt="${i18n.getMessage('page_landingWelcome_renderVideos_permanent_web')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/HUVmypx9HGI/0.jpg" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
@@ -174,7 +174,7 @@ const renderProjects = (i18n) => {
 
   return html`
     <div class="w-80 mv4 navy f6">
-      <p class="mb4 aqua f5">${i18n.getMessage('page_landingWelcome_renderProjects_title')}</p>
+      <p class="mb4 aqua f5">${i18n.getMessage('page_landingWelcome_projects_title')}</p>
 
       <div class="flex justify-between-ns">
         <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">
