@@ -6295,9 +6295,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"libdweb@https://github.com/mozilla/libdweb/tarball/dbb9697a8dd09a9ad61ce5e2204400f72d16157a/libdweb.tar.gz":
+"libdweb@https://github.com/mozilla/libdweb/tarball/a78b0a0c9a1f1d3d1e3343995de7d4a9b0cb000c/libdweb.tar.gz":
   version "0.0.0"
-  resolved "https://github.com/mozilla/libdweb/tarball/dbb9697a8dd09a9ad61ce5e2204400f72d16157a/libdweb.tar.gz#2fcae1f1029940a05c35a8c3ec4293c8a4af6005"
+  resolved "https://github.com/mozilla/libdweb/tarball/a78b0a0c9a1f1d3d1e3343995de7d4a9b0cb000c/libdweb.tar.gz#fe0fdec69e500f8a191d6d75b5fb51d12d025cb2"
 
 libp2p-bootstrap@~0.9.3:
   version "0.9.3"
