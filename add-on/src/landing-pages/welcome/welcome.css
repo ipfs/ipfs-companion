@@ -11,3 +11,8 @@
   text-decoration: underline;
   text-underline-position: under;
 }
+
+.state-unknown {
+  opacity: 0;
+  filter: blur( .15em );
+}

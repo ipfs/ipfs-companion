@@ -456,7 +456,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome",
+    "message": "IPFS Companion - Welcome!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -468,14 +468,8 @@
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Right now your node is connected to <span>$PEERS$</span> peers.",
-    "description": "Ready message copy (page_landingWelcome_welcome_peers)",
-    "placeholders": {
-      "peers": {
-        "content": "$1",
-        "example": "350"
-      }
-    }
+    "message": "Right now your node is connected to <0>$1</0> peers.",
+    "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
     "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
