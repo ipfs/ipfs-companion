@@ -60,8 +60,8 @@ module.exports = async function init () {
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddToIpfs: addFromContext,
       onAddToIpfsKeepFilename: (info) => addFromContext(info, { wrapWithDirectory: true }),
-      onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
-      onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+      onCopyCanonicalAddress: copier.copyCanonicalAddress,
+      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(getIpfs, getState)
