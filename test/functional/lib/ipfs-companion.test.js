@@ -63,7 +63,7 @@ describe.skip('onStorageChange()', function () {
 
     const oldIpfsApiUrl = 'http://127.0.0.1:5001'
     const newIpfsApiUrl = 'http://1.2.3.4:8080'
-    const changes = {ipfsApiUrl: {oldValue: oldIpfsApiUrl, newValue: newIpfsApiUrl}}
+    const changes = { ipfsApiUrl: { oldValue: oldIpfsApiUrl, newValue: newIpfsApiUrl } }
     const area = 'local'
     const ipfs = global.window.ipfs
     browser.storage.onChanged.dispatch(changes, area)

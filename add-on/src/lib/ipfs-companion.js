@@ -2,10 +2,10 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { optionDefaults, storeMissingOptions } = require('./options')
+const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, urlAtPublicGw } = require('./ipfs-path')
-const createDnsLink = require('./dns-link')
+const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const createNotifier = require('./notifier')
@@ -20,7 +20,7 @@ module.exports = async function init () {
   // ===================================================================
   var ipfs // ipfs-api instance
   var state // avoid redundant API reads by utilizing local cache of various states
-  var dnsLink
+  var dnslinkResolver
   var ipfsPathValidator
   var modifyRequest
   var notify
@@ -34,6 +34,7 @@ module.exports = async function init () {
   const browserActionPortName = 'browser-action-port'
 
   try {
+    await migrateOptions(browser.storage.local)
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
@@ -53,15 +54,15 @@ module.exports = async function init () {
     }
 
     copier = createCopier(getState, notify)
-    dnsLink = createDnsLink(getState)
-    ipfsPathValidator = createIpfsPathValidator(getState, dnsLink)
+    dnslinkResolver = createDnslinkResolver(getState)
+    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-      onAddToIpfsRawCid: addFromURL,
-      onAddToIpfsKeepFilename: (info) => addFromURL(info, {wrapWithDirectory: true}),
-      onCopyCanonicalAddress: () => copier.copyCanonicalAddress(),
-      onCopyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+      onAddToIpfs: addFromContext,
+      onAddToIpfsKeepFilename: (info) => addFromContext(info, { wrapWithDirectory: true }),
+      onCopyCanonicalAddress: copier.copyCanonicalAddress,
+      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
-    modifyRequest = createRequestModifier(getState, dnsLink, ipfsPathValidator, runtime)
+    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(getIpfs, getState)
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
     registerListeners()
@@ -88,10 +89,10 @@ module.exports = async function init () {
   }
 
   function registerListeners () {
-    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ['<all_urls>']}, ['blocking', 'requestHeaders'])
-    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, {urls: ['<all_urls>']}, ['blocking'])
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, {urls: ['<all_urls>']}, ['blocking'])
-    browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, {urls: ['<all_urls>']})
+    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, ['blocking', 'requestHeaders'])
+    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
+    browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'] })
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
     browser.tabs.onUpdated.addListener(onUpdatedTab)
@@ -106,8 +107,8 @@ module.exports = async function init () {
     } else if (runtime.hasNativeProtocolHandler && browser.protocol.registerProtocol) {
       console.log('[ipfs-companion] registerProtocol from mozilla/libdweb is available. Adding ipfs:// handler')
       const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol-libdweb')
-      browser.protocol.registerProtocol('ipfs', createIpfsUrlProtocolHandler(getIpfs, dnsLink))
-      browser.protocol.registerProtocol('ipns', createIpfsUrlProtocolHandler(getIpfs, dnsLink))
+      browser.protocol.registerProtocol('ipfs', createIpfsUrlProtocolHandler(getIpfs, dnslinkResolver))
+      browser.protocol.registerProtocol('ipns', createIpfsUrlProtocolHandler(getIpfs, dnslinkResolver))
     } else {
       console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
     }
@@ -132,7 +133,7 @@ module.exports = async function init () {
     const newHandle = await browser.contentScripts.register({
       matches: ['<all_urls>'],
       js: [
-        {file: '/dist/bundles/ipfsProxyContentScript.bundle.js'}
+        { file: '/dist/bundles/ipfsProxyContentScript.bundle.js' }
       ],
       allFrames: true,
       runAt: 'document_start'
@@ -168,7 +169,7 @@ module.exports = async function init () {
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
       const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? urlAtPublicGw(path, state.pubGwURLString) : null
-      return Promise.resolve({pubGwUrlForIpfsOrIpnsPath: result})
+      return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }
 
@@ -211,7 +212,7 @@ module.exports = async function init () {
       peerCount: state.peerCount,
       gwURLString: state.gwURLString,
       pubGwURLString: state.pubGwURLString,
-      currentTab: await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+      currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     }
     try {
       let v = await ipfs.version()
@@ -226,7 +227,7 @@ module.exports = async function init () {
     }
     // Still here?
     if (browserActionPort) {
-      browserActionPort.postMessage({statusUpdate: info})
+      browserActionPort.postMessage({ statusUpdate: info })
     }
   }
 
@@ -255,21 +256,23 @@ module.exports = async function init () {
     })
   }
 
-  // URL Uploader
+  // Context Menu Uploader
   // -------------------------------------------------------------------
 
-  async function addFromURL (info, options) {
-    const srcUrl = await findUrlForContext(info)
+  async function addFromContext (info, options) {
     let result
     try {
-      if (runtime.isFirefox) {
+      const srcUrl = await findUrlForContext(info)
+      if (info.selectionText) {
+        result = await ipfs.files.add(Buffer.from(info.selectionText), options)
+      } else if (runtime.isFirefox) {
         // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
         const fetchOptions = {
           cache: 'force-cache',
           referrer: info.pageUrl
         }
-        // console.log('addFromURL.info', info)
-        // console.log('addFromURL.fetchOptions', fetchOptions)
+        // console.log('addFromContext.info', info)
+        // console.log('addFromContext.fetchOptions', fetchOptions)
         const response = await fetch(srcUrl, fetchOptions)
         const blob = await response.blob()
         const buffer = await new Promise((resolve, reject) => {
@@ -300,25 +303,25 @@ module.exports = async function init () {
       return
     }
 
-    return uploadResultHandler({result, openRootInNewTab: true})
+    return uploadResultHandler({ result, openRootInNewTab: true })
   }
 
   // TODO: feature detect and push to client type specific modules.
   function getIpfsPathAndNativeAddress (hash) {
     const path = `/ipfs/${hash}`
     if (runtime.hasNativeProtocolHandler) {
-      return {path, url: `ipfs://${hash}`}
+      return { path, url: `ipfs://${hash}` }
     } else {
       // open at public GW (will be redirected to local elsewhere, if enabled)
       const url = new URL(path, state.pubGwURLString).toString()
-      return {path, url: url}
+      return { path, url: url }
     }
   }
 
-  async function uploadResultHandler ({result, openRootInNewTab = false}) {
+  async function uploadResultHandler ({ result, openRootInNewTab = false }) {
     for (let file of result) {
       if (file && file.hash) {
-        const {path, url} = getIpfsPathAndNativeAddress(file.hash)
+        const { path, url } = getIpfsPathAndNativeAddress(file.hash)
         preloadAtPublicGateway(path)
         console.info('[ipfs-companion] successfully stored', file)
         // open the wrapping directory (or the CID if wrapping was disabled)
@@ -476,8 +479,8 @@ module.exports = async function init () {
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
     try {
-      await browser.browserAction.setBadgeBackgroundColor({color: badgeColor})
-      await browser.browserAction.setBadgeText({text: badgeText})
+      await browser.browserAction.setBadgeBackgroundColor({ color: badgeColor })
+      await browser.browserAction.setBadgeText({ text: badgeText })
       await setBrowserActionIcon(badgeIcon)
     } catch (error) {
       console.error('Unable to update browserAction badge due to error', error)
@@ -485,7 +488,7 @@ module.exports = async function init () {
   }
 
   async function setBrowserActionIcon (iconPath) {
-    let iconDefinition = {path: iconPath}
+    let iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.browserAction.setIcon(iconDefinition)
@@ -538,10 +541,10 @@ module.exports = async function init () {
     // TODO: use `node.isOnline()` if available (js-ipfs)
     if (state.automaticMode && state.ipfsNodeType !== 'embedded') {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
-        browser.storage.local.set({useCustomGateway: true})
+        browser.storage.local.set({ useCustomGateway: true })
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
-        browser.storage.local.set({useCustomGateway: false})
+        browser.storage.local.set({ useCustomGateway: false })
           .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
       }
     }
@@ -590,11 +593,17 @@ module.exports = async function init () {
           state[key] = change.newValue
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
           break
+        case 'dnslinkPolicy':
+          state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
+          if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
+            await browser.storage.local.set({ detectIpfsPathHeader: true })
+          }
+          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
         case 'automaticMode':
-        case 'dnslink':
+        case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
           state[key] = change.newValue
           break
@@ -634,6 +643,10 @@ module.exports = async function init () {
       return ipfs
     },
 
+    get dnslinkResolver () {
+      return dnslinkResolver
+    },
+
     get notify () {
       return notify
     },
@@ -648,7 +661,7 @@ module.exports = async function init () {
       apiStatusUpdateInterval = null
       ipfs = null
       state = null
-      dnsLink = null
+      dnslinkResolver = null
       modifyRequest = null
       ipfsPathValidator = null
       notify = null

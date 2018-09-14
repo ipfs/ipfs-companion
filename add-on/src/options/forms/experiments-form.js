@@ -9,7 +9,8 @@ function experimentsForm ({
   preloadAtPublicGateway,
   catchUnhandledProtocols,
   linkify,
-  dnslink,
+  dnslinkPolicy,
+  detectIpfsPathHeader,
   ipfsProxy,
   onOptionChange,
   onOptionsReset
@@ -18,7 +19,8 @@ function experimentsForm ({
   const onPreloadAtPublicGatewayChange = onOptionChange('preloadAtPublicGateway')
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
-  const onDnsLinkChange = onOptionChange('dnslink')
+  const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
+  const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
 
   return html`
@@ -63,13 +65,47 @@ function experimentsForm ({
           <input type="checkbox" id="linkify" onchange=${onLinkifyChange} checked=${linkify} />
         </div>
         <div>
-          <label for="dnslink">
+          <label for="dnslinkPolicy">
             <dl>
-              <dt>${browser.i18n.getMessage('option_dnslink_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_dnslink_description')}</dd>
+              <dt>${browser.i18n.getMessage('option_dnslinkPolicy_title')}</dt>
+              <dd>
+                ${browser.i18n.getMessage('option_dnslinkPolicy_description')}
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md#dnslink-support-in-ipfs-companion" target="_blank">
+                  ${browser.i18n.getMessage('option_legend_readMore')}
+                </a></p>
+              </dd>
             </dl>
           </label>
-          <input type="checkbox" id="dnslink" onchange=${onDnsLinkChange} checked=${dnslink} />
+          <select id="dnslinkPolicy" name='dnslinkPolicy' onchange=${onDnslinkPolicyChange}>
+            <option
+              value='false'
+              selected=${String(dnslinkPolicy) === 'false'}>
+              ${browser.i18n.getMessage('option_dnslinkPolicy_disabled')}
+            </option>
+            <option
+              value='best-effort'
+              selected=${dnslinkPolicy === 'best-effort'}>
+              ${browser.i18n.getMessage('option_dnslinkPolicy_bestEffort')}
+            </option>
+            <option
+              value='enabled'
+              selected=${dnslinkPolicy === 'enabled'}>
+              ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label for="detectIpfsPathHeader">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/x-ipfs-path-header.md#x-ipfs-path-header-support-in-ipfs-companion" target="_blank">
+                  ${browser.i18n.getMessage('option_legend_readMore')}
+                </a></p>
+              </dd>
+            </dl>
+          </label>
+          <input type="checkbox" id="detectIpfsPathHeader" onchange=${onDetectIpfsPathHeaderChange} checked=${detectIpfsPathHeader} />
         </div>
         <div>
           <label for="ipfs-proxy">
@@ -82,7 +118,7 @@ function experimentsForm ({
                       ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md" target="_blank">
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md#notes-on-exposing-ipfs-api-as-windowipfs" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>

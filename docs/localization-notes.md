@@ -8,26 +8,16 @@
 
 ## Contributing Translations
 
-Just go to https://crowdin.com/project/ipfs-companion  and start translating!
+Go to https://www.transifex.com/ipfs/ipfs-companion/, send a request to join specific language team and start translating!
+You can also download raw files from Transifex, translate them in your own editor/tool and then upload them back there, but most of people prefer using Transifex GUI.
 
 If your language is not present in `add-on/_locales` yet, but is supported by mainstream browsers
 please create a [new issue](https://github.com/ipfs/ipfs-companion/issues/new) requesting it :+1: 
 
-Same if anyone want to become a proofreader for a specific language:
-
-> Difference between translators and proofreaders:
-> 
-> - translators can suggest translations for empty or translated strings and vote on existing ones
-> - proofreader can translate and suggest (of course) but will lose their Voting feature to get a more powerful "Proofreader " button that allows them to approve or reject translations
-
-Don't worry if GitHub does not reflect translations added at Crowdin:
-translations are merged manually before every release.
-
-It is a good idea to opt-in for email notifications about any new strings in future:
-https://crowdin.com/settings#email
+Don't worry if GitHub does not reflect translations added at Transifex:
+translations are merged manually before every release, locale files at GitHub are often behind what is already translated at Transifex. It is a good idea to keep Transifex email notifications enabled to be notified about new strings to translate.
 
 Thanks again for your translations!
-
 
 ## Running Chrome with specific locale
 

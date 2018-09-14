@@ -5,11 +5,11 @@
   },
   "panel_headerIpfsNodeIconLabel": {
     "message": "IPFS Companion",
-    "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
+    "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
     "message": "Global toggle: activate or suspend all IPFS integrations",
-    "description": "Label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "offline",
@@ -83,6 +83,10 @@
     "message": "Non-IPFS resource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
+  "contextMenu_AddToIpfsSelection": {
+    "message": "Add selected text to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+  },
   "contextMenu_AddToIpfsRawCid": {
     "message": "Add to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
@@ -148,21 +152,11 @@
     "description": "(notify_uploadTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
-    "message": "$MSG$",
-    "placeholders": {
-      "msg": {
-        "content": "$1"
-      }
-    },
+    "message": "$1",
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$ERROR$ (press ctrl+shift+j for more details)",
-    "placeholders": {
-      "error": {
-        "content": "$1"
-      }
-    },
+    "message": "$1 (press ctrl+shift+j for more details)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
@@ -286,7 +280,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enables support for ipfs://$cid, ipns://$peerid and dweb:/ipfs/$cid by normalizing links and requests done with unhandled protocols",
+    "message": "Enables support for ipfs://, ipns:// and dweb: by normalizing links and requests done with unhandled protocols",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -297,9 +291,33 @@
     "message": "Turn plaintext /ipfs/ paths into clickable links",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
-  "option_dnslink_title": {
-    "message": "DNSLINK Support",
-    "description": "An option title on the Preferences screen (option_dnslink_title)"
+  "option_dnslinkPolicy_title": {
+    "message": "DNSLink Support",
+    "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
+  },
+  "option_dnslinkPolicy_description": {
+    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
+    "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
+  },
+  "option_dnslinkPolicy_disabled": {
+    "message": "Off",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
+  },
+  "option_dnslinkPolicy_bestEffort": {
+    "message": "Check after HTTP request",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
+  },
+  "option_dnslinkPolicy_enabled": {
+    "message": "Check before HTTP request",
+    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
+  },
+  "option_detectIpfsPathHeader_title": {
+    "message": "Detect X-Ipfs-Path Header",
+    "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
+  },
+  "option_detectIpfsPathHeader_description": {
+    "message": "Drop HTTP transport and load over IPFS if value is an IPFS path. Redirect of IPNS paths requires DNSLink support to be enabled as well.",
+    "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
     "message": "window.ipfs",
@@ -320,10 +338,6 @@
   "option_preloadAtPublicGateway_description": {
     "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
-  },
-  "option_dnslink_description": {
-    "message": "Perform DNS lookup for every visited website and use Custom Gateway if DNSLINK is present in its DNS TXT record (known to slow down the browser)",
-    "description": "An option description on the Preferences screen (option_dnslink_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Reset Everything",
@@ -346,13 +360,8 @@
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers": {
-    "message": "Connected to $PEERCOUNT$ peers",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)",
-    "placeholders": {
-      "peerCount": {
-        "content": "$1"
-      }
-    }
+    "message": "Connected to $1 peers",
+    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
   },
   "quickUpload_pick_file_button": {
     "message": "Pick a file",
@@ -399,25 +408,12 @@
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $PERMISSION$ for $SCOPE$?",
-    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)",
-    "placeholders": {
-      "permission": {
-        "content": "$1"
-      },
-      "scope": {
-        "content": "$2"
-      }
-    }
+    "message": "Revoke permission $1 for $2?",
+    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $SCOPE$?",
-    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)",
-    "placeholders": {
-      "scope": {
-        "content": "$1"
-      }
-    }
+    "message": "Revoke all permissions for $1?",
+    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
     "message": "Click to allow",
@@ -436,25 +432,12 @@
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Revoke $PERMISSION$",
-    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)",
-    "placeholders": {
-      "permission": {
-        "content": "$1"
-      }
-    }
+    "message": "Revoke $1",
+    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Allow $SCOPE$ to access ipfs.$PERMISSION$?",
-    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)",
-    "placeholders": {
-      "scope": {
-        "content": "$1"
-      },
-      "permission": {
-        "content": "$2"
-      }
-    }
+    "message": "Allow $1 to access ipfs.$2?",
+    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
     "message": "Apply this decision to all permissions in this scope",

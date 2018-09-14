@@ -37,11 +37,11 @@ input[type=checkbox] + .mark {
 input[type=checkbox]:checked + .mark::after {
   color: #6ACAD1;
   position: absolute;
-  left: 4px;
-  top: 2px;
+  left: 3px;
+  top: 3px;
   content: "";
-  height: 6px;
-  width: 6px;
+  height: 5px;
+  width: 8px;
   border-left: 2px solid;
   border-bottom: 2px solid;
   transform: rotate(-45deg);

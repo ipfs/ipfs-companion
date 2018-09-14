@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import {asyncIterateStream} from 'async-iterate-stream/asyncIterateStream'
+import { asyncIterateStream } from 'async-iterate-stream/asyncIterateStream'
 // import streamHead from 'stream-head'
 
 const { resolver } = require('ipfs-http-response')
@@ -17,7 +17,7 @@ const textBuffer = (data) => new TextEncoder('utf-8').encode(data).buffer
 
 /* protocol handler for mozilla/libdweb */
 
-exports.createIpfsUrlProtocolHandler = (getIpfs, dnsLink) => {
+exports.createIpfsUrlProtocolHandler = (getIpfs, dnslinkResolver) => {
   return async (request) => {
     console.time('[ipfs-companion] LibdwebProtocolHandler')
     console.log(`[ipfs-companion] handling ${request.url}`)
@@ -25,9 +25,9 @@ exports.createIpfsUrlProtocolHandler = (getIpfs, dnsLink) => {
       const ipfs = getIpfs()
       const url = request.url
       // Get /ipfs/ path for URL (resolve to immutable snapshot if ipns://)
-      const path = immutableIpfsPath(url, dnsLink)
+      const path = immutableIpfsPath(url, dnslinkResolver)
       // Then, fetch response from IPFS
-      const {content, contentType, contentEncoding} = await getResponse(ipfs, url, path)
+      const { content, contentType, contentEncoding } = await getResponse(ipfs, url, path)
 
       // console.log(`contentType=${contentType}, contentEncoding=${contentEncoding}, content`, content)
 
@@ -77,7 +77,7 @@ function toErrorResponse (request, error) {
   return textBuffer(`Unable to produce IPFS response for "${request.url}": ${error}`)
 }
 
-function immutableIpfsPath (url, dnsLink) {
+function immutableIpfsPath (url, dnslinkResolver) {
   // TODO:
   // - detect invalid addrs and display error page
 
@@ -90,7 +90,7 @@ function immutableIpfsPath (url, dnsLink) {
     // js-ipfs does not implement  ipfs.name.resolve yet, so we only do dnslink lookup
     // const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
     const fqdn = path.split('/')[2]
-    const dnslinkRecord = dnsLink.cachedDnslinkLookup(fqdn)
+    const dnslinkRecord = dnslinkResolver.cachedDnslinkLookup(fqdn)
     if (!dnslinkRecord) {
       throw new Error(`Missing DNS TXT with dnslink for '${fqdn}'`)
     }
@@ -137,7 +137,7 @@ async function getResponse (ipfs, url, path) {
       // TODO remove this after ipfs-http-response switch to ipfs.resolve
       // or sharding is supported by some other means
       try {
-        const matchingLink = (await ipfs.ls(err.parentDagNode, {resolveType: false})).find(item => item.name === err.missingLinkName)
+        const matchingLink = (await ipfs.ls(err.parentDagNode, { resolveType: false })).find(item => item.name === err.missingLinkName)
         if (matchingLink) {
           console.log('resolver.cid.err.matchingLink', matchingLink)
           path = path.replace(matchingLink.path, matchingLink.hash)
@@ -184,5 +184,5 @@ async function getResponse (ipfs, url, path) {
   })
   console.log(`[ipfs-companion] [ipfs://] handler read ${path} and internally mime-sniffed it as ${contentType}`)
 
-  return {content: stream, contentType}
+  return { content: stream, contentType }
 }

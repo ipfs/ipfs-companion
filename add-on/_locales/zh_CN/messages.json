@@ -1,10 +1,10 @@
 {
     "browserAction_title": {
-        "message": "IPFS Companion",
+        "message": "IPFS 伙伴",
         "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
     },
     "panel_headerIpfsNodeIconLabel": {
-        "message": "IPFS Companion",
+        "message": "IPFS 伴侣",
         "description": "Label for IPFS icon (panel_headerIpfsNodeIconLabel)"
     },
     "panel_headerActiveToggleTitle": {
@@ -16,7 +16,7 @@
         "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
     },
     "panel_statusGatewayAddress": {
-        "message": "HTTP шлюз",
+        "message": "网关",
         "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
     },
     "panel_statusApiAddress": {
@@ -24,11 +24,11 @@
         "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
     },
     "panel_statusGatewayVersion": {
-        "message": "версия",
+        "message": "版本",
         "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
     },
     "panel_statusSwarmPeers": {
-        "message": "пиры",
+        "message": "群集对等端",
         "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
     },
     "panel_statusSwarmPeersTitle": {
@@ -36,39 +36,39 @@
         "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
     },
     "panel_quickUpload": {
-        "message": "Быстрая загрузка",
+        "message": "快速上传",
         "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
     },
     "panel_openWebui": {
-        "message": "Веб-интерфейс",
+        "message": "打开 WebUI",
         "description": "A menu item in Browser Action pop-up (panel_openWebui)"
     },
     "panel_openPreferences": {
-        "message": "Настройки",
+        "message": "打开选项",
         "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
     },
     "panel_switchToCustomGateway": {
-        "message": "Подключиться к собственному шлюзу",
+        "message": "切换到自定义网关",
         "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
     },
     "panel_switchToPublicGateway": {
-        "message": "Подключиться к публичному шлюзу",
+        "message": "切换到公共网关",
         "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
     },
     "panel_pinCurrentIpfsAddress": {
-        "message": "Закрепить ресурс",
+        "message": "固定 IPFS 资源",
         "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
     },
     "panel_unpinCurrentIpfsAddress": {
-        "message": "Открепить ресурс",
+        "message": "解除固定 IPFS 资源",
         "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
     },
     "panelCopy_currentIpfsAddress": {
-        "message": "Скопировать каноничный адрес",
+        "message": "复制规范地址",
         "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
     },
     "panel_copyCurrentPublicGwUrl": {
-        "message": "Скопировать URL публичного шлюза",
+        "message": "复制公共网关网址",
         "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
     },
     "pageAction_titleIpfsAtPublicGateway": {
@@ -80,71 +80,71 @@
         "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
     },
     "pageAction_titleNonIpfs": {
-        "message": "Non-IPFS resource",
+        "message": "非 IPFS 资源",
         "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
     },
     "contextMenu_AddToIpfsRawCid": {
-        "message": "Add to IPFS",
+        "message": "添加到 IPFS",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
     },
     "contextMenu_AddToIpfsKeepFilename": {
-        "message": "Add to IPFS (Keep Filename)",
+        "message": "添加到 IPFS（保持文件名）",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
     },
     "notify_addonIssueTitle": {
-        "message": "IPFS Add-on Issue",
+        "message": "IPFS 附加组件问题报告",
         "description": "A title of system notification (notify_addonIssueTitle)"
     },
     "notify_addonIssueMsg": {
-        "message": "Откройте консоль браузера, чтобы увидеть детальную информацию",
+        "message": "具体细节请参阅“浏览器控制台”",
         "description": "A message in system notification (notify_addonIssueMsg)"
     },
     "notify_copiedPublicURLTitle": {
-        "message": "Публичный URL скопирован",
+        "message": "已复制公共网关网址",
         "description": "A title of system notification (notify_copiedPublicURLTitle)"
     },
     "notify_copiedCanonicalAddressTitle": {
-        "message": "Канонический адрес скопирован",
+        "message": "已复制规范地址",
         "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
     },
     "notify_pinnedIpfsResourceTitle": {
-        "message": "IPFS ресурс закреплен",
+        "message": "已固定 IPFS 资源",
         "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
     },
     "notify_unpinnedIpfsResourceTitle": {
-        "message": "IPFS ресурс откреплен",
+        "message": "已解除 IPFS 固定",
         "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
     },
     "notify_pinErrorTitle": {
-        "message": "Ошибка при прикреплении IPFS ресурса",
+        "message": "固定时出错",
         "description": "A title of system notification (notify_pinErrorTitle)"
     },
     "notify_unpinErrorTitle": {
-        "message": "Ошибка при откреплении IPFS ресурса",
+        "message": "解除固定时出错",
         "description": "A title of system notification (notify_unpinErrorTitle)"
     },
     "notify_apiOnlineTitle": {
-        "message": "IPFS API доступно",
+        "message": "IPFS API 在线",
         "description": "A title of system notification (notify_apiOnlineTitle)"
     },
     "notify_apiOnlineAutomaticModeMsg": {
-        "message": "Automatic Mode: Custom Gateway Redirect is active",
+        "message": "自动模式：自定义网关重定向已激活",
         "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
     },
     "notify_apiOfflineTitle": {
-        "message": "IPFS API недоступно",
+        "message": "IPFS API 离线",
         "description": "A title of system notification (notify_apiOfflineTitle)"
     },
     "notify_apiOfflineAutomaticModeMsg": {
-        "message": "Автоматический решим: Публичный шлюз будет использоваться по-умолчанию",
+        "message": "自动模式：公共网关将作为后备方案",
         "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
     },
     "notify_uploadErrorTitle": {
-        "message": "Не удается загрузить через IPFS API",
+        "message": "无法通过 IPFS API 上传",
         "description": "A title of system notification (notify_uploadErrorTitle)"
     },
     "notify_uploadTrackingProtectionErrorMsg": {
-        "message": "Попробуйте отключить защиту от служения (нажмите ctr+shift+j для получения подробностей)",
+        "message": "请尝试禁用“跟踪保护”（详细信息请见 ctrl+shift+j）",
         "description": "(notify_uploadTrackingProtectionErrorMsg)"
     },
     "notify_inlineMsg": {
@@ -156,11 +156,11 @@
         "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
     },
     "notify_startIpfsNodeErrorTitle": {
-        "message": "Failed to start IPFS node",
+        "message": "启动 IPFS 节点失败",
         "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
     },
     "notify_stopIpfsNodeErrorTitle": {
-        "message": "Failed to stop IPFS node",
+        "message": "停止 IPFS 节点失败",
         "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
     },
     "option_legend_readMore": {
@@ -168,11 +168,11 @@
         "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
     },
     "option_header_nodeType": {
-        "message": "IPFS Node",
+        "message": "IPFS 节点",
         "description": "A section header on the Preferences screen (option_header_nodeType)"
     },
     "option_ipfsNodeType_title": {
-        "message": "IPFS Node Type",
+        "message": "IPFS 节点类型",
         "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
     },
     "option_ipfsNodeType_external_description": {
@@ -184,47 +184,47 @@
         "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
     },
     "option_ipfsNodeConfig_title": {
-        "message": "IPFS Node Config",
+        "message": "IPFS 节点配置",
         "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
     },
     "option_ipfsNodeConfig_description": {
-        "message": "Configuration for the embedded IPFS node. Must be valid JSON.",
+        "message": "配置嵌入式的 IPFS 节点。必须是有效的 JSON。",
         "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
     },
     "option_ipfsNodeType_external": {
-        "message": "External",
+        "message": "外部",
         "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
     },
     "option_ipfsNodeType_embedded": {
-        "message": "Embedded",
+        "message": "嵌入",
         "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
     },
     "option_header_gateways": {
-        "message": "Шлюзы",
+        "message": "网关",
         "description": "A section header on the Preferences screen (option_header_gateways)"
     },
     "option_customGatewayUrl_title": {
-        "message": "Пользовательский локальный шлюз",
+        "message": "自定义本地网关",
         "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
     },
     "option_customGatewayUrl_description": {
-        "message": "URL или предпочитаемый HTTP2IPFS шлюз",
+        "message": "首选的HTTP2IPFS网关地址（URL）",
         "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
     },
     "option_useCustomGateway_title": {
-        "message": "Использовать пользовательский шлюз",
+        "message": "使用自定义网关",
         "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
     },
     "option_useCustomGateway_description": {
-        "message": "Перенаправлять запросы на IPFS ресурсы к пользовательскому шлюзу",
+        "message": "公共网关重定向至自定义网关",
         "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
     },
     "option_publicGatewayUrl_title": {
-        "message": "Публичный шлюз по-умолчанию",
+        "message": "默认公共网关",
         "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
     },
     "option_publicGatewayUrl_description": {
-        "message": "URL используемый для копирования публичных ссылок и используемый по-умолчанию, когда пользовательский шлюз недоступен",
+        "message": "自定义网关不可用或复制共享连接时回退URL",
         "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
     },
     "option_header_api": {
@@ -232,63 +232,63 @@
         "description": "A section header on the Preferences screen (option_header_api)"
     },
     "option_ipfsApiUrl_title": {
-        "message": "IPFS API URL",
+        "message": "IPFS API链接",
         "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
     },
     "option_ipfsApiUrl_description": {
-        "message": "Подсказка: здесь находится /webui",
+        "message": "提示：/webui 可用",
         "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
     },
     "option_ipfsApiPollMs_title": {
-        "message": "Интервал опроса состояния",
+        "message": "轮询间隔状态",
         "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
     },
     "option_ipfsApiPollMs_description": {
-        "message": "Частота обновления количества пиров (в миллисекундах)",
+        "message": "节点计数的刷新频率(毫秒级)",
         "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
     },
     "option_automaticMode_title": {
-        "message": "Автоматический режим",
+        "message": "自动模式",
         "description": "An option title on the Preferences screen (option_automaticMode_title)"
     },
     "option_automaticMode_description": {
-        "message": "Toggle use of Custom Gateway when IPFS API availability changes",
+        "message": "当API可用性发生变化时，切换使用自定义网关",
         "description": "An option description on the Preferences screen (option_automaticMode_description)"
     },
     "option_header_experiments": {
-        "message": "Эксперименты",
+        "message": "试验",
         "description": "A section header on the Preferences screen (option_header_experiments)"
     },
     "option_experiments_warning": {
-        "message": "Осторожно: данные функции введены недавно либо находятся в разработке. Используйте их на свой страх и риск.",
+        "message": "警告：这些功能正在完善当中。YMMV",
         "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
     },
     "option_displayNotifications_title": {
-        "message": "Включить уведомления",
+        "message": "启用通知",
         "description": "An option title on the Preferences screen (option_displayNotifications_title)"
     },
     "option_displayNotifications_description": {
-        "message": "Показывать системные уведомления при изменении состояния API, копировании ссылки и тп",
+        "message": "当API状态改变或链接被复制时显示系统通知",
         "description": "An option description on the Preferences screen (option_displayNotifications_description)"
     },
     "option_catchUnhandledProtocols_title": {
-        "message": "Catch Unhandled IPFS Protocols",
+        "message": "捕获未处理的IPFS协议",
         "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
     },
     "option_catchUnhandledProtocols_description": {
-        "message": "Enables support for ipfs://, ipns:// and dweb: by normalizing links and requests done with unhandled protocols",
+        "message": "通过规范未经处理的协议的链接和请求来启用 ipfs://， ipns://， dweb:/ipfs/",
         "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
     },
     "option_linkify_title": {
-        "message": "Linkify IPFS Addresses",
+        "message": "IPFS地址转成链接",
         "description": "An option title on the Preferences screen (option_linkify_title)"
     },
     "option_linkify_description": {
-        "message": "Turn plaintext /ipfs/ paths into clickable links",
+        "message": "将/ipfs/路径转换成可点击链接",
         "description": "An option description on the Preferences screen (option_linkify_description)"
     },
     "option_dnslinkPolicy_title": {
-        "message": "DNSLink Support",
+        "message": "DNSLink 支持",
         "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
     },
     "option_dnslinkPolicy_description": {
@@ -296,19 +296,19 @@
         "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
     },
     "option_dnslinkPolicy_disabled": {
-        "message": "Off",
+        "message": "关",
         "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
     },
     "option_dnslinkPolicy_bestEffort": {
-        "message": "Check after HTTP request",
+        "message": "HTTP 请求后检查",
         "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
     },
     "option_dnslinkPolicy_enabled": {
-        "message": "Check before HTTP request",
+        "message": "HTTP 请求前检查",
         "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
     },
     "option_detectIpfsPathHeader_title": {
-        "message": "Detect X-Ipfs-Path Header",
+        "message": "检测 X-Ipfs-Path 头",
         "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
     },
     "option_detectIpfsPathHeader_description": {
@@ -324,35 +324,35 @@
         "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
     },
     "option_ipfsProxy_link_manage_permissions": {
-        "message": "Manage permissions",
+        "message": "管理权限",
         "description": "Link text for managing permissions"
     },
     "option_preloadAtPublicGateway_title": {
-        "message": "Preload Uploads",
+        "message": "预加载上传",
         "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
     },
     "option_preloadAtPublicGateway_description": {
-        "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+        "message": "通过公共网关的异步http头请求开启对已上传资产的自动预加载",
         "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
     },
     "option_resetAllOptions_title": {
-        "message": "Reset Everything",
+        "message": "全部重置",
         "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
     },
     "option_resetAllOptions_description": {
-        "message": "Replaces user preferences with default ones (can't be undone!)",
+        "message": "将用户配置替换为默认值(不可撤销！)",
         "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
     },
     "manifest_extensionName": {
-        "message": "IPFS Companion",
+        "message": "IPFS 伴侣",
         "description": "Extension name in the Manifest file (manifest_extensionName)"
     },
     "manifest_shortExtensionName": {
-        "message": "IPFS Companion",
+        "message": "IPFS 伴侣",
         "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
     },
     "manifest_extensionDescription": {
-        "message": "Browser extension that simplifies access to IPFS resources",
+        "message": "简化IPFS资源访问的浏览器扩展",
         "description": "Extension description in the Manifest file (manifest_extensionDescription)"
     },
     "quickUpload_subhead_peers": {
@@ -360,27 +360,27 @@
         "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
     },
     "quickUpload_pick_file_button": {
-        "message": "Pick a file",
+        "message": "选一个文件",
         "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
     },
     "quickUpload_or": {
-        "message": "or",
+        "message": "或",
         "description": "seperates the pick a file button from the drop message (quickUpload_or)"
     },
     "quickUpload_drop_it_here": {
-        "message": "drop it here to share",
+        "message": "拖放文件到此处以分享",
         "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
     },
     "quickUpload_state_uploading": {
-        "message": "Upload in progress..",
+        "message": "正在上传..",
         "description": "Status label on the share files page (quickUpload_state_uploading)"
     },
     "quickUpload_state_buffering": {
-        "message": "(buffering, please wait)",
+        "message": "（正在缓冲，请稍候）",
         "description": "Status label on the share files page (quickUpload_state_buffering)"
     },
     "quickUpload_options_show": {
-        "message": "upload options",
+        "message": "上传选项",
         "description": "Button on the share files page (quickUpload_options_show)"
     },
     "quickUpload_options_wrapWithDirectory": {
@@ -392,7 +392,7 @@
         "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
     },
     "page_proxyAcl_title": {
-        "message": "Manage Permissions",
+        "message": "管理权限",
         "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
     },
     "page_proxyAcl_subtitle": {
@@ -400,7 +400,7 @@
         "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
     },
     "page_proxyAcl_no_perms": {
-        "message": "No permissions granted.",
+        "message": "没有授予权限。",
         "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
     },
     "page_proxyAcl_confirm_revoke": {

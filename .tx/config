@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[ipfs-companion.messages-json]
+file_filter = add-on/_locales/<lang>/messages.json
+minimum_perc = 51
+source_file = add-on/_locales/en/messages.json
+source_lang = en
+type = CHROME

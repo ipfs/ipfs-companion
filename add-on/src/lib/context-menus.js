@@ -18,18 +18,19 @@ async function findUrlForContext (context) {
     }
   }
   // falback to the url of current tab
-  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+  const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
   return currentTab.url
 }
 
 module.exports.findUrlForContext = findUrlForContext
 
+const contextMenuAddToIpfsSelection = 'contextMenu_AddToIpfsSelection'
 const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
 const contextMenuAddToIpfsKeepFilename = 'contextMenu_AddToIpfsKeepFilename'
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 
-function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfsRawCid, onAddToIpfsKeepFilename, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
+function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs, onAddToIpfsKeepFilename, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
   let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
   if (runtime.isFirefox) {
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
@@ -37,12 +38,21 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs
   }
   try {
     browser.contextMenus.create({
+      id: contextMenuAddToIpfsSelection,
+      title: browser.i18n.getMessage(contextMenuAddToIpfsSelection),
+      contexts: ['selection'],
+      documentUrlPatterns: ['<all_urls>'],
+      enabled: false,
+      onclick: onAddToIpfs
+    })
+
+    browser.contextMenus.create({
       id: contextMenuAddToIpfsRawCid,
       title: browser.i18n.getMessage(contextMenuAddToIpfsRawCid),
       contexts: ['image', 'video', 'audio', 'link'],
       documentUrlPatterns: ['<all_urls>'],
       enabled: false,
-      onclick: onAddToIpfsRawCid
+      onclick: onAddToIpfs
     })
 
     browser.contextMenus.create({
@@ -87,15 +97,20 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs
     async update (changedTabId) {
       try {
         const canUpload = getState().peerCount > 0
-        await browser.contextMenus.update(contextMenuAddToIpfsRawCid, {enabled: canUpload})
-        await browser.contextMenus.update(contextMenuAddToIpfsKeepFilename, {enabled: canUpload})
+        const items = [ contextMenuAddToIpfsSelection,
+          contextMenuAddToIpfsRawCid,
+          contextMenuAddToIpfsKeepFilename
+        ]
+        for (let item of items) {
+          await browser.contextMenus.update(item, { enabled: canUpload })
+        }
         if (changedTabId) {
           // recalculate tab-dependant menu items
-          const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+          const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
           if (currentTab && currentTab.id === changedTabId) {
             const ipfsContext = ipfsPathValidator.isIpfsPageActionsContext(currentTab.url)
-            browser.contextMenus.update(contextMenuCopyCanonicalAddress, {enabled: ipfsContext})
-            browser.contextMenus.update(contextMenuCopyAddressAtPublicGw, {enabled: ipfsContext})
+            browser.contextMenus.update(contextMenuCopyCanonicalAddress, { enabled: ipfsContext })
+            browser.contextMenus.update(contextMenuCopyAddressAtPublicGw, { enabled: ipfsContext })
           }
         }
       } catch (err) {

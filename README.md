@@ -36,31 +36,52 @@ Learn more at [ipfs.io](https://ipfs.io) (it is really cool, we promise!)
 
 ## Features
 
-#### Automagical Detection of IPFS Resources
+### Automagical Detection of IPFS Resources
 
-Requests for IPFS-like paths (`/ipfs/$cid` or `/ipns/$peerid_or_fqdn-with-dnslink`) are detected on any website.  
-If tested path is a valid IPFS address it gets redirected and loaded from a local gateway, e.g:  
+#### IPFS Path in URL
+
+Requests for IPFS-like paths (`/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) are detected on any website.  
+If tested path is a [valid IPFS address](https://github.com/ipfs/is-ipfs) it gets redirected and loaded from a local gateway, e.g:  
 > `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
 > → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+
+#### DNSLink
+
+Companion will detect presence of [DNSLink](https://docs.ipfs.io/guides/concepts/dnslink/) in DNS records of visited websites and redirect HTTP request to a local gateway.
+
+> `http://docs.ipfs.io`  
+> → `http://127.0.0.1:8080/ipns/docs.ipfs.io`
+
+This means if you visit websites with a valid DNSLink (eg. http://docs.ipfs.io, http://ipld.io, http://libp2p.io, http://tr.wikipedia-on-ipfs.org) browser will load them from IPFS.
+
+More details: [DNSLink Support in IPFS Companion](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md)
+
+#### X-Ipfs-Path
+
+Companion will upgrade transport to IPFS if the header is found in any HTTP response headers. This is a fallback for edge cases when IPFS path is not present in URL.
+
+More details: [`x-ipfs-path` Header Support in IPFS Companion](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/x-ipfs-path-header.md)
+
+#### Redirect Opt-Out
 
 It is possible to opt-out from redirect by
 a) suspending extension via global toggle
 b) including `x-ipfs-companion-no-redirect` in the URL (as a [hash](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect) or [query](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect) parameter).
 
-#### IPFS API as `window.ipfs`
+### IPFS API as `window.ipfs`
 
 Your IPFS node is exposed as `window.ipfs` on every webpage.
 Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
 
-#### Toggle IPFS Integrations
+### Toggle IPFS Integrations
 
 > ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/42685002-18c7cee4-8692-11e8-9171-970866d91ae0.gif)
 
 The Browser Action pop-up provides a toggle for suspending all active IPFS integrations with a single click.
 
-#### IPFS Status and Context Actions
+### IPFS Status and Context Actions
 
 - IPFS API and Gateway status
 - Add local (quick upload) or remote files (context menu) to IPFS with option to preserve filename
@@ -71,7 +92,7 @@ The Browser Action pop-up provides a toggle for suspending all active IPFS integ
     - Copy canonical IPFS address
     - Copy shareable URL to resource at preferred public gateway
 
-#### Experiments!
+### Experiments!
 
 _(some are disabled by default, use Preferences screen to enable)_
 
@@ -80,9 +101,7 @@ _(some are disabled by default, use Preferences screen to enable)_
     - `ipns://$cid_or_fqdn`
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
-- Detect domains with [dnslink](https://github.com/jbenet/go-dnslink) in DNS TXT record and load them from IPFS
 - Make plaintext IPFS links clickable ([demo](https://ipfs.io/ipfs/bafybeidvtwx54qr44kidymvhfzefzxhgkieigwth6oswk75zhlzjdmunoy/linkify-demo.html))
-- Mirror to IPFS by right click on any image or video
 - Switch between _External_ HTTP API and _Embedded_ js-ipfs node. Read about differences at [docs/node-types](docs/node-types.md).
   > [![screenshot of node type switch](https://user-images.githubusercontent.com/157609/42382479-b4d98768-8134-11e8-979c-69b758846bf0.png)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md)
 

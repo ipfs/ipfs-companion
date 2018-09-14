@@ -4,7 +4,7 @@ import groovy.transform.Field
 @Field final String nodeVersion = '10.4.1'
 
 // Run targets in parallel
-parallel(
+timeout(time: 1, unit: 'HOURS') { parallel(
     // the 'proper' CI pipeline runs in docker
     "docker":  {
         node(label: 'linux') { ws("${env.WORKSPACE}/docker") {
@@ -111,5 +111,5 @@ parallel(
             }}
         }}}}
     }
-)
+)}
 

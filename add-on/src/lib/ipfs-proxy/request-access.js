@@ -33,7 +33,7 @@ function createRequestAccess (browser, screen) {
     } else {
       // fallback: opening dialog as a new active tab
       // (runtimes without browser.windows.create, eg. Andorid)
-      dialogTabId = (await browser.tabs.create({active: true, url: url})).id
+      dialogTabId = (await browser.tabs.create({ active: true, url: url })).id
     }
 
     // Resolves with { allow, wildcard }

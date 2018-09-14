@@ -5,7 +5,7 @@ const { safeIpfsPath } = require('./ipfs-path')
 const { findUrlForContext } = require('./context-menus')
 
 async function copyTextToClipboard (copyText) {
-  const currentTab = await browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+  const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
   const tabId = currentTab.id
   // Lets take a moment and ponder on the state of copying a string in 2017:
   const copyToClipboardIn2017 = `function copyToClipboardIn2017(text) {

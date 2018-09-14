@@ -5,7 +5,8 @@ const browser = require('webextension-polyfill')
 const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
-const fileReaderPullStream = require('filereader-pull-stream')
+const drop = require('drag-and-drop-files')
+const fileReaderPullStream = require('pull-file-reader')
 const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('panel_quickUpload')
@@ -15,6 +16,98 @@ const app = choo()
 app.use(quickUploadStore)
 app.route('*', quickUploadPage)
 app.mount('#root')
+
+function quickUploadStore (state, emitter) {
+  state.message = ''
+  state.peerCount = ''
+  state.ipfsNodeType = 'external'
+  state.wrapWithDirectory = true
+  state.pinUpload = true
+  state.expandOptions = false
+
+  function updateState ({ ipfsNodeType, peerCount }) {
+    state.ipfsNodeType = ipfsNodeType
+    state.peerCount = peerCount
+  }
+
+  let port
+
+  emitter.on('DOMContentLoaded', async () => {
+    // initialize connection to the background script which will trigger UI updates
+    port = browser.runtime.connect({ name: 'browser-action-port' })
+    port.onMessage.addListener(async (message) => {
+      if (message.statusUpdate) {
+        console.log('In browser action, received message from background:', message)
+        updateState(message.statusUpdate)
+        emitter.emit('render')
+      }
+    })
+  })
+
+  emitter.on('fileInputChange', event => processFiles(state, emitter, event.target.files))
+
+  // drag & drop anywhere
+  drop(document.body, files => processFiles(state, emitter, files))
+}
+
+async function processFiles (state, emitter, files) {
+  console.log('Processing files', files)
+  try {
+    if (!files.length) {
+      // File list may be empty in some rare cases
+      // eg. when user drags something from proprietary browser context
+      // We just ignore those UI interactions.
+      throw new Error('found no valid sources, try selecting a local file instead')
+    }
+    const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
+    const uploadTab = await browser.tabs.getCurrent()
+    let { streams, totalSize } = files2streams(files)
+    if (!browser.runtime.id.includes('@')) {
+      // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
+      if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
+        // avoid crashing Chrome until the source of issue is fixed in js-ipfs-api
+        // - https://github.com/ipfs-shipyard/ipfs-companion/issues/464
+        // - https://github.com/ipfs/js-ipfs-api/issues/654
+        throw new Error('Unable to process payload bigger than 128MiB in Chrome. See: js-ipfs-api/issues/654')
+      }
+    }
+    progressHandler(0, totalSize, state, emitter)
+    emitter.emit('render')
+    const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
+    const options = {
+      progress: (len) => progressHandler(len, totalSize, state, emitter),
+      wrapWithDirectory: wrapFlag,
+      pin: state.pinUpload
+    }
+    let result
+    try {
+      result = await ipfsCompanion.ipfs.files.add(streams, options)
+      // This is just an additional safety check, as in past combination
+      // of specific go-ipfs/js-ipfs-api versions
+      // produced silent errors in form of partial responses:
+      // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
+      const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
+      if (partialResponse) {
+        throw new Error('Result of ipfs.files.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
+      }
+      await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
+    } catch (err) {
+      console.error('Failed to IPFS add', err)
+      ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
+      throw err
+    }
+    emitter.emit('render')
+    console.log('Upload result', result)
+    // close upload tab as it will be replaced with a new tab with uploaded content
+    await browser.tabs.remove(uploadTab.id)
+  } catch (err) {
+    console.error('Unable to perform quick upload', err)
+    // keep upload tab and display error message in it
+    state.message = `Unable to upload to IPFS API:`
+    state.progress = `${err}`
+    emitter.emit('render')
+  }
+}
 
 /* disabled in favor of fileReaderPullStream
 function file2buffer (file) {
@@ -30,7 +123,13 @@ function files2streams (files) {
   const streams = []
   let totalSize = 0
   for (let file of files) {
-    const fileStream = fileReaderPullStream(file, {chunkSize: 32 * 1024 * 1024})
+    if (!file.type && file.size === 0) {
+      // UX fail-safe:
+      // at the moment drag&drop of an empty file without an extension
+      // looks the same as dropping a directory
+      throw new Error(`unable to add "${file.name}", directories and empty files are not supported`)
+    }
+    const fileStream = fileReaderPullStream(file, { chunkSize: 32 * 1024 * 1024 })
     streams.push({
       path: file.name,
       content: fileStream
@@ -55,86 +154,6 @@ function progressHandler (doneBytes, totalBytes, state, emitter) {
     state.progress = browser.i18n.getMessage('quickUpload_state_buffering')
   }
   emitter.emit('render')
-}
-
-function quickUploadStore (state, emitter) {
-  state.message = ''
-  state.peerCount = ''
-  state.ipfsNodeType = 'external'
-  state.wrapWithDirectory = true
-  state.pinUpload = true
-  state.expandOptions = false
-
-  function updateState ({ipfsNodeType, peerCount}) {
-    state.ipfsNodeType = ipfsNodeType
-    state.peerCount = peerCount
-  }
-
-  let port
-
-  emitter.on('DOMContentLoaded', async () => {
-    // initialize connection to the background script which will trigger UI updates
-    port = browser.runtime.connect({name: 'browser-action-port'})
-    port.onMessage.addListener(async (message) => {
-      if (message.statusUpdate) {
-        console.log('In browser action, received message from background:', message)
-        updateState(message.statusUpdate)
-        emitter.emit('render')
-      }
-    })
-  })
-
-  emitter.on('fileInputChange', async (event) => {
-    try {
-      const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
-      const uploadTab = await browser.tabs.getCurrent()
-      let {streams, totalSize} = files2streams(event.target.files)
-      if (!browser.runtime.id.includes('@')) {
-        // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
-        if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
-          // avoid crashing Chrome until the source of issue is fixed in js-ipfs-api
-          // - https://github.com/ipfs-shipyard/ipfs-companion/issues/464
-          // - https://github.com/ipfs/js-ipfs-api/issues/654
-          throw new Error('Unable to process payload bigger than 128MiB in Chrome. See: js-ipfs-api/issues/654')
-        }
-      }
-      progressHandler(0, totalSize, state, emitter)
-      emitter.emit('render')
-      const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
-      const options = {
-        progress: (len) => progressHandler(len, totalSize, state, emitter),
-        wrapWithDirectory: wrapFlag,
-        pin: state.pinUpload
-      }
-      let result
-      try {
-        result = await ipfsCompanion.ipfs.files.add(streams, options)
-        // This is just an additional safety check, as in past combination
-        // of specific go-ipfs/js-ipfs-api versions
-        // produced silent errors in form of partial responses:
-        // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
-        const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
-        if (partialResponse) {
-          throw new Error('Result of ipfs.files.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
-        }
-        await ipfsCompanion.uploadResultHandler({result, openRootInNewTab: true})
-      } catch (err) {
-        console.error('Failed to IPFS add', err)
-        ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
-        throw err
-      }
-      emitter.emit('render')
-      console.log('Upload result', result)
-      // close upload tab as it will be replaced with a new tab with uploaded content
-      await browser.tabs.remove(uploadTab.id)
-    } catch (err) {
-      console.error('Unable to perform quick upload', err)
-      // keep upload tab and display error message in it
-      state.message = `Unable to upload to IPFS API:`
-      state.progress = `${err}`
-      emitter.emit('render')
-    }
-  })
 }
 
 function quickUploadOptions (state, emit) {
@@ -166,17 +185,17 @@ function quickUploadOptions (state, emit) {
 
 function quickUploadPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
-  const {peerCount} = state
+  const { peerCount } = state
 
   return html`
     <div class="montserrat pt5" style="background: linear-gradient(to top, #041727 0%,#043b55 100%); height:100%;">
       <div class="mw8 center pa3 white">
         <header class="flex items-center no-user-select">
-          ${logo({
-            size: 80,
-            path: '../../icons',
-            heartbeat: false
-          })}
+  ${logo({
+    size: 80,
+    path: '../../icons',
+    heartbeat: false
+  })}
           <div class="pl3">
             <h1 class="f2 fw5 ma0">
               ${browser.i18n.getMessage('panel_quickUpload')}
@@ -186,7 +205,7 @@ function quickUploadPage (state, emit) {
             </p>
           </div>
         </header>
-        <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
+        <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow pointer' style="border:solid 2px #6ACAD1">
           <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" multiple onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>

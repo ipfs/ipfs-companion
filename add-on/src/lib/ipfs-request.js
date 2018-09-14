@@ -4,13 +4,23 @@
 const IsIpfs = require('is-ipfs')
 const { urlAtPublicGw } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
+const recoverableErrors = new Set([
+  // Firefox
+  'NS_ERROR_NET_TIMEOUT', // eg. httpd is offline
+  'NS_ERROR_NET_RESET', // failed to load because the server kept reseting the connection
+  'NS_ERROR_NET_ON_RESOLVED', // no network
+  // Chrome
+  'net::ERR_CONNECTION_TIMED_OUT', // eg. httpd is offline
+  'net::ERR_INTERNET_DISCONNECTED' // no network
+])
 
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
 
-function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
+function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
   // Request modifier provides event listeners for the various stages of making an HTTP request
   // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
+  const browser = runtime.browser
   return {
     onBeforeRequest (request) {
       // This event is triggered when a request is about to be made, and before headers are available.
@@ -43,13 +53,18 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         }
         // Detect valid /ipfs/ and /ipns/ on any site
         if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-          return redirectToGateway(request.url, state, dnsLink)
+          return redirectToGateway(request.url, state, dnslinkResolver)
         }
-        // Look for dnslink in TXT records of visited sites
-        if (state.dnslink && dnsLink.isDnslookupSafeForURL(request.url)) {
-          const dnslinkRedirect = dnsLink.dnslinkLookupAndOptionalRedirect(request.url)
+        // Detect dnslink using heuristics enabled in Preferences
+        if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+          const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
           if (dnslinkRedirect && isSafeToRedirect(request, runtime)) {
+            // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
             return dnslinkRedirect
+          }
+          if (state.dnslinkPolicy === 'best-effort') {
+            // dnslinkResolver.preloadDnslink(request.url, (dnslink) => console.log(`---> preloadDnslink(${new URL(request.url).hostname})=${dnslink}`))
+            dnslinkResolver.preloadDnslink(request.url)
           }
         }
       }
@@ -67,19 +82,43 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
         // There is a bug in go-ipfs related to keep-alive connections
         // that results in partial response for ipfs.files.add
         // mangled by error "http: invalid Read on closed Body"
-        // More info: https://github.com/ipfs/go-ipfs/issues/5168
-        if (request.url.includes('/api/v0/add')) {
+        // More info (ipfs-companion): https://github.com/ipfs-shipyard/ipfs-companion/issues/480
+        // More info (go-ipfs): https://github.com/ipfs/go-ipfs/issues/5168
+        if (request.url.includes('/api/v0/add') && request.url.includes('stream-channels=true')) {
+          let addExpectHeader = true
+          const expectHeader = { name: 'Expect', value: '100-continue' }
+          const warningMsg = '[ipfs-companion] Executing "Expect: 100-continue" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168'
           for (let header of request.requestHeaders) {
-            if (header.name === 'Connection') {
+            // Workaround A: https://github.com/ipfs/go-ipfs/issues/5168#issuecomment-401417420
+            // (works in Firefox, but Chromium does not expose Connection header)
+            /* (disabled so we use the workaround B in all browsers)
+            if (header.name === 'Connection' && header.value !== 'close') {
               console.warn('[ipfs-companion] Executing "Connection: close" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168')
               header.value = 'close'
+              addExpectHeader = false
               break
             }
+            */
+            // Workaround B: https://github.com/ipfs-shipyard/ipfs-companion/issues/480#issuecomment-417657758
+            // (works in Firefox 63 AND Chromium 67)
+            if (header.name === expectHeader.name) {
+              addExpectHeader = false
+              if (header.value !== expectHeader.value) {
+                console.log(warningMsg)
+                header.value = expectHeader.value
+              }
+              break
+            }
+          }
+          if (addExpectHeader) {
+            console.log(warningMsg)
+            request.requestHeaders.push(expectHeader)
           }
         }
         // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
         // which produced '403 - Forbidden' error.
         // This workaround removes bogus header from API requests
+        // TODO: check if still necessary
         for (let i = 0; i < request.requestHeaders.length; i++) {
           let header = request.requestHeaders[i]
           if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
@@ -96,23 +135,105 @@ function createRequestModifier (getState, dnsLink, ipfsPathValidator, runtime) {
     onHeadersReceived (request) {
       // Fired when the HTTP response headers associated with a request have been received.
       // You can use this event to modify HTTP response headers or do a very late redirect.
+      const state = getState()
 
-      // Late redirect as a workaround for edge cases such as:
-      // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-      if (onHeadersReceivedRedirect.has(request.requestId)) {
-        const state = getState()
-        onHeadersReceivedRedirect.delete(request.requestId)
-        return redirectToGateway(request.url, state, dnsLink)
+      if (state.active && state.redirect) {
+        // Late redirect as a workaround for edge cases such as:
+        // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+        if (onHeadersReceivedRedirect.has(request.requestId)) {
+          onHeadersReceivedRedirect.delete(request.requestId)
+          return redirectToGateway(request.url, state, dnslinkResolver)
+        }
+
+        // Detect X-Ipfs-Path Header and upgrade transport to IPFS:
+        // 1. Check if DNSLink exists and redirect to it.
+        // 2. If there is no DNSLink, validate path from the header and redirect
+        const url = request.url
+        const notActiveGatewayOrApi = !(url.startsWith(state.pubGwURLString) || url.startsWith(state.gwURLString) || url.startsWith(state.apiURLString))
+        if (state.detectIpfsPathHeader && request.responseHeaders && notActiveGatewayOrApi) {
+          // console.log('onHeadersReceived.request', request)
+          for (let header of request.responseHeaders) {
+            if (header.name.toLowerCase() === 'x-ipfs-path' && isSafeToRedirect(request, runtime)) {
+              // console.log('onHeadersReceived.request.responseHeaders', request.responseHeaders.length)
+              const xIpfsPath = header.value
+              console.log(`[ipfs-companion] detected x-ipfs-path for ${request.url}: ${xIpfsPath}`)
+              // First: Check if dnslink heuristic yields any results
+              // Note: this depends on which dnslink lookup policy is selecten in Preferences
+              if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+                // x-ipfs-path is a strong indicator of IPFS support
+                // so we force dnslink lookup to pre-populate dnslink cache
+                // in a way that works even when state.dnslinkPolicy !== 'enabled'
+                // All the following requests will be upgraded to IPNS
+                const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
+                const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
+                if (dnslinkRedirect) {
+                  console.log(`[ipfs-companion] onHeadersReceived: dnslinkRedirect from ${request.url} to ${dnslinkRedirect.redirectUrl}`)
+                  return dnslinkRedirect
+                }
+              }
+              // Additional validation of X-Ipfs-Path
+              if (IsIpfs.ipnsPath(xIpfsPath)) {
+                // Ignore unhandled IPNS path by this point
+                // (means DNSLink is disabled so we don't want to make a redirect that works like DNSLink)
+                console.log(`[ipfs-companion] onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkPolicy=false or missing DNS TXT record)`)
+              } else if (IsIpfs.ipfsPath(xIpfsPath)) {
+                // It is possible that someone exposed /ipfs/<cid>/ under /
+                // and our path-based onBeforeRequest heuristics were unable
+                // to identify request as IPFS one until onHeadersReceived revealed
+                // presence of x-ipfs-path header.
+                const url = new URL(request.url)
+                // convert to a path at public gateway
+                // (optional redirect to custom one can happen later)
+                url.protocol = state.pubGwURL.protocol
+                url.host = state.pubGwURL.host
+                url.pathname = xIpfsPath
+                // redirect only if anything changed
+                if (url.toString() !== request.url) {
+                  console.log(`[ipfs-companion] onHeadersReceived: normalized ${request.url} to  ${url}`)
+                  return redirectToGateway(url, state, dnslinkResolver)
+                }
+              }
+            }
+          }
+        }
       }
     },
 
-    onErrorOccurred (request) {
+    async onErrorOccurred (request) {
       // Fired when a request could not be processed due to an error:
       // for example, a lack of Internet connectivity.
+      const state = getState()
 
-      // Cleanup after https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-      if (onHeadersReceivedRedirect.has(request.requestId)) {
-        onHeadersReceivedRedirect.delete(request.requestId)
+      if (state.active) {
+        // console.log('onErrorOccurred:' + request.error)
+        // console.log('onErrorOccurred', request)
+        // Check if error is final and can be recovered via DNSLink
+        const recoverableViaDnslink =
+          state.dnslinkPolicy &&
+          request.type === 'main_frame' &&
+          recoverableErrors.has(request.error)
+        if (recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)) {
+          // Explicit call to ignore global DNSLink policy and force DNS TXT lookup
+          const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
+          const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
+          // We can't redirect in onErrorOccurred, so if DNSLink is present
+          // recover by opening IPNS version in a new tab
+          // TODO: add tests and demo
+          if (dnslinkRedirect) {
+            console.log(`[ipfs-companion] onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
+            const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
+            await browser.tabs.create({
+              active: true,
+              openerTabId: currentTabId,
+              url: dnslinkRedirect.redirectUrl
+            })
+          }
+        }
+
+        // Cleanup after https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+        if (onHeadersReceivedRedirect.has(request.requestId)) {
+          onHeadersReceivedRedirect.delete(request.requestId)
+        }
       }
     }
 
@@ -154,12 +275,12 @@ function postNormalizationSkip (state, request) {
   return false
 }
 
-function redirectToGateway (requestUrl, state, dnsLink) {
+function redirectToGateway (requestUrl, state, dnslinkResolver) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
   const url = new URL(requestUrl)
-  if (state.dnslink && dnsLink.canRedirectToIpns(url)) {
+  if (state.dnslinkPolicy && dnslinkResolver.canRedirectToIpns(url)) {
     // late dnslink in onHeadersReceived
-    return dnsLink.redirectToIpnsPath(url)
+    return { redirectUrl: dnslinkResolver.convertToIpnsUrl(url) }
   }
   const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
   url.protocol = gwUrl.protocol
@@ -177,7 +298,7 @@ function isSafeToRedirect (request, runtime) {
   // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
   // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
   // TODO: revisit when upstream bug is addressed
-  if (runtime.isFirefox && request.type === 'xmlhttprequest') {
+  if (runtime.isFirefox && request.type === 'xmlhttprequest' && !request.responseHeaders) {
     // Sidenote on XHR Origin: Firefox 60 uses request.originUrl, Chrome 63 uses request.initiator
     if (request.originUrl) {
       const sourceOrigin = new URL(request.originUrl).origin

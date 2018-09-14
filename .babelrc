@@ -4,7 +4,7 @@
   ],
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
           "firefox": 61,

@@ -25,7 +25,10 @@ See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for de
 
 ## Translations
 
-Submit PR with a new locale or improve existing ones. Make sure to read [Localization Notes](docs/localization-notes.md).
+
+Go to Transifex and join [IPFS Companion Translation Project](https://www.transifex.com/ipfs/ipfs-companion/) :sparkles:
+
+If you want to downoad translations from Transifex and run them locally, make sure to read [Localization Notes](docs/localization-notes.md) first.
 
 ## Writing Code
 
