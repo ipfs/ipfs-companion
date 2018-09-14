@@ -46,8 +46,9 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
   const logoPath = '../../../icons'
   const logoSize = 128
   const stateUnknown = isIpfsOnline === null
+
   return html`
-    <div class="mt4 mb5 flex flex-column justify-center items-center transition-all ${stateUnknown ? 'state-unknown' : ''}">
+    <div class="mt4 mb5 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
       ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
       <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
     </div>
@@ -91,8 +92,9 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
   const copyClass = 'mv0 white f5 lh-copy'
   const anchorClass = 'white link underline-under hover-aqua'
   const stateUnknown = isIpfsOnline === null
+
   return html`
-    <div class="w-80 mv4 flex flex-column transition-all ${stateUnknown ? 'state-unknown' : ''}">
+    <div class="w-80 mv4 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_title')}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_install', ['https://docs.ipfs.io/introduction/install/'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_run')}</p>

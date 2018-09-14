@@ -42,7 +42,7 @@ const renderTranslatedLinks = (message, links, attributes) => {
 const renderTranslatedSpans = (message, values, attributes) => {
   const regexSpan = /<\d+>(.+?)<\/\d+>/mg
   const regexIndex = /<(\d+)>/mg
-  const str = browser.i18n.getMessage(message, ...values)
+  const str = browser.i18n.getMessage(message, values)
   let output = str
 
   let matchSpan = regexSpan.exec(str)
