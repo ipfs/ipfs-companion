@@ -26,7 +26,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             type="url"
             inputmode="url"
             required
-            pattern="^https?://[^/]+$"
+            pattern="^https?://[^/]+/?$"
             spellcheck="false"
             title="Enter URL without any sub-path"
             onchange=${onIpfsApiUrlChange}

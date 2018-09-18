@@ -33,7 +33,7 @@ function gatewaysForm ({
                 type="url"
                 inputmode="url"
                 required
-                pattern="^https?://[^/]+$"
+                pattern="^https?://[^/]+/?$"
                 spellcheck="false"
                 title="Enter URL without any sub-path"
                 onchange=${onCustomGatewayUrlChange}
@@ -67,7 +67,7 @@ function gatewaysForm ({
             type="url"
             inputmode="url"
             required
-            pattern="^https?://[^/]+$"
+            pattern="^https?://[^/]+/?$"
             spellcheck="false"
             title="Enter URL without any sub-path"
             onchange=${onPublicGatewayUrlChange}
