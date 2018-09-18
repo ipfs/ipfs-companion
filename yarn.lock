@@ -5305,9 +5305,9 @@ ipfs-multipart@~0.1.0:
     content "^3.0.0"
     dicer "^0.2.5"
 
-ipfs-postmsg-proxy@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-3.0.0.tgz#893b9135299154ca110851a952ea11f288afca09"
+ipfs-postmsg-proxy@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/ipfs-postmsg-proxy/-/ipfs-postmsg-proxy-3.1.1.tgz#7f14fcaecddcd1ca41d2ee077757efe234c92ac0"
   dependencies:
     big.js "^5.1.2"
     callbackify "^1.1.0"
@@ -5317,7 +5317,7 @@ ipfs-postmsg-proxy@3.0.0:
     is-pull-stream "0.0.0"
     is-stream "^1.1.0"
     multiaddr "^5.0.0"
-    peer-id "^0.10.7"
+    peer-id "^0.11.0"
     peer-info "^0.14.1"
     postmsg-rpc "^2.4.0"
     prepost "^1.1.0"
@@ -8601,7 +8601,7 @@ peer-id@^0.10.7, peer-id@~0.10.0, peer-id@~0.10.7:
     lodash "^4.17.5"
     multihashes "~0.4.13"
 
-peer-id@~0.11.0:
+peer-id@^0.11.0, peer-id@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/peer-id/-/peer-id-0.11.0.tgz#71bd3fad8fed00e1e0868e5861c79de46ceb3788"
   dependencies:
