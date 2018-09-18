@@ -23,12 +23,12 @@ function createWelcomePage (i18n) {
 
     return html`
       <div class="flex flex-column flex-row-l">
-        <div id="hero" class="w-100 min-vh-100 flex flex-column justify-center items-center bg-navy white">
+        <div id="left-col" class="min-vh-100 flex flex-column justify-center items-center bg-navy white">
           ${renderCompanionLogo(i18n, isIpfsOnline)}
           ${isIpfsOnline ? renderWelcome(i18n, peerCount) : renderInstallSteps(i18n, isIpfsOnline)}
         </div>
 
-        <div class="w-100 min-vh-100 flex flex-column justify-around items-center">
+        <div id="right-col" class="min-vh-100 flex flex-column justify-around items-center">
           ${renderResources(i18n)}
           ${renderVideos(i18n)}
           ${renderProjects(i18n)}
@@ -48,7 +48,7 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
   const stateUnknown = isIpfsOnline === null
 
   return html`
-    <div class="mt4 mb5 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
+    <div class="mt4 mb4 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
       ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
       <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
     </div>
@@ -94,7 +94,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
   const stateUnknown = isIpfsOnline === null
 
   return html`
-    <div class="w-80 mv4 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
+    <div class="w-80 mt3 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_title')}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_install', ['https://docs.ipfs.io/introduction/install/'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_run')}</p>
