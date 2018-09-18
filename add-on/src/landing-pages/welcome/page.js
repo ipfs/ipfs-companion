@@ -155,7 +155,7 @@ const renderVideos = (i18n) => {
       <div class="flex flex-column mr1">
         <p>${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=8CMxDNuuAiQ" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/8CMxDNuuAiQ/0.jpg" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/zb2rhoo8LXEwek8HLLYsXhra9YuYxRDEun3rHRc18mLvK3A5w" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
@@ -164,7 +164,7 @@ const renderVideos = (i18n) => {
       <div class="flex flex-column">
         <p>${i18n.getMessage('page_landingWelcome_videos_permanent_web')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=HUVmypx9HGI" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://img.youtube.com/vi/HUVmypx9HGI/0.jpg" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/zb2rhbCqh6W5Veot1sgZC5v7oLMnrkxq8ikd7auyy9UKSLBBa" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
