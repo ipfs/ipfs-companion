@@ -14,6 +14,7 @@ const createCopier = require('./copier')
 const createRuntimeChecks = require('./runtime-checks')
 const { createContextMenus, findUrlForContext } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
+const { showPendingLandingPages } = require('./on-installed')
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -73,6 +74,7 @@ module.exports = async function init () {
       optionDefaults,
       browser.storage.local
     )
+    await showPendingLandingPages()
   } catch (error) {
     console.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
