@@ -22,6 +22,9 @@ module.exports = function optionsPage (state, emit) {
     }
 
     emit('optionChange', { key, value: modifyValue ? modifyValue(value) : value })
+    if (modifyValue) {
+      emit('render')
+    }
   }
 
   const onOptionsReset = (e) => {

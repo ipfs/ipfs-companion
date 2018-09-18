@@ -7,6 +7,11 @@ const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { initState } = require('../../../add-on/src/lib/state')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
+const testOptions = Object.assign({}, optionDefaults, {
+  customGatewayUrl: 'http://127.0.0.1:8080',
+  publicGatewayUrl: 'https://gateway.foobar.io'
+})
+
 function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
   // pass 'false' to spoof "no DNS TXT record"
   value = String(value) === 'false' ? undefined : '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
@@ -24,26 +29,18 @@ describe('dnslinkResolver', function () {
     global.URL = URL
   })
 
-  const getState = () => Object.assign(initState(optionDefaults), {
-    gwURL: new URL('http://127.0.0.1:8080'),
-    pubGwURL: new URL('https://gateway.foobar.io'),
+  const getState = () => Object.assign(initState(testOptions), {
     peerCount: 1
   })
   const getExternalNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'external' })
-  const getEmbeddedNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'embedded' })
+  // const getEmbeddedNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'embedded' })
 
-  describe('convertToIpnsUrl(url)', function () {
-    it('should return IPNS path at a custom gateway when external API is used', function () {
+  describe('convertToIpnsPath(url)', function () {
+    it('should return IPNS path', function () {
       const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
-      expect(dnslinkResolver.convertToIpnsUrl(url))
-        .to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
-    })
-    it('should return IPNS path at a public gateway if embedded node is used', function () {
-      const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
-      const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
-      expect(dnslinkResolver.convertToIpnsUrl(url))
-        .to.equal('https://gateway.foobar.io/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+      expect(dnslinkResolver.convertToIpnsPath(url))
+        .to.equal('/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
     })
   })
 })
@@ -54,9 +51,7 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
     global.URL = URL
   })
 
-  const getState = () => Object.assign(initState(optionDefaults), {
-    gwURL: new URL('http://127.0.0.1:8080'),
-    pubGwURL: new URL('https://gateway.foobar.io'),
+  const getState = () => Object.assign(initState(testOptions), {
     ipfsNodeType: 'external',
     dnslinkPolicy: 'detectIpfsPathHeader',
     peerCount: 1
@@ -140,9 +135,7 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
     global.URL = URL
   })
 
-  const getState = () => Object.assign(initState(optionDefaults), {
-    gwURL: new URL('http://127.0.0.1:8080'),
-    pubGwURL: new URL('https://gateway.foobar.io'),
+  const getState = () => Object.assign(initState(testOptions), {
     ipfsNodeType: 'external',
     dnslinkPolicy: 'enabled',
     peerCount: 1

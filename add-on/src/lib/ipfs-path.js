@@ -11,8 +11,10 @@ function safeIpfsPath (urlOrPath) {
   return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
 }
 
-function subdomainToIpfsPath (urlString) {
-  const url = new URL(urlString)
+function subdomainToIpfsPath (url) {
+  if (typeof url === 'string') {
+    url = new URL(url)
+  }
   const fqdn = url.hostname.split('.')
   const cid = fqdn[0]
   const protocol = fqdn[1]
@@ -21,11 +23,12 @@ function subdomainToIpfsPath (urlString) {
 
 exports.safeIpfsPath = safeIpfsPath
 
-function urlAtPublicGw (path, pubGwUrl) {
-  return new URL(`${pubGwUrl}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
+function pathAtHttpGateway (path, gatewayUrl) {
+  // return URL without duplicated slashes
+  return new URL(`${gatewayUrl}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
 }
 
-exports.urlAtPublicGw = urlAtPublicGw
+exports.pathAtHttpGateway = pathAtHttpGateway
 
 function createIpfsPathValidator (getState, dnsLink) {
   const ipfsPathValidator = {
