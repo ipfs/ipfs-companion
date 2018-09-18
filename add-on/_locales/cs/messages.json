@@ -454,5 +454,81 @@
     "page_proxyAccessDialog_denyButton_text": {
         "message": "Zakázat",
         "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
+    },
+    "page_landingWelcome_title": {
+        "message": "IPFS Companion - Welcome!",
+        "description": "Page title (page_landingWelcome_title)"
+    },
+    "page_landingWelcome_logo_title": {
+        "message": "IPFS Companion",
+        "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
+    },
+    "page_landingWelcome_welcome_title": {
+        "message": "You are all set!",
+        "description": "Ready message title (page_landingWelcome_welcome_title)"
+    },
+    "page_landingWelcome_welcome_peers": {
+        "message": "Right now your node is connected to <0>$1</0> peers.",
+        "description": "Ready message copy (page_landingWelcome_welcome_peers)"
+    },
+    "page_landingWelcome_welcome_discover": {
+        "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
+        "description": "Ready message copy (page_landingWelcome_welcome_discover)"
+    },
+    "page_landingWelcome_installSteps_title": {
+        "message": "Is your IPFS daemon running?",
+        "description": "Install steps title (page_landingWelcome_installSteps_title)"
+    },
+    "page_landingWelcome_installSteps_install": {
+        "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
+        "description": "Install steps copy (page_landingWelcome_installSteps_install)"
+    },
+    "page_landingWelcome_installSteps_run": {
+        "message": "Then make sure to have an IPFS daemon running in your terminal:",
+        "description": "Install steps run message (page_landingWelcome_installSteps_run)"
+    },
+    "page_landingWelcome_resources_title_new_ipfs": {
+        "message": "New to IPFS?",
+        "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
+    },
+    "page_landingWelcome_resources_new_ipfs": {
+        "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
+        "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
+    },
+    "page_landingWelcome_resources_title_discover": {
+        "message": "Discover!",
+        "description": "Resources title (page_landingWelcome_resources_title_discover)"
+    },
+    "page_landingWelcome_resources_discover": {
+        "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
+        "description": "Resources copy (page_landingWelcome_resources_discover)"
+    },
+    "page_landingWelcome_resources_title_got_questions": {
+        "message": "Got questions?",
+        "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
+    },
+    "page_landingWelcome_resources_got_questions": {
+        "message": "Visit the <0>Discussion and Support Forum</0>.",
+        "description": "Resources copy (page_landingWelcome_resources_got_questions)"
+    },
+    "page_landingWelcome_resources_title_want_to_help": {
+        "message": "Want to help?",
+        "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
+    },
+    "page_landingWelcome_resources_want_to_help": {
+        "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
+        "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
+    },
+    "page_landingWelcome_videos_alpha_demo": {
+        "message": "IPFS Alpha Demo",
+        "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    },
+    "page_landingWelcome_videos_permanent_web": {
+        "message": "The Permanent Web",
+        "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    },
+    "page_landingWelcome_projects_title": {
+        "message": "Related Projects",
+        "description": "Projects section title (page_landingWelcome_projects_title)"
     }
 }
