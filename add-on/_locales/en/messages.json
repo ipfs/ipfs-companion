@@ -84,16 +84,20 @@
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_AddToIpfsSelection": {
-    "message": "Add selected text to IPFS",
+    "message": "Add Selected Text to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
   },
   "contextMenu_AddToIpfsRawCid": {
-    "message": "Add to IPFS",
+    "message": "Add This Object to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS (Keep Filename)",
+    "message": "Add This Object to IPFS (Keep Filename)",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  },
+  "contextMenu_AddToIpfsLink": {
+    "message": "Add This Link to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsLink)"
   },
   "notify_addonIssueTitle": {
     "message": "IPFS Add-on Issue",

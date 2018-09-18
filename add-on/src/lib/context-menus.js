@@ -2,15 +2,18 @@
 
 const browser = require('webextension-polyfill')
 
-async function findUrlForContext (context) {
+async function findUrlForContext (context, contextField) {
   if (context) {
-    if (context.linkUrl) {
-      // present when clicked on a link
-      return context.linkUrl
+    if (contextField) {
+      return context[contextField]
     }
     if (context.srcUrl) {
       // present when clicked on page element such as image or video
       return context.srcUrl
+    }
+    if (context.linkUrl) {
+      // present when clicked on a link
+      return context.linkUrl
     }
     if (context.pageUrl) {
       // pageUrl is the root frame
@@ -27,10 +30,11 @@ module.exports.findUrlForContext = findUrlForContext
 const contextMenuAddToIpfsSelection = 'contextMenu_AddToIpfsSelection'
 const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
 const contextMenuAddToIpfsKeepFilename = 'contextMenu_AddToIpfsKeepFilename'
+const contextMenuAddToIpfsLink = 'contextMenu_AddToIpfsLink'
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 
-function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs, onAddToIpfsKeepFilename, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
+function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromContext, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
   let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
   if (runtime.isFirefox) {
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
@@ -43,25 +47,34 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs
       contexts: ['selection'],
       documentUrlPatterns: ['<all_urls>'],
       enabled: false,
-      onclick: onAddToIpfs
+      onclick: (context) => onAddFromContext(context, 'selectionText')
     })
 
     browser.contextMenus.create({
       id: contextMenuAddToIpfsRawCid,
       title: browser.i18n.getMessage(contextMenuAddToIpfsRawCid),
-      contexts: ['image', 'video', 'audio', 'link'],
+      contexts: ['image', 'video', 'audio'],
       documentUrlPatterns: ['<all_urls>'],
       enabled: false,
-      onclick: onAddToIpfs
+      onclick: (context) => onAddFromContext(context, 'srcUrl')
     })
 
     browser.contextMenus.create({
       id: contextMenuAddToIpfsKeepFilename,
       title: browser.i18n.getMessage(contextMenuAddToIpfsKeepFilename),
-      contexts: ['image', 'video', 'audio', 'link'],
+      contexts: ['image', 'video', 'audio'],
       documentUrlPatterns: ['<all_urls>'],
       enabled: false,
-      onclick: onAddToIpfsKeepFilename
+      onclick: (context) => onAddFromContext(context, 'srcUrl', { wrapWithDirectory: true })
+    })
+
+    browser.contextMenus.create({
+      id: contextMenuAddToIpfsLink,
+      title: browser.i18n.getMessage(contextMenuAddToIpfsLink),
+      contexts: ['link'],
+      documentUrlPatterns: ['<all_urls>'],
+      enabled: false,
+      onclick: (context) => onAddFromContext(context, 'linkUrl', { wrapWithDirectory: true })
     })
 
     browser.contextMenus.create({
@@ -99,7 +112,8 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddToIpfs
         const canUpload = getState().peerCount > 0
         const items = [ contextMenuAddToIpfsSelection,
           contextMenuAddToIpfsRawCid,
-          contextMenuAddToIpfsKeepFilename
+          contextMenuAddToIpfsKeepFilename,
+          contextMenuAddToIpfsLink
         ]
         for (let item of items) {
           await browser.contextMenus.update(item, { enabled: canUpload })
