@@ -12,7 +12,7 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createRuntimeChecks = require('./runtime-checks')
-const { createContextMenus, findUrlForContext } = require('./context-menus')
+const { createContextMenus, findUrlForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyDirectCid, contextMenuCopyCanonicalAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
@@ -55,12 +55,13 @@ module.exports = async function init () {
       }
     }
 
-    copier = createCopier(getState, notify)
+    copier = createCopier(getState, getIpfs, notify)
     dnslinkResolver = createDnslinkResolver(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
       onCopyCanonicalAddress: copier.copyCanonicalAddress,
+      onCopyDirectCid: copier.copyDirectCid,
       onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
@@ -190,8 +191,9 @@ module.exports = async function init () {
 
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
-    copyCanonicalAddress: () => copier.copyCanonicalAddress(),
-    copyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+    [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
+    [contextMenuCopyDirectCid]: copier.copyDirectCid,
+    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
   }
 
   function handleMessageFromBrowserAction (message) {
@@ -259,7 +261,7 @@ module.exports = async function init () {
     let result
     try {
       const srcUrl = await findUrlForContext(context, contextField)
-      if (context.selectionText) {
+      if (contextField === 'selectionText') {
         result = await ipfs.files.add(Buffer.from(context.selectionText), options)
       } else if (runtime.isFirefox) {
         // workaround due to https://github.com/ipfs/ipfs-companion/issues/227

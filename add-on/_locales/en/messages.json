@@ -67,6 +67,10 @@
     "message": "Copy Canonical Address",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
+  "panelCopy_copyDirectCid": {
+    "message": "Copy Direct CID",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyDirectCid)"
+  },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Copy Public Gateway URL",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
@@ -111,13 +115,9 @@
     "message": "See Browser Console for more details",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
-  "notify_copiedPublicURLTitle": {
-    "message": "Copied Public URL",
-    "description": "A title of system notification (notify_copiedPublicURLTitle)"
-  },
-  "notify_copiedCanonicalAddressTitle": {
-    "message": "Copied Canonical Address",
-    "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+  "notify_copiedTitle": {
+    "message": "Copied",
+    "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
     "message": "IPFS Resource is now pinned",

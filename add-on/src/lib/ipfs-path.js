@@ -10,6 +10,7 @@ function safeIpfsPath (urlOrPath) {
   // better safe than sorry: https://github.com/ipfs/ipfs-companion/issues/303
   return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
 }
+exports.safeIpfsPath = safeIpfsPath
 
 function subdomainToIpfsPath (url) {
   if (typeof url === 'string') {
@@ -21,14 +22,22 @@ function subdomainToIpfsPath (url) {
   return `/${protocol}/${cid}${url.pathname}`
 }
 
-exports.safeIpfsPath = safeIpfsPath
-
 function pathAtHttpGateway (path, gatewayUrl) {
   // return URL without duplicated slashes
-  return new URL(`${gatewayUrl}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
+  return trimDoubleSlashes(new URL(`${gatewayUrl}${path}`).toString())
 }
-
 exports.pathAtHttpGateway = pathAtHttpGateway
+
+function trimDoubleSlashes (urlString) {
+  return urlString.replace(/([^:]\/)\/+/g, '$1')
+}
+exports.trimDoubleSlashes = trimDoubleSlashes
+
+function trimHashAndSearch (urlString) {
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
+  return urlString.split('#')[0].split('?')[0]
+}
+exports.trimHashAndSearch = trimHashAndSearch
 
 function createIpfsPathValidator (getState, dnsLink) {
   const ipfsPathValidator = {

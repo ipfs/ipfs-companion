@@ -1,7 +1,7 @@
 'use strict'
 
 const browser = require('webextension-polyfill')
-const { safeIpfsPath } = require('./ipfs-path')
+const { safeIpfsPath, trimHashAndSearch } = require('./ipfs-path')
 const { findUrlForContext } = require('./context-menus')
 
 async function copyTextToClipboard (copyText) {
@@ -34,13 +34,27 @@ async function copyTextToClipboard (copyText) {
   }
 }
 
-function createCopier (getState, notify) {
+function createCopier (getState, getIpfs, notify) {
   return {
     async copyCanonicalAddress (context) {
       const url = await findUrlForContext(context)
       const rawIpfsAddress = safeIpfsPath(url)
       copyTextToClipboard(rawIpfsAddress)
-      notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
+      notify('notify_copiedTitle', rawIpfsAddress)
+    },
+
+    async copyDirectCid (context) {
+      try {
+        const ipfs = getIpfs()
+        const url = await findUrlForContext(context)
+        const rawIpfsAddress = trimHashAndSearch(safeIpfsPath(url))
+        const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true })).split('/')[2]
+        copyTextToClipboard(directCid)
+        notify('notify_copiedTitle', directCid)
+      } catch (error) {
+        console.error('Unable to resolve/copy direct CID:', error.message)
+        if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
+      }
     },
 
     async copyAddressAtPublicGw (context) {
@@ -48,7 +62,7 @@ function createCopier (getState, notify) {
       const state = getState()
       const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
       copyTextToClipboard(urlAtPubGw)
-      notify('notify_copiedPublicURLTitle', urlAtPubGw)
+      notify('notify_copiedTitle', urlAtPubGw)
     }
   }
 }

@@ -27,14 +27,19 @@ async function findUrlForContext (context, contextField) {
 
 module.exports.findUrlForContext = findUrlForContext
 
+// Add X to IPFS
 const contextMenuAddToIpfsSelection = 'contextMenu_AddToIpfsSelection'
-// const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
 const contextMenuAddToIpfsImage = 'contextMenu_AddToIpfsImage'
 const contextMenuAddToIpfsVideo = 'contextMenu_AddToIpfsVideo'
 const contextMenuAddToIpfsAudio = 'contextMenu_AddToIpfsAudio'
 const contextMenuAddToIpfsLink = 'contextMenu_AddToIpfsLink'
+// Copy X
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
+const contextMenuCopyDirectCid = 'panelCopy_copyDirectCid'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
+module.exports.contextMenuCopyCanonicalAddress = contextMenuCopyCanonicalAddress
+module.exports.contextMenuCopyDirectCid = contextMenuCopyDirectCid
+module.exports.contextMenuCopyAddressAtPublicGw = contextMenuCopyAddressAtPublicGw
 
 // menu items that are enabled only when API is online
 const apiMenuItems = [
@@ -42,10 +47,11 @@ const apiMenuItems = [
   contextMenuAddToIpfsImage,
   contextMenuAddToIpfsVideo,
   contextMenuAddToIpfsAudio,
-  contextMenuAddToIpfsLink
+  contextMenuAddToIpfsLink,
+  contextMenuCopyDirectCid
 ]
 
-function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromContext, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
+function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromContext, onCopyCanonicalAddress, onCopyDirectCid, onCopyAddressAtPublicGw }) {
   let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
   if (runtime.isFirefox) {
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
@@ -59,7 +65,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
         contexts: [contextName],
         documentUrlPatterns: ['<all_urls>'],
         enabled: false,
-        onclick: (context) => onAddFromContext(context, 'srcUrl', ipfsAddOptions)
+        onclick: (context) => onAddFromContext(context, contextField, ipfsAddOptions)
       })
     }
     createAddToIpfsMenuItem(contextMenuAddToIpfsSelection, 'selection', 'selectionText')
@@ -68,21 +74,18 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
     createAddToIpfsMenuItem(contextMenuAddToIpfsAudio, 'audio', 'srcUrl', { wrapWithDirectory: true })
     createAddToIpfsMenuItem(contextMenuAddToIpfsLink, 'link', 'linkUrl', { wrapWithDirectory: true })
 
-    browser.contextMenus.create({
-      id: contextMenuCopyCanonicalAddress,
-      title: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-      contexts: copyAddressContexts,
-      documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-      onclick: onCopyCanonicalAddress
-    })
-
-    browser.contextMenus.create({
-      id: contextMenuCopyAddressAtPublicGw,
-      title: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-      contexts: copyAddressContexts,
-      documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
-      onclick: onCopyAddressAtPublicGw
-    })
+    const createCopierMenuItem = (menuItemId, handler) => {
+      browser.contextMenus.create({
+        id: menuItemId,
+        title: browser.i18n.getMessage(menuItemId),
+        contexts: copyAddressContexts,
+        documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+        onclick: handler
+      })
+    }
+    createCopierMenuItem(contextMenuCopyCanonicalAddress, onCopyCanonicalAddress)
+    createCopierMenuItem(contextMenuCopyDirectCid, onCopyDirectCid)
+    createCopierMenuItem(contextMenuCopyAddressAtPublicGw, onCopyAddressAtPublicGw)
   } catch (err) {
     // documentUrlPatterns is not supported in Brave
     if (err.message.indexOf('createProperties.documentUrlPatterns of contextMenus.create is not supported yet') > -1) {

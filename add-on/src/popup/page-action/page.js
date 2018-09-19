@@ -9,11 +9,10 @@ const contextActions = require('../browser-action/context-actions')
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
 module.exports = function pageActionPage (state, emit) {
-  const onCopyIpfsAddr = () => emit('copyIpfsAddr')
-  const onCopyPublicGwAddr = () => emit('copyPublicGwAddr')
+  const onCopy = (copyAction) => emit('copy', copyAction)
   const onPin = () => emit('pin')
   const onUnPin = () => emit('unPin')
-  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
+  const contextActionsProps = Object.assign({ onCopy, onPin, onUnPin }, state)
 
   // Instant init: page-action is shown only in ipfsContext
   contextActionsProps.isIpfsContext = true

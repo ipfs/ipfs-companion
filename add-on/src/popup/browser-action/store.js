@@ -2,7 +2,8 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { safeIpfsPath } = require('../../lib/ipfs-path')
+const { safeIpfsPath, trimHashAndSearch } = require('../../lib/ipfs-path')
+const { contextMenuCopyAddressAtPublicGw, contextMenuCopyDirectCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -55,13 +56,18 @@ module.exports = (state, emitter) => {
     }, 100)
   })
 
-  emitter.on('copyPublicGwAddr', async function copyCurrentPublicGwAddress () {
-    port.postMessage({ event: 'copyAddressAtPublicGw' })
-    window.close()
-  })
-
-  emitter.on('copyIpfsAddr', async function copyCurrentCanonicalAddress () {
-    port.postMessage({ event: 'copyCanonicalAddress' })
+  emitter.on('copy', function (copyAction) {
+    switch (copyAction) {
+      case contextMenuCopyCanonicalAddress:
+        port.postMessage({ event: contextMenuCopyCanonicalAddress })
+        break
+      case contextMenuCopyDirectCid:
+        port.postMessage({ event: contextMenuCopyDirectCid })
+        break
+      case contextMenuCopyAddressAtPublicGw:
+        port.postMessage({ event: contextMenuCopyAddressAtPublicGw })
+        break
+    }
     window.close()
   })
 
@@ -275,7 +281,7 @@ async function getIpfsApi () {
 
 async function resolveToPinPath (ipfs, url) {
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
-  url = url.split('#')[0].split('?')[0]
+  url = trimHashAndSearch(url)
   // https://github.com/ipfs/ipfs-companion/issues/303
   let path = safeIpfsPath(url)
   if (/^\/ipns/.test(path)) {

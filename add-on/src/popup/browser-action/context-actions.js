@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
+const { contextMenuCopyAddressAtPublicGw, contextMenuCopyDirectCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 module.exports = function contextActions ({
   active,
@@ -14,8 +15,7 @@ module.exports = function contextActions ({
   isPinned,
   isIpfsOnline,
   isApiAvailable,
-  onCopyIpfsAddr,
-  onCopyPublicGwAddr,
+  onCopy,
   onPin,
   onUnPin
 }) {
@@ -24,12 +24,16 @@ module.exports = function contextActions ({
   return html`
     <div class='fade-in pv1'>
   ${navItem({
-    text: browser.i18n.getMessage('panelCopy_currentIpfsAddress'),
-    onClick: onCopyIpfsAddr
+    text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+    onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
-    text: browser.i18n.getMessage('panel_copyCurrentPublicGwUrl'),
-    onClick: onCopyPublicGwAddr
+    text: browser.i18n.getMessage(contextMenuCopyDirectCid),
+    onClick: () => onCopy(contextMenuCopyDirectCid)
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+    onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${!isPinned ? (
     navItem({
