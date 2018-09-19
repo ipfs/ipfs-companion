@@ -2,7 +2,7 @@
 
 const browser = require('webextension-polyfill')
 const { safeIpfsPath, trimHashAndSearch } = require('./ipfs-path')
-const { findUrlForContext } = require('./context-menus')
+const { findValueForContext } = require('./context-menus')
 
 async function copyTextToClipboard (copyText) {
   const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
@@ -36,17 +36,17 @@ async function copyTextToClipboard (copyText) {
 
 function createCopier (getState, getIpfs, notify) {
   return {
-    async copyCanonicalAddress (context) {
-      const url = await findUrlForContext(context)
+    async copyCanonicalAddress (context, contextType) {
+      const url = await findValueForContext(context, contextType)
       const rawIpfsAddress = safeIpfsPath(url)
       copyTextToClipboard(rawIpfsAddress)
       notify('notify_copiedTitle', rawIpfsAddress)
     },
 
-    async copyDirectCid (context) {
+    async copyRawCid (context, contextType) {
       try {
         const ipfs = getIpfs()
-        const url = await findUrlForContext(context)
+        const url = await findValueForContext(context, contextType)
         const rawIpfsAddress = trimHashAndSearch(safeIpfsPath(url))
         const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true })).split('/')[2]
         copyTextToClipboard(directCid)
@@ -57,8 +57,8 @@ function createCopier (getState, getIpfs, notify) {
       }
     },
 
-    async copyAddressAtPublicGw (context) {
-      const url = await findUrlForContext(context)
+    async copyAddressAtPublicGw (context, contextType) {
+      const url = await findValueForContext(context, contextType)
       const state = getState()
       const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
       copyTextToClipboard(urlAtPubGw)

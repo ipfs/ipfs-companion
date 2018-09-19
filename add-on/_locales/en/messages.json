@@ -64,12 +64,12 @@
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy Canonical Address",
+    "message": "Copy IPFS Path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
-  "panelCopy_copyDirectCid": {
-    "message": "Copy Direct CID",
-    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyDirectCid)"
+  "panelCopy_copyRawCid": {
+    "message": "Copy Resolved CID",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Copy Public Gateway URL",
@@ -87,25 +87,41 @@
     "message": "Non-IPFS resource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
+  "contextMenu_parentImage": {
+    "message": "Selected Image",
+    "description": "An item in right-click context menu (contextMenu_parentImage)"
+  },
+  "contextMenu_parentVideo": {
+    "message": "Selected Video",
+    "description": "An item in right-click context menu (contextMenu_parentVideo)"
+  },
+  "contextMenu_parentAudio": {
+    "message": "Selected Audio",
+    "description": "An item in right-click context menu (contextMenu_parentAudio)"
+  },
+  "contextMenu_parentLink": {
+    "message": "Linked Content",
+    "description": "An item in right-click context menu (contextMenu_parentLink)"
+  },
+  "contextMenu_parentText": {
+    "message": "Selected Text",
+    "description": "An item in right-click context menu (contextMenu_parentText)"
+  },
+  "contextMenu_parentPage": {
+    "message": "This Page",
+    "description": "An item in right-click context menu (contextMenu_parentPage)"
+  },
+  "contextMenu_AddToIpfsKeepFilename": {
+    "message": "Add to IPFS (Keep Filename)",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  },
+  "contextMenu_AddToIpfsRawCid": {
+    "message": "Add to IPFS (Raw CID)",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
+  },
   "contextMenu_AddToIpfsSelection": {
     "message": "Add Selected Text to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
-  },
-  "contextMenu_AddToIpfsImage": {
-    "message": "Add this Image to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsImage)"
-  },
-  "contextMenu_AddToIpfsVideo": {
-    "message": "Add this Video to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsVideo)"
-  },
-  "contextMenu_AddToIpfsAudio": {
-    "message": "Add this Audio to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsAudio)"
-  },
-  "contextMenu_AddToIpfsLink": {
-    "message": "Add Linked Content to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsLink)"
   },
   "notify_addonIssueTitle": {
     "message": "IPFS Add-on Issue",

@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
-const { contextMenuCopyAddressAtPublicGw, contextMenuCopyDirectCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
+const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 module.exports = function contextActions ({
   active,
@@ -28,8 +28,8 @@ module.exports = function contextActions ({
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
-    text: browser.i18n.getMessage(contextMenuCopyDirectCid),
-    onClick: () => onCopy(contextMenuCopyDirectCid)
+    text: browser.i18n.getMessage(contextMenuCopyRawCid),
+    onClick: () => onCopy(contextMenuCopyRawCid)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),

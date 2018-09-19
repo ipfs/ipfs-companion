@@ -3,7 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const { safeIpfsPath, trimHashAndSearch } = require('../../lib/ipfs-path')
-const { contextMenuCopyAddressAtPublicGw, contextMenuCopyDirectCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
+const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -61,8 +61,8 @@ module.exports = (state, emitter) => {
       case contextMenuCopyCanonicalAddress:
         port.postMessage({ event: contextMenuCopyCanonicalAddress })
         break
-      case contextMenuCopyDirectCid:
-        port.postMessage({ event: contextMenuCopyDirectCid })
+      case contextMenuCopyRawCid:
+        port.postMessage({ event: contextMenuCopyRawCid })
         break
       case contextMenuCopyAddressAtPublicGw:
         port.postMessage({ event: contextMenuCopyAddressAtPublicGw })

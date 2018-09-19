@@ -12,7 +12,7 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createRuntimeChecks = require('./runtime-checks')
-const { createContextMenus, findUrlForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyDirectCid, contextMenuCopyCanonicalAddress } = require('./context-menus')
+const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
@@ -61,7 +61,7 @@ module.exports = async function init () {
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
       onCopyCanonicalAddress: copier.copyCanonicalAddress,
-      onCopyDirectCid: copier.copyDirectCid,
+      onCopyRawCid: copier.copyRawCid,
       onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
@@ -192,7 +192,7 @@ module.exports = async function init () {
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
     [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
-    [contextMenuCopyDirectCid]: copier.copyDirectCid,
+    [contextMenuCopyRawCid]: copier.copyRawCid,
     [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
   }
 
@@ -257,12 +257,12 @@ module.exports = async function init () {
   // Context Menu Uploader
   // -------------------------------------------------------------------
 
-  async function onAddFromContext (context, contextField, options) {
+  async function onAddFromContext (context, contextType, options) {
     let result
     try {
-      const srcUrl = await findUrlForContext(context, contextField)
-      if (contextField === 'selectionText') {
-        result = await ipfs.files.add(Buffer.from(context.selectionText), options)
+      const dataSrc = await findValueForContext(context, contextType)
+      if (contextType === 'selection') {
+        result = await ipfs.files.add(Buffer.from(dataSrc), options)
       } else if (runtime.isFirefox) {
         // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
         const fetchOptions = {
@@ -271,7 +271,7 @@ module.exports = async function init () {
         }
         // console.log('onAddFromContext.context', context)
         // console.log('onAddFromContext.fetchOptions', fetchOptions)
-        const response = await fetch(srcUrl, fetchOptions)
+        const response = await fetch(dataSrc, fetchOptions)
         const blob = await response.blob()
         const buffer = await new Promise((resolve, reject) => {
           const reader = new FileReader()
@@ -285,7 +285,7 @@ module.exports = async function init () {
         }
         result = await ipfs.files.add(data, options)
       } else {
-        result = await ipfs.util.addFromURL(srcUrl, options)
+        result = await ipfs.util.addFromURL(dataSrc, options)
       }
     } catch (error) {
       console.error('Error in upload to IPFS context menu', error)
