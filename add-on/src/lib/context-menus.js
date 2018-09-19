@@ -28,11 +28,22 @@ async function findUrlForContext (context, contextField) {
 module.exports.findUrlForContext = findUrlForContext
 
 const contextMenuAddToIpfsSelection = 'contextMenu_AddToIpfsSelection'
-const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
-const contextMenuAddToIpfsKeepFilename = 'contextMenu_AddToIpfsKeepFilename'
+// const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
+const contextMenuAddToIpfsImage = 'contextMenu_AddToIpfsImage'
+const contextMenuAddToIpfsVideo = 'contextMenu_AddToIpfsVideo'
+const contextMenuAddToIpfsAudio = 'contextMenu_AddToIpfsAudio'
 const contextMenuAddToIpfsLink = 'contextMenu_AddToIpfsLink'
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
+
+// menu items that are enabled only when API is online
+const apiMenuItems = [
+  contextMenuAddToIpfsSelection,
+  contextMenuAddToIpfsImage,
+  contextMenuAddToIpfsVideo,
+  contextMenuAddToIpfsAudio,
+  contextMenuAddToIpfsLink
+]
 
 function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromContext, onCopyCanonicalAddress, onCopyAddressAtPublicGw }) {
   let copyAddressContexts = ['page', 'image', 'video', 'audio', 'link']
@@ -41,41 +52,21 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
     copyAddressContexts.push('page_action')
   }
   try {
-    browser.contextMenus.create({
-      id: contextMenuAddToIpfsSelection,
-      title: browser.i18n.getMessage(contextMenuAddToIpfsSelection),
-      contexts: ['selection'],
-      documentUrlPatterns: ['<all_urls>'],
-      enabled: false,
-      onclick: (context) => onAddFromContext(context, 'selectionText')
-    })
-
-    browser.contextMenus.create({
-      id: contextMenuAddToIpfsRawCid,
-      title: browser.i18n.getMessage(contextMenuAddToIpfsRawCid),
-      contexts: ['image', 'video', 'audio'],
-      documentUrlPatterns: ['<all_urls>'],
-      enabled: false,
-      onclick: (context) => onAddFromContext(context, 'srcUrl')
-    })
-
-    browser.contextMenus.create({
-      id: contextMenuAddToIpfsKeepFilename,
-      title: browser.i18n.getMessage(contextMenuAddToIpfsKeepFilename),
-      contexts: ['image', 'video', 'audio'],
-      documentUrlPatterns: ['<all_urls>'],
-      enabled: false,
-      onclick: (context) => onAddFromContext(context, 'srcUrl', { wrapWithDirectory: true })
-    })
-
-    browser.contextMenus.create({
-      id: contextMenuAddToIpfsLink,
-      title: browser.i18n.getMessage(contextMenuAddToIpfsLink),
-      contexts: ['link'],
-      documentUrlPatterns: ['<all_urls>'],
-      enabled: false,
-      onclick: (context) => onAddFromContext(context, 'linkUrl', { wrapWithDirectory: true })
-    })
+    const createAddToIpfsMenuItem = (menuItemId, contextName, contextField, ipfsAddOptions) => {
+      browser.contextMenus.create({
+        id: menuItemId,
+        title: browser.i18n.getMessage(menuItemId),
+        contexts: [contextName],
+        documentUrlPatterns: ['<all_urls>'],
+        enabled: false,
+        onclick: (context) => onAddFromContext(context, 'srcUrl', ipfsAddOptions)
+      })
+    }
+    createAddToIpfsMenuItem(contextMenuAddToIpfsSelection, 'selection', 'selectionText')
+    createAddToIpfsMenuItem(contextMenuAddToIpfsImage, 'image', 'srcUrl', { wrapWithDirectory: true })
+    createAddToIpfsMenuItem(contextMenuAddToIpfsVideo, 'video', 'srcUrl', { wrapWithDirectory: true })
+    createAddToIpfsMenuItem(contextMenuAddToIpfsAudio, 'audio', 'srcUrl', { wrapWithDirectory: true })
+    createAddToIpfsMenuItem(contextMenuAddToIpfsLink, 'link', 'linkUrl', { wrapWithDirectory: true })
 
     browser.contextMenus.create({
       id: contextMenuCopyCanonicalAddress,
@@ -110,12 +101,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
     async update (changedTabId) {
       try {
         const canUpload = getState().peerCount > 0
-        const items = [ contextMenuAddToIpfsSelection,
-          contextMenuAddToIpfsRawCid,
-          contextMenuAddToIpfsKeepFilename,
-          contextMenuAddToIpfsLink
-        ]
-        for (let item of items) {
+        for (let item of apiMenuItems) {
           await browser.contextMenus.update(item, { enabled: canUpload })
         }
         if (changedTabId) {

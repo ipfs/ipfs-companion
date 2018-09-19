@@ -87,16 +87,20 @@
     "message": "Add Selected Text to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
   },
-  "contextMenu_AddToIpfsRawCid": {
-    "message": "Add This Object to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
+  "contextMenu_AddToIpfsImage": {
+    "message": "Add this Image to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsImage)"
   },
-  "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add This Object to IPFS (Keep Filename)",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  "contextMenu_AddToIpfsVideo": {
+    "message": "Add this Video to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsVideo)"
+  },
+  "contextMenu_AddToIpfsAudio": {
+    "message": "Add this Audio to IPFS",
+    "description": "An item in right-click context menu (contextMenu_AddToIpfsAudio)"
   },
   "contextMenu_AddToIpfsLink": {
-    "message": "Add This Link to IPFS",
+    "message": "Add Link Destination to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsLink)"
   },
   "notify_addonIssueTitle": {
