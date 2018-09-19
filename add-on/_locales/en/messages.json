@@ -100,7 +100,7 @@
     "description": "An item in right-click context menu (contextMenu_AddToIpfsAudio)"
   },
   "contextMenu_AddToIpfsLink": {
-    "message": "Add Link Destination to IPFS",
+    "message": "Add Linked Content to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsLink)"
   },
   "notify_addonIssueTitle": {
