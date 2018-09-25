@@ -7417,9 +7417,9 @@ ipfs-unixfs@^0.1.14, ipfs-unixfs@^0.1.15, ipfs-unixfs@~0.1.15:
   dependencies:
     protons "^1.0.0"
 
-"ipfs-webui@https://github.com/ipfs/webui/tarball/87d4d0d2d295d8813919bbc61e75e2cc57c33e82/webui.tar.gz":
-  version "0.0.0"
-  resolved "https://github.com/ipfs/webui/tarball/87d4d0d2d295d8813919bbc61e75e2cc57c33e82/webui.tar.gz#09b80152ea44114d7a3b8b015e4c195ec24409bd"
+"ipfs-webui@https://github.com/ipfs/webui/tarball/570d17a211af2bbc7974806c6b2db9bb8ffcd817/webui.tar.gz":
+  version "2.0.0"
+  resolved "https://github.com/ipfs/webui/tarball/570d17a211af2bbc7974806c6b2db9bb8ffcd817/webui.tar.gz#b626c170fca4ceefcbae4274966e019df7e564c5"
   dependencies:
     "@tableflip/react-dropdown" "^1.1.1"
     "@tableflip/react-inspector" "^2.3.0"

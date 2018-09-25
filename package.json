@@ -108,7 +108,7 @@
     "ipfs-css": "0.8.0",
     "ipfs-http-response": "0.1.4",
     "ipfs-postmsg-proxy": "3.1.1",
-    "ipfs-webui": "https://github.com/ipfs/webui/tarball/87d4d0d2d295d8813919bbc61e75e2cc57c33e82/webui.tar.gz",
+    "ipfs-webui": "https://github.com/ipfs/webui/tarball/570d17a211af2bbc7974806c6b2db9bb8ffcd817/webui.tar.gz",
     "is-ipfs": "0.4.2",
     "is-svg": "3.0.0",
     "lru-cache": "4.1.3",
