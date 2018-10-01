@@ -15,7 +15,6 @@ const contextSources = {
 
 async function findValueForContext (context, contextType) {
   if (context) {
-    console.log(context)
     if (contextType) {
       const field = contextSources[contextType]
       return context[field]
@@ -96,7 +95,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
         /* no support for 'icons' in Chrome
         icons: {
           '48': '/ui-kit/icons/stroke_cube.svg'
-        },*/
+        }, */
         onclick: (context) => onAddFromContext(context, contextType, ipfsAddOptions)
       })
     }
@@ -116,7 +115,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
         /* no support for 'icons' in Chrome
         icons: {
           '48': '/ui-kit/icons/stroke_copy.svg'
-        },*/
+        }, */
         onclick: (context) => handler(context, contextType)
       })
     }
@@ -125,9 +124,9 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
       createAddToIpfsMenuItem(parentId, contextMenuAddToIpfsKeepFilename, contextType, { wrapWithDirectory: true })
       createAddToIpfsMenuItem(parentId, contextMenuAddToIpfsRawCid, contextType, { wrapWithDirectory: false })
       createSeparator(parentId, 'separator-1', contextType)
+      createCopierMenuItem(parentId, contextMenuCopyAddressAtPublicGw, contextType, onCopyAddressAtPublicGw)
       createCopierMenuItem(parentId, contextMenuCopyCanonicalAddress, contextType, onCopyCanonicalAddress)
       createCopierMenuItem(parentId, contextMenuCopyRawCid, contextType, onCopyRawCid)
-      createCopierMenuItem(parentId, contextMenuCopyAddressAtPublicGw, contextType, onCopyAddressAtPublicGw)
     }
 
     /*

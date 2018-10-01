@@ -48,12 +48,12 @@ function createCopier (getState, getIpfs, notify) {
         const ipfs = getIpfs()
         const url = await findValueForContext(context, contextType)
         const rawIpfsAddress = trimHashAndSearch(safeIpfsPath(url))
-        const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true })).split('/')[2]
+        const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true, dhtt: '5s', dhtrc: 1 })).split('/')[2]
         copyTextToClipboard(directCid)
         notify('notify_copiedTitle', directCid)
       } catch (error) {
         console.error('Unable to resolve/copy direct CID:', error.message)
-        if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
+        if (notify) notify('notify_addonIssueTitle', 'notify_inlineErrorMsg', error.message)
       }
     },
 

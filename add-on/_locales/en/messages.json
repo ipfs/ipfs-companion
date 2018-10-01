@@ -68,7 +68,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copy Resolved CID",
+    "message": "Copy CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -112,11 +112,11 @@
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS (Keep Filename)",
+    "message": "Add to IPFS with Filename",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "contextMenu_AddToIpfsRawCid": {
-    "message": "Add to IPFS (Raw CID)",
+    "message": "Add to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsSelection": {

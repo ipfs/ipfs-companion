@@ -24,16 +24,16 @@ module.exports = function contextActions ({
   return html`
     <div class='fade-in pv1'>
   ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+    onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
+  })}
+  ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
     onClick: () => onCopy(contextMenuCopyRawCid)
-  })}
-  ${navItem({
-    text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-    onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${!isPinned ? (
     navItem({

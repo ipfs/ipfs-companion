@@ -263,8 +263,11 @@ module.exports = async function init () {
       const dataSrc = await findValueForContext(context, contextType)
       if (contextType === 'selection') {
         result = await ipfs.files.add(Buffer.from(dataSrc), options)
-      } else if (runtime.isFirefox) {
-        // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
+      } else {
+        // Enchanced addFromURL
+        // --------------------
+        // Initially, this was a workaround due to https://github.com/ipfs/ipfs-companion/issues/227
+        // but now we have additional rules about keeping file name, so we can't use valilla ipfs.addFromURL
         const fetchOptions = {
           cache: 'force-cache',
           referrer: context.pageUrl
@@ -279,13 +282,16 @@ module.exports = async function init () {
           reader.onerror = reject
           reader.readAsArrayBuffer(blob)
         })
+        const url = new URL(response.url)
+        // https://github.com/ipfs-shipyard/ipfs-companion/issues/599
+        const filename = url.pathname === '/'
+          ? url.hostname
+          : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
         const data = {
-          path: decodeURIComponent(new URL(response.url).pathname.split('/').pop()),
+          path: decodeURIComponent(filename),
           content: buffer
         }
         result = await ipfs.files.add(data, options)
-      } else {
-        result = await ipfs.util.addFromURL(dataSrc, options)
       }
     } catch (error) {
       console.error('Error in upload to IPFS context menu', error)
