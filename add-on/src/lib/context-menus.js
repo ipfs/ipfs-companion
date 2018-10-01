@@ -153,22 +153,30 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
     throw err
   }
 
+  // enabled only when ipfsContext is shown when API is up
+  const apiAndIpfsContextItems = new Set([...apiMenuItems].filter(i => ipfsContextItems.has(i)))
+  // state to avoid async tab lookups
+  let ipfsContext = false
+
   return {
     async update (changedTabId) {
       try {
-        const canUpload = getState().peerCount > 0
-        for (let item of apiMenuItems) {
-          await browser.contextMenus.update(item, { enabled: canUpload })
-        }
         if (changedTabId) {
           // recalculate tab-dependant menu items
           const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
           if (currentTab && currentTab.id === changedTabId) {
-            const ipfsContext = ipfsPathValidator.isIpfsPageActionsContext(currentTab.url)
-            for (let item of ipfsContextItems) {
-              browser.contextMenus.update(item, { enabled: ipfsContext })
-            }
+            ipfsContext = ipfsPathValidator.isIpfsPageActionsContext(currentTab.url)
           }
+        }
+        const ifApi = getState().peerCount > 0
+        for (let item of apiMenuItems) {
+          await browser.contextMenus.update(item, { enabled: ifApi })
+        }
+        for (let item of ipfsContextItems) {
+          await browser.contextMenus.update(item, { enabled: ipfsContext })
+        }
+        for (let item of apiAndIpfsContextItems) {
+          await browser.contextMenus.update(item, { enabled: (ifApi && ipfsContext) })
         }
       } catch (err) {
         console.log('[ipfs-companion] Error updating context menus', err)

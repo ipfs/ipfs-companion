@@ -100,6 +100,9 @@ module.exports = async function init () {
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
     browser.tabs.onUpdated.addListener(onUpdatedTab)
     browser.tabs.onActivated.addListener(onActivatedTab)
+    if (browser.windows) {
+      browser.windows.onFocusChanged.addListener(onWindowFocusChanged)
+    }
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
@@ -341,6 +344,15 @@ module.exports = async function init () {
 
   // Page-specific Actions
   // -------------------------------------------------------------------
+
+  async function onWindowFocusChanged (windowId) {
+    // Note: On some Linux window managers, WINDOW_ID_NONE will always be sent
+    // immediately preceding a switch from one browser window to another.
+    if (windowId !== browser.windows.WINDOW_ID_NONE) {
+      const currentTab = await browser.tabs.query({ active: true, windowId }).then(tabs => tabs[0])
+      await contextMenus.update(currentTab.id)
+    }
+  }
 
   async function onActivatedTab (activeInfo) {
     await contextMenus.update(activeInfo.tabId)

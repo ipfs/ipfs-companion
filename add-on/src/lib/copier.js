@@ -53,7 +53,17 @@ function createCopier (getState, getIpfs, notify) {
         notify('notify_copiedTitle', directCid)
       } catch (error) {
         console.error('Unable to resolve/copy direct CID:', error.message)
-        if (notify) notify('notify_addonIssueTitle', 'notify_inlineErrorMsg', error.message)
+        if (notify) {
+          const errMsg = error.toString()
+          if (errMsg.startsWith('Error: no link')) {
+            // Sharding support is limited:
+            // - https://github.com/ipfs/js-ipfs/issues/1279
+            // - https://github.com/ipfs/go-ipfs/issues/5270
+            notify('notify_addonIssueTitle', 'Unable to resolve CID within HAMT-sharded directory, sorry! Will be fixed soon.')
+          } else {
+            notify('notify_addonIssueTitle', 'notify_inlineErrorMsg', error.message)
+          }
+        }
       }
     },
 
