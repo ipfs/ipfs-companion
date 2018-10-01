@@ -112,7 +112,7 @@
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS with Filename",
+    "message": "Add to IPFS (Keep Filename)",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "contextMenu_AddToIpfsRawCid": {
