@@ -10687,9 +10687,9 @@ stream-each@^1.1.0:
     end-of-stream "^1.1.0"
     stream-shift "^1.0.0"
 
-stream-http@^2.7.2, stream-http@^2.8.3:
+stream-http@^2.7.2, stream-http@^2.8.3, "stream-http@https://github.com/jhiesey/stream-http/tarball/2a8467dd84da9ab93cb43ca6cf78a75fef07f282/stream-http.tar.gz":
   version "2.8.3"
-  resolved "https://registry.yarnpkg.com/stream-http/-/stream-http-2.8.3.tgz#b2d242469288a5a27ec4fe8933acf623de6514fc"
+  resolved "https://github.com/jhiesey/stream-http/tarball/2a8467dd84da9ab93cb43ca6cf78a75fef07f282/stream-http.tar.gz#6975289c60e4f2061fb6f544472357ffd13c9170"
   dependencies:
     builtin-status-codes "^3.0.0"
     inherits "^2.0.1"

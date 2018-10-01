@@ -57,6 +57,7 @@
   "private": true,
   "preferGlobal": false,
   "resolutions": {
+    "stream-http": "https://github.com/jhiesey/stream-http/tarball/2a8467dd84da9ab93cb43ca6cf78a75fef07f282/stream-http.tar.gz",
     "uglify-es": "npm:terser"
   },
   "devDependencies": {
