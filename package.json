@@ -20,6 +20,7 @@
     "build:copy:ui-kit:ipfs-css": "run-p build:copy:ui-kit:ipfs-css:*",
     "build:copy:ui-kit:ipfs-css:css": "shx mkdir -p add-on/ui-kit && shx cp node_modules/ipfs-css/ipfs.css add-on/ui-kit",
     "build:copy:ui-kit:ipfs-css:fonts": "shx mkdir -p add-on/ui-kit/fonts && shx cp node_modules/ipfs-css/fonts/* add-on/ui-kit/fonts",
+    "build:copy:ui-kit:ipfs-css:icons": "shx mkdir -p add-on/ui-kit/icons && shx cp node_modules/ipfs-css/icons/* add-on/ui-kit/icons",
     "build:copy:ui-kit:tachyons": "shx mkdir -p add-on/ui-kit && shx cp node_modules/tachyons/css/tachyons.css add-on/ui-kit",
     "build:js": "run-p build:js:*",
     "build:js:webpack": "webpack -p",

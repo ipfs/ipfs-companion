@@ -12,7 +12,7 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createRuntimeChecks = require('./runtime-checks')
-const { createContextMenus, findUrlForContext } = require('./context-menus')
+const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
@@ -55,13 +55,13 @@ module.exports = async function init () {
       }
     }
 
-    copier = createCopier(getState, notify)
+    copier = createCopier(getState, getIpfs, notify)
     dnslinkResolver = createDnslinkResolver(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-      onAddToIpfs: addFromContext,
-      onAddToIpfsKeepFilename: (info) => addFromContext(info, { wrapWithDirectory: true }),
+      onAddFromContext,
       onCopyCanonicalAddress: copier.copyCanonicalAddress,
+      onCopyRawCid: copier.copyRawCid,
       onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
@@ -100,6 +100,9 @@ module.exports = async function init () {
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
     browser.tabs.onUpdated.addListener(onUpdatedTab)
     browser.tabs.onActivated.addListener(onActivatedTab)
+    if (browser.windows) {
+      browser.windows.onFocusChanged.addListener(onWindowFocusChanged)
+    }
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
@@ -191,8 +194,9 @@ module.exports = async function init () {
 
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
-    copyCanonicalAddress: () => copier.copyCanonicalAddress(),
-    copyAddressAtPublicGw: () => copier.copyAddressAtPublicGw()
+    [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
+    [contextMenuCopyRawCid]: copier.copyRawCid,
+    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
   }
 
   function handleMessageFromBrowserAction (message) {
@@ -256,21 +260,24 @@ module.exports = async function init () {
   // Context Menu Uploader
   // -------------------------------------------------------------------
 
-  async function addFromContext (info, options) {
+  async function onAddFromContext (context, contextType, options) {
     let result
     try {
-      const srcUrl = await findUrlForContext(info)
-      if (info.selectionText) {
-        result = await ipfs.files.add(Buffer.from(info.selectionText), options)
-      } else if (runtime.isFirefox) {
-        // workaround due to https://github.com/ipfs/ipfs-companion/issues/227
+      const dataSrc = await findValueForContext(context, contextType)
+      if (contextType === 'selection') {
+        result = await ipfs.files.add(Buffer.from(dataSrc), options)
+      } else {
+        // Enchanced addFromURL
+        // --------------------
+        // Initially, this was a workaround due to https://github.com/ipfs/ipfs-companion/issues/227
+        // but now we have additional rules about keeping file name, so we can't use valilla ipfs.addFromURL
         const fetchOptions = {
           cache: 'force-cache',
-          referrer: info.pageUrl
+          referrer: context.pageUrl
         }
-        // console.log('addFromContext.info', info)
-        // console.log('addFromContext.fetchOptions', fetchOptions)
-        const response = await fetch(srcUrl, fetchOptions)
+        // console.log('onAddFromContext.context', context)
+        // console.log('onAddFromContext.fetchOptions', fetchOptions)
+        const response = await fetch(dataSrc, fetchOptions)
         const blob = await response.blob()
         const buffer = await new Promise((resolve, reject) => {
           const reader = new FileReader()
@@ -278,13 +285,16 @@ module.exports = async function init () {
           reader.onerror = reject
           reader.readAsArrayBuffer(blob)
         })
+        const url = new URL(response.url)
+        // https://github.com/ipfs-shipyard/ipfs-companion/issues/599
+        const filename = url.pathname === '/'
+          ? url.hostname
+          : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
         const data = {
-          path: decodeURIComponent(new URL(response.url).pathname.split('/').pop()),
+          path: decodeURIComponent(filename),
           content: buffer
         }
         result = await ipfs.files.add(data, options)
-      } else {
-        result = await ipfs.util.addFromURL(srcUrl, options)
       }
     } catch (error) {
       console.error('Error in upload to IPFS context menu', error)
@@ -334,6 +344,15 @@ module.exports = async function init () {
 
   // Page-specific Actions
   // -------------------------------------------------------------------
+
+  async function onWindowFocusChanged (windowId) {
+    // Note: On some Linux window managers, WINDOW_ID_NONE will always be sent
+    // immediately preceding a switch from one browser window to another.
+    if (windowId !== browser.windows.WINDOW_ID_NONE) {
+      const currentTab = await browser.tabs.query({ active: true, windowId }).then(tabs => tabs[0])
+      await contextMenus.update(currentTab.id)
+    }
+  }
 
   async function onActivatedTab (activeInfo) {
     await contextMenus.update(activeInfo.tabId)
