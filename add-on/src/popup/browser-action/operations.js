@@ -23,7 +23,7 @@ module.exports = function operations ({
     <div class="fade-in pv1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickUpload'),
-    bold: true,
+    addClass: 'b',
     disabled: !activeQuickUpload,
     onClick: onQuickUpload
   })}
