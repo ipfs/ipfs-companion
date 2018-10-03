@@ -6,6 +6,7 @@ module.exports = {
   sourceDir: 'add-on/',
   ignoreFiles: [
     'src/',
+    '*.map',
     'manifest.*.json'
   ],
   // Command options:
