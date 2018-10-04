@@ -16,7 +16,7 @@ async function initIpfsClient (opts) {
   }
 
   const instance = await client.init(opts)
-  await _reloadIpfsClientDependents()
+  _reloadIpfsClientDependents() // async (API is present)
   return instance
 }
 
@@ -26,9 +26,15 @@ async function destroyIpfsClient () {
       await client.destroy()
     } finally {
       client = null
-      await _reloadIpfsClientDependents()
+      await _reloadIpfsClientDependents() // sync (API stopped working)
     }
   }
+}
+
+function _isWebuiTab (url) {
+  const bundled = !url.startsWith('http') && url.includes('/webui/index.html#/')
+  const ipns = url.includes('/webui.ipfs.io/#/')
+  return bundled || ipns
 }
 
 async function _reloadIpfsClientDependents () {
@@ -37,7 +43,7 @@ async function _reloadIpfsClientDependents () {
     if (tabs) {
       tabs.forEach((tab) => {
         // detect bundled webui in any of open tabs
-        if (!tab.url.startsWith('http') && tab.url.includes('/webui/index.html#/')) {
+        if (_isWebuiTab(tab.url)) {
           browser.tabs.reload(tab.id)
           console.log('[ipfs-companion] reloading bundled webui')
         }
