@@ -23,7 +23,7 @@
     "build:copy:ui-kit:ipfs-css:fonts": "shx mkdir -p add-on/ui-kit/fonts && shx cp node_modules/ipfs-css/fonts/* add-on/ui-kit/fonts",
     "build:copy:ui-kit:ipfs-css:icons": "shx mkdir -p add-on/ui-kit/icons && shx cp node_modules/ipfs-css/icons/* add-on/ui-kit/icons",
     "build:copy:ui-kit:tachyons": "shx mkdir -p add-on/ui-kit && shx cp node_modules/tachyons/css/tachyons.css add-on/ui-kit",
-    "build:webui": "cross-env CID=QmQYAwCEy1wAxXwkQBzeA1L7RXjmm7Sk3T6mQAHvwTFxpj npm run build:webui:with-cid",
+    "build:webui": "cross-env CID=QmZqJ4k1cTbvKuySbR9gReGJjZbJpnmPvEWJs1Kgy4Ma7s npm run build:webui:with-cid",
     "build:webui:with-cid": "cross-env-shell \"shx test -d add-on/webui/ || (npm run build:webui:dir && (npm run build:webui:fetch-ipfs || npm run build:webui:fetch-http) && npm run build:webui:minimize)\"",
     "build:webui:dir": "shx mkdir -p add-on/webui",
     "build:webui:fetch-ipfs": "cross-env-shell \"ipfs get $CID -o add-on/webui/\"",
@@ -65,7 +65,7 @@
   "private": true,
   "preferGlobal": false,
   "resolutions": {
-    "stream-http": "https://github.com/jhiesey/stream-http/tarball/2a8467dd84da9ab93cb43ca6cf78a75fef07f282/stream-http.tar.gz",
+    "stream-http": "3.0.0",
     "uglify-es": "npm:terser"
   },
   "devDependencies": {
