@@ -28,7 +28,7 @@
     "build:webui:dir": "shx mkdir -p add-on/webui",
     "build:webui:fetch-ipfs": "cross-env-shell \"ipfs get $CID -o add-on/webui/\"",
     "build:webui:fetch-http": "cross-env-shell \"node scripts/fetch-webui-from-gateway.js $CID add-on/webui/\"",
-    "build:webui:minimize": "shx rm -rf add-on/webui/static/js/*.map && shx rm -rf add-on/webui/static/css/*.map",
+    "build:webui:minimize": "shx rm -rf add-on/webui/static/js/*.map && shx rm -rf add-on/webui/static/css/*.map && shx rm -rf add-on/webui/manifest.json",
     "build:js": "run-p build:js:*",
     "build:js:webpack": "webpack -p",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib add-on/dist/contentScripts/ add-on/dist/bundles/ipfsProxyContentScriptPayload.bundle.js",
