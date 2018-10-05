@@ -125,9 +125,8 @@ module.exports = (state, emitter) => {
 
   emitter.on('openWebUi', async () => {
     try {
-      const options = await browser.storage.local.get('ipfsApiUrl')
-      const apiUrl = options['ipfsApiUrl']
-      await browser.tabs.create({ url: apiUrl + '/webui/' })
+      // Open bundled version of WebUI
+      await browser.tabs.create({ url: '/webui/index.html' })
       window.close()
     } catch (error) {
       console.error(`Unable Open Web UI due to ${error}`)

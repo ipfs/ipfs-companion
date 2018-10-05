@@ -33,6 +33,7 @@ module.exports = function contextActions ({
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
+    disabled: !activePinControls,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
   ${!isPinned ? (
