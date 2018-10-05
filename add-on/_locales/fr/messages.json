@@ -8,7 +8,7 @@
         "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
     },
     "panel_headerActiveToggleTitle": {
-        "message": "Bouton principal: activer ou désactiver toutes les intégrations IPFS",
+        "message": "Interrupteur général: Suspendre toute intégration IPFS",
         "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
     },
     "panel_statusOffline": {
@@ -64,8 +64,12 @@
         "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
     },
     "panelCopy_currentIpfsAddress": {
-        "message": "Copier l’adresse canonique",
+        "message": "Copier le chemin IPFS",
         "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+    },
+    "panelCopy_copyRawCid": {
+        "message": "Copier le CID",
+        "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
     },
     "panel_copyCurrentPublicGwUrl": {
         "message": "Copier l'URL vers la passerelle publique",
@@ -83,17 +87,41 @@
         "message": "Ressource non IPFS",
         "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
     },
-    "contextMenu_AddToIpfsSelection": {
-        "message": "Ajouter la selection à IPFS",
-        "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+    "contextMenu_parentImage": {
+        "message": "Image sélectionnée",
+        "description": "An item in right-click context menu (contextMenu_parentImage)"
+    },
+    "contextMenu_parentVideo": {
+        "message": "Vidéo sélectionnée",
+        "description": "An item in right-click context menu (contextMenu_parentVideo)"
+    },
+    "contextMenu_parentAudio": {
+        "message": "Audio sélectionné",
+        "description": "An item in right-click context menu (contextMenu_parentAudio)"
+    },
+    "contextMenu_parentLink": {
+        "message": "Contenu lié",
+        "description": "An item in right-click context menu (contextMenu_parentLink)"
+    },
+    "contextMenu_parentText": {
+        "message": "Text sélectionné",
+        "description": "An item in right-click context menu (contextMenu_parentText)"
+    },
+    "contextMenu_parentPage": {
+        "message": "Cette page",
+        "description": "An item in right-click context menu (contextMenu_parentPage)"
+    },
+    "contextMenu_AddToIpfsKeepFilename": {
+        "message": "Ajouter à IPFS (garder le nom de fichier)",
+        "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
     },
     "contextMenu_AddToIpfsRawCid": {
         "message": "Ajouter à IPFS",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
     },
-    "contextMenu_AddToIpfsKeepFilename": {
-        "message": "Ajouter à IPFS (garder le nom de fichier)",
-        "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+    "contextMenu_AddToIpfsSelection": {
+        "message": "Ajouter le texte sélectionné à IPFS",
+        "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
     },
     "notify_addonIssueTitle": {
         "message": "Erreur de l'extension IPFS",
@@ -103,13 +131,9 @@
         "message": "Regarder la console du navigateur pour plus de détails",
         "description": "A message in system notification (notify_addonIssueMsg)"
     },
-    "notify_copiedPublicURLTitle": {
-        "message": "URL publique copiée",
-        "description": "A title of system notification (notify_copiedPublicURLTitle)"
-    },
-    "notify_copiedCanonicalAddressTitle": {
-        "message": "Adresse canonique copiée",
-        "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+    "notify_copiedTitle": {
+        "message": "Copié",
+        "description": "A title of system notification (notify_copiedTitle)"
     },
     "notify_pinnedIpfsResourceTitle": {
         "message": "Ressource IPFS épinglée",
@@ -456,7 +480,7 @@
         "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
     },
     "page_landingWelcome_title": {
-        "message": "IPFS Companion - Welcome!",
+        "message": "Compagnon IPFS - Bienvenu !",
         "description": "Page title (page_landingWelcome_title)"
     },
     "page_landingWelcome_logo_title": {
@@ -464,71 +488,71 @@
         "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
     },
     "page_landingWelcome_welcome_title": {
-        "message": "You are all set!",
+        "message": "Vous êtes prêt!",
         "description": "Ready message title (page_landingWelcome_welcome_title)"
     },
     "page_landingWelcome_welcome_peers": {
-        "message": "Right now your node is connected to <0>$1</0> peers.",
+        "message": "Votre nœud est actuellement connecté à <0>$1</0> pairs.",
         "description": "Ready message copy (page_landingWelcome_welcome_peers)"
     },
     "page_landingWelcome_welcome_discover": {
-        "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
+        "message": "Découvrez ce que vous <0>pouvez faire avec Compagnon </0> et plongez dans le web distribué avec IPFS!",
         "description": "Ready message copy (page_landingWelcome_welcome_discover)"
     },
     "page_landingWelcome_installSteps_title": {
-        "message": "Is your IPFS daemon running?",
+        "message": "Votre démon IPFS est-il en cours d'exécution?",
         "description": "Install steps title (page_landingWelcome_installSteps_title)"
     },
     "page_landingWelcome_installSteps_install": {
-        "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
+        "message": "Si vous n'avez pas encore installé IPFS merci de le faire <0> en suivant ces instructions </0>.",
         "description": "Install steps copy (page_landingWelcome_installSteps_install)"
     },
     "page_landingWelcome_installSteps_run": {
-        "message": "Then make sure to have an IPFS daemon running in your terminal:",
+        "message": "Ensuite, assurez-vous d'avoir un démon IPFS en cours d'exécution dans votre terminal:",
         "description": "Install steps run message (page_landingWelcome_installSteps_run)"
     },
     "page_landingWelcome_resources_title_new_ipfs": {
-        "message": "New to IPFS?",
+        "message": "Nouveau sur IPFS?",
         "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
     },
     "page_landingWelcome_resources_new_ipfs": {
-        "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
+        "message": "Lisez la <0>documentation</0> pour apprendre les <1>concepts</1> de base et travailler avec IPFS.",
         "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
     },
     "page_landingWelcome_resources_title_discover": {
-        "message": "Discover!",
+        "message": "Découvrir!",
         "description": "Resources title (page_landingWelcome_resources_title_discover)"
     },
     "page_landingWelcome_resources_discover": {
-        "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
+        "message": "Trouvez des <0>resources utiles</0> pour utiliser IPFS et <1>créer des choses</1> basées dessus.",
         "description": "Resources copy (page_landingWelcome_resources_discover)"
     },
     "page_landingWelcome_resources_title_got_questions": {
-        "message": "Got questions?",
+        "message": "Des questions?",
         "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
     },
     "page_landingWelcome_resources_got_questions": {
-        "message": "Visit the <0>Discussion and Support Forum</0>.",
+        "message": "Visitez le forum <0>Discussion et Support </0>.",
         "description": "Resources copy (page_landingWelcome_resources_got_questions)"
     },
     "page_landingWelcome_resources_title_want_to_help": {
-        "message": "Want to help?",
+        "message": "Vous souhaitez nous aider?",
         "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
     },
     "page_landingWelcome_resources_want_to_help": {
-        "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
+        "message": "Rejoignez la <0>communité IPFS</0>! Contribuez au <1>code</1>, à la <2>documentation</2>, aux<3>tranductions</3> ou en venant en <4>aide aux autres utilisateurs</4>.",
         "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
     },
     "page_landingWelcome_videos_alpha_demo": {
-        "message": "IPFS Alpha Demo",
+        "message": "Démo Alpha IPFS",
         "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
     },
     "page_landingWelcome_videos_permanent_web": {
-        "message": "The Permanent Web",
+        "message": "Le Web Permanent",
         "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
     },
     "page_landingWelcome_projects_title": {
-        "message": "Related Projects",
+        "message": "Projets en relation",
         "description": "Projects section title (page_landingWelcome_projects_title)"
     }
 }
