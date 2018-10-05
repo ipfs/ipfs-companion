@@ -8,7 +8,7 @@
         "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
     },
     "panel_headerActiveToggleTitle": {
-        "message": "Global toggle: activate or suspend all IPFS integrations",
+        "message": "Global toggle: Suspend all IPFS integrations",
         "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
     },
     "panel_statusOffline": {
@@ -64,8 +64,12 @@
         "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
     },
     "panelCopy_currentIpfsAddress": {
-        "message": "Copiar Endereço Canónico",
+        "message": "Copy IPFS Path",
         "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+    },
+    "panelCopy_copyRawCid": {
+        "message": "Copy CID",
+        "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
     },
     "panel_copyCurrentPublicGwUrl": {
         "message": "Copiar URL da Gateway Pública",
@@ -83,17 +87,41 @@
         "message": "Recurso não IPFS",
         "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
     },
-    "contextMenu_AddToIpfsSelection": {
-        "message": "Add selected text to IPFS",
-        "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+    "contextMenu_parentImage": {
+        "message": "Selected Image",
+        "description": "An item in right-click context menu (contextMenu_parentImage)"
+    },
+    "contextMenu_parentVideo": {
+        "message": "Selected Video",
+        "description": "An item in right-click context menu (contextMenu_parentVideo)"
+    },
+    "contextMenu_parentAudio": {
+        "message": "Selected Audio",
+        "description": "An item in right-click context menu (contextMenu_parentAudio)"
+    },
+    "contextMenu_parentLink": {
+        "message": "Linked Content",
+        "description": "An item in right-click context menu (contextMenu_parentLink)"
+    },
+    "contextMenu_parentText": {
+        "message": "Selected Text",
+        "description": "An item in right-click context menu (contextMenu_parentText)"
+    },
+    "contextMenu_parentPage": {
+        "message": "This Page",
+        "description": "An item in right-click context menu (contextMenu_parentPage)"
+    },
+    "contextMenu_AddToIpfsKeepFilename": {
+        "message": "Add to IPFS (Keep Filename)",
+        "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
     },
     "contextMenu_AddToIpfsRawCid": {
         "message": "Add to IPFS",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
     },
-    "contextMenu_AddToIpfsKeepFilename": {
-        "message": "Add to IPFS (Keep Filename)",
-        "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+    "contextMenu_AddToIpfsSelection": {
+        "message": "Add Selected Text to IPFS",
+        "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
     },
     "notify_addonIssueTitle": {
         "message": "Problema com a extensão IPFS",
@@ -103,13 +131,9 @@
         "message": "Veja a Browser Console para mais detalhes",
         "description": "A message in system notification (notify_addonIssueMsg)"
     },
-    "notify_copiedPublicURLTitle": {
-        "message": "URL Público Copiado",
-        "description": "A title of system notification (notify_copiedPublicURLTitle)"
-    },
-    "notify_copiedCanonicalAddressTitle": {
-        "message": "Endereço Canónico Copiado",
-        "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+    "notify_copiedTitle": {
+        "message": "Copied",
+        "description": "A title of system notification (notify_copiedTitle)"
     },
     "notify_pinnedIpfsResourceTitle": {
         "message": "Item IPFS fixado",

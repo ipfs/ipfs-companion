@@ -8,11 +8,11 @@
         "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
     },
     "panel_headerActiveToggleTitle": {
-        "message": "Global toggle: activate or suspend all IPFS integrations",
+        "message": "全局切换：暂停所有的IPFS整合",
         "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
     },
     "panel_statusOffline": {
-        "message": "offline",
+        "message": "离线",
         "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
     },
     "panel_statusGatewayAddress": {
@@ -32,11 +32,11 @@
         "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
     },
     "panel_statusSwarmPeersTitle": {
-        "message": "The number of other IPFS nodes you can connect to",
+        "message": "你可以连接的IPFS节点的数目",
         "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
     },
     "panel_quickUpload": {
-        "message": "快速上传",
+        "message": "通过IPFS分享文件",
         "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
     },
     "panel_openWebui": {
@@ -64,36 +64,64 @@
         "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
     },
     "panelCopy_currentIpfsAddress": {
-        "message": "复制规范地址",
+        "message": "Copy IPFS Path",
         "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+    },
+    "panelCopy_copyRawCid": {
+        "message": "Copy CID",
+        "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
     },
     "panel_copyCurrentPublicGwUrl": {
         "message": "复制公共网关网址",
         "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
     },
     "pageAction_titleIpfsAtPublicGateway": {
-        "message": "IPFS resource loaded via Public Gateway",
+        "message": "通过公共网关加载IPFS资源",
         "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
     },
     "pageAction_titleIpfsAtCustomGateway": {
-        "message": "IPFS resource loaded via Custom Gateway",
+        "message": "通过自定义网关加载IPFS资源",
         "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
     },
     "pageAction_titleNonIpfs": {
         "message": "非 IPFS 资源",
         "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
     },
-    "contextMenu_AddToIpfsSelection": {
-        "message": "Add selected text to IPFS",
-        "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+    "contextMenu_parentImage": {
+        "message": "Selected Image",
+        "description": "An item in right-click context menu (contextMenu_parentImage)"
+    },
+    "contextMenu_parentVideo": {
+        "message": "Selected Video",
+        "description": "An item in right-click context menu (contextMenu_parentVideo)"
+    },
+    "contextMenu_parentAudio": {
+        "message": "Selected Audio",
+        "description": "An item in right-click context menu (contextMenu_parentAudio)"
+    },
+    "contextMenu_parentLink": {
+        "message": "Linked Content",
+        "description": "An item in right-click context menu (contextMenu_parentLink)"
+    },
+    "contextMenu_parentText": {
+        "message": "Selected Text",
+        "description": "An item in right-click context menu (contextMenu_parentText)"
+    },
+    "contextMenu_parentPage": {
+        "message": "This Page",
+        "description": "An item in right-click context menu (contextMenu_parentPage)"
+    },
+    "contextMenu_AddToIpfsKeepFilename": {
+        "message": "添加到 IPFS（保持文件名）",
+        "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
     },
     "contextMenu_AddToIpfsRawCid": {
         "message": "添加到 IPFS",
         "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
     },
-    "contextMenu_AddToIpfsKeepFilename": {
-        "message": "添加到 IPFS（保持文件名）",
-        "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+    "contextMenu_AddToIpfsSelection": {
+        "message": "Add Selected Text to IPFS",
+        "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
     },
     "notify_addonIssueTitle": {
         "message": "IPFS 附加组件问题报告",
@@ -103,13 +131,9 @@
         "message": "具体细节请参阅“浏览器控制台”",
         "description": "A message in system notification (notify_addonIssueMsg)"
     },
-    "notify_copiedPublicURLTitle": {
-        "message": "已复制公共网关网址",
-        "description": "A title of system notification (notify_copiedPublicURLTitle)"
-    },
-    "notify_copiedCanonicalAddressTitle": {
-        "message": "已复制规范地址",
-        "description": "A title of system notification (notify_copiedCanonicalAddressTitle)"
+    "notify_copiedTitle": {
+        "message": "Copied",
+        "description": "A title of system notification (notify_copiedTitle)"
     },
     "notify_pinnedIpfsResourceTitle": {
         "message": "已固定 IPFS 资源",
@@ -156,7 +180,7 @@
         "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
     },
     "notify_inlineErrorMsg": {
-        "message": "$1 (press ctrl+shift+j for more details)",
+        "message": "$1（按下 ctrl+shift+j 组合键以了解更多细节）",
         "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
     },
     "notify_startIpfsNodeErrorTitle": {
@@ -168,7 +192,7 @@
         "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
     },
     "option_legend_readMore": {
-        "message": "Read more",
+        "message": "阅读更多",
         "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
     },
     "option_header_nodeType": {
@@ -180,11 +204,11 @@
         "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
     },
     "option_ipfsNodeType_external_description": {
-        "message": "External: connect to a node over HTTP API",
+        "message": "外部：通过HTTP的API来连接一个节点",
         "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
     },
     "option_ipfsNodeType_embedded_description": {
-        "message": "Embedded (experimental): run js-ipfs node in your browser (use only for development, read about its limitations under the link below)",
+        "message": "嵌入式（测试阶段）：在你的浏览器中运行js-ipfsj节点 （仅用于开发，从以下链接阅读其局限性）",
         "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
     },
     "option_ipfsNodeConfig_title": {
@@ -316,7 +340,7 @@
         "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
     },
     "option_detectIpfsPathHeader_description": {
-        "message": "Drop HTTP transport and load over IPFS if value is an IPFS path. Redirect of IPNS paths requires DNSLink support to be enabled as well.",
+        "message": "如果值是一个IPFS路径，就丢弃HTTP传输，转而使用IPFS加载。IPFS路径的转向也需要启用DNSLink 支持。",
         "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
     },
     "option_ipfsProxy_title": {
@@ -324,7 +348,7 @@
         "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
     },
     "option_ipfsProxy_description": {
-        "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
+        "message": "IPFS被添加到每一个页面的窗口对象。启用/禁用它对其暴露函数的访问。",
         "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
     },
     "option_ipfsProxy_link_manage_permissions": {
@@ -360,7 +384,7 @@
         "description": "Extension description in the Manifest file (manifest_extensionDescription)"
     },
     "quickUpload_subhead_peers": {
-        "message": "Connected to $1 peers",
+        "message": "已连接到$1个节点",
         "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
     },
     "quickUpload_pick_file_button": {
@@ -388,7 +412,7 @@
         "description": "Button on the share files page (quickUpload_options_show)"
     },
     "quickUpload_options_wrapWithDirectory": {
-        "message": "Wrap single files in a directory to preserve their filenames.",
+        "message": "将单个文件包装在文件夹中，来保留其文件名。",
         "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
     },
     "quickUpload_options_pinUpload": {
@@ -408,7 +432,7 @@
         "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
     },
     "page_proxyAcl_confirm_revoke": {
-        "message": "Revoke permission $1 for $2?",
+        "message": "是否撤销$2对$1的权限？",
         "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
     },
     "page_proxyAcl_confirm_revoke_all": {
@@ -424,15 +448,15 @@
         "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
     },
     "page_proxyAcl_allow_button_value": {
-        "message": "Allow",
+        "message": "允许",
         "description": "Button value for allow (page_proxyAcl_allow_button_value)"
     },
     "page_proxyAcl_deny_button_value": {
-        "message": "Deny",
+        "message": "拒绝",
         "description": "Button value for deny"
     },
     "page_proxyAcl_revoke_button_title": {
-        "message": "Revoke $1",
+        "message": "撤销$1",
         "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
     },
     "page_proxyAccessDialog_title": {
@@ -444,15 +468,15 @@
         "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
     },
     "page_proxyAcl_revoke_all_button_title": {
-        "message": "Revoke all permissions",
+        "message": "撤回所有许可",
         "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
     },
     "page_proxyAccessDialog_allowButton_text": {
-        "message": "Allow",
+        "message": "允许",
         "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
     },
     "page_proxyAccessDialog_denyButton_text": {
-        "message": "Deny",
+        "message": "拒绝",
         "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
     },
     "page_landingWelcome_title": {
@@ -464,11 +488,11 @@
         "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
     },
     "page_landingWelcome_welcome_title": {
-        "message": "You are all set!",
+        "message": "一切准备就绪！",
         "description": "Ready message title (page_landingWelcome_welcome_title)"
     },
     "page_landingWelcome_welcome_peers": {
-        "message": "Right now your node is connected to <0>$1</0> peers.",
+        "message": "当前您的节点已经连接上<0>$1</0>个节点",
         "description": "Ready message copy (page_landingWelcome_welcome_peers)"
     },
     "page_landingWelcome_welcome_discover": {
@@ -480,7 +504,7 @@
         "description": "Install steps title (page_landingWelcome_installSteps_title)"
     },
     "page_landingWelcome_installSteps_install": {
-        "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
+        "message": "如果您尚未安装IPFS，请根据<0>以下指示</0>安装。",
         "description": "Install steps copy (page_landingWelcome_installSteps_install)"
     },
     "page_landingWelcome_installSteps_run": {
@@ -488,11 +512,11 @@
         "description": "Install steps run message (page_landingWelcome_installSteps_run)"
     },
     "page_landingWelcome_resources_title_new_ipfs": {
-        "message": "New to IPFS?",
+        "message": "刚接触IPFS？",
         "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
     },
     "page_landingWelcome_resources_new_ipfs": {
-        "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
+        "message": "阅读<0>文档</0>来学习基本的<1>概念</1>，开始IPFS相关的工作",
         "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
     },
     "page_landingWelcome_resources_title_discover": {
@@ -504,19 +528,19 @@
         "description": "Resources copy (page_landingWelcome_resources_discover)"
     },
     "page_landingWelcome_resources_title_got_questions": {
-        "message": "Got questions?",
+        "message": "遇到问题？",
         "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
     },
     "page_landingWelcome_resources_got_questions": {
-        "message": "Visit the <0>Discussion and Support Forum</0>.",
+        "message": "浏览<0>讨论与支持论坛</0>。",
         "description": "Resources copy (page_landingWelcome_resources_got_questions)"
     },
     "page_landingWelcome_resources_title_want_to_help": {
-        "message": "Want to help?",
+        "message": "需要帮助？",
         "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
     },
     "page_landingWelcome_resources_want_to_help": {
-        "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
+        "message": "加入<0>IPFS社区</0>！贡献<1>代码</1>，<2>文档</2>，<3>翻译</3>或通过<4>给其他用户提供支持</4>来帮忙。",
         "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
     },
     "page_landingWelcome_videos_alpha_demo": {
@@ -524,11 +548,11 @@
         "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
     },
     "page_landingWelcome_videos_permanent_web": {
-        "message": "The Permanent Web",
+        "message": "永久性网络",
         "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
     },
     "page_landingWelcome_projects_title": {
-        "message": "Related Projects",
+        "message": "相关项目",
         "description": "Projects section title (page_landingWelcome_projects_title)"
     }
 }
