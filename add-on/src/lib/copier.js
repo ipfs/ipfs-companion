@@ -1,8 +1,8 @@
 'use strict'
 
 const browser = require('webextension-polyfill')
-const { safeIpfsPath } = require('./ipfs-path')
-const { findUrlForContext } = require('./context-menus')
+const { safeIpfsPath, trimHashAndSearch } = require('./ipfs-path')
+const { findValueForContext } = require('./context-menus')
 
 async function copyTextToClipboard (copyText) {
   const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
@@ -34,21 +34,45 @@ async function copyTextToClipboard (copyText) {
   }
 }
 
-function createCopier (getState, notify) {
+function createCopier (getState, getIpfs, notify) {
   return {
-    async copyCanonicalAddress (context) {
-      const url = await findUrlForContext(context)
+    async copyCanonicalAddress (context, contextType) {
+      const url = await findValueForContext(context, contextType)
       const rawIpfsAddress = safeIpfsPath(url)
       copyTextToClipboard(rawIpfsAddress)
-      notify('notify_copiedCanonicalAddressTitle', rawIpfsAddress)
+      notify('notify_copiedTitle', rawIpfsAddress)
     },
 
-    async copyAddressAtPublicGw (context) {
-      const url = await findUrlForContext(context)
+    async copyRawCid (context, contextType) {
+      try {
+        const ipfs = getIpfs()
+        const url = await findValueForContext(context, contextType)
+        const rawIpfsAddress = trimHashAndSearch(safeIpfsPath(url))
+        const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true, dhtt: '5s', dhtrc: 1 })).split('/')[2]
+        copyTextToClipboard(directCid)
+        notify('notify_copiedTitle', directCid)
+      } catch (error) {
+        console.error('Unable to resolve/copy direct CID:', error.message)
+        if (notify) {
+          const errMsg = error.toString()
+          if (errMsg.startsWith('Error: no link')) {
+            // Sharding support is limited:
+            // - https://github.com/ipfs/js-ipfs/issues/1279
+            // - https://github.com/ipfs/go-ipfs/issues/5270
+            notify('notify_addonIssueTitle', 'Unable to resolve CID within HAMT-sharded directory, sorry! Will be fixed soon.')
+          } else {
+            notify('notify_addonIssueTitle', 'notify_inlineErrorMsg', error.message)
+          }
+        }
+      }
+    },
+
+    async copyAddressAtPublicGw (context, contextType) {
+      const url = await findValueForContext(context, contextType)
       const state = getState()
       const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
       copyTextToClipboard(urlAtPubGw)
-      notify('notify_copiedPublicURLTitle', urlAtPubGw)
+      notify('notify_copiedTitle', urlAtPubGw)
     }
   }
 }

@@ -51,12 +51,18 @@ exports.storeMissingOptions = (read, defaults, storage) => {
 }
 
 function normalizeGatewayURL (url) {
+  if (typeof url === 'string') {
+    url = new URL(url)
+  }
   // https://github.com/ipfs/ipfs-companion/issues/328
-  return url
-    .replace('/localhost:', '/127.0.0.1:')
+  if (url.hostname.toLowerCase() === 'localhost') {
+    url.hostname = '127.0.0.1'
+  }
+  // Return string without trailing slash
+  return url.toString().replace(/\/$/, '')
 }
-
 exports.normalizeGatewayURL = normalizeGatewayURL
+exports.safeURL = (url) => new URL(normalizeGatewayURL(url))
 
 exports.migrateOptions = async (storage) => {
   // <= v2.4.4

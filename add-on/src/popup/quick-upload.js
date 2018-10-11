@@ -62,15 +62,6 @@ async function processFiles (state, emitter, files) {
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
     const uploadTab = await browser.tabs.getCurrent()
     let { streams, totalSize } = files2streams(files)
-    if (!browser.runtime.id.includes('@')) {
-      // we are in non-Firefox runtime (we know for a fact that Chrome puts no @ in id)
-      if (state.ipfsNodeType === 'external' && totalSize >= 134217728) {
-        // avoid crashing Chrome until the source of issue is fixed in js-ipfs-api
-        // - https://github.com/ipfs-shipyard/ipfs-companion/issues/464
-        // - https://github.com/ipfs/js-ipfs-api/issues/654
-        throw new Error('Unable to process payload bigger than 128MiB in Chrome. See: js-ipfs-api/issues/654')
-      }
-    }
     progressHandler(0, totalSize, state, emitter)
     emitter.emit('render')
     const wrapFlag = (state.wrapWithDirectory || streams.length > 1)

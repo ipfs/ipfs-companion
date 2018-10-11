@@ -95,7 +95,8 @@ const uiConfig = merge(commonConfig, {
     uploadPage: './add-on/src/popup/quick-upload.js',
     optionsPage: './add-on/src/options/options.js',
     proxyAclManagerPage: './add-on/src/pages/proxy-acl/index.js',
-    proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js'
+    proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js',
+    welcomePage: './add-on/src/landing-pages/welcome/index.js'
   },
   optimization: {
     splitChunks: {

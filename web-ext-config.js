@@ -7,6 +7,7 @@ module.exports = {
   ignoreFiles: [
     'src/',
     'libdweb/',
+    '*.map',
     'manifest.*.json'
   ],
   // Command options:

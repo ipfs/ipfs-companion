@@ -37,7 +37,9 @@ describe('modifyRequest.onBeforeRequest:', function () {
       dnslinkPolicy: false, // dnslink testi suite is in ipfs-request-dnslink.test.js
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
-      pubGwURLString: 'https://ipfs.io'
+      gwURL: new URL('http://127.0.0.1:8080'),
+      pubGwURLString: 'https://ipfs.io',
+      pubGwURL: new URL('https://ipfs.io')
     })
     const getState = () => state
     dnslinkResolver = createDnslinkResolver(getState)
@@ -265,6 +267,25 @@ describe('modifyRequest.onBeforeRequest:', function () {
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
       })
+    })
+  })
+
+  describe('request for IPFS Path with redirect to custom gateway at port 80', function () {
+    beforeEach(function () {
+      state.ipfsNodeType = 'external'
+      state.redirect = true
+    })
+    it('should work for HTTP GW without explicit port in URL', function () {
+      state.gwURLString = 'http://foo:80/'
+      state.gwURL = new URL(state.gwURLString)
+      const request = url2request('https://bar.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+    })
+    it('should work for HTTPS GW without explicit port in URL', function () {
+      state.gwURLString = 'https://foo:443/'
+      state.gwURL = new URL(state.gwURLString)
+      const request = url2request('https://bar.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
     })
   })
 

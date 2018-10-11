@@ -2,7 +2,8 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const { safeIpfsPath } = require('../../lib/ipfs-path')
+const { safeIpfsPath, trimHashAndSearch } = require('../../lib/ipfs-path')
+const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -55,13 +56,18 @@ module.exports = (state, emitter) => {
     }, 100)
   })
 
-  emitter.on('copyPublicGwAddr', async function copyCurrentPublicGwAddress () {
-    port.postMessage({ event: 'copyAddressAtPublicGw' })
-    window.close()
-  })
-
-  emitter.on('copyIpfsAddr', async function copyCurrentCanonicalAddress () {
-    port.postMessage({ event: 'copyCanonicalAddress' })
+  emitter.on('copy', function (copyAction) {
+    switch (copyAction) {
+      case contextMenuCopyCanonicalAddress:
+        port.postMessage({ event: contextMenuCopyCanonicalAddress })
+        break
+      case contextMenuCopyRawCid:
+        port.postMessage({ event: contextMenuCopyRawCid })
+        break
+      case contextMenuCopyAddressAtPublicGw:
+        port.postMessage({ event: contextMenuCopyAddressAtPublicGw })
+        break
+    }
     window.close()
   })
 
@@ -119,9 +125,8 @@ module.exports = (state, emitter) => {
 
   emitter.on('openWebUi', async () => {
     try {
-      const options = await browser.storage.local.get('ipfsApiUrl')
-      const apiUrl = options['ipfsApiUrl']
-      await browser.tabs.create({ url: apiUrl + '/webui/' })
+      // Open bundled version of WebUI
+      await browser.tabs.create({ url: '/webui/index.html' })
       window.close()
     } catch (error) {
       console.error(`Unable Open Web UI due to ${error}`)
@@ -245,7 +250,7 @@ module.exports = (state, emitter) => {
     if (state.isPinning || state.isUnPinning) return
     try {
       const currentPath = await resolveToPinPath(ipfs, status.currentTab.url)
-      const response = await ipfs.pin.ls(currentPath, { quiet: true })
+      const response = await ipfs.pin.ls(currentPath, { type: 'recursive', quiet: true })
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {
@@ -275,7 +280,7 @@ async function getIpfsApi () {
 
 async function resolveToPinPath (ipfs, url) {
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
-  url = url.split('#')[0].split('?')[0]
+  url = trimHashAndSearch(url)
   // https://github.com/ipfs/ipfs-companion/issues/303
   let path = safeIpfsPath(url)
   if (/^\/ipns/.test(path)) {

@@ -5,6 +5,7 @@ const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
 const PQueue = require('p-queue')
 const { offlinePeerCount } = require('./state')
+const { pathAtHttpGateway } = require('./ipfs-path')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
@@ -41,13 +42,19 @@ module.exports = function createDnslinkResolver (getState) {
         !requestUrl.startsWith(state.gwURLString)
     },
 
-    dnslinkRedirect (requestUrl, dnslink) {
-      const url = new URL(requestUrl)
+    dnslinkRedirect (url, dnslink) {
+      if (typeof url === 'string') {
+        url = new URL(url)
+      }
       if (dnslinkResolver.canRedirectToIpns(url, dnslink)) {
+        const state = getState()
         // redirect to IPNS and leave it up to the gateway
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
-        return { redirectUrl: dnslinkResolver.convertToIpnsUrl(url) }
+        const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
+        const gateway = state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString
+        // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
+        return { redirectUrl: pathAtHttpGateway(ipnsPath, gateway) }
       }
     },
 
@@ -129,6 +136,9 @@ module.exports = function createDnslinkResolver (getState) {
     },
 
     canRedirectToIpns (url, dnslink) {
+      if (typeof url === 'string') {
+        url = new URL(url)
+      }
       // Safety check: detect and skip gateway paths
       // Public gateways such as ipfs.io are often exposed under the same domain name.
       // We don't want dnslink to interfere with content-addressing redirects,
@@ -159,18 +169,14 @@ module.exports = function createDnslinkResolver (getState) {
       return false
     },
 
-    convertToIpnsUrl (originalUrl) {
-      // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
-      const fqdn = originalUrl.hostname
-      const state = getState()
-      const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
-      const url = new URL(originalUrl)
-      url.protocol = gwUrl.protocol
-      url.host = gwUrl.host
-      url.port = gwUrl.port
-      url.pathname = `/ipns/${fqdn}${url.pathname}`
-      return url.toString()
+    convertToIpnsPath (url) {
+      if (typeof url === 'string') {
+        url = new URL(url)
+      }
+      const fqdn = url.hostname
+      return `/ipns/${fqdn}${url.pathname}${url.search}${url.hash}`
     }
+
   }
 
   return dnslinkResolver

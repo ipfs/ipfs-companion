@@ -10,8 +10,7 @@ const operations = require('./operations')
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
 module.exports = function browserActionPage (state, emit) {
-  const onCopyIpfsAddr = () => emit('copyIpfsAddr')
-  const onCopyPublicGwAddr = () => emit('copyPublicGwAddr')
+  const onCopy = (copyAction) => emit('copy', copyAction)
   const onPin = () => emit('pin')
   const onUnPin = () => emit('unPin')
 
@@ -23,7 +22,7 @@ module.exports = function browserActionPage (state, emit) {
   const onToggleActive = () => emit('toggleActive')
 
   const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onOpenPrefs }, state)
-  const contextActionsProps = Object.assign({ onCopyIpfsAddr, onCopyPublicGwAddr, onPin, onUnPin }, state)
+  const contextActionsProps = Object.assign({ onCopy, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleRedirect }, state)
 
   return html`

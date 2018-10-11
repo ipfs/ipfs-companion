@@ -10,22 +10,34 @@ function safeIpfsPath (urlOrPath) {
   // better safe than sorry: https://github.com/ipfs/ipfs-companion/issues/303
   return decodeURIComponent(urlOrPath.replace(/^.*(\/ip(f|n)s\/.+)$/, '$1'))
 }
+exports.safeIpfsPath = safeIpfsPath
 
-function subdomainToIpfsPath (urlString) {
-  const url = new URL(urlString)
+function subdomainToIpfsPath (url) {
+  if (typeof url === 'string') {
+    url = new URL(url)
+  }
   const fqdn = url.hostname.split('.')
   const cid = fqdn[0]
   const protocol = fqdn[1]
   return `/${protocol}/${cid}${url.pathname}`
 }
 
-exports.safeIpfsPath = safeIpfsPath
-
-function urlAtPublicGw (path, pubGwUrl) {
-  return new URL(`${pubGwUrl}${path}`).toString().replace(/([^:]\/)\/+/g, '$1')
+function pathAtHttpGateway (path, gatewayUrl) {
+  // return URL without duplicated slashes
+  return trimDoubleSlashes(new URL(`${gatewayUrl}${path}`).toString())
 }
+exports.pathAtHttpGateway = pathAtHttpGateway
 
-exports.urlAtPublicGw = urlAtPublicGw
+function trimDoubleSlashes (urlString) {
+  return urlString.replace(/([^:]\/)\/+/g, '$1')
+}
+exports.trimDoubleSlashes = trimDoubleSlashes
+
+function trimHashAndSearch (urlString) {
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
+  return urlString.split('#')[0].split('?')[0]
+}
+exports.trimHashAndSearch = trimHashAndSearch
 
 function createIpfsPathValidator (getState, dnsLink) {
   const ipfsPathValidator = {

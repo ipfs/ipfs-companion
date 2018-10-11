@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const IsIpfs = require('is-ipfs')
-const { urlAtPublicGw } = require('./ipfs-path')
+const { safeIpfsPath, pathAtHttpGateway } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableErrors = new Set([
   // Firefox
@@ -142,6 +142,12 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
         if (onHeadersReceivedRedirect.has(request.requestId)) {
           onHeadersReceivedRedirect.delete(request.requestId)
+          if (state.dnslinkPolicy) {
+            const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
+            if (dnslinkRedirect) {
+              return dnslinkRedirect
+            }
+          }
           return redirectToGateway(request.url, state, dnslinkResolver)
         }
 
@@ -181,16 +187,15 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 // and our path-based onBeforeRequest heuristics were unable
                 // to identify request as IPFS one until onHeadersReceived revealed
                 // presence of x-ipfs-path header.
-                const url = new URL(request.url)
-                // convert to a path at public gateway
+                // Solution: convert header value to a path at public gateway
                 // (optional redirect to custom one can happen later)
-                url.protocol = state.pubGwURL.protocol
-                url.host = state.pubGwURL.host
-                url.pathname = xIpfsPath
+                const url = new URL(request.url)
+                const pathWithArgs = `${xIpfsPath}${url.search}${url.hash}`
+                const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString)
                 // redirect only if anything changed
-                if (url.toString() !== request.url) {
-                  console.log(`[ipfs-companion] onHeadersReceived: normalized ${request.url} to  ${url}`)
-                  return redirectToGateway(url, state, dnslinkResolver)
+                if (newUrl !== request.url) {
+                  console.log(`[ipfs-companion] onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
+                  return redirectToGateway(newUrl, state, dnslinkResolver)
                 }
               }
             }
@@ -277,16 +282,9 @@ function postNormalizationSkip (state, request) {
 
 function redirectToGateway (requestUrl, state, dnslinkResolver) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
-  const url = new URL(requestUrl)
-  if (state.dnslinkPolicy && dnslinkResolver.canRedirectToIpns(url)) {
-    // late dnslink in onHeadersReceived
-    return { redirectUrl: dnslinkResolver.convertToIpnsUrl(url) }
-  }
-  const gwUrl = state.ipfsNodeType === 'embedded' ? state.pubGwURL : state.gwURL
-  url.protocol = gwUrl.protocol
-  url.host = gwUrl.host
-  url.port = gwUrl.port
-  return { redirectUrl: url.toString() }
+  const gateway = state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString
+  const path = safeIpfsPath(requestUrl)
+  return { redirectUrl: pathAtHttpGateway(path, gateway) }
 }
 
 function isSafeToRedirect (request, runtime) {
@@ -340,7 +338,7 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   path = path.replace(/^#ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
   // console.log(`oldPath: '${oldPath}' new: '${path}'`)
   if (oldPath !== path && IsIpfs.path(path)) {
-    return { redirectUrl: urlAtPublicGw(path, pubGwUrl) }
+    return { redirectUrl: pathAtHttpGateway(path, pubGwUrl) }
   }
   return null
 }
@@ -371,6 +369,6 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
   if (IsIpfs.path(path)) {
     // replace search query with fake request to the public gateway
     // (will be redirected later, if needed)
-    return { redirectUrl: urlAtPublicGw(path, pubGwUrl) }
+    return { redirectUrl: pathAtHttpGateway(path, pubGwUrl) }
   }
 }
