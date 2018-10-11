@@ -90,7 +90,7 @@ function immutableIpfsPath (url, dnslinkResolver) {
     // js-ipfs does not implement  ipfs.name.resolve yet, so we only do dnslink lookup
     // const response = await ipfs.name.resolve(path, {recursive: true, nocache: false})
     const fqdn = path.split('/')[2]
-    const dnslinkRecord = dnslinkResolver.cachedDnslinkLookup(fqdn)
+    const dnslinkRecord = dnslinkResolver.readAndCacheDnslink(fqdn)
     if (!dnslinkRecord) {
       throw new Error(`Missing DNS TXT with dnslink for '${fqdn}'`)
     }

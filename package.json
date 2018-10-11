@@ -73,6 +73,7 @@
     "babel-eslint": "9.0.0",
     "babel-loader": "8.0.0",
     "babel-plugin-syntax-async-generators": "6.13.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
     "chai": "4.1.2",
     "cross-env": "5.2.0",
     "fakefile": "0.0.9",
