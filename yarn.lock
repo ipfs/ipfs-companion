@@ -6199,19 +6199,20 @@ ipfs-css@0.11.0:
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.11.0.tgz#5a54e52cff80346d499b2067077291e9f644d275"
   integrity sha512-9WHATIPct06Y6n8QvC0gR40M8BHaeChmJXcMYPfMNWZiL480apc303Pg+T1o0q1p+2i69jRYUh7etw1MHO7wOw==
 
-"ipfs-http-response@https://github.com/lidel/js-ipfs-http-response/tarball/475aead595fbbd77cfa4a248fc27474e8d604cb1/js-ipfs-http-response.tar.gz":
-  version "0.1.4"
-  resolved "https://github.com/lidel/js-ipfs-http-response/tarball/475aead595fbbd77cfa4a248fc27474e8d604cb1/js-ipfs-http-response.tar.gz#6ef6ffc602e3c6b21ac6e142d55b74bca1487d2b"
+ipfs-http-response@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ipfs-http-response/-/ipfs-http-response-0.2.0.tgz#2afeea7cfebbe07593c9ea02c25d26ae8219f4e8"
+  integrity sha512-E4atwGKflYNzynrJQ6VYguREiPWgQDmgXOwEsGOM8EdHHQWOkWsPNl6CGnlHGC2ESj0iUJx1CYMmXNmNzzOlGQ==
   dependencies:
     async "^2.6.0"
-    cids "^0.5.3"
+    cids "~0.5.5"
     debug "^3.1.0"
     file-type "^8.0.0"
     filesize "^3.6.1"
     get-stream "^3.0.0"
-    ipfs-unixfs "^0.1.14"
-    mime-types "^2.1.19"
-    multihashes "^0.4.13"
+    ipfs-unixfs "~0.1.14"
+    mime-types "^2.1.18"
+    multihashes "~0.4.13"
     promisify-es6 "^1.0.3"
     stream-to-blob "^1.0.1"
 
@@ -6371,7 +6372,7 @@ ipfs-unixfs-engine@~0.32.1:
   optionalDependencies:
     rabin "^1.6.0"
 
-ipfs-unixfs@^0.1.14, ipfs-unixfs@~0.1.15:
+ipfs-unixfs@^0.1.14, ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.15:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/ipfs-unixfs/-/ipfs-unixfs-0.1.15.tgz#c204da10019daa048eea465ce8f9c6f350ecef00"
   integrity sha512-fjtwBDsIlNags4btHIdAJtE02K4KqEMOhV9GEFVv1M2JO2STS23v2LAtX5qb1EOU5VrjtKlm/JIBH3XDRdAyGQ==
