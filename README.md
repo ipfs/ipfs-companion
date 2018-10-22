@@ -111,23 +111,23 @@ _(some are disabled by default, use Preferences screen to enable)_
 
 We recommend installing the stable release via your browser's add-on store.
 
-| Firefox                                                                                                                                                    | Chrome / Chromium                                                                                                                                                                              |
+| <img src="https://unpkg.com/@browser-logos/firefox@2.0.0/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/)  | <img src="https://unpkg.com/@browser-logos/chrome@1.0.4/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) / <img src="https://unpkg.com/@browser-logos/chromium@1.0.2/chromium_16x16.png" width="16" height="16"> [Chromium](https://www.chromium.org/Home) / <img src="https://unpkg.com/@browser-logos/brave@3.0.0/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Install From AMO](https://ipfs.io/ipfs/QmSX44XockQifmxE8Wdevkaa6vaqTXtGdH9t9aHWXZkuJq)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmPinSJKFYCMuTDh484dLk5Av4HpZRzBRR1KPv7TM7CBVF)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+| [![Install From AMO](https://ipfs.io/ipfs/QmSX44XockQifmxE8Wdevkaa6vaqTXtGdH9t9aHWXZkuJq)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmPinSJKFYCMuTDh484dLk5Av4HpZRzBRR1KPv7TM7CBVF)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
 **Note:** `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.  
-Make sure [IPFS is installed](https://ipfs.io/docs/getting-started/) on your computer.
+Make sure [IPFS is installed](https://docs.ipfs.io/introduction/usage/) on your computer.
 
 ### Beta Channel
 
 Developers and enthusiasts can opt-in for Beta-quality channel with hand-picked Dev Builds:
 
 - Beta for Firefox: [Self-hosted Signed Dev Build](https://ipfs.io/ipfs/QmR8W5wg8BuAyBTruHnHovfWRavwvidVh3qtyinXi6NnLa)
-- Beta for Chrome: [Dev Build at Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
+- Beta for Chromium-based browsers: [Dev Build at Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
 
 It is also possible to [grab the last successful build from `master`](https://ci.ipfs.team/job/IPFS%20Shipyard/job/ipfs-companion/job/master/lastSuccessfulBuild/),
 but these builds are not signed nor will automatically update:
-`.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chrome) or `about:debugging` (Firefox) for the purpose of quick smoke-testing.
+`.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium-based) or `about:debugging` (Firefox) for the purpose of quick smoke-testing.
 
 ## Development
 
@@ -138,7 +138,7 @@ To work on the extension you need to install it from source rather than from the
     ```bash
     npm install
     npm run build    
-    npm run bundle:generic # for Chrome dev
+    npm run bundle:generic # for Chromium-based dev
     # or
     npm run bundle:firefox # for Firefox dev (build default)
     ```
@@ -179,12 +179,6 @@ It is an alias for running `ci:build` script inside of immutable Docker image, w
 Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
 While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
 For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
-
-
-### Brave
-
-See [`docs/brave.md`](docs/brave.md)
-
 
 ## Contribute
 
