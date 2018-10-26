@@ -1,6 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const LRU = require('lru-cache')
 const IsIpfs = require('is-ipfs')
 const { safeIpfsPath, pathAtHttpGateway } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
@@ -17,14 +18,45 @@ const recoverableErrors = new Set([
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
 
+// Request modifier provides event listeners for the various stages of making an HTTP request
+// API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
 function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
-  // Request modifier provides event listeners for the various stages of making an HTTP request
-  // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
   const browser = runtime.browser
+
+  // Ignored requests are identified once and cached across all browser.webRequest hooks
+  const ignoredRequests = new LRU({ max: 128, maxAge: 1000 * 30 })
+  const ignore = (id) => ignoredRequests.set(id, true)
+  const isIgnored = (id) => ignoredRequests.get(id) !== undefined
+  const preNormalizationSkip = (state, request) => {
+    // skip requests to the custom gateway or API (otherwise we have too much recursion)
+    if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
+      ignore(request.requestId)
+    }
+    // skip websocket handshake (not supported by HTTP2IPFS gateways)
+    if (request.type === 'websocket') {
+      ignore(request.requestId)
+    }
+    // skip all local requests
+    if (request.url.startsWith('http://127.0.0.1') || request.url.startsWith('http://localhost') || request.url.startsWith('http://[::1]')) {
+      ignore(request.requestId)
+    }
+    return isIgnored(request.requestId)
+  }
+  const postNormalizationSkip = (state, request) => {
+    // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
+    if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
+      ignore(request.requestId)
+      // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
+    }
+    return isIgnored(request.requestId)
+  }
+
+  // Build RequestModifier
   return {
+    // browser.webRequest.onBeforeRequest
+    // This event is triggered when a request is about to be made, and before headers are available.
+    // This is a good place to listen if you want to cancel or redirect the request.
     onBeforeRequest (request) {
-      // This event is triggered when a request is about to be made, and before headers are available.
-      // This is a good place to listen if you want to cancel or redirect the request.
       const state = getState()
       // early sanity checks
       if (preNormalizationSkip(state, request)) {
@@ -70,14 +102,17 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       }
     },
 
+    // browser.webRequest.onBeforeSendHeaders
+    // This event is triggered before sending any HTTP data, but after all HTTP headers are available.
+    // This is a good place to listen if you want to modify HTTP request headers.
     onBeforeSendHeaders (request) {
-      // This event is triggered before sending any HTTP data, but after all HTTP headers are available.
-      // This is a good place to listen if you want to modify HTTP request headers.
       const state = getState()
-      // ignore websocket handshake (not supported by HTTP2IPFS gateways)
-      if (request.type === 'websocket') {
+
+      // Skip if IPFS integrations are inactive or request is marked as ignored
+      if (!state.active || isIgnored(request.requestId)) {
         return
       }
+
       if (request.url.startsWith(state.apiURLString)) {
         // There is a bug in go-ipfs related to keep-alive connections
         // that results in partial response for ipfs.files.add
@@ -132,12 +167,18 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       }
     },
 
+    // browser.webRequest.onHeadersReceived
+    // Fired when the HTTP response headers associated with a request have been received.
+    // You can use this event to modify HTTP response headers or do a very late redirect.
     onHeadersReceived (request) {
-      // Fired when the HTTP response headers associated with a request have been received.
-      // You can use this event to modify HTTP response headers or do a very late redirect.
       const state = getState()
 
-      if (state.active && state.redirect) {
+      // Skip if IPFS integrations are inactive or request is marked as ignored
+      if (!state.active || isIgnored(request.requestId)) {
+        return
+      }
+
+      if (state.redirect) {
         // Late redirect as a workaround for edge cases such as:
         // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
         if (onHeadersReceivedRedirect.has(request.requestId)) {
@@ -204,41 +245,45 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       }
     },
 
+    // browser.webRequest.onErrorOccurred
+    // Fired when a request could not be processed due to an error:
+    // for example, a lack of Internet connectivity.
     async onErrorOccurred (request) {
-      // Fired when a request could not be processed due to an error:
-      // for example, a lack of Internet connectivity.
       const state = getState()
 
-      if (state.active) {
-        // console.log('onErrorOccurred:' + request.error)
-        // console.log('onErrorOccurred', request)
-        // Check if error is final and can be recovered via DNSLink
-        const recoverableViaDnslink =
-          state.dnslinkPolicy &&
-          request.type === 'main_frame' &&
-          recoverableErrors.has(request.error)
-        if (recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)) {
-          // Explicit call to ignore global DNSLink policy and force DNS TXT lookup
-          const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
-          const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
-          // We can't redirect in onErrorOccurred, so if DNSLink is present
-          // recover by opening IPNS version in a new tab
-          // TODO: add tests and demo
-          if (dnslinkRedirect) {
-            console.log(`[ipfs-companion] onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
-            const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
-            await browser.tabs.create({
-              active: true,
-              openerTabId: currentTabId,
-              url: dnslinkRedirect.redirectUrl
-            })
-          }
-        }
+      // Skip if IPFS integrations are inactive or request is marked as ignored
+      if (!state.active || isIgnored(request.requestId)) {
+        return
+      }
 
-        // Cleanup after https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-        if (onHeadersReceivedRedirect.has(request.requestId)) {
-          onHeadersReceivedRedirect.delete(request.requestId)
+      // console.log('onErrorOccurred:' + request.error)
+      // console.log('onErrorOccurred', request)
+      // Check if error is final and can be recovered via DNSLink
+      const recoverableViaDnslink =
+        state.dnslinkPolicy &&
+        request.type === 'main_frame' &&
+        recoverableErrors.has(request.error)
+      if (recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)) {
+        // Explicit call to ignore global DNSLink policy and force DNS TXT lookup
+        const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
+        const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
+        // We can't redirect in onErrorOccurred, so if DNSLink is present
+        // recover by opening IPNS version in a new tab
+        // TODO: add tests and demo
+        if (dnslinkRedirect) {
+          console.log(`[ipfs-companion] onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
+          const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
+          await browser.tabs.create({
+            active: true,
+            openerTabId: currentTabId,
+            url: dnslinkRedirect.redirectUrl
+          })
         }
+      }
+
+      // Cleanup after https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+      if (onHeadersReceivedRedirect.has(request.requestId)) {
+        onHeadersReceivedRedirect.delete(request.requestId)
       }
     }
 
@@ -248,37 +293,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
 exports.onHeadersReceivedRedirect = onHeadersReceivedRedirect
-
-// types of requests to be skipped before any normalization happens
-function preNormalizationSkip (state, request) {
-  // skip requests to the custom gateway or API (otherwise we have too much recursion)
-  if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
-    return true
-  }
-
-  // skip websocket handshake (not supported by HTTP2IPFS gateways)
-  if (request.type === 'websocket') {
-    return true
-  }
-
-  // skip all local requests
-  if (request.url.startsWith('http://127.0.0.1:') || request.url.startsWith('http://localhost:') || request.url.startsWith('http://[::1]:')) {
-    return true
-  }
-
-  return false
-}
-
-// types of requests to be skipped after expensive normalization happens
-function postNormalizationSkip (state, request) {
-  // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
-  if (state.ipfsNodeType === 'embedded' && request.url.startsWith(state.pubGwURLString)) {
-    return true
-    // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
-  }
-
-  return false
-}
 
 function redirectToGateway (requestUrl, state, dnslinkResolver) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
