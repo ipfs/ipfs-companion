@@ -1,10 +1,10 @@
 {
   "browserAction_title": {
-    "message": "IPFS Companion",
+    "message": "IPFS 同伴",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS Companion",
+    "message": "IPFS 同伴",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
@@ -12,11 +12,11 @@
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
-    "message": "Offline",
+    "message": "離線",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
-    "message": "Gateway",
+    "message": "閘道器",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusApiAddress": {
@@ -24,103 +24,103 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusGatewayVersion": {
-    "message": "Versjon",
+    "message": "版本",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
-    "message": "Peers",
+    "message": "用戶群",
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "Antall andre IPFS noder du kan koble til",
+    "message": "您可以連接的 IPFS 節點數",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
-    "message": "Del filer via IPFS",
+    "message": "通過 IPFS 分享檔案",
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
-    "message": "Åpne WebUI",
+    "message": "開啟 WebUI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
-    "message": "Åpne preferanser for nettleserutvidelse",
+    "message": "開啟瀏覽器擴充功能選項",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_switchToCustomGateway": {
-    "message": "Bytt til custom gateway",
+    "message": "切換至自訂閘道器",
     "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
   },
   "panel_switchToPublicGateway": {
-    "message": "Bytt til offentlig gateway",
+    "message": "切換至公共閘道器",
     "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS ressurs",
+    "message": "固定 IPFS 資源",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_unpinCurrentIpfsAddress": {
-    "message": "Unpin IPFS ressurs",
+    "message": "解除固定 IPFS 資源",
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Kopier IPFS sti",
+    "message": "複製 IPFS 路徑",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Kopier CID",
+    "message": "複製 CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Kopier offentlig Gateway URL",
+    "message": "複製公共閘道器網址",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "IPFS ressurs lastet via Public Gateway",
+    "message": "通過公共閘道器載入 IPFS 資源",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS ressurs lastet via Custom Gateway",
+    "message": "通過自訂閘道器載入 IPFS 資源",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Ikke-IPFS ressurs",
+    "message": "非 IPFS 資源",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Valgt Bilde",
+    "message": "Selected Image",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Valgt Video",
+    "message": "Selected Video",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Valgt Lyd",
+    "message": "Selected Audio",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Koblet Innhold",
+    "message": "Linked Content",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Valgt Tekst",
+    "message": "Selected Text",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "Denne siden",
+    "message": "This Page",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Legg til i IPFS (Behold filnavn)",
+    "message": "Add to IPFS (Keep Filename)",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "contextMenu_AddToIpfsRawCid": {
-    "message": "Legg til i IPFS",
+    "message": "添加至 IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsSelection": {
-    "message": "Legg valgt tekst til IPFS",
+    "message": "Add Selected Text to IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -128,31 +128,31 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Se nettleserkonsoll for flere detaljer",
+    "message": "See Browser Console for more details",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Kopiert",
+    "message": "已複製",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS ressurs er nå pinned",
+    "message": "IPFS 資源已固定",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Fjernet IPFS Pin",
+    "message": "移除 IPFS 固定",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Error while pinning IPFS Resource",
+    "message": "固定 IPFS 資源時錯誤",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Error while removing IPFS Pin",
+    "message": "移除 IPFS 固定時錯誤",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API er Online",
+    "message": "IPFS API 上線",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
@@ -160,19 +160,19 @@
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS API er offline",
+    "message": "IPFS API 離線",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatisk Modus: Public Gateway vil bli brukt som reserveløsning",
+    "message": "Automatic Mode: Public Gateway will be used as a fallback",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
-    "message": "Kunne ikke laste opp via IPFS API",
+    "message": "無法通過 IPFS API 上傳",
     "description": "A title of system notification (notify_uploadErrorTitle)"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
-    "message": "Prøv å deaktivere sporingsbeskyttelse (trykk ctrl+shift+j for mer informasjon)",
+    "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)",
     "description": "(notify_uploadTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -180,31 +180,31 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1 (trykk ctrl+shift+j for flere detaljer)",
+    "message": "$1 (press ctrl+shift+j for more details)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Kunne ikke starte IPFS node",
+    "message": "Failed to start IPFS node",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Kunne ikke stoppe IPFS node",
+    "message": "Failed to stop IPFS node",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_legend_readMore" : {
-    "message": "Les mer",
+    "message": "Read more",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType" : {
-    "message": "IPFS Node",
+    "message": "IPFS 節點",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS Node Type",
+    "message": "IPFS 節點類型",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Ekstern: koble til en node over HTTP API",
+    "message": "External: connect to a node over HTTP API",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
@@ -212,7 +212,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "IPFS 節點設定",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
@@ -220,7 +220,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "Ekstern",
+    "message": "External",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
@@ -228,7 +228,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_header_gateways": {
-    "message": "Gatewayer",
+    "message": "閘道器群",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
@@ -240,7 +240,7 @@
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_useCustomGateway_title": {
-    "message": "Bruk tilpasset Gateway",
+    "message": "使用自訂閘道器",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
@@ -248,7 +248,7 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Default Public Gateway",
+    "message": "預設公共閘道器",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
@@ -260,11 +260,11 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "IPFS API 網址",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: dette er hvor /webui bor",
+    "message": "Hint: this is where /webui lives",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -272,11 +272,11 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Hvor ofte peer telling er oppdatert (i millisekunder)",
+    "message": "用戶數更新頻率 (毫秒)",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Automatisk modus",
+    "message": "自動模式",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
@@ -284,7 +284,7 @@
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_experiments": {
-    "message": "Eksperimenter",
+    "message": "Experiments",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experiments_warning": {
@@ -292,11 +292,11 @@
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_displayNotifications_title": {
-    "message": "Aktiver varsler",
+    "message": "Enable Notifications",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Viser systemvarsler når API-tilstanden endres, en link kopieres, etc",
+    "message": "Displays system notifications when API state changes, a link is copied etc",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
@@ -316,7 +316,7 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Støtte",
+    "message": "DNSLink 支援",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
@@ -324,15 +324,15 @@
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Av",
+    "message": "關閉",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "HTTP 請求後檢查",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "HTTP 請求前檢查",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -352,11 +352,11 @@
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Administrer tillatelser",
+    "message": "管理權限",
     "description": "Link text for managing permissions"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Forhåndslast Opplastninger",
+    "message": "Preload Uploads",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
@@ -364,7 +364,7 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Tilbakestill alt",
+    "message": "全部重置",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
@@ -372,43 +372,43 @@
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
-    "message": "IPFS Companion",
+    "message": "IPFS 同伴",
     "description": "Extension name in the Manifest file (manifest_extensionName)"
   },
   "manifest_shortExtensionName": {
-    "message": "IPFS Companion",
+    "message": "IPFS 同伴",
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Nettleserutvidelse som forenkler tilgangen til IPFS ressurser",
+    "message": "Browser extension that simplifies access to IPFS resources",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers": {
-    "message": "Tilkoblet $1 peers",
+    "message": "Connected to $1 peers",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
   },
   "quickUpload_pick_file_button": {
-    "message": "Velg en fil",
+    "message": "Pick a file",
     "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
   },
   "quickUpload_or": {
-    "message": "eller",
+    "message": "或",
     "description": "seperates the pick a file button from the drop message (quickUpload_or)"
   },
   "quickUpload_drop_it_here": {
-    "message": "Slipp den her for å dele",
+    "message": "drop it here to share",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
   "quickUpload_state_uploading": {
-    "message": "Opplasting pågår..",
+    "message": "正在上傳中..",
     "description": "Status label on the share files page (quickUpload_state_uploading)"
   },
   "quickUpload_state_buffering": {
-    "message": "(buffering, vennligst vent)",
+    "message": "(正在緩衝中, 請稍候)",
     "description": "Status label on the share files page (quickUpload_state_buffering)"
   },
   "quickUpload_options_show": {
-    "message": "Opplastingsalternativer",
+    "message": "上傳選項",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_wrapWithDirectory": {
@@ -420,127 +420,127 @@
     "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
   },
   "page_proxyAcl_title": {
-    "message": "Administrer tillatelser",
+    "message": "Manage Permissions",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "Se, endre og tilbakekall tildelte tilgangsrettigheter til din IPFS forekomst.",
+    "message": "View, change and revoke granted access rights to your IPFS instance.",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "Ingen tillatelser gitt.",
+    "message": "No permissions granted.",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Tilbakekall tillatelse $1 for $2?",
+    "message": "Revoke permission $1 for $2?",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Tilbakekall alle tillatelser for $1?",
+    "message": "Revoke all permissions for $1?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Klikk for å tillate",
+    "message": "Click to allow",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Klikk for å nekte",
+    "message": "Click to deny",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Tillat",
+    "message": "允許",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Nekte",
+    "message": "拒絕",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Tilbakekall $1",
+    "message": "Revoke $1",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Tillat $1 å få tilgang til IPFS.$2?",
+    "message": "Allow $1 to access ipfs.$2?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Anvend denne avgjørelsen til alle tillatelser i dette omfanget",
+    "message": "Apply this decision to all permissions in this scope",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Tilbakekall alle tillatelser",
+    "message": "Revoke all permissions",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Tillat",
+    "message": "允許",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Nekte",
+    "message": "拒絕",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Velkommen!",
+    "message": "IPFS Companion - Welcome!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
-    "message": "IPFS Companion",
+    "message": "IPFS 同伴",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_title": {
-    "message": "Du er klar!",
+    "message": "You are all set!",
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Akkurat nå er din node tilkoblet <0>$1</0> peers.",
+    "message": "Right now your node is connected to <0>$1</0> peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
-    "message": "Oppdag hva du <0>kan gjøre med Companion</0> og dykk inn i det distribuerte nettet med IPFS!",
+    "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_title": {
-    "message": "Kjører din IPFS daemon?",
+    "message": "Is your IPFS daemon running?",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
   "page_landingWelcome_installSteps_install": {
-    "message": "Hvis du ikke har installert IPFS, vennligst gjør det <0>med disse instruksjonene</0>.",
+    "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
     "description": "Install steps copy (page_landingWelcome_installSteps_install)"
   },
   "page_landingWelcome_installSteps_run": {
-    "message": "Deretter må du sørge for at en IPFS daemon kjører i terminalen din:",
+    "message": "Then make sure to have an IPFS daemon running in your terminal:",
     "description": "Install steps run message (page_landingWelcome_installSteps_run)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Ny på IPFS?",
+    "message": "New to IPFS?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
-    "message": "Les <0>dokumentasjonen </0> for å lære om de grunnleggende <1>konseptene</1>, og jobbe med IPFS",
+    "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
   },
   "page_landingWelcome_resources_title_discover": {
-    "message": "Utforsk!",
+    "message": "Discover!",
     "description": "Resources title (page_landingWelcome_resources_title_discover)"
   },
   "page_landingWelcome_resources_discover": {
-    "message": "Finn <0>nyttige ressurser</0> for å bruke IPFS, og <1>bygge ting</1>på toppen av det.",
+    "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
-    "message": "Har du spørsmål?",
+    "message": "遇到問題?",
     "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
   },
   "page_landingWelcome_resources_got_questions": {
-    "message": "Besøk <0>diskusjons- og supportforumet</0>.",
+    "message": "Visit the <0>Discussion and Support Forum</0>.",
     "description": "Resources copy (page_landingWelcome_resources_got_questions)"
   },
   "page_landingWelcome_resources_title_want_to_help": {
-    "message": "Ønsker du å hjelpe til?",
+    "message": "需要幫助?",
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
-    "message": "Bli med i <0>IPFS-fellesskapet</0>! Bidra med <1>kode</1>, <2>dokumentasjon</2>, <3>oversettelser</3> eller hjelp ved å <4>støtte andre brukere</4>.",
+    "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
   "page_landingWelcome_videos_alpha_demo": {
@@ -548,11 +548,11 @@
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
-    "message": "Det permanente nettet",
+    "message": "The Permanent Web",
     "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Relaterte prosjekter",
+    "message": "Related Projects",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }
