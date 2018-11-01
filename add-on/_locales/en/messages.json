@@ -40,7 +40,7 @@
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
-    "message": "Open WebUI",
+    "message": "Open Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
@@ -264,7 +264,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where /webui lives",
+    "message": "Hint: this is where /api/v0/config lives",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
