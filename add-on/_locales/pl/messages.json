@@ -40,7 +40,7 @@
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
-    "message": "Otwórz WebUI",
+    "message": "Otwórz Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
@@ -264,7 +264,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Wskazówka: adres który udostępnia /webui",
+    "message": "Hint: this is where /api/v0/config lives",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -516,7 +516,7 @@
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
-    "message": "Przeczytaj <0>dokumentację</0>, aby zapoznać się z podstawową  <1>terminologią</1> i operacjami na IPFS.",
+    "message": "Przeczytaj <0>dokumentację</0> i zapoznaj się z podstawową  <1>terminologią</1> oraz pracą z IPFS.",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
   },
   "page_landingWelcome_resources_title_discover": {
@@ -540,15 +540,15 @@
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
-    "message": "Dołącz do <0>Społeczności IPFS</0>! Ulepszaj <1>kod</1>, <2>dokumentację</2>, <3>tłumaczenia</3> lub pomagaj <4>odpowiadając na pytania i problemy</4> innych użytkowników.",
+    "message": "Dołącz do <0>społeczności IPFS</0>! Ulepszaj <1>kod</1>, <2>dokumentację</2>, <3>tłumaczenia</3> lub pomagaj <4>odpowiadając na pytania i problemy</4> innych użytkowników.",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
   "page_landingWelcome_videos_alpha_demo": {
-    "message": "IPFS Alpha Demo [ENG]",
+    "message": "IPFS Alpha Demo (ang.)",
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
-    "message": "The Permanent Web [ENG]",
+    "message": "The Permanent Web (ang.)",
     "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
   },
   "page_landingWelcome_projects_title": {

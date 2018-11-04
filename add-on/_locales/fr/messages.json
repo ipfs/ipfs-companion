@@ -40,7 +40,7 @@
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
-    "message": "Ouvrir l'interface web",
+    "message": "Ouvrir l'interface utilisateur Web",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
@@ -264,7 +264,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Astuce: c'est ici que vit le /webui",
+    "message": "Indice: c'est où se trouve /api/v0/config ",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {

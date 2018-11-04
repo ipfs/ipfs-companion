@@ -40,7 +40,7 @@
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
-    "message": "Open web interface",
+    "message": "Open Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openPreferences": {
@@ -64,11 +64,11 @@
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Path",
+    "message": "Kopieer IPFS pad",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copy CID",
+    "message": "Kopieer CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -88,27 +88,27 @@
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Selected Image",
+    "message": "Geselecteerde afbeelding",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Selected Video",
+    "message": "Geselecteerde video",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Selected Audio",
+    "message": "Geselecteerd geluidsfragment",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Linked Content",
+    "message": "Verwezen inhoud",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Selected Text",
+    "message": "Geselecteerde tekst",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "This Page",
+    "message": "Deze pagina",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
@@ -120,7 +120,7 @@
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsSelection": {
-    "message": "Add Selected Text to IPFS",
+    "message": "Voeg de geselecteerde tekst toe aan IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -132,7 +132,7 @@
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Copied",
+    "message": "Gekopieerd",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
@@ -264,7 +264,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Tip: hier leeft /webui",
+    "message": "Hint: this is where /api/v0/config lives",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
