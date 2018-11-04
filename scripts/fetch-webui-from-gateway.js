@@ -9,8 +9,11 @@ const cid = process.argv[2]
 const destination = process.argv[3]
 
 // pick random preloader
-const no = Math.round(Math.random()) // 0 or 1
-const url = 'https://node' + no + '.preload.ipfs.io/api/v0/get?arg=' + cid + '&archive=true&compress=true'
+// const no = Math.round(Math.random()) // 0 or 1
+// const url = 'https://node' + no + '.preload.ipfs.io/api/v0/get?arg=' + cid + '&archive=true&compress=true'
+
+// use public gw
+const url = 'https://ipfs.io/api/v0/get?arg=' + cid + '&archive=true&compress=true'
 
 console.log('Fallback to HTTP GET from: ' + url)
 
