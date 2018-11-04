@@ -8858,24 +8858,9 @@ multiaddr-to-uri@^4.0.0:
   dependencies:
     multiaddr "^5.0.0"
 
-multiaddr@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-4.0.0.tgz#70a8857c4f737350bc2c56914a70f1263889db33"
-  integrity sha512-zUatrOCfBd/tJNOSoJ10d2EI2FDXB9PyPZhqUMdXE9mOyR3C+HLuOjga2Ga/eChwvEHIpTYRMoIKF2Nv7af2qQ==
-  dependencies:
-    bs58 "^4.0.1"
-    class-is "^1.1.0"
-    ip "^1.1.5"
-    ip-address "^5.8.9"
-    lodash.filter "^4.6.0"
-    lodash.map "^4.6.0"
-    varint "^5.0.0"
-    xtend "^4.0.1"
-
-multiaddr@^5.0.0:
+multiaddr@^4.0.0, multiaddr@^5.0.0, "multiaddr@https://github.com/multiformats/js-multiaddr/tarball/9238d0d4aa57de52475e3776c30dbb9dce85fba5/js-multiaddr.tar.gz":
   version "5.0.0"
-  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-5.0.0.tgz#c8d7492d8506de470610f6c1adb82af9a69d6748"
-  integrity sha512-IMEo+iCv53MT8c/6SQWbJpJUEENTYr6qp7o635BKJLQG2nkxOIO9LSEFhF5e56Az+DkmI6HGAAjp69AT7Sjulw==
+  resolved "https://github.com/multiformats/js-multiaddr/tarball/9238d0d4aa57de52475e3776c30dbb9dce85fba5/js-multiaddr.tar.gz#d31482d1a13495c8b9fff0de044dfb9fdd53b82e"
   dependencies:
     bs58 "^4.0.1"
     class-is "^1.1.0"
