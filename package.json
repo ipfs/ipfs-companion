@@ -66,7 +66,7 @@
   "preferGlobal": false,
   "resolutions": {
     "stream-http": "3.0.0",
-    "multiaddr": "https://github.com/multiformats/js-multiaddr/tarball/9238d0d4aa57de52475e3776c30dbb9dce85fba5/js-multiaddr.tar.gz",
+    "multiaddr": "5.0.2",
     "uglify-es": "npm:terser"
   },
   "devDependencies": {

@@ -8858,9 +8858,10 @@ multiaddr-to-uri@^4.0.0:
   dependencies:
     multiaddr "^5.0.0"
 
-multiaddr@^4.0.0, multiaddr@^5.0.0, "multiaddr@https://github.com/multiformats/js-multiaddr/tarball/9238d0d4aa57de52475e3776c30dbb9dce85fba5/js-multiaddr.tar.gz":
-  version "5.0.0"
-  resolved "https://github.com/multiformats/js-multiaddr/tarball/9238d0d4aa57de52475e3776c30dbb9dce85fba5/js-multiaddr.tar.gz#d31482d1a13495c8b9fff0de044dfb9fdd53b82e"
+multiaddr@5.0.2, multiaddr@^4.0.0, multiaddr@^5.0.0:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-5.0.2.tgz#bffc4ebf0ef208ce40eab8cd6f146296b61aa0e3"
+  integrity sha512-dXz1chaUHV6L6okujDLS7uRA6NmCbitpikOJA0vMMnrwVyai5kC3ot2CSLrSfj3B8XIgNzpe/j5auSYrnbGGzA==
   dependencies:
     bs58 "^4.0.1"
     class-is "^1.1.0"
