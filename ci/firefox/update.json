@@ -41,6 +41,16 @@
                     },
                     "update_hash": "sha256:1ad6cac302adcd24e05efaef3e96b130c1ef551335ab907a5acce895b9ee08f8",
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.5.1.12010/ipfs_companion_beta_build-2.5.1.12010-an+fx.xpi"
+                },
+                {
+                    "version": "2.6.0.12060",
+                    "applications": {
+                        "gecko": {
+                            "strict_min_version": "59"
+                        }
+                    },
+                    "update_hash": "sha256:95800dd68f6967131eb2ca6fb0fd9a785a86feefef96f486df51be97a8bc6f29",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.0.12060/ipfs_companion_beta_build-2.6.0.12060-an+fx.xpi"
                 }
             ]
         }
