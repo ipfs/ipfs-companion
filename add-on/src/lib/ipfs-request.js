@@ -108,8 +108,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     onBeforeSendHeaders (request) {
       const state = getState()
 
-      // Skip if IPFS integrations are inactive or request is marked as ignored
-      if (!state.active || isIgnored(request.requestId)) {
+      // Skip if IPFS integrations are inactive
+      if (!state.active) {
         return
       }
 
@@ -150,10 +150,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
             request.requestHeaders.push(expectHeader)
           }
         }
-        // For some reason js-ipfs-api sent requests with "Origin: null" under Chrome
-        // which produced '403 - Forbidden' error.
+        // For some reason js-ipfs-api sends requests with "Origin: null" under Chrome
+        // which produces '403 - Forbidden' error.
         // This workaround removes bogus header from API requests
-        // TODO: check if still necessary
         for (let i = 0; i < request.requestHeaders.length; i++) {
           let header = request.requestHeaders[i]
           if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
