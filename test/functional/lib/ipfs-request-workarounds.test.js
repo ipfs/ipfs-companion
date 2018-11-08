@@ -40,6 +40,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/add?progress=true&wrapWithDirectory=true&pin=true&wrap-with-directory=true&stream-channels=true`
       }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.deep.include(expectHeader)
     })
   })
@@ -52,6 +53,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
     })
   })
