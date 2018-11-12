@@ -306,6 +306,12 @@ function isSafeToRedirect (request, runtime) {
     return false
   }
 
+  // For now we do not redirect if cid-in-subdomain is used
+  // as it would break origin-based security perimeter
+  if (IsIpfs.subdomain(request.url)) {
+    return false
+  }
+
   // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
   // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
   // TODO: revisit when upstream bug is addressed
