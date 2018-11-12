@@ -268,11 +268,13 @@ describe('modifyRequest.onBeforeRequest:', function () {
         it('should be left untouched for IPFS', function () {
           state.redirect = true
           const request = url2request('http://bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge.ipfs.dweb.link/')
+          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
           expectNoRedirect(modifyRequest, request)
         })
         it('should be left untouched for IPNS', function () {
           state.redirect = true
           const request = url2request('http://bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge.ipns.dweb.link/')
+          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
           expectNoRedirect(modifyRequest, request)
         })
       })
