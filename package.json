@@ -60,7 +60,7 @@
     "beta-build": "docker build -t ipfs-companion . && docker run -it -e RELEASE_CHANNEL=beta -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build",
     "release-build": "docker build -t ipfs-companion . && docker run -it -e RELEASE_CHANNEL=stable -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build",
     "dev-build": "npx yarn@1.10.1 && npx yarn@1.10.1 build",
-    "yarn-build": "run-s dev-build"
+    "yarn-build": "npm run dev-build"
   },
   "private": true,
   "preferGlobal": false,
