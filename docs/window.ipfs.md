@@ -25,15 +25,18 @@ IPFS Companion is exposing a subset of IPFS APIs as `window.ipfs` on every webpa
 
 This means websites can detect that `window.ipfs` already exists and use it instead of spawning own `js-ipfs` node, which saves resources, battery etc.
 
-For more context, see original issue: [Expose IPFS API as window.ipfs #330](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
+For more context, see:
+- first iteration: [Expose IPFS API as window.ipfs #330](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
+- second iteration: [window.ipfs 2.0](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)
 
 ## Creating applications using `window.ipfs`
 
 If a user has installed IPFS companion, `window.ipfs` will be available as soon as the first script runs on your web page, so you'll be able to detect it using a simple `if` statement:
 
 ```js
-if (window.ipfs) {  
-  await ipfs.id()
+if (window.ipfs && window.ipfs.enable) {
+  const ipfs = await window.ipfs.enable( { capabilities: ['id'] } )
+  console.log(await ipfs.id())
 } else {
   // Fallback
 }
@@ -42,8 +45,10 @@ if (window.ipfs) {
 To add and get content, you could do something like this:
 
 ```js
-if (window.ipfs) {
+if (window.ipfs && window.ipfs.enable) {
   try {
+    const capabilities = ["add","cat"]
+    const ipfs = await window.ipfs.enable({capabilities})
     const [{ hash }] = await ipfs.add(Buffer.from('=^.^='))
     const data = await ipfs.cat(hash)
     console.log(data.toString()) // =^.^=
@@ -92,9 +97,11 @@ Note these might have been re-worded already. Please send a PR.
 
 ## What _is_ a `window.ipfs`?
 
+It is an endpoint that enables you to obtain IPFS API instance.
+
 Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-api` or a `js-ipfs` daemon over `js-ipfs-api` and potentially others in the future.
 
-Note that `window.ipfs` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
+Note that object returned by `window.ipfs.enable` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
 
 See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://github.com/ipfs/js-ipfs-api#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
 
