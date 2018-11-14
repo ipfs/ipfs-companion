@@ -23,7 +23,7 @@
     "build:copy:ui-kit:ipfs-css:fonts": "shx mkdir -p add-on/ui-kit/fonts && shx cp node_modules/ipfs-css/fonts/* add-on/ui-kit/fonts",
     "build:copy:ui-kit:ipfs-css:icons": "shx mkdir -p add-on/ui-kit/icons && shx cp node_modules/ipfs-css/icons/* add-on/ui-kit/icons",
     "build:copy:ui-kit:tachyons": "shx mkdir -p add-on/ui-kit && shx cp node_modules/tachyons/css/tachyons.css add-on/ui-kit",
-    "build:webui": "cross-env CID=QmeEJPYJiTa8PkHbe88uiGTRC9GdF29K51oyWfJzj7jfXd npm run build:webui:with-cid",
+    "build:webui": "cross-env CID=QmPwKAKiPaTXYzqPSctCGnZoNyAjT3gn7AgXcT8TTDofw9 npm run build:webui:with-cid",
     "build:webui:with-cid": "cross-env-shell \"shx test -d add-on/webui/ || (npm run build:webui:dir && (npm run build:webui:fetch-ipfs || npm run build:webui:fetch-http) && npm run build:webui:minimize)\"",
     "build:webui:dir": "shx mkdir -p add-on/webui",
     "build:webui:fetch-ipfs": "cross-env-shell \"ipfs get $CID -o add-on/webui/\"",
