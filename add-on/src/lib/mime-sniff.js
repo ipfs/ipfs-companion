@@ -15,7 +15,7 @@ const mime = require('mime-types')
  */
 exports.mimeSniff = function (buff, path) {
   // deals with buffers, and uses magic number detection
-  const fileTypeRes = fileType(buff)
+  const fileTypeRes = fileType(buff instanceof Uint8Array ? buff : new Uint8Array(buff))
   if (fileTypeRes) return fileTypeRes.mime
 
   const str = buff.toString('utf8')
