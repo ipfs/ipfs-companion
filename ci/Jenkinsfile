@@ -61,7 +61,7 @@ timeout(time: 1, unit: 'HOURS') { parallel(
                     // remove node_modules if any
                     bat 'del /s /q node_modules >nul 2>&1'
                     // https://github.com/yarnpkg/yarn/issues/3110#issuecomment-293347341
-                    bat 'npx yarn@1.10.1 config set msvs_version 2015 --global'
+                    bat 'npx yarn@1.12.3 config set msvs_version 2015 --global'
                     // run developer build as a smoke-test for windows
                     bat 'npm run dev-build'
                     bat 'dir /s /b /o:gn build'
