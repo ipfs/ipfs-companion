@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Global toggle: Suspend all IPFS integrations",
+    "message": "Interruttore globale: Sospendi tutte le integrazioni con IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -64,11 +64,11 @@
     "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Path",
+    "message": "Copia il percorso IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copy CID",
+    "message": "Copia CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -88,27 +88,27 @@
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Selected Image",
+    "message": "Immagine Selezionata",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Selected Video",
+    "message": "Video Selezionato",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Selected Audio",
+    "message": "Audio Selezionato",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Linked Content",
+    "message": "Contenuto Collegato",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Selected Text",
+    "message": "Testo Selezionato",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "This Page",
+    "message": "Questa Pagina",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
@@ -120,7 +120,7 @@
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsSelection": {
-    "message": "Add Selected Text to IPFS",
+    "message": "Aggiungi il testo selezionato a IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -132,7 +132,7 @@
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Copied",
+    "message": "Copiato",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
@@ -180,7 +180,7 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1 (press ctrl+shift+j for more details)",
+    "message": "$1(premi ctrl+shift+j per maggiori dettagli)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
@@ -264,7 +264,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where /api/v0/config lives",
+    "message": "Suggerimento: /api/v0/config vive qui",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -384,7 +384,7 @@
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers": {
-    "message": "Connected to $1 peers",
+    "message": "Connesso a $1nodi",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
   },
   "quickUpload_pick_file_button": {
@@ -432,11 +432,11 @@
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $1 for $2?",
+    "message": "Revocare il permesso $1 per $2 ?",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $1?",
+    "message": "Revocare tutti i permessi per $1 ?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
@@ -456,11 +456,11 @@
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Revoke $1",
+    "message": "Revoca $1",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Allow $1 to access ipfs.$2?",
+    "message": "Permetti a $1 di accedere IPFS. $2 ?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
@@ -480,7 +480,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "IPFS Companion - Benvenuto!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -488,59 +488,59 @@
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_title": {
-    "message": "You are all set!",
+    "message": "Tutto pronto!",
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Right now your node is connected to <0>$1</0> peers.",
+    "message": "Al momento il tuo nodo è connesso a <0>$1</0> nodi.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
-    "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
+    "message": "Scopri cosa <0>puoi fare con Companion</0> e tuffati nel web distribuito con IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_title": {
-    "message": "Is your IPFS daemon running?",
+    "message": "È in esecuzione il demone IPFS?",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
   "page_landingWelcome_installSteps_install": {
-    "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
+    "message": "Se non hai installato IPFS, per favore segui <0>queste istruzioni</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_install)"
   },
   "page_landingWelcome_installSteps_run": {
-    "message": "Then make sure to have an IPFS daemon running in your terminal:",
+    "message": "Quindi assicurati che il demone IPFS sia in esecuzione nel terminale:",
     "description": "Install steps run message (page_landingWelcome_installSteps_run)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "New to IPFS?",
+    "message": "Nuovo to IPFS?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
-    "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
+    "message": "Leggi la <0>documentazione</0> per scoprire i <1>concetti</1> base e lavorare con IPFS.",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
   },
   "page_landingWelcome_resources_title_discover": {
-    "message": "Discover!",
+    "message": "Scopri!",
     "description": "Resources title (page_landingWelcome_resources_title_discover)"
   },
   "page_landingWelcome_resources_discover": {
-    "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
+    "message": "Trova <0>risorse utili</0> per usare e <1>costruire cose</1> con IPFS.",
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
-    "message": "Got questions?",
+    "message": "Domande?",
     "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
   },
   "page_landingWelcome_resources_got_questions": {
-    "message": "Visit the <0>Discussion and Support Forum</0>.",
+    "message": "Visita il <0>Forum di Discussione e Supporto</0>",
     "description": "Resources copy (page_landingWelcome_resources_got_questions)"
   },
   "page_landingWelcome_resources_title_want_to_help": {
-    "message": "Want to help?",
+    "message": "Hai bisogno di aiuto?",
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
-    "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
+    "message": "Unisciti alla <0>Comunitià IPFS</0>! Contribuisci con <1>codice</1>, <2>documentazione</2>, <3>traduzioni</3> o dai <4>supporto ad altri utenti</4>.",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
   "page_landingWelcome_videos_alpha_demo": {
@@ -548,11 +548,11 @@
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
-    "message": "The Permanent Web",
+    "message": "Il Web Permanente",
     "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Related Projects",
+    "message": "Progetti simili ",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }
