@@ -22,6 +22,8 @@ const onHeadersReceivedRedirect = new Set()
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
 function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
   const browser = runtime.browser
+  const runtimeRoot = browser.runtime.getURL('/')
+  const webExtensionOrigin = runtimeRoot ? new URL(runtimeRoot).origin : 'null'
 
   // Ignored requests are identified once and cached across all browser.webRequest hooks
   const ignoredRequests = new LRU({ max: 128, maxAge: 1000 * 30 })
@@ -114,6 +116,35 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       }
 
       if (request.url.startsWith(state.apiURLString)) {
+        // '403 - Forbidden' fix for Chrome and Firefox
+        // --------------------------------------------
+        // We remove Origin header from requests made to API URL
+        // by js-ipfs-api running in WebExtension context to remove need
+        // for manual whitelisting Access-Control-Allow-Origin at go-ipfs
+        // More info:
+        // Chrome: https://github.com/ipfs-shipyard/ipfs-companion/pull/616
+        // Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/622
+        const isWebExtensionOrigin = (origin) => {
+          // Chromium
+          if (origin == null || origin === 'null') {
+            return true
+          }
+          // Firefox Nightly 65 sets moz-extension://{extension-installation-id}
+          if (origin && origin.startsWith('moz-extension://') && new URL(origin).origin === webExtensionOrigin) {
+            return true
+          }
+          return false
+        }
+        for (let i = 0; i < request.requestHeaders.length; i++) {
+          let header = request.requestHeaders[i]
+          if (header.name === 'Origin' && isWebExtensionOrigin(header.value)) {
+            request.requestHeaders.splice(i, 1)
+            break
+          }
+        }
+
+        // Fix "http: invalid Read on closed Body"
+        // ----------------------------------
         // There is a bug in go-ipfs related to keep-alive connections
         // that results in partial response for ipfs.files.add
         // mangled by error "http: invalid Read on closed Body"
@@ -148,16 +179,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           if (addExpectHeader) {
             console.log(warningMsg)
             request.requestHeaders.push(expectHeader)
-          }
-        }
-        // For some reason js-ipfs-api sends requests with "Origin: null" under Chrome
-        // which produces '403 - Forbidden' error.
-        // This workaround removes bogus header from API requests
-        for (let i = 0; i < request.requestHeaders.length; i++) {
-          let header = request.requestHeaders[i]
-          if (header.name === 'Origin' && (header.value == null || header.value === 'null')) {
-            request.requestHeaders.splice(i, 1)
-            break
           }
         }
       }

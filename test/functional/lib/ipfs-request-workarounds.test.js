@@ -1,7 +1,7 @@
 'use strict'
 const { describe, it, before, beforeEach, after } = require('mocha')
 const { expect } = require('chai')
-const { URL } = require('url')
+const { URL } = require('url') // URL implementation with support for .origin attribute
 const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
 const createRuntimeChecks = require('../../../add-on/src/lib/runtime-checks')
@@ -18,6 +18,7 @@ describe('modifyRequest processing', function () {
   before(function () {
     global.URL = URL
     global.browser = browser
+    browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
   })
 
   beforeEach(async function () {
@@ -42,6 +43,20 @@ describe('modifyRequest processing', function () {
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.deep.include(expectHeader)
+    })
+  })
+
+  describe('a request to <apiURL>/api/v0/ with Origin=moz-extension://{extension-installation-id}', function () {
+    it('should remove Origin header ', function () {
+      const bogusOriginHeader = { name: 'Origin', value: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df' }
+      const request = {
+        requestHeaders: [ bogusOriginHeader ],
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
+      browser.runtime.getURL.flush()
     })
   })
 
