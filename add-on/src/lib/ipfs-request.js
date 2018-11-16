@@ -131,7 +131,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           }
           // Firefox Nightly 65 sets moz-extension://{extension-installation-id}
           if (origin && origin.startsWith('moz-extension://') && new URL(origin).origin === webExtensionOrigin) {
-            console.log(`${webExtensionOrigin} | ${new URL(origin).origin}`)
             return true
           }
           return false
