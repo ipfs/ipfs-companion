@@ -53,6 +53,7 @@
     "prepush": "run-s clean build lint test",
     "firefox": "web-ext run --url about:debugging",
     "get-firefox-nightly": "shx test -e ./firefox/firefox || get-firefox -b nightly -e",
+    "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
     "ci": "run-s ci:*",
     "ci:install": "npx yarn@1.12.3 install --frozen-lockfile || npx yarn@1.12.3 install --frozen-lockfile",
     "ci:test": "npx yarn@1.12.3 test",
