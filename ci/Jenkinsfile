@@ -1,7 +1,7 @@
 import groovy.transform.Field
 // Global for which node version to use on macos and windows
-// When in doubt, should follow https://github.com/ipfs/jenkins-libs/blob/master/vars/javascript.groovy
-@Field final String nodeVersion = '10.4.1'
+// This should match image version from Dockerfile
+@Field final String nodeVersion = '10.13.0'
 
 // Run targets in parallel
 timeout(time: 1, unit: 'HOURS') { parallel(
