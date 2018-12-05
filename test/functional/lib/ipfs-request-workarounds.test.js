@@ -13,17 +13,25 @@ const { optionDefaults } = require('../../../add-on/src/lib/options')
 // const nodeTypes = ['external', 'embedded']
 
 describe('modifyRequest processing', function () {
-  let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
+  let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
+    // stub URL.origin in test context to return something other than null
+    Object.defineProperty(URL.prototype, 'origin', {
+      get: function () {
+        let fakeOrigin = this.href.split('/')
+        if (fakeOrigin.length >= 3) {
+          return fakeOrigin.slice(0, 3).join('/')
+        }
+      }
+    })
     global.URL = URL
     global.browser = browser
-    browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
   })
 
   beforeEach(async function () {
     state = initState(optionDefaults)
-    const getState = () => state
+    getState = () => state
     dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
     ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
@@ -47,7 +55,13 @@ describe('modifyRequest processing', function () {
   })
 
   describe('a request to <apiURL>/api/v0/ with Origin=moz-extension://{extension-installation-id}', function () {
-    it('should remove Origin header ', function () {
+    it('should remove Origin header with moz-extension://', async function () {
+      // set vendor-specific Origin for WebExtension context
+      browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
       const bogusOriginHeader = { name: 'Origin', value: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df' }
       const request = {
         requestHeaders: [ bogusOriginHeader ],
@@ -60,8 +74,34 @@ describe('modifyRequest processing', function () {
     })
   })
 
+  describe('a request to <apiURL>/api/v0/ with Origin=chrome-extension://{extension-installation-id}', function () {
+    it('should remove Origin header with chrome-extension://', async function () {
+      // set vendor-specific Origin for WebExtension context
+      browser.runtime.getURL.withArgs('/').returns('chrome-extension://trolrorlrorlrol/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const bogusOriginHeader = { name: 'Origin', value: 'chrome-extension://trolrorlrorlrol' }
+      const request = {
+        requestHeaders: [ bogusOriginHeader ],
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
+      browser.runtime.getURL.flush()
+    })
+  })
+
   describe('a request to <apiURL>/api/v0/ with Origin=null', function () {
-    it('should remove Origin header ', function () {
+    it('should remove Origin header ', async function () {
+      // set vendor-specific Origin for WebExtension context
+      browser.runtime.getURL.withArgs('/').returns(undefined)
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
       const bogusOriginHeader = { name: 'Origin', value: 'null' }
       const request = {
         requestHeaders: [ bogusOriginHeader ],
@@ -70,6 +110,7 @@ describe('modifyRequest processing', function () {
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
+      browser.runtime.getURL.flush()
     })
   })
 
