@@ -500,7 +500,7 @@
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_title": {
-    "message": "Is your IPFS daemon running?",
+    "message": "O teu IPFS daemon está correr?",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
   "page_landingWelcome_installSteps_install": {

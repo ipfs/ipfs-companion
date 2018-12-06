@@ -48,7 +48,7 @@
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_switchToCustomGateway": {
-    "message": "맞춤 게이트웨이로 전환",
+    "message": "로컬 게이트웨이로 전환",
     "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
   },
   "panel_switchToPublicGateway": {
@@ -80,7 +80,7 @@
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS 리소스가 맞춤 게이트웨이를 통해 로드 되었습니다.",
+    "message": "IPFS 리소스가 로컬 게이트웨이를 통해 로드 되었습니다.",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
@@ -156,7 +156,7 @@
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "자동 모드: 맞춤 게이트웨이로 리다이렉트가 활성화 됩니다.",
+    "message": "자동 모드: 로컬 게이트웨이로 리다이렉트가 활성화 됩니다.",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
@@ -168,7 +168,7 @@
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
-    "message": "Unable to upload via IPFS API",
+    "message": "IPFS API를 이용한 업로드 비활성화",
     "description": "A title of system notification (notify_uploadErrorTitle)"
   },
   "notify_uploadTrackingProtectionErrorMsg": {
@@ -204,11 +204,11 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "External: connect to a node over HTTP API",
+    "message": "외부 노드: HTTP API를 이용하여 노드에 연결합니다.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded (experimental): run js-ipfs node in your browser (use only for development, read about its limitations under the link below)",
+    "message": "내장된 노드 (실험적 기능): js-ipfs 노드를 당신의 브라우저에서 작동 시킵니다. (오직 개발용으로 사용하고, 제한된 기능에 대한 것은 아래에 있는 링크를 통해 읽을 수 있습니다.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -220,19 +220,19 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "External",
+    "message": "외부 노드",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Embedded",
+    "message": "내장된 노드",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_header_gateways": {
-    "message": "Gateways",
+    "message": "게이트웨이",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Custom Local Gateway",
+    "message": "로컬 게이트웨이 설정",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
@@ -240,7 +240,7 @@
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_useCustomGateway_title": {
-    "message": "Use Custom Gateway",
+    "message": "로컬 게이트웨이 사용",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
@@ -248,11 +248,11 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Default Public Gateway",
+    "message": "기본 공공 게이트웨이",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Fallback URL used when Custom Gateway is not available and for copying shareable links",
+    "message": "로컬 게이트웨이가 사용 불가능 할 때, 공유 가능한 링크를 복사하면 대체 URL이 사용됩니다.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_header_api": {
@@ -276,7 +276,7 @@
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Automatic Mode",
+    "message": "자동 모드",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
@@ -284,7 +284,7 @@
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_experiments": {
-    "message": "Experiments",
+    "message": "실험기능",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experiments_warning": {
@@ -292,7 +292,7 @@
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_displayNotifications_title": {
-    "message": "Enable Notifications",
+    "message": "알림 활성화",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
@@ -500,7 +500,7 @@
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_title": {
-    "message": "Is your IPFS daemon running?",
+    "message": "IPFS 노드가 실행중입니까?",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
   "page_landingWelcome_installSteps_install": {
@@ -528,7 +528,7 @@
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
-    "message": "Got questions?",
+    "message": "질문이 있습니까?",
     "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
   },
   "page_landingWelcome_resources_got_questions": {
@@ -536,7 +536,7 @@
     "description": "Resources copy (page_landingWelcome_resources_got_questions)"
   },
   "page_landingWelcome_resources_title_want_to_help": {
-    "message": "Want to help?",
+    "message": "도움이 필요한가요?",
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
