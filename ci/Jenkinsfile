@@ -1,7 +1,7 @@
 import groovy.transform.Field
 // Global for which node version to use on macos and windows
 // This should match image version from Dockerfile
-@Field final String nodeVersion = '10.13.0'
+@Field final String nodeVersion = '10.11.0'
 
 // Run targets in parallel
 timeout(time: 1, unit: 'HOURS') { parallel(
