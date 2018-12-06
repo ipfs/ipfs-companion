@@ -8,7 +8,7 @@
       {
         "targets": {
           "firefox": 60,
-          "chrome": 71
+          "chrome": 70
         }
       }
     ]
