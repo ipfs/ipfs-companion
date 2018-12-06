@@ -17,12 +17,12 @@ const commonConfig = {
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
-        minify(file, sourceMap) {
+        minify (file, sourceMap) {
           let uglifyJsOptions = {
             // Default minify settings break js-ipfs:
             // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
             compress: { unused: false },
-            mangle: true,
+            mangle: true
           }
           if (sourceMap) uglifyJsOptions.sourceMap = { content: sourceMap }
           return require('terser').minify(file, uglifyJsOptions)
