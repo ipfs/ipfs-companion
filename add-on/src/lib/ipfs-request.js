@@ -122,15 +122,22 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // by js-ipfs-api running in WebExtension context to remove need
         // for manual whitelisting Access-Control-Allow-Origin at go-ipfs
         // More info:
-        // Chrome: https://github.com/ipfs-shipyard/ipfs-companion/pull/616
         // Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/622
+        // Chromium 71: https://github.com/ipfs-shipyard/ipfs-companion/pull/616
+        // Chromium 72: https://github.com/ipfs-shipyard/ipfs-companion/issues/630
         const isWebExtensionOrigin = (origin) => {
-          // Chromium
+          // console.log(`origin=${origin}, webExtensionOrigin=${webExtensionOrigin}`)
+          // Chromium <= 71 returns opaque Origin as defined in
+          // https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin
           if (origin == null || origin === 'null') {
             return true
           }
-          // Firefox Nightly 65 sets moz-extension://{extension-installation-id}
-          if (origin && origin.startsWith('moz-extension://') && new URL(origin).origin === webExtensionOrigin) {
+          // Firefox  Nightly 65 sets moz-extension://{extension-installation-id}
+          // Chromium Beta    72 sets chrome-extension://{uid}
+          if (origin &&
+            (origin.startsWith('moz-extension://') ||
+              origin.startsWith('chrome-extension://')) &&
+                new URL(origin).origin === webExtensionOrigin) {
             return true
           }
           return false
