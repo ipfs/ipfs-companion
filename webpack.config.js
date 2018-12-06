@@ -16,13 +16,16 @@ const commonConfig = {
   },
   optimization: {
     minimizer: [
-      // Default flags break js-ipfs: https://github.com/ipfs-shipyard/ipfs-companion/issues/521
       new UglifyJsPlugin({
-        parallel: true,
-        extractComments: true,
-        uglifyOptions: {
-          compress: { unused: false },
-          mangle: true
+        minify (file, sourceMap) {
+          let uglifyJsOptions = {
+            // Default minify settings break js-ipfs:
+            // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
+            compress: { unused: false },
+            mangle: true
+          }
+          if (sourceMap) uglifyJsOptions.sourceMap = { content: sourceMap }
+          return require('terser').minify(file, uglifyJsOptions)
         }
       })
     ]
