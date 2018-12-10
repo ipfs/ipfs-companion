@@ -5263,7 +5263,7 @@ ipaddr.js@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.8.0.tgz#eaa33d6ddd7ace8f7f6fe0c9ca0440e706738b1e"
 
-ipfs-api@26.1.2, ipfs-api@^26.1.0:
+ipfs-api@^26.1.0:
   version "26.1.2"
   resolved "https://registry.yarnpkg.com/ipfs-api/-/ipfs-api-26.1.2.tgz#6b53d4720455060ad39784336234a4acc54d4332"
   dependencies:
@@ -5369,6 +5369,52 @@ ipfs-block@~0.8.0:
 ipfs-css@0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.12.0.tgz#becf48dbdfb1c913006ff0c6dc6c56752a2cb6b3"
+
+ipfs-http-client@27.1.0:
+  version "27.1.0"
+  resolved "https://registry.yarnpkg.com/ipfs-http-client/-/ipfs-http-client-27.1.0.tgz#5db19d2d63210098e9651e9909275ddd9dd19289"
+  integrity sha512-Id9C0V8Bxnr8xBjXdVf7qUBAnslkvgHSFJw+csx4t5dqqeaI/aOLnNZG/6RBgmvI0//3ixKgwzgSt2vBHxeikw==
+  dependencies:
+    async "^2.6.1"
+    big.js "^5.2.2"
+    bl "^2.1.2"
+    bs58 "^4.0.1"
+    cids "~0.5.5"
+    concat-stream "^1.6.2"
+    debug "^4.1.0"
+    detect-node "^2.0.4"
+    end-of-stream "^1.4.1"
+    flatmap "0.0.3"
+    glob "^7.1.3"
+    ipfs-block "~0.8.0"
+    ipfs-unixfs "~0.1.16"
+    ipld-dag-cbor "~0.13.0"
+    ipld-dag-pb "~0.15.0"
+    is-ipfs "~0.4.7"
+    is-pull-stream "0.0.0"
+    is-stream "^1.1.0"
+    libp2p-crypto "~0.14.0"
+    lodash "^4.17.11"
+    lru-cache "^4.1.3"
+    multiaddr "^5.0.2"
+    multibase "~0.6.0"
+    multihashes "~0.4.14"
+    ndjson "^1.5.0"
+    once "^1.4.0"
+    peer-id "~0.12.0"
+    peer-info "~0.14.1"
+    promisify-es6 "^1.0.3"
+    pull-defer "~0.2.3"
+    pull-pushable "^2.2.0"
+    pull-stream-to-stream "^1.3.4"
+    pump "^3.0.0"
+    qs "^6.5.2"
+    readable-stream "^3.0.6"
+    stream-http "^3.0.0"
+    stream-to-pull-stream "^1.7.2"
+    streamifier "~0.1.1"
+    tar-stream "^1.6.2"
+    through2 "^2.0.3"
 
 ipfs-http-response@0.2.1, ipfs-http-response@~0.2.0:
   version "0.2.1"
@@ -5725,6 +5771,22 @@ ipld-dag-pb@^0.14.4, ipld-dag-pb@~0.14.10, ipld-dag-pb@~0.14.6:
 ipld-dag-pb@~0.14.11:
   version "0.14.11"
   resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.14.11.tgz#df235a301fec8443cf933387cebb38e42c22c2a8"
+  dependencies:
+    async "^2.6.1"
+    bs58 "^4.0.1"
+    cids "~0.5.4"
+    class-is "^1.1.0"
+    is-ipfs "~0.4.2"
+    multihashing-async "~0.5.1"
+    protons "^1.0.1"
+    pull-stream "^3.6.9"
+    pull-traverse "^1.0.3"
+    stable "~0.1.8"
+
+ipld-dag-pb@~0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/ipld-dag-pb/-/ipld-dag-pb-0.15.0.tgz#f0d007fa0837ce4c7273514d3d515db992581f1f"
+  integrity sha512-rX8kHhiM7975LO6XgSze91TSAEVEpHLsFaLQoR1FLgKoDTwejudRdQJx6DnZmzTT+agpSvi79UYdWTI5ZP+B1w==
   dependencies:
     async "^2.6.1"
     bs58 "^4.0.1"
@@ -7836,7 +7898,7 @@ multiaddr-to-uri@^4.0.0:
   dependencies:
     multiaddr "^5.0.0"
 
-multiaddr@5.0.2, multiaddr@^4.0.0, multiaddr@^5.0.0:
+multiaddr@5.0.2, multiaddr@^4.0.0, multiaddr@^5.0.0, multiaddr@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-5.0.2.tgz#bffc4ebf0ef208ce40eab8cd6f146296b61aa0e3"
   dependencies:
