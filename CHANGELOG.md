@@ -1,3 +1,14 @@
+## [2.6.3](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.2...v2.6.3) (2018-12-10)
+
+
+### Bug Fixes
+
+* **ci:** switch to nodejs v10.11.0 ([687a4d8](https://github.com/ipfs-shipyard/ipfs-companion/commit/687a4d8))
+* **security:** remove  event-stream/flatmap-stream ([d4db63a](https://github.com/ipfs-shipyard/ipfs-companion/commit/d4db63a))
+* Origin in API requests under Chromium 72 ([#631](https://github.com/ipfs-shipyard/ipfs-companion/issues/631)) ([8866f76](https://github.com/ipfs-shipyard/ipfs-companion/commit/8866f76))
+
+
+
 ## [2.6.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.1...v2.6.2) (2018-11-22)
 
 
@@ -447,4 +458,106 @@
 * **linkify:** PoC linkification of plaintext IPFS paths ([b8f6517](https://github.com/ipfs-shipyard/ipfs-companion/commit/b8f6517)), closes [#39](https://github.com/ipfs-shipyard/ipfs-companion/issues/39) [#202](https://github.com/ipfs-shipyard/ipfs-companion/issues/202)
 * **pageAction:** pinning of IPNS resources ([0e6418b](https://github.com/ipfs-shipyard/ipfs-companion/commit/0e6418b)), closes [#222](https://github.com/ipfs-shipyard/ipfs-companion/issues/222) [#212](https://github.com/ipfs-shipyard/ipfs-companion/issues/212)
 * **protocol:** support web+foo protocols ([20436d6](https://github.com/ipfs-shipyard/ipfs-companion/commit/20436d6)), closes [#164](https://github.com/ipfs-shipyard/ipfs-companion/issues/164)
+
+
+
+## [1.5.10](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.9...v1.5.10) (2016-09-26)
+
+
+
+## [1.5.9](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.8...v1.5.9) (2016-07-09)
+
+
+
+## [1.5.8](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.7...v1.5.8) (2016-04-11)
+
+
+
+## [1.5.7](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.6...v1.5.7) (2016-03-29)
+
+
+
+## [1.5.6](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.5...v1.5.6) (2016-03-20)
+
+
+
+## [1.5.5](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.4...v1.5.5) (2016-02-20)
+
+
+
+## [1.5.4](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.3...v1.5.4) (2016-02-13)
+
+
+
+## [1.5.3](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.2...v1.5.3) (2016-02-09)
+
+
+
+## [1.5.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.1...v1.5.2) (2016-02-07)
+
+
+
+## [1.5.1](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.5.0...v1.5.1) (2016-02-05)
+
+
+
+# [1.5.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.4.2...v1.5.0) (2016-02-04)
+
+
+
+## [1.4.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.4.1...v1.4.2) (2016-01-24)
+
+
+
+## [1.4.1](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.4.0...v1.4.1) (2016-01-16)
+
+
+
+# [1.4.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.3.2...v1.4.0) (2016-01-10)
+
+
+
+## [1.3.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.3.1...v1.3.2) (2015-12-17)
+
+
+
+## [1.3.1](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.3.0...v1.3.1) (2015-11-27)
+
+
+
+# [1.3.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.2.0...v1.3.0) (2015-11-22)
+
+
+
+# [1.2.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.1.0...v1.2.0) (2015-09-27)
+
+
+
+# [1.1.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.0.3...v1.1.0) (2015-09-20)
+
+
+
+## [1.0.3](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.0.2...v1.0.3) (2015-09-09)
+
+
+
+## [1.0.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.0.1...v1.0.2) (2015-08-27)
+
+
+
+## [1.0.1](https://github.com/ipfs-shipyard/ipfs-companion/compare/v1.0.0...v1.0.1) (2015-04-08)
+
+
+
+# [1.0.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v0.2.0...v1.0.0) (2015-04-08)
+
+
+
+# [0.2.0](https://github.com/ipfs-shipyard/ipfs-companion/compare/v0.1.0...v0.2.0) (2015-03-25)
+
+
+
+# 0.1.0 (2015-03-22)
+
+
 
