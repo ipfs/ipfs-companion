@@ -2,7 +2,8 @@ const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // common configuration shared by all targets
@@ -10,22 +11,18 @@ const commonConfig = {
   target: 'web',
   bail: true,
   output: {
-    path: path.resolve(__dirname, 'add-on/dist/bundles'),
+    path: path.resolve(__dirname, 'add-on/dist/bundles/'),
     publicPath: '/dist/bundles/',
     filename: '[name].bundle.js'
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        minify (file, sourceMap) {
-          let uglifyJsOptions = {
-            // Default minify settings break js-ipfs:
-            // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
-            compress: { unused: false },
-            mangle: true
-          }
-          if (sourceMap) uglifyJsOptions.sourceMap = { content: sourceMap }
-          return require('terser').minify(file, uglifyJsOptions)
+      new TerserPlugin({
+        terserOptions: {
+          // Default minify settings break js-ipfs:
+          // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
+          compress: { unused: false },
+          mangle: true
         }
       })
     ]
@@ -80,8 +77,8 @@ const bgConfig = merge(commonConfig, {
           name: 'ipfs',
           priority: 10,
           enforce: true,
-          // Include js-ipfs and js-ipfs-api
-          test: /\/node_modules\/(ipfs|ipfs-api)\//
+          // Include js-ipfs and js-ipfs-http-client
+          test: /\/node_modules\/(ipfs|ipfs-api|ipfs-http-client)\//
         }
       }
     }
