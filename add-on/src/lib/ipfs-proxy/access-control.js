@@ -78,6 +78,7 @@ class AccessControl extends EventEmitter {
     )
   }
 
+  // Return current access rights to given permission.
   async getAccess (scope, permission) {
     if (!isScope(scope)) throw new TypeError('Invalid scope')
     if (!isString(permission)) throw new TypeError('Invalid permission')
@@ -101,12 +102,15 @@ class AccessControl extends EventEmitter {
       }
     }
 
-    return allow == null ? null : { scope: matchingScope, permission, allow }
+    return allow == null ? null : { scope: matchingScope, permissions: [permission], allow }
   }
 
-  async setAccess (scope, permission, allow) {
+  // Set access rights to given permissions.
+  // 'permissions' can be an array of strings or a single string
+  async setAccess (scope, permissions, allow) {
+    permissions = Array.isArray(permissions) ? permissions : [permissions]
     if (!isScope(scope)) throw new TypeError('Invalid scope')
-    if (!isString(permission)) throw new TypeError('Invalid permission')
+    if (!isStringArray(permissions)) throw new TypeError('Invalid permissions')
     if (!isBoolean(allow)) throw new TypeError('Invalid allow')
 
     return this._writeQ.add(async () => {
@@ -114,29 +118,29 @@ class AccessControl extends EventEmitter {
 
       // Trying to set access for non-wildcard permission, when wildcard
       // permission is already granted?
-      if (allAccess.has('*') && permission !== '*') {
+      if (allAccess.has('*') && !permissions.includes('*')) {
         if (allAccess.get('*') === allow) {
           // Noop if requested access is the same as access for wildcard grant
-          return { scope, permission, allow }
+          return { scope, permissions, allow }
         } else {
           // Fail if requested access is the different to access for wildcard grant
-          throw new Error(`Illegal set access for ${permission} when wildcard exists`)
+          throw new Error(`Illegal set access for '${permissions}' when wildcard exists`)
         }
       }
 
       // If setting a wildcard permission, remove existing grants
-      if (permission === '*') {
+      if (permissions.includes('*')) {
         allAccess.clear()
       }
 
-      allAccess.set(permission, allow)
+      permissions.forEach(permission => allAccess.set(permission, allow))
 
       const accessKey = this._getAccessKey(scope)
       await this._storage.local.set({ [accessKey]: JSON.stringify(Array.from(allAccess)) })
 
       await this._addScope(scope)
 
-      return { scope, permission, allow }
+      return { scope, permissions, allow }
     })
   }
 
@@ -199,4 +203,5 @@ const isScope = (value) => {
 }
 
 const isString = (value) => Object.prototype.toString.call(value) === '[object String]'
+const isStringArray = (value) => Array.isArray(value) && value.length && value.every(isString)
 const isBoolean = (value) => value === true || value === false

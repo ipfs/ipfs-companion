@@ -8,3 +8,8 @@
 .hover-bg-red-muted:hover {
   background-color: #f36149;
 }
+
+label:hover,
+button:hover {
+  cursor: pointer;
+}

@@ -5,8 +5,7 @@ const { URL } = require('url')
 const Storage = require('mem-storage-area/Storage')
 const Sinon = require('sinon')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
-const createPreAcl = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
-const ACL_WHITELIST = require('../../../../add-on/src/lib/ipfs-proxy/acl-whitelist.json')
+const { createPreAcl, ACL_WHITELIST } = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
 
 describe('lib/ipfs-proxy/pre-acl', () => {
   before(() => {
@@ -29,7 +28,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('User disabled access to IPFS')
+    expect(() => { if (error) throw error }).to.throw('User disabled access to API proxy in IPFS Companion')
   })
 
   it('should allow access if permission is on whitelist', async () => {
@@ -82,7 +81,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(requestAccess.called).to.equal(true)
-    expect(() => { if (error) throw error }).to.throw(`User denied access to ${permission}`)
+    expect(() => { if (error) throw error }).to.throw(`User denied access to selected commands over IPFS proxy: ${permission}`)
   })
 
   it('should not re-request if denied', async () => {
@@ -102,7 +101,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(requestAccess.called).to.equal(true)
-    expect(() => { if (error) throw error }).to.throw(`User denied access to ${permission}`)
+    expect(() => { if (error) throw error }).to.throw(`User denied access to selected commands over IPFS proxy: ${permission}`)
 
     error = null
     requestAccess.resetHistory()
@@ -114,7 +113,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(requestAccess.called).to.equal(false)
-    expect(() => { if (error) throw error }).to.throw(`User denied access to ${permission}`)
+    expect(() => { if (error) throw error }).to.throw(`User denied access to selected commands over IPFS proxy: ${permission}`)
   })
 
   it('should have a well-formed Error if denied', async () => {
@@ -134,8 +133,9 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(error.output.payload).to.deep.eql({
+      isIpfsProxyError: true,
       isIpfsProxyAclError: true,
-      permission,
+      permissions: [permission],
       scope: getScope()
     })
   })

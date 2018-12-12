@@ -12,7 +12,12 @@
 
     const getIpfs = () => new Promise((resolve, reject) => {
       if (window.ipfs) {
-        log('window.ipfs is available!')
+        if (window.ipfs.enable) {
+          log('window.ipfs.enable is available!')
+          // improve UX by asking for permissions upfront
+          return resolve(window.ipfs.enable({ commands: ['id','version'] }))
+        }
+        log('legacy window.ipfs is available!')
         return resolve(window.ipfs)
       }
 
@@ -29,7 +34,8 @@
     })
 
     getIpfs()
-      .then(ipfs => ipfs.id().then(id => log(`running ${id.agentVersion} with ID ${id.id}`)))
+      .then(ipfs => ipfs.id()
+      .then(id => log(`running ${id.agentVersion} with ID ${id.id}`)))
       .catch(log)
   })()
 </script>

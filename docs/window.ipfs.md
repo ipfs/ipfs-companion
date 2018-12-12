@@ -1,9 +1,9 @@
 # Notes on exposing IPFS API via `window.ipfs`
- 
+
 > ### Disclaimer:    
 > - ### we are [🚧 working on v2.0 of this interface 🚧](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)    
-> - ### ⚠️ below API will change ⚠️. 
-> 
+> - ### ⚠️ below API will change ⚠️.
+>
 > Want to help in shaping it? See [#589](https://github.com/ipfs-shipyard/ipfs-companion/issues/589) and [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
 
 - [Background](#background)
@@ -35,7 +35,7 @@ If a user has installed IPFS companion, `window.ipfs` will be available as soon 
 
 ```js
 if (window.ipfs && window.ipfs.enable) {
-  const ipfs = await window.ipfs.enable( { capabilities: ['id'] } )
+  const ipfs = await window.ipfs.enable({commands: ['id','dag','version']})
   console.log(await ipfs.id())
 } else {
   // Fallback
@@ -47,8 +47,7 @@ To add and get content, you could do something like this:
 ```js
 if (window.ipfs && window.ipfs.enable) {
   try {
-    const capabilities = ["add","cat"]
-    const ipfs = await window.ipfs.enable({capabilities})
+    const ipfs = await window.ipfs.enable({commands: ['add','cat']})
     const [{ hash }] = await ipfs.add(Buffer.from('=^.^='))
     const data = await ipfs.cat(hash)
     console.log(data.toString()) // =^.^=
@@ -99,11 +98,11 @@ Note these might have been re-worded already. Please send a PR.
 
 It is an endpoint that enables you to obtain IPFS API instance.
 
-Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-api` or a `js-ipfs` daemon over `js-ipfs-api` and potentially others in the future.
+Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-http-client` or a `js-ipfs` daemon over `js-ipfs-http-client` and potentially others in the future.
 
-Note that object returned by `window.ipfs.enable` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
+Note that object returned by `window.ipfs.enable` is _not_ an instance of `js-ipfs` or `js-ipfs-http-client` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
 
-See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://github.com/ipfs/js-ipfs-api#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
+See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-http-client](https://github.com/ipfs/js-ipfs-http-client#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
 
 ## How do I fallback if `window.ipfs` is not available?
 
@@ -117,9 +116,9 @@ You can't make any assumptions about how the node is configured. For example, th
 
 Yes.
 
-IPFS companion users are able to selectively control access to `window.ipfs` functions so calls may reject (or callback) with [an error](#error-messages) if a user decides to deny access.
+IPFS companion users are able to selectively control access to proxied commands so calls may reject (or callback) with [an error](#error-messages) if a user decides to deny access.
 
-The first time you call a `window.ipfs` function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
+The first time you call a proxied function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
 
 It looks like this:
 
