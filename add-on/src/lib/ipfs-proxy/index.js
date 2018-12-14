@@ -6,7 +6,7 @@ const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
 const { expose } = require('postmsg-rpc')
 const AccessControl = require('./access-control')
 const createEnableCommand = require('./enable-command')
-const { createPreApiWhitelist } = require('./pre-api-whitelist')
+const { createPreCommand } = require('./pre-command')
 const { createPreAcl } = require('./pre-acl')
 const createPreMfsScope = require('./pre-mfs-scope')
 const createRequestAccess = require('./request-access')
@@ -37,7 +37,7 @@ function createIpfsProxy (getIpfs, getState) {
       postMessage: (data) => port.postMessage(data),
       getMessageData: (d) => d,
       pre: (fnName) => [
-        createPreApiWhitelist(fnName),
+        createPreCommand(fnName),
         createPreAcl(fnName, getState, getScope, accessControl, requestAccess),
         createPreMfsScope(fnName, getScope, getIpfs)
       ]

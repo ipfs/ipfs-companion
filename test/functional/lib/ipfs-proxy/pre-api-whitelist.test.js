@@ -2,16 +2,16 @@
 const { describe, it, before, after } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
-const { createPreApiWhitelist } = require('../../../../add-on/src/lib/ipfs-proxy/pre-api-whitelist')
+const { createPreCommand } = require('../../../../add-on/src/lib/ipfs-proxy/pre-command')
 
-describe('lib/ipfs-proxy/pre-api-whitelist', () => {
+describe('lib/ipfs-proxy/pre-command', () => {
   before(() => {
     global.URL = URL
   })
 
   it('should throw early if access was not enabled via global API whitelist', async () => {
     const permission = 'config.show'
-    const preApiWhitelist = createPreApiWhitelist(permission)
+    const preApiWhitelist = createPreCommand(permission)
 
     let error
 
@@ -26,7 +26,7 @@ describe('lib/ipfs-proxy/pre-api-whitelist', () => {
 
   it('should have a well-formed Error if denied', async () => {
     const permission = 'config.show'
-    const preApiWhitelist = createPreApiWhitelist(permission)
+    const preApiWhitelist = createPreCommand(permission)
 
     let error
 

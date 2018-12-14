@@ -1,4 +1,4 @@
-const { inApiWhitelist, createProxyWhitelistError } = require('./pre-api-whitelist')
+const { inCommandWhitelist, createCommandWhitelistError } = require('./pre-command')
 const { inNoAclPromptWhitelist, createProxyAclError } = require('./pre-acl')
 
 // Artificial API command responsible for backend orchestration
@@ -21,8 +21,8 @@ function createEnableCommand (getIpfs, getState, getScope, accessControl, reques
       let deniedAcls = []
       for (let command of opts.commands) {
         // Fail fast if command is not allowed to be proxied at all
-        if (!inApiWhitelist(command)) {
-          throw createProxyWhitelistError(command)
+        if (!inCommandWhitelist(command)) {
+          throw createCommandWhitelistError(command)
         }
         // Get the current access flag to decide if it should be added
         // to the list of permissions to be prompted about in the next step
