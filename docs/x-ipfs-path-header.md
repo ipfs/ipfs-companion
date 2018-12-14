@@ -12,7 +12,7 @@ The detection of the `x-ipfs-path` header can be disabled in the _Preferences_ s
 
 ## Use Cases
 
-### Fallback for edge cases when the IPFS path is not present in URL
+### Fallback for edge cases where the IPFS path is not present in the URL
 
 The website owner can have the HTTP gateway behind a reverse-proxy but configure it to expose `/ipfs/<cid>/` under `/` in which case path-based IPFS detection, by the IPFS Companion add-on (see [onBeforeRequest][]), won't work.
 
