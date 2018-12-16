@@ -29,9 +29,19 @@ function createCommandWhitelistError (permission) {
   const err = new Error(`Access to '${permission}' commands over IPFS Proxy is globally blocked`)
   err.output = {
     payload: {
-      isIpfsProxyError: true,
-      isIpfsProxyWhitelistError: true,
-      permissions
+      // Error follows convention from https://github.com/ipfs/js-ipfs/pull/1746/files
+      code: 'ERR_IPFS_PROXY_ACCESS_DENIED',
+      permissions,
+      // TODO: remove below after deprecation period ends with Q1
+      get isIpfsProxyWhitelistError () {
+        console.warn("[ipfs-companion] reading .isIpfsProxyWhitelistError from Ipfs Proxy errors is deprecated, use '.code' instead")
+        return true
+      },
+      get permission () {
+        if (!this.permissions || !this.permissions.length) return undefined
+        console.warn("[ipfs-companion] reading .permission from Ipfs Proxy errors is deprecated, use '.permissions' instead")
+        return this.permissions[0]
+      }
     }
   }
   return err

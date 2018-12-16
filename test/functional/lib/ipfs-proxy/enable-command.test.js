@@ -230,10 +230,12 @@ describe('lib/ipfs-proxy/enable-command', () => {
     }
 
     expect(error.output.payload).to.deep.eql({
-      isIpfsProxyError: true,
-      isIpfsProxyAclError: true,
+      code: 'ERR_IPFS_PROXY_ACCESS_DENIED',
       permissions: permissions.commands,
-      scope: getScope()
+      scope: getScope(),
+      isIpfsProxyAclError: true, // deprecated
+      permission: permissions.commands[0] // deprecated
+
     })
   })
 

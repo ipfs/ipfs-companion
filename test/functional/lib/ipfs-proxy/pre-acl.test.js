@@ -133,10 +133,11 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(error.output.payload).to.deep.eql({
-      isIpfsProxyError: true,
-      isIpfsProxyAclError: true,
+      code: 'ERR_IPFS_PROXY_ACCESS_DENIED',
       permissions: [permission],
-      scope: getScope()
+      scope: getScope(),
+      isIpfsProxyAclError: true, // deprecated
+      permission // deprecated
     })
   })
 

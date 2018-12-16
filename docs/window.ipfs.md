@@ -7,8 +7,8 @@
 > Want to help in shaping it? See [#589](https://github.com/ipfs-shipyard/ipfs-companion/issues/589) and [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
 
 - [Background](#background)
-- [Creating applications using window.ipfs](#creating-applications-using-windowipfs)
-    - [Error messages](#error-messages)
+- [Creating applications using `window.ipfs`](#creating-applications-using-windowipfs)
+    - [Error Codes](#error-codes)
 - [Q&A](#qa)
     - [What is a `window.ipfs`?](#what-is-a-windowipfs)
     - [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
@@ -42,7 +42,7 @@ if (window.ipfs && window.ipfs.enable) {
 }
 ```
 
-To add and get content, you could do something like this:
+To add and get content, you could update above example to do something like this:
 
 ```js
 if (window.ipfs && window.ipfs.enable) {
@@ -52,15 +52,17 @@ if (window.ipfs && window.ipfs.enable) {
     const data = await ipfs.cat(hash)
     console.log(data.toString()) // =^.^=
   } catch (err) {
-    if (err.isIpfsProxyAclError) {
-      // Fallback
-      console.log('Unable to get ACL decision from user :(', err)
+    if (err.code === 'ERR_IPFS_PROXY_ACCESS_DENIED') {
+      // Proxy is present but user denied access.
+      // (fallback to js-ipfs or js-ipfs-http-client goes here)
     } else {
+      // Something else went wrong (error handling)
       throw err
     }
   }
 } else {
-  // Fallback
+  // No IPFS Proxy
+  // (fallback to js-ipfs or js-ipfs-http-client goes here)
 }
 ```
 
@@ -68,39 +70,27 @@ Note that IPFS Companion also adds `window.Buffer` if it doesn't already exist.
 
 See also: [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
 
-### Error messages
+### Error Codes
 
-If access was denied:
+Errors returned by IPFS Proxy can be identified by the value of `code` attribute:
 
-```
-User denied access to ${permission}
-```
+#### `ERR_IPFS_PROXY_ACCESS_DENIED`
 
-If the user closes the dialog without making a decision:
+Thrown when current scope has no access rights to requested commands.
 
-```
-Failed to obtain access response for ${permission} at ${scope}
-```
-
-If access to IPFS was disabled entirely:
-
-```
-User disabled access to IPFS
-```
-
-Note these might have been re-worded already. Please send a PR.
-
-
+Optional `scope` and `permissions` attributes provide detailed information:
+ - IF access was denied for a specific command THEN the `permissions` list is present and includes names of blocked commands
+ - IF entire IPFS Proxy was disabled by the user THEN the `permissions` list is missing entirely
 
 # Q&A
 
 ## What _is_ a `window.ipfs`?
 
-It is an endpoint that enables you to obtain IPFS API instance.
+It is an IPFS Proxy endpoint that enables you to obtain IPFS API instance.
 
 Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-http-client` or a `js-ipfs` daemon over `js-ipfs-http-client` and potentially others in the future.
 
-Note that object returned by `window.ipfs.enable` is _not_ an instance of `js-ipfs` or `js-ipfs-http-client` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
+Note that object returned by `window.ipfs.enable` is _not_ an instance of `js-ipfs` or `js-ipfs-http-client` but is a Proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
 
 See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-http-client](https://github.com/ipfs/js-ipfs-http-client#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
 

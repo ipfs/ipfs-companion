@@ -44,10 +44,20 @@ function createProxyAclError (scope, permission) {
   const permissions = Array.isArray(permission) ? permission : [permission]
   err.output = {
     payload: {
-      isIpfsProxyError: true,
-      isIpfsProxyAclError: true,
+      // Error follows convention from https://github.com/ipfs/js-ipfs/pull/1746/files
+      code: 'ERR_IPFS_PROXY_ACCESS_DENIED',
       permissions,
-      scope
+      scope,
+      // TODO: remove below after deprecation period ends with Q1
+      get isIpfsProxyAclError () {
+        console.warn("[ipfs-companion] reading .isIpfsProxyAclError from Ipfs Proxy errors is deprecated, use '.code' instead")
+        return true
+      },
+      get permission () {
+        if (!this.permissions || !this.permissions.length) return undefined
+        console.warn("[ipfs-companion] reading .permission from Ipfs Proxy errors is deprecated, use '.permissions' instead")
+        return this.permissions[0]
+      }
     }
   }
   return err

@@ -37,9 +37,10 @@ describe('lib/ipfs-proxy/pre-command', () => {
     }
 
     expect(error.output.payload).to.deep.eql({
-      isIpfsProxyError: true,
-      isIpfsProxyWhitelistError: true,
-      permissions: [permission]
+      code: 'ERR_IPFS_PROXY_ACCESS_DENIED',
+      permissions: [permission],
+      isIpfsProxyWhitelistError: true, // deprecated
+      permission // deprecated
     })
   })
 
