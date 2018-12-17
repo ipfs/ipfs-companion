@@ -10,6 +10,7 @@ crowdin.yml
 .*~
 add-on/dist
 add-on/webui/
+add-on/share/
 add-on/ui-kit/
 coverage
 .nyc_output

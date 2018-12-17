@@ -21,7 +21,7 @@ progress(request(url), { lengthHeader: 'x-content-length', delay: 10000 })
   .on('progress', (state) => console.log(`progress: ${Math.round(state.percent)} %, transferred: ${state.size.transferred}`, state))
   .on('response', (response) => console.log('Status Code', response.statusCode))
   .on('error', (error) => console.log('Download Error', error))
-  .on('close', () => console.log('Done! webui extracted to: ' + destination))
+  .on('close', () => console.log(`Done! ${cid} extracted to: ${destination}`))
   .pipe(
     tar.extract({
       strip: 1,

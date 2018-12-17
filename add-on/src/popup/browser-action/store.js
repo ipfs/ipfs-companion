@@ -118,8 +118,10 @@ module.exports = (state, emitter) => {
     }
   }
 
-  emitter.on('quickUpload', () => {
-    browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-upload.html') })
+  emitter.on('quickUpload', async () => {
+    // TODO: remove code responsibe for old upload screen when new one is polished enough
+    await browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-upload.html') })
+    await browser.tabs.create({ url: browser.extension.getURL('share/index.html') })
     window.close()
   })
 
