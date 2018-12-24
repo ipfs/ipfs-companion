@@ -9,7 +9,7 @@ const { pathAtHttpGateway } = require('./ipfs-path')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
-  const cacheOptions = { max: 1000, maxAge: 1000 * 60 * 60 * 12 }
+  const cacheOptions = { max: 400, maxAge: 1000 * 60 * 2 }
   const cache = new LRU(cacheOptions)
   // upper bound for concurrent background lookups done by preloadDnslink(url)
   const lookupQueue = new PQueue({ concurrency: 8 })
