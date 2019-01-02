@@ -1,36 +1,34 @@
 'use strict'
 
-const browser = require('webextension-polyfill')
 const { safeIpfsPath, trimHashAndSearch } = require('./ipfs-path')
 const { findValueForContext } = require('./context-menus')
 
-async function copyTextToClipboard (copyText) {
-  const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
-  const tabId = currentTab.id
-  // Lets take a moment and ponder on the state of copying a string in 2017:
-  const copyToClipboardIn2017 = `function copyToClipboardIn2017(text) {
-      function oncopy(event) {
-          document.removeEventListener('copy', oncopy, true);
-          event.stopImmediatePropagation();
-          event.preventDefault();
-          event.clipboardData.setData('text/plain', text);
-      }
-      document.addEventListener('copy', oncopy, true);
-      document.execCommand('copy');
-    }`
-
-  // In Firefox you can't select text or focus an input field in background pages,
-  // so you can't write to the clipboard from a background page.
-  // We work around this limitation by injecting content script into a tab and copying there.
-  // Yes, this is 2017.
+async function copyTextToClipboard (text, notify) {
   try {
-    const copyHelperPresent = (await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: "typeof copyToClipboardIn2017 === 'function';" }))[0]
-    if (!copyHelperPresent) {
-      await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: copyToClipboardIn2017 })
+    try {
+      // Modern API (spotty support, but works in Firefox)
+      await navigator.clipboard.writeText(text)
+      // FUN FACT:
+      // Before this API existed we had no access to cliboard from
+      // the background page in Firefox and had to inject content script
+      // into current page to copy there:
+      // https://github.com/ipfs-shipyard/ipfs-companion/blob/b4a168880df95718e15e57dace6d5006d58e7f30/add-on/src/lib/copier.js#L10-L35
+      // :-))
+    } catch (e) {
+      // Fallback to old API (works only in Chromium)
+      function oncopy (event) { // eslint-disable-line no-inner-declarations
+        document.removeEventListener('copy', oncopy, true)
+        event.stopImmediatePropagation()
+        event.preventDefault()
+        event.clipboardData.setData('text/plain', text)
+      }
+      document.addEventListener('copy', oncopy, true)
+      document.execCommand('copy')
     }
-    await browser.tabs.executeScript(tabId, { runAt: 'document_start', code: 'copyToClipboardIn2017(' + JSON.stringify(copyText) + ');' })
+    notify('notify_copiedTitle', text)
   } catch (error) {
-    console.error('Failed to copy text: ' + error)
+    console.error('[ipfs-companion] Failed to copy text', error)
+    notify('notify_addonIssueTitle', 'Unable to copy')
   }
 }
 
@@ -39,8 +37,7 @@ function createCopier (getState, getIpfs, notify) {
     async copyCanonicalAddress (context, contextType) {
       const url = await findValueForContext(context, contextType)
       const rawIpfsAddress = safeIpfsPath(url)
-      copyTextToClipboard(rawIpfsAddress)
-      notify('notify_copiedTitle', rawIpfsAddress)
+      await copyTextToClipboard(rawIpfsAddress, notify)
     },
 
     async copyRawCid (context, contextType) {
@@ -49,8 +46,7 @@ function createCopier (getState, getIpfs, notify) {
         const url = await findValueForContext(context, contextType)
         const rawIpfsAddress = trimHashAndSearch(safeIpfsPath(url))
         const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true, dhtt: '5s', dhtrc: 1 })).split('/')[2]
-        copyTextToClipboard(directCid)
-        notify('notify_copiedTitle', directCid)
+        await copyTextToClipboard(directCid, notify)
       } catch (error) {
         console.error('Unable to resolve/copy direct CID:', error.message)
         if (notify) {
@@ -71,8 +67,7 @@ function createCopier (getState, getIpfs, notify) {
       const url = await findValueForContext(context, contextType)
       const state = getState()
       const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
-      copyTextToClipboard(urlAtPubGw)
-      notify('notify_copiedTitle', urlAtPubGw)
+      await copyTextToClipboard(urlAtPubGw, notify)
     }
   }
 }
