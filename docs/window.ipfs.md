@@ -117,16 +117,21 @@ It looks like this:
 
 ## Do I need to confirm every API call?
 
-Not all function calls require a decision from the user. You will be able to call [whitelisted](../add-on/src/lib/ipfs-proxy/acl-whitelist.json) IPFS functions and users will _not_ be prompted to allow/deny access.
+Command access need to be confirmed only once [per scope](#how-are-permissions-scoped).
 
-Functions that are not whitelisted need to be confirmed only once [per scope](#how-are-permissions-scoped).
+If you provide a list of commands when requesting API instance via `window.ipfs.enable({commands})`
+then a single permission dialog will be displayed to the user.
 
-Note that users can modify their permission decisions after the fact so you should not expect to always be allowed to call a function if it was successfully called previously.
+For everything else, only the first call requires a decision from the user. You will be able to call
+previously whitelisted IPFS commands and users will _not_ be prompted to
+allow/deny access the second time.
+
+Note that users can modify their permission decisions after the fact so you should not expect to always be allowed to call a command if it was successfully called previously.
 
 
 ## Can I disable this for now?
 
-Users can permanently deny access to all IPFS functions by disabling `window.ipfs` experiment on _Preferences_ screen.
+Users can permanently deny access to all IPFS commands by disabling `window.ipfs` experiment on _Preferences_ screen.
 
 ## How are permissions scoped?
 
@@ -166,7 +171,7 @@ e.g.
 
 ## Are mutable file system (MFS) files sandboxed to a directory?
 
-Yes. To avoid conflicts, each app gets it's own MFS directory where it can store files. When using MFS functions (see [docs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)) this directory will be automatically added to paths you pass. Your app's MFS directory is based on the **origin and path** where your application is running.
+Yes. To avoid conflicts, each app gets it's own MFS directory where it can store files. When using MFS commands (see [docs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)) this directory will be automatically added to paths you pass. Your app's MFS directory is based on the **origin and path** where your application is running.
 
 e.g.
 

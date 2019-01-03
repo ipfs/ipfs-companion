@@ -1,5 +1,5 @@
 const { inCommandWhitelist, createCommandWhitelistError } = require('./pre-command')
-const { inNoAclPromptWhitelist, createProxyAclError } = require('./pre-acl')
+const { createProxyAclError } = require('./pre-acl')
 
 // Artificial API command responsible for backend orchestration
 // during window.ipfs.enable()
@@ -26,13 +26,11 @@ function createEnableCommand (getIpfs, getState, getScope, accessControl, reques
         }
         // Get the current access flag to decide if it should be added
         // to the list of permissions to be prompted about in the next step
-        if (!inNoAclPromptWhitelist(command)) {
-          let access = await accessControl.getAccess(scope, command)
-          if (!access) {
-            missingAcls.push(command)
-          } else if (access.allow !== true) {
-            deniedAcls.push(command)
-          }
+        let access = await accessControl.getAccess(scope, command)
+        if (!access) {
+          missingAcls.push(command)
+        } else if (access.allow !== true) {
+          deniedAcls.push(command)
         }
       }
       // Fail fast if user already denied any of requested permissions

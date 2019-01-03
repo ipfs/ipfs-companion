@@ -10,7 +10,6 @@ const Sinon = require('sinon')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const createEnableCommand = require('../../../../add-on/src/lib/ipfs-proxy/enable-command')
 const createRequestAccess = require('../../../../add-on/src/lib/ipfs-proxy/request-access')
-const { ACL_WHITELIST } = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
 
 describe('lib/ipfs-proxy/enable-command', () => {
   before(() => {
@@ -69,25 +68,6 @@ describe('lib/ipfs-proxy/enable-command', () => {
     await enable()
     // confirm there was no user prompt
     expect(requestAccess.called).to.equal(false)
-  })
-
-  it('should allow access without prompt if permission is on ACL whitelist', async () => {
-    const getState = () => ({ ipfsProxy: true })
-    const accessControl = new AccessControl(new Storage())
-    const getScope = () => 'https://3.foo.tld/path/'
-    const getIpfs = () => {}
-    const requestAccess = async () => { throw new Error('Requested access for whitelist permission') }
-    const enable = createEnableCommand(getIpfs, getState, getScope, accessControl, requestAccess)
-
-    let error
-
-    try {
-      await Promise.all(ACL_WHITELIST.map(permission => enable({ commands: [permission] })))
-    } catch (err) {
-      error = err
-    }
-
-    expect(error).to.equal(undefined)
   })
 
   it('should request access if no grant exists', async () => {

@@ -5,7 +5,7 @@ const { URL } = require('url')
 const Storage = require('mem-storage-area/Storage')
 const Sinon = require('sinon')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
-const { createPreAcl, ACL_WHITELIST } = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
+const { createPreAcl } = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
 
 describe('lib/ipfs-proxy/pre-acl', () => {
   before(() => {
@@ -29,26 +29,6 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(() => { if (error) throw error }).to.throw('User disabled access to API proxy in IPFS Companion')
-  })
-
-  it('should allow access if permission is on whitelist', async () => {
-    const getState = () => ({ ipfsProxy: true })
-    const accessControl = new AccessControl(new Storage())
-    const getScope = () => 'https://ipfs.io/'
-    const requestAccess = async () => { throw new Error('Requested access for whitelist permission') }
-
-    let error
-
-    try {
-      await Promise.all(ACL_WHITELIST.map(permission => {
-        const preAcl = createPreAcl(permission, getState, getScope, accessControl, requestAccess)
-        return preAcl()
-      }))
-    } catch (err) {
-      error = err
-    }
-
-    expect(error).to.equal(undefined)
   })
 
   it('should request access if no grant exists', async () => {

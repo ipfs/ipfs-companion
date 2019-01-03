@@ -1,7 +1,3 @@
-// This are the functions that DO NOT require an allow/deny decision by the user.
-// All other IPFS functions require authorization.
-const ACL_WHITELIST = Object.freeze(require('./acl-whitelist.json'))
-
 // Creates a "pre" function that is called prior to calling a real function
 // on the IPFS instance. It will throw if access is denied, and ask the user if
 // no access decision has been made yet.
@@ -9,9 +5,6 @@ function createPreAcl (permission, getState, getScope, accessControl, requestAcc
   return async (...args) => {
     // Check if all access to the IPFS node is disabled
     if (!getState().ipfsProxy) throw new Error('User disabled access to API proxy in IPFS Companion')
-
-    // No need to verify access if permission is on the whitelist
-    if (inNoAclPromptWhitelist(permission)) return args
 
     const scope = await getScope()
     const access = await getAccessWithPrompt(accessControl, requestAccess, scope, permission)
@@ -24,10 +17,6 @@ function createPreAcl (permission, getState, getScope, accessControl, requestAcc
   }
 }
 
-function inNoAclPromptWhitelist (permission) {
-  return ACL_WHITELIST.includes(permission)
-}
-
 async function getAccessWithPrompt (accessControl, requestAccess, scope, permission) {
   let access = await accessControl.getAccess(scope, permission)
   if (!access) {
@@ -37,7 +26,7 @@ async function getAccessWithPrompt (accessControl, requestAccess, scope, permiss
   return access
 }
 
-// Standardized error thrown when a command is not on the ACL_WHITELIST
+// Standardized error thrown when a command access is denied
 // TODO: return errors following conventions from https://github.com/ipfs/js-ipfs/pull/1746
 function createProxyAclError (scope, permission) {
   const err = new Error(`User denied access to selected commands over IPFS proxy: ${permission}`)
@@ -65,7 +54,5 @@ function createProxyAclError (scope, permission) {
 
 module.exports = {
   createPreAcl,
-  createProxyAclError,
-  inNoAclPromptWhitelist,
-  ACL_WHITELIST
+  createProxyAclError
 }
