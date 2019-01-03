@@ -7,7 +7,7 @@ const { normalizeGatewayURL } = require('../../lib/options')
 
 // Warn about mixed content issues when changing the gateway
 // https://github.com/ipfs-shipyard/ipfs-companion/issues/648
-const secureContextUrl = /^https:\/\/.*|^http:\/\/127.0.0.1/
+const secureContextUrl = /^https:\/\/|^http:\/\/127.0.0.1|^http:\/\/\[::1\]/
 
 function gatewaysForm ({
   ipfsNodeType,
