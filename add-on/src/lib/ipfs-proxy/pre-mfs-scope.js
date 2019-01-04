@@ -63,7 +63,7 @@ function prefixSrcDestArgs (prefix, args) {
       prefixedArgs[i] = safePathPrefix(prefix, item, isDestination)
     } else if (Array.isArray(item)) {
       // The syntax recently changed to remove passing an array,
-      // but we allow for both versions until js-ipfs-api is updated to remove
+      // but we allow for both versions until js-ipfs-http-client is updated to remove
       // support for it
       console.warn('[ipfs-companion] use of array in ipfs.files.cp|mv is deprecated, see https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filescp')
       prefixedArgs[i] = prefixSrcDestArgs(prefix, item)

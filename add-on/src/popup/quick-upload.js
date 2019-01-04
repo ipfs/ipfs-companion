@@ -74,7 +74,7 @@ async function processFiles (state, emitter, files) {
     try {
       result = await ipfsCompanion.ipfs.files.add(streams, options)
       // This is just an additional safety check, as in past combination
-      // of specific go-ipfs/js-ipfs-api versions
+      // of specific go-ipfs/js-ipfs-http-client versions
       // produced silent errors in form of partial responses:
       // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
       const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
@@ -141,7 +141,7 @@ function progressHandler (doneBytes, totalBytes, state, emitter) {
     state.progress = `${done.value} ${done.symbol} / ${total.value} ${total.symbol} (${percent}%)`
   } else {
     // This is a gracefull fallback for environments in which progress reporting is delayed
-    // until entire file/chunk is bufferend into memory (eg. js-ipfs-api)
+    // until entire file/chunk is bufferend into memory (eg. js-ipfs-http-client)
     state.progress = browser.i18n.getMessage('quickUpload_state_buffering')
   }
   emitter.emit('render')

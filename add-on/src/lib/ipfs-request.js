@@ -119,7 +119,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // '403 - Forbidden' fix for Chrome and Firefox
         // --------------------------------------------
         // We remove Origin header from requests made to API URL
-        // by js-ipfs-api running in WebExtension context to remove need
+        // by js-ipfs-http-client running in WebExtension context to remove need
         // for manual whitelisting Access-Control-Allow-Origin at go-ipfs
         // More info:
         // Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/622
