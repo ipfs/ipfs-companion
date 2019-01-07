@@ -1,14 +1,14 @@
 # Notes on exposing IPFS API via `window.ipfs`
- 
-> ### Disclaimer:    
-> - ### we are [🚧 working on v2.0 of this interface 🚧](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)    
-> - ### ⚠️ below API will change ⚠️. 
-> 
-> Want to help in shaping it? See [#589](https://github.com/ipfs-shipyard/ipfs-companion/issues/589) and [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
+
+> ### Disclaimer:
+> - ### [🚧 ongoing work on v2 of this interface 🚧](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)
+>   - Want to help with shaping it? See [#589](https://github.com/ipfs-shipyard/ipfs-companion/issues/589) and [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
+> - ### ⚠️ the interface is experimental and might change ⚠️
+>   - **tl;dr** use [window.ipfs-fallback](https://www.npmjs.com/package/window.ipfs-fallback) to ensure your app follows any future changes
 
 - [Background](#background)
-- [Creating applications using window.ipfs](#creating-applications-using-windowipfs)
-    - [Error messages](#error-messages)
+- [Creating applications using `window.ipfs`](#creating-applications-using-windowipfs)
+    - [Error Codes](#error-codes)
 - [Q&A](#qa)
     - [What is a `window.ipfs`?](#what-is-a-windowipfs)
     - [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
@@ -25,38 +25,46 @@ IPFS Companion is exposing a subset of IPFS APIs as `window.ipfs` on every webpa
 
 This means websites can detect that `window.ipfs` already exists and use it instead of spawning own `js-ipfs` node, which saves resources, battery etc.
 
-For more context, see original issue: [Expose IPFS API as window.ipfs #330](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
+For more context, see:
+- first iteration: [window.ipfs v1](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
+- second iteration (now): [window.ipfs v2](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)
 
 ## Creating applications using `window.ipfs`
 
-If a user has installed IPFS companion, `window.ipfs` will be available as soon as the first script runs on your web page, so you'll be able to detect it using a simple `if` statement:
+> **tl;dr** jump to: [how do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
+
+If a user has installed IPFS Companion, `window.ipfs` will be available as soon as the first script runs on your web page, so you'll be able to detect it using a simple `if` statement:
 
 ```js
-if (window.ipfs) {  
-  await ipfs.id()
+if (window.ipfs && window.ipfs.enable) {
+  const ipfs = await window.ipfs.enable({commands: ['id','dag','version']})
+  console.log(await ipfs.id())
 } else {
   // Fallback
 }
 ```
 
-To add and get content, you could do something like this:
+To add and get content, you could update above example to do something like this:
 
 ```js
-if (window.ipfs) {
+if (window.ipfs && window.ipfs.enable) {
   try {
+    const ipfs = await window.ipfs.enable({commands: ['add','cat']})
     const [{ hash }] = await ipfs.add(Buffer.from('=^.^='))
     const data = await ipfs.cat(hash)
     console.log(data.toString()) // =^.^=
   } catch (err) {
-    if (err.isIpfsProxyAclError) {
-      // Fallback
-      console.log('Unable to get ACL decision from user :(', err)
+    if (err.code === 'ERR_IPFS_PROXY_ACCESS_DENIED') {
+      // Proxy is present but user denied access.
+      // (fallback to js-ipfs or js-ipfs-http-client goes here)
     } else {
+      // Something else went wrong (error handling)
       throw err
     }
   }
 } else {
-  // Fallback
+  // No IPFS Proxy
+  // (fallback to js-ipfs or js-ipfs-http-client goes here)
 }
 ```
 
@@ -64,55 +72,51 @@ Note that IPFS Companion also adds `window.Buffer` if it doesn't already exist.
 
 See also: [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
 
-### Error messages
+### Error Codes
 
-If access was denied:
+Errors returned by IPFS Proxy can be identified by the value of `code` attribute:
 
-```
-User denied access to ${permission}
-```
+#### `ERR_IPFS_PROXY_ACCESS_DENIED`
 
-If the user closes the dialog without making a decision:
+Thrown when current scope has no access rights to requested commands.
 
-```
-Failed to obtain access response for ${permission} at ${scope}
-```
-
-If access to IPFS was disabled entirely:
-
-```
-User disabled access to IPFS
-```
-
-Note these might have been re-worded already. Please send a PR.
-
-
+Optional `scope` and `permissions` attributes provide detailed information:
+ - **IF** access was denied for a specific command **THEN** the `permissions` list is present and includes names of blocked commands
+ - **IF** entire IPFS Proxy was disabled by the user **THEN** the `permissions` list is missing entirely
 
 # Q&A
 
 ## What _is_ a `window.ipfs`?
 
-Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-api` or a `js-ipfs` daemon over `js-ipfs-api` and potentially others in the future.
+It is an IPFS Proxy endpoint that enables you to obtain IPFS API instance.
 
-Note that `window.ipfs` is _not_ an instance of `js-ipfs` or `js-ipfs-api` but is a proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
+Depending how IPFS companion is configured, you may be talking directly to a `js-ipfs` node running in the companion, a `go-ipfs` daemon over `js-ipfs-http-client` or a `js-ipfs` daemon over `js-ipfs-http-client` and potentially others in the future.
 
-See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-api](https://github.com/ipfs/js-ipfs-api#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
+Note that object returned by `window.ipfs.enable` is _not_ an instance of `js-ipfs` or `js-ipfs-http-client` but is a Proxy to one of them, so don't expect to be able to detect either of them or be able to use any undocumented or instance specific functions.
+
+See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-http-client](https://github.com/ipfs/js-ipfs-http-client#api) docs for available functions. If you find that some new functions are missing, the proxy might be out of date. Please check the [current status](https://github.com/tableflip/ipfs-postmsg-proxy#current-status) and submit a PR.
 
 ## How do I fallback if `window.ipfs` is not available?
 
+
 See the [example code](examples/window.ipfs-fallback.html) (and [live demo](https://ipfs-shipyard.github.io/ipfs-companion/docs/examples/window.ipfs-fallback.html)) for getting an IPFS instance with a fallback.
+
+**Tip:** use [window.ipfs-fallback](https://www.npmjs.com/package/window.ipfs-fallback) library that takes care of fallback ceremony.
+It will ensure your app follows API changes and does not break in the future.
 
 ## What about IPFS node configuration?
 
-You can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
+Right now access to `config` command is blocked, and you can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
+
+Spawn a dedicated js-ipfs instance if you need non-standard configuration or any experimental features.
 
 ## Is there a Permission Control (ACL)?
 
 Yes.
 
-IPFS companion users are able to selectively control access to `window.ipfs` functions so calls may reject (or callback) with [an error](#error-messages) if a user decides to deny access.
+IPFS companion users are able to selectively control access to proxied commands so calls may reject (or callback) with [an error](#error-messages) if a user decides to deny access.
 
-The first time you call a `window.ipfs` function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
+The first time you call a proxied function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
 
 It looks like this:
 
@@ -121,16 +125,21 @@ It looks like this:
 
 ## Do I need to confirm every API call?
 
-Not all function calls require a decision from the user. You will be able to call [whitelisted](../add-on/src/lib/ipfs-proxy/acl-whitelist.json) IPFS functions and users will _not_ be prompted to allow/deny access.
+Command access need to be confirmed only once [per scope](#how-are-permissions-scoped).
 
-Functions that are not whitelisted need to be confirmed only once [per scope](#how-are-permissions-scoped).
+If you provide a list of commands when requesting API instance via `window.ipfs.enable({commands})`
+then a single permission dialog will be displayed to the user.
 
-Note that users can modify their permission decisions after the fact so you should not expect to always be allowed to call a function if it was successfully called previously.
+For everything else, only the first call requires a decision from the user. You will be able to call
+previously whitelisted IPFS commands and users will _not_ be prompted to
+allow/deny access the second time.
+
+Note that users can modify their permission decisions after the fact so you should not expect to always be allowed to call a command if it was successfully called previously.
 
 
 ## Can I disable this for now?
 
-Users can permanently deny access to all IPFS functions by disabling `window.ipfs` experiment on _Preferences_ screen.
+Users can permanently deny access to all IPFS commands by disabling `window.ipfs` experiment on _Preferences_ screen.
 
 ## How are permissions scoped?
 
@@ -170,7 +179,7 @@ e.g.
 
 ## Are mutable file system (MFS) files sandboxed to a directory?
 
-Yes. To avoid conflicts, each app gets it's own MFS directory where it can store files. When using MFS functions (see [docs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)) this directory will be automatically added to paths you pass. Your app's MFS directory is based on the **origin and path** where your application is running.
+Yes. To avoid conflicts, each app gets it's own MFS directory where it can store files. When using MFS commands (see [docs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)) this directory will be automatically added to paths you pass. Your app's MFS directory is based on the **origin and path** where your application is running.
 
 e.g.
 

@@ -8,13 +8,16 @@ const DIALOG_PATH = 'dist/pages/proxy-access-dialog/index.html'
 const DIALOG_PORT_NAME = 'proxy-access-dialog'
 
 function createRequestAccess (browser, screen) {
-  // piggybacker allows multiple requests for access to the same permission to
+  // piggybacker allows multiple requests for access to the same permissions to
   // receive the same response i.e. don't popup multiple dialogs for the
-  // same permission request.
-  return piggyback(requestAccess, (scope, permission) => `${scope}/${permission}`)
+  // same permissions request.
+  return piggyback(requestAccess, (scope, permissions) => `${scope}/${permissions}`)
 
-  async function requestAccess (scope, permission, opts) {
+  async function requestAccess (scope, permissions, opts) {
     opts = opts || {}
+
+    // TODO: cleanup so below stub is not needed
+    permissions = Array.isArray(permissions) ? permissions : [permissions]
 
     const url = browser.extension.getURL(opts.dialogPath || DIALOG_PATH)
 
@@ -37,9 +40,9 @@ function createRequestAccess (browser, screen) {
     }
 
     // Resolves with { allow, wildcard }
-    const userResponse = getUserResponse(dialogTabId, scope, permission, opts)
+    const userResponse = getUserResponse(dialogTabId, scope, permissions, opts)
     // Never resolves, might reject if user closes the tab
-    const userTabRemoved = getUserTabRemoved(dialogTabId, scope, permission)
+    const userTabRemoved = getUserTabRemoved(dialogTabId, scope, permissions)
 
     let response
 
@@ -56,7 +59,7 @@ function createRequestAccess (browser, screen) {
     return response
   }
 
-  function getUserResponse (tabId, scope, permission, opts) {
+  function getUserResponse (tabId, scope, permissions, opts) {
     opts = opts || {}
 
     const dialogPortName = opts.dialogPortName || DIALOG_PORT_NAME
@@ -69,8 +72,8 @@ function createRequestAccess (browser, screen) {
 
         browser.runtime.onConnect.removeListener(onPortConnect)
 
-        // Tell the dialog what scope/permission it is about
-        port.postMessage({ scope, permission })
+        // Tell the dialog what scope/permissions it is about
+        port.postMessage({ scope, permissions })
 
         // Wait for the user response
         const onMessage = ({ allow, wildcard }) => {
@@ -92,14 +95,14 @@ function createRequestAccess (browser, screen) {
   // Since the dialog is a tab not a real dialog it can be closed by the user
   // with no response, this function creates a promise that will reject if the tab
   // is removed.
-  function getUserTabRemoved (tabId, scope, permission) {
+  function getUserTabRemoved (tabId, scope, permissions) {
     let onTabRemoved
 
     const userTabRemoved = new Promise((resolve, reject) => {
       onTabRemoved = (id) => {
         if (id !== tabId) return
-        const err = new Error(`Failed to obtain access response for ${permission} at ${scope}`)
-        err.output = { payload: { isIpfsProxyAclError: true, scope, permission } }
+        const err = new Error(`IPFS Proxy failed to obtain access response for '${permissions}' at ${scope}`)
+        err.output = { payload: { isIpfsProxyError: true, isIpfsProxyAclError: true, scope, permissions } }
         reject(err)
       }
       browser.tabs.onRemoved.addListener(onTabRemoved)

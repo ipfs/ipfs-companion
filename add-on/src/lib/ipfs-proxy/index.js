@@ -3,9 +3,11 @@
 
 const browser = require('webextension-polyfill')
 const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
+const { expose } = require('postmsg-rpc')
 const AccessControl = require('./access-control')
-const createPreApiWhitelist = require('./pre-api-whitelist')
-const createPreAcl = require('./pre-acl')
+const createEnableCommand = require('./enable-command')
+const { createPreCommand } = require('./pre-command')
+const { createPreAcl } = require('./pre-acl')
 const createPreMfsScope = require('./pre-mfs-scope')
 const createRequestAccess = require('./request-access')
 
@@ -28,16 +30,26 @@ function createIpfsProxy (getIpfs, getState) {
       return origin + pathname
     }
 
-    const proxy = createProxyServer(getIpfs, {
+    // https://github.com/ipfs-shipyard/ipfs-postmsg-proxy#api
+    const proxyCfg = {
       addListener: (_, handler) => port.onMessage.addListener(handler),
       removeListener: (_, handler) => port.onMessage.removeListener(handler),
       postMessage: (data) => port.postMessage(data),
       getMessageData: (d) => d,
       pre: (fnName) => [
-        createPreApiWhitelist(fnName),
+        createPreCommand(fnName),
         createPreAcl(fnName, getState, getScope, accessControl, requestAccess),
         createPreMfsScope(fnName, getScope, getIpfs)
       ]
+    }
+
+    const proxy = createProxyServer(getIpfs, proxyCfg)
+
+    // Extend proxy with Companion-specific commands:
+    const enableCommand = createEnableCommand(getIpfs, getState, getScope, accessControl, requestAccess)
+    Object.assign(proxy, {
+      // window.ipfs.enable(opts)
+      'proxy.enable': expose('proxy.enable', enableCommand, proxyCfg)
     })
 
     const close = () => {

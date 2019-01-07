@@ -17,7 +17,7 @@
     "build": "run-s clean build:*",
     "build:copy": "run-s build:copy:*",
     "build:copy:src": "shx mkdir -p add-on/dist && shx cp -R add-on/src/* add-on/dist",
-    "build:copy:ui-kit": "run-p build:copy:ui-kit:*",
+    "build:copy:ui-kit": "run-s build:copy:ui-kit:*",
     "build:copy:ui-kit:ipfs-css": "run-p build:copy:ui-kit:ipfs-css:*",
     "build:copy:ui-kit:ipfs-css:css": "shx mkdir -p add-on/ui-kit && shx cp node_modules/ipfs-css/ipfs.css add-on/ui-kit",
     "build:copy:ui-kit:ipfs-css:fonts": "shx mkdir -p add-on/ui-kit/fonts && shx cp node_modules/ipfs-css/fonts/* add-on/ui-kit/fonts",
@@ -29,7 +29,7 @@
     "build:webui:fetch-ipfs": "cross-env-shell \"ipfs get $CID -o add-on/webui/\"",
     "build:webui:fetch-http": "cross-env-shell \"node scripts/fetch-webui-from-gateway.js $CID add-on/webui/\"",
     "build:webui:minimize": "shx rm -rf add-on/webui/static/js/*.map && shx rm -rf add-on/webui/static/css/*.map && shx rm -rf add-on/webui/manifest.json",
-    "build:js": "run-p build:js:*",
+    "build:js": "run-s build:js:*",
     "build:js:webpack": "webpack -p",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib add-on/dist/contentScripts/ add-on/dist/bundles/ipfsProxyContentScriptPayload.bundle.js",
     "build:bundle-all": "npm run bundle:generic && cross-env RELEASE_CHANNEL=${RELEASE_CHANNEL:=dev} npm run bundle:firefox:$RELEASE_CHANNEL || npm run bundle:firefox",
@@ -67,8 +67,7 @@
   "preferGlobal": false,
   "resolutions": {
     "stream-http": "3.0.0",
-    "multiaddr": "5.0.2",
-    "uglify-es": "npm:terser"
+    "multiaddr": "5.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",
@@ -98,8 +97,8 @@
     "standard": "12.0.1",
     "tar": "4.4.8",
     "terser": "3.11.0",
+    "terser-webpack-plugin": "1.1.0",
     "transform-loader": "0.2.4",
-    "uglifyjs-webpack-plugin": "2.0.1",
     "web-ext": "2.9.2",
     "webpack": "4.27.1",
     "webpack-bundle-analyzer": "3.0.3",
@@ -117,6 +116,7 @@
     "ipfs-http-client": "27.1.0",
     "ipfs-http-response": "0.2.1",
     "ipfs-postmsg-proxy": "3.1.1",
+    "ipfsx": "0.17.0",
     "is-ipfs": "0.4.8",
     "is-svg": "3.0.0",
     "lru-cache": "5.1.1",

@@ -57,7 +57,7 @@ describe('lib/ipfs-proxy/access-control', () => {
 
     access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
-    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: true }
+    const expectedAccess = { scope: 'https://ipfs.io/', permissions: ['files.add'], allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
   })
@@ -73,7 +73,7 @@ describe('lib/ipfs-proxy/access-control', () => {
 
     access = await accessControl.getAccess('https://ipfs.io/docs/install/', 'files.add')
 
-    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: true }
+    const expectedAccess = { scope: 'https://ipfs.io/', permissions: ['files.add'], allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
   })
@@ -103,7 +103,7 @@ describe('lib/ipfs-proxy/access-control', () => {
 
     access = await accessControl.getAccess('https://ipfs.io/', 'files.add')
 
-    const expectedAccess = { scope: 'https://ipfs.io/', permission: 'files.add', allow: false }
+    const expectedAccess = { scope: 'https://ipfs.io/', permissions: ['files.add'], allow: false }
 
     expect(access).to.deep.equal(expectedAccess)
   })
@@ -155,7 +155,7 @@ describe('lib/ipfs-proxy/access-control', () => {
       error = err
     }
 
-    expect(() => { if (error) throw error }).to.throw('Illegal set access for files.add when wildcard exists')
+    expect(() => { if (error) throw error }).to.throw('Illegal set access for \'files.add\' when wildcard exists')
   })
 
   it('should be able set same access to specific permission if wildcard access grant exists', async () => {
@@ -179,7 +179,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     const accessControl = new AccessControl(new Storage())
 
     let access = await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', true)
-    const expectedAccess = { scope: 'http://ipfs.io/', permission: 'ipfs.files.add', allow: true }
+    const expectedAccess = { scope: 'http://ipfs.io/', permissions: ['ipfs.files.add'], allow: true }
 
     expect(access).to.deep.equal(expectedAccess)
 
@@ -304,7 +304,7 @@ describe('lib/ipfs-proxy/access-control', () => {
     await accessControl.setAccess('http://ipfs.io/', 'ipfs.files.add', false)
     let access = await accessControl.getAccess('http://ipfs.io/', 'ipfs.files.add')
 
-    expect(access).to.deep.equal({ scope: 'http://ipfs.io/', permission: 'ipfs.files.add', allow: false })
+    expect(access).to.deep.equal({ scope: 'http://ipfs.io/', permissions: ['ipfs.files.add'], allow: false })
 
     await accessControl.revokeAccess('http://ipfs.io/', 'ipfs.files.add')
 
