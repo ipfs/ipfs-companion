@@ -1,10 +1,10 @@
 # Notes on exposing IPFS API via `window.ipfs`
 
-> ### Disclaimer:    
-> - ### we are [🚧 working on v2.0 of this interface 🚧](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)    
-> - ### ⚠️ below API will change ⚠️.
->
-> Want to help in shaping it? See [#589](https://github.com/ipfs-shipyard/ipfs-companion/issues/589) and [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
+> ### Disclaimer:
+> - ### [🚧 ongoing work on v2 of this interface 🚧](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)
+>   - Want to help with shaping it? See [#589](https://github.com/ipfs-shipyard/ipfs-companion/issues/589) and [issues with `window.ipfs` label](https://github.com/ipfs-shipyard/ipfs-companion/labels/window.ipfs).
+> - ### ⚠️ the interface is experimental and might change ⚠️
+>   - **tl;dr** use [window.ipfs-fallback](https://www.npmjs.com/package/window.ipfs-fallback) to ensure your app follows any future changes
 
 - [Background](#background)
 - [Creating applications using `window.ipfs`](#creating-applications-using-windowipfs)
@@ -26,12 +26,14 @@ IPFS Companion is exposing a subset of IPFS APIs as `window.ipfs` on every webpa
 This means websites can detect that `window.ipfs` already exists and use it instead of spawning own `js-ipfs` node, which saves resources, battery etc.
 
 For more context, see:
-- first iteration: [Expose IPFS API as window.ipfs #330](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
-- second iteration: [window.ipfs 2.0](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)
+- first iteration: [window.ipfs v1](https://github.com/ipfs-shipyard/ipfs-companion/issues/330)
+- second iteration (now): [window.ipfs v2](https://github.com/ipfs-shipyard/ipfs-companion/issues/589)
 
 ## Creating applications using `window.ipfs`
 
-If a user has installed IPFS companion, `window.ipfs` will be available as soon as the first script runs on your web page, so you'll be able to detect it using a simple `if` statement:
+> **tl;dr** jump to: [how do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
+
+If a user has installed IPFS Companion, `window.ipfs` will be available as soon as the first script runs on your web page, so you'll be able to detect it using a simple `if` statement:
 
 ```js
 if (window.ipfs && window.ipfs.enable) {
@@ -79,8 +81,8 @@ Errors returned by IPFS Proxy can be identified by the value of `code` attribute
 Thrown when current scope has no access rights to requested commands.
 
 Optional `scope` and `permissions` attributes provide detailed information:
- - IF access was denied for a specific command THEN the `permissions` list is present and includes names of blocked commands
- - IF entire IPFS Proxy was disabled by the user THEN the `permissions` list is missing entirely
+ - **IF** access was denied for a specific command **THEN** the `permissions` list is present and includes names of blocked commands
+ - **IF** entire IPFS Proxy was disabled by the user **THEN** the `permissions` list is missing entirely
 
 # Q&A
 
@@ -96,11 +98,17 @@ See the [js-ipfs](https://github.com/ipfs/js-ipfs#api)/[js-ipfs-http-client](htt
 
 ## How do I fallback if `window.ipfs` is not available?
 
+
 See the [example code](examples/window.ipfs-fallback.html) (and [live demo](https://ipfs-shipyard.github.io/ipfs-companion/docs/examples/window.ipfs-fallback.html)) for getting an IPFS instance with a fallback.
+
+**Tip:** use [window.ipfs-fallback](https://www.npmjs.com/package/window.ipfs-fallback) library that takes care of fallback ceremony.
+It will ensure your app follows API changes and does not break in the future.
 
 ## What about IPFS node configuration?
 
-You can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
+Right now access to `config` command is blocked, and you can't make any assumptions about how the node is configured. For example, the user may not have enabled experimental features like pubsub.
+
+Spawn a dedicated js-ipfs instance if you need non-standard configuration or any experimental features.
 
 ## Is there a Permission Control (ACL)?
 
