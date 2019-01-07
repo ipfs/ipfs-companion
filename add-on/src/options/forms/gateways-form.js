@@ -5,6 +5,10 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const { normalizeGatewayURL } = require('../../lib/options')
 
+// Warn about mixed content issues when changing the gateway
+// https://github.com/ipfs-shipyard/ipfs-companion/issues/648
+const secureContextUrl = /^https:\/\/|^http:\/\/127.0.0.1|^http:\/\/\[::1\]/
+
 function gatewaysForm ({
   ipfsNodeType,
   customGatewayUrl,
@@ -15,6 +19,7 @@ function gatewaysForm ({
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', normalizeGatewayURL)
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', normalizeGatewayURL)
+  const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
 
   return html`
     <form>
@@ -25,7 +30,9 @@ function gatewaysForm ({
               <label for="customGatewayUrl">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_customGatewayUrl_title')}</dt>
-                  <dd>${browser.i18n.getMessage('option_customGatewayUrl_description')}</dd>
+                  <dd>${browser.i18n.getMessage('option_customGatewayUrl_description')}
+                    ${mixedContentWarning ? html`<p class="red i">${browser.i18n.getMessage('option_customGatewayUrl_warning')}</p>` : null}
+                  </dd>
                 </dl>
               </label>
               <input
@@ -38,6 +45,7 @@ function gatewaysForm ({
                 title="Enter URL without any sub-path"
                 onchange=${onCustomGatewayUrlChange}
                 value=${customGatewayUrl} />
+
             </div>
           ` : null}
           ${ipfsNodeType === 'external' ? html`
