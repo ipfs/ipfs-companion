@@ -70,7 +70,7 @@ class AccessControl extends EventEmitter {
   }
 
   // Get a Map of granted permissions for a given scope
-  // e.g. Map { 'files.add' => true, 'object.new' => false }
+  // e.g. Map { 'add' => true, 'object.new' => false }
   async _getAllAccess (scope) {
     const key = this._getAccessKey(scope)
     return new Map(

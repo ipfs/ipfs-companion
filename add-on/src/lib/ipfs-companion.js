@@ -265,7 +265,7 @@ module.exports = async function init () {
     try {
       const dataSrc = await findValueForContext(context, contextType)
       if (contextType === 'selection') {
-        result = await ipfs.files.add(Buffer.from(dataSrc), options)
+        result = await ipfs.add(Buffer.from(dataSrc), options)
       } else {
         // Enchanced addFromURL
         // --------------------
@@ -294,7 +294,7 @@ module.exports = async function init () {
           path: decodeURIComponent(filename),
           content: buffer
         }
-        result = await ipfs.files.add(data, options)
+        result = await ipfs.add(data, options)
       }
     } catch (error) {
       console.error('Error in upload to IPFS context menu', error)

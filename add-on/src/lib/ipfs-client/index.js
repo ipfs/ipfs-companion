@@ -16,6 +16,7 @@ async function initIpfsClient (opts) {
   }
 
   const instance = await client.init(opts)
+  easeApiChanges(instance)
   _reloadIpfsClientDependents() // async (API is present)
   return instance
 }
@@ -50,6 +51,21 @@ async function _reloadIpfsClientDependents () {
       })
     }
   }
+}
+
+// Ensures Companion can be used with backends that provide old and new versions
+// of the same API moved into different namespace
+function easeApiChanges (ipfs) {
+  if (!ipfs) return
+  // Handle the move of regular files api to top level
+  // https://github.com/ipfs/interface-ipfs-core/pull/378
+  // https://github.com/ipfs/js-ipfs/releases/tag/v0.34.0-pre.0
+  const movedToTop = ['add', 'addPullStream', 'addReadableStream', 'cat', 'catPullStream', 'catReadableStream', 'get', 'getPullStream', 'getReadableStream']
+  movedToTop.forEach(cmd => {
+    if (typeof ipfs[cmd] !== 'function' && ipfs.files && ipfs.files[cmd] === 'function') {
+      ipfs[cmd] = ipfs.files[cmd]
+    }
+  })
 }
 
 exports.initIpfsClient = initIpfsClient

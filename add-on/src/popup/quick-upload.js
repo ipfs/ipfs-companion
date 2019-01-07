@@ -72,14 +72,14 @@ async function processFiles (state, emitter, files) {
     }
     let result
     try {
-      result = await ipfsCompanion.ipfs.files.add(streams, options)
+      result = await ipfsCompanion.ipfs.add(streams, options)
       // This is just an additional safety check, as in past combination
       // of specific go-ipfs/js-ipfs-http-client versions
       // produced silent errors in form of partial responses:
       // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
       const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
       if (partialResponse) {
-        throw new Error('Result of ipfs.files.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
+        throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
       }
       await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
     } catch (err) {

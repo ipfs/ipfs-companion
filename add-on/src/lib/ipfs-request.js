@@ -153,20 +153,20 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // Fix "http: invalid Read on closed Body"
         // ----------------------------------
         // There is a bug in go-ipfs related to keep-alive connections
-        // that results in partial response for ipfs.files.add
+        // that results in partial response for ipfs.add
         // mangled by error "http: invalid Read on closed Body"
         // More info (ipfs-companion): https://github.com/ipfs-shipyard/ipfs-companion/issues/480
         // More info (go-ipfs): https://github.com/ipfs/go-ipfs/issues/5168
         if (request.url.includes('/api/v0/add') && request.url.includes('stream-channels=true')) {
           let addExpectHeader = true
           const expectHeader = { name: 'Expect', value: '100-continue' }
-          const warningMsg = '[ipfs-companion] Executing "Expect: 100-continue" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168'
+          const warningMsg = '[ipfs-companion] Executing "Expect: 100-continue" workaround for ipfs.add due to https://github.com/ipfs/go-ipfs/issues/5168'
           for (let header of request.requestHeaders) {
             // Workaround A: https://github.com/ipfs/go-ipfs/issues/5168#issuecomment-401417420
             // (works in Firefox, but Chromium does not expose Connection header)
             /* (disabled so we use the workaround B in all browsers)
             if (header.name === 'Connection' && header.value !== 'close') {
-              console.warn('[ipfs-companion] Executing "Connection: close" workaround for ipfs.files.add due to https://github.com/ipfs/go-ipfs/issues/5168')
+              console.warn('[ipfs-companion] Executing "Connection: close" workaround for ipfs.add due to https://github.com/ipfs/go-ipfs/issues/5168')
               header.value = 'close'
               addExpectHeader = false
               break
