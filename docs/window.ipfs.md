@@ -114,13 +114,13 @@ Spawn a dedicated js-ipfs instance if you need non-standard configuration or any
 
 Yes.
 
-IPFS companion users are able to selectively control access to proxied commands so calls may reject (or callback) with [an error](#error-messages) if a user decides to deny access.
+IPFS companion users are able to selectively control access to proxied commands so calls may reject (or callback) with [an error](#error-codes) if a user decides to deny access.
 
 The first time you call a proxied function the user will be prompted to allow or deny the call and the decision will be remembered for subsequent calls.
 
 It looks like this:
 
-> ![permission dialog in Firefox](https://user-images.githubusercontent.com/152863/36159691-3cf44eea-10d7-11e8-81d1-988dfd70a2f7.png)
+> ![single permission dialog in Firefox](https://user-images.githubusercontent.com/152863/36159691-3cf44eea-10d7-11e8-81d1-988dfd70a2f7.png)
 
 
 ## Do I need to confirm every API call?
@@ -128,7 +128,9 @@ It looks like this:
 Command access need to be confirmed only once [per scope](#how-are-permissions-scoped).
 
 If you provide a list of commands when requesting API instance via `window.ipfs.enable({commands})`
-then a single permission dialog will be displayed to the user.
+then a single permission dialog will be displayed to the user:
+
+> ![bulk permission dialog in Firefox](https://user-images.githubusercontent.com/157609/49878977-3d475780-fe29-11e8-9da9-2540bb2c8d9f.png)
 
 For everything else, only the first call requires a decision from the user. You will be able to call
 previously whitelisted IPFS commands and users will _not_ be prompted to
