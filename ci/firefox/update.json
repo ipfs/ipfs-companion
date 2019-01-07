@@ -23,14 +23,14 @@
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.2.12270/ipfs_companion_beta_build-2.6.2.12270-an+fx.xpi"
                 },
                 {
-                    "version": "2.6.3.12500",
+                    "version": "2.6.3.12520",
                     "applications": {
                         "gecko": {
                             "strict_min_version": "60"
                         }
                     },
-                    "update_hash": "sha256:90868a4a8c12926ac3fb8edd4718b226588e2c3392d6c3845ae054841efd375c",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.3.12500/ipfs_companion_beta_build-2.6.3.12500-an+fx.xpi"
+                    "update_hash": "sha256:35d5a45a73931d11907e560e154f12b202096adf8c550a0d9bfb442d7b594b0f",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.3.12520/ipfs_companion_beta_build-2.6.3.12520-an+fx.xpi"
                 }
             ]
         }
