@@ -239,6 +239,10 @@
     "message": "URL de la passerelle préférée HTTP2IPFS",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
+  "option_customGatewayUrl_warning": {
+    "message": "Le chargement du contenu IPFS sera bloqué sur les site HTTPS sauf si l'url de la passerelle commence par \"http://127.0.0.1\", \"http://[::1]\" ou \"https://\".",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_useCustomGateway_title": {
     "message": "Utiliser une passerelle personnalisée",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
@@ -460,11 +464,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Autoriser $1 à accéder à ipfs. $2 ?",
+    "message": "IPFS Companion doit-il autoriser «$1» à accéder à «$2» au nœud connecté?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Appliqué cette décision à toutes les permission dans ce contexte",
+    "message": "Appliquer ce choix à toutes les permissions courantes et futures de ce périmètre",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {

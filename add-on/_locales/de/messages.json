@@ -239,6 +239,10 @@
     "message": "URL des bevorzugten HTTP2IPFS-Gateways",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
+  "option_customGatewayUrl_warning": {
+    "message": "Das laden von IPFS inhalten wird von HTTPS Websiten blockiert ausser deine Gateway URL startet mit “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_useCustomGateway_title": {
     "message": "Benutzerdefiniertes Gateway verwenden",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
@@ -460,11 +464,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Erlaube $1 den IPFS-Zugriff. $2?",
+    "message": "Soll IPFS Companion den Zugriff auf $1 am verbundenen Node $2 erlauben?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Wende diese Entscheidung auf alle Berechtigungen in diesem Bereich an",
+    "message": "Wende diese Entscheidung für alle aktuellen und zukünftigen Genehmigungen inherhalb von diesem Gültigkeitsbereich an.",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {

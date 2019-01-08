@@ -239,6 +239,10 @@
     "message": "URL til foretrukket HTTP2IPFS Gateway",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
+  "option_customGatewayUrl_warning": {
+    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_useCustomGateway_title": {
     "message": "Bruk tilpasset Gateway",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
@@ -460,11 +464,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Tillat $1 å få tilgang til IPFS.$2?",
+    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Anvend denne avgjørelsen til alle tillatelser i dette omfanget",
+    "message": "Apply this decision to all current and future permissions in this scope",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {

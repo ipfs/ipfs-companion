@@ -239,6 +239,10 @@
     "message": "URL preferowanej bramy HTTP",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
+  "option_customGatewayUrl_warning": {
+    "message": "Zasoby IPFS zostaną zablokowane na stronach z HTTPS jeśli URL bramy nie rozpoczyna się od „http://127.0.0.1”, „http://[::1]” lub „https://”",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_useCustomGateway_title": {
     "message": "Użyj własnej bramy",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
@@ -264,7 +268,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where /api/v0/config lives",
+    "message": "Wskazówka: to adres, który udostępnia /api/v0/config",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -460,11 +464,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Zezwolić $1 na dostęp do ipfs.$2?",
+    "message": "Czy Asystent IPFS powinien zezwolić «$1» na dostęp do komend  «$2»  na aktywnym węźle?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Zastosuj dla wszystkich metod API",
+    "message": "Zastosuj dla wszystkich obecnych i przyszłych komend w tym zakresie",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
