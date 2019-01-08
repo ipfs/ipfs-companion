@@ -62,8 +62,9 @@ function easeApiChanges (ipfs) {
   // https://github.com/ipfs/js-ipfs/releases/tag/v0.34.0-pre.0
   const movedToTop = ['add', 'addPullStream', 'addReadableStream', 'cat', 'catPullStream', 'catReadableStream', 'get', 'getPullStream', 'getReadableStream']
   movedToTop.forEach(cmd => {
-    if (typeof ipfs[cmd] !== 'function' && ipfs.files && ipfs.files[cmd] === 'function') {
+    if (typeof ipfs[cmd] !== 'function' && ipfs.files && typeof ipfs.files[cmd] === 'function') {
       ipfs[cmd] = ipfs.files[cmd]
+      console.log(`[ipfs-companion] fixed missing ipfs.${cmd}: added an alias for ipfs.files.${cmd}`)
     }
   })
 }
