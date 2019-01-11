@@ -67,7 +67,7 @@
   "preferGlobal": false,
   "resolutions": {
     "stream-http": "3.0.0",
-    "multiaddr": "5.0.2"
+    "multiaddr": "6.0.3"
   },
   "devDependencies": {
     "@babel/core": "7.2.2",
