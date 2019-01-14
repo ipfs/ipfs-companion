@@ -240,7 +240,7 @@
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "message": "除非你的网关地址（URL）以：“http://127.0.0.1”、“http://[::1]”或“https://”开头，否则将禁止从HTTPS网站加载IPFS内容。",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
@@ -324,7 +324,7 @@
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
+    "message": "选择 DNS TXT 查找策略以尽可能通过IPFS加载通过IPFS托管的站点",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -416,11 +416,11 @@
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_wrapWithDirectory": {
-    "message": "将单个文件包装在文件夹中，来保留其文件名。",
+    "message": "保留文件名称（如果勾选，文件会被包装在一个文件夹中，否则通过IPFS分享的文件没有文件名称）。",
     "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
   },
   "quickUpload_options_pinUpload": {
-    "message": "Pin files so they are retained when performing garbage collection on your IPFS repo.",
+    "message": "固定文件（如果勾选，文件会被IPFS库保留，否则执行垃圾回收时文件可能会被从IPFS库中删除）。",
     "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
   },
   "page_proxyAcl_title": {
@@ -428,7 +428,7 @@
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "View, change and revoke granted access rights to your IPFS instance.",
+    "message": "查看，修改和撤销对你的IPFS实例授予的访问权限。",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
@@ -440,15 +440,15 @@
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $1?",
+    "message": "是否撤销对$1的所有权限？",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Click to allow",
+    "message": "点击允许",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Click to deny",
+    "message": "点击拒绝",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
@@ -464,11 +464,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "IPFS伴侣是否允许$1在连接的节点上访问$2",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "在此域中为当前和未来的所有权限应用此决定",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
@@ -500,7 +500,7 @@
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
-    "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
+    "message": "发现什么是你 <0>通过伴侣能做的</0> 并通过IPFS投身于分布式web！",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_title": {
@@ -528,7 +528,7 @@
     "description": "Resources title (page_landingWelcome_resources_title_discover)"
   },
   "page_landingWelcome_resources_discover": {
-    "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
+    "message": "在它上面寻找使用IPFS的 <0>有用资源</0> 和 <1>正在做的事</1> 。",
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
