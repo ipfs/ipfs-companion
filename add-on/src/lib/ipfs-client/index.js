@@ -53,21 +53,29 @@ async function _reloadIpfsClientDependents () {
   }
 }
 
-// Ensures Companion can be used with backends that provide old and new versions
-// of the same API moved into different namespace
+const movedFilesApis = ['add', 'addPullStream', 'addReadableStream', 'cat', 'catPullStream', 'catReadableStream', 'get', 'getPullStream', 'getReadableStream']
+
+// This enables use of dependencies without worrying if they already migrated to the new API.
 function easeApiChanges (ipfs) {
   if (!ipfs) return
   // Handle the move of regular files api to top level
   // https://github.com/ipfs/interface-ipfs-core/pull/378
   // https://github.com/ipfs/js-ipfs/releases/tag/v0.34.0-pre.0
-  const movedToTop = ['add', 'addPullStream', 'addReadableStream', 'cat', 'catPullStream', 'catReadableStream', 'get', 'getPullStream', 'getReadableStream']
-  movedToTop.forEach(cmd => {
+  movedFilesApis.forEach(cmd => {
+    // Fix old backend (add new methods)
     if (typeof ipfs[cmd] !== 'function' && ipfs.files && typeof ipfs.files[cmd] === 'function') {
       ipfs[cmd] = ipfs.files[cmd]
-      console.log(`[ipfs-companion] fixed missing ipfs.${cmd}: added an alias for ipfs.files.${cmd}`)
+      // console.log(`[ipfs-companion] fixed missing ipfs.${cmd}: added an alias for ipfs.files.${cmd}`)
+    }
+    // Fix new backend (add old methods)
+    // This ensures ipfs-postmsg-proxy always works and can be migrated later
+    if (ipfs.files && typeof ipfs.files[cmd] !== 'function' && typeof ipfs[cmd] === 'function') {
+      ipfs.files[cmd] = ipfs[cmd]
+      // console.log(`[ipfs-companion] fixed missing ipfs.files.${cmd}: added an alias for ipfs.${cmd}`)
     }
   })
 }
 
+exports.movedFilesApis = movedFilesApis
 exports.initIpfsClient = initIpfsClient
 exports.destroyIpfsClient = destroyIpfsClient

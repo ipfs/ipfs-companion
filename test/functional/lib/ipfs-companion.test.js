@@ -27,6 +27,23 @@ describe('init', function () {
     ipfsCompanion.destroy()
   })
 
+  it('should fixup migrated files APIs', async function () {
+    // Companion should gracefully handle the move of regular files api to top
+    // level by supporting both old and new API. This way we can use
+    // dependencies without worrying if they already migrated to the new API.
+    // https://github.com/ipfs/interface-ipfs-core/pull/378
+    // https://github.com/ipfs/js-ipfs/releases/tag/v0.34.0-pre.0
+    browser.storage.local.get.returns(Promise.resolve(optionDefaults))
+    browser.storage.local.set.returns(Promise.resolve())
+    const ipfsCompanion = await init()
+    const { movedFilesApis } = require('../../../add-on/src/lib/ipfs-client/index.js')
+    for (let cmd of movedFilesApis) {
+      expect(typeof ipfsCompanion.ipfs[cmd], `ipfs.${cmd} expected to be a function`).to.equal('function')
+      expect(typeof ipfsCompanion.ipfs.files[cmd], `ipfs.files.${cmd} expected to be a function`).to.equal('function')
+    }
+    ipfsCompanion.destroy()
+  })
+
   after(function () {
     delete global.window
     delete global.browser
