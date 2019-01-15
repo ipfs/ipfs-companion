@@ -24,6 +24,24 @@ describe('lib/ipfs-proxy/pre-command', () => {
     expect(() => { if (error) throw error }).to.throw(`Access to '${permission}' commands over IPFS Proxy is globally blocked`)
   })
 
+  it('should throw early if flag is not supported', async () => {
+    const permission = 'add'
+    const preApiWhitelist = createPreCommand(permission)
+    const flag = 'nocopy'
+    const opts = {}
+    opts[flag] = true
+
+    let error
+
+    try {
+      await preApiWhitelist('foo', opts)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw(`ipfs.${permission} with '${flag}' flag is not supported by IPFS Proxy`)
+  })
+
   it('should have a well-formed Error if denied', async () => {
     const permission = 'config.show'
     const preApiWhitelist = createPreCommand(permission)

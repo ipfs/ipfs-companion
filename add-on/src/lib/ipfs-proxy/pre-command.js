@@ -5,11 +5,18 @@
 const COMMAND_WHITELIST = Object.freeze(require('./command-whitelist.json'))
 
 // Creates a "pre" function that is called prior to calling a real function
-// on the IPFS instance. It will throw if access is denied due to API not being whitelisted
+// on the IPFS instance. It will throw if access is denied
+// due to API not being whitelisted of arguments not being supported
 function createPreCommand (permission) {
   return async (...args) => {
     if (!inCommandWhitelist(permission)) {
       throw createCommandWhitelistError(permission)
+    }
+    if (['add', 'files.add'].includes(permission)) {
+      // Fail fast: nocopy does not work over proxy
+      if (args.some(arg => typeof arg === 'object' && arg.nocopy)) {
+        throw new Error(`ipfs.${permission} with 'nocopy' flag is not supported by IPFS Proxy`)
+      }
     }
     return args
   }
