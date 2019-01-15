@@ -4,7 +4,9 @@
 function createPreAcl (permission, getState, getScope, accessControl, requestAccess) {
   return async (...args) => {
     // Check if all access to the IPFS node is disabled
-    if (!getState().ipfsProxy) throw new Error('User disabled access to API proxy in IPFS Companion')
+    if (!getState().ipfsProxy) {
+      throw createProxyAclError(undefined, undefined, 'User disabled access to API proxy in IPFS Companion')
+    }
 
     const scope = await getScope()
     const access = await getAccessWithPrompt(accessControl, requestAccess, scope, permission)
@@ -28,8 +30,8 @@ async function getAccessWithPrompt (accessControl, requestAccess, scope, permiss
 
 // Standardized error thrown when a command access is denied
 // TODO: return errors following conventions from https://github.com/ipfs/js-ipfs/pull/1746
-function createProxyAclError (scope, permission) {
-  const err = new Error(`User denied access to selected commands over IPFS proxy: ${permission}`)
+function createProxyAclError (scope, permission, message) {
+  const err = new Error(message || `User denied access to selected commands over IPFS proxy: ${permission}`)
   const permissions = Array.isArray(permission) ? permission : [permission]
   err.output = {
     payload: {

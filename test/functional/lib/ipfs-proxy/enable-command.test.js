@@ -35,6 +35,8 @@ describe('lib/ipfs-proxy/enable-command', () => {
     }
 
     expect(() => { if (error) throw error }).to.throw('User disabled access to API proxy in IPFS Companion')
+    expect(error.scope).to.equal(undefined)
+    expect(error.permissions).to.be.equal(undefined)
   })
 
   it('should throw if access to unknown command is requested', async () => {

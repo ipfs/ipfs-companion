@@ -29,6 +29,8 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     }
 
     expect(() => { if (error) throw error }).to.throw('User disabled access to API proxy in IPFS Companion')
+    expect(error.scope).to.equal(undefined)
+    expect(error.permissions).to.be.equal(undefined)
   })
 
   it('should request access if no grant exists', async () => {
