@@ -9,15 +9,12 @@ module.exports = function operations ({
   active,
   ipfsNodeType,
   isIpfsOnline,
-  redirectEnabled,
   isApiAvailable,
   onQuickUpload,
-  onOpenWebUi,
-  onToggleRedirect
+  onOpenWebUi
 }) {
   const activeQuickUpload = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
-  const activeGatewaySwitch = active && ipfsNodeType === 'external'
 
   return html`
     <div class="fade-in pv1">
@@ -26,15 +23,6 @@ module.exports = function operations ({
     addClass: 'b',
     disabled: !activeQuickUpload,
     onClick: onQuickUpload
-  })}
-  ${navItem({
-    text: browser.i18n.getMessage(
-      redirectEnabled && activeGatewaySwitch
-        ? 'panel_switchToPublicGateway'
-        : 'panel_switchToCustomGateway'
-    ),
-    disabled: !activeGatewaySwitch,
-    onClick: onToggleRedirect
   })}
   ${navItem({
     text: browser.i18n.getMessage('panel_openWebui'),

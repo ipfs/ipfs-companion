@@ -64,6 +64,7 @@ function createIpfsPathValidator (getState, dnsLink) {
     },
 
     // Test if actions such as 'copy URL', 'pin/unpin' should be enabled for the URL
+    // TODO: include hostname check for DNSLink and display option to copy CID even if no redirect
     isIpfsPageActionsContext (url) {
       return (IsIpfs.url(url) && !url.startsWith(getState().apiURLString)) || IsIpfs.subdomain(url)
     }
@@ -110,6 +111,7 @@ function validIpnsPath (path, dnsLink) {
       // console.log('==> IPNS is a valid CID', ipnsRoot)
       return true
     }
+    // then see if there is an DNSLink entry for 'ipnsRoot' hostname
     if (dnsLink.readAndCacheDnslink(ipnsRoot)) {
       // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
       return true

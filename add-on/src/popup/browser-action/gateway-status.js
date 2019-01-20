@@ -26,7 +26,7 @@ module.exports = function gatewayStatus ({
   swarmPeers,
   isIpfsOnline,
   ipfsNodeType,
-  redirectEnabled
+  globalRedirectEnabled
 }) {
   const api = ipfsApiUrl && ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`

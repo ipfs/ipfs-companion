@@ -42,7 +42,7 @@
     "bundle:brave": "shx cat add-on/manifest.common.json add-on/manifest.brave.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/brave/",
     "watch": "npm-run-all build:copy --parallel watch:*",
     "watch:js": "run-p watch:js:*",
-    "watch:js:webpack": "webpack --watch --progress -d --devtool inline-source-map",
+    "watch:js:webpack": "webpack --watch --progress -d --devtool inline-source-map  --config ./webpack.config.js",
     "test": "run-s test:*",
     "test:functional": " nyc --reporter=lcov --reporter=text mocha --timeout 15000 --require ignore-styles \"test/functional/**/*.test.js\"",
     "lint": "run-s lint:*",

@@ -12,6 +12,7 @@ exports.optionDefaults = Object.freeze({
   }, null, 2),
   publicGatewayUrl: 'https://ipfs.io',
   useCustomGateway: true,
+  noRedirectHostnames: [],
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',
@@ -22,7 +23,7 @@ exports.optionDefaults = Object.freeze({
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001',
   ipfsApiPollMs: 3000,
-  ipfsProxy: true
+  ipfsProxy: true // window.ipfs
 })
 
 // `storage` should be a browser.storage.local or similar

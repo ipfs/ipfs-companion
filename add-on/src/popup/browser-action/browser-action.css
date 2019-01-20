@@ -6,6 +6,17 @@
   background-color: #F4F4F4;
 }
 
+.header-icon:active {
+  color: #edf0f4;
+  transform: translateY(4px);
+}
+.header-icon[disabled],
+.header-icon[disabled]:active {
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
 .outline-0--focus:focus {
   outline: 0;
 }

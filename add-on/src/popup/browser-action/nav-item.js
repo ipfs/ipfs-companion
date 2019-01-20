@@ -3,7 +3,7 @@
 
 const html = require('choo/html')
 
-function navItem ({ icon, text, disabled, addClass, onClick }) {
+function navItem ({ icon, text, title, disabled, addClass, onClick }) {
   let className = 'black button-reset db w-100 bg-white b--none outline-0--focus pv2 ph3 f5 tl'
   if (disabled) {
     className += ' o-40'
@@ -15,7 +15,7 @@ function navItem ({ icon, text, disabled, addClass, onClick }) {
   }
 
   return html`
-    <button class="${className}" onclick=${disabled ? null : onClick} ${disabled ? 'disabled' : ''}>
+    <button class="${className}" onclick=${disabled ? null : onClick}  title="${title || ''}" ${disabled ? 'disabled' : ''}>
       ${text}
     </button>
   `

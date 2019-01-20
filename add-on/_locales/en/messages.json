@@ -11,6 +11,10 @@
     "message": "Global toggle: Suspend all IPFS integrations",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
+  "panel_headerRedirectToggleTitle": {
+    "message": "Global toggle: Stop all gateway redirections",
+    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+  },
   "panel_statusOffline": {
     "message": "offline",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
@@ -47,13 +51,21 @@
     "message": "Open Preferences of Browser Extension",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
-  "panel_switchToCustomGateway": {
-    "message": "Switch to Custom Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  "panel_globalRedirectEnable": {
+    "message": "Enable All Redirects",
+    "description": "A menu item in Browser Action pop-up (panel_globalRedirectEnable)"
   },
-  "panel_switchToPublicGateway": {
-    "message": "Switch to Public Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  "panel_activeTabSectionHeader": {
+    "message": "Active Tab",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
+  },
+  "panel_activeTabSiteRedirectEnable": {
+    "message": "Restore Redirects on $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
+  },
+  "panel_activeTabSiteRedirectDisable": {
+    "message": "Disable Redirects on $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectDisable)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Pin IPFS Resource",
