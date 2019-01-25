@@ -6192,10 +6192,10 @@ ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.16:
   dependencies:
     protons "^1.0.1"
 
-ipfs@0.34.0:
-  version "0.34.0"
-  resolved "https://registry.js.ipfs.io/ipfs/-/ipfs-0.34.0.tgz#3337d2de07e897d2e9e8e137947fac0d2e2633c8"
-  integrity sha512-NYjBYHcXTEyHKIeaX7Qkn/t+7HuKIV0rJ1m/ZttZbSsGaQJkxWn8BC7Ly9yOqQARVMtpM8jvgV/eo68TY1mibQ==
+ipfs@0.34.4:
+  version "0.34.4"
+  resolved "https://registry.js.ipfs.io/ipfs/-/ipfs-0.34.4.tgz#325705ae17ebb606d7d9cb2223c7606a806c6085"
+  integrity sha512-BhNVdWRE9lP+D/DfAI4L3rtIFg3trxpkEbCELBA7+mLi5ZkVnNpsOvvlcn3eJdufwqBj0/9x2xbOP1YQzZfEKg==
   dependencies:
     "@nodeutils/defaults-deep" "^1.1.0"
     async "^2.6.1"
@@ -6256,7 +6256,7 @@ ipfs@0.34.0:
     libp2p-secio "~0.11.0"
     libp2p-tcp "~0.13.0"
     libp2p-webrtc-star "~0.15.5"
-    libp2p-websocket-star "~0.10.0"
+    libp2p-websocket-star-multi "~0.4.0"
     libp2p-websockets "~0.12.0"
     lodash "^4.17.11"
     mafmt "^6.0.2"
@@ -7821,7 +7821,19 @@ libp2p-webrtc-star@~0.15.5:
     stream-to-pull-stream "^1.7.2"
     webrtcsupport "github:ipfs/webrtcsupport"
 
-libp2p-websocket-star@~0.10.0:
+libp2p-websocket-star-multi@~0.4.0:
+  version "0.4.3"
+  resolved "https://registry.js.ipfs.io/libp2p-websocket-star-multi/-/libp2p-websocket-star-multi-0.4.3.tgz#28d5aa4efffb7cf14ac147fc927841a5e275cfd7"
+  integrity sha512-AhiBQABPw0uCRX4T1XzixRvCRXIq3k/IqrXcdRLgBZ8Yi6SXl0l7YwfAv5bO4fjq+jJTj2ypPvyM16ftNnWqBw==
+  dependencies:
+    async "^2.6.1"
+    debug "^4.1.0"
+    libp2p-websocket-star "~0.10.2"
+    mafmt "^6.0.2"
+    multiaddr "^6.0.3"
+    once "^1.4.0"
+
+libp2p-websocket-star@~0.10.2:
   version "0.10.2"
   resolved "https://registry.js.ipfs.io/libp2p-websocket-star/-/libp2p-websocket-star-0.10.2.tgz#74df4c651292bf64307d1198746e249827041ea5"
   integrity sha512-ccjMqy7lrKV6vbTdsm9XOZ+eWt01ZCS3hI2s+I+ZpglnPQNg8z+dGs+8rdl8/hU44Sq3EbmUw0gCxPB/2ZbPlg==
