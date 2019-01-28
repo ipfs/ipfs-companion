@@ -48,11 +48,17 @@ const commonConfig = {
       }
     ]
   },
+  resolve: {
+    extensions: ['.js','.json'],
+    alias: {
+      'dgram': 'chrome-dgram',
+      'net': 'chrome-net'
+    }
+  },
   node: {
     global: false, // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
     Buffer: true,
     fs: 'empty',
-    net: 'empty',
     tls: 'empty'
   },
   performance: {

@@ -108,6 +108,8 @@
   },
   "dependencies": {
     "choo": "6.13.1",
+    "chrome-dgram": "3.0.1",
+    "chrome-net": "3.3.1",
     "doc-sniff": "1.0.1",
     "drag-and-drop-files": "0.0.1",
     "file-type": "10.7.0",

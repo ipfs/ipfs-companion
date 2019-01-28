@@ -2396,6 +2396,21 @@ chownr@^1.0.1, chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
+chrome-dgram@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/chrome-dgram/-/chrome-dgram-3.0.1.tgz#42a388d04da063865a79e3ba2ae5fbf8ab0f1dba"
+  integrity sha1-QqOI0E2gY4ZaeeO6KuX7+KsPHbo=
+  dependencies:
+    inherits "^2.0.1"
+    run-series "^1.1.2"
+
+chrome-net@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.npmjs.org/chrome-net/-/chrome-net-3.3.1.tgz#b4041edb5b264222e7e3c96101344b2332c86782"
+  integrity sha512-erjHzaLGOOn1WTDdVtEYxeltKLhWpL3TNAv5ODqgseOCWMmV0GueWUR3by3LH9gr3BKPJRzyqPROJpaOCXz22w==
+  dependencies:
+    inherits "^2.0.1"
+
 chrome-trace-event@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.0.tgz#45a91bd2c20c9411f0963b5aaeb9a1b95e09cc48"
@@ -11316,6 +11331,11 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   integrity sha1-6Eg5bwV9Ij8kOGkkYY4laUFh7Ec=
   dependencies:
     aproba "^1.1.1"
+
+run-series@^1.1.2:
+  version "1.1.8"
+  resolved "https://registry.npmjs.org/run-series/-/run-series-1.1.8.tgz#2c4558f49221e01cd6371ff4e0a1e203e460fc36"
+  integrity sha512-+GztYEPRpIsQoCSraWHDBs9WVy4eVME16zhOtDB4H9J4xN0XRhknnmLOl+4gRgZtu8dpp9N/utSPjKH/xmDzXg==
 
 rx-lite-aggregates@^4.0.8:
   version "4.0.8"
