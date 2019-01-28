@@ -39,6 +39,7 @@
     "bundle:generic": "shx cp add-on/manifest.common.json add-on/manifest.json && web-ext build -a build/generic",
     "bundle:firefox": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/firefox/",
     "bundle:firefox:beta": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json add-on/manifest.firefox-beta.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/firefox/beta/",
+    "bundle:brave": "shx cat add-on/manifest.common.json add-on/manifest.brave.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/brave/",
     "watch": "npm-run-all build:copy --parallel watch:*",
     "watch:js": "run-p watch:js:*",
     "watch:js:webpack": "webpack --watch --progress -d --devtool inline-source-map",
