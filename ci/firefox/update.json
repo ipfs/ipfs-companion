@@ -3,26 +3,6 @@
         "ipfs-companion-dev-build@ci.ipfs.team": {
             "updates": [
                 {
-                    "version": "2.6.1.12130",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "59"
-                        }
-                    },
-                    "update_hash": "sha256:bfcf77b05ecefd55b6dcb3029a5febdc038d8b13e99607221d2284c0e2f0d163",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.1.12130/ipfs_companion_beta_build-2.6.1.12130-an+fx.xpi"
-                },
-                {
-                    "version": "2.6.2.12270",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "60"
-                        }
-                    },
-                    "update_hash": "sha256:4b09871039a888f5c2e4517191aae73e0150eccd5a36c7ef3daf7654f970e0b1",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.2.12270/ipfs_companion_beta_build-2.6.2.12270-an+fx.xpi"
-                },
-                {
                     "version": "2.6.3.12520",
                     "applications": {
                         "gecko": {
@@ -31,6 +11,16 @@
                     },
                     "update_hash": "sha256:35d5a45a73931d11907e560e154f12b202096adf8c550a0d9bfb442d7b594b0f",
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.6.3.12520/ipfs_companion_beta_build-2.6.3.12520-an+fx.xpi"
+                },
+                {
+                    "version": "2.7.0.12740",
+                    "applications": {
+                        "gecko": {
+                            "strict_min_version": "60"
+                        }
+                    },
+                    "update_hash": "sha256:e78475cab2f76912c35d10e93d26cdaa691b9958bfb3d92eae5caef1766ae586",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.7.0.12740/ipfs_companion_beta_build-2.7.0.12740-an+fx.xpi"
                 }
             ]
         }
