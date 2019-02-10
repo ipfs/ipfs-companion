@@ -2,3 +2,5 @@ vendor
 build
 coverage/
 node_modules
+add-on/dist
+firefox
