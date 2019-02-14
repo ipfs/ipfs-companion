@@ -16,7 +16,7 @@ module.exports = function operations ({
   onToggleRedirect
 }) {
   const activeQuickUpload = active && isIpfsOnline && isApiAvailable
-  const activeWebUI = active && isIpfsOnline // (js-ipfs >=0.34.0-rc.0 is ok) && ipfsNodeType === 'external'
+  const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
   const activeGatewaySwitch = active && ipfsNodeType === 'external'
 
   return html`

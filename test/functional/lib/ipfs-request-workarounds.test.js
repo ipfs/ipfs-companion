@@ -114,6 +114,50 @@ describe('modifyRequest processing', function () {
     })
   })
 
+  // Web UI is loaded from hardcoded 'blessed' CID, which enables us to remove
+  // CORS limitation. This makes Web UI opened from browser action work without
+  // the need for any additional configuration of go-ipfs daemon
+  describe('a request to API from blessed webuiRootUrl', function () {
+    it('should pass without CORS limitations ', async function () {
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const webuiOriginHeader = { name: 'Origin', value: state.webuiRootUrl }
+      const webuiRefererHeader = { name: 'Referer', value: state.webuiRootUrl }
+      // CORS whitelisting does not worh in Chrome 72 without passing/restoring ACRH preflight header
+      const acrhHeader = { name: 'Access-Control-Request-Headers', value: 'X-Test' } // preflight to store
+
+      // Test request
+      let request = {
+        requestHeaders: [ webuiOriginHeader, webuiRefererHeader, acrhHeader ],
+        type: 'xmlhttprequest',
+        originUrl: state.webuiRootUrl,
+        url: `${state.apiURLString}api/v0/id`
+      }
+      request = modifyRequest.onBeforeRequest(request) || request // executes before onBeforeSendHeaders, may mutate state
+      const requestHeaders = modifyRequest.onBeforeSendHeaders(request).requestHeaders
+
+      // "originUrl" should be swapped to look like it came from the same origin as HTTP API
+      const expectedOriginUrl = state.webuiRootUrl.replace(state.gwURLString, state.apiURLString)
+      expect(requestHeaders).to.deep.include({ name: 'Origin', value: expectedOriginUrl })
+      expect(requestHeaders).to.deep.include({ name: 'Referer', value: expectedOriginUrl })
+      expect(requestHeaders).to.deep.include(acrhHeader)
+
+      // Test response
+      const response = Object.assign({}, request)
+      delete response.requestHeaders
+      response.responseHeaders = []
+      const responseHeaders = modifyRequest.onHeadersReceived(response).responseHeaders
+      const corsHeader = { name: 'Access-Control-Allow-Origin', value: state.gwURL.origin }
+      const acahHeader = { name: 'Access-Control-Allow-Headers', value: acrhHeader.value } // expect value restored from preflight
+      expect(responseHeaders).to.deep.include(corsHeader)
+      expect(responseHeaders).to.deep.include(acahHeader)
+
+      browser.runtime.getURL.flush()
+    })
+  })
+
   after(function () {
     delete global.URL
     delete global.browser

@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const toMultiaddr = require('uri-to-multiaddr')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, pathAtHttpGateway } = require('./ipfs-path')
@@ -92,13 +93,18 @@ module.exports = async function init () {
   }
 
   function registerListeners () {
-    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, ['blocking', 'requestHeaders'])
+    let onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
+    if (!runtime.isFirefox) {
+      // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
+      onBeforeSendInfoSpec.push('extraHeaders')
+    }
+    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
     browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'] })
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
-    browser.tabs.onUpdated.addListener(onUpdatedTab)
+    browser.webNavigation.onDOMContentLoaded.addListener(onDOMContentLoaded)
     browser.tabs.onActivated.addListener(onActivatedTab)
     if (browser.windows) {
       browser.windows.onFocusChanged.addListener(onWindowFocusChanged)
@@ -213,6 +219,7 @@ module.exports = async function init () {
       peerCount: state.peerCount,
       gwURLString: state.gwURLString,
       pubGwURLString: state.pubGwURLString,
+      webuiRootUrl: state.webuiRootUrl,
       currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     }
     try {
@@ -378,44 +385,56 @@ module.exports = async function init () {
     }
   }
 
-  async function onUpdatedTab (tabId, changeInfo, tab) {
+  async function onDOMContentLoaded (details) {
     if (!state.active) return // skip content script injection when off
-    if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
-      if (state.linkify) {
-        console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
-        try {
-          await browser.tabs.executeScript(tabId, {
-            file: '/dist/bundles/linkifyContentScript.bundle.js',
-            matchAboutBlank: false,
-            allFrames: true,
-            runAt: 'document_idle'
-          })
-        } catch (error) {
-          console.error(`Unable to linkify DOM at '${tab.url}' due to`, error)
-        }
+    if (!details.url.startsWith('http')) return // skip special pages
+    // console.info(`[ipfs-companion] onDOMContentLoaded`, details)
+    if (state.linkify) {
+      console.info(`[ipfs-companion] Running linkfy experiment for ${details.url}`)
+      try {
+        await browser.tabs.executeScript(details.tabId, {
+          file: '/dist/bundles/linkifyContentScript.bundle.js',
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_idle'
+        })
+      } catch (error) {
+        console.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
-      if (state.catchUnhandledProtocols) {
-        // console.log(`[ipfs-companion] Normalizing links with unhandled protocols at ${tab.url}`)
-        // See: https://github.com/ipfs/ipfs-companion/issues/286
-        try {
-          // pass the URL of user-preffered public gateway
-          await browser.tabs.executeScript(tabId, {
-            code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
-            matchAboutBlank: false,
-            allFrames: true,
-            runAt: 'document_start'
-          })
-          // inject script that normalizes `href` and `src` containing unhandled protocols
-          await browser.tabs.executeScript(tabId, {
-            file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
-            matchAboutBlank: false,
-            allFrames: true,
-            runAt: 'document_end'
-          })
-        } catch (error) {
-          console.error(`Unable to normalize links at '${tab.url}' due to`, error)
-        }
+    }
+    if (state.catchUnhandledProtocols) {
+      // console.log(`[ipfs-companion] Normalizing links with unhandled protocols at ${tab.url}`)
+      // See: https://github.com/ipfs/ipfs-companion/issues/286
+      try {
+        // pass the URL of user-preffered public gateway
+        await browser.tabs.executeScript(details.tabId, {
+          code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_start'
+        })
+        // inject script that normalizes `href` and `src` containing unhandled protocols
+        await browser.tabs.executeScript(details.tabId, {
+          file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_end'
+        })
+      } catch (error) {
+        console.error(`Unable to normalize links at '${details.url}' due to`, error)
       }
+    }
+    if (details.url.startsWith(state.webuiRootUrl)) {
+      // Ensure API backend points at one from IPFS Companion
+      const apiMultiaddr = toMultiaddr(state.apiURLString)
+      await browser.tabs.executeScript(details.tabId, {
+        runAt: 'document_start',
+        code: `if (!localStorage.getItem('ipfsApi')) {
+          console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
+          localStorage.setItem('ipfsApi', '${apiMultiaddr}');
+          window.location.reload();
+        }`
+      })
     }
   }
 
@@ -597,6 +616,7 @@ module.exports = async function init () {
         case 'customGatewayUrl':
           state.gwURL = new URL(change.newValue)
           state.gwURLString = state.gwURL.toString()
+          state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)

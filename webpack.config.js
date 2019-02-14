@@ -55,6 +55,9 @@ const commonConfig = {
     net: 'empty',
     tls: 'empty'
   },
+  watchOptions: {
+    ignored: ['add-on/dist/**/*', 'node_modules']
+  },
   performance: {
     maxEntrypointSize: Infinity,
     maxAssetSize: 4194304 // https://github.com/mozilla/addons-linter/pull/892
