@@ -13367,6 +13367,14 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+uri-to-multiaddr@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/uri-to-multiaddr/-/uri-to-multiaddr-3.0.1.tgz#460bd5d78074002c47b60fdc456efd009e7168ae"
+  integrity sha512-77slJiNB/IxM35zgflBEgp8T8ywpyYAbEh8Ezdnq7kAuA6TRg6wfvNTi4Uixfh6CsPv9K2fAkI5+E4C2dw3tXA==
+  dependencies:
+    is-ip "^2.0.0"
+    multiaddr "^6.0.3"
+
 urijs@^1.18.2:
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.1.tgz#5b0ff530c0cbde8386f6342235ba5ca6e995d25a"

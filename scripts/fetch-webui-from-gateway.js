@@ -1,5 +1,6 @@
 /* This is a fallback script used when ipfs cli fails or is not available
  * More details: https://github.com/ipfs-shipyard/ipfs-webui/issues/843
+ * See also why this is not used: https://github.com/ipfs-shipyard/ipfs-companion/issues/679
  */
 const tar = require('tar')
 const request = require('request')
@@ -7,10 +8,6 @@ const progress = require('request-progress')
 
 const cid = process.argv[2]
 const destination = process.argv[3]
-
-// pick random preloader
-// const no = Math.round(Math.random()) // 0 or 1
-// const url = 'https://node' + no + '.preload.ipfs.io/api/v0/get?arg=' + cid + '&archive=true&compress=true'
 
 // use public gw
 const url = 'https://ipfs.io/api/v0/get?arg=' + cid + '&archive=true&compress=true'

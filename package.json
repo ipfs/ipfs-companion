@@ -23,12 +23,12 @@
     "build:copy:ui-kit:ipfs-css:fonts": "shx mkdir -p add-on/ui-kit/fonts && shx cp node_modules/ipfs-css/fonts/* add-on/ui-kit/fonts",
     "build:copy:ui-kit:ipfs-css:icons": "shx mkdir -p add-on/ui-kit/icons && shx cp node_modules/ipfs-css/icons/* add-on/ui-kit/icons",
     "build:copy:ui-kit:tachyons": "shx mkdir -p add-on/ui-kit && shx cp node_modules/tachyons/css/tachyons.css add-on/ui-kit",
-    "build:webui": "cross-env CID=QmXc9raDM1M5G5fpBnVyQ71vR4gbnskwnB9iMEzBuLgvoZ npm run build:webui:with-cid",
-    "build:webui:with-cid": "cross-env-shell \"shx test -d add-on/webui/ || (npm run build:webui:dir && (npm run build:webui:fetch-ipfs || npm run build:webui:fetch-http) && npm run build:webui:minimize)\"",
-    "build:webui:dir": "shx mkdir -p add-on/webui",
-    "build:webui:fetch-ipfs": "cross-env-shell \"ipfs get $CID -o add-on/webui/\"",
-    "build:webui:fetch-http": "cross-env-shell \"node scripts/fetch-webui-from-gateway.js $CID add-on/webui/\"",
-    "build:webui:minimize": "shx rm -rf add-on/webui/static/js/*.map && shx rm -rf add-on/webui/static/css/*.map && shx rm -rf add-on/webui/manifest.json",
+    "DISABLED:issue679:build:webui": "cross-env CID=QmXc9raDM1M5G5fpBnVyQ71vR4gbnskwnB9iMEzBuLgvoZ npm run build:webui:with-cid",
+    "DISABLED:issue679:build:webui:with-cid": "cross-env-shell \"shx test -d add-on/webui/ || (npm run build:webui:dir && (npm run build:webui:fetch-ipfs || npm run build:webui:fetch-http) && npm run build:webui:minimize)\"",
+    "DISABLED:issue679:build:webui:dir": "shx mkdir -p add-on/webui",
+    "DISABLED:issue679:build:webui:fetch-ipfs": "cross-env-shell \"ipfs get $CID -o add-on/webui/\"",
+    "DISABLED:issue679:build:webui:fetch-http": "cross-env-shell \"node scripts/fetch-webui-from-gateway.js $CID add-on/webui/\"",
+    "DISABLED:issue679:build:webui:minimize": "shx rm -rf add-on/webui/static/js/*.map && shx rm -rf add-on/webui/static/css/*.map && shx rm -rf add-on/webui/manifest.json",
     "build:js": "run-s build:js:*",
     "build:js:webpack": "webpack -p",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib add-on/dist/contentScripts/ add-on/dist/bundles/ipfsProxyContentScriptPayload.bundle.js",
@@ -127,6 +127,7 @@
     "piggybacker": "2.0.0",
     "pull-file-reader": "1.0.2",
     "tachyons": "4.11.1",
+    "uri-to-multiaddr": "3.0.1",
     "webextension-polyfill": "0.3.1"
   }
 }
