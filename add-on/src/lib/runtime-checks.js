@@ -19,7 +19,7 @@ async function createRuntimeChecks (browser) {
   // browser
   const browserInfo = await getBrowserInfo(browser)
   const runtimeBrowserName = browserInfo ? browserInfo.name : 'unknown'
-  const runtimeIsFirefox = !!runtimeBrowserName.match('Firefox')
+  const runtimeIsFirefox = !!(runtimeBrowserName.includes('Firefox') || runtimeBrowserName.includes('Fennec'))
   const runtimeHasNativeProtocol = !!(browser && browser.protocol && browser.protocol.registerStringProtocol)
   // platform
   const platformInfo = await getPlatformInfo(browser)
