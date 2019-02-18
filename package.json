@@ -58,9 +58,9 @@
     "ci": "run-s ci:*",
     "ci:install": "npx yarn@1.12.3 install --frozen-lockfile || npx yarn@1.12.3 install --frozen-lockfile",
     "ci:test": "npx yarn@1.12.3 test",
-    "ci:build": "./ci/update-manifest.sh ; npx yarn@1.12.3 build ; chmod -R ugo+rwX build/ add-on/",
-    "beta-build": "docker build -t ipfs-companion . && docker run -it --net=host -e RELEASE_CHANNEL=beta -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build",
-    "release-build": "docker build -t ipfs-companion . && docker run -it --net=host -e RELEASE_CHANNEL=stable -v $(pwd)/build:/usr/src/app/build ipfs-companion yarn ci:build",
+    "ci:build": "./ci/update-manifest.sh && npx yarn@1.12.3 build",
+    "beta-build": "docker build -t ipfs-companion-beta-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=beta -v $(pwd)/build:/home/node/app/build ipfs-companion-beta-build yarn ci:build",
+    "release-build": "docker build -t ipfs-companion-release-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=stable -v $(pwd)/build:/home/node/app/build ipfs-companion-release-build yarn ci:build",
     "dev-build": "npx yarn@1.12.3 && npx yarn@1.12.3 build",
     "yarn-build": "npm run dev-build"
   },
