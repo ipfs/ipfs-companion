@@ -1,10 +1,6 @@
 language: node_js
 node_js:
     - 10.15.1
-env:
-    global:
-        - secure: "LUZnP+lhVj0zbFe/tSppMvI6jaXyOos84WZehPImMeara9/RRrRk5QpKsUsqr1x/oHzElJnbAX9OD/GOuEI4fyYv9qBXr8CKxBpmjlM2ElY85WcGm9mntRXtvR0iscR3Jg9kPtUBqzVlh1E/mQjs5GR2nLn0Fe34Xwl6TWd3m6c="
-          #- JUNIT_REPORT_PATH=test/report.xml
 matrix:
     allow_failures:
         - os: windows
@@ -24,5 +20,6 @@ script:
     - npm run ci:build
     - npm run ci:test
     - npm run ci:lint
+after_success: npx nyc report --reporter=text-lcov > coverage.lcov && npx codecov
 notifications:
     email: false
