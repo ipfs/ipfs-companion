@@ -10206,7 +10206,7 @@ postcss@7.0.6:
     source-map "^0.6.1"
     supports-color "^5.5.0"
 
-postmsg-rpc@^2.4.0:
+postmsg-rpc@2.4.0, postmsg-rpc@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/postmsg-rpc/-/postmsg-rpc-2.4.0.tgz#4e2daf6851852364696debd5d6bf6936d1424cdf"
   integrity sha512-adGH2zGSxhCUOfUfAXdRn4tgZVWauaSP2X8on+g7uBA45sxkzORL1oia95eXZtcZk5Sp4JTZmDFOTe+D24avBQ==

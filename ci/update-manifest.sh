@@ -6,7 +6,7 @@ set -e
 MANIFEST=add-on/manifest.common.json
 
 # restore original in case it was modified manually
-test -d .git && git checkout $MANIFEST
+test -d .git && git checkout -- $MANIFEST
 
 # skip all manifest mutations when building for stable channel
 if [ "$RELEASE_CHANNEL" = "stable" ]; then
@@ -32,9 +32,7 @@ grep $REVISION $MANIFEST
 ## Set VERSION
 # Browsers do not accept non-numeric values in version string
 # so we calculate some sub-versions based on number of commits in master and  current branch
-COMMITS_IN_MASTER=$(git rev-list --count refs/remotes/origin/master)
-NEW_COMMITS_IN_CURRENT_BRANCH=$(git rev-list --count HEAD ^refs/remotes/origin/master)
 # mozilla/addons-linter: Version string must be a string comprising one to four dot-separated integers (0-65535). E.g: 1.2.3.4"
-BUILD_VERSION=$(($COMMITS_IN_MASTER*10+$NEW_COMMITS_IN_CURRENT_BRANCH))
+BUILD_VERSION=$(git rev-list --count --first-parent HEAD)
 set-manifest ".version = (.version + \".${BUILD_VERSION}\")"
 grep \"version\" $MANIFEST
