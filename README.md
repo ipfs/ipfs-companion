@@ -26,6 +26,7 @@
 - [Install](#install)
 - [Contribute](#contribute)
 - [Troubleshooting](#troubleshooting)
+- [Privacy Policy](#privacy-policy)
 - [License](#license)
 
 ## Background
@@ -235,6 +236,10 @@ Deny
 ```
 
 Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
+
+## Privacy Policy
+
+See [`docs/privacy-policy.md`](docs/privacy-policy.md)
 
 ## License
 
