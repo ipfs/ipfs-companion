@@ -66,7 +66,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       ignore(request.requestId)
     }
     // skip if a per-site redirect opt-out exists
-    const parentUrl = request.originUrl || request.initiator // FF: originUrl, Chrome: initiator
+    const parentUrl = request.originUrl || request.initiator // FF: originUrl (Referer-like Origin URL), Chrome: initiator (just Origin)
     const fqdn = new URL(request.url).hostname
     const parentFqdn = parentUrl && request.url !== parentUrl ? new URL(parentUrl).hostname : null
     if (state.noRedirectHostnames.some(optout =>
@@ -76,9 +76,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     }
     // additional checks limited to requests for root documents
     if (request.type === 'main_frame') {
-      // trigger DNSLink lookup if status for root domain is not in cache yet
+      // lazily trigger DNSLink lookup (will do anything only if status for root domain is not in cache)
       if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
-        (async () => dnslinkResolver.readAndCacheDnslink(parentFqdn || fqdn))()
+        dnslinkResolver.preloadDnslink(request.url)
       }
     }
     return isIgnored(request.requestId)
