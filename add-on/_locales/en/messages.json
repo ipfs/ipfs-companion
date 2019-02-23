@@ -8,11 +8,11 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Global toggle: Suspend all IPFS integrations",
+    "message": "Toggle all IPFS integrations",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_headerRedirectToggleTitle": {
-    "message": "Global toggle: Stop all gateway redirections",
+    "message": "Toggle all gateway redirections",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
