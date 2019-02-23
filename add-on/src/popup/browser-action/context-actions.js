@@ -95,8 +95,8 @@ function activeTabActions (state) {
   const showActiveTabSection = (state.active && state.globalRedirectEnabled && state.ipfsNodeType === 'external') || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
-      <div class="no-select w-100 outline-0--focus tl ba b--dashed b--navy-muted">
-        <div class="ph3 pv2 tr  charcoal bg-snow-muted truncate tl">
+      <div class="no-select w-100 outline-0--focus tl">
+        <div class="ph3 pv2 white f7 ttu" style="background-image: url('../../../images/stars.png'), linear-gradient(to left, #041727 0%,#043b55 100%); background-size: 100%; background-repeat: repeat;">
           ${browser.i18n.getMessage('panel_activeTabSectionHeader')}
         </div>
         ${contextActions(state)}
