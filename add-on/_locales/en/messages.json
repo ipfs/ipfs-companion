@@ -263,6 +263,14 @@
     "message": "Redirect requests for IPFS resources to the Custom gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_noRedirectHostnames_title": {
+    "message": "Redirect Opt-Outs",
+    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  },
+  "option_noRedirectHostnames_description": {
+    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
+  },
   "option_publicGatewayUrl_title": {
     "message": "Default Public Gateway",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"

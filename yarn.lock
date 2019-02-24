@@ -6664,6 +6664,11 @@ is-finite@^1.0.0:
   dependencies:
     number-is-nan "^1.0.0"
 
+is-fqdn@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/is-fqdn/-/is-fqdn-1.0.1.tgz#f3ed9cd5a20238449ae510e10d81258dafca9b70"
+  integrity sha1-8+2c1aICOESa5RDhDYElja/Km3A=
+
 is-fullwidth-code-point@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-1.0.0.tgz#ef9e31386f031a7f0d643af82fde50c457ef00cb"

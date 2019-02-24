@@ -184,7 +184,7 @@ module.exports = (state, emitter) => {
       } else {
         noRedirectHostnames.push(fqdn)
       }
-      console.dir('toggleSiteRedirect', state)
+      // console.dir('toggleSiteRedirect', state)
       await browser.storage.local.set({ noRedirectHostnames })
 
       // Reload the current tab to apply updated redirect preference

@@ -118,6 +118,7 @@
     "ipfs-http-response": "0.2.2",
     "ipfs-postmsg-proxy": "3.1.1",
     "ipfsx": "0.17.0",
+    "is-fqdn": "1.0.1",
     "is-ipfs": "0.4.8",
     "is-svg": "3.0.0",
     "lru-cache": "5.1.1",

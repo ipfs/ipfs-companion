@@ -1,5 +1,7 @@
 'use strict'
 
+const isFQDN = require('is-fqdn')
+
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external', // or 'embedded'
@@ -64,6 +66,25 @@ function normalizeGatewayURL (url) {
 }
 exports.normalizeGatewayURL = normalizeGatewayURL
 exports.safeURL = (url) => new URL(normalizeGatewayURL(url))
+
+// convert JS array to multiline textarea
+function hostArrayToText (array) {
+  array = array.map(host => host.trim().toLowerCase())
+  array = [...new Set(array)] // dedup
+  array = array.filter(Boolean).filter(isFQDN)
+  array.sort()
+  return array.join('\n')
+}
+// convert JS array to multiline textarea
+function hostTextToArray (text) {
+  let array = text.split('\n').map(host => host.trim().toLowerCase())
+  array = [...new Set(array)] // dedup
+  array = array.filter(Boolean).filter(isFQDN)
+  array.sort()
+  return array
+}
+exports.hostArrayToText = hostArrayToText
+exports.hostTextToArray = hostTextToArray
 
 exports.migrateOptions = async (storage) => {
   // <= v2.4.4
