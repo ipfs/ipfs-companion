@@ -177,8 +177,9 @@ module.exports = function createDnslinkResolver (getState) {
       return `/ipns/${fqdn}${url.pathname}${url.search}${url.hash}`
     },
 
-    // Test if URL contains a valid DNSLink hostname, FQDN in /ipns/ path
-    // and return original hostname if present
+    // Test if URL contains a valid DNSLink FQDN
+    // in url.hostname OR in url.pathname (/ipns/<fqdn>)
+    // and return matching FQDN if present
     findDNSLinkHostname (url) {
       const { hostname, pathname } = new URL(url)
       // check //foo.tld/ipns/<fqdn>

@@ -68,20 +68,18 @@ exports.normalizeGatewayURL = normalizeGatewayURL
 exports.safeURL = (url) => new URL(normalizeGatewayURL(url))
 
 // convert JS array to multiline textarea
-function hostArrayToText (array) {
+function hostArrayCleanup (array) {
   array = array.map(host => host.trim().toLowerCase())
   array = [...new Set(array)] // dedup
   array = array.filter(Boolean).filter(isFQDN)
   array.sort()
-  return array.join('\n')
-}
-// convert JS array to multiline textarea
-function hostTextToArray (text) {
-  let array = text.split('\n').map(host => host.trim().toLowerCase())
-  array = [...new Set(array)] // dedup
-  array = array.filter(Boolean).filter(isFQDN)
-  array.sort()
   return array
+}
+function hostArrayToText (array) {
+  return hostArrayCleanup(array).join('\n')
+}
+function hostTextToArray (text) {
+  return hostArrayCleanup(text.split('\n'))
 }
 exports.hostArrayToText = hostArrayToText
 exports.hostTextToArray = hostTextToArray
