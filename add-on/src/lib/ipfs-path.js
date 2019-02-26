@@ -67,6 +67,17 @@ function createIpfsPathValidator (getState, dnsLink) {
     // TODO: include hostname check for DNSLink and display option to copy CID even if no redirect
     isIpfsPageActionsContext (url) {
       return (IsIpfs.url(url) && !url.startsWith(getState().apiURLString)) || IsIpfs.subdomain(url)
+    },
+
+    // Test if actions such as 'per site redirect toggle' should be enabled for the URL
+    isRedirectPageActionsContext (url) {
+      const state = getState()
+      return state.active && // show  only when actionable
+      state.ipfsNodeType === 'external' && // hide with embedded node
+      (IsIpfs.ipnsUrl(url) || // show on /ipns/<fqdn>
+        (url.startsWith('http') && // hide on non-HTTP pages
+         !url.startsWith(state.gwURLString) && // hide on /ipfs/*
+          !url.startsWith(state.apiURLString))) // hide on api port
     }
   }
 

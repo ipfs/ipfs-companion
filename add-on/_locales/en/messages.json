@@ -51,10 +51,6 @@
     "message": "Open Preferences of Browser Extension",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
-  "panel_globalRedirectEnable": {
-    "message": "Enable All Redirects",
-    "description": "A menu item in Browser Action pop-up (panel_globalRedirectEnable)"
-  },
   "panel_activeTabSectionHeader": {
     "message": "Active Tab",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"

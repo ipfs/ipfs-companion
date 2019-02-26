@@ -235,10 +235,12 @@ module.exports = async function init () {
       info.gatewayVersion = null
     }
     if (info.currentTab) {
-      info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
-      info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(info.currentTab.url)
-      info.currentFqdn = info.currentDnslinkFqdn || new URL(info.currentTab.url).hostname
+      const url = info.currentTab.url
+      info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
+      info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
+      info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
       info.currentTabRedirectOptOut = info.noRedirectHostnames && info.noRedirectHostnames.includes(info.currentFqdn)
+      info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
     // Still here?
     if (browserActionPort) {

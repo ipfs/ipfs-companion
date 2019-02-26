@@ -9,17 +9,16 @@ const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopy
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
   Object.assign(state, {
-    // Global ON/OFF
+    // Global toggles
     active: true,
-    // UI state
-    isIpfsContext: false,
+    redirect: true,
+    // UI contexts
+    isIpfsContext: false, // Active Tab represents IPFS resource
+    isRedirectContext: false, // Active Tab or its subresources could be redirected
     isPinning: false,
     isUnPinning: false,
     isPinned: false,
-    currentTab: null,
-    currentFqdn: null,
-    currentDnslinkFqdn: null,
-    // IPFS status
+    // IPFS details
     ipfsNodeType: 'external',
     isIpfsOnline: false,
     ipfsApiUrl: null,
@@ -27,10 +26,12 @@ module.exports = (state, emitter) => {
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,
-    noRedirectHostnames: [],
-    globalRedirectEnabled: false,
-    currentTabRedirectOptOut: false,
-    isApiAvailable: false
+    isApiAvailable: false,
+    // isRedirectContext
+    currentTab: null,
+    currentFqdn: null,
+    currentDnslinkFqdn: null,
+    noRedirectHostnames: []
   })
 
   let port
@@ -42,17 +43,16 @@ module.exports = (state, emitter) => {
     port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
-        let status = message.statusUpdate
+        const status = message.statusUpdate
         console.log('In browser action, received message from background:', message)
         await updateBrowserActionState(status)
         emitter.emit('render')
-        if (status.ipfsPageActionsContext) {
+        if (status.isIpfsContext) {
           // calculating pageActions states is expensive (especially pin-related checks)
           // we update them in separate step to keep UI snappy
           await updatePageActionsState(status)
           emitter.emit('render')
         }
-        console.log('statusAfterUpdate', status)
       }
     })
     // fix for https://github.com/ipfs-shipyard/ipfs-companion/issues/318
@@ -149,7 +149,7 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('toggleGlobalRedirect', async () => {
-    const redirectEnabled = state.globalRedirectEnabled
+    const redirectEnabled = state.redirect
     // If all integrations were suspended..
     if (!state.active) {
       // ..clicking on 'inactive' toggle implies user wants to go online
@@ -157,17 +157,16 @@ module.exports = (state, emitter) => {
       // if redirect was already on, then we dont want to disable it, as it would be bad UX
       if (redirectEnabled) return
     }
-    state.globalRedirectEnabled = !redirectEnabled
-    state.gatewayAddress = state.globalRedirectEnabled ? state.gwURLString : state.pubGwURLString
+    state.redirect = !redirectEnabled
+    state.gatewayAddress = state.redirect ? state.gwURLString : state.pubGwURLString
     emitter.emit('render')
 
     try {
       await browser.storage.local.set({ useCustomGateway: !redirectEnabled })
     } catch (error) {
       console.error(`Unable to update redirect state due to ${error}`)
-      state.globalRedirectEnabled = redirectEnabled
+      state.redirect = redirectEnabled
     }
-
     emitter.emit('render')
   })
 
@@ -231,8 +230,8 @@ module.exports = (state, emitter) => {
       state.gatewayVersion = null
       state.swarmPeers = null
       state.isIpfsOnline = false
+      state.isRedirectContext = false
     }
-    emitter.emit('render')
     try {
       await browser.storage.local.set({ active: state.active })
     } catch (error) {
@@ -243,12 +242,6 @@ module.exports = (state, emitter) => {
   })
 
   async function updatePageActionsState (status) {
-    // Check if current page is an IPFS one
-    state.isIpfsContext = status.ipfsPageActionsContext || false
-    state.currentTab = status.currentTab || null
-    state.currentFqdn = status.currentFqdn || null
-    state.currentTabRedirectOptOut = state.noRedirectHostnames.includes(state.currentFqdn)
-
     // browser.pageAction-specific items that can be rendered earlier (snappy UI)
     requestAnimationFrame(async () => {
       const tabId = state.currentTab ? { tabId: state.currentTab.id } : null
@@ -280,20 +273,19 @@ module.exports = (state, emitter) => {
       } else {
         state.gatewayAddress = status.pubGwURLString
       }
-      state.globalRedirectEnabled = state.active && status.redirect
       // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
       state.isApiAvailable = state.active && !!(await browser.runtime.getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
       state.ipfsApiUrl = state.active ? status.apiURLString : null
-      state.webuiRootUrl = status.webuiRootUrl
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null
       state.isIpfsOnline = false
       state.gatewayVersion = null
       state.isIpfsContext = false
+      state.isRedirectContext = false
     }
   }
 

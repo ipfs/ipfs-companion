@@ -9,7 +9,8 @@ const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopy
 // Context Actions are displayed in Browser Action and Page Action (FF only)
 function contextActions ({
   active,
-  globalRedirectEnabled,
+  redirect,
+  isRedirectContext,
   currentFqdn,
   currentTabRedirectOptOut,
   ipfsNodeType,
@@ -25,7 +26,6 @@ function contextActions ({
   onUnPin
 }) {
   const activePinControls = active && isIpfsOnline && isApiAvailable && !(isPinning || isUnPinning)
-  const activeSiteRedirectSwitch = active && globalRedirectEnabled && ipfsNodeType === 'external'
 
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
@@ -62,9 +62,9 @@ function contextActions ({
   }
 
   const renderSiteRedirectToggle = () => {
-    if (!activeSiteRedirectSwitch) return
+    if (!isRedirectContext) return
     const siteRedirectToggleLabel = browser.i18n.getMessage(
-      globalRedirectEnabled && !currentTabRedirectOptOut
+      active && redirect && !currentTabRedirectOptOut
         ? 'panel_activeTabSiteRedirectDisable'
         : 'panel_activeTabSiteRedirectEnable',
       currentFqdn
@@ -74,7 +74,7 @@ function contextActions ({
     text: siteRedirectToggleLabel,
     title: siteRedirectToggleLabel,
     addClass: 'truncate',
-    disabled: !activeSiteRedirectSwitch,
+    disabled: !(active && redirect),
     onClick: onToggleSiteRedirect
   })}
       `
@@ -92,7 +92,7 @@ module.exports.contextActions = contextActions
 // "Active Tab" section is displayed in Browser Action  only
 // if redirect can be toggled or current tab has any IPFS Context Actions
 function activeTabActions (state) {
-  const showActiveTabSection = (state.active && state.globalRedirectEnabled && state.ipfsNodeType === 'external') || state.isIpfsContext
+  const showActiveTabSection = (state.redirect && state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
       <div class="no-select w-100 outline-0--focus tl">
