@@ -51,6 +51,7 @@ const commonConfig = {
   resolve: {
     extensions: ['.js', '.json'],
     alias: {
+      'url': 'iso-url',
       'http': 'http-node',
       'dns': 'http-dns',
       'dgram': 'chrome-dgram',

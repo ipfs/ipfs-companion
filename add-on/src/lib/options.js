@@ -2,13 +2,11 @@
 
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
-  ipfsNodeType: 'external', // or 'embedded'
+  ipfsNodeType: 'embedded', // Brave should default to js-ipfs: https://github.com/ipfs-shipyard/ipfs-companion/issues/664
   ipfsNodeConfig: JSON.stringify({
     config: {
       Addresses: {
-        //    Swarm: [],
-        Swarm: [
-        ],
+        Swarm: [],
         // API: '/ip4/127.0.0.1/tcp/5002',
         Gateway: '/ip4/127.0.0.1/tcp/9090'
       }

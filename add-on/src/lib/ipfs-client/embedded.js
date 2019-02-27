@@ -5,21 +5,24 @@ process.hrtime = require('browser-process-hrtime')
 const Ipfs = require('ipfs')
 const { optionDefaults } = require('../options')
 const http = require('http') // courtesy of chrome-net
-
-const Hapi = require('hapi')
+const Hapi = require('hapi') // courtesy of js-ipfs
 
 let node = null
 let httpServer = null
 let hapiServer = null
 
 exports.init = function init (opts) {
-  console.log('[ipfs-companion] Embedded ipfs init')
-
-  node = new Ipfs(
-    JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig)
-  )
-
-  // find first free port and start http server
+  // BRAVE TESTS FIRST
+  // TODO: remove after experiments are done
+  // =======================================
+  // [x] start raw http server (http.createServer)
+  // [x] start raw Hapi server (Hapi.Server)
+  //     [x] return response
+  // [ ] start js-ipfs with Gateway exposed by embedded Hapi server
+  //     - right now fails due to `TypeError: this._dht.on is not a function`,
+  //       but we are on the right track
+  // =======================================
+  // TEST RAW require('http') SERVER
   if (!httpServer) {
     let port = 9091
     httpServer = http.createServer(function (req, res) {
@@ -27,38 +30,45 @@ exports.init = function init (opts) {
       res.end('Hello from ipfs-companion exposing HTTP via chrome.sockets in Brave :-)\n')
     })
     httpServer.listen(port, '127.0.0.1')
-    console.log(`[ipfs-companion] started demo HTTP server on http://127.0.0.1:${port}`)
+    console.log(`[ipfs-companion] require('http') HTTP server on http://127.0.0.1:${port}`)
   }
-
-  // find first free port and start http server
+  // =======================================
+  // TEST require('hapi') HTTP SERVER (same as in js-ipfs)
   if (!hapiServer) {
     let port = 9092
     let options = {
+      host: '127.0.0.1',
+      port,
       debug: {
         log: ['*'],
         request: ['*']
       }
     }
-    hapiServer = new Hapi.Server(options)
-    hapiServer.connection({
-      host: '127.0.0.1',
-      port
-    })
-
-    hapiServer.route({
-      method: 'GET',
-      path: '/',
-      handler: function (request, reply) {
-        console.log('[ipfs-companion] hapiServer processing request', request)
-        return reply('Hello')
-      }
-    })
-
-    hapiServer.start((err) => {
-      if (err) console.error(`[ipfs-companion] Failed to start Hapi`, err)
-      console.log(`[ipfs-companion] started demo Hapi server on http://127.0.0.1:${port}`)
-    })
+    const initHapi = async () => {
+      // hapi v18 (js-ipfs >=v0.35.0-pre.0)
+      hapiServer = new Hapi.Server(options)
+      await hapiServer.route({
+        method: 'GET',
+        path: '/',
+        handler: (request, h) => {
+          console.log('[ipfs-companion] hapiServer processing request', request)
+          return 'Hello from ipfs-companion+Hapi.js exposing HTTP via chrome.sockets in Brave :-)'
+        }
+      })
+      // await hapiServer.register({
+      // })
+      await hapiServer.start()
+      console.log(`[ipfs-companion] require('hapi') HTTP server running at: ${hapiServer.info.uri}`)
+    }
+    initHapi()
   }
+  // =======================================
+  // Resume regular startup
+  console.log('[ipfs-companion] Embedded ipfs init')
+
+  node = new Ipfs(
+    JSON.parse(opts.ipfsNodeConfig || optionDefaults.ipfsNodeConfig)
+  )
 
   if (node.isOnline()) {
     return Promise.resolve(node)
@@ -80,14 +90,16 @@ exports.destroy = async function () {
     httpServer = null
   }
   if (hapiServer) {
-    hapiServer.stop({ timeout: 1000 }).then(function (err) {
+    try {
+      await hapiServer.stop({ timeout: 1000 })
+    } catch (err) {
       if (err) {
         console.error(`[ipfs-companion]  failed to stop hapi`, err)
       } else {
         console.log('[ipfs-companion] hapi server stopped')
       }
-    })
-    httpServer = null
+    }
+    hapiServer = null
   }
 
   await node.stop()
