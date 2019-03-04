@@ -5,6 +5,7 @@ const html = require('choo/html')
 const header = require('./header')
 const { activeTabActions } = require('./context-actions')
 const operations = require('./operations')
+const tools = require('./tools')
 
 // Render the browser action page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -31,6 +32,7 @@ module.exports = function browserActionPage (state, emit) {
       ${header(headerProps)}
       ${operations(opsProps)}
       ${activeTabActions(activeTabActionsProps)}
+      ${tools(opsProps)}
     </div>
   `
 }
