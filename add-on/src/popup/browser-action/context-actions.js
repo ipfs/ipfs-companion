@@ -81,7 +81,7 @@ module.exports.contextActions = contextActions
 // "Active Tab" section is displayed in Browser Action  only
 // if redirect can be toggled or current tab has any IPFS Context Actions
 function activeTabActions (state) {
-  const showActiveTabSection = (state.redirect && state.isRedirectContext) || state.isIpfsContext
+  const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
       <div class="no-select w-100 outline-0--focus tl">

@@ -5,13 +5,11 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const logo = require('../logo')
 const powerIcon = require('./power-icon')
-const redirectIcon = require('./redirect-icon')
 const optionsIcon = require('./options-icon')
 const gatewayStatus = require('./gateway-status')
 
 module.exports = function header (props) {
-  const { ipfsNodeType, active, redirect, onToggleActive, onToggleGlobalRedirect, onOpenPrefs, isIpfsOnline } = props
-  const showGlobalRedirectSwitch = ipfsNodeType === 'external'
+  const { ipfsNodeType, active, onToggleActive, onOpenPrefs, isIpfsOnline } = props
   return html`
     <div class="pt3 pb1 br2 br--top ba bw1 b--white" style="background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%,#043b55 100%); background-size: 100%; background-repeat: repeat;">
       <div class="no-user-select">
@@ -27,10 +25,6 @@ module.exports = function header (props) {
           ${browser.i18n.getMessage('panel_headerIpfsNodeIconLabel')}
         </h1>
         <div class="tc ma0 pa0">
-  ${showGlobalRedirectSwitch ? redirectIcon({ active: active && redirect,
-    title: 'panel_redirectToggleTooltip',
-    action: onToggleGlobalRedirect
-  }) : null}
   ${powerIcon({ active,
     title: 'panel_headerActiveToggleTitle',
     action: onToggleActive

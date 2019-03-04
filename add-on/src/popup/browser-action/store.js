@@ -230,7 +230,6 @@ module.exports = (state, emitter) => {
       state.gatewayVersion = null
       state.swarmPeers = null
       state.isIpfsOnline = false
-      state.isRedirectContext = false
     }
     try {
       await browser.storage.local.set({ active: state.active })

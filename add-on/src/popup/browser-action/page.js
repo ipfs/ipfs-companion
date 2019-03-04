@@ -22,7 +22,7 @@ module.exports = function browserActionPage (state, emit) {
   const onToggleNodeType = () => emit('toggleNodeType')
   const onToggleActive = () => emit('toggleActive')
 
-  const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onToggleGlobalRedirect, onOpenPrefs }, state)
+  const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onOpenPrefs }, state)
   const activeTabActionsProps = Object.assign({ onToggleSiteRedirect, onCopy, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleGlobalRedirect }, state)
 

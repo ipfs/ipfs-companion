@@ -18,6 +18,7 @@ module.exports = function operations ({
 }) {
   const activeQuickUpload = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
+  const activeRedirectSwitch = active && ipfsNodeType === 'external'
 
   return html`
     <div>
@@ -25,8 +26,8 @@ module.exports = function operations ({
   ${navItem({
     text: browser.i18n.getMessage('panel_redirectToggle'),
     title: browser.i18n.getMessage('panel_redirectToggleTooltip'),
-    disabled: !active,
-    switchValue: active && redirect,
+    disabled: !activeRedirectSwitch,
+    switchValue: redirect && activeRedirectSwitch,
     onClick: onToggleGlobalRedirect
   })}
     </div>
