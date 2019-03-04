@@ -205,7 +205,7 @@ module.exports = (state, emitter) => {
       console.error(`Unable to update redirect state due to ${error}`)
       emitter.emit('render')
     }
-    window.close()
+    // window.close()
   })
 
   emitter.on('toggleNodeType', async () => {

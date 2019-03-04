@@ -27,14 +27,14 @@ module.exports = function header (props) {
           ${browser.i18n.getMessage('panel_headerIpfsNodeIconLabel')}
         </h1>
         <div class="tc ma0 pa0">
+  ${showGlobalRedirectSwitch ? redirectIcon({ active: active && redirect,
+    title: 'panel_redirectToggleTooltip',
+    action: onToggleGlobalRedirect
+  }) : null}
   ${powerIcon({ active,
     title: 'panel_headerActiveToggleTitle',
     action: onToggleActive
   })}
-  ${showGlobalRedirectSwitch ? redirectIcon({ active: active && redirect,
-    title: 'panel_headerRedirectToggleTitle',
-    action: onToggleGlobalRedirect
-  }) : null}
   ${optionsIcon({ active,
     title: 'panel_openPreferences',
     action: onOpenPrefs

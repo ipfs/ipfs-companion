@@ -1,5 +1,6 @@
 @import url('/ui-kit/tachyons.css');
 @import url('/ui-kit/ipfs.css');
+@import url('/ui-kit/mdc.switch.min.css');
 @import url('../heartbeat.css');
 
 .bg-near-white--hover:hover {
@@ -41,4 +42,8 @@
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+.mdc-switch {
+  --mdc-theme-secondary: #244e66 /* navy-muted */
 }

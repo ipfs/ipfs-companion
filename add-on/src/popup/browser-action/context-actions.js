@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
+const navHeader = require('./nav-header')
 const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
@@ -43,38 +44,26 @@ function contextActions ({
     disabled: !activePinControls,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
-  ${!isPinned ? (
-    navItem({
-      text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-      disabled: !activePinControls,
-      onClick: onPin
-    })
-  ) : null}
-  ${isPinned ? (
-    navItem({
-      text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
-      disabled: !activePinControls,
-      onClick: onUnPin
-    })
-  ) : null}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
+    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
+    disabled: !activePinControls,
+    switchValue: isPinned,
+    onClick: isPinned ? onUnPin : onPin
+  })}
   </div>
     `
   }
 
   const renderSiteRedirectToggle = () => {
     if (!isRedirectContext) return
-    const siteRedirectToggleLabel = browser.i18n.getMessage(
-      active && redirect && !currentTabRedirectOptOut
-        ? 'panel_activeTabSiteRedirectDisable'
-        : 'panel_activeTabSiteRedirectEnable',
-      currentFqdn
-    )
     return html`
   ${navItem({
-    text: siteRedirectToggleLabel,
-    title: siteRedirectToggleLabel,
-    addClass: 'truncate',
+    text: browser.i18n.getMessage('panel_activeTabSiteRedirectToggle', currentFqdn),
+    title: browser.i18n.getMessage('panel_activeTabSiteRedirectToggleTooltip', currentFqdn),
+    style: 'truncate',
     disabled: !(active && redirect),
+    switchValue: active && redirect && !currentTabRedirectOptOut,
     onClick: onToggleSiteRedirect
   })}
       `
@@ -82,8 +71,8 @@ function contextActions ({
 
   return html`
     <div class='fade-in pv1'>
-  ${renderIpfsContextItems()}
   ${renderSiteRedirectToggle()}
+  ${renderIpfsContextItems()}
     </div>
   `
 }
@@ -96,9 +85,7 @@ function activeTabActions (state) {
   if (!showActiveTabSection) return
   return html`
       <div class="no-select w-100 outline-0--focus tl">
-        <div class="ph3 pv2 white f7 ttu" style="background-image: url('../../../images/stars.png'), linear-gradient(to left, #041727 0%,#043b55 100%); background-size: 100%; background-repeat: repeat;">
-          ${browser.i18n.getMessage('panel_activeTabSectionHeader')}
-        </div>
+        ${navHeader('panel_activeTabSectionHeader')}
         ${contextActions(state)}
       </div>
   `
