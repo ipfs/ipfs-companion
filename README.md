@@ -122,7 +122,7 @@ The Browser Action pop-up provides handy toggles for often used operations.
 _(some are disabled by default, use Preferences screen to enable)_
 
 - Requests made via [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) are re-routed to HTTP gateway (public or custom):
-    - `ipns://$cid`
+    - `ipfs://$cid`
     - `ipns://$cid_or_fqdn`
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
