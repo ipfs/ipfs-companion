@@ -3,7 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
-const { normalizeGatewayURL } = require('../../lib/options')
+const { normalizeGatewayURL, hostTextToArray, hostArrayToText } = require('../../lib/options')
 
 // Warn about mixed content issues when changing the gateway
 // https://github.com/ipfs-shipyard/ipfs-companion/issues/648
@@ -13,19 +13,40 @@ function gatewaysForm ({
   ipfsNodeType,
   customGatewayUrl,
   useCustomGateway,
+  noRedirectHostnames,
   publicGatewayUrl,
   onOptionChange
 }) {
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', normalizeGatewayURL)
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', normalizeGatewayURL)
+  const onNoRedirectHostnamesChange = onOptionChange('noRedirectHostnames', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
+  const supportRedirectToCustomGateway = ipfsNodeType === 'external'
 
   return html`
     <form>
       <fieldset>
         <legend>${browser.i18n.getMessage('option_header_gateways')}</legend>
-          ${ipfsNodeType === 'external' ? html`
+          <div>
+            <label for="publicGatewayUrl">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_publicGatewayUrl_title')}</dt>
+                <dd>${browser.i18n.getMessage('option_publicGatewayUrl_description')}</dd>
+              </dl>
+            </label>
+            <input
+              id="publicGatewayUrl"
+              type="url"
+              inputmode="url"
+              required
+              pattern="^https?://[^/]+/?$"
+              spellcheck="false"
+              title="Enter URL without any sub-path"
+              onchange=${onPublicGatewayUrlChange}
+              value=${publicGatewayUrl} />
+          </div>
+          ${supportRedirectToCustomGateway ? html`
             <div>
               <label for="customGatewayUrl">
                 <dl>
@@ -48,7 +69,7 @@ function gatewaysForm ({
 
             </div>
           ` : null}
-          ${ipfsNodeType === 'external' ? html`
+          ${supportRedirectToCustomGateway ? html`
             <div>
               <label for="useCustomGateway">
                 <dl>
@@ -63,24 +84,22 @@ function gatewaysForm ({
                 checked=${useCustomGateway} />
             </div>
           ` : null}
-        <div>
-          <label for="publicGatewayUrl">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_publicGatewayUrl_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_publicGatewayUrl_description')}</dd>
-            </dl>
-          </label>
-          <input
-            id="publicGatewayUrl"
-            type="url"
-            inputmode="url"
-            required
-            pattern="^https?://[^/]+/?$"
-            spellcheck="false"
-            title="Enter URL without any sub-path"
-            onchange=${onPublicGatewayUrlChange}
-            value=${publicGatewayUrl} />
-        </div>
+          ${supportRedirectToCustomGateway ? html`
+            <div>
+              <label for="noRedirectHostnames">
+                <dl>
+                  <dt>${browser.i18n.getMessage('option_noRedirectHostnames_title')}</dt>
+                  <dd>${browser.i18n.getMessage('option_noRedirectHostnames_description')}</dd>
+                </dl>
+              </label>
+              <textarea
+                id="noRedirectHostnames"
+                spellcheck="false"
+                onchange=${onNoRedirectHostnamesChange}
+                rows="4" 
+                >${hostArrayToText(noRedirectHostnames)}</textarea>
+            </div>
+          ` : null}
       </fieldset>
     </form>
   `

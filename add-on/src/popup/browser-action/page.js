@@ -3,8 +3,9 @@
 
 const html = require('choo/html')
 const header = require('./header')
-const contextActions = require('./context-actions')
+const { activeTabActions } = require('./context-actions')
 const operations = require('./operations')
+const tools = require('./tools')
 
 // Render the browser action page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -17,23 +18,21 @@ module.exports = function browserActionPage (state, emit) {
   const onQuickUpload = () => emit('quickUpload')
   const onOpenWebUi = () => emit('openWebUi')
   const onOpenPrefs = () => emit('openPrefs')
-  const onToggleRedirect = () => emit('toggleRedirect')
+  const onToggleGlobalRedirect = () => emit('toggleGlobalRedirect')
+  const onToggleSiteRedirect = () => emit('toggleSiteRedirect')
   const onToggleNodeType = () => emit('toggleNodeType')
   const onToggleActive = () => emit('toggleActive')
 
   const headerProps = Object.assign({ onToggleNodeType, onToggleActive, onOpenPrefs }, state)
-  const contextActionsProps = Object.assign({ onCopy, onPin, onUnPin }, state)
-  const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleRedirect }, state)
+  const activeTabActionsProps = Object.assign({ onToggleSiteRedirect, onCopy, onPin, onUnPin }, state)
+  const opsProps = Object.assign({ onQuickUpload, onOpenWebUi, onToggleGlobalRedirect }, state)
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">
       ${header(headerProps)}
-      <div class="bb b--black-20">
-        ${contextActions(contextActionsProps)}
-      </div>
-      <div class="bb b--black-20">
-        ${operations(opsProps)}
-      </div>
+      ${operations(opsProps)}
+      ${activeTabActions(activeTabActionsProps)}
+      ${tools(opsProps)}
     </div>
   `
 }

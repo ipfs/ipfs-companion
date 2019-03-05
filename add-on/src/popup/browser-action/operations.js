@@ -7,39 +7,19 @@ const navItem = require('./nav-item')
 
 module.exports = function operations ({
   active,
+  redirect,
   ipfsNodeType,
-  isIpfsOnline,
-  redirectEnabled,
-  isApiAvailable,
-  onQuickUpload,
-  onOpenWebUi,
-  onToggleRedirect
+  onToggleGlobalRedirect
 }) {
-  const activeQuickUpload = active && isIpfsOnline && isApiAvailable
-  const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
-  const activeGatewaySwitch = active && ipfsNodeType === 'external'
-
+  const activeRedirectSwitch = active && ipfsNodeType === 'external'
   return html`
-    <div class="fade-in pv1">
+    <div class="fade-in pv1 bb b--black-10">
   ${navItem({
-    text: browser.i18n.getMessage('panel_quickUpload'),
-    addClass: 'b',
-    disabled: !activeQuickUpload,
-    onClick: onQuickUpload
-  })}
-  ${navItem({
-    text: browser.i18n.getMessage(
-      redirectEnabled && activeGatewaySwitch
-        ? 'panel_switchToPublicGateway'
-        : 'panel_switchToCustomGateway'
-    ),
-    disabled: !activeGatewaySwitch,
-    onClick: onToggleRedirect
-  })}
-  ${navItem({
-    text: browser.i18n.getMessage('panel_openWebui'),
-    disabled: !activeWebUI,
-    onClick: onOpenWebUi
+    text: browser.i18n.getMessage('panel_redirectToggle'),
+    title: browser.i18n.getMessage('panel_redirectToggleTooltip'),
+    disabled: !activeRedirectSwitch,
+    switchValue: redirect && activeRedirectSwitch,
+    onClick: onToggleGlobalRedirect
   })}
     </div>
   `

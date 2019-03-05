@@ -6,7 +6,7 @@ const browser = require('webextension-polyfill')
 
 function icon ({ svg, title, active, action }) {
   return html`
-    <button class="pa0 ma0 dib bn bg-transparent pointer transition-all ${active ? 'aqua hover-snow' : 'gray hover-snow-muted'}"
+    <button class="header-icon pa0 ma0 dib bn bg-transparent transition-all ${action ? 'pointer' : null} ${active ? 'aqua' : 'gray'}"
       style="outline:none;"
       title="${browser.i18n.getMessage(title)}"
       onclick=${action}>

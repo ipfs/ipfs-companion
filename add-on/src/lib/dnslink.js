@@ -175,6 +175,29 @@ module.exports = function createDnslinkResolver (getState) {
       }
       const fqdn = url.hostname
       return `/ipns/${fqdn}${url.pathname}${url.search}${url.hash}`
+    },
+
+    // Test if URL contains a valid DNSLink FQDN
+    // in url.hostname OR in url.pathname (/ipns/<fqdn>)
+    // and return matching FQDN if present
+    findDNSLinkHostname (url) {
+      const { hostname, pathname } = new URL(url)
+      // check //foo.tld/ipns/<fqdn>
+      if (IsIpfs.ipnsPath(pathname)) {
+        // we may have false-positives here, so we do additional checks below
+        const ipnsRoot = pathname.match(/^\/ipns\/([^/]+)/)[1]
+        // console.log('findDNSLinkHostname ==> inspecting IPNS root', ipnsRoot)
+        // Ignore PeerIDs, match DNSLink only
+        if (!IsIpfs.cid(ipnsRoot) && dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
+          // console.log('findDNSLinkHostname ==> found DNSLink for FQDN in url.pathname: ', ipnsRoot)
+          return ipnsRoot
+        }
+      }
+      // check //<fqdn>/foo/bar
+      if (dnslinkResolver.readAndCacheDnslink(hostname)) {
+        // console.log('findDNSLinkHostname ==> found DNSLink for url.hostname', hostname)
+        return hostname
+      }
     }
 
   }

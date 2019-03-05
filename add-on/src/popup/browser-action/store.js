@@ -2,21 +2,23 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const IsIpfs = require('is-ipfs')
 const { safeIpfsPath, trimHashAndSearch } = require('../../lib/ipfs-path')
 const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
   Object.assign(state, {
-    // Global ON/OFF
+    // Global toggles
     active: true,
-    // UI state
-    isIpfsContext: false,
+    redirect: true,
+    // UI contexts
+    isIpfsContext: false, // Active Tab represents IPFS resource
+    isRedirectContext: false, // Active Tab or its subresources could be redirected
     isPinning: false,
     isUnPinning: false,
     isPinned: false,
-    currentTab: null,
-    // IPFS status
+    // IPFS details
     ipfsNodeType: 'external',
     isIpfsOnline: false,
     ipfsApiUrl: null,
@@ -24,8 +26,12 @@ module.exports = (state, emitter) => {
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,
-    redirectEnabled: false,
-    isApiAvailable: false
+    isApiAvailable: false,
+    // isRedirectContext
+    currentTab: null,
+    currentFqdn: null,
+    currentDnslinkFqdn: null,
+    noRedirectHostnames: []
   })
 
   let port
@@ -37,11 +43,11 @@ module.exports = (state, emitter) => {
     port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {
       if (message.statusUpdate) {
-        let status = message.statusUpdate
+        const status = message.statusUpdate
         console.log('In browser action, received message from background:', message)
         await updateBrowserActionState(status)
         emitter.emit('render')
-        if (status.ipfsPageActionsContext) {
+        if (status.isIpfsContext) {
           // calculating pageActions states is expensive (especially pin-related checks)
           // we update them in separate step to keep UI snappy
           await updatePageActionsState(status)
@@ -142,20 +148,64 @@ module.exports = (state, emitter) => {
       })
   })
 
-  emitter.on('toggleRedirect', async () => {
-    const enabled = state.redirectEnabled
-    state.redirectEnabled = !enabled
-    state.gatewayAddress = '…'
+  emitter.on('toggleGlobalRedirect', async () => {
+    const redirectEnabled = state.redirect
+    // If all integrations were suspended..
+    if (!state.active) {
+      // ..clicking on 'inactive' toggle implies user wants to go online
+      emitter.emit('toggleActive')
+      // if redirect was already on, then we dont want to disable it, as it would be bad UX
+      if (redirectEnabled) return
+    }
+    state.redirect = !redirectEnabled
+    state.gatewayAddress = state.redirect ? state.gwURLString : state.pubGwURLString
     emitter.emit('render')
 
     try {
-      await browser.storage.local.set({ useCustomGateway: !enabled })
+      await browser.storage.local.set({ useCustomGateway: !redirectEnabled })
     } catch (error) {
       console.error(`Unable to update redirect state due to ${error}`)
-      state.redirectEnabled = enabled
+      state.redirect = redirectEnabled
     }
-
     emitter.emit('render')
+  })
+
+  emitter.on('toggleSiteRedirect', async () => {
+    state.currentTabRedirectOptOut = !state.currentTabRedirectOptOut
+    emitter.emit('render')
+
+    try {
+      let noRedirectHostnames = state.noRedirectHostnames
+      // if we are on /ipns/fqdn.tld/ then use hostname from DNSLink
+      let fqdn = state.currentDnslinkFqdn || state.currentFqdn
+      if (noRedirectHostnames.includes(fqdn)) {
+        noRedirectHostnames = noRedirectHostnames.filter(host => !host.endsWith(fqdn))
+      } else {
+        noRedirectHostnames.push(fqdn)
+      }
+      // console.dir('toggleSiteRedirect', state)
+      await browser.storage.local.set({ noRedirectHostnames })
+
+      // Reload the current tab to apply updated redirect preference
+      if (!state.currentDnslinkFqdn || !IsIpfs.ipnsUrl(state.currentTab.url)) {
+        // No DNSLink, reload URL as-is
+        await browser.tabs.reload(state.currentTab.id)
+      } else {
+        // DNSLinked websites require URL change
+        // from  http?://gateway.tld/ipns/{fqdn}/some/path
+        // to    http://{fqdn}/some/path
+        // (defaulting to http: https websites will have HSTS or a redirect)
+        const originalUrl = state.currentTab.url.replace(/^.*\/ipns\//, 'http://')
+        await browser.tabs.update(state.currentTab.id, {
+          // FF only: loadReplace: true,
+          url: originalUrl
+        })
+      }
+    } catch (error) {
+      console.error(`Unable to update redirect state due to ${error}`)
+      emitter.emit('render')
+    }
+    // window.close()
   })
 
   emitter.on('toggleNodeType', async () => {
@@ -175,28 +225,22 @@ module.exports = (state, emitter) => {
     const prev = state.active
     state.active = !prev
     if (!state.active) {
-      const options = await browser.storage.local.get()
-      state.gatewayAddress = options.publicGatewayUrl
+      state.gatewayAddress = state.pubGwURLString
       state.ipfsApiUrl = null
       state.gatewayVersion = null
       state.swarmPeers = null
       state.isIpfsOnline = false
     }
-    emitter.emit('render')
     try {
       await browser.storage.local.set({ active: state.active })
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)
       state.active = prev
-      emitter.emit('render')
     }
+    emitter.emit('render')
   })
 
   async function updatePageActionsState (status) {
-    // Check if current page is an IPFS one
-    state.isIpfsContext = status.ipfsPageActionsContext || false
-    state.currentTab = status.currentTab || null
-
     // browser.pageAction-specific items that can be rendered earlier (snappy UI)
     requestAnimationFrame(async () => {
       const tabId = state.currentTab ? { tabId: state.currentTab.id } : null
@@ -220,28 +264,27 @@ module.exports = (state, emitter) => {
 
   async function updateBrowserActionState (status) {
     if (status) {
-      const options = await browser.storage.local.get()
-      state.active = status.active
-      if (state.active && options.useCustomGateway && (options.ipfsNodeType !== 'embedded')) {
-        state.gatewayAddress = options.customGatewayUrl
+      // Copy all attributes
+      Object.assign(state, status)
+
+      if (state.active && status.redirect && (status.ipfsNodeType !== 'embedded')) {
+        state.gatewayAddress = status.gwURLString
       } else {
-        state.gatewayAddress = options.publicGatewayUrl
+        state.gatewayAddress = status.pubGwURLString
       }
-      state.ipfsNodeType = status.ipfsNodeType
-      state.redirectEnabled = state.active && options.useCustomGateway
       // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
       state.isApiAvailable = state.active && !!(await browser.runtime.getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
-      state.ipfsApiUrl = state.active ? options.ipfsApiUrl : null
-      state.webuiRootUrl = status.webuiRootUrl
+      state.ipfsApiUrl = state.active ? status.apiURLString : null
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null
       state.isIpfsOnline = false
       state.gatewayVersion = null
       state.isIpfsContext = false
+      state.isRedirectContext = false
     }
   }
 

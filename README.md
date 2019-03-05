@@ -69,9 +69,10 @@ More details: [`x-ipfs-path` Header Support in IPFS Companion](https://github.co
 
 #### Redirect Opt-Out
 
-It is possible to opt-out from redirect by
-a) suspending extension via global toggle
-b) including `x-ipfs-companion-no-redirect` in the URL (as a [hash](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect) or [query](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect) parameter).
+It is possible to opt-out from Gateway redirect by:
+- a) suspending redirect via global toggle (see [_Disable All Redirects_](#disable-all-redirects) below)
+- b) suspending redirect for via per website opt-out (in [_Active Tab_ section of _Browser Action_](#disable-gateway-redirect-per-website) or _Preferences_)
+- c) including `x-ipfs-companion-no-redirect` in the URL (as a [hash](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect) or [query](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect) parameter).
 
 ### IPFS API as `window.ipfs`
 
@@ -80,11 +81,30 @@ Websites can detect if `window.ipfs` exists and opt-in to use it instead of crea
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
 
-### Toggle IPFS Integrations
+### Quick Toggles
 
-> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/42685002-18c7cee4-8692-11e8-9171-970866d91ae0.gif)
+The Browser Action pop-up provides handy toggles for often used operations.
 
-The Browser Action pop-up provides a toggle for suspending all active IPFS integrations with a single click.
+#### Disable Gateway Redirect Per Website
+
+> _Active Tab_ actions include option to opt-out current website from Gateway redirect of any IPFS subresources.    
+> Disabling redirect for DNSLink website will restore original URL as well:
+>
+> ![per-site-peek 2019-02-26 00-23](https://user-images.githubusercontent.com/157609/53376094-86557500-395d-11e9-837f-a4712aa19236.gif)    
+
+#### Disable All Redirects
+
+> A handy toggle to disable all gateway redirects while keeping all other features enabled:
+>
+> ![redirect](https://user-images.githubusercontent.com/157609/53376263-0976cb00-395e-11e9-8536-d83d28ffeee9.gif)
+
+#### Suspend IPFS Extension
+
+> The "power" icon can be used to temporarily suspend all IPFS integrations
+> (redirects, API status, content scripts, protocol handlers etc).
+> Useful during testing. Extension can be re-enabled with a single click:
+>
+> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/53376196-d6343c00-395d-11e9-83f2-04c16b3a008f.gif)
 
 ### IPFS Status and Context Actions
 

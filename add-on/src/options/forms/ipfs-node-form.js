@@ -46,7 +46,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
                 <dd>${browser.i18n.getMessage('option_ipfsNodeConfig_description')}</dd>
               </dl>
             </label>
-            <textarea id="ipfsNodeConfig" rows="4" onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
+            <textarea id="ipfsNodeConfig" rows="7" onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
           </div>
         ` : null}
       </fieldset>

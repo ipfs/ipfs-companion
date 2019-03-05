@@ -64,8 +64,19 @@ function createIpfsPathValidator (getState, dnsLink) {
     },
 
     // Test if actions such as 'copy URL', 'pin/unpin' should be enabled for the URL
+    // TODO: include hostname check for DNSLink and display option to copy CID even if no redirect
     isIpfsPageActionsContext (url) {
       return (IsIpfs.url(url) && !url.startsWith(getState().apiURLString)) || IsIpfs.subdomain(url)
+    },
+
+    // Test if actions such as 'per site redirect toggle' should be enabled for the URL
+    isRedirectPageActionsContext (url) {
+      const state = getState()
+      return state.ipfsNodeType === 'external' && // hide with embedded node
+      (IsIpfs.ipnsUrl(url) || // show on /ipns/<fqdn>
+        (url.startsWith('http') && // hide on non-HTTP pages
+         !url.startsWith(state.gwURLString) && // hide on /ipfs/*
+          !url.startsWith(state.apiURLString))) // hide on api port
     }
   }
 
@@ -110,6 +121,7 @@ function validIpnsPath (path, dnsLink) {
       // console.log('==> IPNS is a valid CID', ipnsRoot)
       return true
     }
+    // then see if there is an DNSLink entry for 'ipnsRoot' hostname
     if (dnsLink.readAndCacheDnslink(ipnsRoot)) {
       // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
       return true

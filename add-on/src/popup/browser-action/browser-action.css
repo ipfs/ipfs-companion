@@ -1,9 +1,21 @@
 @import url('/ui-kit/tachyons.css');
 @import url('/ui-kit/ipfs.css');
+@import url('/ui-kit/mdc.switch.min.css');
 @import url('../heartbeat.css');
 
 .bg-near-white--hover:hover {
   background-color: #F4F4F4;
+}
+
+.header-icon:active {
+  color: #edf0f4;
+  transform: translateY(4px);
+}
+.header-icon[disabled],
+.header-icon[disabled]:active {
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
 }
 
 .outline-0--focus:focus {
@@ -30,4 +42,8 @@
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+.mdc-switch {
+  --mdc-theme-secondary: #244e66 /* navy-muted */
 }
