@@ -680,6 +680,8 @@ module.exports = async function init () {
 
       apiStatusUpdate()
     }
+    // Post update to Browser Action (if exists) -- this gives UX a snappy feel
+    await sendStatusUpdateToBrowserAction()
   }
 
   // Public API

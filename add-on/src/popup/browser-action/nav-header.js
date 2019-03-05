@@ -1,6 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const browser = require('webextension-polyfill')
 const html = require('choo/html')
 
 function navHeader (label) {

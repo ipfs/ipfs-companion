@@ -150,24 +150,16 @@ module.exports = (state, emitter) => {
 
   emitter.on('toggleGlobalRedirect', async () => {
     const redirectEnabled = state.redirect
-    // If all integrations were suspended..
-    if (!state.active) {
-      // ..clicking on 'inactive' toggle implies user wants to go online
-      emitter.emit('toggleActive')
-      // if redirect was already on, then we dont want to disable it, as it would be bad UX
-      if (redirectEnabled) return
-    }
     state.redirect = !redirectEnabled
     state.gatewayAddress = state.redirect ? state.gwURLString : state.pubGwURLString
     emitter.emit('render')
-
     try {
       await browser.storage.local.set({ useCustomGateway: !redirectEnabled })
     } catch (error) {
       console.error(`Unable to update redirect state due to ${error}`)
       state.redirect = redirectEnabled
+      emitter.emit('render')
     }
-    emitter.emit('render')
   })
 
   emitter.on('toggleSiteRedirect', async () => {
@@ -205,7 +197,6 @@ module.exports = (state, emitter) => {
       console.error(`Unable to update redirect state due to ${error}`)
       emitter.emit('render')
     }
-    // window.close()
   })
 
   emitter.on('toggleNodeType', async () => {
@@ -273,7 +264,7 @@ module.exports = (state, emitter) => {
         state.gatewayAddress = status.pubGwURLString
       }
       // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.isApiAvailable = state.active && !!(await browser.runtime.getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
+      state.isApiAvailable = state.active && !!(await getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
