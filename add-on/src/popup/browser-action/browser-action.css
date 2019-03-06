@@ -45,5 +45,10 @@
 }
 
 .mdc-switch {
-  --mdc-theme-secondary: #244e66 /* navy-muted */
+  --mdc-theme-secondary: #3e9096 /* teal */
+}
+
+.mdc-switch:not(.mdc-switch--checked) .mdc-switch__thumb {
+  background-color: #34373f; /* charcoal */
+  border-color: #34373f;
 }
