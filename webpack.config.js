@@ -19,6 +19,9 @@ const commonConfig = {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
+          // Speed Up
+          cache: true,
+          parallel: true,
           // Default minify settings break js-ipfs:
           // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
           compress: { unused: false },
