@@ -3,6 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const switchToggle = require('../../pages/components/switch-toggle')
 
 function experimentsForm ({
   displayNotifications,
@@ -35,7 +36,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_displayNotifications_description')}</dd>
             </dl>
           </label>
-          <input id="displayNotifications" type="checkbox" onchange=${onDisplayNotificationsChange} checked=${displayNotifications} />
+          <div>${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
         </div>
         <div>
           <label for="preloadAtPublicGateway">
@@ -44,7 +45,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_preloadAtPublicGateway_description')}</dd>
             </dl>
           </label>
-          <input type="checkbox" id="preloadAtPublicGateway" onchange=${onPreloadAtPublicGatewayChange} checked=${preloadAtPublicGateway} />
+          <div>${switchToggle({ id: 'preloadAtPublicGateway', checked: preloadAtPublicGateway, onchange: onPreloadAtPublicGatewayChange })}</div>
         </div>
         <div>
           <label for="catchUnhandledProtocols">
@@ -53,7 +54,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_catchUnhandledProtocols_description')}</dd>
             </dl>
           </label>
-          <input type="checkbox" id="catchUnhandledProtocols" onchange=${onCatchUnhandledProtocolsChange} checked=${catchUnhandledProtocols} />
+          <div>${switchToggle({ id: 'catchUnhandledProtocols', checked: catchUnhandledProtocols, onchange: onCatchUnhandledProtocolsChange })}</div>
         </div>
         <div>
           <label for="linkify">
@@ -62,7 +63,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_linkify_description')}</dd>
             </dl>
           </label>
-          <input type="checkbox" id="linkify" onchange=${onLinkifyChange} checked=${linkify} />
+          <div>${switchToggle({ id: 'linkify', checked: linkify, onchange: onLinkifyChange })}</div>
         </div>
         <div>
           <label for="dnslinkPolicy">
@@ -105,10 +106,10 @@ function experimentsForm ({
               </dd>
             </dl>
           </label>
-          <input type="checkbox" id="detectIpfsPathHeader" onchange=${onDetectIpfsPathHeaderChange} checked=${detectIpfsPathHeader} />
+          <div>${switchToggle({ id: 'detectIpfsPathHeader', checked: detectIpfsPathHeader, onchange: onDetectIpfsPathHeaderChange })}</div>
         </div>
         <div>
-          <label for="ipfs-proxy">
+          <label for="ipfsProxy">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
               <dd>
@@ -124,7 +125,7 @@ function experimentsForm ({
               </dd>
             </dl>
           </label>
-          <input type="checkbox" id="ipfs-proxy" onchange=${onIpfsProxyChange} checked=${ipfsProxy} />
+          <div>${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, onchange: onIpfsProxyChange })}</div>
         </div>
         <div>
           <label for="resetAllOptions">
@@ -133,7 +134,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_resetAllOptions_description')}</dd>
             </dl>
           </label>
-          <span id="resetAllOptions"><button onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></span>
+          <div><button id="resetAllOptions" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
         </div>
       </fieldset>
     </form>

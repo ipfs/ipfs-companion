@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const { normalizeGatewayURL } = require('../../lib/options')
+const switchToggle = require('../../pages/components/switch-toggle')
 
 function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
   const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', normalizeGatewayURL)
@@ -57,11 +58,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
               <dd>${browser.i18n.getMessage('option_automaticMode_description')}</dd>
             </dl>
           </label>
-          <input
-            id="automaticMode"
-            type="checkbox"
-            onchange=${onAutomaticModeChange}
-            checked=${automaticMode} />
+          <div>${switchToggle({ id: 'automaticMode', checked: automaticMode, onchange: onAutomaticModeChange })}</div>
         </div>
       </fieldset>
     </form>
