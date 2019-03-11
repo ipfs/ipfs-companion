@@ -5,7 +5,7 @@ const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator, pathAtHttpGateway } = require('./ipfs-path')
+const { createIpfsPathValidator } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
@@ -56,9 +56,9 @@ module.exports = async function init () {
       }
     }
 
-    copier = createCopier(getState, getIpfs, notify)
     dnslinkResolver = createDnslinkResolver(getState)
-    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
+    ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
+    copier = createCopier(notify, ipfsPathValidator)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
       onCopyCanonicalAddress: copier.copyCanonicalAddress,
@@ -174,7 +174,7 @@ module.exports = async function init () {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? pathAtHttpGateway(path, state.pubGwURLString) : null
+      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }
@@ -257,7 +257,7 @@ module.exports = async function init () {
     return new Promise((resolve, reject) => {
       const http = new XMLHttpRequest()
       // Make sure preload request is excluded from global redirect
-      const preloadUrl = pathAtHttpGateway(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
+      const preloadUrl = ipfsPathValidator.resolveToPublicUrl(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
       http.open('HEAD', preloadUrl)
       http.onreadystatechange = function () {
         if (this.readyState === this.DONE) {
@@ -697,6 +697,10 @@ module.exports = async function init () {
 
     get dnslinkResolver () {
       return dnslinkResolver
+    },
+
+    get ipfsPathValidator () {
+      return ipfsPathValidator
     },
 
     get notify () {

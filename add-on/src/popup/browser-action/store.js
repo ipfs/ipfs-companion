@@ -3,7 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const IsIpfs = require('is-ipfs')
-const { safeIpfsPath, trimHashAndSearch } = require('../../lib/ipfs-path')
+const { trimHashAndSearch } = require('../../lib/ipfs-path')
 const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
@@ -312,15 +312,16 @@ async function getIpfsApi () {
   return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfs : null
 }
 
+async function getIpfsPathValidator () {
+  const bg = await getBackgroundPage()
+  return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfsPathValidator : null
+}
+
 async function resolveToPinPath (ipfs, url) {
+  // Prior issues:
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
-  url = trimHashAndSearch(url)
   // https://github.com/ipfs/ipfs-companion/issues/303
-  let path = safeIpfsPath(url)
-  if (/^\/ipns/.test(path)) {
-    const response = await ipfs.name.resolve(path, { recursive: true, nocache: false })
-    // old API returned object, latest one returns string ¯\_(ツ)_/¯
-    return response.Path ? response.Path : response
-  }
-  return path
+  const pathValidator = await getIpfsPathValidator()
+  const pinPath = trimHashAndSearch(pathValidator.resolveToImmutableIpfsPath(url))
+  return pinPath
 }
