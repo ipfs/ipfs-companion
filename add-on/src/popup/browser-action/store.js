@@ -322,6 +322,6 @@ async function resolveToPinPath (ipfs, url) {
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
   // https://github.com/ipfs/ipfs-companion/issues/303
   const pathValidator = await getIpfsPathValidator()
-  const pinPath = trimHashAndSearch(pathValidator.resolveToImmutableIpfsPath(url))
+  const pinPath = trimHashAndSearch(await pathValidator.resolveToImmutableIpfsPath(url))
   return pinPath
 }

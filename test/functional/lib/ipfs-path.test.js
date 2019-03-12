@@ -1,6 +1,6 @@
 'use strict'
 const { stub } = require('sinon')
-const { describe, it, beforeEach } = require('mocha')
+const { describe, it, beforeEach, afterEach } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
 const { normalizedIpfsPath, createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
@@ -10,14 +10,12 @@ const { optionDefaults } = require('../../../add-on/src/lib/options')
 const { spoofCachedDnslink } = require('./dnslink.test.js')
 
 function spoofIpnsRecord (ipfs, ipnsPath, value) {
-  if (ipfs.name.resolve.reset) ipfs.name.resolve.reset()
   const resolve = stub(ipfs.name, 'resolve')
   resolve.withArgs(ipnsPath).resolves(value)
   resolve.throws((arg) => new Error(`Unexpected stubbed call ipfs.name.resolve(${arg})`))
 }
 
 function spoofIpfsResolve (ipfs, path, value) {
-  if (ipfs.resolve.reset) ipfs.resolve.reset()
   const resolve = stub(ipfs, 'resolve')
   resolve.withArgs(path).resolves(value)
   resolve.throws((arg) => new Error(`Unexpected stubbed call ipfs.resolve(${arg})`))
@@ -42,6 +40,11 @@ describe('ipfs-path.js', function () {
     }
     dnslinkResolver = createDnslinkResolver(() => state)
     ipfsPathValidator = createIpfsPathValidator(() => state, () => ipfs, dnslinkResolver)
+  })
+
+  afterEach(function () {
+    if (ipfs.name.resolve.reset) ipfs.name.resolve.reset()
+    if (ipfs.resolve.reset) ipfs.resolve.reset()
   })
 
   describe('normalizedIpfsPath', function () {
@@ -338,6 +341,22 @@ describe('ipfs-path.js', function () {
       spoofIpnsRecord(ipfs, `/ipns/${hostname}`, ipnsPointer)
       expect(await ipfsPathValidator.resolveToImmutableIpfsPath(url)).to.equal(ipnsPointer + '/guides/concepts/dnslink/?argTest#hashTest')
     })
+    // TODO: remove when https://github.com/ipfs/js-ipfs/issues/1918 is addressed
+    it('should resolve URL of a DNSLink website to the immutable /ipfs/ address behind mutable /ipns/ DNSLink in cache (js-ipfs fallback)', async function () {
+      const url = 'https://docs.ipfs.io/guides/concepts/dnslink/?argTest#hashTest'
+      // Use IPNS in DNSLINK to ensure resolveToImmutableIpfsPath does resursive resolv to immutable address
+      const dnslinkValue = '/ipns/QmRV5iNhGoxBaAcbucMAW9WtVHbeehXhAdr5CZQDhL55Xk'
+      const ipnsPointer = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+      const { hostname } = new URL(url)
+      spoofCachedDnslink(hostname, dnslinkResolver, dnslinkValue)
+      // js-ipfs v0.34 does not support DNSLinks in ipfs.name.resolve: https://github.com/ipfs/js-ipfs/issues/1918
+      const resolve = stub(ipfs.name, 'resolve')
+      resolve.withArgs(`/ipns/${hostname}`).throws(new Error('Non-base58 character'))
+      // until it is implemented, we have a workaround that falls back to value from dnslink
+      resolve.withArgs(dnslinkValue).resolves(ipnsPointer)
+      resolve.throws((arg) => new Error(`Unexpected stubbed call ipfs.name.resolve(${arg})`))
+      expect(await ipfsPathValidator.resolveToImmutableIpfsPath(url)).to.equal(ipnsPointer + '/guides/concepts/dnslink/?argTest#hashTest')
+    })
     it('should resolve to null if input is an invalid path', async function () {
       const path = '/foo/bar/?argTest#hashTest'
       expect(await ipfsPathValidator.resolveToImmutableIpfsPath(path)).to.equal(null)
@@ -396,6 +415,24 @@ describe('ipfs-path.js', function () {
       // Note the DNSLink value is ignored, and /ipns/<fqdn> is passed to ipfs.resolv internally
       // This ensures the latest pointer is returned, instead of stale value from DNSLink cache
       spoofIpfsResolve(ipfs, `/ipns/docs.ipfs.io/guides/concepts/dnslink/`, `/ipfs/${expectedCid}`)
+      expect(await ipfsPathValidator.resolveToCid(url)).to.equal(expectedCid)
+    })
+    // TODO: remove when https://github.com/ipfs/js-ipfs/issues/1918 is addressed
+    it('should resolve URL of a DNSLink website if DNSLink is in cache (js-ipfs fallback)', async function () {
+      const url = 'https://docs.ipfs.io/guides/concepts/dnslink/?argTest#hashTest'
+      // Use IPNS in DNSLINK to ensure resolveToImmutableIpfsPath does resursive resolv to immutable address
+      const expectedCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+      const dnslinkValue = '/ipns/QmRV5iNhGoxBaAcbucMAW9WtVHbeehXhAdr5CZQDhL55Xk'
+      const { hostname } = new URL(url)
+      spoofCachedDnslink(hostname, dnslinkResolver, dnslinkValue)
+      // Note the DNSLink value is ignored, and /ipns/<fqdn> is passed to ipfs.resolv internally
+      // This ensures the latest pointer is returned, instead of stale value from DNSLink cache
+      // js-ipfs v0.34 does not support DNSLinks in ipfs.name.resolve: https://github.com/ipfs/js-ipfs/issues/1918
+      const resolve = stub(ipfs, 'resolve')
+      resolve.withArgs(`/ipns/docs.ipfs.io/guides/concepts/dnslink/`).throws(new Error('resolve non-IPFS names is not implemented'))
+      // until it is implemented, we have a workaround that falls back to value from dnslink
+      resolve.withArgs('/ipns/QmRV5iNhGoxBaAcbucMAW9WtVHbeehXhAdr5CZQDhL55Xk/guides/concepts/dnslink/').resolves(`/ipfs/${expectedCid}`)
+      resolve.throws((arg) => new Error(`Unexpected stubbed call ipfs.resolve(${arg})`))
       expect(await ipfsPathValidator.resolveToCid(url)).to.equal(expectedCid)
     })
     it('should resolve to null if input is an invalid path', async function () {

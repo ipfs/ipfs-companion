@@ -40,8 +40,8 @@ function createCopier (notify, ipfsPathValidator) {
     },
 
     async copyRawCid (context, contextType) {
+      const url = await findValueForContext(context, contextType)
       try {
-        const url = await findValueForContext(context, contextType)
         const cid = await ipfsPathValidator.resolveToCid(url)
         await copyTextToClipboard(cid, notify)
       } catch (error) {

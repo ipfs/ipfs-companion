@@ -2,6 +2,7 @@
 /* eslint-env browser */
 
 const IsIpfs = require('is-ipfs')
+const isFQDN = require('is-fqdn')
 
 function normalizedIpfsPath (urlOrPath) {
   let result = urlOrPath
@@ -74,7 +75,6 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
     // Test if actions such as 'copy URL', 'pin/unpin' should be enabled for the URL
     isIpfsPageActionsContext (url) {
-      console.log(url)
       return Boolean(url && !url.startsWith(getState().apiURLString) && (
         IsIpfs.url(url) ||
         IsIpfs.subdomain(url) ||
@@ -147,7 +147,34 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
         const labels = path.split('/')
         // We resolve /ipns/<fqdn> as value in DNSLink cache may be out of date
         const ipnsRoot = `/ipns/${labels[2]}`
-        const result = await getIpfs().name.resolve(ipnsRoot, { recursive: true, nocache: false })
+
+        // js-ipfs v0.34 does not support DNSLinks in ipfs.name.resolve: https://github.com/ipfs/js-ipfs/issues/1918
+        // TODO: remove ipfsNameResolveWithDnslinkFallback when js-ipfs implements DNSLink support in ipfs.name.resolve
+        const ipfsNameResolveWithDnslinkFallback = async (resolve) => {
+          try {
+            return await resolve()
+          } catch (err) {
+            const fqdn = ipnsRoot.replace(/^.*\/ipns\/([^/]+).*/, '$1')
+            console.log('fqdn:' + ipnsRoot, fqdn)
+            if (err.message === 'Non-base58 character' && isFQDN(fqdn)) {
+              // js-ipfs without dnslink support, fallback to the value read from DNSLink
+              const dnslink = dnslinkResolver.readAndCacheDnslink(fqdn)
+              if (dnslink) {
+                // swap problematic /ipns/{fqdn} with /ipfs/{cid} and retry lookup
+                const safePath = trimDoubleSlashes(ipnsRoot.replace(/^.*(\/ipns\/[^/]+)/, dnslink))
+                if (ipnsRoot !== safePath) {
+                  return ipfsPathValidator.resolveToImmutableIpfsPath(safePath)
+                }
+              }
+            }
+            throw err
+          }
+        }
+        const result = await ipfsNameResolveWithDnslinkFallback(async () =>
+          // dhtt/dhtrc optimize for lookup time
+          getIpfs().name.resolve(ipnsRoot, { recursive: true, dhtt: '5s', dhtrc: 1 })
+        )
+
         // Old API returned object, latest one returns string ¯\_(ツ)_/¯
         const ipfsRoot = result.Path ? result.Path : result
         // Return original path with swapped root (keeps pathname + ?search + #hash)
@@ -157,27 +184,53 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       return path
     },
 
-    // TODO: add description and tests
     // Resolve URL or path to a raw CID:
     // - Result is the direct CID
     // - Ignores ?search and #hash from original URL
     // - Returns null if no CID can be produced
+    // The purpose of this resolver is to return direct CID without anything else.
     async resolveToCid (urlOrPath) {
       const path = ipfsPathValidator.resolveToIpfsPath(urlOrPath)
       // Fail fast if no IPFS Path
       if (!path) return null
-      // Resolve to raw CID
+      // Drop unused parts
       const rawPath = trimHashAndSearch(path)
-      const result = await getIpfs().resolve(rawPath, { recursive: true, dhtt: '5s', dhtrc: 1 })
-      const directCid = result.split('/')[2]
+
+      // js-ipfs v0.34 does not support DNSLinks in ipfs.resolve: https://github.com/ipfs/js-ipfs/issues/1918
+      // TODO: remove ipfsResolveWithDnslinkFallback when js-ipfs implements DNSLink support in ipfs.resolve
+      const ipfsResolveWithDnslinkFallback = async (resolve) => {
+        try {
+          return await resolve()
+        } catch (err) {
+          const fqdn = rawPath.replace(/^.*\/ipns\/([^/]+).*/, '$1')
+          if (err.message === 'resolve non-IPFS names is not implemented' && isFQDN(fqdn)) {
+            // js-ipfs without dnslink support, fallback to the value read from DNSLink
+            const dnslink = dnslinkResolver.readAndCacheDnslink(fqdn)
+            if (dnslink) {
+              // swap problematic /ipns/{fqdn} with /ipfs/{cid} and retry lookup
+              const safePath = trimDoubleSlashes(rawPath.replace(/^.*(\/ipns\/[^/]+)/, dnslink))
+              if (rawPath !== safePath) {
+                const result = await ipfsPathValidator.resolveToCid(safePath)
+                // return in format of ipfs.resolve()
+                return IsIpfs.cid(result) ? `/ipfs/${result}` : result
+              }
+            }
+          }
+          throw err
+        }
+      }
+      const result = await ipfsResolveWithDnslinkFallback(async () =>
+        // dhtt/dhtrc optimize for lookup time
+        getIpfs().resolve(rawPath, { recursive: true, dhtt: '5s', dhtrc: 1 })
+      )
+
+      const directCid = IsIpfs.ipfsPath(result) ? result.split('/')[2] : result
       return directCid
     }
-
   }
 
   return ipfsPathValidator
 }
-
 exports.createIpfsPathValidator = createIpfsPathValidator
 
 function validIpfsOrIpnsUrl (url, dnsLink) {
