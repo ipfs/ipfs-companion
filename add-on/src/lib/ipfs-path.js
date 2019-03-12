@@ -155,7 +155,6 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
             return await resolve()
           } catch (err) {
             const fqdn = ipnsRoot.replace(/^.*\/ipns\/([^/]+).*/, '$1')
-            console.log('fqdn:' + ipnsRoot, fqdn)
             if (err.message === 'Non-base58 character' && isFQDN(fqdn)) {
               // js-ipfs without dnslink support, fallback to the value read from DNSLink
               const dnslink = dnslinkResolver.readAndCacheDnslink(fqdn)
