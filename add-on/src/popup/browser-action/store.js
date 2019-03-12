@@ -93,7 +93,6 @@ module.exports = (state, emitter) => {
     }
     state.isPinning = false
     emitter.emit('render')
-    window.close()
   })
 
   emitter.on('unPin', async function unPinCurrentResource () {
@@ -112,7 +111,6 @@ module.exports = (state, emitter) => {
     }
     state.isUnPinning = false
     emitter.emit('render')
-    window.close()
   })
 
   async function handlePinError (errorMessageKey, error) {
