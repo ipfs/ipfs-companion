@@ -3,6 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const switchToggle = require('../../pages/components/switch-toggle')
 const { normalizeGatewayURL, hostTextToArray, hostArrayToText } = require('../../lib/options')
 
 // Warn about mixed content issues when changing the gateway
@@ -77,11 +78,7 @@ function gatewaysForm ({
                   <dd>${browser.i18n.getMessage('option_useCustomGateway_description')}</dd>
                 </dl>
               </label>
-              <input
-                id="useCustomGateway"
-                type="checkbox"
-                onchange=${onUseCustomGatewayChange}
-                checked=${useCustomGateway} />
+              <div>${switchToggle({ id: 'useCustomGateway', checked: useCustomGateway, onchange: onUseCustomGatewayChange })}</div>
             </div>
           ` : null}
           ${supportRedirectToCustomGateway ? html`
@@ -96,7 +93,7 @@ function gatewaysForm ({
                 id="noRedirectHostnames"
                 spellcheck="false"
                 onchange=${onNoRedirectHostnamesChange}
-                rows="4" 
+                rows="4"
                 >${hostArrayToText(noRedirectHostnames)}</textarea>
             </div>
           ` : null}

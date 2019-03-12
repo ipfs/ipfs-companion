@@ -3,13 +3,14 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const switchToggle = require('../../pages/components/switch-toggle')
 
 function globalToggleForm ({ active, onOptionChange }) {
-  const toggle = onOptionChange('active', checked => !checked)
+  const toggle = onOptionChange('active')
   return html`
     <form class="dib mb3">
-      <label for="active" class="dib pa3 pointer ${!active ? 'charcoal bg-gray-muted br2' : ''}">
-        <input class="mr2 pointer" id="active" type="checkbox" onchange=${toggle} checked=${!active} />
+      <label for="active" class="dib pa3 flex items-center pointer ${!active ? 'charcoal bg-gray-muted br2' : ''}">
+        ${switchToggle({ id: 'active', checked: active, onchange: toggle, style: 'mr3' })}
         ${browser.i18n.getMessage('panel_headerActiveToggleTitle')}
       </label>
     </form>
