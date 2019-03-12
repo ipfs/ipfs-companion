@@ -7,6 +7,8 @@ const PQueue = require('p-queue')
 const { offlinePeerCount } = require('./state')
 const { pathAtHttpGateway } = require('./ipfs-path')
 
+// TODO: add Preferences toggle to disable redirect of DNSLink  websites (while keeping async dnslink lookup)
+
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, maxAge: 1000 * 60 * 60 * 12 }

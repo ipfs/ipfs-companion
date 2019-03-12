@@ -3,7 +3,7 @@
 
 const LRU = require('lru-cache')
 const IsIpfs = require('is-ipfs')
-const { safeIpfsPath, pathAtHttpGateway } = require('./ipfs-path')
+const { pathAtHttpGateway } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableErrors = new Set([
   // Firefox
@@ -127,7 +127,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         }
         // Detect valid /ipfs/ and /ipns/ on any site
         if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-          return redirectToGateway(request.url, state, dnslinkResolver)
+          return redirectToGateway(request.url, state, ipfsPathValidator)
         }
         // Detect dnslink using heuristics enabled in Preferences
         if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
@@ -321,7 +321,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
               return dnslinkRedirect
             }
           }
-          return redirectToGateway(request.url, state, dnslinkResolver)
+          return redirectToGateway(request.url, state, ipfsPathValidator)
         }
 
         // Detect X-Ipfs-Path Header and upgrade transport to IPFS:
@@ -368,7 +368,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 // redirect only if anything changed
                 if (newUrl !== request.url) {
                   console.log(`[ipfs-companion] onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
-                  return redirectToGateway(newUrl, state, dnslinkResolver)
+                  return redirectToGateway(newUrl, state, ipfsPathValidator)
                 }
               }
             }
@@ -426,11 +426,11 @@ exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
 exports.onHeadersReceivedRedirect = onHeadersReceivedRedirect
 
-function redirectToGateway (requestUrl, state, dnslinkResolver) {
+function redirectToGateway (requestUrl, state, ipfsPathValidator) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
   const gateway = state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString
-  const path = safeIpfsPath(requestUrl)
-  return { redirectUrl: pathAtHttpGateway(path, gateway) }
+  const redirectUrl = ipfsPathValidator.resolveToPublicUrl(requestUrl, gateway)
+  return { redirectUrl }
 }
 
 function isSafeToRedirect (request, runtime) {

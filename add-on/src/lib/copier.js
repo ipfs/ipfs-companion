@@ -1,6 +1,5 @@
 'use strict'
 
-const { safeIpfsPath, trimHashAndSearch } = require('./ipfs-path')
 const { findValueForContext } = require('./context-menus')
 
 async function copyTextToClipboard (text, notify) {
@@ -32,21 +31,19 @@ async function copyTextToClipboard (text, notify) {
   }
 }
 
-function createCopier (getState, getIpfs, notify) {
+function createCopier (notify, ipfsPathValidator) {
   return {
     async copyCanonicalAddress (context, contextType) {
       const url = await findValueForContext(context, contextType)
-      const rawIpfsAddress = safeIpfsPath(url)
-      await copyTextToClipboard(rawIpfsAddress, notify)
+      const ipfsPath = ipfsPathValidator.resolveToIpfsPath(url)
+      await copyTextToClipboard(ipfsPath, notify)
     },
 
     async copyRawCid (context, contextType) {
+      const url = await findValueForContext(context, contextType)
       try {
-        const ipfs = getIpfs()
-        const url = await findValueForContext(context, contextType)
-        const rawIpfsAddress = trimHashAndSearch(safeIpfsPath(url))
-        const directCid = (await ipfs.resolve(rawIpfsAddress, { recursive: true, dhtt: '5s', dhtrc: 1 })).split('/')[2]
-        await copyTextToClipboard(directCid, notify)
+        const cid = await ipfsPathValidator.resolveToCid(url)
+        await copyTextToClipboard(cid, notify)
       } catch (error) {
         console.error('Unable to resolve/copy direct CID:', error.message)
         if (notify) {
@@ -65,9 +62,8 @@ function createCopier (getState, getIpfs, notify) {
 
     async copyAddressAtPublicGw (context, contextType) {
       const url = await findValueForContext(context, contextType)
-      const state = getState()
-      const urlAtPubGw = url.replace(state.gwURLString, state.pubGwURLString)
-      await copyTextToClipboard(urlAtPubGw, notify)
+      const publicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+      await copyTextToClipboard(publicUrl, notify)
     }
   }
 }

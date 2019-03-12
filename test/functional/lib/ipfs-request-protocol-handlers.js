@@ -35,9 +35,10 @@ describe('modifyRequest.onBeforeRequest:', function () {
       pubGwURLString: 'https://ipfs.io'
     })
     const getState = () => state
+    const getIpfs = () => {}
     dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
-    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
+    ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
