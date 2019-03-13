@@ -1,6 +1,6 @@
 /* This is a fallback script used when ipfs cli fails or is not available
  * More details: https://github.com/ipfs-shipyard/ipfs-webui/issues/843
- * See also why this is not used: https://github.com/ipfs-shipyard/ipfs-companion/issues/679
+ * See also why this is not used anymore: https://github.com/ipfs-shipyard/ipfs-companion/issues/679
  */
 const tar = require('tar')
 const request = require('request')
