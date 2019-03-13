@@ -8,7 +8,8 @@ exports.init = async function (opts) {
 
   const url = opts.apiURL
   const protocol = url.protocol.substr(0, url.protocol.length - 1) // http: -> http
-  const api = IpfsApi({ host: url.hostname, port: url.port, protocol })
+  const host = url.hostname.replace(/[[\]]+/g, '') // temporary fix for ipv6: https://github.com/ipfs-shipyard/ipfs-companion/issues/668
+  const api = IpfsApi({ host, port: url.port, protocol })
   return api
 }
 

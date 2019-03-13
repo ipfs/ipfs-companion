@@ -1,5 +1,7 @@
 'use strict'
 
+const isFQDN = require('is-fqdn')
+
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'embedded', // Brave should default to js-ipfs: https://github.com/ipfs-shipyard/ipfs-companion/issues/664
@@ -14,6 +16,7 @@ exports.optionDefaults = Object.freeze({
   }, null, 2),
   publicGatewayUrl: 'https://ipfs.io',
   useCustomGateway: true,
+  noRedirectHostnames: [],
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',
@@ -24,7 +27,7 @@ exports.optionDefaults = Object.freeze({
   customGatewayUrl: 'http://127.0.0.1:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001',
   ipfsApiPollMs: 3000,
-  ipfsProxy: true
+  ipfsProxy: true // window.ipfs
 })
 
 // `storage` should be a browser.storage.local or similar
@@ -65,6 +68,23 @@ function normalizeGatewayURL (url) {
 }
 exports.normalizeGatewayURL = normalizeGatewayURL
 exports.safeURL = (url) => new URL(normalizeGatewayURL(url))
+
+// convert JS array to multiline textarea
+function hostArrayCleanup (array) {
+  array = array.map(host => host.trim().toLowerCase())
+  array = [...new Set(array)] // dedup
+  array = array.filter(Boolean).filter(isFQDN)
+  array.sort()
+  return array
+}
+function hostArrayToText (array) {
+  return hostArrayCleanup(array).join('\n')
+}
+function hostTextToArray (text) {
+  return hostArrayCleanup(text.split('\n'))
+}
+exports.hostArrayToText = hostArrayToText
+exports.hostTextToArray = hostTextToArray
 
 exports.migrateOptions = async (storage) => {
   // <= v2.4.4

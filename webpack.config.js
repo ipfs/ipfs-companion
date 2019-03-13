@@ -19,6 +19,9 @@ const commonConfig = {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
+          // Speed Up
+          cache: true,
+          parallel: true,
           // Default minify settings break js-ipfs:
           // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
           compress: { unused: false },
@@ -30,7 +33,7 @@ const commonConfig = {
   // plugins: [new BundleAnalyzerPlugin()]
   plugins: [
     new SimpleProgressWebpackPlugin({
-      format: process.env.CI ? 'expanded' : 'compact'
+      format: process.env.CI ? 'expanded' : 'minimal'
     }),
     new webpack.DefinePlugin({
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
@@ -63,6 +66,9 @@ const commonConfig = {
     Buffer: true,
     fs: 'empty',
     tls: 'empty'
+  },
+  watchOptions: {
+    ignored: ['add-on/dist/**/*', 'node_modules']
   },
   performance: {
     maxEntrypointSize: Infinity,

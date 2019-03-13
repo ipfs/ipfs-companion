@@ -12,12 +12,19 @@ const testOptions = Object.assign({}, optionDefaults, {
   publicGatewayUrl: 'https://gateway.foobar.io'
 })
 
+const dnslinkValue = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+
 function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
-  // pass 'false' to spoof "no DNS TXT record"
-  value = String(value) === 'false' ? undefined : '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
   // spoofs existence of valid DNS TXT record (used on cache miss)
   dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(value)
 }
+module.exports.spoofDnsTxtRecord = spoofDnsTxtRecord
+
+function spoofCachedDnslink (fqdn, dnslinkResolver, value) {
+  // spoofs existence of valid DNS TXT record (used on cache miss)
+  dnslinkResolver.setDnslink(fqdn, value)
+}
+module.exports.spoofCachedDnslink = spoofCachedDnslink
 
 function expectNoDnsTxtRecordLookup (fqdn, dnslinkResolver) {
   dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).throws('unexpected DNS TXT lookup', 'only cache should be used')
@@ -148,21 +155,21 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
       it('should return nothing if DNS TXT record is present but path starts with ' + path, function () {
         const url = new URL('https://dnslinksite1.io' + path)
         const dnslinkResolver = createDnslinkResolver(getState)
-        spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+        spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
         expect(dnslinkResolver.dnslinkRedirect(url.toString())).to.equal(undefined)
       })
     })
     it('[external node] should return redirect to custom gateway if DNS TXT record is present and path does not belong to a gateway', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
         .to.equal('http://127.0.0.1:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
     })
     it('[embedded node] should return redirect to public gateway if DNS TXT record is present and path does not belong to a gateway', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getEmbeddedNodeState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
         .to.equal('https://gateway.foobar.io/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
     })
@@ -172,28 +179,28 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
     it('should return false if dnslink is present but path starts with /api/v0/', function () {
       const url = new URL('https://dnslinksite1.io/api/v0/dns/ipfs.io')
       const dnslinkResolver = createDnslinkResolver(getState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
     })
     it('should return false if dnslink is present but path starts with /ipfs/', function () {
       const url = new URL('https://dnslinksite2.io/ipfs/foo/bar')
       const dnslinkResolver = createDnslinkResolver(getState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
     })
     it('should return false if dnslink is present but path starts with /ipfs/', function () {
       const url = new URL('https://dnslinksite3.io/ipns/foo/bar')
       const dnslinkResolver = createDnslinkResolver(getState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver)
+      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
     })
-    const dnsTxtRecordPresence = [true, false]
+    const dnsTxtRecordPresence = [undefined, '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR']
     dnsTxtRecordPresence.forEach(present => {
-      it(`should return ${present} if DNS TXT record is ${present ? 'present' : 'missing'} and path does not belong to an HTTP gateway`, function () {
+      it(`should return ${Boolean(present)} if DNS TXT record is ${present ? 'present' : 'missing'} and path does not belong to an HTTP gateway`, function () {
         const url = new URL('https://dnslinksite4.io/foo/bar')
         const dnslinkResolver = createDnslinkResolver(getState)
         spoofDnsTxtRecord(url.hostname, dnslinkResolver, present)
-        expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(present)
+        expect(dnslinkResolver.canRedirectToIpns(url)).to.equal(Boolean(present))
       })
     })
   })

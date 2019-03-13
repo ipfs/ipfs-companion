@@ -1,0 +1,11 @@
+@import url('/ui-kit/mdc.switch.min.css');
+
+.mdc-switch {
+  --mdc-theme-secondary: #3e9096 /* teal */
+}
+
+.mdc-switch:not(.mdc-switch--checked) .mdc-switch__thumb,
+.mdc-switch:not(.mdc-switch--checked) .mdc-switch__track {
+  background-color: #7f8491; /* charcoal-muted */
+  border-color: #7f8491;
+}

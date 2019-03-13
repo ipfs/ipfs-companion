@@ -3,7 +3,7 @@
 
 const html = require('choo/html')
 const header = require('./header')
-const contextActions = require('../browser-action/context-actions')
+const { contextActions } = require('../browser-action/context-actions')
 
 // Render the page-action page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -12,7 +12,9 @@ module.exports = function pageActionPage (state, emit) {
   const onCopy = (copyAction) => emit('copy', copyAction)
   const onPin = () => emit('pin')
   const onUnPin = () => emit('unPin')
-  const contextActionsProps = Object.assign({ onCopy, onPin, onUnPin }, state)
+  const onToggleSiteRedirect = () => emit('toggleSiteRedirect')
+
+  const contextActionsProps = Object.assign({ onCopy, onPin, onUnPin, onToggleSiteRedirect }, state)
 
   // Instant init: page-action is shown only in ipfsContext
   contextActionsProps.isIpfsContext = true

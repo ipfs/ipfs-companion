@@ -39,9 +39,10 @@ describe('modifyRequest processing', function () {
       pubGwURLString: 'https://ipfs.io'
     })
     const getState = () => state
+    const getIpfs = () => {}
     dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
-    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
+    ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
@@ -219,7 +220,7 @@ describe('modifyRequest processing', function () {
         // force-clear dnslink cache to enable cache miss
         dnslinkResolver.clearCache()
       })
-      it('should redirect in onHeadersReceived if DNS TXT record exists and x-ipfs-path header is present', function () {
+      it('should redirect subrequests in onHeadersReceived if DNS TXT record exists and x-ipfs-path header is present', function () {
         // clear dnslink cache to ensure miss
         dnslinkResolver.clearCache()
         // stub existence of a valid DNS record
@@ -227,6 +228,7 @@ describe('modifyRequest processing', function () {
         dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
         //
         const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+        request.type = 'sub_frame' // we test a subrequests because main_frame gets early DNSLink preload in onBeforeRequest
         expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         // simulate presence of x-ipfs-path header returned by HTTP gateway
         request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
@@ -241,6 +243,7 @@ describe('modifyRequest processing', function () {
         dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(false)
         //
         const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+        request.type = 'sub_frame' // we test a subrequest here because main_frame gets early DNSLink preload in onBeforeRequest
         expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         // simulate presence of x-ipfs-path header returned by HTTP gateway
         request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
@@ -255,6 +258,7 @@ describe('modifyRequest processing', function () {
         dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
         //
         const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+        request.type = 'sub_frame' // we test a subrequest here because main_frame gets early DNSLink preload in onBeforeRequest
         expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         expect(modifyRequest.onHeadersReceived(request)).to.equal(undefined)
       })

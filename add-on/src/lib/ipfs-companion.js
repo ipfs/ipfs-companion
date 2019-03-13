@@ -2,9 +2,10 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
+const toMultiaddr = require('uri-to-multiaddr')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator, pathAtHttpGateway } = require('./ipfs-path')
+const { createIpfsPathValidator } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
@@ -55,9 +56,9 @@ module.exports = async function init () {
       }
     }
 
-    copier = createCopier(getState, getIpfs, notify)
     dnslinkResolver = createDnslinkResolver(getState)
-    ipfsPathValidator = createIpfsPathValidator(getState, dnslinkResolver)
+    ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
+    copier = createCopier(notify, ipfsPathValidator)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
       onCopyCanonicalAddress: copier.copyCanonicalAddress,
@@ -92,13 +93,18 @@ module.exports = async function init () {
   }
 
   function registerListeners () {
-    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, ['blocking', 'requestHeaders'])
+    let onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
+    if (!runtime.isFirefox) {
+      // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
+      onBeforeSendInfoSpec.push('extraHeaders')
+    }
+    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
     browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'] })
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
-    browser.tabs.onUpdated.addListener(onUpdatedTab)
+    browser.webNavigation.onDOMContentLoaded.addListener(onDOMContentLoaded)
     browser.tabs.onActivated.addListener(onActivatedTab)
     if (browser.windows) {
       browser.windows.onFocusChanged.addListener(onWindowFocusChanged)
@@ -168,7 +174,7 @@ module.exports = async function init () {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? pathAtHttpGateway(path, state.pubGwURLString) : null
+      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }
@@ -207,12 +213,17 @@ module.exports = async function init () {
 
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
+    const dropSlash = url => url.replace(/\/$/, '')
     const info = {
       active: state.active,
       ipfsNodeType: state.ipfsNodeType,
       peerCount: state.peerCount,
-      gwURLString: state.gwURLString,
-      pubGwURLString: state.pubGwURLString,
+      gwURLString: dropSlash(state.gwURLString),
+      pubGwURLString: dropSlash(state.pubGwURLString),
+      webuiRootUrl: state.webuiRootUrl,
+      apiURLString: dropSlash(state.apiURLString),
+      redirect: state.redirect,
+      noRedirectHostnames: state.noRedirectHostnames,
       currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     }
     try {
@@ -224,7 +235,12 @@ module.exports = async function init () {
       info.gatewayVersion = null
     }
     if (info.currentTab) {
-      info.ipfsPageActionsContext = ipfsPathValidator.isIpfsPageActionsContext(info.currentTab.url)
+      const url = info.currentTab.url
+      info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
+      info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
+      info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
+      info.currentTabRedirectOptOut = info.noRedirectHostnames && info.noRedirectHostnames.includes(info.currentFqdn)
+      info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
     // Still here?
     if (browserActionPort) {
@@ -241,7 +257,7 @@ module.exports = async function init () {
     return new Promise((resolve, reject) => {
       const http = new XMLHttpRequest()
       // Make sure preload request is excluded from global redirect
-      const preloadUrl = pathAtHttpGateway(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
+      const preloadUrl = ipfsPathValidator.resolveToPublicUrl(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
       http.open('HEAD', preloadUrl)
       http.onreadystatechange = function () {
         if (this.readyState === this.DONE) {
@@ -378,44 +394,56 @@ module.exports = async function init () {
     }
   }
 
-  async function onUpdatedTab (tabId, changeInfo, tab) {
+  async function onDOMContentLoaded (details) {
     if (!state.active) return // skip content script injection when off
-    if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
-      if (state.linkify) {
-        console.info(`[ipfs-companion] Running linkfyDOM for ${tab.url}`)
-        try {
-          await browser.tabs.executeScript(tabId, {
-            file: '/dist/bundles/linkifyContentScript.bundle.js',
-            matchAboutBlank: false,
-            allFrames: true,
-            runAt: 'document_idle'
-          })
-        } catch (error) {
-          console.error(`Unable to linkify DOM at '${tab.url}' due to`, error)
-        }
+    if (!details.url.startsWith('http')) return // skip special pages
+    // console.info(`[ipfs-companion] onDOMContentLoaded`, details)
+    if (state.linkify) {
+      console.info(`[ipfs-companion] Running linkfy experiment for ${details.url}`)
+      try {
+        await browser.tabs.executeScript(details.tabId, {
+          file: '/dist/bundles/linkifyContentScript.bundle.js',
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_idle'
+        })
+      } catch (error) {
+        console.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
-      if (state.catchUnhandledProtocols) {
-        // console.log(`[ipfs-companion] Normalizing links with unhandled protocols at ${tab.url}`)
-        // See: https://github.com/ipfs/ipfs-companion/issues/286
-        try {
-          // pass the URL of user-preffered public gateway
-          await browser.tabs.executeScript(tabId, {
-            code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
-            matchAboutBlank: false,
-            allFrames: true,
-            runAt: 'document_start'
-          })
-          // inject script that normalizes `href` and `src` containing unhandled protocols
-          await browser.tabs.executeScript(tabId, {
-            file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
-            matchAboutBlank: false,
-            allFrames: true,
-            runAt: 'document_end'
-          })
-        } catch (error) {
-          console.error(`Unable to normalize links at '${tab.url}' due to`, error)
-        }
+    }
+    if (state.catchUnhandledProtocols) {
+      // console.log(`[ipfs-companion] Normalizing links with unhandled protocols at ${tab.url}`)
+      // See: https://github.com/ipfs/ipfs-companion/issues/286
+      try {
+        // pass the URL of user-preffered public gateway
+        await browser.tabs.executeScript(details.tabId, {
+          code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_start'
+        })
+        // inject script that normalizes `href` and `src` containing unhandled protocols
+        await browser.tabs.executeScript(details.tabId, {
+          file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
+          matchAboutBlank: false,
+          allFrames: true,
+          runAt: 'document_end'
+        })
+      } catch (error) {
+        console.error(`Unable to normalize links at '${details.url}' due to`, error)
       }
+    }
+    if (details.url.startsWith(state.webuiRootUrl)) {
+      // Ensure API backend points at one from IPFS Companion
+      const apiMultiaddr = toMultiaddr(state.apiURLString)
+      await browser.tabs.executeScript(details.tabId, {
+        runAt: 'document_start',
+        code: `if (!localStorage.getItem('ipfsApi')) {
+          console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
+          localStorage.setItem('ipfsApi', '${apiMultiaddr}');
+          window.location.reload();
+        }`
+      })
     }
   }
 
@@ -597,6 +625,7 @@ module.exports = async function init () {
         case 'customGatewayUrl':
           state.gwURL = new URL(change.newValue)
           state.gwURLString = state.gwURL.toString()
+          state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)
@@ -621,6 +650,7 @@ module.exports = async function init () {
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
+        case 'noRedirectHostnames':
           state[key] = change.newValue
           break
       }
@@ -650,6 +680,8 @@ module.exports = async function init () {
 
       apiStatusUpdate()
     }
+    // Post update to Browser Action (if exists) -- this gives UX a snappy feel
+    await sendStatusUpdateToBrowserAction()
   }
 
   // Public API
@@ -665,6 +697,10 @@ module.exports = async function init () {
 
     get dnslinkResolver () {
       return dnslinkResolver
+    },
+
+    get ipfsPathValidator () {
+      return ipfsPathValidator
     },
 
     get notify () {

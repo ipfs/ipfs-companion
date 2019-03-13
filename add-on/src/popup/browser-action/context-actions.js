@@ -4,10 +4,16 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
+const navHeader = require('./nav-header')
 const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
-module.exports = function contextActions ({
+// Context Actions are displayed in Browser Action and Page Action (FF only)
+function contextActions ({
   active,
+  redirect,
+  isRedirectContext,
+  currentFqdn,
+  currentTabRedirectOptOut,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -15,14 +21,16 @@ module.exports = function contextActions ({
   isPinned,
   isIpfsOnline,
   isApiAvailable,
+  onToggleSiteRedirect,
   onCopy,
   onPin,
   onUnPin
 }) {
-  if (!isIpfsContext) return null
   const activePinControls = active && isIpfsOnline && isApiAvailable && !(isPinning || isUnPinning)
-  return html`
-    <div class='fade-in pv1'>
+
+  const renderIpfsContextItems = () => {
+    if (!isIpfsContext) return
+    return html`<div>
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
@@ -36,20 +44,52 @@ module.exports = function contextActions ({
     disabled: !activePinControls,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
-  ${!isPinned ? (
-    navItem({
-      text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-      disabled: !activePinControls,
-      onClick: onPin
-    })
-  ) : null}
-  ${isPinned ? (
-    navItem({
-      text: browser.i18n.getMessage('panel_unpinCurrentIpfsAddress'),
-      disabled: !activePinControls,
-      onClick: onUnPin
-    })
-  ) : null}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
+    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
+    disabled: !activePinControls,
+    switchValue: isPinned,
+    onClick: isPinned ? onUnPin : onPin
+  })}
+  </div>
+    `
+  }
+
+  const renderSiteRedirectToggle = () => {
+    if (!isRedirectContext) return
+    return html`
+  ${navItem({
+    text: browser.i18n.getMessage('panel_activeTabSiteRedirectToggle', currentFqdn),
+    title: browser.i18n.getMessage('panel_activeTabSiteRedirectToggleTooltip', currentFqdn),
+    style: 'truncate',
+    disabled: !(active && redirect),
+    switchValue: active && redirect && !currentTabRedirectOptOut,
+    onClick: onToggleSiteRedirect
+  })}
+      `
+  }
+
+  return html`
+    <div class='fade-in pv1'>
+  ${renderSiteRedirectToggle()}
+  ${renderIpfsContextItems()}
     </div>
   `
 }
+module.exports.contextActions = contextActions
+
+// "Active Tab" section is displayed in Browser Action  only
+// if redirect can be toggled or current tab has any IPFS Context Actions
+function activeTabActions (state) {
+  const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
+  if (!showActiveTabSection) return
+  return html`
+      <div>
+      ${navHeader('panel_activeTabSectionHeader')}
+      <div class="fade-in pv1 bb b--black-10">
+        ${contextActions(state)}
+      </div>
+      </div>
+  `
+}
+module.exports.activeTabActions = activeTabActions

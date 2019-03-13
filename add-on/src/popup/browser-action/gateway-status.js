@@ -18,15 +18,11 @@ function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueC
 }
 
 module.exports = function gatewayStatus ({
-  active,
-  onToggleActive,
   ipfsApiUrl,
   gatewayAddress,
   gatewayVersion,
   swarmPeers,
-  isIpfsOnline,
-  ipfsNodeType,
-  redirectEnabled
+  ipfsNodeType
 }) {
   const api = ipfsApiUrl && ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`

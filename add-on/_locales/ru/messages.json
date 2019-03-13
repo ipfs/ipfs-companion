@@ -504,7 +504,7 @@
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_title": {
-    "message": "Is your IPFS daemon running?",
+    "message": "Служба IPFS запущена?",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
   "page_landingWelcome_installSteps_install": {

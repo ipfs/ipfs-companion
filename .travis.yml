@@ -1,45 +1,25 @@
 language: node_js
 node_js:
-    - "lts/*"
-sudo: false
-env:
-    global:
-        - secure: "LUZnP+lhVj0zbFe/tSppMvI6jaXyOos84WZehPImMeara9/RRrRk5QpKsUsqr1x/oHzElJnbAX9OD/GOuEI4fyYv9qBXr8CKxBpmjlM2ElY85WcGm9mntRXtvR0iscR3Jg9kPtUBqzVlh1E/mQjs5GR2nLn0Fe34Xwl6TWd3m6c="
-        - DISPLAY=':99.0'
-        - FIREFOX_BINARY='./firefox/firefox'
-        - PATH="./firefox/:${PATH}"
-        - CXX=g++-4.8
-#    matrix:
-#        - FIREFOX_RELEASE='latest'
-#        - FIREFOX_RELEASE='nightly-latest'
-#        - FIREFOX_RELEASE='52.0'
-#        - FIREFOX_RELEASE='esr-latest'
-
-# pulled in by node-webcrypto-ossl@1.0.7
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-4.8
-
+    - 10.15.1
 matrix:
-    fast_finish: true
-    #    allow_failures:
-    #    - env: FIREFOX_RELEASE='nightly-latest'
-    #    - env: FIREFOX_RELEASE='esr-latest'
+    allow_failures:
+        - os: windows
 cache:
-    directories:
-        - node_modules
-#before_script:
-#    - test $FIREFOX_RELEASE != nightly-latest || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-#    - test $FIREFOX_RELEASE != latest         || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-#    - test $FIREFOX_RELEASE != '55.0'         || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-#    - test $FIREFOX_RELEASE != esr-latest     || wget -O firefox-$FIREFOX_RELEASE.tar.bz2 "https://download.mozilla.org/?product=firefox-$FIREFOX_RELEASE&os=linux64&lang=en-US"
-#    - tar xvf firefox-$FIREFOX_RELEASE.tar.bz2
-#    - sh -e /etc/init.d/xvfb start
+    - npm
+    - yarn
+os:
+    - linux
+    - osx
+    - windows
+addons:
+    homebrew:
+        packages: jq
 install:
-    - npm run yarn-build
+    - npm run ci:install
 script:
-    - npm test
-    - npm run lint
+    - npm run ci:build
+    - npm run ci:test
+    - npm run ci:lint
+after_success: npx nyc report --reporter=text-lcov > coverage.lcov && npx codecov
+notifications:
+    email: false
