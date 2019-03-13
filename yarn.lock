@@ -2504,6 +2504,11 @@ caw@^2.0.0:
     tunnel-agent "^0.6.0"
     url-to-options "^1.0.1"
 
+chai-checkmark@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/chai-checkmark/-/chai-checkmark-1.0.1.tgz#9fbb3c9ad9101f097ef288328d30f4227d74fffb"
+  integrity sha1-n7s8mtkQHwl+8ogyjTD0In10//s=
+
 chai@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/chai/-/chai-4.2.0.tgz#760aa72cf20e3795e84b12877ce0e83737aa29e5"
@@ -6466,10 +6471,10 @@ ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.16:
   dependencies:
     protons "^1.0.1"
 
-ipfs@0.35.0-pre.0:
-  version "0.35.0-pre.0"
-  resolved "https://registry.npmjs.org/ipfs/-/ipfs-0.35.0-pre.0.tgz#98b84cec584560e59a4a79b01ff4e95efcddb73a"
-  integrity sha512-2LeR1HGD6jJFYFjQf69DhDmIiQUcGe/kdLycYJEJZk/PrE8wnP9LcHcP8BJjFwHbZLF/v9z98EL/yyIg0AGSbg==
+ipfs@0.35.0-rc.0:
+  version "0.35.0-rc.0"
+  resolved "https://registry.yarnpkg.com/ipfs/-/ipfs-0.35.0-rc.0.tgz#e4c2de16b46eafe3b44c03677340a534b7ca8264"
+  integrity sha512-esQoEiLWBekKt2us7hwZZegoH/Ew0B351qAGqmYd6k7TdK+p29LnC1ZKDYkSfjUvXDXi+oDdztIzDAgLY8QlmA==
   dependencies:
     "@nodeutils/defaults-deep" "^1.1.0"
     async "^2.6.1"
@@ -6519,10 +6524,10 @@ ipfs@0.35.0-pre.0:
     joi "^14.3.0"
     joi-browser "^13.4.0"
     joi-multiaddr "^4.0.0"
-    libp2p "~0.25.0-rc.0"
+    libp2p "~0.25.0-rc.3"
     libp2p-bootstrap "~0.9.3"
     libp2p-crypto "~0.16.0"
-    libp2p-kad-dht "~0.14.4"
+    libp2p-kad-dht "~0.14.7"
     libp2p-keychain "~0.3.3"
     libp2p-mdns "~0.12.0"
     libp2p-mplex "~0.8.4"
@@ -6537,7 +6542,7 @@ ipfs@0.35.0-pre.0:
     mime-types "^2.1.21"
     mkdirp "~0.5.1"
     multiaddr "^6.0.0"
-    multiaddr-to-uri "^4.0.0"
+    multiaddr-to-uri "^4.0.1"
     multibase "~0.6.0"
     multihashes "~0.4.14"
     multihashing-async "~0.5.1"
@@ -6565,6 +6570,7 @@ ipfs@0.35.0-pre.0:
     tar-stream "^2.0.0"
     temp "~0.9.0"
     update-notifier "^2.5.0"
+    uri-to-multiaddr "^3.0.1"
     varint "^5.0.0"
     yargs "^12.0.5"
     yargs-promise "^1.1.0"
@@ -7936,13 +7942,15 @@ libp2p-identify@~0.7.5:
     pull-length-prefixed "^1.3.1"
     pull-stream "^3.6.9"
 
-libp2p-kad-dht@~0.14.4:
-  version "0.14.4"
-  resolved "https://registry.yarnpkg.com/libp2p-kad-dht/-/libp2p-kad-dht-0.14.4.tgz#15d4a5333a4617e90b9ba8b90389c1a7005c89a5"
-  integrity sha512-kRdM+6XFttPNt2MUrczU+ZhP+lVPyZIM3MFKtbd5mh7xNMEYrHVH84qN++OZrXXvAxdSylSHCJMQ7psncdhjvA==
+libp2p-kad-dht@~0.14.7:
+  version "0.14.7"
+  resolved "https://registry.yarnpkg.com/libp2p-kad-dht/-/libp2p-kad-dht-0.14.7.tgz#3b199a5a48bdfeb34cb934fdd5ceaa1f4ab6287d"
+  integrity sha512-FM7eZnyPnTtXANDiY9JlG60jyE/2RjukCoV8o44l+3fY9mDguIIx2rjKK9+f0P9OhXEi0hR5w+SLmD5J7DSugQ==
   dependencies:
-    async "^2.6.1"
+    "@nodeutils/defaults-deep" "^1.1.0"
+    async "^2.6.2"
     base32.js "~0.1.0"
+    chai-checkmark "^1.0.1"
     cids "~0.5.7"
     debug "^4.1.1"
     err-code "^1.1.2"
@@ -7951,11 +7959,11 @@ libp2p-kad-dht@~0.14.4:
     interface-datastore "~0.6.0"
     k-bucket "^5.0.0"
     libp2p-crypto "~0.16.0"
-    libp2p-record "~0.6.1"
+    libp2p-record "~0.6.2"
     multihashes "~0.4.14"
-    multihashing-async "~0.5.1"
-    peer-id "~0.12.1"
-    peer-info "~0.15.0"
+    multihashing-async "~0.5.2"
+    peer-id "~0.12.2"
+    peer-info "~0.15.1"
     priorityqueue "~0.2.1"
     protons "^1.0.1"
     pull-length-prefixed "^1.3.1"
@@ -8039,6 +8047,19 @@ libp2p-record@~0.6.1:
     multihashes "~0.4.14"
     multihashing-async "~0.4.6"
     protons "^1.0.0"
+
+libp2p-record@~0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/libp2p-record/-/libp2p-record-0.6.2.tgz#712a2be9e1d97df8a62c8a240201c41372ddd543"
+  integrity sha512-b+RQc4l6AzYtQq0kAyDYV2Eth1DDsB2TQoQfvQtyJy/iVeKz8Q1RZxLTo7lhwS78LMwcVCGrdlx5H5luONjhjg==
+  dependencies:
+    async "^2.6.2"
+    buffer-split "^1.0.0"
+    err-code "^1.1.2"
+    left-pad "^1.3.0"
+    multihashes "~0.4.14"
+    multihashing-async "~0.5.2"
+    protons "^1.0.1"
 
 libp2p-secio@~0.11.0:
   version "0.11.1"
@@ -8168,10 +8189,10 @@ libp2p-websockets@~0.12.1, libp2p-websockets@~0.12.2:
     multiaddr-to-uri "^4.0.1"
     pull-ws hugomrdias/pull-ws#fix/bundle-size
 
-libp2p@~0.25.0-rc.0:
-  version "0.25.0-rc.3"
-  resolved "https://registry.npmjs.org/libp2p/-/libp2p-0.25.0-rc.3.tgz#c5a4b46e96865ca3b79bd42b7d574d9a31b053e8"
-  integrity sha512-tl16Sj1qsy3gWS/O3tPMb5uAMRpBiYYsWulL675ehNSfs5FqAPrJFxgHPcZ7ViHr2lJ0CMrwDZeXfAWiKgdekg==
+libp2p@~0.25.0-rc.3:
+  version "0.25.0-rc.4"
+  resolved "https://registry.yarnpkg.com/libp2p/-/libp2p-0.25.0-rc.4.tgz#77c5cfadf2101a7c34b2a1552c8afaa6084343d0"
+  integrity sha512-JYJnGxgrMMF9QtQfJzj7ue+iT5wuLavbFioUPHLNYetWX7JN3mCcnEZNXKl3Yp0u0wS9B0aH3hrZM1JTkQxDdQ==
   dependencies:
     async "^2.6.1"
     debug "^4.1.0"
@@ -8990,7 +9011,7 @@ ms@2.1.1, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-multiaddr-to-uri@^4.0.0, multiaddr-to-uri@^4.0.1:
+multiaddr-to-uri@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/multiaddr-to-uri/-/multiaddr-to-uri-4.0.1.tgz#3b89d2a460a96602a16f3bfe296ee771ecb2558b"
   integrity sha512-RVHKm5NXcMWMIhrwF4B4Q34JtMXt1/2wgnDTnKRE+AGAiXfqFika0bIfCsAtLp+gZJOWeDLeT1vR6P0gGyVAtg==
@@ -13401,7 +13422,7 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-uri-to-multiaddr@3.0.1:
+uri-to-multiaddr@3.0.1, uri-to-multiaddr@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uri-to-multiaddr/-/uri-to-multiaddr-3.0.1.tgz#460bd5d78074002c47b60fdc456efd009e7168ae"
   integrity sha512-77slJiNB/IxM35zgflBEgp8T8ywpyYAbEh8Ezdnq7kAuA6TRg6wfvNTi4Uixfh6CsPv9K2fAkI5+E4C2dw3tXA==

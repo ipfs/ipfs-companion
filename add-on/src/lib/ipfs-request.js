@@ -68,7 +68,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     // skip if a per-site redirect opt-out exists
     const parentUrl = request.originUrl || request.initiator // FF: originUrl (Referer-like Origin URL), Chrome: initiator (just Origin)
     const fqdn = new URL(request.url).hostname
-    const parentFqdn = parentUrl && request.url !== parentUrl ? new URL(parentUrl).hostname : null
+    const parentFqdn = parentUrl && parentUrl !== 'null' && request.url !== parentUrl ? new URL(parentUrl).hostname : null
     if (state.noRedirectHostnames.some(optout =>
       fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout)
       ))) {

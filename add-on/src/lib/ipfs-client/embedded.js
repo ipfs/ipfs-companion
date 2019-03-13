@@ -1,5 +1,7 @@
 'use strict'
+/* eslint-env browser, webextensions */
 
+// Required by HTTP server
 process.hrtime = require('browser-process-hrtime')
 
 const Ipfs = require('ipfs')
@@ -11,6 +13,11 @@ let node = null
 let httpServer = null
 let hapiServer = null
 
+// Enable some debug output from js-ipfs
+// (borrowed from https://github.com/ipfs-shipyard/ipfs-companion/pull/557)
+// to  include everything (mplex, libp2p, mss): localStorage.debug = '*'
+localStorage.debug = 'jsipfs*,ipfs*,-*:mfs*,-*:ipns*'
+
 exports.init = function init (opts) {
   // BRAVE TESTS FIRST
   // TODO: remove after experiments are done
@@ -19,8 +26,8 @@ exports.init = function init (opts) {
   // [x] start raw Hapi server (Hapi.Server)
   //     [x] return response
   // [ ] start js-ipfs with Gateway exposed by embedded Hapi server
-  //     - right now fails due to `TypeError: this._dht.on is not a function`,
-  //       but we are on the right track
+  //     - [x] disabling DHT in libp2p solved `TypeError: this._dht.on is not a function`,
+  //     - [ ] Gateway does not start for some reason, nothing in logs
   // =======================================
   // TEST RAW require('http') SERVER
   if (!httpServer) {
@@ -76,8 +83,16 @@ exports.init = function init (opts) {
 
   return new Promise((resolve, reject) => {
     // TODO: replace error listener after a 'ready' event.
-    node.once('error', (err) => reject(err))
-    node.once('ready', () => resolve(node))
+    node.once('error', (error) => {
+      console.error('[ipfs-companion] Something went terribly wrong during startup of js-ipfs!', error)
+      reject(error)
+    })
+    node.once('ready', () => {
+      node.on('error', error => {
+        console.error('[ipfs-companion] Something went terribly wrong in embedded js-ipfs!', error)
+      })
+      return resolve(node)
+    })
   })
 }
 

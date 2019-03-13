@@ -12,10 +12,17 @@ exports.optionDefaults = Object.freeze({
         // API: '/ip4/127.0.0.1/tcp/5002',
         Gateway: '/ip4/127.0.0.1/tcp/9090'
       }
+    },
+    libp2p: {
+      config: {
+        dht: {
+          enabled: false
+        }
+      }
     }
   }, null, 2),
   publicGatewayUrl: 'https://ipfs.io',
-  useCustomGateway: true,
+  useCustomGateway: false, // TODO: Brave should not redirect to public one, but own
   noRedirectHostnames: [],
   automaticMode: true,
   linkify: false,
