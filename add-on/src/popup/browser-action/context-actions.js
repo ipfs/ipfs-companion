@@ -26,7 +26,8 @@ function contextActions ({
   onPin,
   onUnPin
 }) {
-  const activePinControls = active && isIpfsOnline && isApiAvailable && !(isPinning || isUnPinning)
+  const activeCidResolver = active && isIpfsOnline && isApiAvailable
+  const activePinControls = active && isIpfsOnline && isApiAvailable
 
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
@@ -41,14 +42,14 @@ function contextActions ({
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
-    disabled: !activePinControls,
+    disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
   ${navItem({
     text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
     title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
     disabled: !activePinControls,
-    switchValue: isPinned,
+    switchValue: (isPinned || isPinning) && !isUnPinning,
     onClick: isPinned ? onUnPin : onPin
   })}
   </div>
