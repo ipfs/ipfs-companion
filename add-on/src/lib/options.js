@@ -9,7 +9,7 @@ exports.optionDefaults = Object.freeze({
     config: {
       Addresses: {
         Swarm: [],
-        // API: '/ip4/127.0.0.1/tcp/5002',
+        API: '/ip4/127.0.0.1/tcp/5002',
         Gateway: '/ip4/127.0.0.1/tcp/9090'
       }
     },

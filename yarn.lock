@@ -4773,9 +4773,9 @@ fast-levenshtein@~2.0.4:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fast-redact@^1.4.2:
+fast-redact@^1.4.4:
   version "1.4.4"
-  resolved "https://registry.npmjs.org/fast-redact/-/fast-redact-1.4.4.tgz#d29bd1d0cc3ab808a9d4f9870f6e27e85c750db4"
+  resolved "https://registry.yarnpkg.com/fast-redact/-/fast-redact-1.4.4.tgz#d29bd1d0cc3ab808a9d4f9870f6e27e85c750db4"
   integrity sha512-QOQZ8sDDQPZMJ6x6zlm6hLZ2cjPDqfN3R/AYnAbM+yy8VNPvOnVXdUF/E/xbMv7g44c1krhWuzgjH2u0V5Vhsg==
 
 fast-safe-stringify@^2.0.6:
@@ -6501,10 +6501,9 @@ ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.16:
   dependencies:
     protons "^1.0.1"
 
-ipfs@0.35.0-rc.0:
+"ipfs@https://github.com/ipfs/js-ipfs/tarball/cd2ccb008c1b4f8e5b8982d008546766dcdef6e2/js-ipfs.tar.gz":
   version "0.35.0-rc.0"
-  resolved "https://registry.yarnpkg.com/ipfs/-/ipfs-0.35.0-rc.0.tgz#e4c2de16b46eafe3b44c03677340a534b7ca8264"
-  integrity sha512-esQoEiLWBekKt2us7hwZZegoH/Ew0B351qAGqmYd6k7TdK+p29LnC1ZKDYkSfjUvXDXi+oDdztIzDAgLY8QlmA==
+  resolved "https://github.com/ipfs/js-ipfs/tarball/cd2ccb008c1b4f8e5b8982d008546766dcdef6e2/js-ipfs.tar.gz#6ef53f81f857a3f32d48a0a39c764b473a9feaea"
   dependencies:
     "@nodeutils/defaults-deep" "^1.1.0"
     async "^2.6.1"
@@ -6574,6 +6573,7 @@ ipfs@0.35.0-rc.0:
     multiaddr "^6.0.0"
     multiaddr-to-uri "^4.0.1"
     multibase "~0.6.0"
+    multicodec "~0.5.0"
     multihashes "~0.4.14"
     multihashing-async "~0.5.1"
     node-fetch "^2.3.0"
@@ -10460,17 +10460,16 @@ pino-std-serializers@^2.3.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-2.3.0.tgz#34eeaab97c055c28e22c0542ae55978e7e427786"
   integrity sha512-klfGoOsP6sJH7ON796G4xoUSx2fkpFgKHO4YVVO2zmz31jR+etzc/QzGJILaOIiCD6HTCFgkPx+XN8nk+ruqPw==
 
-pino@5.11.1, pino@^5.10.1, pino@~5.11.0:
+pino@5.11.1, pino@^5.10.1, "pino@https://github.com/pinojs/pino/tarball/ab3dd74843eb4186fbc02b43e4b293840182fd7c/pino.tar.gz", pino@~5.11.0:
   version "5.11.1"
-  resolved "https://registry.npmjs.org/pino/-/pino-5.11.1.tgz#2d6d8edb7ebc7c354be03bfa04fd436352e1d67b"
-  integrity sha512-NIua0mGb9Adknq35ONvQmvh93LCUVUjp2+1q1EcvIkJmpJnSd3E5rHVKlKNjzMXFl/z3fI+QA0xXCjPEKNiLvQ==
+  resolved "https://github.com/pinojs/pino/tarball/ab3dd74843eb4186fbc02b43e4b293840182fd7c/pino.tar.gz#bf13b3983ad9778a2479c688f78dde456d28582b"
   dependencies:
-    fast-redact "^1.4.2"
+    fast-redact "^1.4.4"
     fast-safe-stringify "^2.0.6"
     flatstr "^1.0.9"
     pino-std-serializers "^2.3.0"
-    quick-format-unescaped "^3.0.0"
-    sonic-boom "^0.7.1"
+    quick-format-unescaped "^3.0.2"
+    sonic-boom "^0.7.3"
 
 pkg-conf@^2.0.0:
   version "2.1.0"
@@ -11070,10 +11069,10 @@ querystringify@^2.0.0:
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.0.tgz#7ded8dfbf7879dcc60d0a644ac6754b283ad17ef"
   integrity sha512-sluvZZ1YiTLD5jsqZcDmFyV2EwToyXZBfpoVOmktMmW+VEnhgakFHnasVph65fOjGPTWN0Nw3+XQaSeMayr0kg==
 
-quick-format-unescaped@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/quick-format-unescaped/-/quick-format-unescaped-3.0.1.tgz#e1e8526f6aa56dc5452926111461e85755f79acf"
-  integrity sha512-Tnk4iJQ8x3V8ml3x9sLIf4tSDaVB9OJY/5gOrnxgK63CXKphhn8oYOPI4tqnXPQcZ3tCv7GFjeoYY5h6UAvuzg==
+quick-format-unescaped@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/quick-format-unescaped/-/quick-format-unescaped-3.0.2.tgz#0137e94d8fb37ffeb70040535111c378e75396fb"
+  integrity sha512-FXTaCkwvpIlkdKeGDNgcq07SXWS383noQUuZjvdE1QcTt+eLuqof6/BDiEPqB59FWLie/l91+HtlJSw7iCViSA==
 
 quick-lru@^1.0.0:
   version "1.1.0"
@@ -12275,9 +12274,9 @@ somever@2.x.x:
     bounce "1.x.x"
     hoek "6.x.x"
 
-sonic-boom@^0.7.1:
+sonic-boom@^0.7.3:
   version "0.7.3"
-  resolved "https://registry.npmjs.org/sonic-boom/-/sonic-boom-0.7.3.tgz#cbfc18e87c2b8078b00e38ad9475c05fce5ea696"
+  resolved "https://registry.yarnpkg.com/sonic-boom/-/sonic-boom-0.7.3.tgz#cbfc18e87c2b8078b00e38ad9475c05fce5ea696"
   integrity sha512-A9EyoIeLD+g9vMLYQKjNCatJtAKdBQMW03+L8ZWWX/A6hq+srRCwdqHrBD1R8oSMLXov3oHN13dljtZf12q2Ow==
   dependencies:
     flatstr "^1.0.9"
