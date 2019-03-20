@@ -10460,9 +10460,9 @@ pino-std-serializers@^2.3.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-2.3.0.tgz#34eeaab97c055c28e22c0542ae55978e7e427786"
   integrity sha512-klfGoOsP6sJH7ON796G4xoUSx2fkpFgKHO4YVVO2zmz31jR+etzc/QzGJILaOIiCD6HTCFgkPx+XN8nk+ruqPw==
 
-pino@5.11.1, pino@^5.10.1, "pino@https://github.com/pinojs/pino/tarball/ab3dd74843eb4186fbc02b43e4b293840182fd7c/pino.tar.gz", pino@~5.11.0:
+pino@5.11.1, pino@^5.10.1, "pino@https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz", pino@~5.11.0:
   version "5.11.1"
-  resolved "https://github.com/pinojs/pino/tarball/ab3dd74843eb4186fbc02b43e4b293840182fd7c/pino.tar.gz#bf13b3983ad9778a2479c688f78dde456d28582b"
+  resolved "https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz#db6adc03aef85aa645d5df8ebab934c85bead951"
   dependencies:
     fast-redact "^1.4.4"
     fast-safe-stringify "^2.0.6"

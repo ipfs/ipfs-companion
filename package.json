@@ -65,7 +65,7 @@
   "resolutions": {
     "stream-http": "3.0.0",
     "multiaddr": "6.0.3",
-    "pino": "https://github.com/pinojs/pino/tarball/ab3dd74843eb4186fbc02b43e4b293840182fd7c/pino.tar.gz"
+    "pino": "https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz"
   },
   "devDependencies": {
     "@babel/core": "7.3.4",

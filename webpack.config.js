@@ -40,8 +40,8 @@ const commonConfig = {
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.env': {
         NODE_ENV: '"production"',
-        IPFS_MONITORING: Boolean(false),
-        DEBUG: true
+        IPFS_MONITORING: false,
+        DEBUG: true // controls verbosity of Hapi HTTP server in js-ipfs
       }
     })
   ],
