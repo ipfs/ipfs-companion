@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Interrupteur général: Suspendre toute intégration IPFS",
+    "message": "Basculer toutes les intégrations IPFS\n",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -43,25 +43,41 @@
     "message": "Ouvrir l'interface utilisateur Web",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
+  "panel_redirectToggle": {
+    "message": "Rediriger vers la passerelle",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
+  },
+  "panel_redirectToggleTooltip": {
+    "message": "Cliquez pour basculer toutes les redirections vers la passerelle",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
+  },
+  "panel_toolsSectionHeader": {
+    "message": "Outils",
+    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  },
   "panel_openPreferences": {
     "message": "Ouvrir les préférences",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
-  "panel_switchToCustomGateway": {
-    "message": "Utiliser la passerelle personnalisée",
-    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  "panel_activeTabSectionHeader": {
+    "message": "Onglet Actif",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_switchToPublicGateway": {
-    "message": "Utiliser la passerelle publique",
-    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  "panel_activeTabSiteRedirectToggle": {
+    "message": "Rediriger sur  $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  },
+  "panel_activeTabSiteRedirectToggleTooltip": {
+    "message": "Cliquez pour basculer les redirections vers la passerelle sur $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Epingler la ressource IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
-  "panel_unpinCurrentIpfsAddress": {
-    "message": "Désépingler la ressource IPFS",
-    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
+  "panel_pinCurrentIpfsAddressTooltip": {
+    "message": "Épingler un CID indique à votre nœud IPFS que cette donnée est importante et ne doit pas être jetées.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
     "message": "Copier le chemin IPFS",
@@ -250,6 +266,14 @@
   "option_useCustomGateway_description": {
     "message": "Rediriger les demandes faites à la passerelle publique vers la passerelle personnalisée",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
+  },
+  "option_noRedirectHostnames_title": {
+    "message": "Désengagement des redirections",
+    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  },
+  "option_noRedirectHostnames_description": {
+    "message": "Liste des sites web qui ne doivent pas être redirigés vers la passerelle personnalisée (inclut les sous-ressources d'autres domaines). Un hostname par ligne.",
+    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
     "message": "Passerelle publique par défaut",

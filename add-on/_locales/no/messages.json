@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Global bryter: Suspander alle IPFS integrasjoner",
+    "message": "Toggle all IPFS integrations",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -43,25 +43,41 @@
     "message": "Åpne Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
+  "panel_redirectToggle": {
+    "message": "Redirect to Gateway",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
+  },
+  "panel_redirectToggleTooltip": {
+    "message": "Click to toggle all gateway redirects",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
+  },
+  "panel_toolsSectionHeader": {
+    "message": "Verktøy",
+    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  },
   "panel_openPreferences": {
     "message": "Åpne preferanser for nettleserutvidelse",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
-  "panel_switchToCustomGateway": {
-    "message": "Bytt til custom gateway",
-    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  "panel_activeTabSectionHeader": {
+    "message": "Aktiv fane",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_switchToPublicGateway": {
-    "message": "Bytt til offentlig gateway",
-    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  "panel_activeTabSiteRedirectToggle": {
+    "message": "Redirect on $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  },
+  "panel_activeTabSiteRedirectToggleTooltip": {
+    "message": "Click to toggle gateway redirects on $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Pin IPFS ressurs",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
-  "panel_unpinCurrentIpfsAddress": {
-    "message": "Unpin IPFS ressurs",
-    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
+  "panel_pinCurrentIpfsAddressTooltip": {
+    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
     "message": "Kopier IPFS sti",
@@ -240,7 +256,7 @@
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "message": "IPFS-innhold vil bli blokkert fra å laste på HTTPS-nettsider, med mindre din gateway URL starter med \"http://127.0.0.1, \"http://[::1]” eller “https://”",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
@@ -250,6 +266,14 @@
   "option_useCustomGateway_description": {
     "message": "Redirect requests for IPFS resources to the Custom gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
+  },
+  "option_noRedirectHostnames_title": {
+    "message": "Redirect Opt-Outs",
+    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  },
+  "option_noRedirectHostnames_description": {
+    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
     "message": "Standard Public Gateway",
@@ -292,7 +316,7 @@
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experiments_warning": {
-    "message": "Be warned: these features are new or work-in-progress. YMMV.",
+    "message": "Vær advart: disse funksjonene er nye eller i arbeid. YMMV.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_displayNotifications_title": {
@@ -304,7 +328,7 @@
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Catch Unhandled IPFS Protocols",
+    "message": "Fang uhåndterte IPFS-protokoller",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
@@ -464,11 +488,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "Skal IPFS Companion tillate «$1» til å få\b tilgang «$2» ved den tilkoblede noden?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Bruk denne avgjørelsen til alle nåværende og fremtidige tillatelser i dette omfanget",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
