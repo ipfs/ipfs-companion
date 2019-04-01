@@ -2,7 +2,7 @@
 
 > Upgrade your browser with [IPFS](https://ipfs.io/) super powers
 
-![demo of v2.4.2](https://user-images.githubusercontent.com/157609/42695172-d35ede9c-86b4-11e8-9165-0471a60fd60d.gif)
+![demo of v2.8.0](https://user-images.githubusercontent.com/157609/55318231-938ce480-5472-11e9-8624-b0021a34c1a4.gif)
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
@@ -57,7 +57,7 @@ Companion will detect presence of [DNSLink](https://docs.ipfs.io/guides/concepts
 > `http://docs.ipfs.io`  
 > → `http://127.0.0.1:8080/ipns/docs.ipfs.io`
 
-This means if you visit websites with a valid DNSLink (eg. http://docs.ipfs.io, http://ipld.io, http://libp2p.io, http://tr.wikipedia-on-ipfs.org) browser will load them from IPFS.
+This means if you visit websites with a valid DNSLink (eg. https://docs.ipfs.io, https://ipld.io, http://tr.wikipedia-on-ipfs.org) browser will load them from IPFS.
 
 More details: [DNSLink Support in IPFS Companion](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md)
 
@@ -90,13 +90,13 @@ The Browser Action pop-up provides handy toggles for often used operations.
 > _Active Tab_ actions include option to opt-out current website from Gateway redirect of any IPFS subresources.    
 > Disabling redirect for DNSLink website will restore original URL as well:
 >
-> ![per-site-peek 2019-02-26 00-23](https://user-images.githubusercontent.com/157609/53376094-86557500-395d-11e9-837f-a4712aa19236.gif)    
+> ![per-site-opt-out](https://user-images.githubusercontent.com/157609/55317805-90452900-5471-11e9-9e0f-293afd261648.gif)
 
 #### Disable All Redirects
 
 > A handy toggle to disable all gateway redirects while keeping all other features enabled:
 >
-> ![redirect](https://user-images.githubusercontent.com/157609/53376263-0976cb00-395e-11e9-8536-d83d28ffeee9.gif)
+> ![redirect](https://user-images.githubusercontent.com/157609/55317804-90452900-5471-11e9-9fc1-42bee5b15a6a.gif)
 
 #### Suspend IPFS Extension
 
@@ -104,7 +104,7 @@ The Browser Action pop-up provides handy toggles for often used operations.
 > (redirects, API status, content scripts, protocol handlers etc).
 > Useful during testing. Extension can be re-enabled with a single click:
 >
-> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/53376196-d6343c00-395d-11e9-83f2-04c16b3a008f.gif)
+> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/55317803-8fac9280-5471-11e9-96e3-f068cc62148b.gif)
 
 ### IPFS Status and Context Actions
 
