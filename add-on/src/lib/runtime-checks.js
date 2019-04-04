@@ -15,6 +15,16 @@ function getPlatformInfo (browser) {
   return Promise.resolve()
 }
 
+function hasChromeSocketsForTcp () {
+  return typeof chrome === 'object' &&
+    typeof chrome.runtime === 'object' &&
+    typeof chrome.runtime.id === 'string' &&
+    typeof chrome.sockets === 'object' &&
+    typeof chrome.sockets.tcpServer === 'object' &&
+    typeof chrome.sockets === 'object' &&
+    typeof chrome.sockets.tcp === 'object'
+}
+
 async function createRuntimeChecks (browser) {
   // browser
   const browserInfo = await getBrowserInfo(browser)
@@ -24,11 +34,12 @@ async function createRuntimeChecks (browser) {
   // platform
   const platformInfo = await getPlatformInfo(browser)
   const runtimeIsAndroid = platformInfo ? platformInfo.os === 'android' : false
-  //
+  const runtimeHasSocketsForTcp = hasChromeSocketsForTcp()
   return Object.freeze({
     browser,
     isFirefox: runtimeIsFirefox,
     isAndroid: runtimeIsAndroid,
+    hasChromeSocketsForTcp: runtimeHasSocketsForTcp,
     hasNativeProtocolHandler: runtimeHasNativeProtocol
   })
 }

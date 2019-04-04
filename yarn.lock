@@ -747,7 +747,7 @@
   dependencies:
     "@material/feature-targeting" "^0.44.1"
 
-"@nodeutils/defaults-deep@^1.1.0":
+"@nodeutils/defaults-deep@1.1.0", "@nodeutils/defaults-deep@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodeutils/defaults-deep/-/defaults-deep-1.1.0.tgz#bb1124dc8d7ce0bc5da1d668ace58149258ef20b"
   integrity sha1-uxEk3I184LxdodZorOWBSSWO8gs=
@@ -2639,10 +2639,9 @@ chrome-dgram@3.0.1:
     inherits "^2.0.1"
     run-series "^1.1.2"
 
-chrome-net@3.3.1:
+"chrome-net@https://github.com/lidel/chrome-net/tarball/838ffde4a33721888f74783821e0486dfcc88797/chrome-net.tar.gz":
   version "3.3.1"
-  resolved "https://registry.npmjs.org/chrome-net/-/chrome-net-3.3.1.tgz#b4041edb5b264222e7e3c96101344b2332c86782"
-  integrity sha512-erjHzaLGOOn1WTDdVtEYxeltKLhWpL3TNAv5ODqgseOCWMmV0GueWUR3by3LH9gr3BKPJRzyqPROJpaOCXz22w==
+  resolved "https://github.com/lidel/chrome-net/tarball/838ffde4a33721888f74783821e0486dfcc88797/chrome-net.tar.gz#07f9210134741fa40472ef2f3bdf7b325cc8169c"
   dependencies:
     inherits "^2.0.1"
 

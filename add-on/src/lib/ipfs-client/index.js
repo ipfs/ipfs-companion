@@ -1,18 +1,35 @@
 'use strict'
 
+/* eslint-env browser, webextensions */
+
 const browser = require('webextension-polyfill')
 const external = require('./external')
-const embedded = require('./embedded')
+const embeddedJs = require('./embedded')
+const embeddedJsBrave = require('./embedded-brave')
 
 let client
+
+// TODO: make generic
+const hasChromeSocketsForTcp = typeof chrome === 'object' &&
+  typeof chrome.runtime === 'object' &&
+  typeof chrome.runtime.id === 'string' &&
+  typeof chrome.sockets === 'object' &&
+  typeof chrome.sockets.tcpServer === 'object' &&
+  typeof chrome.sockets === 'object' &&
+  typeof chrome.sockets.tcp === 'object'
 
 async function initIpfsClient (opts) {
   await destroyIpfsClient()
 
-  if (opts.ipfsNodeType === 'embedded') {
-    client = embedded
-  } else {
-    client = external
+  switch (opts.ipfsNodeType) {
+    case 'embedded':
+      client = hasChromeSocketsForTcp ? embeddedJsBrave : embeddedJs // TODO: make generic
+      break
+    case 'external':
+      client = external
+      break
+    default:
+      throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
 
   const instance = await client.init(opts)
