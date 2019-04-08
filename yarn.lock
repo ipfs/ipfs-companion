@@ -7035,7 +7035,7 @@ iso-random-stream@^1.1.0:
   resolved "https://registry.yarnpkg.com/iso-random-stream/-/iso-random-stream-1.1.0.tgz#c1dc1bb43dd8da6524df9cbc6253b010806585c8"
   integrity sha512-ywSWt0KrWcsaK0jVoVJIR30rLyjg9Rw3k2Sm/qp+3tdtSV0SNH7L7KilKnENcENOSoJxDFvpt2idvuMMQohdCQ==
 
-iso-stream-http@0.1.2, iso-stream-http@~0.1.1, stream-http@^2.7.2, stream-http@^3.0.0, "stream-http@npm:iso-stream-http":
+iso-stream-http@0.1.2, iso-stream-http@~0.1.1, stream-http@^2.7.2, stream-http@^3.0.0, "stream-http@npm:iso-stream-http@0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/iso-stream-http/-/iso-stream-http-0.1.2.tgz#b3dfea4c9f23ff26d078d40c539cfc0dfebacd37"
   integrity sha512-oHEDNOysIMTNypbg2f1SlydqRBvjl4ZbSE9+0awVxnkx3K2stGTFwB/kpVqnB6UEfF8QD36kAjDwZvqyXBLMnQ==
@@ -8830,10 +8830,10 @@ multiaddr-to-uri@^4.0.0:
   dependencies:
     multiaddr "^5.0.0"
 
-multiaddr@6.0.3, multiaddr@^4.0.0, multiaddr@^5.0.0, multiaddr@^5.0.2, multiaddr@^6.0.0, multiaddr@^6.0.2, multiaddr@^6.0.3, multiaddr@^6.0.4, multiaddr@^6.0.6:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-6.0.3.tgz#36797d110ad1d912a69c07ca5fca6f8a08690bf3"
-  integrity sha512-ZYKAmSQ6j3x3fJQGF8yoAb5aDwrNFT/QVhfN8rId+M4/E1RYR3fsitFwMG3l7TuWhow+ET01mA+BViz+8NaktQ==
+multiaddr@6.0.6, multiaddr@^4.0.0, multiaddr@^5.0.0, multiaddr@^5.0.2, multiaddr@^6.0.0, multiaddr@^6.0.2, multiaddr@^6.0.3, multiaddr@^6.0.4, multiaddr@^6.0.6:
+  version "6.0.6"
+  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-6.0.6.tgz#99296d219d4f21b6520c7eaf43fd3ef9306d7a63"
+  integrity sha512-nR4s91mi7IKed1jrqUj/4OhZ1VKdAjUG79IuVB5PS6b+qxOZLKPW8nsskHhrfGn4o1Rn1NJWl7znidF/NVQpEA==
   dependencies:
     bs58 "^4.0.1"
     class-is "^1.1.0"
