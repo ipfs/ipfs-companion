@@ -62,7 +62,8 @@
   "private": true,
   "preferGlobal": false,
   "resolutions": {
-    "stream-http": "3.0.0",
+    "stream-http": "npm:iso-stream-http",
+    "iso-stream-http": "0.1.2",
     "multiaddr": "6.0.3"
   },
   "devDependencies": {

@@ -7035,10 +7035,10 @@ iso-random-stream@^1.1.0:
   resolved "https://registry.yarnpkg.com/iso-random-stream/-/iso-random-stream-1.1.0.tgz#c1dc1bb43dd8da6524df9cbc6253b010806585c8"
   integrity sha512-ywSWt0KrWcsaK0jVoVJIR30rLyjg9Rw3k2Sm/qp+3tdtSV0SNH7L7KilKnENcENOSoJxDFvpt2idvuMMQohdCQ==
 
-iso-stream-http@~0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/iso-stream-http/-/iso-stream-http-0.1.1.tgz#f763eb63014cea781f9296073879eaec1be4f5ac"
-  integrity sha512-uYveJvqcH+TecR1ittHG+vSfq8fwQRNiqWYlFkpZu1RpwLcXU9zSgN29CQ66M/ZOykbcXm3igDiHrs+G+bLd6A==
+iso-stream-http@0.1.2, iso-stream-http@~0.1.1, stream-http@^2.7.2, stream-http@^3.0.0, "stream-http@npm:iso-stream-http":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/iso-stream-http/-/iso-stream-http-0.1.2.tgz#b3dfea4c9f23ff26d078d40c539cfc0dfebacd37"
+  integrity sha512-oHEDNOysIMTNypbg2f1SlydqRBvjl4ZbSE9+0awVxnkx3K2stGTFwB/kpVqnB6UEfF8QD36kAjDwZvqyXBLMnQ==
   dependencies:
     builtin-status-codes "^3.0.0"
     inherits "^2.0.1"
@@ -12227,16 +12227,6 @@ stream-each@^1.1.0:
   dependencies:
     end-of-stream "^1.1.0"
     stream-shift "^1.0.0"
-
-stream-http@3.0.0, stream-http@^2.7.2, stream-http@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/stream-http/-/stream-http-3.0.0.tgz#bd6d3c52610098699e25eb2dfcd188e30e0d12e4"
-  integrity sha512-JELJfd+btL9GHtxU3+XXhg9NLYrKFnhybfvRuDghtyVkOFydz3PKNT1df07AMr88qW03WHF+FSV0PySpXignCA==
-  dependencies:
-    builtin-status-codes "^3.0.0"
-    inherits "^2.0.1"
-    readable-stream "^3.0.6"
-    xtend "^4.0.0"
 
 stream-parser@~0.3.1:
   version "0.3.1"
