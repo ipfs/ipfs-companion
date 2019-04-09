@@ -77,6 +77,8 @@ Each `npm` task can be run separately, but for most of time `dev-build`, `test` 
 - `npm run lint:standard` -- run [standard](http://standardjs.com) linter ([IPFS JavaScript projects default to standard code style](https://github.com/ipfs/community/blob/master/js-code-guidelines.md#linting--code-style))
 - `npm run lint:web-ext` -- run [addons-linter](https://github.com/mozilla/addons-linter) shipped with `web-ext` tool
 - `npm run firefox` -- run as temporary add-on in Firefox
+- `npm run get-firefox-nightly` -- fetch latest Firefox Nightly to `./firefox/`
+- `npm run firefox:beta:add -- --update-link "https://host/path/to/file.xpi" file.xpi` -- add a manifest entry for new self-hosted Beta for Firefox
 
 Release build shortcuts:
 - `npm run dev-build` -- all-in-one: fast dependency install, build with yarn (updates yarn.lock if needed)

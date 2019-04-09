@@ -50,6 +50,7 @@
     "precommit": "run-s lint:standard",
     "prepush": "run-s clean build lint test",
     "firefox": "web-ext run --url about:debugging",
+    "firefox:beta:add": "faauv --update ci/firefox/update.json ",
     "get-firefox-nightly": "shx test -e ./firefox/firefox || get-firefox -b nightly -e",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
     "ci": "run-s ci:*",
@@ -65,10 +66,11 @@
   "private": true,
   "preferGlobal": false,
   "resolutions": {
-    "stream-http": "3.0.0",
-    "multiaddr": "6.0.3",
     "hapi": "https://github.com/lidel/hapi/tarball/0961606e2c7dca8eceda765bd31ec2cb58358382/hapi.tar.gz",
-    "pino": "https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz"
+    "pino": "https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz",
+    "iso-stream-http": "0.1.2",
+    "stream-http": "npm:iso-stream-http@0.1.2",
+    "multiaddr": "6.0.6"
   },
   "devDependencies": {
     "@babel/core": "7.3.4",
@@ -79,6 +81,7 @@
     "cross-env": "5.2.0",
     "download-cli": "1.1.1",
     "fakefile": "0.0.9",
+    "firefox-addons-add-update-version": "https://github.com/lidel/firefox-addons-add-update-version/tarball/7901bf69b4ed122a20cd5e10ed7f8dae9b00dde7/firefox-addons-add-update-version.tar.gz",
     "fs-promise": "2.0.3",
     "get-firefox": "2.2.1",
     "husky": "1.3.1",
