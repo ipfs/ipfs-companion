@@ -39,9 +39,11 @@ async function createRuntimeChecks (browser) {
     browser,
     isFirefox: runtimeIsFirefox,
     isAndroid: runtimeIsAndroid,
+    isBrave: runtimeHasSocketsForTcp, // TODO: make it more robust
     hasChromeSocketsForTcp: runtimeHasSocketsForTcp,
     hasNativeProtocolHandler: runtimeHasNativeProtocol
   })
 }
 
-module.exports = createRuntimeChecks
+module.exports.createRuntimeChecks = createRuntimeChecks
+module.exports.hasChromeSocketsForTcp = hasChromeSocketsForTcp

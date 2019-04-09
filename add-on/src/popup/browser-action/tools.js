@@ -15,7 +15,7 @@ module.exports = function tools ({
   onOpenWebUi
 }) {
   const activeQuickUpload = active && isIpfsOnline && isApiAvailable
-  const activeWebUI = active && isIpfsOnline && ipfsNodeType === 'external'
+  const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`
     <div>

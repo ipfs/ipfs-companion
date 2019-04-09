@@ -105,7 +105,7 @@ module.exports = function createDnslinkResolver (getState) {
     readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
-      if (state.ipfsNodeType === 'external' && state.peerCount !== offlinePeerCount) {
+      if (state.ipfsNodeType !== 'embedded' && state.peerCount !== offlinePeerCount) {
         apiProvider = state.apiURLString
       } else {
         // fallback to resolver at public gateway

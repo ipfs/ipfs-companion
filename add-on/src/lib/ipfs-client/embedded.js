@@ -1,6 +1,6 @@
 'use strict'
 
-const defaultsDeep = require('@nodeutils/defaults-deep')
+const mergeOptions = require('merge-options')
 const Ipfs = require('ipfs')
 const { optionDefaults } = require('../options')
 
@@ -9,9 +9,9 @@ let node = null
 exports.init = function init (opts) {
   console.log('[ipfs-companion] Embedded ipfs init')
 
-  const defaultOpts = optionDefaults.ipfsNodeConfig
+  const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsOpts = defaultsDeep(defaultOpts, userOpts, { start: false })
+  const ipfsOpts = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
 
   node = new Ipfs(ipfsOpts)
 

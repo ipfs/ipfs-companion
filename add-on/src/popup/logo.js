@@ -4,7 +4,7 @@
 const html = require('choo/html')
 
 function logo ({ path, size = 52, ipfsNodeType = 'external', isIpfsOnline = true, heartbeat = true }) {
-  const logoTypePrefix = ipfsNodeType === 'embedded' ? 'js-' : ''
+  const logoTypePrefix = ipfsNodeType.startsWith('embedded') ? 'js-' : ''
   const logoFileName = `${logoTypePrefix}ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
   return html`
     <img

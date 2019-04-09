@@ -5,7 +5,7 @@ const { expect } = require('chai')
 const { URL } = require('url')
 const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
-const createRuntimeChecks = require('../../../add-on/src/lib/runtime-checks')
+const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
@@ -54,7 +54,7 @@ describe('modifyRequest processing', function () {
       // API is online and has one peer
       state.peerCount = 1
       // embedded node (js-ipfs) defaults to public gw
-      activeGateway = (state.ipfsNodeType === 'external' ? state.gwURLString : state.pubGwURLString)
+      activeGateway = (state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString)
       // clear dnslink cache to ensure DNS TXT record lookup is triggered
       dnslinkResolver.clearCache()
     })
@@ -151,7 +151,7 @@ describe('modifyRequest processing', function () {
       // API is online and has one peer
       state.peerCount = 1
       // embedded node (js-ipfs) defaults to public gw
-      activeGateway = (state.ipfsNodeType === 'external' ? state.gwURLString : state.pubGwURLString)
+      activeGateway = (state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString)
       // clear dnslink cache to ensure DNS TXT record lookup is triggered
       dnslinkResolver.clearCache()
     })
@@ -213,7 +213,7 @@ describe('modifyRequest processing', function () {
       // API is online and has one peer
       state.peerCount = 1
       // embedded node (js-ipfs) defaults to public gw
-      activeGateway = (state.ipfsNodeType === 'external' ? state.gwURLString : state.pubGwURLString)
+      activeGateway = (state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString)
     })
     describe('and dnslink cache miss', function () {
       beforeEach(function () {

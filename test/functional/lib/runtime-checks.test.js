@@ -2,7 +2,7 @@
 const { describe, it, before, beforeEach, after } = require('mocha')
 const { expect } = require('chai')
 const browser = require('sinon-chrome')
-const createRuntimeChecks = require('../../../add-on/src/lib/runtime-checks')
+const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
 
 describe('runtime-checks.js', function () {
   before(() => {
@@ -77,6 +77,22 @@ describe('runtime-checks.js', function () {
       expect(runtime.hasNativeProtocolHandler).to.equal(false)
     })
   })
+
+  /* TODO
+  describe('hasChromeSocketsForTcp', function () {
+    beforeEach(function () {
+      browser.flush()
+    })
+
+    it('should return true when chrome.sockets.tcp* are present', async function () {
+      // TODO
+    })
+
+    it('should return false when chrome.sockets.tcp* are missing', async function () {
+      // TODO
+    })
+  })
+  */
 
   after(function () {
     delete global.browser

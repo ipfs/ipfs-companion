@@ -23,7 +23,7 @@ function gatewaysForm ({
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', normalizeGatewayURL)
   const onNoRedirectHostnamesChange = onOptionChange('noRedirectHostnames', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
-  const supportRedirectToCustomGateway = ipfsNodeType === 'external'
+  const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
 
   return html`
     <form>
@@ -66,6 +66,7 @@ function gatewaysForm ({
                 spellcheck="false"
                 title="Enter URL without any sub-path"
                 onchange=${onCustomGatewayUrlChange}
+                ${ipfsNodeType !== 'external' ? 'disabled' : ''}
                 value=${customGatewayUrl} />
 
             </div>

@@ -2,28 +2,25 @@
 
 /* eslint-env browser, webextensions */
 
+const debug = require('debug')
+const log = debug('ipfs-companion:client')
+log.error = debug('ipfs-companion:client:error')
+
 const browser = require('webextension-polyfill')
 const external = require('./external')
-const embeddedJs = require('./embedded')
-const embeddedJsBrave = require('./embedded-brave')
+const embedded = require('./embedded')
+const embeddedWithChromeSockets = require('./embedded-chromesockets')
 
 let client
 
-// TODO: make generic
-const hasChromeSocketsForTcp = typeof chrome === 'object' &&
-  typeof chrome.runtime === 'object' &&
-  typeof chrome.runtime.id === 'string' &&
-  typeof chrome.sockets === 'object' &&
-  typeof chrome.sockets.tcpServer === 'object' &&
-  typeof chrome.sockets === 'object' &&
-  typeof chrome.sockets.tcp === 'object'
-
 async function initIpfsClient (opts) {
   await destroyIpfsClient()
-
   switch (opts.ipfsNodeType) {
     case 'embedded':
-      client = hasChromeSocketsForTcp ? embeddedJsBrave : embeddedJs // TODO: make generic
+      client = embedded
+      break
+    case 'embedded:chromesockets':
+      client = embeddedWithChromeSockets
       break
     case 'external':
       client = external
@@ -63,7 +60,7 @@ async function _reloadIpfsClientDependents () {
         // detect bundled webui in any of open tabs
         if (_isWebuiTab(tab.url)) {
           browser.tabs.reload(tab.id)
-          console.log('[ipfs-companion] reloading bundled webui')
+          log('reloading bundled webui')
         }
       })
     }

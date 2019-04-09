@@ -1,28 +1,14 @@
 'use strict'
 
 const isFQDN = require('is-fqdn')
+const { hasChromeSocketsForTcp } = require('./runtime-checks')
 
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
-  ipfsNodeType: 'embedded', // Brave should default to js-ipfs: https://github.com/ipfs-shipyard/ipfs-companion/issues/664
-  ipfsNodeConfig: JSON.stringify({
-    config: {
-      Addresses: {
-        Swarm: [],
-        API: '/ip4/127.0.0.1/tcp/5002',
-        Gateway: '/ip4/127.0.0.1/tcp/9090'
-      }
-    },
-    libp2p: {
-      config: {
-        dht: {
-          enabled: false
-        }
-      }
-    }
-  }, null, 2),
+  ipfsNodeType: buildDefaultIpfsNodeType(),
+  ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
   publicGatewayUrl: 'https://ipfs.io',
-  useCustomGateway: false, // TODO: Brave should not redirect to public one, but own
+  useCustomGateway: true,
   noRedirectHostnames: [],
   automaticMode: true,
   linkify: false,
@@ -36,6 +22,27 @@ exports.optionDefaults = Object.freeze({
   ipfsApiPollMs: 3000,
   ipfsProxy: true // window.ipfs
 })
+
+function buildDefaultIpfsNodeType () {
+  // Right now Brave is the only vendor giving us access to chrome.sockets
+  return hasChromeSocketsForTcp() ? 'embedded:chromesockets' : 'external'
+}
+
+function buildDefaultIpfsNodeConfig () {
+  let config = {
+    config: {
+      Addresses: {
+        Swarm: []
+      }
+    }
+  }
+  if (hasChromeSocketsForTcp()) {
+    // config.config.Addresses.API = '/ip4/127.0.0.1/tcp/5002'
+    config.config.Addresses.API = '' // disable API port
+    config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/8080'
+  }
+  return JSON.stringify(config, null, 2)
+}
 
 // `storage` should be a browser.storage.local or similar
 exports.storeMissingOptions = (read, defaults, storage) => {
@@ -104,5 +111,17 @@ exports.migrateOptions = async (storage) => {
       detectIpfsPathHeader: true
     })
     await storage.remove('dnslink')
+  }
+  // ~ v2.8.x + Brave
+  // Upgrade js-ipfs to js-ipfs + chrome.sockets
+  const { ipfsNodeType } = await storage.get('ipfsNodeType')
+  if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
+    console.log(`[ipfs-companion] migrating ipfsNodeType to 'embedded:chromesockets'`)
+    // Overwrite old config
+    const ipfsNodeConfig = JSON.parse(exports.optionDefaults.ipfsNodeConfig)
+    await storage.set({
+      ipfsNodeType: 'embedded:chromesockets',
+      ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
+    })
   }
 }

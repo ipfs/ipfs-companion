@@ -8,6 +8,7 @@ describe('init', function () {
   let init
 
   before(function () {
+    global.localStorage = {}
     global.window = {}
     global.browser = browser
     global.URL = URL
