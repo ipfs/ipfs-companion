@@ -1,6 +1,10 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const debug = require('debug')
+const log = debug('ipfs-companion:main')
+log.error = debug('ipfs-companion:main:error')
+
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
@@ -37,7 +41,9 @@ module.exports = async function init () {
   const browserActionPortName = 'browser-action-port'
 
   try {
+    log('init')
     await migrateOptions(browser.storage.local)
+    await storeMissingOptions(await browser.storage.local.get(), optionDefaults, browser.storage.local)
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
@@ -68,16 +74,13 @@ module.exports = async function init () {
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(getIpfs, getState)
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
+    log('register all listeners')
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await storeMissingOptions(
-      await browser.storage.local.get(),
-      optionDefaults,
-      browser.storage.local
-    )
+    log('init done')
     await showPendingLandingPages()
   } catch (error) {
-    console.error('Unable to initialize addon due to error', error)
+    log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
     throw error
   }
@@ -596,6 +599,7 @@ module.exports = async function init () {
 
   async function onStorageChange (changes, area) {
     let shouldRestartIpfsClient = false
+    let shouldStopIpfsClient = false
 
     for (let key in changes) {
       const change = changes[key]
@@ -608,6 +612,7 @@ module.exports = async function init () {
           state[key] = change.newValue
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
           shouldRestartIpfsClient = true
+          shouldStopIpfsClient = !state.active
           break
         case 'ipfsNodeType':
         case 'ipfsNodeConfig':
@@ -656,8 +661,9 @@ module.exports = async function init () {
       }
     }
 
-    if (shouldRestartIpfsClient) {
+    if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {
+        log('stoping ipfs client due to config changes', changes)
         await destroyIpfsClient()
       } catch (err) {
         console.error('[ipfs-companion] Failed to destroy IPFS client', err)
@@ -669,6 +675,7 @@ module.exports = async function init () {
       if (!state.active) return
 
       try {
+        log('starting ipfs client with the new config')
         ipfs = await initIpfsClient(state)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)

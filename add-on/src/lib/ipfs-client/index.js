@@ -14,6 +14,7 @@ const embeddedWithChromeSockets = require('./embedded-chromesockets')
 let client
 
 async function initIpfsClient (opts) {
+  log('init ipfs client')
   await destroyIpfsClient()
   switch (opts.ipfsNodeType) {
     case 'embedded':

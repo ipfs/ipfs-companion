@@ -17,11 +17,23 @@ exports.optionDefaults = Object.freeze({
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
-  customGatewayUrl: 'http://127.0.0.1:8080',
-  ipfsApiUrl: 'http://127.0.0.1:5001',
+  customGatewayUrl: buildCustomGatewayUrl(),
+  ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
   ipfsProxy: true // window.ipfs
 })
+
+function buildCustomGatewayUrl () {
+  // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
+  const port = hasChromeSocketsForTcp() ? 9091 : 8080
+  return `http://127.0.0.1:${port}`
+}
+
+function buildIpfsApiUrl () {
+  // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
+  const port = hasChromeSocketsForTcp() ? 5003 : 5001
+  return `http://127.0.0.1:${port}`
+}
 
 function buildDefaultIpfsNodeType () {
   // Right now Brave is the only vendor giving us access to chrome.sockets
@@ -37,36 +49,40 @@ function buildDefaultIpfsNodeConfig () {
     }
   }
   if (hasChromeSocketsForTcp()) {
-    // config.config.Addresses.API = '/ip4/127.0.0.1/tcp/5002'
-    config.config.Addresses.API = '' // disable API port
-    config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/8080'
+    // TODO: make more robust (sync with buildCustomGatewayUrl and buildIpfsApiUrl)
+    // embedded node should use different ports to make it easier
+    // for people already running regular go-ipfs and js-ipfs on standard ports
+    config.config.Addresses.API = '/ip4/127.0.0.1/tcp/5003'
+    config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/9091'
+    /*
+      (Sidenote on why we need API for Web UI)
+      Gateway can run without API port,
+      but Web UI does not use window.ipfs due to sandboxing atm.
+
+      If Web UI is able to use window.ipfs, then we can remove API port.
+      Disabling API is as easy as:
+      config.config.Addresses.API = ''
+    */
   }
   return JSON.stringify(config, null, 2)
 }
 
 // `storage` should be a browser.storage.local or similar
-exports.storeMissingOptions = (read, defaults, storage) => {
+exports.storeMissingOptions = async (read, defaults, storage) => {
   const requiredKeys = Object.keys(defaults)
-  const changes = new Set()
-  requiredKeys.map(key => {
-    // limit work to defaults and missing values
+  const changes = {}
+  for (let key of requiredKeys) {
+    // limit work to defaults and missing values, skip values other than defaults
     if (!read.hasOwnProperty(key) || read[key] === defaults[key]) {
-      changes.add(new Promise((resolve, reject) => {
-        storage.get(key).then(data => {
-          if (!data[key]) { // detect and fix key without value in storage
-            let option = {}
-            option[key] = defaults[key]
-            storage.set(option)
-              .then(data => { resolve(`updated:${key}`) })
-              .catch(error => { reject(error) })
-          } else {
-            resolve(`nochange:${key}`)
-          }
-        })
-      }))
+      const data = await storage.get(key)
+      if (!data.hasOwnProperty(key)) { // detect and fix key without value in storage
+        changes[key] = defaults[key]
+      }
     }
-  })
-  return Promise.all(changes)
+  }
+  // save all in bulk
+  await storage.set(changes)
+  return changes
 }
 
 function normalizeGatewayURL (url) {
@@ -118,10 +134,9 @@ exports.migrateOptions = async (storage) => {
   if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
     console.log(`[ipfs-companion] migrating ipfsNodeType to 'embedded:chromesockets'`)
     // Overwrite old config
-    const ipfsNodeConfig = JSON.parse(exports.optionDefaults.ipfsNodeConfig)
     await storage.set({
       ipfsNodeType: 'embedded:chromesockets',
-      ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
+      ipfsNodeConfig: buildDefaultIpfsNodeConfig()
     })
   }
 }

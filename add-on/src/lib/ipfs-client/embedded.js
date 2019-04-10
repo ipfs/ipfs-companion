@@ -21,7 +21,7 @@ exports.init = function init (opts) {
       reject(error)
     })
     node.once('ready', async () => {
-      node.on('start', () => {
+      node.once('start', () => {
         resolve(node)
       })
       node.on('error', error => {

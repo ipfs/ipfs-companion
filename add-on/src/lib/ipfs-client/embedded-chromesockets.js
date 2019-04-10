@@ -24,11 +24,6 @@ let nodeHttpApi = null
 // let httpServer = null
 // let hapiServer = null
 
-// Enable some debug output from js-ipfs
-// (borrowed from https://github.com/ipfs-shipyard/ipfs-companion/pull/557)
-// to  include everything (mplex, libp2p, mss): localStorage.debug = '*'
-localStorage.debug = 'jsipfs*,ipfs*,-*:mfs*,-*:ipns*,-ipfs:preload*'
-
 const log = debug('ipfs-companion:client:embedded')
 log.error = debug('ipfs-companion:client:embedded:error')
 
@@ -43,9 +38,11 @@ exports.init = function init (opts) {
     hapiServer = startRawHapiServer(9092)
   }
   */
-  log('init: embedded js-ipfs+chrome.sockets')
+  log('init embedded:chromesockets')
 
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
+
+  // TODO: check if below is needed after js-ipfs is released with DHT disabled
   defaultOpts.libp2p = {
     config: {
       dht: {
@@ -65,21 +62,21 @@ exports.init = function init (opts) {
       reject(error)
     })
     node.once('ready', async () => {
-      node.on('start', async () => {
+      node.once('start', async () => {
         // HttpApi is off in browser context and needs to be started separately
         try {
           const httpServers = new HttpApi(node, ipfsOpts)
           nodeHttpApi = await httpServers.start()
-          await updateConfigWithHttpEndpoints(node)
+          await updateConfigWithHttpEndpoints(node, opts)
           resolve(node)
         } catch (err) {
           reject(err)
         }
       })
-      node.on('error', error => {
-        log.error('something went terribly wrong in embedded js-ipfs!', error)
-      })
       try {
+        node.on('error', error => {
+          log.error('something went terribly wrong in embedded js-ipfs!', error)
+        })
         await node.start()
       } catch (err) {
         reject(err)
@@ -88,21 +85,35 @@ exports.init = function init (opts) {
   })
 }
 
+const multiaddr2httpUrl = (ma) => maToUri(ma.includes('/http') ? ma : multiaddr(ma).encapsulate('/http'))
+
 // Update internal configuration to HTTP Endpoints from js-ipfs instance
-async function updateConfigWithHttpEndpoints (ipfs) {
-  const ma = await ipfs.config.get('Addresses.Gateway')
-  log(`synchronizing Addresses.Gateway=${ma} to customGatewayUrl and ipfsNodeConfig`)
-  const httpGateway = maToUri(ma.includes('/http') ? ma : multiaddr(ma).encapsulate('/http'))
-  const ipfsNodeConfig = JSON.parse((await browser.storage.local.get('ipfsNodeConfig')).ipfsNodeConfig)
-  ipfsNodeConfig.config.Addresses.Gateway = ma
-  await browser.storage.local.set({
-    customGatewayUrl: httpGateway,
-    ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
-  })
+async function updateConfigWithHttpEndpoints (ipfs, opts) {
+  const localConfig = await browser.storage.local.get('ipfsNodeConfig')
+  if (localConfig && localConfig.ipfsNodeConfig) {
+    const gwMa = await ipfs.config.get('Addresses.Gateway')
+    const apiMa = await ipfs.config.get('Addresses.API')
+    const httpGateway = multiaddr2httpUrl(gwMa)
+    const httpApi = multiaddr2httpUrl(apiMa)
+    log(`updating extension configuration to Gateway=${httpGateway} and API=${httpApi}`)
+    // update ports in JSON configuration for embedded js-ipfs
+    const ipfsNodeConfig = JSON.parse(localConfig.ipfsNodeConfig)
+    ipfsNodeConfig.config.Addresses.Gateway = gwMa
+    ipfsNodeConfig.config.Addresses.API = apiMa
+    const configChanges = {
+      customGatewayUrl: httpGateway,
+      ipfsApiUrl: httpApi,
+      ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
+    }
+    // update current runtime config (in place, effective without restart)
+    Object.assign(opts, configChanges)
+    // update user config in storage (effective on next run)
+    await browser.storage.local.set(configChanges)
+  }
 }
 
 exports.destroy = async function () {
-  log('destroy: embedded js-ipfs+chrome.sockets')
+  log('destroy: embedded:chromesockets')
 
   /*
   if (httpServer) {
