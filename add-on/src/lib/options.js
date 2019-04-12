@@ -54,6 +54,8 @@ function buildDefaultIpfsNodeConfig () {
     // for people already running regular go-ipfs and js-ipfs on standard ports
     config.config.Addresses.API = '/ip4/127.0.0.1/tcp/5003'
     config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/9091'
+    // Until we have MulticastDNS+DNS, peer discovery is done over ws-star
+    config.config.Addresses.Swarm.push('/dnsaddr/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star')
     /*
       (Sidenote on why we need API for Web UI)
       Gateway can run without API port,

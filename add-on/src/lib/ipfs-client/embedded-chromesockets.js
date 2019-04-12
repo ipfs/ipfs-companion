@@ -42,10 +42,10 @@ exports.init = function init (opts) {
 
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
 
-  // TODO: check if below is needed after js-ipfs is released with DHT disabled
   defaultOpts.libp2p = {
     config: {
       dht: {
+        // TODO: check if below is needed after js-ipfs is released with DHT disabled
         enabled: false
       }
     }
