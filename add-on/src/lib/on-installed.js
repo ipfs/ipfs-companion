@@ -15,7 +15,7 @@ exports.showPendingLandingPages = async () => {
   const hint = await browser.storage.local.get('showLandingPage')
   switch (hint.showLandingPage) {
     case 'onInstallWelcome':
-      // TODO:restore await browser.storage.local.remove('showLandingPage')
+      await browser.storage.local.remove('showLandingPage')
       return browser.tabs.create({
         url: '/dist/landing-pages/welcome/index.html'
       })
