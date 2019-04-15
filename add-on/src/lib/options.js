@@ -3,6 +3,12 @@
 const isFQDN = require('is-fqdn')
 const { hasChromeSocketsForTcp } = require('./runtime-checks')
 
+// Detect Beta Channel on Brave via: chrome.runtime.id === 'hjoieblefckbooibpepigmacodalfndh'
+// TODO: enable by default when key blockers are resolved
+// - [ ] /ipns/<fqdn>/ load fine
+// - [ ] sharded directories (e.g. wikipedia) load fine
+const DEFAULT_TO_EMBEDDED_GATEWAY = false && hasChromeSocketsForTcp()
+
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: buildDefaultIpfsNodeType(),
@@ -25,19 +31,19 @@ exports.optionDefaults = Object.freeze({
 
 function buildCustomGatewayUrl () {
   // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
-  const port = hasChromeSocketsForTcp() ? 9091 : 8080
+  const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 9091 : 8080
   return `http://127.0.0.1:${port}`
 }
 
 function buildIpfsApiUrl () {
   // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
-  const port = hasChromeSocketsForTcp() ? 5003 : 5001
+  const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 5003 : 5001
   return `http://127.0.0.1:${port}`
 }
 
 function buildDefaultIpfsNodeType () {
   // Right now Brave is the only vendor giving us access to chrome.sockets
-  return hasChromeSocketsForTcp() ? 'embedded:chromesockets' : 'external'
+  return DEFAULT_TO_EMBEDDED_GATEWAY ? 'embedded:chromesockets' : 'external'
 }
 
 function buildDefaultIpfsNodeConfig () {
@@ -134,8 +140,7 @@ exports.migrateOptions = async (storage) => {
   // Upgrade js-ipfs to js-ipfs + chrome.sockets
   const { ipfsNodeType } = await storage.get('ipfsNodeType')
   if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
-    console.log(`[ipfs-companion] migrating ipfsNodeType to 'embedded:chromesockets'`)
-    // Overwrite old config
+    console.log(`[ipfs-companion] migrating ipfsNodeType: ${ipfsNodeType} → embedded:chromesockets`)
     await storage.set({
       ipfsNodeType: 'embedded:chromesockets',
       ipfsNodeConfig: buildDefaultIpfsNodeConfig()
