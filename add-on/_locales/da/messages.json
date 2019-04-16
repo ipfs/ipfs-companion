@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Global til/frakobling: Suspender alle IPFS integrationer",
+    "message": "Skift alle IPFS integrationer",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -43,25 +43,41 @@
     "message": "Åbn webkonsollen",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
+  "panel_redirectToggle": {
+    "message": "Omdirriger til Gateway",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
+  },
+  "panel_redirectToggleTooltip": {
+    "message": "Klik for at skifte alle gateway omdirrigeringer",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
+  },
+  "panel_toolsSectionHeader": {
+    "message": "Værktøjer",
+    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  },
   "panel_openPreferences": {
     "message": "Åben indstillinger",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
-  "panel_switchToCustomGateway": {
-    "message": "Skift til Valgfri Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  "panel_activeTabSectionHeader": {
+    "message": "Aktivt faneblad",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_switchToPublicGateway": {
-    "message": "Skift til Offentlig Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  "panel_activeTabSiteRedirectToggle": {
+    "message": "Omdirriger for $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  },
+  "panel_activeTabSiteRedirectToggleTooltip": {
+    "message": "Klik for at omskifte gateway omdirrigeringer for $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Fastgør IPFS resource",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
-  "panel_unpinCurrentIpfsAddress": {
-    "message": "Frigør IPFS resource",
-    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
+  "panel_pinCurrentIpfsAddressTooltip": {
+    "message": "Fastgørelse af en CID fortæller din IPFS-klient at denne data er vigtig og ikke må fjernes.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
     "message": "Kopier IPFS-stien",
@@ -250,6 +266,14 @@
   "option_useCustomGateway_description": {
     "message": "Ormdiriger forespørgsler på IPFS-resourcer til den Valgfri Gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
+  },
+  "option_noRedirectHostnames_title": {
+    "message": "Omdirrigerer fravalg",
+    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  },
+  "option_noRedirectHostnames_description": {
+    "message": "Liste med hjemmesider som ikke bør omdirrigeres til den valgfrie Gateway (inkluderer under-ressourcer fra øvrige domæner). Et værtsnavn per linje.",
+    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
     "message": "Offentlig Standard Gateway",
