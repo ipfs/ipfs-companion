@@ -26,7 +26,8 @@ exports.optionDefaults = Object.freeze({
   customGatewayUrl: buildCustomGatewayUrl(),
   ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
-  ipfsProxy: true // window.ipfs
+  ipfsProxy: true, // window.ipfs
+  logNamespaces: 'jsipfs*,ipfs*,-*:mfs*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*'
 })
 
 function buildCustomGatewayUrl () {
@@ -129,7 +130,7 @@ exports.migrateOptions = async (storage) => {
   // DNSLINK: convert old on/off 'dnslink' flag to text-based 'dnslinkPolicy'
   const { dnslink } = await storage.get('dnslink')
   if (dnslink) {
-    console.log(`[ipfs-companion] migrating old dnslink policy '${dnslink}' to 'best-effort'`)
+    // migrating old dnslink policy to 'best-effort'
     await storage.set({
       dnslinkPolicy: 'best-effort',
       detectIpfsPathHeader: true
@@ -140,7 +141,7 @@ exports.migrateOptions = async (storage) => {
   // Upgrade js-ipfs to js-ipfs + chrome.sockets
   const { ipfsNodeType } = await storage.get('ipfsNodeType')
   if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
-    console.log(`[ipfs-companion] migrating ipfsNodeType: ${ipfsNodeType} → embedded:chromesockets`)
+    // migrating ipfsNodeType to embedded:chromesockets
     await storage.set({
       ipfsNodeType: 'embedded:chromesockets',
       ipfsNodeConfig: buildDefaultIpfsNodeConfig()

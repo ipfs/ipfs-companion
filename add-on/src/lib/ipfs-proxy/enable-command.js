@@ -1,3 +1,7 @@
+const debug = require('debug')
+const log = debug('ipfs-companion:proxy')
+log.error = debug('ipfs-companion:proxy:error')
+
 const { inCommandWhitelist, createCommandWhitelistError } = require('./pre-command')
 const { createProxyAclError } = require('./pre-acl')
 
@@ -6,7 +10,7 @@ const { createProxyAclError } = require('./pre-acl')
 function createEnableCommand (getIpfs, getState, getScope, accessControl, requestAccess) {
   return async (opts) => {
     const scope = await getScope()
-    console.log(`[ipfs-companion] received window.ipfs.enable request from ${scope}`, opts)
+    log(`received window.ipfs.enable request from ${scope}`, opts)
 
     // Check if all access to the IPFS node is disabled
     if (!getState().ipfsProxy) throw new Error('User disabled access to API proxy in IPFS Companion')

@@ -1,6 +1,10 @@
 'use strict'
 /* eslint-env browser */
 
+const debug = require('debug')
+const log = debug('ipfs-companion:dnslink')
+log.error = debug('ipfs-companion:dnslink:error')
+
 const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
 const PQueue = require('p-queue')
@@ -64,18 +68,18 @@ module.exports = function createDnslinkResolver (getState) {
       let dnslink = dnslinkResolver.cachedDnslink(fqdn)
       if (typeof dnslink === 'undefined') {
         try {
-          console.info(`[ipfs-companion] dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
+          log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
             // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
             dnslinkResolver.setDnslink(fqdn, dnslink)
-            console.info(`[ipfs-companion] found dnslink: '${fqdn}' -> '${dnslink}'`)
+            log(`found dnslink: '${fqdn}' -> '${dnslink}'`)
           } else {
             dnslinkResolver.setDnslink(fqdn, false)
-            console.info(`[ipfs-companion] found NO dnslink for '${fqdn}'`)
+            log(`found NO dnslink for '${fqdn}'`)
           }
         } catch (error) {
-          console.error(`[ipfs-companion] Error in readAndCacheDnslink for '${fqdn}'`)
+          log.error(`error in readAndCacheDnslink for '${fqdn}'`, error)
           console.error(error)
         }
       } else {

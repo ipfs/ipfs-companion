@@ -1,6 +1,10 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const debug = require('debug')
+const log = debug('ipfs-companion:request')
+log.error = debug('ipfs-companion:request:error')
+
 const LRU = require('lru-cache')
 const IsIpfs = require('is-ipfs')
 const { pathAtHttpGateway } = require('./ipfs-path')
@@ -225,7 +229,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         if (request.url.includes('/api/v0/add') && request.url.includes('stream-channels=true')) {
           let addExpectHeader = true
           const expectHeader = { name: 'Expect', value: '100-continue' }
-          const warningMsg = '[ipfs-companion] Executing "Expect: 100-continue" workaround for ipfs.add due to https://github.com/ipfs/go-ipfs/issues/5168'
+          const warningMsg = 'Executing "Expect: 100-continue" workaround for ipfs.add due to https://github.com/ipfs/go-ipfs/issues/5168'
           for (let header of request.requestHeaders) {
             // Workaround A: https://github.com/ipfs/go-ipfs/issues/5168#issuecomment-401417420
             // (works in Firefox, but Chromium does not expose Connection header)
@@ -242,14 +246,14 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
             if (header.name === expectHeader.name) {
               addExpectHeader = false
               if (header.value !== expectHeader.value) {
-                console.log(warningMsg)
+                log(warningMsg)
                 header.value = expectHeader.value
               }
               break
             }
           }
           if (addExpectHeader) {
-            console.log(warningMsg)
+            log(warningMsg)
             request.requestHeaders.push(expectHeader)
           }
         }
@@ -335,7 +339,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
             if (header.name.toLowerCase() === 'x-ipfs-path' && isSafeToRedirect(request, runtime)) {
               // console.log('onHeadersReceived.request.responseHeaders', request.responseHeaders.length)
               const xIpfsPath = header.value
-              console.log(`[ipfs-companion] detected x-ipfs-path for ${request.url}: ${xIpfsPath}`)
+              log(`detected x-ipfs-path for ${request.url}: ${xIpfsPath}`)
               // First: Check if dnslink heuristic yields any results
               // Note: this depends on which dnslink lookup policy is selecten in Preferences
               if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
@@ -346,7 +350,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
                 const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
                 if (dnslinkRedirect) {
-                  console.log(`[ipfs-companion] onHeadersReceived: dnslinkRedirect from ${request.url} to ${dnslinkRedirect.redirectUrl}`)
+                  log(`onHeadersReceived: dnslinkRedirect from ${request.url} to ${dnslinkRedirect.redirectUrl}`)
                   return dnslinkRedirect
                 }
               }
@@ -354,7 +358,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
               if (IsIpfs.ipnsPath(xIpfsPath)) {
                 // Ignore unhandled IPNS path by this point
                 // (means DNSLink is disabled so we don't want to make a redirect that works like DNSLink)
-                console.log(`[ipfs-companion] onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkPolicy=false or missing DNS TXT record)`)
+                log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkPolicy=false or missing DNS TXT record)`)
               } else if (IsIpfs.ipfsPath(xIpfsPath)) {
                 // It is possible that someone exposed /ipfs/<cid>/ under /
                 // and our path-based onBeforeRequest heuristics were unable
@@ -367,7 +371,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString)
                 // redirect only if anything changed
                 if (newUrl !== request.url) {
-                  console.log(`[ipfs-companion] onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
+                  log(`onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
                   return redirectToGateway(newUrl, state, ipfsPathValidator)
                 }
               }
@@ -403,7 +407,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // recover by opening IPNS version in a new tab
         // TODO: add tests and demo
         if (dnslinkRedirect) {
-          console.log(`[ipfs-companion] onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
+          log(`onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
           const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
           await browser.tabs.create({
             active: true,
@@ -454,7 +458,7 @@ function isSafeToRedirect (request, runtime) {
       const sourceOrigin = new URL(request.originUrl).origin
       const targetOrigin = new URL(request.url).origin
       if (sourceOrigin !== targetOrigin) {
-        console.warn('[ipfs-companion] Delaying redirect of CORS XHR until onHeadersReceived due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436 :', request.url)
+        log('Delaying redirect of CORS XHR until onHeadersReceived due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436 :', request.url)
         onHeadersReceivedRedirect.add(request.requestId)
         return false
       }

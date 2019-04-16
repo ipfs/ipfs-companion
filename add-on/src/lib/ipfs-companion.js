@@ -91,7 +91,7 @@ module.exports = async function init () {
 
   function getIpfs () {
     if (state.active && ipfs) return ipfs
-    console.error('[ipfs-companion] Refused access to IPFS API client, check if extension is enabled')
+    log.error('refused access to IPFS API client, check if extension is enabled')
     throw new Error('IPFS Companion: API client is disabled')
   }
 
@@ -116,10 +116,10 @@ module.exports = async function init () {
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
     if (runtime.hasNativeProtocolHandler) {
-      console.log('[ipfs-companion] registerStringProtocol available. Adding ipfs:// handler')
+      log('registerStringProtocol available. Adding ipfs:// handler')
       browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
     } else {
-      console.log('[ipfs-companion] browser.protocol.registerStringProtocol not available, native protocol will not be registered')
+      log('no browser.protocol API, native protocol will not be registered')
     }
   }
 
@@ -598,6 +598,7 @@ module.exports = async function init () {
   }
 
   async function onStorageChange (changes, area) {
+    let shouldReloadExtension = false
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
 
@@ -606,7 +607,7 @@ module.exports = async function init () {
       if (change.oldValue === change.newValue) continue
 
       // debug info
-      // console.info(`Storage key "${key}" in namespace "${area}" changed. Old value was "${change.oldValue}", new value is "${change.newValue}".`)
+      log(`storage key "${key}" changed: "${change.oldValue}" → "${change.newValue}"`)
       switch (key) {
         case 'active':
           state[key] = change.newValue
@@ -649,6 +650,10 @@ module.exports = async function init () {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
           break
+        case 'logNamespaces':
+          shouldReloadExtension = true
+          state[key] = localStorage.debug = change.newValue
+          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
@@ -686,6 +691,11 @@ module.exports = async function init () {
       }
 
       apiStatusUpdate()
+    }
+    if (shouldReloadExtension) {
+      log('reloading extension due to config change')
+      browser.tabs.reload() // async reload of options page to keep it alive
+      await browser.runtime.reload()
     }
     // Post update to Browser Action (if exists) -- this gives UX a snappy feel
     await sendStatusUpdateToBrowserAction()

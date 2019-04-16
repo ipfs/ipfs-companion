@@ -77,6 +77,7 @@ module.exports = function optionsPage (state, emit) {
     dnslinkPolicy: state.options.dnslinkPolicy,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     ipfsProxy: state.options.ipfsProxy,
+    logNamespaces: state.options.logNamespaces,
     onOptionChange,
     onOptionsReset
   })}
