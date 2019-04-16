@@ -85,7 +85,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // Test if actions such as 'per site redirect toggle' should be enabled for the URL
     isRedirectPageActionsContext (url) {
       const state = getState()
-      return state.ipfsNodeType === 'external' && // hide with embedded node
+      return state.ipfsNodeType !== 'embedded' && // hide with embedded node
       (IsIpfs.ipnsUrl(url) || // show on /ipns/<fqdn>
         (url.startsWith('http') && // hide on non-HTTP pages
          !url.startsWith(state.gwURLString) && // hide on /ipfs/*

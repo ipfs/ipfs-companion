@@ -11,53 +11,44 @@ describe('storeMissingOptions()', function () {
   })
 
   it('should save all defaults during first run when no value is present in storage', done => {
-    browser.storage.local.get.returns(Promise.resolve({})) // simulates empty storage
+    browser.storage.local.get.returns(Promise.resolve({})) // simulates empty user storage (clean install)
     browser.storage.local.set.returns(Promise.resolve({}))
     const read = Object.assign({}, optionDefaults)
     storeMissingOptions(read, optionDefaults, browser.storage.local)
       .then(changes => {
-        // console.log(`Default changes: ${JSON.stringify(changes)} (size: ${changes.length})`)
-        for (let key in optionDefaults) {
-          // make sure each option was read..
-          sinon.assert.calledWith(browser.storage.local.get, key)
-          // .. and the default was saved because it was missing
-          // (this is a simulation of first run)
-          let option = {}
-          option[key] = optionDefaults[key]
-          sinon.assert.calledWith(browser.storage.local.set, option)
-        }
+        sinon.assert.calledWith(browser.storage.local.set, changes)
+        expect(changes).to.be.deep.equal(optionDefaults)
         done()
       })
       .catch(error => { done(error) })
   })
   it('should not touch non-default value present in storage', done => {
     const read = Object.assign({}, optionDefaults)
-    const modifiedKey = 'useCustomGateway'
-    read[modifiedKey] = !optionDefaults[modifiedKey] // simulate custom option set by user
-    browser.storage.local.get.returns(Promise.resolve(read)) // simulate data read from storage
+    const userModifiedKey = 'linkify'
+    read[userModifiedKey] = !optionDefaults[userModifiedKey] // simulate custom option set by user
+    browser.storage.local.get.returns(Promise.resolve(read)) // simulate existing user data read from storage
     browser.storage.local.set.returns(Promise.resolve({}))
     storeMissingOptions(read, optionDefaults, browser.storage.local)
       .then(changes => {
-        // console.log(`Default changes: ${JSON.stringify(changes)} (size: ${changes.length})`)
-        sinon.assert.neverCalledWith(browser.storage.local.get, modifiedKey)
-        sinon.assert.neverCalledWith(browser.storage.local.set, modifiedKey)
+        sinon.assert.calledWith(browser.storage.local.set, changes)
+        expect(changes).to.be.deep.equal({})
         done()
       })
       .catch(error => { done(error) })
   })
+
   it('should initialize default value for key missing from both read options and storage', done => {
     const read = Object.assign({}, optionDefaults)
-    const missingKey = 'customGatewayUrl'
-    delete read[missingKey] // simulate key not being in storage for some reason
-    browser.storage.local.get.returns(Promise.resolve(read)) // simulate read from storage
+    const userMissingKey = 'customGatewayUrl'
+    delete read[userMissingKey] // simulate the key not being in storage (eg. after extension update)
+    const expectedChanges = {}
+    expectedChanges[userMissingKey] = optionDefaults[userMissingKey]
+    browser.storage.local.get.returns(Promise.resolve(read)) // simulate existing user data read from storage
     browser.storage.local.set.returns(Promise.resolve({}))
     storeMissingOptions(read, optionDefaults, browser.storage.local)
       .then(changes => {
-        // console.log(`Default changes: ${JSON.stringify(changes)} (size: ${changes.length})`)
-        sinon.assert.calledWith(browser.storage.local.get, missingKey)
-        let option = {}
-        option[missingKey] = optionDefaults[missingKey]
-        sinon.assert.calledWith(browser.storage.local.set, option)
+        sinon.assert.calledWith(browser.storage.local.set, changes)
+        expect(changes).to.be.deep.equal(expectedChanges)
         done()
       })
       .catch(error => { done(error) })

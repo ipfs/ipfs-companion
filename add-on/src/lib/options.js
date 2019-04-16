@@ -1,17 +1,18 @@
 'use strict'
 
 const isFQDN = require('is-fqdn')
+const { hasChromeSocketsForTcp } = require('./runtime-checks')
+
+// Detect Beta Channel on Brave via: chrome.runtime.id === 'hjoieblefckbooibpepigmacodalfndh'
+// TODO: enable by default when key blockers are resolved
+// - [ ] /ipns/<fqdn>/ load fine
+// - [ ] sharded directories (e.g. wikipedia) load fine
+const DEFAULT_TO_EMBEDDED_GATEWAY = false && hasChromeSocketsForTcp()
 
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
-  ipfsNodeType: 'external', // or 'embedded'
-  ipfsNodeConfig: JSON.stringify({
-    config: {
-      Addresses: {
-        Swarm: []
-      }
-    }
-  }, null, 2),
+  ipfsNodeType: buildDefaultIpfsNodeType(),
+  ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
   publicGatewayUrl: 'https://ipfs.io',
   useCustomGateway: true,
   noRedirectHostnames: [],
@@ -22,35 +23,74 @@ exports.optionDefaults = Object.freeze({
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
-  customGatewayUrl: 'http://127.0.0.1:8080',
-  ipfsApiUrl: 'http://127.0.0.1:5001',
+  customGatewayUrl: buildCustomGatewayUrl(),
+  ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
   ipfsProxy: true // window.ipfs
 })
 
-// `storage` should be a browser.storage.local or similar
-exports.storeMissingOptions = (read, defaults, storage) => {
-  const requiredKeys = Object.keys(defaults)
-  const changes = new Set()
-  requiredKeys.map(key => {
-    // limit work to defaults and missing values
-    if (!read.hasOwnProperty(key) || read[key] === defaults[key]) {
-      changes.add(new Promise((resolve, reject) => {
-        storage.get(key).then(data => {
-          if (!data[key]) { // detect and fix key without value in storage
-            let option = {}
-            option[key] = defaults[key]
-            storage.set(option)
-              .then(data => { resolve(`updated:${key}`) })
-              .catch(error => { reject(error) })
-          } else {
-            resolve(`nochange:${key}`)
-          }
-        })
-      }))
+function buildCustomGatewayUrl () {
+  // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
+  const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 9091 : 8080
+  return `http://127.0.0.1:${port}`
+}
+
+function buildIpfsApiUrl () {
+  // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
+  const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 5003 : 5001
+  return `http://127.0.0.1:${port}`
+}
+
+function buildDefaultIpfsNodeType () {
+  // Right now Brave is the only vendor giving us access to chrome.sockets
+  return DEFAULT_TO_EMBEDDED_GATEWAY ? 'embedded:chromesockets' : 'external'
+}
+
+function buildDefaultIpfsNodeConfig () {
+  let config = {
+    config: {
+      Addresses: {
+        Swarm: []
+      }
     }
-  })
-  return Promise.all(changes)
+  }
+  if (hasChromeSocketsForTcp()) {
+    // TODO: make more robust (sync with buildCustomGatewayUrl and buildIpfsApiUrl)
+    // embedded node should use different ports to make it easier
+    // for people already running regular go-ipfs and js-ipfs on standard ports
+    config.config.Addresses.API = '/ip4/127.0.0.1/tcp/5003'
+    config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/9091'
+    // Until we have MulticastDNS+DNS, peer discovery is done over ws-star
+    config.config.Addresses.Swarm.push('/dnsaddr/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star')
+    /*
+      (Sidenote on why we need API for Web UI)
+      Gateway can run without API port,
+      but Web UI does not use window.ipfs due to sandboxing atm.
+
+      If Web UI is able to use window.ipfs, then we can remove API port.
+      Disabling API is as easy as:
+      config.config.Addresses.API = ''
+    */
+  }
+  return JSON.stringify(config, null, 2)
+}
+
+// `storage` should be a browser.storage.local or similar
+exports.storeMissingOptions = async (read, defaults, storage) => {
+  const requiredKeys = Object.keys(defaults)
+  const changes = {}
+  for (let key of requiredKeys) {
+    // limit work to defaults and missing values, skip values other than defaults
+    if (!read.hasOwnProperty(key) || read[key] === defaults[key]) {
+      const data = await storage.get(key)
+      if (!data.hasOwnProperty(key)) { // detect and fix key without value in storage
+        changes[key] = defaults[key]
+      }
+    }
+  }
+  // save all in bulk
+  await storage.set(changes)
+  return changes
 }
 
 function normalizeGatewayURL (url) {
@@ -95,5 +135,15 @@ exports.migrateOptions = async (storage) => {
       detectIpfsPathHeader: true
     })
     await storage.remove('dnslink')
+  }
+  // ~ v2.8.x + Brave
+  // Upgrade js-ipfs to js-ipfs + chrome.sockets
+  const { ipfsNodeType } = await storage.get('ipfsNodeType')
+  if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
+    console.log(`[ipfs-companion] migrating ipfsNodeType: ${ipfsNodeType} → embedded:chromesockets`)
+    await storage.set({
+      ipfsNodeType: 'embedded:chromesockets',
+      ipfsNodeConfig: buildDefaultIpfsNodeConfig()
+    })
   }
 }

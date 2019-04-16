@@ -105,7 +105,8 @@ module.exports = function createDnslinkResolver (getState) {
     readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
-      if (state.ipfsNodeType === 'external' && state.peerCount !== offlinePeerCount) {
+      // TODO: fix DNS resolver for ipfsNodeType='embedded:chromesockets', for now use ipfs.io
+      if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
         apiProvider = state.apiURLString
       } else {
         // fallback to resolver at public gateway

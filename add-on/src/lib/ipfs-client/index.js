@@ -1,18 +1,33 @@
 'use strict'
 
+/* eslint-env browser, webextensions */
+
+const debug = require('debug')
+const log = debug('ipfs-companion:client')
+log.error = debug('ipfs-companion:client:error')
+
 const browser = require('webextension-polyfill')
 const external = require('./external')
 const embedded = require('./embedded')
+const embeddedWithChromeSockets = require('./embedded-chromesockets')
 
 let client
 
 async function initIpfsClient (opts) {
+  log('init ipfs client')
   await destroyIpfsClient()
-
-  if (opts.ipfsNodeType === 'embedded') {
-    client = embedded
-  } else {
-    client = external
+  switch (opts.ipfsNodeType) {
+    case 'embedded':
+      client = embedded
+      break
+    case 'embedded:chromesockets':
+      client = embeddedWithChromeSockets
+      break
+    case 'external':
+      client = external
+      break
+    default:
+      throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
 
   const instance = await client.init(opts)
@@ -46,7 +61,7 @@ async function _reloadIpfsClientDependents () {
         // detect bundled webui in any of open tabs
         if (_isWebuiTab(tab.url)) {
           browser.tabs.reload(tab.id)
-          console.log('[ipfs-companion] reloading bundled webui')
+          log('reloading bundled webui')
         }
       })
     }

@@ -11,7 +11,7 @@ module.exports = function operations ({
   ipfsNodeType,
   onToggleGlobalRedirect
 }) {
-  const activeRedirectSwitch = active && ipfsNodeType === 'external'
+  const activeRedirectSwitch = active && ipfsNodeType !== 'embedded'
   return html`
     <div class="fade-in pv1 bb b--black-10">
   ${navItem({

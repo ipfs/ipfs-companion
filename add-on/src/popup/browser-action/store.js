@@ -197,19 +197,6 @@ module.exports = (state, emitter) => {
     }
   })
 
-  emitter.on('toggleNodeType', async () => {
-    const prev = state.ipfsNodeType
-    state.ipfsNodeType = prev === 'external' ? 'embedded' : 'external'
-    emitter.emit('render')
-    try {
-      await browser.storage.local.set({ ipfsNodeType: state.ipfsNodeType })
-    } catch (error) {
-      console.error(`Unable to update ipfs node type due to ${error}`)
-      state.ipfsNodeType = prev
-      emitter.emit('render')
-    }
-  })
-
   emitter.on('toggleActive', async () => {
     const prev = state.active
     state.active = !prev

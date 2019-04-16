@@ -22,10 +22,11 @@ const commonConfig = {
           // Speed Up
           cache: true,
           parallel: true,
-          // Default minify settings break js-ipfs:
-          // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
-          compress: { unused: false },
-          mangle: true
+          // Custom settings to unbreak js-ipfs
+          compress: {
+            unused: false // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
+          },
+          mangle: true // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
         }
       })
     ]
@@ -38,7 +39,9 @@ const commonConfig = {
     new webpack.DefinePlugin({
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.env': {
-        NODE_ENV: '"production"'
+        NODE_ENV: '"production"',
+        IPFS_MONITORING: false,
+        DEBUG: true // controls verbosity of Hapi HTTP server in js-ipfs
       }
     })
   ],
@@ -51,12 +54,23 @@ const commonConfig = {
       }
     ]
   },
+  resolve: {
+    /* mainFields: ['browser', 'main'], */
+    extensions: ['.js', '.json'],
+    alias: {
+      'url': 'iso-url',
+      'http': 'http-node', // chrome.sockets
+      'dns': 'http-dns', // chrome.sockets
+      'dgram': 'chrome-dgram', // chrome.sockets
+      'net': 'chrome-net' // chrome.sockets
+    }
+  },
   node: {
     global: false, // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
     Buffer: true,
     fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
+    tls: 'empty',
+    cluster: 'empty' // expected by js-ipfs dependency: node_modules/prom-client/lib/cluster.js
   },
   watchOptions: {
     ignored: ['add-on/dist/**/*', 'node_modules']
