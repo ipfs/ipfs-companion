@@ -39,7 +39,7 @@ start up your own IPFS daemon.
 
 Power users can provide [custom config](https://github.com/ipfs/js-ipfs#faq) (eg. to enable experimental pubsub) [via _Preferences_](https://user-images.githubusercontent.com/157609/38084660-0b97c0cc-334e-11e8-9368-823345ced67f.png)
 
-**Note** that at the time this note was created, Embedded js-ipfs running within webextension (browser context) comes with some limitations:
+**Note:** at the time this note was created, Embedded js-ipfs running within webextension (browser context) comes with some limitations:
 
 - Can't act as an HTTP gateway (extension uses public one as a fallback)
 - Known to be CPU-hungry
@@ -49,7 +49,7 @@ Power users can provide [custom config](https://github.com/ipfs/js-ipfs#faq) (eg
 - Default transports limited to websockets ([js-ipfs/#1088](https://github.com/ipfs/js-ipfs/issues/1088))
     - Lack of connection closing
     ([ipfs/js-ipfs#962](https://github.com/ipfs/js-ipfs/issues/962))
-    - Missing relay discovery ([js-ipfs/v0.29.x/examples/circuit-relaying](https://github.com/ipfs/js-ipfs/tree/v0.29.3/examples/circuit-relaying)) 
+    - Missing relay discovery ([js-ipfs/v0.29.x/examples/circuit-relaying](https://github.com/ipfs/js-ipfs/tree/v0.29.3/examples/circuit-relaying))
 - The Embedded node _does not run_ when External node is selected.  Every time
   you switch back to the embedded node, a new instance is created on-demand. It
   can take [a few
@@ -58,8 +58,21 @@ Power users can provide [custom config](https://github.com/ipfs/js-ipfs#faq) (eg
 
 When in doubt, run go-ipfs as External node instead.
 
+
+## Embedded + `chrome.sockets`
+
+This node type replaces regular _Embedded_ type if browser vendor granted us access to `chrome.sockets` APIs.  
+Those powerful APIs enable exciting possibilities:
+
+- Embedded HTTP Gateway [wip]
+- True P2P over TCP/UDP transports [future]
+- Local Discovery (mDNS/DNS-SD) [future]
+
+**Note:** this is still work in progress: one can track progress in [ipfs-companion/issues/664](https://github.com/ipfs-shipyard/ipfs-companion/issues/664).  
+Right now only [Brave Nightly](https://brave.com/download-nightly/) supports this.  
+
+
 ## Public
 
 Public node is not a part of the toggle UI. It is used as an implicit fallback for its Gateway functionality when External node is offline or Embedded node is used.
 It does not expose API port.
-
