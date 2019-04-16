@@ -19,6 +19,7 @@
     "notifications",
     "alarms",
     "storage",
+    "unlimitedStorage",
     "contextMenus",
     "clipboardWrite",
     "webNavigation",
