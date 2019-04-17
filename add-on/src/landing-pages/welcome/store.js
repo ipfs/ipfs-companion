@@ -10,7 +10,6 @@ function createWelcomePageStore (i18n, runtime) {
       emitter.emit('render')
       port = runtime.connect({ name: 'browser-action-port' })
       port.onMessage.addListener(async (message) => {
-        console.log('port.onMessage', message)
         if (message.statusUpdate) {
           const peerCount = message.statusUpdate.peerCount
           const isIpfsOnline = peerCount > -1

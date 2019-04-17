@@ -1,10 +1,14 @@
 'use strict'
 /* eslint-env browser */
 
+const debug = require('debug')
+const log = debug('ipfs-companion:client:external')
+log.error = debug('ipfs-companion:client:external:error')
+
 const IpfsApi = require('ipfs-http-client')
 
 exports.init = async function (opts) {
-  console.log('[ipfs-companion] External ipfs init', opts.apiURLString)
+  log(`init with API: ${opts.apiURLString}`)
 
   const url = opts.apiURL
   const protocol = url.protocol.substr(0, url.protocol.length - 1) // http: -> http
@@ -14,7 +18,7 @@ exports.init = async function (opts) {
 }
 
 exports.destroy = async function () {
-  console.log('[ipfs-companion] External ipfs destroy')
+  log('destroy')
 }
 
 // TODO: Upgrade to a caching proxy for ipfs-http-client

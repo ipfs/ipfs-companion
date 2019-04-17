@@ -1,7 +1,10 @@
 'use strict'
 /* eslint-env browser, webextensions */
 const browser = require('webextension-polyfill')
+
 const debug = require('debug')
+const log = debug('ipfs-companion:client:embedded')
+log.error = debug('ipfs-companion:client:embedded:error')
 
 // Polyfills required by embedded HTTP server
 const uptimeStart = Date.now()
@@ -23,9 +26,6 @@ let nodeHttpApi = null
 // additional servers for smoke-tests
 // let httpServer = null
 // let hapiServer = null
-
-const log = debug('ipfs-companion:client:embedded')
-log.error = debug('ipfs-companion:client:embedded:error')
 
 exports.init = function init (opts) {
   /*

@@ -399,6 +399,14 @@
     "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
+  "option_logNamespaces_title": {
+    "message": "Log Namespaces",
+    "description": "An option title for tweaking log level (option_logNamespaces_title)"
+  },
+  "option_logNamespaces_description": {
+    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "description": "An option description for the log level (option_logNamespaces_description)"
+  },
   "option_resetAllOptions_title": {
     "message": "Reset Everything",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"

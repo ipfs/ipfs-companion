@@ -13,6 +13,7 @@ function experimentsForm ({
   dnslinkPolicy,
   detectIpfsPathHeader,
   ipfsProxy,
+  logNamespaces,
   onOptionChange,
   onOptionsReset
 }) {
@@ -126,6 +127,20 @@ function experimentsForm ({
             </dl>
           </label>
           <div>${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, onchange: onIpfsProxyChange })}</div>
+        </div>
+        <div>
+          <label for="logNamespaces">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_logNamespaces_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_logNamespaces_description')}</dd>
+            </dl>
+          </label>
+          <input
+            id="logNamespaces"
+            type="text"
+            required
+            onchange=${onOptionChange('logNamespaces')}
+            value=${logNamespaces} />
         </div>
         <div>
           <label for="resetAllOptions">

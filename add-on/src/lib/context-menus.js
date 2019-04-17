@@ -2,6 +2,10 @@
 
 const browser = require('webextension-polyfill')
 
+const debug = require('debug')
+const log = debug('ipfs-companion:context-menus')
+log.error = debug('ipfs-companion:context-menus:error')
+
 // mapping between context name and field with data for it
 // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/menus/ContextType
 const contextSources = {
@@ -142,12 +146,12 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
   } catch (err) {
     // documentUrlPatterns is not supported in Muon-Brave
     if (err.message.indexOf('createProperties.documentUrlPatterns of contextMenus.create is not supported yet') > -1) {
-      console.warn('[ipfs-companion] Context menus disabled - createProperties.documentUrlPatterns of contextMenus.create is not supported yet')
+      log('context menus disabled - createProperties.documentUrlPatterns of contextMenus.create is not supported yet')
       return { update: () => Promise.resolve() }
     }
     // contextMenus are not supported in Firefox for Android
     if (err.message === 'browser.contextMenus is undefined' || typeof browser.contextMenus === 'undefined') {
-      console.warn('[ipfs-companion] Context menus disabled - browser.contextMenus is undefined')
+      log('context menus disabled - browser.contextMenus is undefined')
       return { update: () => Promise.resolve() }
     }
     throw err
@@ -179,7 +183,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
           await browser.contextMenus.update(item, { enabled: (ifApi && ipfsContext) })
         }
       } catch (err) {
-        console.log('[ipfs-companion] Error updating context menus', err)
+        log.error('Error updating context menus', err)
       }
     }
 
