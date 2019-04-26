@@ -67,7 +67,8 @@
   "preferGlobal": false,
   "resolutions": {
     "@hapi/hapi": "https://github.com/lidel/hapi/tarball/0961606e2c7dca8eceda765bd31ec2cb58358382/hapi.tar.gz",
-    "pino": "https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz",
+    "pino": "5.12.3",
+    "hapi-pino": "https://github.com/pinojs/hapi-pino/tarball/3767ed6b67601831e176e084ed82ba4ed9f726e6/hapi-pino.tar.gz",
     "iso-stream-http": "0.1.2",
     "stream-http": "npm:iso-stream-http@0.1.2",
     "pull-to-stream": "0.1.1",

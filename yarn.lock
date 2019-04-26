@@ -5764,14 +5764,13 @@ handlebars@^4.1.0:
   optionalDependencies:
     uglify-js "^3.1.4"
 
-hapi-pino@^5.2.0:
-  version "5.4.1"
-  resolved "https://registry.npmjs.org/hapi-pino/-/hapi-pino-5.4.1.tgz#b4ea582037b924b05e826cb68907295ba9bbe531"
-  integrity sha512-Bmt0XtRm5xPRE26bcn4dakgLPyAPyadEI5LF9P4EMP43XDzbxl4wQqwe2uVC463X9txdkwOAjaan3vDTC/guaQ==
+hapi-pino@^5.2.0, "hapi-pino@https://github.com/pinojs/hapi-pino/tarball/3767ed6b67601831e176e084ed82ba4ed9f726e6/hapi-pino.tar.gz":
+  version "5.4.0"
+  resolved "https://github.com/pinojs/hapi-pino/tarball/3767ed6b67601831e176e084ed82ba4ed9f726e6/hapi-pino.tar.gz#3a8f286bdb50b8dc3a6c949be22df2cd192dc317"
   dependencies:
     abstract-logging "^1.0.0"
     hoek "^6.1.2"
-    pino "^5.10.1"
+    pino "^5.12.3"
     pino-pretty "^2.5.0"
 
 hapi@^16.6.2:
@@ -10715,9 +10714,10 @@ pino-std-serializers@^2.3.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-2.3.0.tgz#34eeaab97c055c28e22c0542ae55978e7e427786"
   integrity sha512-klfGoOsP6sJH7ON796G4xoUSx2fkpFgKHO4YVVO2zmz31jR+etzc/QzGJILaOIiCD6HTCFgkPx+XN8nk+ruqPw==
 
-pino@5.11.1, pino@^5.10.1, "pino@https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz", pino@~5.11.0:
-  version "5.11.1"
-  resolved "https://github.com/pinojs/pino/tarball/d4d291cd271af969716ac40afce2ddecc7f3d9fa/pino.tar.gz#db6adc03aef85aa645d5df8ebab934c85bead951"
+pino@5.11.1, pino@5.12.3, pino@^5.12.3, pino@~5.11.0:
+  version "5.12.3"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-5.12.3.tgz#5ebc7d15b3584b91de8d3cdae01ef3a10e7fb977"
+  integrity sha512-/PiX7QXOMZz7edRVGm/apt22nkdRByB6ki0ftWcDpHjjNmjnE7UubNd7NeDX7cBey27obxvBvZy3oQuJbz1+Ag==
   dependencies:
     fast-redact "^1.4.4"
     fast-safe-stringify "^2.0.6"
