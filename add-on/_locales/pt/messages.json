@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Fixar um CID diz ao seu nó IPFS que estes dados são importantes e não devem ser descartados.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -84,7 +84,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copy CID",
+    "message": "Copiar CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -144,7 +144,7 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Veja a consola do Navegador para mais detalhes",
+    "message": "Veja a consola do navegador para mais detalhes",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
@@ -227,12 +227,16 @@
     "message": "Embutido (experimental): executar o nó js-ipfs no seu navegador (use apenas para desenvolvimento, leia sobre as limitações no link abaixo)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
+  "option_ipfsNodeType_embedded_chromesockets_description": {
+    "message": "Embutido com Chrome Sockets (experimental): executar o nó js-ipfs no seu navegador com acesso às APIs chrome.sockets (mais detalhes na hiperligação abaixo)",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
   "option_ipfsNodeConfig_title": {
     "message": "Configuração do Nó IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configuração para o nó embutido. Tem que ser JSON válido.",
+    "message": "Configuração adicional para o nó IPFS embutido (os arrays serão unidos). Tem que ser JSON válido.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -242,6 +246,10 @@
   "option_ipfsNodeType_embedded": {
     "message": "Embutido",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
+  },
+  "option_ipfsNodeType_embedded_chromesockets": {
+    "message": "Embutido + chrome.sockets",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
     "message": "Gateways",
@@ -268,11 +276,11 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_noRedirectHostnames_title": {
-    "message": "Redirect Opt-Outs",
+    "message": "Exceções de redirecionamentos",
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
   },
   "option_noRedirectHostnames_description": {
-    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+    "message": "Lista de websites que não devem ser redirecionados para o gateway personalizado (inclui sub-recursos de outros domínios). Um nome de hospedeiro (por ex.: domínio ou IP) por linha.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -348,7 +356,7 @@
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
+    "message": "Selecione a política de consulta ao registo TXT do DNS para carregar sites alojados no IPFS via IPFS quando possível",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -368,7 +376,7 @@
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Drop HTTP transport and load over IPFS if value is an IPFS path. Redirect of IPNS paths requires DNSLink support to be enabled as well.",
+    "message": "Parar o transporte por HTTP e carregar via IPFS se o valor for um caminho IPFS. O redirecionamento de caminhos IPNS requer que o suporte a DNSLink também esteja ativado.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -388,8 +396,16 @@
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Ativa o pré-carregamento automático de itens enviados via requisição HEAD HTTP a um gateway público",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
+  },
+  "option_logNamespaces_title": {
+    "message": "Registo de nomes de espaço",
+    "description": "An option title for tweaking log level (option_logNamespaces_title)"
+  },
+  "option_logNamespaces_description": {
+    "message": "Personalize que nomes de espaços são registados na consola do navegador. Alterando este valor irá despoletar o reiniciar da extensão.",
+    "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Restaurar Pré-definições",
@@ -432,7 +448,7 @@
     "description": "Status label on the share files page (quickUpload_state_uploading)"
   },
   "quickUpload_state_buffering": {
-    "message": "(buffering, please wait)",
+    "message": "(a colocar na memória RAM, por favor aguarde)",
     "description": "Status label on the share files page (quickUpload_state_buffering)"
   },
   "quickUpload_options_show": {
@@ -440,11 +456,11 @@
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_wrapWithDirectory": {
-    "message": "Wrap single files in a directory to preserve their filenames.",
+    "message": "Embrulhar os ficheiros individuais num diretório para preservar os nomes dos ficheiros.",
     "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
   },
   "quickUpload_options_pinUpload": {
-    "message": "Pin files so they are retained when performing garbage collection on your IPFS repo.",
+    "message": "Fixar ficheiros para que estes sejam retidos ao fazer coletas de lixo no seu repositório IPFS.",
     "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
   },
   "page_proxyAcl_title": {
