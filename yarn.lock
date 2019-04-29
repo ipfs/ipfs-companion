@@ -746,9 +746,9 @@
   dependencies:
     "@hapi/hoek" "6.x.x"
 
-"@hapi/hapi@^18.3.1", "@hapi/hapi@https://github.com/lidel/hapi/tarball/0961606e2c7dca8eceda765bd31ec2cb58358382/hapi.tar.gz":
+"@hapi/hapi@^18.3.1", "@hapi/hapi@https://github.com/lidel/hapi/tarball/ccbf84ba5edc9b24564fdd166e3ee6d81c4c02d8/hapi.tar.gz":
   version "18.1.0"
-  resolved "https://github.com/lidel/hapi/tarball/0961606e2c7dca8eceda765bd31ec2cb58358382/hapi.tar.gz#8e5a029c1d275cf8dd476cb751e0cba0db7cc353"
+  resolved "https://github.com/lidel/hapi/tarball/ccbf84ba5edc9b24564fdd166e3ee6d81c4c02d8/hapi.tar.gz#644804c04d27a5051d96a8168b492bf342bc8a30"
   dependencies:
     accept "3.x.x"
     ammo "3.x.x"
@@ -759,7 +759,6 @@
     catbox-memory "4.x.x"
     heavy "6.x.x"
     hoek "6.x.x"
-    is-stream "1.1.0"
     joi "14.x.x"
     mimos "4.x.x"
     podium "3.x.x"
@@ -7377,7 +7376,7 @@ is-retry-allowed@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.1.0.tgz#11a060568b67339444033d0125a61a20d564fb34"
   integrity sha1-EaBgVotnM5REAz0BJaYaINVk+zQ=
 
-is-stream@1.1.0, is-stream@^1.0.0, is-stream@^1.0.1, is-stream@^1.1.0:
+is-stream@^1.0.0, is-stream@^1.0.1, is-stream@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
   integrity sha1-EtSj3U5o4Lec6428hBc66A2RykQ=
