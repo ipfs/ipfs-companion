@@ -228,7 +228,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets (experimental): run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "message": "Indlejret med Chrome Sockets (eksperiment): kør js-ipfs klienten i din browser med adgang til chrome.sockets API'er (detaljer under linket nedenfor)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded IPFS node (arrays will be merged). Must be valid JSON.",
+    "message": "Yderligere konfiguration for den indlejrede IPFS klient (array's vil blive sammenlagt). Skal være valid JSON.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -248,7 +248,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "Indlejret + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -400,11 +400,11 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "Log navnerum",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "message": "Skræddersy hvilke navnerum der logges til browser konsollen. Ændringer af denne værdi vil medføre genstart af udvidelsen.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_resetAllOptions_title": {
