@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Globální nastavení: pozastavit všechny IPFS integrace",
+    "message": "Toggle all IPFS integrations",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -43,25 +43,41 @@
     "message": "Otevřít Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
+  "panel_redirectToggle": {
+    "message": "Redirect to Gateway",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
+  },
+  "panel_redirectToggleTooltip": {
+    "message": "Click to toggle all gateway redirects",
+    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
+  },
+  "panel_toolsSectionHeader": {
+    "message": "Tools",
+    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  },
   "panel_openPreferences": {
     "message": "Otevřít nastavení rozšíření",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
-  "panel_switchToCustomGateway": {
-    "message": "Přepnout na vlastní bránu",
-    "description": "A menu item in Browser Action pop-up (panel_switchToCustomGateway)"
+  "panel_activeTabSectionHeader": {
+    "message": "Active Tab",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_switchToPublicGateway": {
-    "message": "Přepnout na veřejnou bránu",
-    "description": "A menu item in Browser Action pop-up (panel_switchToPublicGateway)"
+  "panel_activeTabSiteRedirectToggle": {
+    "message": "Redirect on $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  },
+  "panel_activeTabSiteRedirectToggleTooltip": {
+    "message": "Click to toggle gateway redirects on $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Připnout IPFS objekt",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
-  "panel_unpinCurrentIpfsAddress": {
-    "message": "Odepnout IPFS objekt",
-    "description": "A menu item in Browser Action pop-up (panel_unpinCurrentIpfsAddress)"
+  "panel_pinCurrentIpfsAddressTooltip": {
+    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
     "message": "Zkopírovat IPFS cestu",
@@ -211,12 +227,16 @@
     "message": "Integrovaný uzel (experiment): spustí js-ipfs uzel přímo ve vaším prohlížeči (použijte pouze pro vývoj, pro více informací následujte odkaz níže)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
+  "option_ipfsNodeType_embedded_chromesockets_description": {
+    "message": "Embedded with Chrome Sockets (experimental): run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  },
   "option_ipfsNodeConfig_title": {
     "message": "Konfigurace IPFS uzlu",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Konfigurace pro integrovaný IPFS uzel. Musí být validní JSON.",
+    "message": "Additional configuration for the embedded IPFS node (arrays will be merged). Must be valid JSON.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -226,6 +246,10 @@
   "option_ipfsNodeType_embedded": {
     "message": "Integrovaný",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
+  },
+  "option_ipfsNodeType_embedded_chromesockets": {
+    "message": "Embedded + chrome.sockets",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
     "message": "Brány",
@@ -250,6 +274,14 @@
   "option_useCustomGateway_description": {
     "message": "Přesměrovat požadavky pro IPFS objekt skrze vlastní bránu",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
+  },
+  "option_noRedirectHostnames_title": {
+    "message": "Redirect Opt-Outs",
+    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  },
+  "option_noRedirectHostnames_description": {
+    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
     "message": "Výchozí veřejná brána",
@@ -366,6 +398,14 @@
   "option_preloadAtPublicGateway_description": {
     "message": "Povolit automatické načtení nahraných souborů skrze asynchroní HTTP HEAD požadavek na Veřejnou bránu",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
+  },
+  "option_logNamespaces_title": {
+    "message": "Log Namespaces",
+    "description": "An option title for tweaking log level (option_logNamespaces_title)"
+  },
+  "option_logNamespaces_description": {
+    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Vše vyresetovat",

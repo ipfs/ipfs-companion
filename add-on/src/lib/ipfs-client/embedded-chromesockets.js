@@ -33,7 +33,7 @@ exports.init = function init (opts) {
   if (!httpServer) {
     httpServer = startRawHttpServer(9091)
   }
-  // TEST require('hapi') HTTP SERVER (same as in js-ipfs)
+  // TEST require('@hapi/hapi') HTTP SERVER (same as in js-ipfs)
   if (!hapiServer) {
     hapiServer = startRawHapiServer(9092)
   }
@@ -172,7 +172,7 @@ function startRawHapiServer (port) {
   }
   const initHapi = async () => {
     // hapi v18 (js-ipfs >=v0.35.0-pre.0)
-    const Hapi = require('hapi') // courtesy of js-ipfs
+    const Hapi = require('@hapi/hapi') // courtesy of js-ipfs
     const hapiServer = new Hapi.Server(options)
     await hapiServer.route({
       method: 'GET',
@@ -183,7 +183,7 @@ function startRawHapiServer (port) {
       }
     })
     await hapiServer.start()
-    console.log(`[ipfs-companion] require('hapi') HTTP server running at: ${hapiServer.info.uri}`)
+    console.log(`[ipfs-companion] require('@hapi/hapi') HTTP server running at: ${hapiServer.info.uri}`)
   }
   initHapi()
   return hapiServer
