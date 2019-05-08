@@ -774,10 +774,10 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-6.2.1.tgz#d3a66329159af879bfdf0b0cff2229c43c5a3451"
   integrity sha512-+ryw4GU9pjr1uT6lBuErHJg3NYqzwJTvZ75nKuJijEzpd00Uqi6oiawTGDDf5Hl0zWmI7qHfOtaqB0kpQZJQzA==
 
-"@hapi/joi@^15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@hapi/joi/-/joi-15.0.0.tgz#675d227b4c10d902fc5a96a2235665f0bc292e1b"
-  integrity sha512-pLCfcSeT26g59jEKZntmzlqe19dRMDNxCFKGD4CriF8+9FAD3Mq1aWNuKIFpKpX+u3x8lxLKXolDwk0gYl3b2w==
+"@hapi/joi@^15.0.1":
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/@hapi/joi/-/joi-15.0.1.tgz#dec64ff87555954f925220a9c5db062ba34493fc"
+  integrity sha512-6RLoFusVbSkKjo51IGy7TT72TYKaks3OLKRV4Wy4E8f0Vt2oqKBgtG+8VMnbruy+M4iLItiLYjETX7mQqklObQ==
   dependencies:
     "@hapi/address" "2.x.x"
     "@hapi/hoek" "6.x.x"
@@ -5763,7 +5763,7 @@ handlebars@^4.1.0:
   optionalDependencies:
     uglify-js "^3.1.4"
 
-hapi-pino@^5.2.0, "hapi-pino@https://github.com/pinojs/hapi-pino/tarball/3767ed6b67601831e176e084ed82ba4ed9f726e6/hapi-pino.tar.gz":
+hapi-pino@^5.4.1, "hapi-pino@https://github.com/pinojs/hapi-pino/tarball/3767ed6b67601831e176e084ed82ba4ed9f726e6/hapi-pino.tar.gz":
   version "5.4.0"
   resolved "https://github.com/pinojs/hapi-pino/tarball/3767ed6b67601831e176e084ed82ba4ed9f726e6/hapi-pino.tar.gz#3a8f286bdb50b8dc3a6c949be22df2cd192dc317"
   dependencies:
@@ -6528,10 +6528,9 @@ ipfs-http-client@^30.1.1:
     tar-stream "^2.0.1"
     through2 "^3.0.1"
 
-ipfs-http-response@0.2.2:
+ipfs-http-response@0.2.2, "ipfs-http-response@https://github.com/ipfs/js-ipfs-http-response/tarball/7c2a49f43d1903689b50f87e14d1e5f046e3fe78/js-ipfs-http-response.gz", "ipfs-http-response@https://github.com/ipfs/js-ipfs-http-response/tarball/7c2a49f43d1903689b50f87e14d1e5f046e3fe78/js-ipfs-http-response.tar.gz":
   version "0.2.2"
-  resolved "https://registry.yarnpkg.com/ipfs-http-response/-/ipfs-http-response-0.2.2.tgz#40f1dad22c73b4d64fcfad8a2cbe55f634f4a2ec"
-  integrity sha512-RMc9GUdyfFdOclobCXslfS+tGevJJs9ZhUv1xuJd32d1CVEd3PlZB2VBgWPMP5jXyZJWQ9kkAha8fBHGtC55Cw==
+  resolved "https://github.com/ipfs/js-ipfs-http-response/tarball/7c2a49f43d1903689b50f87e14d1e5f046e3fe78/js-ipfs-http-response.gz#25ac8baeea7a9f7a724ad97fdacda3ee8c4b4a2b"
   dependencies:
     async "^2.6.1"
     cids "~0.5.7"
@@ -6545,27 +6544,9 @@ ipfs-http-response@0.2.2:
     promisify-es6 "^1.0.3"
     stream-to-blob "^1.0.1"
 
-ipfs-http-response@~0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/ipfs-http-response/-/ipfs-http-response-0.2.1.tgz#94aecd9a4732fb4cceb0931ad68af5d5b5e34172"
-  integrity sha512-A3FPRa/IqiGE0dNRDDYRdDnPsq5eBuJWpASWGuEzTeGAh7Ad5dvIaU9JyIcLlcLLF3tAhueUnaFxjgAhot7xog==
-  dependencies:
-    async "^2.6.0"
-    cids "~0.5.5"
-    debug "^3.1.0"
-    file-type "^8.0.0"
-    filesize "^3.6.1"
-    get-stream "^3.0.0"
-    ipfs-unixfs "~0.1.14"
-    mime-types "^2.1.18"
-    multihashes "~0.4.13"
-    promisify-es6 "^1.0.3"
-    stream-to-blob "^1.0.1"
-
-ipfs-mfs@~0.10.2:
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/ipfs-mfs/-/ipfs-mfs-0.10.4.tgz#44244f732a35e7031783b6ab7bdde276a724de01"
-  integrity sha512-WFGSkbSdpUcHXstLhhK1Tn/CFXtQTtRH6zPGvjGoZ+Zmap3LXc4gwVkIlaswllZhzP9lOYhPULC3rLZc/IuUUw==
+"ipfs-mfs@https://github.com/ipfs/js-ipfs-mfs/tarball/c644291f31a57f7bc65318ba8bf83e002b83e030/js-ipfs-mfs.gz", "ipfs-mfs@https://github.com/ipfs/js-ipfs-mfs/tarball/c644291f31a57f7bc65318ba8bf83e002b83e030/js-ipfs-mfs.tar.gz":
+  version "0.10.3"
+  resolved "https://github.com/ipfs/js-ipfs-mfs/tarball/c644291f31a57f7bc65318ba8bf83e002b83e030/js-ipfs-mfs.gz#f2d1ac27c5af6a7e3f6d054cbc074797f26307a3"
   dependencies:
     async "^2.6.1"
     cids "~0.5.5"
@@ -6716,20 +6697,20 @@ ipfs-unixfs-importer@~0.38.5:
   optionalDependencies:
     rabin "^1.6.0"
 
-ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.16:
+ipfs-unixfs@~0.1.16:
   version "0.1.16"
   resolved "https://registry.yarnpkg.com/ipfs-unixfs/-/ipfs-unixfs-0.1.16.tgz#41140f4359f1b8fe7a970052663331091c5f54c4"
   integrity sha512-TX9Dyu77MxpLzGh/LcQne95TofOyvOeW0oOi72aBMMcV1ItP3684e6NTG9KY1qzdrC+ZUR8kT7y18J058n8KXg==
   dependencies:
     protons "^1.0.1"
 
-"ipfs@https://github.com/lidel/js-ipfs/tarball/17712a4b86bacb748ed429bd2a3ca73976e54ae0/js-ipfs.tar.gz":
+"ipfs@https://github.com/lidel/js-ipfs/tarball/4081cbd69a252ec8adcec1e965724246669c9e9f/js-ipfs.tar.gz":
   version "0.35.0"
-  resolved "https://github.com/lidel/js-ipfs/tarball/17712a4b86bacb748ed429bd2a3ca73976e54ae0/js-ipfs.tar.gz#d14fbe7038aa790dfe6f8c553dbf1f489acf2514"
+  resolved "https://github.com/lidel/js-ipfs/tarball/4081cbd69a252ec8adcec1e965724246669c9e9f/js-ipfs.tar.gz#c02cf99869813939d6443e3443d40f6145c486b7"
   dependencies:
     "@hapi/ammo" "^3.1.0"
     "@hapi/hapi" "^18.3.1"
-    "@hapi/joi" "^15.0.0"
+    "@hapi/joi" "^15.0.1"
     async "^2.6.1"
     bignumber.js "^8.0.2"
     binary-querystring "~0.1.2"
@@ -6751,15 +6732,15 @@ ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.16:
     fsm-event "^2.1.0"
     get-folder-size "^2.0.0"
     glob "^7.1.3"
-    hapi-pino "^5.2.0"
+    hapi-pino "^5.4.1"
     human-to-milliseconds "^1.0.0"
     interface-datastore "~0.6.0"
     ipfs-bitswap "~0.23.0"
     ipfs-block "~0.8.0"
     ipfs-block-service "~0.15.1"
     ipfs-http-client "^30.1.1"
-    ipfs-http-response "~0.2.1"
-    ipfs-mfs "~0.10.2"
+    ipfs-http-response "https://github.com/ipfs/js-ipfs-http-response/tarball/7c2a49f43d1903689b50f87e14d1e5f046e3fe78/js-ipfs-http-response.tar.gz"
+    ipfs-mfs "https://github.com/ipfs/js-ipfs-mfs/tarball/c644291f31a57f7bc65318ba8bf83e002b83e030/js-ipfs-mfs.tar.gz"
     ipfs-multipart "~0.1.0"
     ipfs-repo "~0.26.1"
     ipfs-unixfs "~0.1.16"
@@ -6774,6 +6755,7 @@ ipfs-unixfs@~0.1.14, ipfs-unixfs@~0.1.16:
     ipld-raw "^2.0.1"
     ipld-zcash "~0.1.6"
     ipns "~0.5.0"
+    is-domain-name "^1.0.1"
     is-ipfs "~0.6.0"
     is-pull-stream "~0.0.0"
     is-stream "^1.1.0"
@@ -7157,6 +7139,11 @@ is-directory@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/is-directory/-/is-directory-0.3.1.tgz#61339b6f2475fc772fd9c9d83f5c8575dc154ae1"
   integrity sha1-YTObbyR1/Hcv2cnYP1yFddwVSuE=
+
+is-domain-name@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/is-domain-name/-/is-domain-name-1.0.1.tgz#f6eb33b14a497541dca58335137d4466e0c20da1"
+  integrity sha1-9uszsUpJdUHcpYM1E31EZuDCDaE=
 
 is-extendable@^0.1.0, is-extendable@^0.1.1:
   version "0.1.1"
@@ -9118,7 +9105,7 @@ mime-types@2.1.24:
   dependencies:
     mime-db "1.40.0"
 
-mime-types@^2.1.12, mime-types@^2.1.18, mime-types@^2.1.21, mime-types@~2.1.17, mime-types@~2.1.18, mime-types@~2.1.19:
+mime-types@^2.1.12, mime-types@^2.1.21, mime-types@~2.1.17, mime-types@~2.1.18, mime-types@~2.1.19:
   version "2.1.21"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.21.tgz#28995aa1ecb770742fe6ae7e58f9181c744b3f96"
   integrity sha512-3iL6DbwpyLzjR3xHSFNFeb9Nz/M8WDkX33t1GFQnFOllWk8pOrh/LSrB5OXlnlW5P9LH73X6loW/eogc+F5lJg==
