@@ -27,7 +27,7 @@ exports.optionDefaults = Object.freeze({
   ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
   ipfsProxy: true, // window.ipfs
-  logNamespaces: 'jsipfs*,ipfs*,-*:mfs*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*'
+  logNamespaces: 'jsipfs*,ipfs*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*'
 })
 
 function buildCustomGatewayUrl () {
