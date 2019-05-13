@@ -117,7 +117,7 @@
     "browser-process-hrtime": "1.0.0",
     "choo": "6.13.3",
     "chrome-dgram": "3.0.1",
-    "chrome-net": "https://github.com/lidel/chrome-net/tarball/838ffde4a33721888f74783821e0486dfcc88797/chrome-net.tar.gz",
+    "chrome-net": "3.3.2",
     "debug": "4.1.1",
     "doc-sniff": "1.0.1",
     "drag-and-drop-files": "0.0.1",

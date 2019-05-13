@@ -2879,9 +2879,10 @@ chrome-dgram@3.0.1:
     inherits "^2.0.1"
     run-series "^1.1.2"
 
-"chrome-net@https://github.com/lidel/chrome-net/tarball/838ffde4a33721888f74783821e0486dfcc88797/chrome-net.tar.gz":
-  version "3.3.1"
-  resolved "https://github.com/lidel/chrome-net/tarball/838ffde4a33721888f74783821e0486dfcc88797/chrome-net.tar.gz#07f9210134741fa40472ef2f3bdf7b325cc8169c"
+chrome-net@3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/chrome-net/-/chrome-net-3.3.2.tgz#0454c247e908db42a93c6024d8a5ac50e3731445"
+  integrity sha512-BHxWfA9MDnh0C1By5q1DnF1vRS7vfBi2PrqTHIIt1HA4hM6l2xkHzoazbDlZcrDrMfjNs6fojKG+ZD0JmlnNWg==
   dependencies:
     inherits "^2.0.1"
 
