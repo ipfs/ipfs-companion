@@ -24,7 +24,7 @@ function initState (options) {
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
   // store info about 'blessed' release of Web UI
   // which should work without setting CORS headers
-  state.webuiCid = 'QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub' // v2.4.4
+  state.webuiCid = 'QmQNHd1suZTktPRhP7DD4nKWG46ZRSxkwHocycHVrK3dYW' // v2.4.6
   state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
   return state
 }
