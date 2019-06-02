@@ -60,7 +60,7 @@
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Active Tab",
+    "message": "活动页",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteRedirectToggle": {
@@ -248,7 +248,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "嵌入chrome接口",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -400,11 +400,11 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "记录命名空间",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "message": "确认哪些命名空间会被记录到浏览器控制台中。改变这些值会导致外接程序重启。",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_resetAllOptions_title": {
