@@ -551,6 +551,14 @@
     "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
     "description": "Install steps copy (page_landingWelcome_installSteps_install)"
   },
+  "page_landingWelcome_installSteps_title_desktop": {
+    "message": "Don't want to use the command line?",
+    "description": "Install steps title (page_landingWelcome_installSteps_title_desktop)"
+  },
+  "page_landingWelcome_installSteps_install_desktop": {
+    "message": "Give <0>IPFS Desktop</0> a go!",
+    "description": "Install steps copy (page_landingWelcome_installSteps_install_desktop)"
+  },
   "page_landingWelcome_installSteps_run": {
     "message": "Then make sure to have an IPFS daemon running in your terminal:",
     "description": "Install steps run message (page_landingWelcome_installSteps_run)"
