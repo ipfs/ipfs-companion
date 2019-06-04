@@ -556,12 +556,8 @@
     "description": "Install steps title (page_landingWelcome_installSteps_title_desktop)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "<0>Follow these instructions</0>.",
+    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
     "description": "Install steps copy (page_landingWelcome_installSteps_install)"
-  },
-  "page_landingWelcome_installSteps_cli_run": {
-    "message": "Then make sure to have an IPFS daemon running in your terminal:",
-    "description": "Install steps run message (page_landingWelcome_installSteps_run)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
     "message": "New to IPFS?",
