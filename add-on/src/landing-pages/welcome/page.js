@@ -95,10 +95,11 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
 
   return html`
     <div class="w-80 mt3 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
-      <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_title')}</p>
-      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_install', ['https://docs.ipfs.io/introduction/install/'], `target="_blank" class="${anchorClass}"`)}</p>
-      <p class="${copyClass}">${i18n.getMessage('page_landingWelcome_installSteps_run')}</p>
-      <div className='db w-100 mt3 pa3 bg-black-70 bt bw4 br2 snow f7'>
+      <p class="mt0 mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/introduction/usage/'], `target="_blank" class="${anchorClass}"`)}</p>
+      <div className='db w-100 mw6 mv3 pa3 bg-black-70 bt bw4 br2 snow f7'>
         <code className='db'>$ ipfs daemon</code>
         <code className='db'>Initializing daemon...</code>
         <code className='db'>API server listening on /ip4/127.0.0.1/tcp/5001</code>
@@ -128,7 +129,7 @@ const renderResources = (i18n) => {
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_resources_got_questions', ['https://discuss.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</p>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_want_to_help')}</p>
-      <p class="${copyClass} mv0">${renderTranslatedLinks('page_landingWelcome_resources_want_to_help', ['https://github.com/ipfs/community/#community', 'https://github.com/ipfs/ipfs#project-links', 'https://github.com/ipfs/docs', 'https://www.transifex.com/ipfs/public', 'https://discuss.ipfs.io/c/help'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass} mv0">${renderTranslatedLinks('page_landingWelcome_resources_want_to_help', ['https://github.com/ipfs/community/#community', 'https://github.com/ipfs/ipfs#project-links', 'https://github.com/ipfs/docs', 'https://github.com/ipfs/i18n#ipfs-translation-project--%EF%B8%8F', 'https://discuss.ipfs.io/c/help'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }

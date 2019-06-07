@@ -543,17 +543,21 @@
     "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
-  "page_landingWelcome_installSteps_title": {
-    "message": "Is your IPFS daemon running?",
+  "page_landingWelcome_installSteps_notRunning_title": {
+    "message": "IPFS does not seem to be running",
     "description": "Install steps title (page_landingWelcome_installSteps_title)"
   },
-  "page_landingWelcome_installSteps_install": {
-    "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
-    "description": "Install steps copy (page_landingWelcome_installSteps_install)"
+  "page_landingWelcome_installSteps_desktop_install": {
+    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "description": "Install steps copy (page_landingWelcome_installSteps_install_desktop)"
   },
-  "page_landingWelcome_installSteps_run": {
-    "message": "Then make sure to have an IPFS daemon running in your terminal:",
-    "description": "Install steps run message (page_landingWelcome_installSteps_run)"
+  "page_landingWelcome_installSteps_cli_title": {
+    "message": "Prefer to use the command line?",
+    "description": "Install steps title (page_landingWelcome_installSteps_title_desktop)"
+  },
+  "page_landingWelcome_installSteps_cli_install": {
+    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "description": "Install steps copy (page_landingWelcome_installSteps_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
     "message": "New to IPFS?",
