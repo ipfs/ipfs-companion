@@ -26,7 +26,7 @@
     "build:js": "run-s build:js:*",
     "build:js:webpack": "webpack -p",
     "build:minimize-dist": "shx rm -rf add-on/dist/lib add-on/dist/contentScripts/ add-on/dist/bundles/ipfsProxyContentScriptPayload.bundle.js",
-    "build:bundle-all": "npm run bundle:generic && cross-env RELEASE_CHANNEL=${RELEASE_CHANNEL:=dev} run-s bundle:firefox:$RELEASE_CHANNEL bundle:brave:$RELEASE_CHANNEL || run-s bundle:firefox bundle:brave",
+    "build:bundle-all": "npm run bundle:generic && cross-env RELEASE_CHANNEL=${RELEASE_CHANNEL:=dev} run-s bundle:brave:$RELEASE_CHANNEL  bundle:firefox:$RELEASE_CHANNEL || run-s bundle:firefox bundle:brave",
     "bundle": "run-s bundle:*",
     "bundle:firefox:dev": "npm run bundle:firefox",
     "bundle:firefox:stable": "npm run bundle:firefox",
