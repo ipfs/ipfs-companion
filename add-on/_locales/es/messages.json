@@ -543,17 +543,21 @@
     "message": "Descubra lo que puede <0>hacer con Companion</0> y sumérjase en la red distribuida con IPFS",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
-  "page_landingWelcome_installSteps_title": {
-    "message": "¿Está funcionando su daemon IPFS?",
-    "description": "Install steps title (page_landingWelcome_installSteps_title)"
+  "page_landingWelcome_installSteps_notRunning_title": {
+    "message": "IPFS does not seem to be running",
+    "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
-  "page_landingWelcome_installSteps_install": {
-    "message": "Si no ha instalado IPFS, hágalo <0>con estas instrucciones</0>.",
-    "description": "Install steps copy (page_landingWelcome_installSteps_install)"
+  "page_landingWelcome_installSteps_desktop_install": {
+    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
-  "page_landingWelcome_installSteps_run": {
-    "message": "Luego, asegúrese de tener el servicio IPFS ejecutándose en su terminal:",
-    "description": "Install steps run message (page_landingWelcome_installSteps_run)"
+  "page_landingWelcome_installSteps_cli_title": {
+    "message": "Prefer to use the command line?",
+    "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
+  },
+  "page_landingWelcome_installSteps_cli_install": {
+    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
     "message": "¿Nuevo en IPFS?",

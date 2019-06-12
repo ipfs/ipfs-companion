@@ -543,17 +543,21 @@
     "message": "Udforsk hvad du <0> kan gøre med Følgesvend</0> og dyk ned i det distribuerede net med IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
-  "page_landingWelcome_installSteps_title": {
-    "message": "Kører din IPFS baggrunds-process?",
-    "description": "Install steps title (page_landingWelcome_installSteps_title)"
+  "page_landingWelcome_installSteps_notRunning_title": {
+    "message": "IPFS does not seem to be running",
+    "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
-  "page_landingWelcome_installSteps_install": {
-    "message": "Hvis du ikke har installeret IPFS, gør venligst dette <0>med disse instrukser</0>.",
-    "description": "Install steps copy (page_landingWelcome_installSteps_install)"
+  "page_landingWelcome_installSteps_desktop_install": {
+    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
-  "page_landingWelcome_installSteps_run": {
-    "message": "Sørg da for at have en IPFS baggrunds-process kørende i din terminal:",
-    "description": "Install steps run message (page_landingWelcome_installSteps_run)"
+  "page_landingWelcome_installSteps_cli_title": {
+    "message": "Prefer to use the command line?",
+    "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
+  },
+  "page_landingWelcome_installSteps_cli_install": {
+    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
     "message": "Er du nybegynder til IPFS?",

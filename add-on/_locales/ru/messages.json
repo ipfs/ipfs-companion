@@ -12,7 +12,7 @@
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
-    "message": "offline",
+    "message": "оффлайн",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
@@ -28,11 +28,11 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
-    "message": "пиры",
+    "message": "Пиры",
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "The number of other IPFS nodes you can connect to",
+    "message": "Число других IPFS нод к которым вы подключены",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
@@ -44,7 +44,7 @@
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Redirect to Gateway",
+    "message": "Перенаправить в шлюз",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
@@ -52,7 +52,7 @@
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
-    "message": "Tools",
+    "message": "Инструменты",
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
@@ -60,15 +60,15 @@
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Active Tab",
+    "message": "Активная вкладка",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteRedirectToggle": {
-    "message": "Redirect on $1",
+    "message": "Перенаправить на $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
   },
   "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Click to toggle gateway redirects on $1",
+    "message": "Нажмите, чтобы переключить перенаправления шлюза на $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -80,11 +80,11 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Path",
+    "message": "Копировать IPFS путь",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copy CID",
+    "message": "Копировать CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -100,43 +100,43 @@
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Non-IPFS resource",
+    "message": "Не IPFS ресурс",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Selected Image",
+    "message": "Выбранное изображение",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Selected Video",
+    "message": "Выбранное видео",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Selected Audio",
+    "message": "Выбранное аудио",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Linked Content",
+    "message": "Связанный контент",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Selected Text",
+    "message": "Выбранный текст",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "This Page",
+    "message": "Эта страница",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS (Keep Filename)",
+    "message": "Добавить в IPFS (Сохранить имя)",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "contextMenu_AddToIpfsRawCid": {
-    "message": "Add to IPFS",
+    "message": "Добавить в IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsSelection": {
-    "message": "Add Selected Text to IPFS",
+    "message": "Добавить выбранный текст в IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -148,7 +148,7 @@
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Copied",
+    "message": "Скопировано",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
@@ -180,7 +180,7 @@
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Автоматический решим: Публичный шлюз будет использоваться по-умолчанию",
+    "message": "Автоматический режим: Публичный шлюз будет использоваться по-умолчанию",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
@@ -200,23 +200,23 @@
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Failed to start IPFS node",
+    "message": "Невозможно запустить IPFS узел",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Failed to stop IPFS node",
+    "message": "Невозможно остановить IPFS узел",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_legend_readMore" : {
-    "message": "Read more",
+    "message": "Читать далее",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType" : {
-    "message": "IPFS Node",
+    "message": "IPFS узел",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS Node Type",
+    "message": "Тип IPFS узла",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
@@ -232,7 +232,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "Настройки IPFS узла",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
@@ -240,15 +240,15 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "External",
+    "message": "Внешний",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Embedded",
+    "message": "Встроенный",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "Встроенный + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -300,7 +300,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where /api/v0/config lives",
+    "message": "Подсказка: это где расположен /api/v0/config",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -340,7 +340,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enables support for ipfs://, ipns:// and dweb: by normalizing links and requests done with unhandled protocols",
+    "message": "Включает поддержку ipfs://, ipns:// и dweb: путём нормализации ссылок и запросов по неподключённым протоколам",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -352,7 +352,7 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Support",
+    "message": "Поддержка DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
@@ -360,19 +360,19 @@
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Off",
+    "message": "Выкл",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "Проверять после HTTP запроса",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "Проверять до HTTP запроса",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detect X-Ipfs-Path Header",
+    "message": "Удалить заголовок X-Ipfs-Path",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
@@ -388,11 +388,11 @@
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
+    "message": "Управлять разрешениями",
     "description": "Link text for managing permissions"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "Предзагрузка файлов",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
@@ -408,7 +408,7 @@
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Reset Everything",
+    "message": "Сбросить всё",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
@@ -428,31 +428,31 @@
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers": {
-    "message": "Connected to $1 peers",
+    "message": "Присоединено к $1 пирам",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
   },
   "quickUpload_pick_file_button": {
-    "message": "Pick a file",
+    "message": "Выберите файл",
     "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
   },
   "quickUpload_or": {
-    "message": "or",
+    "message": "или",
     "description": "seperates the pick a file button from the drop message (quickUpload_or)"
   },
   "quickUpload_drop_it_here": {
-    "message": "drop it here to share",
+    "message": "перетащи сюда, чтобы поделиться",
     "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
   },
   "quickUpload_state_uploading": {
-    "message": "Upload in progress..",
+    "message": "Загрузка выполняется..",
     "description": "Status label on the share files page (quickUpload_state_uploading)"
   },
   "quickUpload_state_buffering": {
-    "message": "(buffering, please wait)",
+    "message": "(буферизация, пожалуйста ждите)",
     "description": "Status label on the share files page (quickUpload_state_buffering)"
   },
   "quickUpload_options_show": {
-    "message": "upload options",
+    "message": "настройки загрузки",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_wrapWithDirectory": {
@@ -484,19 +484,19 @@
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Click to allow",
+    "message": "Нажмите, чтобы разрешить",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Click to deny",
+    "message": "Нажмите, чтобы запретить",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Allow",
+    "message": "Разрешить",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Deny",
+    "message": "Запретить",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
@@ -516,15 +516,15 @@
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Allow",
+    "message": "Разрешить",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Deny",
+    "message": "Запретить",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "IPFS Companion - Добро пожаловать!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -536,27 +536,31 @@
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Right now your node is connected to <0>$1</0> peers.",
+    "message": "Прямо сейчас ваш узел присоединён к <0>$1</0> пирам.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
     "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
-  "page_landingWelcome_installSteps_title": {
-    "message": "Служба IPFS запущена?",
-    "description": "Install steps title (page_landingWelcome_installSteps_title)"
+  "page_landingWelcome_installSteps_notRunning_title": {
+    "message": "IPFS does not seem to be running",
+    "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
-  "page_landingWelcome_installSteps_install": {
-    "message": "If you haven't installed IPFS please do so <0>with these instructions</0>.",
-    "description": "Install steps copy (page_landingWelcome_installSteps_install)"
+  "page_landingWelcome_installSteps_desktop_install": {
+    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
-  "page_landingWelcome_installSteps_run": {
-    "message": "Then make sure to have an IPFS daemon running in your terminal:",
-    "description": "Install steps run message (page_landingWelcome_installSteps_run)"
+  "page_landingWelcome_installSteps_cli_title": {
+    "message": "Prefer to use the command line?",
+    "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
+  },
+  "page_landingWelcome_installSteps_cli_install": {
+    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "New to IPFS?",
+    "message": "Новичок в IPFS?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
@@ -564,7 +568,7 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
   },
   "page_landingWelcome_resources_title_discover": {
-    "message": "Discover!",
+    "message": "Исследуй!",
     "description": "Resources title (page_landingWelcome_resources_title_discover)"
   },
   "page_landingWelcome_resources_discover": {
@@ -572,7 +576,7 @@
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
-    "message": "Got questions?",
+    "message": "Есть вопросы?",
     "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
   },
   "page_landingWelcome_resources_got_questions": {
@@ -580,7 +584,7 @@
     "description": "Resources copy (page_landingWelcome_resources_got_questions)"
   },
   "page_landingWelcome_resources_title_want_to_help": {
-    "message": "Want to help?",
+    "message": "Хотите помочь?",
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
@@ -588,7 +592,7 @@
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
   "page_landingWelcome_videos_alpha_demo": {
-    "message": "IPFS Alpha Demo",
+    "message": "IPFS Альфа версия",
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
@@ -596,7 +600,7 @@
     "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Related Projects",
+    "message": "Связанные проекты",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }

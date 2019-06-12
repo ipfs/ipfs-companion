@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Toggle all IPFS integrations",
+    "message": "Włącz dostępne integracje IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -44,15 +44,15 @@
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Redirect to Gateway",
+    "message": "Przekierowania bramy",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
-    "message": "Click to toggle all gateway redirects",
+    "message": "Kliknij, aby przełączyć wszystkie przekierowania do własnej bramy (globalnie)",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
-    "message": "Tools",
+    "message": "Przybory",
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
@@ -60,15 +60,15 @@
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Active Tab",
+    "message": "Aktywna strona",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteRedirectToggle": {
-    "message": "Redirect on $1",
+    "message": "Przekierowania na $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
   },
   "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Click to toggle gateway redirects on $1",
+    "message": "Kliknij, aby przełączyć przekierowania do własnej bramy na $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Przypnij CID, aby twój węzeł IPFS nie usuwał i zawsze udostępniał lokalną kopię.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -228,7 +228,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets (experimental): run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "message": "Wbudowany + chrome.sockets (eksperyment): uruchamia węzeł js-ipfs w procesie przeglądarki z dostępem do chrome.sockets (szczegóły pod linkiem poniżej).",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded IPFS node (arrays will be merged). Must be valid JSON.",
+    "message": "Dodatkowa konfiguracja wbudowanego węzła IPFS (tablice są scalane). Wymagany poprawny JSON.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -248,7 +248,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "Wbudowany + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -276,11 +276,11 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_noRedirectHostnames_title": {
-    "message": "Redirect Opt-Outs",
+    "message": "Wyłączenia przekierowań",
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
   },
   "option_noRedirectHostnames_description": {
-    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+    "message": "Lista stron, które nie będą przekierowane do własnej bramy (włączając zasoby strona pobiera z innych domen). Jeden host w każdej linii.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -400,11 +400,11 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "Zakres logowania",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "message": "Dostosuj zakres informacji, jakie będą logowane do konsoli przeglądarki. Zmiana tej wartości spowoduje restart rozszerzenia.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_resetAllOptions_title": {
@@ -543,17 +543,21 @@
     "message": "Odkryj co <0>możesz zrobić dzięki temu rozszerzeniu</0> i rozpocznij przygodę z IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
-  "page_landingWelcome_installSteps_title": {
-    "message": "Czy twoja instancja IPFS jest uruchomiona?",
-    "description": "Install steps title (page_landingWelcome_installSteps_title)"
+  "page_landingWelcome_installSteps_notRunning_title": {
+    "message": "IPFS does not seem to be running",
+    "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
-  "page_landingWelcome_installSteps_install": {
-    "message": "Jeśli jeszcze nie posiadasz IPFS, zainstaluj <0>posiłkując się tą instrukcją</0>.",
-    "description": "Install steps copy (page_landingWelcome_installSteps_install)"
+  "page_landingWelcome_installSteps_desktop_install": {
+    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
-  "page_landingWelcome_installSteps_run": {
-    "message": "Następnie upewnij się, że usługa IPFS jest uruchomiona wpisując w konsoli systemowej:",
-    "description": "Install steps run message (page_landingWelcome_installSteps_run)"
+  "page_landingWelcome_installSteps_cli_title": {
+    "message": "Prefer to use the command line?",
+    "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
+  },
+  "page_landingWelcome_installSteps_cli_install": {
+    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
     "message": "Zaczynasz z IPFS?",
