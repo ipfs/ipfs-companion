@@ -13,7 +13,8 @@ os:
     - windows
 addons:
     homebrew:
-        packages: jq
+        packages:
+        - jq
 install:
     - npm run ci:install
 script:

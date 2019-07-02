@@ -10,21 +10,7 @@ const { createRequestModifier, redirectOptOutHint } = require('../../../add-on/s
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
-
-const url2request = (string) => {
-  return { url: string, type: 'main_frame' }
-}
-
-const fakeRequestId = () => {
-  return Math.floor(Math.random() * 100000).toString()
-}
-
-const expectNoRedirect = (modifyRequest, request) => {
-  expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
-  expect(modifyRequest.onHeadersReceived(request)).to.equal(undefined)
-}
-
-const nodeTypes = ['external', 'embedded']
+const { url2request, expectNoRedirect, fakeRequestId, nodeTypes } = require('../lib/utils')
 
 describe('modifyRequest.onBeforeRequest:', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
@@ -39,7 +25,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
-      dnslinkPolicy: false, // dnslink testi suite is in ipfs-request-dnslink.test.js
+      dnslinkPolicy: false, // dnslink test suite is in ipfs-request-dnslink.test.js
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
       gwURL: new URL('http://127.0.0.1:8080'),

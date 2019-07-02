@@ -10,16 +10,7 @@ const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request'
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
-
-const url2request = (string) => {
-  return { url: string, type: 'main_frame' }
-}
-
-const fakeRequestId = () => {
-  return Math.floor(Math.random() * 100000).toString()
-}
-
-// const nodeTypes = ['external', 'embedded']
+const { url2request, fakeRequestId } = require('../lib/utils')
 
 describe('modifyRequest processing', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime

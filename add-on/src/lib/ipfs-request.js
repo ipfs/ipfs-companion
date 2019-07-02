@@ -67,6 +67,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     }
     // skip all local requests
     if (request.url.startsWith('http://127.0.0.1') || request.url.startsWith('http://localhost') || request.url.startsWith('http://[::1]')) {
+      // TODO: support *.localhost when HTTP Proxy lands: https://github.com/ipfs/go-ipfs/issues/5982
       ignore(request.requestId)
     }
     // skip if a per-site redirect opt-out exists
@@ -119,6 +120,13 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (redirectingProtocolRequest(request)) {
         // fix path passed via custom protocol
         const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
+        if (fix) {
+          return fix
+        }
+      }
+      // fixup non-standard subdomain gateways to follow convention from
+      if (request.url.includes('.cf-ipfs.com') || request.url.includes('.cf-ipns.com')) {
+        const fix = normalizedCloudflareSubdomainRequest(request)
         if (fix) {
           return fix
         }
@@ -531,4 +539,23 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
 
 function findHeaderIndex (name, headers) {
   return headers.findIndex(x => x.name && x.name.toLowerCase() === name.toLowerCase())
+}
+
+function normalizedCloudflareSubdomainRequest (request) {
+  // Cloudflare supports subdomain gateway directly on .cf-ipfs.com and on .ipfs.cf-ipfs.com
+  // Below normalizes URL to one with explicit subdomain namespace indicator
+  // following convention from https://github.com/ipfs/in-web-browsers/issues/89
+  const has = (hostSuffix) => request.url.includes(hostSuffix)
+  if (has('.cf-ipfs.com') && !(has('.ipfs.cf-ipfs.com') || has('.ipns.cf-ipfs.com'))) {
+    // normalize to {cid}.ipfs.cf-ipfs.com
+    return { redirectUrl: request.url.replace('.cf-ipfs.com', '.ipfs.cf-ipfs.com') }
+  }
+  if (has('.cf-ipns.com')) {
+    if (has('.ipns.cf-ipns.com')) {
+      // {libp2p-key}.cf-ipns.com → {libp2p-key}.ipns.cf-ipfs.com
+      return { redirectUrl: request.url.replace('.ipns.cf-ipns.com', '.ipns.cf-ipfs.com') }
+    }
+    // normalize to {libp2p-key}.ipns.cf-ipfs.com
+    return { redirectUrl: request.url.replace('.cf-ipns.com', '.ipns.cf-ipfs.com') }
+  }
 }

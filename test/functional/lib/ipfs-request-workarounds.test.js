@@ -9,8 +9,7 @@ const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request'
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
-
-// const nodeTypes = ['external', 'embedded']
+const { url2request, expectNoRedirect } = require('../lib/utils')
 
 describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
@@ -156,6 +155,39 @@ describe('modifyRequest processing', function () {
       expect(responseHeaders).to.deep.include(acahHeader)
 
       browser.runtime.getURL.flush()
+    })
+  })
+
+  describe('a request to a subdomain gateway at Cloudflare', function () {
+    beforeEach(function () {
+      state.dnslinkPolicy = false
+    })
+    // normalize to {cid}.ipfs.cf-ipfs.com
+    it('{cid}.ipfs.cf-ipfs.com should not be redirected', async function () {
+      const request = url2request('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.cf-ipfs.com/wiki/?argTest#hashTest')
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/' }]
+      expectNoRedirect(modifyRequest, request)
+    })
+    it('{cid}.cf-ipfs.com should be redirected to {cid}.ipfs.cf-ipfs.com', async function () {
+      const request = url2request('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.cf-ipfs.com/wiki/?argTest#hashTest')
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/' }]
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.cf-ipfs.com/wiki/?argTest#hashTest')
+    })
+    // normalize to {libp2p-key}.ipns.cf-ipfs.com
+    it('{libp2p-key}.ipns.cf-ipfs.com should not be redirected', async function () {
+      const request = url2request('https://bafybeiaqarwnhp7vmqgkhfbqyf32qgkf65xluww5vr2xlang2rekfiquku.ipns.cf-ipfs.com/wiki/?argTest#hashTest')
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/bafybeiaqarwnhp7vmqgkhfbqyf32qgkf65xluww5vr2xlang2rekfiquku/wiki/' }]
+      expectNoRedirect(modifyRequest, request)
+    })
+    it('{libp2p-key}.ipns.cf-ipns.com should be redirected to {libp2p-key}.ipns.cf-ipfs.com', async function () {
+      const request = url2request('https://bafybeiaqarwnhp7vmqgkhfbqyf32qgkf65xluww5vr2xlang2rekfiquku.ipns.cf-ipns.com/wiki/?argTest#hashTest')
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/bafybeiaqarwnhp7vmqgkhfbqyf32qgkf65xluww5vr2xlang2rekfiquku/wiki/' }]
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://bafybeiaqarwnhp7vmqgkhfbqyf32qgkf65xluww5vr2xlang2rekfiquku.ipns.cf-ipfs.com/wiki/?argTest#hashTest')
+    })
+    it('{libp2p-key}.cf-ipns.com should be redirected to {libp2p-key}.ipns.cf-ipfs.com', async function () {
+      const request = url2request('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.cf-ipns.com/wiki/?argTest#hashTest')
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/' }]
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipns.cf-ipfs.com/wiki/?argTest#hashTest')
     })
   })
 
