@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const PQueue = require('p-queue')
+const { default: PQueue } = require('p-queue')
 
   /*
  * This content script is responsible for performing the logic of replacing

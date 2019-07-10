@@ -2,7 +2,7 @@
 /* eslint-env browser */
 
 const EventEmitter = require('events')
-const PQueue = require('p-queue')
+const { default: PQueue } = require('p-queue')
 
 class AccessControl extends EventEmitter {
   constructor (storage, storageKeyPrefix = 'ipfsProxyAcl') {
