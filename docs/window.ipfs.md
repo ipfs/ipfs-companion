@@ -68,7 +68,7 @@ if (window.ipfs && window.ipfs.enable) {
 }
 ```
 
-Note that IPFS Companion also adds `window.Buffer` if it doesn't already exist.
+Note that IPFS Companion does not add `Buffer` to the global scope, you need to [get it on your own](https://github.com/feross/buffer).
 
 See also: [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
 
