@@ -138,12 +138,29 @@ exports.destroy = async function () {
     try {
       await nodeHttpApi.stop()
     } catch (err) {
-      log.error('failed to stop HttpApi', err)
+      // TODO: needs upstream fix like https://github.com/ipfs/js-ipfs/issues/2257
+      if (err.message !== 'Cannot stop server while in stopping phase') {
+        log.error('failed to stop HttpApi', err)
+      }
     }
     nodeHttpApi = null
   }
   if (node) {
-    await node.stop()
+    const stopped = new Promise((resolve, reject) => {
+      node.on('stop', resolve)
+      node.on('error', reject)
+    })
+    try {
+      await node.stop()
+    } catch (err) {
+      // TODO: remove when fixed upstream: https://github.com/ipfs/js-ipfs/issues/2257
+      if (err.message === 'Not able to stop from state: stopping') {
+        log('destroy: embedded:chromesockets waiting for node.stop()')
+        await stopped
+      } else {
+        throw err
+      }
+    }
     node = null
   }
 }
