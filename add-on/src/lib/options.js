@@ -3,10 +3,7 @@
 const isFQDN = require('is-fqdn')
 const { hasChromeSocketsForTcp } = require('./runtime-checks')
 
-// Detect Beta Channel on Brave via: chrome.runtime.id === 'hjoieblefckbooibpepigmacodalfndh'
-// TODO: enable by default when key blockers are resolved
-// - [ ] /ipns/<fqdn>/ load fine
-// - [ ] sharded directories (e.g. wikipedia) load fine
+// TODO: enable by default when embedded node is performant enough
 const DEFAULT_TO_EMBEDDED_GATEWAY = false && hasChromeSocketsForTcp()
 
 exports.optionDefaults = Object.freeze({
@@ -61,8 +58,19 @@ function buildDefaultIpfsNodeConfig () {
     // for people already running regular go-ipfs and js-ipfs on standard ports
     config.config.Addresses.API = '/ip4/127.0.0.1/tcp/5003'
     config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/9091'
+
     // Until we have MulticastDNS+DNS, peer discovery is done over ws-star
-    config.config.Addresses.Swarm.push('/dnsaddr/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star')
+    config.config.Addresses.Swarm = ['/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star']
+    // Until DHT and p2p transport are ready, delegate + preload
+    const delegates = [
+      '/dns4/node0.preload.ipfs.io/tcp/443/https',
+      '/dns4/node1.preload.ipfs.io/tcp/443/https'
+    ]
+    // Delegated Content and Peer Routing: https://github.com/ipfs/js-ipfs/pull/2195
+    // TODO: delegated routing blocked by https://github.com/libp2p/js-libp2p-delegated-content-routing/issues/12
+    // config.config.Addresses.Delegates = delegates
+    // TODO: are preloads needed? should Brave have own nodes?
+    config.preload = { enabled: true, addresses: delegates }
     /*
       (Sidenote on why we need API for Web UI)
       Gateway can run without API port,
