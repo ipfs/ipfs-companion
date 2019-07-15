@@ -16,6 +16,7 @@ const Ipfs = require('ipfs')
 const HttpApi = require('ipfs/src/http')
 const multiaddr = require('multiaddr')
 const maToUri = require('multiaddr-to-uri')
+const getPort = require('get-port')
 
 const { optionDefaults } = require('../options')
 
@@ -23,11 +24,8 @@ const { optionDefaults } = require('../options')
 let node = null
 let nodeHttpApi = null
 
-exports.init = function init (opts) {
-  log('init embedded:chromesockets')
-
+async function buildConfig (opts) {
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
-
   defaultOpts.libp2p = {
     config: {
       dht: {
@@ -36,9 +34,31 @@ exports.init = function init (opts) {
       }
     }
   }
-
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsOpts = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
+  const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
+
+  // Detect when API or Gateway port is not available (taken by something else)
+  // We find the next free port and update configuration to use it instead
+  const multiaddr2port = (ma) => parseInt(new URL(multiaddr2httpUrl(ma)).port, 10)
+  const gatewayPort = multiaddr2port(ipfsNodeConfig.config.Addresses.Gateway)
+  const apiPort = multiaddr2port(ipfsNodeConfig.config.Addresses.API)
+  log(`checking if ports are available: api: ${apiPort}, gateway: ${gatewayPort}`)
+  const freeGatewayPort = await getPort({ port: getPort.makeRange(gatewayPort, gatewayPort + 100) })
+  const freeApiPort = await getPort({ port: getPort.makeRange(apiPort, apiPort + 100) })
+  if (gatewayPort !== freeGatewayPort || apiPort !== freeApiPort) {
+    log(`updating config to available ports: api: ${freeApiPort}, gateway: ${freeGatewayPort}`)
+    const addrs = ipfsNodeConfig.config.Addresses
+    addrs.Gateway = addrs.Gateway.replace(gatewayPort.toString(), freeGatewayPort.toString())
+    addrs.API = addrs.API.replace(apiPort.toString(), freeApiPort.toString())
+  }
+
+  return ipfsNodeConfig
+}
+
+exports.init = async function init (opts) {
+  log('init embedded:chromesockets')
+
+  const ipfsOpts = await buildConfig(opts)
   log('creating js-ipfs with opts: ', ipfsOpts)
   node = new Ipfs(ipfsOpts)
 
@@ -90,9 +110,9 @@ async function updateConfigWithHttpEndpoints (ipfs, opts) {
       ipfsApiUrl: httpApi,
       ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
     }
-    // update current runtime config (in place, effective without restart)
+    // update current runtime config (in place)
     Object.assign(opts, configChanges)
-    // update user config in storage (effective on next run)
+    // update user config in storage (triggers async client restart if ports changed)
     log(`synchronizing ipfsNodeConfig with customGatewayUrl (${configChanges.customGatewayUrl}) and ipfsApiUrl (${configChanges.ipfsApiUrl})`)
     await browser.storage.local.set(configChanges)
   }
