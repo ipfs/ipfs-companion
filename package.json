@@ -107,7 +107,7 @@
     "web-ext": "3.1.0",
     "webpack": "4.35.3",
     "webpack-bundle-analyzer": "3.3.2",
-    "webpack-cli": "3.3.5",
+    "webpack-cli": "3.3.6",
     "webpack-merge": "4.2.1"
   },
   "dependencies": {
@@ -125,7 +125,7 @@
     "http-node": "1.2.0",
     "ipfs": "https://github.com/ipfs/js-ipfs/tarball/2ae6b672c222555b1a068141f2acfe4b5f39b709/js-ipfs.tar.gz",
     "ipfs-css": "0.12.0",
-    "ipfs-http-client": "33.0.1",
+    "ipfs-http-client": "33.1.0",
     "ipfs-http-response": "0.3.1",
     "ipfs-postmsg-proxy": "3.1.1",
     "ipfsx": "0.17.0",
@@ -137,7 +137,7 @@
     "mime-types": "2.1.24",
     "multiaddr": "6.1.0",
     "multiaddr-to-uri": "4.0.1",
-    "p-queue": "6.0.2",
+    "p-queue": "6.1.0",
     "path-browserify": "1.0.0",
     "piggybacker": "2.0.0",
     "postmsg-rpc": "2.4.0",
