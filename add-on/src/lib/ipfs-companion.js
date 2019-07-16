@@ -616,6 +616,26 @@ module.exports = async function init () {
           shouldStopIpfsClient = !state.active
           break
         case 'ipfsNodeType':
+          // Switching between External and Embeedded HTTP Gateway in Brave is tricky.
+          // For now we remove user confusion by persisting and restoring the External config.
+          // TODO: refactor as a part of https://github.com/ipfs-shipyard/ipfs-companion/issues/491
+          if (change.oldValue === 'external' && change.newValue === 'embedded:chromesockets') {
+            const oldGatewayUrl = (await browser.storage.local.get('customGatewayUrl')).customGatewayUrl
+            const oldApiUrl = (await browser.storage.local.get('ipfsApiUrl')).ipfsApiUrl
+            log(`storing externalNodeConfig: ipfsApiUrl=${oldApiUrl}, customGatewayUrl=${oldGatewayUrl}"`)
+            await browser.storage.local.set({ externalNodeConfig: [oldGatewayUrl, oldApiUrl] })
+          } else if (change.oldValue === 'embedded:chromesockets' && change.newValue === 'external') {
+            const [oldGatewayUrl, oldApiUrl] = (await browser.storage.local.get('externalNodeConfig')).externalNodeConfig
+            log(`restoring externalNodeConfig: ipfsApiUrl=${oldApiUrl}, customGatewayUrl=${oldGatewayUrl}"`)
+            await browser.storage.local.set({
+              ipfsApiUrl: oldApiUrl,
+              customGatewayUrl: oldGatewayUrl,
+              externalNodeConfig: null
+            })
+          }
+          shouldRestartIpfsClient = true
+          state[key] = change.newValue
+          break
         case 'ipfsNodeConfig':
           shouldRestartIpfsClient = true
           state[key] = change.newValue

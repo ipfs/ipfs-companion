@@ -16,6 +16,7 @@ const Ipfs = require('ipfs')
 const HttpApi = require('ipfs/src/http')
 const multiaddr = require('multiaddr')
 const maToUri = require('multiaddr-to-uri')
+const getPort = require('get-port')
 
 const { optionDefaults } = require('../options')
 
@@ -23,25 +24,8 @@ const { optionDefaults } = require('../options')
 let node = null
 let nodeHttpApi = null
 
-// additional servers for smoke-tests
-// let httpServer = null
-// let hapiServer = null
-
-exports.init = function init (opts) {
-  /*
-  // TEST RAW require('http') SERVER
-  if (!httpServer) {
-    httpServer = startRawHttpServer(9091)
-  }
-  // TEST require('@hapi/hapi') HTTP SERVER (same as in js-ipfs)
-  if (!hapiServer) {
-    hapiServer = startRawHapiServer(9092)
-  }
-  */
-  log('init embedded:chromesockets')
-
+async function buildConfig (opts) {
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
-
   defaultOpts.libp2p = {
     config: {
       dht: {
@@ -50,9 +34,31 @@ exports.init = function init (opts) {
       }
     }
   }
-
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsOpts = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
+  const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
+
+  // Detect when API or Gateway port is not available (taken by something else)
+  // We find the next free port and update configuration to use it instead
+  const multiaddr2port = (ma) => parseInt(new URL(multiaddr2httpUrl(ma)).port, 10)
+  const gatewayPort = multiaddr2port(ipfsNodeConfig.config.Addresses.Gateway)
+  const apiPort = multiaddr2port(ipfsNodeConfig.config.Addresses.API)
+  log(`checking if ports are available: api: ${apiPort}, gateway: ${gatewayPort}`)
+  const freeGatewayPort = await getPort({ port: getPort.makeRange(gatewayPort, gatewayPort + 100) })
+  const freeApiPort = await getPort({ port: getPort.makeRange(apiPort, apiPort + 100) })
+  if (gatewayPort !== freeGatewayPort || apiPort !== freeApiPort) {
+    log(`updating config to available ports: api: ${freeApiPort}, gateway: ${freeGatewayPort}`)
+    const addrs = ipfsNodeConfig.config.Addresses
+    addrs.Gateway = addrs.Gateway.replace(gatewayPort.toString(), freeGatewayPort.toString())
+    addrs.API = addrs.API.replace(apiPort.toString(), freeApiPort.toString())
+  }
+
+  return ipfsNodeConfig
+}
+
+exports.init = async function init (opts) {
+  log('init embedded:chromesockets')
+
+  const ipfsOpts = await buildConfig(opts)
   log('creating js-ipfs with opts: ', ipfsOpts)
   node = new Ipfs(ipfsOpts)
 
@@ -95,7 +101,6 @@ async function updateConfigWithHttpEndpoints (ipfs, opts) {
     const apiMa = await ipfs.config.get('Addresses.API')
     const httpGateway = multiaddr2httpUrl(gwMa)
     const httpApi = multiaddr2httpUrl(apiMa)
-    log(`updating extension configuration to Gateway=${httpGateway} and API=${httpApi}`)
     // update ports in JSON configuration for embedded js-ipfs
     const ipfsNodeConfig = JSON.parse(localConfig.ipfsNodeConfig)
     ipfsNodeConfig.config.Addresses.Gateway = gwMa
@@ -105,9 +110,10 @@ async function updateConfigWithHttpEndpoints (ipfs, opts) {
       ipfsApiUrl: httpApi,
       ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
     }
-    // update current runtime config (in place, effective without restart)
+    // update current runtime config (in place)
     Object.assign(opts, configChanges)
-    // update user config in storage (effective on next run)
+    // update user config in storage (triggers async client restart if ports changed)
+    log(`synchronizing ipfsNodeConfig with customGatewayUrl (${configChanges.customGatewayUrl}) and ipfsApiUrl (${configChanges.ipfsApiUrl})`)
     await browser.storage.local.set(configChanges)
   }
 }
@@ -115,77 +121,33 @@ async function updateConfigWithHttpEndpoints (ipfs, opts) {
 exports.destroy = async function () {
   log('destroy: embedded:chromesockets')
 
-  /*
-  if (httpServer) {
-    httpServer.close()
-    httpServer = null
-  }
-  if (hapiServer) {
-    try {
-      await hapiServer.stop({ timeout: 1000 })
-    } catch (err) {
-      if (err) {
-        console.error(`[ipfs-companion]  failed to stop hapi`, err)
-      } else {
-        console.log('[ipfs-companion] hapi server stopped')
-      }
-    }
-    hapiServer = null
-  }
-  */
-
   if (nodeHttpApi) {
     try {
       await nodeHttpApi.stop()
     } catch (err) {
-      log.error('failed to stop HttpApi', err)
+      // TODO: needs upstream fix like https://github.com/ipfs/js-ipfs/issues/2257
+      if (err.message !== 'Cannot stop server while in stopping phase') {
+        log.error('failed to stop HttpApi', err)
+      }
     }
     nodeHttpApi = null
   }
   if (node) {
-    await node.stop()
+    const stopped = new Promise((resolve, reject) => {
+      node.on('stop', resolve)
+      node.on('error', reject)
+    })
+    try {
+      await node.stop()
+    } catch (err) {
+      // TODO: remove when fixed upstream: https://github.com/ipfs/js-ipfs/issues/2257
+      if (err.message === 'Not able to stop from state: stopping') {
+        log('destroy: embedded:chromesockets waiting for node.stop()')
+        await stopped
+      } else {
+        throw err
+      }
+    }
     node = null
   }
 }
-
-/*
-// Quick smoke-test to confirm require('http') works for MVP
-function startRawHttpServer (port) {
-  const http = require('http') // courtesy of chrome-net
-  const httpServer = http.createServer(function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' })
-    res.end('Hello from ipfs-companion exposing HTTP via chrome.sockets in Brave :-)\n')
-  })
-  httpServer.listen(port, '127.0.0.1')
-  console.log(`[ipfs-companion] require('http') HTTP server on http://127.0.0.1:${port}`)
-  return httpServer
-}
-
-function startRawHapiServer (port) {
-  let options = {
-    host: '127.0.0.1',
-    port,
-    debug: {
-      log: ['*'],
-      request: ['*']
-    }
-  }
-  const initHapi = async () => {
-    // hapi v18 (js-ipfs >=v0.35.0-pre.0)
-    const Hapi = require('@hapi/hapi') // courtesy of js-ipfs
-    const hapiServer = new Hapi.Server(options)
-    await hapiServer.route({
-      method: 'GET',
-      path: '/',
-      handler: (request, h) => {
-        console.log('[ipfs-companion] hapiServer processing request', request)
-        return 'Hello from ipfs-companion+Hapi.js exposing HTTP via chrome.sockets in Brave :-)'
-      }
-    })
-    await hapiServer.start()
-    console.log(`[ipfs-companion] require('@hapi/hapi') HTTP server running at: ${hapiServer.info.uri}`)
-  }
-  initHapi()
-  return hapiServer
-}
-*/

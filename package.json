@@ -121,6 +121,7 @@
     "drag-and-drop-files": "0.0.1",
     "file-type": "12.0.1",
     "filesize": "4.1.2",
+    "get-port": "5.0.0",
     "http-dns": "3.0.1",
     "http-node": "1.2.0",
     "ipfs": "https://github.com/ipfs/js-ipfs/tarball/2ae6b672c222555b1a068141f2acfe4b5f39b709/js-ipfs.tar.gz",
