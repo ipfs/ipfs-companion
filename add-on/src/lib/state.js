@@ -4,6 +4,10 @@
 const { safeURL } = require('./options')
 const offlinePeerCount = -1
 
+// CID of a 'blessed' Web UI release
+// which should work without setting CORS headers
+const webuiCid = 'QmYTRvKFGhxgBiUreiw7ihn8g95tfJTWDt7aXqDsvAcJse' // v2.4.7
+
 function initState (options) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
@@ -22,12 +26,11 @@ function initState (options) {
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
-  // store info about 'blessed' release of Web UI
-  // which should work without setting CORS headers
-  state.webuiCid = 'QmQNHd1suZTktPRhP7DD4nKWG46ZRSxkwHocycHVrK3dYW' // v2.4.6
+  state.webuiCid = webuiCid
   state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
   return state
 }
 
 exports.initState = initState
 exports.offlinePeerCount = offlinePeerCount
+exports.webuiCid = webuiCid
