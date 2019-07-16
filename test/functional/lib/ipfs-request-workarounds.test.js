@@ -19,7 +19,7 @@ describe('modifyRequest processing', function () {
     // stub URL.origin in test context to return something other than null
     Object.defineProperty(URL.prototype, 'origin', {
       get: function () {
-        let fakeOrigin = this.href.split('/')
+        const fakeOrigin = this.href.split('/')
         if (fakeOrigin.length >= 3) {
           return fakeOrigin.slice(0, 3).join('/')
         }
@@ -65,7 +65,7 @@ describe('modifyRequest processing', function () {
       // test
       const bogusOriginHeader = { name: 'Origin', value: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df' }
       const request = {
-        requestHeaders: [ bogusOriginHeader ],
+        requestHeaders: [bogusOriginHeader],
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
@@ -85,7 +85,7 @@ describe('modifyRequest processing', function () {
       // test
       const bogusOriginHeader = { name: 'Origin', value: 'chrome-extension://trolrorlrorlrol' }
       const request = {
-        requestHeaders: [ bogusOriginHeader ],
+        requestHeaders: [bogusOriginHeader],
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
@@ -105,7 +105,7 @@ describe('modifyRequest processing', function () {
       // test
       const bogusOriginHeader = { name: 'Origin', value: 'null' }
       const request = {
-        requestHeaders: [ bogusOriginHeader ],
+        requestHeaders: [bogusOriginHeader],
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
@@ -131,7 +131,7 @@ describe('modifyRequest processing', function () {
 
       // Test request
       let request = {
-        requestHeaders: [ webuiOriginHeader, webuiRefererHeader, acrhHeader ],
+        requestHeaders: [webuiOriginHeader, webuiRefererHeader, acrhHeader],
         type: 'xmlhttprequest',
         originUrl: state.webuiRootUrl,
         url: `${state.apiURLString}api/v0/id`

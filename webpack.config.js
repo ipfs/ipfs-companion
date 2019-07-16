@@ -58,11 +58,11 @@ const commonConfig = {
     /* mainFields: ['browser', 'main'], */
     extensions: ['.js', '.json'],
     alias: {
-      'url': 'iso-url',
-      'http': 'http-node', // chrome.sockets
-      'dns': 'http-dns', // chrome.sockets
-      'dgram': 'chrome-dgram', // chrome.sockets
-      'net': 'chrome-net' // chrome.sockets
+      url: 'iso-url',
+      http: 'http-node', // chrome.sockets
+      dns: 'http-dns', // chrome.sockets
+      dgram: 'chrome-dgram', // chrome.sockets
+      net: 'chrome-net' // chrome.sockets
     }
   },
   node: {

@@ -45,7 +45,7 @@ function buildDefaultIpfsNodeType () {
 }
 
 function buildDefaultIpfsNodeConfig () {
-  let config = {
+  const config = {
     config: {
       Addresses: {
         Swarm: []
@@ -88,11 +88,12 @@ function buildDefaultIpfsNodeConfig () {
 exports.storeMissingOptions = async (read, defaults, storage) => {
   const requiredKeys = Object.keys(defaults)
   const changes = {}
-  for (let key of requiredKeys) {
+  const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key)
+  for (const key of requiredKeys) {
     // limit work to defaults and missing values, skip values other than defaults
-    if (!read.hasOwnProperty(key) || read[key] === defaults[key]) {
+    if (!has(read, key) || read[key] === defaults[key]) {
       const data = await storage.get(key)
-      if (!data.hasOwnProperty(key)) { // detect and fix key without value in storage
+      if (!has(data, key)) { // detect and fix key without value in storage
         changes[key] = defaults[key]
       }
     }

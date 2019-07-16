@@ -32,8 +32,8 @@ function createWindowIpfs () {
   const proxyClient = createProxyClient()
 
   // Add deprecation warning to window.ipfs.<cmd>
-  for (let cmd in proxyClient) {
-    let fn = proxyClient[cmd]
+  for (const cmd in proxyClient) {
+    const fn = proxyClient[cmd]
     proxyClient[cmd] = function () {
       console.warn('Calling commands directly on window.ipfs is deprecated and will be removed on 2019-09-01. Use API instance returned by window.ipfs.enable() instead. More: https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md')
       return fn.apply(this, arguments)

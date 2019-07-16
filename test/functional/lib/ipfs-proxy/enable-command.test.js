@@ -84,7 +84,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
     await enable(permissions)
 
     expect(requestAccess.called).to.equal(true)
-    let { allow } = await accessControl.getAccess(getScope(), 'version')
+    const { allow } = await accessControl.getAccess(getScope(), 'version')
     expect(allow).to.equal(true)
   })
 
@@ -99,13 +99,13 @@ describe('lib/ipfs-proxy/enable-command', () => {
 
     // ensure partial grant exists
     await accessControl.setAccess(getScope(), 'id', true)
-    let idAcl = await accessControl.getAccess(getScope(), 'id')
+    const idAcl = await accessControl.getAccess(getScope(), 'id')
     expect(idAcl.allow).to.equal(true)
 
     await enable(permissions)
 
     expect(requestAccess.called).to.equal(true)
-    let versionAcl = await accessControl.getAccess(getScope(), 'version')
+    const versionAcl = await accessControl.getAccess(getScope(), 'version')
     expect(versionAcl.allow).to.equal(true)
   })
 
@@ -120,7 +120,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
 
     // ensure partial deny exists
     await accessControl.setAccess(getScope(), 'id', false)
-    let idAcl = await accessControl.getAccess(getScope(), 'id')
+    const idAcl = await accessControl.getAccess(getScope(), 'id')
     expect(idAcl.allow).to.equal(false)
 
     // main test
@@ -136,7 +136,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
     expect(() => { if (error) throw error }).to.throw(`User denied access to selected commands over IPFS proxy: id`)
 
     // ensure explicit version acl is still missing
-    let versionAcl = await accessControl.getAccess(getScope(), 'version')
+    const versionAcl = await accessControl.getAccess(getScope(), 'version')
     expect(versionAcl).to.equal(null)
   })
 

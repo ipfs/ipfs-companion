@@ -65,7 +65,7 @@ const { default: PQueue } = require('p-queue')
   async function linkifyMutation (mutation, linkifyJobs) {
     linkifyJobs = linkifyJobs || new PQueue({ concurrency: 1 })
     if (mutation.type === 'childList') {
-      for (let addedNode of mutation.addedNodes) {
+      for (const addedNode of mutation.addedNodes) {
         if (addedNode.nodeType === Node.TEXT_NODE) {
           linkifyJobs.add(async () => linkifyTextNode(addedNode))
         } else {

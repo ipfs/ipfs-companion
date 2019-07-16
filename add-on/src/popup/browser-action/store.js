@@ -167,7 +167,7 @@ module.exports = (state, emitter) => {
     try {
       let noRedirectHostnames = state.noRedirectHostnames
       // if we are on /ipns/fqdn.tld/ then use hostname from DNSLink
-      let fqdn = state.currentDnslinkFqdn || state.currentFqdn
+      const fqdn = state.currentDnslinkFqdn || state.currentFqdn
       if (noRedirectHostnames.includes(fqdn)) {
         noRedirectHostnames = noRedirectHostnames.filter(host => !host.endsWith(fqdn))
       } else {
