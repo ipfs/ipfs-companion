@@ -2,7 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const PQueue = require('p-queue')
+const { default: PQueue } = require('p-queue')
 
   /*
  * This content script is responsible for performing the logic of replacing
@@ -65,7 +65,7 @@ const PQueue = require('p-queue')
   async function linkifyMutation (mutation, linkifyJobs) {
     linkifyJobs = linkifyJobs || new PQueue({ concurrency: 1 })
     if (mutation.type === 'childList') {
-      for (let addedNode of mutation.addedNodes) {
+      for (const addedNode of mutation.addedNodes) {
         if (addedNode.nodeType === Node.TEXT_NODE) {
           linkifyJobs.add(async () => linkifyTextNode(addedNode))
         } else {

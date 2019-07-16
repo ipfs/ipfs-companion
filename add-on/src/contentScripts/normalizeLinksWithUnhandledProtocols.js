@@ -38,7 +38,7 @@
     new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         if (mutation.type === 'childList') {
-          for (let addedNode of mutation.addedNodes) {
+          for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
               setTimeout(() => normalizeTree(addedNode), 0)
             }

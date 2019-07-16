@@ -38,7 +38,7 @@ describe('init', function () {
     browser.storage.local.set.returns(Promise.resolve())
     const ipfsCompanion = await init()
     const { movedFilesApis } = require('../../../add-on/src/lib/ipfs-client/index.js')
-    for (let cmd of movedFilesApis) {
+    for (const cmd of movedFilesApis) {
       expect(typeof ipfsCompanion.ipfs[cmd], `ipfs.${cmd} expected to be a function`).to.equal('function')
       expect(typeof ipfsCompanion.ipfs.files[cmd], `ipfs.files.${cmd} expected to be a function`).to.equal('function')
     }

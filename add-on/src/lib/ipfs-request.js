@@ -45,7 +45,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     // To reconstruct originUrl we read full URL from Referer header in onBeforeSendHeaders
     // and cache it for short time
     // TODO: when request.originUrl is available in Chrome the `originUrls` cache can be removed
-    let cachedUrl = originUrls.get(request.requestId)
+    const cachedUrl = originUrls.get(request.requestId)
     if (cachedUrl) return cachedUrl
     if (request.requestHeaders) {
       const referer = request.requestHeaders.find(h => h.name === 'Referer')
@@ -230,7 +230,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           let addExpectHeader = true
           const expectHeader = { name: 'Expect', value: '100-continue' }
           const warningMsg = 'Executing "Expect: 100-continue" workaround for ipfs.add due to https://github.com/ipfs/go-ipfs/issues/5168'
-          for (let header of request.requestHeaders) {
+          for (const header of request.requestHeaders) {
             // Workaround A: https://github.com/ipfs/go-ipfs/issues/5168#issuecomment-401417420
             // (works in Firefox, but Chromium does not expose Connection header)
             /* (disabled so we use the workaround B in all browsers)
@@ -335,7 +335,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         const notActiveGatewayOrApi = !(url.startsWith(state.pubGwURLString) || url.startsWith(state.gwURLString) || url.startsWith(state.apiURLString))
         if (state.detectIpfsPathHeader && request.responseHeaders && notActiveGatewayOrApi) {
           // console.log('onHeadersReceived.request', request)
-          for (let header of request.responseHeaders) {
+          for (const header of request.responseHeaders) {
             if (header.name.toLowerCase() === 'x-ipfs-path' && isSafeToRedirect(request, runtime)) {
               // console.log('onHeadersReceived.request.responseHeaders', request.responseHeaders.length)
               const xIpfsPath = header.value

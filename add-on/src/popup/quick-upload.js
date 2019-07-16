@@ -61,7 +61,7 @@ async function processFiles (state, emitter, files) {
     }
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
     const uploadTab = await browser.tabs.getCurrent()
-    let { streams, totalSize } = files2streams(files)
+    const { streams, totalSize } = files2streams(files)
     progressHandler(0, totalSize, state, emitter)
     emitter.emit('render')
     const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
@@ -113,7 +113,7 @@ function file2buffer (file) {
 function files2streams (files) {
   const streams = []
   let totalSize = 0
-  for (let file of files) {
+  for (const file of files) {
     if (!file.type && file.size === 0) {
       // UX fail-safe:
       // at the moment drag&drop of an empty file without an extension

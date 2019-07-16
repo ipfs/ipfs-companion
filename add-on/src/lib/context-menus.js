@@ -173,13 +173,13 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
           }
         }
         const ifApi = getState().peerCount > 0
-        for (let item of apiMenuItems) {
+        for (const item of apiMenuItems) {
           await browser.contextMenus.update(item, { enabled: ifApi })
         }
-        for (let item of ipfsContextItems) {
+        for (const item of ipfsContextItems) {
           await browser.contextMenus.update(item, { enabled: ipfsContext })
         }
-        for (let item of apiAndIpfsContextItems) {
+        for (const item of apiAndIpfsContextItems) {
           await browser.contextMenus.update(item, { enabled: (ifApi && ipfsContext) })
         }
       } catch (err) {

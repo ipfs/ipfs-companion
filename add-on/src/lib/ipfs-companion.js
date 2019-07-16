@@ -96,7 +96,7 @@ module.exports = async function init () {
   }
 
   function registerListeners () {
-    let onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
+    const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (!runtime.isFirefox) {
       // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
       onBeforeSendInfoSpec.push('extraHeaders')
@@ -230,7 +230,7 @@ module.exports = async function init () {
       currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     }
     try {
-      let v = await ipfs.version()
+      const v = await ipfs.version()
       if (v) {
         info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
       }
@@ -321,7 +321,7 @@ module.exports = async function init () {
         notify('notify_uploadErrorTitle', 'notify_uploadTrackingProtectionErrorMsg')
         console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
         browser.tabs.create({
-          'url': 'https://github.com/ipfs/ipfs-companion/issues/227'
+          url: 'https://github.com/ipfs/ipfs-companion/issues/227'
         })
       } else {
         notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
@@ -345,7 +345,7 @@ module.exports = async function init () {
   }
 
   async function uploadResultHandler ({ result, openRootInNewTab = false }) {
-    for (let file of result) {
+    for (const file of result) {
       if (file && file.hash) {
         const { path, url } = getIpfsPathAndNativeAddress(file.hash)
         preloadAtPublicGateway(path)
@@ -353,7 +353,7 @@ module.exports = async function init () {
         // open the wrapping directory (or the CID if wrapping was disabled)
         if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.hash)) {
           await browser.tabs.create({
-            'url': url
+            url: url
           })
         }
       }
@@ -464,7 +464,7 @@ module.exports = async function init () {
 
   async function apiStatusUpdate () {
     // update peer count
-    let oldPeerCount = state.peerCount
+    const oldPeerCount = state.peerCount
     state.peerCount = await getSwarmPeerCount()
     updatePeerCountDependentStates(oldPeerCount, state.peerCount)
     // trigger pending updates
@@ -535,7 +535,7 @@ module.exports = async function init () {
   }
 
   async function setBrowserActionIcon (iconPath) {
-    let iconDefinition = { path: iconPath }
+    const iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.browserAction.setIcon(iconDefinition)
@@ -553,17 +553,17 @@ module.exports = async function init () {
     // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
     // - https://developer.chrome.com/extensions/manifest/icons
     return {
-      'path': {
-        '19': rasterIconPath(svgPath, 19),
-        '38': rasterIconPath(svgPath, 38),
-        '128': rasterIconPath(svgPath, 128)
+      path: {
+        19: rasterIconPath(svgPath, 19),
+        38: rasterIconPath(svgPath, 38),
+        128: rasterIconPath(svgPath, 128)
       }
     }
   }
 
   function rasterIconPath (iconPath, size) {
     // point at precomputed PNG file
-    let baseName = /\/icons\/(.+)\.svg/.exec(iconPath)[1]
+    const baseName = /\/icons\/(.+)\.svg/.exec(iconPath)[1]
     return `/icons/png/${baseName}_${size}.png`
   }
 
@@ -602,7 +602,7 @@ module.exports = async function init () {
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
 
-    for (let key in changes) {
+    for (const key in changes) {
       const change = changes[key]
       if (change.oldValue === change.newValue) continue
 
@@ -729,7 +729,7 @@ module.exports = async function init () {
     },
 
     destroy () {
-      let destroyTasks = []
+      const destroyTasks = []
       clearInterval(apiStatusUpdateInterval)
       apiStatusUpdateInterval = null
       ipfs = null

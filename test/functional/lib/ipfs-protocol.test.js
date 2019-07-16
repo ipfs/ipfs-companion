@@ -11,12 +11,8 @@ describe('ipfs-protocol', () => {
     const handler = createIpfsUrlProtocolHandler(() => ipfs)
     const request = { url }
 
-    const res = await new Promise(async (resolve, reject) => {
-      try {
-        await handler(request, resolve)
-      } catch (err) {
-        reject(err)
-      }
+    const res = await new Promise((resolve, reject) => {
+      handler(request, resolve).catch((err) => reject(err))
     })
 
     expect(res.data).to.equal(content)
@@ -36,12 +32,8 @@ describe('ipfs-protocol', () => {
     const handler = createIpfsUrlProtocolHandler(() => ipfs)
     const request = { url }
 
-    const res = await new Promise(async (resolve, reject) => {
-      try {
-        await handler(request, resolve)
-      } catch (err) {
-        reject(err)
-      }
+    const res = await new Promise((resolve, reject) => {
+      handler(request, resolve).catch((err) => reject(err))
     })
 
     expect(res.mimeType).to.equal('text/html')

@@ -15,6 +15,7 @@ addons:
     homebrew:
         packages: jq
 install:
+    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install jq ; fi
     - npm run ci:install
 script:
     - npm run ci:build

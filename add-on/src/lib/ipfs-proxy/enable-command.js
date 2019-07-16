@@ -21,16 +21,16 @@ function createEnableCommand (getIpfs, getState, getScope, accessControl, reques
     // Validate and prompt for any missing permissions in bulk
     // if a list of needed commands is announced up front
     if (opts.commands) {
-      let missingAcls = []
-      let deniedAcls = []
-      for (let command of opts.commands) {
+      const missingAcls = []
+      const deniedAcls = []
+      for (const command of opts.commands) {
         // Fail fast if command is not allowed to be proxied at all
         if (!inCommandWhitelist(command)) {
           throw createCommandWhitelistError(command)
         }
         // Get the current access flag to decide if it should be added
         // to the list of permissions to be prompted about in the next step
-        let access = await accessControl.getAccess(scope, command)
+        const access = await accessControl.getAccess(scope, command)
         if (!access) {
           missingAcls.push(command)
         } else if (access.allow !== true) {
@@ -44,7 +44,7 @@ function createEnableCommand (getIpfs, getState, getScope, accessControl, reques
       // Display a single prompt with all missing permissions
       if (missingAcls.length) {
         const { allow, wildcard } = await requestAccess(scope, missingAcls)
-        let access = await accessControl.setAccess(scope, wildcard ? '*' : missingAcls, allow)
+        const access = await accessControl.setAccess(scope, wildcard ? '*' : missingAcls, allow)
         if (!access.allow) {
           throw createProxyAclError(scope, missingAcls)
         }

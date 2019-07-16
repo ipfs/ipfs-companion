@@ -7,7 +7,7 @@ log.error = debug('ipfs-companion:dnslink:error')
 
 const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
-const PQueue = require('p-queue')
+const { default: PQueue } = require('p-queue')
 const { offlinePeerCount } = require('./state')
 const { pathAtHttpGateway } = require('./ipfs-path')
 
