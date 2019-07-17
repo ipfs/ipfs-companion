@@ -3,36 +3,6 @@
         "ipfs-companion-dev-build@ci.ipfs.team": {
             "updates": [
                 {
-                    "version": "2.7.5.753",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "60"
-                        }
-                    },
-                    "update_hash": "sha256:e67635ce91b27f91656f286cc9cc243985074d0aa2eff2101a3954003b8d2e74",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.7.5.753/ipfs_companion_beta_build-2.7.5.753-an+fx.xpi"
-                },
-                {
-                    "version": "2.7.5.757",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "60"
-                        }
-                    },
-                    "update_hash": "sha256:7bbd7f5d81d1160db73658230a889ea630919321ca7c54053f9b37d4389d5394",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.7.5.757/ipfs_companion_beta_build-2.7.5.757-an+fx.xpi"
-                },
-                {
-                    "version": "2.7.5.760",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "60"
-                        }
-                    },
-                    "update_hash": "sha256:655159e4d0e0306f9de8c94097ed8ebddab3e5dc481854d817289f4707b6d742",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.7.5.760/ipfs_companion_beta_build-2.7.5.760-an+fx.xpi"
-                },
-                {
                     "version": "2.7.5.762",
                     "applications": {
                         "gecko": {
@@ -43,56 +13,6 @@
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.7.5.762/ipfs_companion_beta_build-2.7.5.762-an+fx.xpi"
                 },
                 {
-                    "version": "2.8.0.770",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "65"
-                        }
-                    },
-                    "update_hash": "sha256:c67fa3bc2b96d9c11dc35be15a0aee076fced751e771ec106b67a2d756cde1c1",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.0.770/ipfs_companion_beta_build-2.8.0.770-an+fx.xpi"
-                },
-                {
-                    "version": "2.8.1.778",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "65"
-                        }
-                    },
-                    "update_hash": "sha256:5e23a08aef19a4924542f6f23a2a5448cb644b66e321ac61f923130357d39823",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.1.778/ipfs_companion_beta_build-2.8.1.778-an+fx.xpi"
-                },
-                {
-                    "version": "2.8.1.780",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "65"
-                        }
-                    },
-                    "update_hash": "sha256:deb36999c33cefab46a82bdff52b32aa60e462674fcd8e61bd2c79edb698174f",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.1.780/ipfs_companion_beta_build-2.8.1.780-an+fx.xpi"
-                },
-                {
-                    "version": "2.8.1.782",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "65"
-                        }
-                    },
-                    "update_hash": "sha256:651e763585a3383e3b0776a9c9b0beecc8305793ade51796059e01f1eb14ff0a",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.1.782/ipfs_companion_beta_build-2.8.1.782-an+fx.xpi"
-                },
-                {
-                    "version": "2.8.2.788",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "65"
-                        }
-                    },
-                    "update_hash": "sha256:91421811e24f403ad487d30a7bdb5fdb61bd6c4de4a65358204ade2bbf1ef390",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.2.788/ipfs_companion_beta_build-2.8.2.788-an+fx.xpi"
-                },
-                {
                     "version": "2.8.2.794",
                     "applications": {
                         "gecko": {
@@ -101,6 +21,16 @@
                     },
                     "update_hash": "sha256:88772c379f8ff84bc00299c50cd09f854257a9556ecdf89e90c12059e022d896",
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.2.794/ipfs_companion_beta_build-2.8.2.794-an+fx.xpi"
+                },
+                {
+                    "version": "2.8.3.802",
+                    "applications": {
+                        "gecko": {
+                            "strict_min_version": "67"
+                        }
+                    },
+                    "update_hash": "sha256:bd02f7fbe5f1b5968d74f3a11b53017ce52fb1a643930e9ee501ea4890754278",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.3.802/ipfs_companion_beta_build-2.8.3.802-an+fx.xpi"
                 }
             ]
         }
