@@ -10,6 +10,7 @@ function experimentsForm ({
   preloadAtPublicGateway,
   catchUnhandledProtocols,
   linkify,
+  webuiFromDNSLink,
   dnslinkPolicy,
   detectIpfsPathHeader,
   ipfsProxy,
@@ -24,6 +25,7 @@ function experimentsForm ({
   const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
+  const onWebuiFromDNSLinkChange = onOptionChange('webuiFromDNSLink')
 
   return html`
     <form>
@@ -65,6 +67,15 @@ function experimentsForm ({
             </dl>
           </label>
           <div>${switchToggle({ id: 'linkify', checked: linkify, onchange: onLinkifyChange })}</div>
+        </div>
+        <div>
+          <label for="webuiFromDNSLink">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_webuiFromDNSLink_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_webuiFromDNSLink_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'webuiFromDNSLink', checked: webuiFromDNSLink, onchange: onWebuiFromDNSLinkChange })}</div>
         </div>
         <div>
           <label for="dnslinkPolicy">

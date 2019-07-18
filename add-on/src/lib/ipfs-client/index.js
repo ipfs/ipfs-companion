@@ -47,13 +47,13 @@ async function destroyIpfsClient () {
 
 function preloadWebui (instance, opts) {
   // run only when client still exists and async fetch is possible
-  if (!(client && instance && opts.webuiRootUrl && typeof fetch === 'function')) return
+  if (!(client && instance && opts.webuiURLString && typeof fetch === 'function')) return
   // Optimization: preload the root CID to speed up the first time
   // Web UI is opened. If embedded js-ipfs is used it will trigger
   // remote (always recursive) preload of entire DAG to one of preload nodes.
   // This way when embedded node wants to load resource related to webui
   // it will get it fast from preload nodes.
-  const webuiUrl = opts.webuiRootUrl
+  const webuiUrl = opts.webuiURLString
   log(`preloading webui root at ${webuiUrl}`)
   return fetch(webuiUrl, { redirect: 'follow' })
     .then(response => {

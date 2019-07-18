@@ -24,6 +24,7 @@ exports.optionDefaults = Object.freeze({
   ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
   ipfsProxy: true, // window.ipfs
+  webuiFromDNSLink: false,
   logNamespaces: 'jsipfs*,ipfs*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*'
 })
 

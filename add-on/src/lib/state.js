@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const { safeURL } = require('./options')
+
 const offlinePeerCount = -1
 
 function initState (options) {
@@ -22,9 +23,17 @@ function initState (options) {
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
-  state.webuiRootUrl = `${state.apiURLString}webui`
+  state.webuiURLString = buildWebuiURLString(state)
   return state
+}
+
+function buildWebuiURLString ({ apiURLString, webuiFromDNSLink }) {
+  if (!apiURLString) throw new Error('Missing apiURLString')
+  return webuiFromDNSLink
+    ? `${apiURLString}ipns/webui.ipfs.io/`
+    : `${apiURLString}webui/`
 }
 
 exports.initState = initState
 exports.offlinePeerCount = offlinePeerCount
+exports.buildWebuiURLString = buildWebuiURLString

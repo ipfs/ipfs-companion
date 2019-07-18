@@ -3,7 +3,7 @@ const { describe, it, before, beforeEach, after } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url') // URL implementation with support for .origin attribute
 const browser = require('sinon-chrome')
-const { initState } = require('../../../add-on/src/lib/state')
+const { initState, buildWebuiURLString } = require('../../../add-on/src/lib/state')
 const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
@@ -109,6 +109,27 @@ describe('modifyRequest processing', function () {
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
       browser.runtime.getURL.flush()
+    })
+  })
+
+  describe('a request to <apiURL>/ipns/webui.ipfs.io/ when webuiFromDNSLink = true', function () {
+    it('should not be left untouched by onHeadersReceived if statusCode is 200', function () {
+      state.webuiFromDNSLink = true
+      state.webuiURLString = buildWebuiURLString(state)
+      const request = {
+        url: state.webuiURLString,
+        statusCode: 200
+      }
+      expect(modifyRequest.onHeadersReceived(request)).to.equal(undefined)
+    })
+    it('should be redirected in onHeadersReceived to  <apiURL>/webui/ if statusCode is 404', function () {
+      state.webuiFromDNSLink = true
+      state.webuiURLString = buildWebuiURLString(state)
+      const request = {
+        url: state.webuiURLString,
+        statusCode: 404
+      }
+      expect(modifyRequest.onHeadersReceived(request).redirectUrl).to.equal(`${state.apiURLString}webui/`)
     })
   })
 

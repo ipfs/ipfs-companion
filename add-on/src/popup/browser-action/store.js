@@ -129,7 +129,7 @@ module.exports = (state, emitter) => {
 
   emitter.on('openWebUi', async () => {
     try {
-      browser.tabs.create({ url: state.webuiRootUrl })
+      browser.tabs.create({ url: state.webuiURLString })
       window.close()
     } catch (error) {
       console.error(`Unable Open Web UI due to ${error}`)

@@ -7,7 +7,7 @@ log.error = debug('ipfs-companion:main:error')
 
 const browser = require('webextension-polyfill')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
-const { initState, offlinePeerCount } = require('./state')
+const { initState, offlinePeerCount, buildWebuiURLString } = require('./state')
 const { createIpfsPathValidator } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
@@ -223,7 +223,7 @@ module.exports = async function init () {
       peerCount: state.peerCount,
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
-      webuiRootUrl: state.webuiRootUrl,
+      webuiURLString: state.webuiURLString,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noRedirectHostnames: state.noRedirectHostnames,
@@ -633,7 +633,7 @@ module.exports = async function init () {
         case 'ipfsApiUrl':
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()
-          state.webuiRootUrl = `${state.apiURLString}webui`
+          state.webuiURLString = buildWebuiURLString(state)
           shouldRestartIpfsClient = true
           break
         case 'ipfsApiPollMs':
@@ -663,6 +663,10 @@ module.exports = async function init () {
         case 'logNamespaces':
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
+          break
+        case 'webuiFromDNSLink':
+          state[key] = change.newValue
+          state.webuiURLString = buildWebuiURLString(state)
           break
         case 'linkify':
         case 'catchUnhandledProtocols':

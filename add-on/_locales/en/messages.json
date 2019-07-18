@@ -351,6 +351,14 @@
     "message": "Turn plaintext /ipfs/ paths into clickable links",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
+  "option_webuiFromDNSLink_title": {
+    "message": "Load the latest Web UI",
+    "description": "An option title on the Preferences screen (option_webuiFromDNSLink_title)"
+  },
+  "option_webuiFromDNSLink_description": {
+    "message": "Replaces stable version provided by your node with one at /ipns/webui.ipfs.io (requires working DNS and a compatible backend)",
+    "description": "An option description on the Preferences screen (option_webuiFromDNSLink_description)"
+  },
   "option_dnslinkPolicy_title": {
     "message": "DNSLink Support",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"

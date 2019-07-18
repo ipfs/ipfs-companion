@@ -8,6 +8,7 @@ log.error = debug('ipfs-companion:request:error')
 const LRU = require('lru-cache')
 const IsIpfs = require('is-ipfs')
 const { pathAtHttpGateway } = require('./ipfs-path')
+const { buildWebuiURLString } = require('./state')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableErrors = new Set([
   // Firefox
@@ -227,6 +228,17 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // Skip if IPFS integrations are inactive
       if (!state.active) {
         return
+      }
+
+      // Recover from a broken DNSLink webui by redirecting back to CID one
+      // TODO: remove when both GO and JS ship support for /ipns/webui.ipfs.io on the API port
+      if (request.statusCode === 404 && request.url === state.webuiURLString && state.webuiFromDNSLink) {
+        const stableWebui = buildWebuiURLString({
+          apiURLString: state.apiURLString,
+          webuiFromDNSLink: false
+        })
+        log(`opening webui via ${state.webuiURLString} is not supported yet, opening stable webui from ${stableWebui} instead`)
+        return { redirectUrl: stableWebui }
       }
 
       // Skip if request is marked as ignored
