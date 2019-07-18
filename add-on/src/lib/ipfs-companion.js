@@ -6,7 +6,6 @@ const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
 const browser = require('webextension-polyfill')
-const toMultiaddr = require('uri-to-multiaddr')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator } = require('./ipfs-path')
@@ -98,7 +97,8 @@ module.exports = async function init () {
   function registerListeners () {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (!runtime.isFirefox) {
-      // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
+      // Chrome 72+  requires 'extraHeaders' for accessing all headers
+      // Note: we need this for code ensuring ipfs-http-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
@@ -419,6 +419,7 @@ module.exports = async function init () {
       // See: https://github.com/ipfs/ipfs-companion/issues/286
       try {
         // pass the URL of user-preffered public gateway
+        // TOOD: plan to remove this
         await browser.tabs.executeScript(details.tabId, {
           code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
           matchAboutBlank: false,
@@ -426,6 +427,7 @@ module.exports = async function init () {
           runAt: 'document_start'
         })
         // inject script that normalizes `href` and `src` containing unhandled protocols
+        // TOOD: add deprecation warning and plan to remove this
         await browser.tabs.executeScript(details.tabId, {
           file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
           matchAboutBlank: false,
@@ -435,18 +437,6 @@ module.exports = async function init () {
       } catch (error) {
         console.error(`Unable to normalize links at '${details.url}' due to`, error)
       }
-    }
-    if (details.url.startsWith(state.webuiRootUrl)) {
-      // Ensure API backend points at one from IPFS Companion
-      const apiMultiaddr = toMultiaddr(state.apiURLString)
-      await browser.tabs.executeScript(details.tabId, {
-        runAt: 'document_start',
-        code: `if (!localStorage.getItem('ipfsApi')) {
-          console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
-          localStorage.setItem('ipfsApi', '${apiMultiaddr}');
-          window.location.reload();
-        }`
-      })
     }
   }
 
@@ -643,6 +633,7 @@ module.exports = async function init () {
         case 'ipfsApiUrl':
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()
+          state.webuiRootUrl = `${state.apiURLString}webui`
           shouldRestartIpfsClient = true
           break
         case 'ipfsApiPollMs':
@@ -651,7 +642,6 @@ module.exports = async function init () {
         case 'customGatewayUrl':
           state.gwURL = new URL(change.newValue)
           state.gwURLString = state.gwURL.toString()
-          state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)

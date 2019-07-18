@@ -34,28 +34,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
   const ignoredRequests = new LRU(requestCacheCfg)
   const ignore = (id) => ignoredRequests.set(id, true)
   const isIgnored = (id) => ignoredRequests.get(id) !== undefined
-
-  const acrhHeaders = new LRU(requestCacheCfg) // webui cors fix in Chrome
-  const originUrls = new LRU(requestCacheCfg) // request.originUrl workaround for Chrome
-  const originUrl = (request) => {
-    // Firefox and Chrome provide relevant value in different fields:
-    // (Firefox) request object includes full URL of origin document, return as-is
-    if (request.originUrl) return request.originUrl
-    // (Chrome) is lacking: `request.initiator` is just the origin (protocol+hostname+port)
-    // To reconstruct originUrl we read full URL from Referer header in onBeforeSendHeaders
-    // and cache it for short time
-    // TODO: when request.originUrl is available in Chrome the `originUrls` cache can be removed
-    const cachedUrl = originUrls.get(request.requestId)
-    if (cachedUrl) return cachedUrl
-    if (request.requestHeaders) {
-      const referer = request.requestHeaders.find(h => h.name === 'Referer')
-      if (referer) {
-        originUrls.set(request.requestId, referer.value)
-        return referer.value
-      }
-    }
-  }
-
   const preNormalizationSkip = (state, request) => {
     // skip requests to the custom gateway or API (otherwise we have too much recursion)
     if (request.url.startsWith(state.gwURLString) || request.url.startsWith(state.apiURLString)) {
@@ -161,46 +139,23 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 
       // Special handling of requests made to API
       if (request.url.startsWith(state.apiURLString)) {
-        // Requests made by 'blessed' Web UI
-        // --------------------------------------------
-        // Goal: Web UI works without setting CORS at go-ipfs
-        // (Without this snippet go-ipfs will return HTTP 403 due to additional origin check on the backend)
-        const origin = originUrl(request)
-        if (origin && origin.startsWith(state.webuiRootUrl)) {
-          // console.log('onBeforeSendHeaders', request)
-          // console.log('onBeforeSendHeaders.origin', origin)
-          // Swap Origin to pass server-side check
-          // (go-ipfs returns HTTP 403 on origin mismatch if there are no CORS headers)
-          const swapOrigin = (at) => {
-            request.requestHeaders[at].value = request.requestHeaders[at].value.replace(state.gwURL.origin, state.apiURL.origin)
-          }
-          let foundAt = request.requestHeaders.findIndex(h => h.name === 'Origin')
-          if (foundAt > -1) swapOrigin(foundAt)
-          foundAt = request.requestHeaders.findIndex(h => h.name === 'Referer')
-          if (foundAt > -1) swapOrigin(foundAt)
-
-          // Save access-control-request-headers from preflight
-          foundAt = request.requestHeaders.findIndex(h => h.name && h.name.toLowerCase() === 'access-control-request-headers')
-          if (foundAt > -1) {
-            acrhHeaders.set(request.requestId, request.requestHeaders[foundAt].value)
-            // console.log('onBeforeSendHeaders FOUND access-control-request-headers', acrhHeaders.get(request.requestId))
-          }
-          // console.log('onBeforeSendHeaders fixed headers', request.requestHeaders)
-        }
-
         // '403 - Forbidden' fix for Chrome and Firefox
         // --------------------------------------------
-        // We remove Origin header from requests made to API URL and WebUI
-        // by js-ipfs-http-client running in WebExtension context to remove need
-        // for manual CORS whitelisting via Access-Control-Allow-Origin at go-ipfs
+        // We remove Origin header from requests made to API URL
+        // by js-ipfs-http-client running in WebExtension context.
+        // This act as unification of CORS behavior across all vendors,
+        // where behavior was non-deterministic and changed between releases.
+        // Without this, some users would need to do manual CORS whitelisting
+        // by adding webExtensionOrigin to API.Access-Control-Allow-Origin at their IPFS node.
         // More info:
         // Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/622
         // Chromium 71: https://github.com/ipfs-shipyard/ipfs-companion/pull/616
         // Chromium 72: https://github.com/ipfs-shipyard/ipfs-companion/issues/630
         const isWebExtensionOrigin = (origin) => {
           // console.log(`origin=${origin}, webExtensionOrigin=${webExtensionOrigin}`)
-          // Chromium <= 71 returns opaque Origin as defined in
+          // Chromium <72 returns opaque Origin as defined in
           // https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin
+          // TODO: remove this when <72 is not used by users
           if (origin == null || origin === 'null') {
             return true
           }
@@ -274,41 +229,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         return
       }
 
-      // Special handling of requests made to API
-      if (request.url.startsWith(state.apiURLString)) {
-        // Special handling of requests made by 'blessed' Web UI from local Gateway
-        // Goal: Web UI works without setting CORS at go-ipfs
-        // (This includes 'ignored' requests: CORS needs to be fixed even if no redirect is done)
-        const origin = originUrl(request)
-        if (origin && origin.startsWith(state.webuiRootUrl) && request.responseHeaders) {
-          // console.log('onHeadersReceived', request)
-          const acaOriginHeader = { name: 'Access-Control-Allow-Origin', value: state.gwURL.origin }
-          const foundAt = findHeaderIndex(acaOriginHeader.name, request.responseHeaders)
-          if (foundAt > -1) {
-            request.responseHeaders[foundAt].value = acaOriginHeader.value
-          } else {
-            request.responseHeaders.push(acaOriginHeader)
-          }
-
-          // Restore access-control-request-headers from preflight
-          const acrhValue = acrhHeaders.get(request.requestId)
-          if (acrhValue) {
-            const acahHeader = { name: 'Access-Control-Allow-Headers', value: acrhValue }
-            const foundAt = findHeaderIndex(acahHeader.name, request.responseHeaders)
-            if (foundAt > -1) {
-              request.responseHeaders[foundAt].value = acahHeader.value
-            } else {
-              request.responseHeaders.push(acahHeader)
-            }
-            acrhHeaders.del(request.requestId)
-            // console.log('onHeadersReceived SET  Access-Control-Allow-Headers', header)
-          }
-
-          // console.log('onHeadersReceived fixed headers', request.responseHeaders)
-          return { responseHeaders: request.responseHeaders }
-        }
-      }
-
       // Skip if request is marked as ignored
       if (isIgnored(request.requestId)) {
         return
@@ -317,6 +237,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (state.redirect) {
         // Late redirect as a workaround for edge cases such as:
         // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+        // TODO: remove when Firefox with a fix landed in Stable channel
         if (onHeadersReceivedRedirect.has(request.requestId)) {
           onHeadersReceivedRedirect.delete(request.requestId)
           if (state.dnslinkPolicy) {
@@ -529,6 +450,25 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
   }
 }
 
-function findHeaderIndex (name, headers) {
-  return headers.findIndex(x => x.name && x.name.toLowerCase() === name.toLowerCase())
+/* not used at the moment, but this heuristic may be useful in the future
+// Note: Chrome 72+  requires 'extraHeaders' for access to Referer header
+const originUrls = new LRU(requestCacheCfg) // request.originUrl workaround for Chrome
+const originUrl = (request) => {
+  // Firefox and Chrome provide relevant value in different fields:
+  // (Firefox) request object includes full URL of origin document, return as-is
+  if (request.originUrl) return request.originUrl
+  // (Chrome) is lacking: `request.initiator` is just the origin (protocol+hostname+port)
+  // To reconstruct originUrl we read full URL from Referer header in onBeforeSendHeaders
+  // and cache it for short time
+  // TODO: when request.originUrl is available in Chrome the `originUrls` cache can be removed
+  const cachedUrl = originUrls.get(request.requestId)
+  if (cachedUrl) return cachedUrl
+  if (request.requestHeaders) {
+    const referer = request.requestHeaders.find(h => h.name === 'Referer')
+    if (referer) {
+      originUrls.set(request.requestId, referer.value)
+      return referer.value
+    }
+  }
 }
+*/

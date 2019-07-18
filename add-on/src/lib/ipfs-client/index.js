@@ -6,11 +6,9 @@ const debug = require('debug')
 const log = debug('ipfs-companion:client')
 log.error = debug('ipfs-companion:client:error')
 
-const browser = require('webextension-polyfill')
 const external = require('./external')
 const embedded = require('./embedded')
 const embeddedWithChromeSockets = require('./embedded-chromesockets')
-const { webuiCid } = require('../state')
 
 let client
 
@@ -33,7 +31,7 @@ async function initIpfsClient (opts) {
 
   const instance = await client.init(opts)
   easeApiChanges(instance)
-  _reloadIpfsClientDependents(instance) // async (API is present)
+  preloadWebui(instance, opts)
   return instance
 }
 
@@ -43,43 +41,28 @@ async function destroyIpfsClient () {
       await client.destroy()
     } finally {
       client = null
-      await _reloadIpfsClientDependents() // sync (API stopped working)
     }
   }
 }
 
-function _isWebuiTab (url) {
-  const bundled = !url.startsWith('http') && url.includes('/webui/index.html#/')
-  const ipns = url.includes('/webui.ipfs.io/#/')
-  return bundled || ipns
-}
-
-async function _reloadIpfsClientDependents (instance, opts) {
-  // online || offline
-  if (browser.tabs && browser.tabs.query) {
-    const tabs = await browser.tabs.query({})
-    if (tabs) {
-      tabs.forEach((tab) => {
-        // detect bundled webui in any of open tabs
-        if (_isWebuiTab(tab.url)) {
-          browser.tabs.reload(tab.id)
-          log('reloading bundled webui')
-        }
-      })
-    }
-  }
-  // online only
-  if (client && instance) {
-    if (webuiCid && instance.refs) {
-      // Optimization: preload the root CID to speed up the first time
-      // Web UI is opened. If embedded js-ipfs is used it will trigger
-      // remote (always recursive) preload of entire DAG to one of preload nodes.
-      // This way when embedded node wants to load resource related to webui
-      // it will get it fast from preload nodes.
-      log(`preloading webui root at ${webuiCid}`)
-      instance.refs(webuiCid, { recursive: false })
-    }
-  }
+function preloadWebui (instance, opts) {
+  // run only when client still exists and async fetch is possible
+  if (!(client && instance && opts.webuiRootUrl && typeof fetch === 'function')) return
+  // Optimization: preload the root CID to speed up the first time
+  // Web UI is opened. If embedded js-ipfs is used it will trigger
+  // remote (always recursive) preload of entire DAG to one of preload nodes.
+  // This way when embedded node wants to load resource related to webui
+  // it will get it fast from preload nodes.
+  const webuiUrl = opts.webuiRootUrl
+  log(`preloading webui root at ${webuiUrl}`)
+  return fetch(webuiUrl, { redirect: 'follow' })
+    .then(response => {
+      const webuiPath = new URL(response.url).pathname
+      log(`preloaded webui root at ${webuiPath}`)
+      // trigger recursive remote preload in js-ipfs
+      instance.refs(webuiPath, { recursive: false })
+    })
+    .catch(err => log.error(`failed to preload webui root`, err))
 }
 
 const movedFilesApis = ['add', 'addPullStream', 'addReadableStream', 'cat', 'catPullStream', 'catReadableStream', 'get', 'getPullStream', 'getReadableStream']

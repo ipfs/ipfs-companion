@@ -55,8 +55,9 @@ describe('modifyRequest processing', function () {
     })
   })
 
-  describe('a request to <apiURL>/api/v0/ with Origin=moz-extension://{extension-installation-id}', function () {
-    it('should remove Origin header with moz-extension://', async function () {
+  describe('a request to <apiURL>/api/v0/ made from extension with Origin header', function () {
+    it('should have it removed if Origin: moz-extension://{extension-installation-id}', async function () {
+      // Context: Firefox 65 started setting this header
       // set vendor-specific Origin for WebExtension context
       browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
       // ensure clean modifyRequest
@@ -73,10 +74,8 @@ describe('modifyRequest processing', function () {
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
       browser.runtime.getURL.flush()
     })
-  })
-
-  describe('a request to <apiURL>/api/v0/ with Origin=chrome-extension://{extension-installation-id}', function () {
-    it('should remove Origin header with chrome-extension://', async function () {
+    it('should have it removed if Origin: chrome-extension://{extension-installation-id}', async function () {
+      // Context: Chromium 72 started setting this header
       // set vendor-specific Origin for WebExtension context
       browser.runtime.getURL.withArgs('/').returns('chrome-extension://trolrorlrorlrol/')
       // ensure clean modifyRequest
@@ -93,10 +92,8 @@ describe('modifyRequest processing', function () {
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
       browser.runtime.getURL.flush()
     })
-  })
-
-  describe('a request to <apiURL>/api/v0/ with Origin=null', function () {
-    it('should remove Origin header ', async function () {
+    it('should have it removed if Origin: null ', async function () {
+      // Context: Chromium <72 was setting this header
       // set vendor-specific Origin for WebExtension context
       browser.runtime.getURL.withArgs('/').returns(undefined)
       // ensure clean modifyRequest
@@ -111,50 +108,6 @@ describe('modifyRequest processing', function () {
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
-      browser.runtime.getURL.flush()
-    })
-  })
-
-  // Web UI is loaded from hardcoded 'blessed' CID, which enables us to remove
-  // CORS limitation. This makes Web UI opened from browser action work without
-  // the need for any additional configuration of go-ipfs daemon
-  describe('a request to API from blessed webuiRootUrl', function () {
-    it('should pass without CORS limitations ', async function () {
-      // ensure clean modifyRequest
-      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
-      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-      // test
-      const webuiOriginHeader = { name: 'Origin', value: state.webuiRootUrl }
-      const webuiRefererHeader = { name: 'Referer', value: state.webuiRootUrl }
-      // CORS whitelisting does not worh in Chrome 72 without passing/restoring ACRH preflight header
-      const acrhHeader = { name: 'Access-Control-Request-Headers', value: 'X-Test' } // preflight to store
-
-      // Test request
-      let request = {
-        requestHeaders: [webuiOriginHeader, webuiRefererHeader, acrhHeader],
-        type: 'xmlhttprequest',
-        originUrl: state.webuiRootUrl,
-        url: `${state.apiURLString}api/v0/id`
-      }
-      request = modifyRequest.onBeforeRequest(request) || request // executes before onBeforeSendHeaders, may mutate state
-      const requestHeaders = modifyRequest.onBeforeSendHeaders(request).requestHeaders
-
-      // "originUrl" should be swapped to look like it came from the same origin as HTTP API
-      const expectedOriginUrl = state.webuiRootUrl.replace(state.gwURLString, state.apiURLString)
-      expect(requestHeaders).to.deep.include({ name: 'Origin', value: expectedOriginUrl })
-      expect(requestHeaders).to.deep.include({ name: 'Referer', value: expectedOriginUrl })
-      expect(requestHeaders).to.deep.include(acrhHeader)
-
-      // Test response
-      const response = Object.assign({}, request)
-      delete response.requestHeaders
-      response.responseHeaders = []
-      const responseHeaders = modifyRequest.onHeadersReceived(response).responseHeaders
-      const corsHeader = { name: 'Access-Control-Allow-Origin', value: state.gwURL.origin }
-      const acahHeader = { name: 'Access-Control-Allow-Headers', value: acrhHeader.value } // expect value restored from preflight
-      expect(responseHeaders).to.deep.include(corsHeader)
-      expect(responseHeaders).to.deep.include(acahHeader)
-
       browser.runtime.getURL.flush()
     })
   })
