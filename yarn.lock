@@ -6798,7 +6798,7 @@ ipfs-css@0.12.0:
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.12.0.tgz#becf48dbdfb1c913006ff0c6dc6c56752a2cb6b3"
   integrity sha512-bU72aEG1LR1MVUnHIXsCxdZqJwKpQrh0Wod2aI1o940hVxobZqHEVw5PISdhVdtK42IaHhtq25wAl0zZlUwyiA==
 
-ipfs-http-client@33.1.0, ipfs-http-client@^33.0.1, ipfs-http-client@^33.0.2, ipfs-http-client@^33.1.0:
+ipfs-http-client@33.1.0, ipfs-http-client@^33.1.0:
   version "33.1.0"
   resolved "https://registry.yarnpkg.com/ipfs-http-client/-/ipfs-http-client-33.1.0.tgz#4d3beceba27fcef26cf1940375a5f8c9d609f0dd"
   integrity sha512-hkS8nXay3DGKb/KXU1RDvTyxnvkAdhS5enlXxNXaS7yKvADlf5SEuQGYjW+VknkPPQ4FNbY3JttQ3YW+LTuoRA==
@@ -8550,25 +8550,25 @@ libp2p-crypto@~0.16.0, libp2p-crypto@~0.16.1:
     tweetnacl "^1.0.0"
     ursa-optional "~0.9.10"
 
-libp2p-delegated-content-routing@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/libp2p-delegated-content-routing/-/libp2p-delegated-content-routing-0.2.3.tgz#de3e923e70cbcfbbc2de679a84ad1c1c342a8129"
-  integrity sha512-WbHunAEJj5HzhbHKEep9myfoGa7/g4rWytyHLuC3syxbVpc9Tv4oQK0dD8G09YofGpIr/I4yUPaJY1GM7skGQQ==
+libp2p-delegated-content-routing@0.3.1, libp2p-delegated-content-routing@^0.2.3:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/libp2p-delegated-content-routing/-/libp2p-delegated-content-routing-0.3.1.tgz#45e1711074a68d457c9b4bd92682ad06fb8857c8"
+  integrity sha512-GgEj1FHzNFH6nL0fQ5sFZWcskfWkwVLL+GtY5wZbe9izXftyg5QDVdoKSlYWQUrEjaaAJE+T4KjvtK83T/C7Yg==
   dependencies:
-    async "^2.6.2"
-    ipfs-http-client "^33.0.2"
+    debug "^4.1.1"
+    ipfs-http-client "^33.1.0"
     multiaddr "^6.1.0"
-    peer-id "^0.12.2"
-    peer-info "^0.15.1"
+    p-queue "^6.1.0"
 
-libp2p-delegated-peer-routing@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/libp2p-delegated-peer-routing/-/libp2p-delegated-peer-routing-0.2.3.tgz#b2c27bee2bd6a9f0147fc2ec12b5e1c9c6c982eb"
-  integrity sha512-yr5NRgAnVmsvhIC5COyEda+ZdD42JVfBeShsHj7FaRdYay4kdEpUXqLXiC7bC6PMbYSh2d/TheO3ITTj4Kp1Fw==
+libp2p-delegated-peer-routing@0.3.1, libp2p-delegated-peer-routing@^0.2.3:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/libp2p-delegated-peer-routing/-/libp2p-delegated-peer-routing-0.3.1.tgz#331d129559b2b257cef5e13260d7ac50d4731768"
+  integrity sha512-WAN2rBsuiS1xqrAaZthKX9vVtXar0nH7ACAWoTNsk2BaAhhds0Shri48NB5jN//kxLo+vC7+WVn4Rgdg3Dp2sA==
   dependencies:
-    ipfs-http-client "^33.0.1"
-    peer-id "^0.12.2"
-    peer-info "^0.15.1"
+    debug "^4.1.1"
+    ipfs-http-client "^33.1.0"
+    p-queue "^6.1.0"
+    peer-id "~0.12.2"
 
 libp2p-floodsub@^0.16.1:
   version "0.16.1"
@@ -10737,7 +10737,7 @@ p-map@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-2.1.0.tgz#310928feef9c9ecc65b68b17693018a665cea175"
   integrity sha512-y3b8Kpd8OAN444hxfBbFfj1FY/RjtTd8tzYwhUqNYXx0fXx2iX4maP4Qr6qhIKbQXI02wTLAda4fYUbDagTUFw==
 
-p-queue@6.1.0:
+p-queue@6.1.0, p-queue@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.1.0.tgz#3f546275073b41e4af460e41459524b15c2753f3"
   integrity sha512-907vNz/cY+JEsqGglo7o/Ia9E/wisahJGOp9HPfbAyCVGERQVmFGA4IyknxY1v+QRBiMKedL3ToOBXNEy9MKQA==
