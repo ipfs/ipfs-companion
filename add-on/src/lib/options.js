@@ -60,7 +60,10 @@ function buildDefaultIpfsNodeConfig () {
     config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/9091'
 
     // Until we have MulticastDNS+DNS, peer discovery is done over ws-star
-    config.config.Addresses.Swarm = ['/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star']
+    config.config.Addresses.Swarm = [
+      '/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star',
+      '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+    ]
     // Until DHT and p2p transport are ready, delegate + preload
     // Note: we use .preload.ipfs.io and .delegate.ipfs.io as means of http sharding (12 instead of 6 concurrent requests)
     const delegates = [
