@@ -83,6 +83,10 @@
     "message": "Copy IPFS Path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
+	"panelCopy_currentIpnsAddress": {
+		"message": "Copy IPNS Path",
+		"description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+	},
   "panelCopy_copyRawCid": {
     "message": "Copy CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
@@ -91,6 +95,10 @@
     "message": "Copy Public Gateway URL",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+	"panel_copyCurrentPermalink": {
+		"message": "Copy Permalink",
+		"description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPermalink)"
+	},
   "pageAction_titleIpfsAtPublicGateway": {
     "message": "IPFS resource loaded via Public Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"

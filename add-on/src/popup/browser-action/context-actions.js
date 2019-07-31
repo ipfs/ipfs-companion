@@ -5,7 +5,7 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
 const navHeader = require('./nav-header')
-const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
+const { contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } = require('../../lib/context-menus')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
 function contextActions ({
@@ -32,13 +32,21 @@ function contextActions ({
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
     return html`<div>
-  ${navItem({
+  ${isRedirectContext ? navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
-  })}
+  }) : ''}
   ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyPermalink),
+    onClick: () => onCopy(contextMenuCopyPermalink)
+  })}
+  ${isRedirectContext ? navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
+  }) : ''}
+  ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyCidAddress),
+    onClick: () => onCopy(contextMenuCopyCidAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),

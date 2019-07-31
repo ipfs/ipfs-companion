@@ -17,7 +17,7 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const { createRuntimeChecks } = require('./runtime-checks')
-const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('./context-menus')
+const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
@@ -204,8 +204,10 @@ module.exports = async function init () {
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
     [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
+    [contextMenuCopyCidAddress]: copier.copyCidAddress,
     [contextMenuCopyRawCid]: copier.copyRawCid,
-    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
+    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw,
+    [contextMenuCopyPermalink]: copier.copyPermalink
   }
 
   function handleMessageFromBrowserAction (message) {
