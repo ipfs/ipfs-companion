@@ -24,7 +24,7 @@ exports.optionDefaults = Object.freeze({
   ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
   ipfsProxy: true, // window.ipfs
-  logNamespaces: 'jsipfs*,ipfs*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*'
+  logNamespaces: 'jsipfs*,ipfs*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*'
 })
 
 function buildCustomGatewayUrl () {
@@ -60,17 +60,26 @@ function buildDefaultIpfsNodeConfig () {
     config.config.Addresses.Gateway = '/ip4/127.0.0.1/tcp/9091'
 
     // Until we have MulticastDNS+DNS, peer discovery is done over ws-star
-    config.config.Addresses.Swarm = ['/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star']
+    config.config.Addresses.Swarm = [
+      '/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star',
+      '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+    ]
     // Until DHT and p2p transport are ready, delegate + preload
+    // Note: we use .preload.ipfs.io and .delegate.ipfs.io as means of http sharding (12 instead of 6 concurrent requests)
     const delegates = [
-      '/dns4/node0.preload.ipfs.io/tcp/443/https',
-      '/dns4/node1.preload.ipfs.io/tcp/443/https'
+      '/dns4/node1.delegate.ipfs.io/tcp/443/https',
+      '/dns4/node0.delegate.ipfs.io/tcp/443/https'
     ]
     // Delegated Content and Peer Routing: https://github.com/ipfs/js-ipfs/pull/2195
-    // TODO: delegated routing blocked by https://github.com/libp2p/js-libp2p-delegated-content-routing/issues/12
-    // config.config.Addresses.Delegates = delegates
-    // TODO: are preloads needed? should Brave have own nodes?
-    config.preload = { enabled: true, addresses: delegates }
+    config.config.Addresses.Delegates = delegates
+    // TODO: when we have p2p transport, are preloads still needed? should Brave have own nodes?
+    config.preload = {
+      enabled: true,
+      addresses: [
+        '/dns4/node1.preload.ipfs.io/tcp/443/https',
+        '/dns4/node0.preload.ipfs.io/tcp/443/https'
+      ]
+    }
     /*
       (Sidenote on why we need API for Web UI)
       Gateway can run without API port,
