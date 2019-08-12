@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Épingler un CID indique à votre nœud IPFS que cette donnée est importante et ne doit pas être jetées.",
+    "message": "Épingler un CID indique à votre nœud IPFS que cette donnée est importante et ne doit pas être jetée.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -120,7 +120,7 @@
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Text sélectionné",
+    "message": "Texte sélectionné",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
@@ -168,7 +168,7 @@
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "API IPFS est en ligne",
+    "message": "L'API IPFS est en ligne",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
@@ -176,11 +176,11 @@
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "API IPFS hors ligne",
+    "message": "L'API IPFS est hors ligne",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Mode automatique: le routeur publique sera utilisé en cas d'erreur",
+    "message": "Mode automatique: le routeur public sera utilisé en cas d'erreur",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_uploadErrorTitle": {
@@ -228,7 +228,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "embarqué avec Chrome Sockets (expérimentale) : lancer js-ipfs node dans votre navigateur avec chrome.sockets API (détails sur le lien)",
+    "message": "embarqué avec Chrome Sockets (expérimentale) : lancer un nœud js-ipfs dans votre navigateur avec chrome.sockets API (détails sur le lien)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "La configuration additionel pour le noeud IPFS embarqué. doit être un JSON valide.",
+    "message": "La configuration additionelle pour le noeud IPFS embarqué doit être un JSON valide.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {

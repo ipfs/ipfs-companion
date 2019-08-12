@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "切换所有IPFS集成",
+    "message": "切换所有 IPFS 集成",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -32,11 +32,11 @@
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "你可以连接的IPFS节点的数目",
+    "message": "你可以连接的 IPFS 节点的数量",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickUpload": {
-    "message": "通过IPFS分享文件",
+    "message": "通过 IPFS 分享文件",
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
   "panel_openWebui": {
@@ -76,15 +76,15 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "固定 CID 会告诉您的 IPFS 节点此数据很重要，不得丢弃。",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "复制IPFS路径",
+    "message": "复制 IPFS 路径",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "复制CID",
+    "message": "复制 CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
@@ -132,7 +132,7 @@
     "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
   },
   "contextMenu_AddToIpfsRawCid": {
-    "message": "添加到IPFS",
+    "message": "添加到 IPFS",
     "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
   },
   "contextMenu_AddToIpfsSelection": {
@@ -220,7 +220,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "外部：通过HTTP的API来连接一个节点",
+    "message": "外部：通过 HTTP API 来连接一个节点",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
@@ -228,7 +228,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets (experimental): run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "message": "嵌入 Chrome 套接字（实验性）：在浏览器中运行 js-ipfs 节点并访问 chrome.sockets 的 API（详情见下面的链接）",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded IPFS node (arrays will be merged). Must be valid JSON.",
+    "message": "嵌入式 IPFS 节点的额外配置（将合并阵列）。必须是合规的 JSON 。",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -248,7 +248,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "嵌入chrome接口",
+    "message": "嵌入式并使用 chrome.sockets 接口",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -260,11 +260,11 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "首选的HTTP2IPFS网关地址（URL）",
+    "message": "首选的 HTTP2IPFS 网关地址（URL）",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "除非你的网关地址（URL）以：“http://127.0.0.1”、“http://[::1]”或“https://”开头，否则将禁止从HTTPS网站加载IPFS内容。",
+    "message": "除非你使用的网关的 URL 以：“http://127.0.0.1”、“http://[::1]”或“https://”开头，否则将禁止从 HTTP S网站加载 IPFS 内容。",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
@@ -288,7 +288,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "自定义网关不可用或复制共享连接时回退URL",
+    "message": "自定义网关不可用或复制共享连接时回退 URL",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_header_api": {
@@ -296,11 +296,11 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API链接",
+    "message": "IPFS API 链接",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "提示：这是/api/v0/config所在的位置",
+    "message": "提示：这是 /api/v0/config 所在的位置",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -376,7 +376,7 @@
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "如果值是一个IPFS路径，就丢弃HTTP传输，转而使用IPFS加载。IPFS路径的转向也需要启用DNSLink 支持。",
+    "message": "如果值是一个 IPFS 路径，就丢弃 HTTP 传输，转而使用 IPFS 加载。 IPFS 路径的转向也需要启用 DNSLink 支持。",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -396,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "通过公共网关的异步http头请求开启对已上传资产的自动预加载",
+    "message": "通过公共网关的异步 HTTP 头请求开启对已上传资产的自动预加载",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -412,7 +412,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "将用户配置替换为默认值(不可撤销！)",
+    "message": "将用户配置替换为默认值（不可撤销！）",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -424,7 +424,7 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "简化IPFS资源访问的浏览器扩展",
+    "message": "简化 IPFS 资源访问的浏览器扩展",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickUpload_subhead_peers": {
@@ -456,11 +456,11 @@
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_wrapWithDirectory": {
-    "message": "保留文件名称（如果勾选，文件会被包装在一个文件夹中，否则通过IPFS分享的文件没有文件名称）。",
+    "message": "保留文件名称（如果勾选，文件会被包装在一个文件夹中，否则通过 IPFS 分享的文件没有文件名称）。",
     "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
   },
   "quickUpload_options_pinUpload": {
-    "message": "固定文件（如果勾选，文件会被IPFS库保留，否则执行垃圾回收时文件可能会被从IPFS库中删除）。",
+    "message": "固定文件（如果勾选，文件会被 IPFS 库保留，否则执行垃圾回收时文件可能会被从 IPFS 库中删除）。",
     "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
   },
   "page_proxyAcl_title": {
@@ -468,7 +468,7 @@
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "查看，修改和撤销对你的IPFS实例授予的访问权限。",
+    "message": "查看，修改和撤销对你的 IPFS 实例授予的访问权限。",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
@@ -524,7 +524,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS伴侣 - 欢迎！",
+    "message": "IPFS 伴侣 - 欢迎！",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -540,31 +540,31 @@
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
-    "message": "发现什么是你 <0>通过伴侣能做的</0> 并通过IPFS投身于分布式web！",
+    "message": "发现什么是你 <0>通过伴侣能做的</0> 并通过 IPFS 参与到分布式 web ！",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS does not seem to be running",
+    "message": "IPFS 似乎没有运行",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "message": "获取 <0>IPFS Desktop</0>，就全部完成了！",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Prefer to use the command line?",
+    "message": "喜欢使用命令行？",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "message": "按照以下<0>说明</0>，然后在终端中启动 IPFS 守护程序：",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "刚接触IPFS？",
+    "message": "刚接触 IPFS？",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
-    "message": "阅读<0>文档</0>来学习基本的<1>概念</1>，开始IPFS相关的工作",
+    "message": "阅读<0>文档</0>来学习基本的<1>概念</1>，开始 IPFS 相关的工作",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
   },
   "page_landingWelcome_resources_title_discover": {
@@ -592,7 +592,7 @@
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
   "page_landingWelcome_videos_alpha_demo": {
-    "message": "IPFS Alpha演示",
+    "message": "IPFS Alpha 演示",
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
