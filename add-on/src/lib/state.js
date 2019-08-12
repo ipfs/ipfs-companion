@@ -6,7 +6,7 @@ const offlinePeerCount = -1
 
 // CID of a 'blessed' Web UI release
 // which should work without setting CORS headers
-const webuiCid = 'QmYTRvKFGhxgBiUreiw7ihn8g95tfJTWDt7aXqDsvAcJse' // v2.4.7
+const webuiCid = 'QmNyMYhwJUS1cVvaWoVBhrW8KPj1qmie7rZcWo8f1Bvkhz' // v2.5.0
 
 function initState (options) {
   // we store options and some pregenerated values to avoid async storage
