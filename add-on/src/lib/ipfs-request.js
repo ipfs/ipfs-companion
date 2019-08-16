@@ -74,7 +74,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     const fqdn = new URL(request.url).hostname
     const parentFqdn = parentUrl && parentUrl !== 'null' && request.url !== parentUrl ? new URL(parentUrl).hostname : null
     if (state.noRedirectHostnames.some(optout =>
-      fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout)
+      fqdn !== 'gateway.ipfs.io' && (fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout))
       ))) {
       ignore(request.requestId)
     }
