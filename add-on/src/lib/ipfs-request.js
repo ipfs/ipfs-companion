@@ -7,6 +7,7 @@ log.error = debug('ipfs-companion:request:error')
 
 const LRU = require('lru-cache')
 const IsIpfs = require('is-ipfs')
+const isFQDN = require('is-fqdn')
 const { pathAtHttpGateway } = require('./ipfs-path')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableErrors = new Set([
@@ -492,11 +493,22 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   path = path.replace(/^#dweb:\//i, '/') // dweb:/ipfs/Qm → /ipfs/Qm
   path = path.replace(/^#ipfs:\/\//i, '/ipfs/') // ipfs://Qm → /ipfs/Qm
   path = path.replace(/^#ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
-  // console.log(`oldPath: '${oldPath}' new: '${path}'`)
+  // additional fixups of the final path
+  path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
   if (oldPath !== path && IsIpfs.path(path)) {
     return { redirectUrl: pathAtHttpGateway(path, pubGwUrl) }
   }
   return null
+}
+
+// idempotent /ipfs/example.com → /ipns/example.com
+function fixupDnslinkPath (path) {
+  if (!(path && path.startsWith('/ipfs/'))) return path
+  const [, root] = path.match(/^\/ipfs\/([^/?#]+)/)
+  if (root && !IsIpfs.cid(root) && isFQDN(root)) {
+    return path.replace(/^\/ipfs\//, '/ipns/')
+  }
+  return path
 }
 
 // SEARCH-HIJACK HANDLERS: UNIVERSAL FALLBACK FOR UNHANDLED PROTOCOLS
@@ -521,9 +533,10 @@ function unhandledIpfsPath (requestUrl) {
 }
 
 function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
-  const path = unhandledIpfsPath(request.url)
+  let path = unhandledIpfsPath(request.url)
+  path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
   if (IsIpfs.path(path)) {
-    // replace search query with fake request to the public gateway
+    // replace search query with a request to a public gateway
     // (will be redirected later, if needed)
     return { redirectUrl: pathAtHttpGateway(path, pubGwUrl) }
   }
