@@ -24,7 +24,7 @@ const maToUri = require('multiaddr-to-uri')
 const getPort = require('get-port')
 
 // libp2p
-// const WS = require('libp2p-websockets')
+const WS = require('libp2p-websockets')
 // const WSM = require('libp2p-websocket-star-multi')
 const TCP = require('libp2p-tcp')
 const MulticastDNS = require('libp2p-mdns')
@@ -42,9 +42,19 @@ async function buildConfig (opts) {
 
   const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
 
+  // TODO: replace object with function that builds the bundle
+  // See defaultBundle in js-ipfs/src/core/components/libp2p.js
   ipfsNodeConfig.libp2p = {
+    // node defaults instead of browser ones
+    switch: {
+      blacklistTTL: 2 * 60 * 1e3, // 2 minute base
+      blackListAttempts: 5, // back off 5 times
+      maxParallelDials: 150,
+      maxColdCalls: 50,
+      dialTimeout: 10e3 // Be strict with dial time
+    },
     modules: {
-      transport: [new TCP()],
+      transport: [new TCP(), new WS()],
       peerDiscovery: [
         MulticastDNS,
         new Bootstrap({ list: ipfsNodeConfig.config.Bootstrap })
@@ -64,8 +74,12 @@ async function buildConfig (opts) {
         }
       },
       dht: {
-        // TODO: check if below is needed after js-ipfs is released with DHT disabled
-        enabled: false
+        // TODO: KadDHT seems to be CPU-bound in browser context, needs investigation
+        kBucketSize: 20,
+        enabled: false,
+        randomWalk: {
+          enabled: false
+        }
       }
     }
   }
