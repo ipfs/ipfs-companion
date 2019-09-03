@@ -27,6 +27,7 @@ const getPort = require('get-port')
 // const WS = require('libp2p-websockets')
 // const WSM = require('libp2p-websocket-star-multi')
 const TCP = require('libp2p-tcp')
+const MulticastDNS = require('libp2p-mdns')
 const Bootstrap = require('libp2p-bootstrap')
 
 const { optionDefaults } = require('../options')
@@ -44,9 +45,24 @@ async function buildConfig (opts) {
   ipfsNodeConfig.libp2p = {
     modules: {
       transport: [new TCP()],
-      peerDiscovery: [new Bootstrap({ list: ipfsNodeConfig.config.Bootstrap })]
+      peerDiscovery: [
+        MulticastDNS,
+        new Bootstrap({ list: ipfsNodeConfig.config.Bootstrap })
+      ]
     },
     config: {
+      peerDiscovery: {
+        autoDial: true,
+        mdns: {
+          enabled: true
+        },
+        bootstrap: {
+          enabled: true
+        },
+        websocketStar: {
+          enabled: true
+        }
+      },
       dht: {
         // TODO: check if below is needed after js-ipfs is released with DHT disabled
         enabled: false
