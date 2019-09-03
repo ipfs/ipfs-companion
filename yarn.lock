@@ -729,12 +729,19 @@
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.0.0.tgz#9f05469c88cb2fd3dcd624776b54ee95c312126a"
   integrity sha512-mV6T0IYqb0xL1UALPFplXYQmR0twnXG0M6jUswpquqT2sD12BOiCiLy3EvMp/Fy7s3DZElC4/aPjEjo2jeZpvw==
 
-"@hapi/ammo@3.x.x", "@hapi/ammo@^3.1.0":
+"@hapi/ammo@3.x.x":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@hapi/ammo/-/ammo-3.1.0.tgz#a3281ecb68bf7af2ffa6d0f7656536a7d23700ed"
   integrity sha512-iFQBEfm3WwWy8JdPQ8l6qXVLPtzmjITVfaxwl6dfoP8kKv6i2Uk43Ax+ShkNfOVyfEnNggqL2IyZTY3DaaRGNg==
   dependencies:
     "@hapi/hoek" "6.x.x"
+
+"@hapi/ammo@^3.1.0":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@hapi/ammo/-/ammo-3.1.1.tgz#ab700dac10f0b7fc5b7168c550c6be45ec3b981b"
+  integrity sha512-NYFK27VSPGyQ/KmOQedpQH4PSjE7awLntepX68vrYtRvuJO21W1kX0bK2p3C+6ltUwtCQSvmNT8a4uMVAysC6Q==
+  dependencies:
+    "@hapi/hoek" "8.x.x"
 
 "@hapi/boom@7.x.x", "@hapi/boom@^7.4.2":
   version "7.4.2"
@@ -6933,61 +6940,10 @@ ipfs-css@0.13.1:
   resolved "https://registry.yarnpkg.com/ipfs-css/-/ipfs-css-0.13.1.tgz#f751be9cc89e30c34c50325848233f6da6b6728e"
   integrity sha512-hofJSYVBE3VC3/MOYZKfF66SKuHgnYkhXUmPDS8PISI8ygcljGOyBSSU4Je3dfgZX5UHDBEnzq5XyrTU822EDg==
 
-ipfs-http-client@33.1.1, ipfs-http-client@^33.0.1, ipfs-http-client@^33.0.2:
+ipfs-http-client@33.1.1, ipfs-http-client@^33.0.1, ipfs-http-client@^33.0.2, ipfs-http-client@^33.1.0:
   version "33.1.1"
   resolved "https://registry.yarnpkg.com/ipfs-http-client/-/ipfs-http-client-33.1.1.tgz#6ddc13e86f8db768093290b19537d2388c74dd45"
   integrity sha512-iwtLL3lOIzxXJFwLnOEtFUv1cYTuWJ0NauD7rpMEd/y4C7z6fuN6TSF4h547lxMh7sJWv+6Z0PmOA5N8FzUHJw==
-  dependencies:
-    async "^2.6.1"
-    bignumber.js "^9.0.0"
-    bl "^3.0.0"
-    bs58 "^4.0.1"
-    buffer "^5.2.1"
-    cids "~0.7.1"
-    concat-stream "github:hugomrdias/concat-stream#feat/smaller"
-    debug "^4.1.0"
-    detect-node "^2.0.4"
-    end-of-stream "^1.4.1"
-    err-code "^1.1.2"
-    flatmap "0.0.3"
-    glob "^7.1.3"
-    ipfs-block "~0.8.1"
-    ipfs-utils "~0.0.3"
-    ipld-dag-cbor "~0.15.0"
-    ipld-dag-pb "~0.17.3"
-    ipld-raw "^4.0.0"
-    is-ipfs "~0.6.1"
-    is-pull-stream "0.0.0"
-    is-stream "^2.0.0"
-    iso-stream-http "~0.1.2"
-    iso-url "~0.4.6"
-    just-kebab-case "^1.1.0"
-    just-map-keys "^1.1.0"
-    kind-of "^6.0.2"
-    lru-cache "^5.1.1"
-    multiaddr "^6.0.6"
-    multibase "~0.6.0"
-    multicodec "~0.5.1"
-    multihashes "~0.4.14"
-    ndjson "github:hugomrdias/ndjson#feat/readable-stream3"
-    once "^1.4.0"
-    peer-id "~0.12.2"
-    peer-info "~0.15.1"
-    promisify-es6 "^1.0.3"
-    pull-defer "~0.2.3"
-    pull-stream "^3.6.9"
-    pull-to-stream "~0.1.1"
-    pump "^3.0.0"
-    qs "^6.5.2"
-    readable-stream "^3.1.1"
-    stream-to-pull-stream "^1.7.2"
-    tar-stream "^2.0.1"
-    through2 "^3.0.1"
-
-ipfs-http-client@^33.1.0:
-  version "33.1.0"
-  resolved "https://registry.yarnpkg.com/ipfs-http-client/-/ipfs-http-client-33.1.0.tgz#4d3beceba27fcef26cf1940375a5f8c9d609f0dd"
-  integrity sha512-hkS8nXay3DGKb/KXU1RDvTyxnvkAdhS5enlXxNXaS7yKvADlf5SEuQGYjW+VknkPPQ4FNbY3JttQ3YW+LTuoRA==
   dependencies:
     async "^2.6.1"
     bignumber.js "^9.0.0"
@@ -9036,7 +8992,7 @@ libp2p-websocket-star@~0.10.2:
     socket.io-client "^2.1.1"
     socket.io-pull-stream "~0.1.5"
 
-libp2p-websockets@^0.12.2, libp2p-websockets@~0.12.2:
+libp2p-websockets@^0.12.2:
   version "0.12.2"
   resolved "https://registry.yarnpkg.com/libp2p-websockets/-/libp2p-websockets-0.12.2.tgz#eecf25564cbe6b0e9017bb411c2a8abec8c9f29b"
   integrity sha512-K/Jg/fWFfP5NyiLx01EJcoAcYQO00RSHpZfPQDR3May6ABvOseAjq45SrUDdDCW5mCS0502Vz1VjRrZdOXw8zQ==
@@ -9046,6 +9002,18 @@ libp2p-websockets@^0.12.2, libp2p-websockets@~0.12.2:
     interface-connection "~0.3.2"
     mafmt "^6.0.4"
     multiaddr-to-uri "^4.0.1"
+    pull-ws hugomrdias/pull-ws#fix/bundle-size
+
+libp2p-websockets@~0.12.2:
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/libp2p-websockets/-/libp2p-websockets-0.12.3.tgz#f4bc201b0f381bd6b53f5e92446394761f29ceb3"
+  integrity sha512-qA5YZv7RoxGUtMlcD8JwquonM0/19MCV0UPDRihCjzTi4wRgGKhIXZSwd/fs+8RRTKHMEUngAxit7ZLSlYgdQQ==
+  dependencies:
+    class-is "^1.1.0"
+    debug "^4.1.1"
+    interface-connection "~0.3.3"
+    mafmt "^6.0.7"
+    multiaddr-to-uri "^5.0.0"
     pull-ws hugomrdias/pull-ws#fix/bundle-size
 
 libp2p@~0.25.4:
@@ -9951,6 +9919,13 @@ multiaddr-to-uri@4.0.1, multiaddr-to-uri@^4.0.1:
   integrity sha512-RVHKm5NXcMWMIhrwF4B4Q34JtMXt1/2wgnDTnKRE+AGAiXfqFika0bIfCsAtLp+gZJOWeDLeT1vR6P0gGyVAtg==
   dependencies:
     multiaddr "^6.0.3"
+
+multiaddr-to-uri@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/multiaddr-to-uri/-/multiaddr-to-uri-5.0.0.tgz#f62421bd905d2690030acdae09b0719f60b6a91c"
+  integrity sha512-aVc52fdGXso3DwvVKUTjMddhLyuFBXcpGSbsIju0lKiYKFBUEREXSLpcqTOZlO8w1G1TivVmDe4CBUKQ/xMm5A==
+  dependencies:
+    multiaddr "^6.1.0"
 
 multiaddr@6.1.0, multiaddr@^4.0.0, multiaddr@^5.0.0, multiaddr@^6.0.3, multiaddr@^6.0.4, multiaddr@^6.0.6, multiaddr@^6.1.0:
   version "6.1.0"
@@ -14075,10 +14050,18 @@ superagent@^3.1.0, superagent@~3.8.1:
     qs "^6.5.1"
     readable-stream "^2.3.5"
 
-superstruct@^0.6.0, superstruct@~0.6.0, superstruct@~0.6.1:
+superstruct@^0.6.0, superstruct@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.6.1.tgz#148fc3d627bb59fcfe24aa1bd2a1b8c51b1db072"
   integrity sha512-LDbOKL5sNbOJ00Q36iYRhSexKIptZje0/mhNznnz04wT9CmsPDZg/K/UV1dgYuCwNMuOBHTbVROZsGB9EhhK4w==
+  dependencies:
+    clone-deep "^2.0.1"
+    kind-of "^6.0.1"
+
+superstruct@~0.6.0:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.6.2.tgz#c5eb034806a17ff98d036674169ef85e4c7f6a1c"
+  integrity sha512-lvA97MFAJng3rfjcafT/zGTSWm6Tbpk++DP6It4Qg7oNaeM+2tdJMuVgGje21/bIpBEs6iQql1PJH6dKTjl4Ig==
   dependencies:
     clone-deep "^2.0.1"
     kind-of "^6.0.1"

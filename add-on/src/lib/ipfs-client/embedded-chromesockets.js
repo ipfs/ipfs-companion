@@ -2,6 +2,11 @@
 /* eslint-env browser, webextensions */
 const browser = require('webextension-polyfill')
 
+/* *********************************************************
+   This file is a wip sandbox.
+   Code will be refactored when kinks are ironed out.
+   ********************************************************* */
+
 const debug = require('debug')
 const log = debug('ipfs-companion:client:embedded')
 log.error = debug('ipfs-companion:client:embedded:error')
@@ -18,6 +23,12 @@ const multiaddr = require('multiaddr')
 const maToUri = require('multiaddr-to-uri')
 const getPort = require('get-port')
 
+// libp2p
+// const WS = require('libp2p-websockets')
+// const WSM = require('libp2p-websocket-star-multi')
+const TCP = require('libp2p-tcp')
+const Bootstrap = require('libp2p-bootstrap')
+
 const { optionDefaults } = require('../options')
 
 // js-ipfs with embedded hapi HTTP server
@@ -26,7 +37,15 @@ let nodeHttpApi = null
 
 async function buildConfig (opts) {
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
-  defaultOpts.libp2p = {
+  const userOpts = JSON.parse(opts.ipfsNodeConfig)
+
+  const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
+
+  ipfsNodeConfig.libp2p = {
+    modules: {
+      transport: [new TCP()],
+      peerDiscovery: [new Bootstrap({ list: ipfsNodeConfig.config.Bootstrap })]
+    },
     config: {
       dht: {
         // TODO: check if below is needed after js-ipfs is released with DHT disabled
@@ -34,8 +53,6 @@ async function buildConfig (opts) {
       }
     }
   }
-  const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
 
   // Detect when API or Gateway port is not available (taken by something else)
   // We find the next free port and update configuration to use it instead
