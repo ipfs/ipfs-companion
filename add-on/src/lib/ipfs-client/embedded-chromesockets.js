@@ -24,13 +24,15 @@ const maToUri = require('multiaddr-to-uri')
 const getPort = require('get-port')
 
 // libp2p
-const WS = require('libp2p-websockets')
+// const WS = require('libp2p-websockets')
 // const WSM = require('libp2p-websocket-star-multi')
-const TCP = require('libp2p-tcp')
-const MulticastDNS = require('libp2p-mdns')
-const Bootstrap = require('libp2p-bootstrap')
+// const TCP = require('libp2p-tcp')
+// const MulticastDNS = require('libp2p-mdns')
+// const Bootstrap = require('libp2p-bootstrap')
 
 const { optionDefaults } = require('../options')
+
+const chromeSocketsBundle = require('./chrome-sockets/libp2p-bundle')
 
 // js-ipfs with embedded hapi HTTP server
 let node = null
@@ -40,49 +42,7 @@ async function buildConfig (opts) {
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
 
-  const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
-
-  // TODO: replace object with function that builds the bundle
-  // See defaultBundle in js-ipfs/src/core/components/libp2p.js
-  ipfsNodeConfig.libp2p = {
-    // node defaults instead of browser ones
-    switch: {
-      blacklistTTL: 2 * 60 * 1e3, // 2 minute base
-      blackListAttempts: 5, // back off 5 times
-      maxParallelDials: 150,
-      maxColdCalls: 50,
-      dialTimeout: 10e3 // Be strict with dial time
-    },
-    modules: {
-      transport: [new TCP(), new WS()],
-      peerDiscovery: [
-        MulticastDNS,
-        new Bootstrap({ list: ipfsNodeConfig.config.Bootstrap })
-      ]
-    },
-    config: {
-      peerDiscovery: {
-        autoDial: true,
-        mdns: {
-          enabled: true
-        },
-        bootstrap: {
-          enabled: true
-        },
-        websocketStar: {
-          enabled: true
-        }
-      },
-      dht: {
-        // TODO: KadDHT seems to be CPU-bound in browser context, needs investigation
-        kBucketSize: 20,
-        enabled: false,
-        randomWalk: {
-          enabled: false
-        }
-      }
-    }
-  }
+  const ipfsNodeConfig = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false, libp2p: chromeSocketsBundle })
 
   // Detect when API or Gateway port is not available (taken by something else)
   // We find the next free port and update configuration to use it instead

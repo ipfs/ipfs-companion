@@ -100,8 +100,8 @@ function buildDefaultIpfsNodeConfig () {
     // Until we have MulticastDNS+DNS, peer discovery is done over ws-star
     config.config.Addresses.Swarm = [
       '/ip4/0.0.0.0/tcp/0',
-      '/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star',
-      '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+      '/dns4/ws-star1.par.dwebops.pub/tcp/443/wss/p2p-websocket-star'
+      // '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
     ]
     /*
     // Until DHT and p2p transport are ready, delegate + preload
