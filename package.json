@@ -116,7 +116,7 @@
     "@material/switch": "3.1.0",
     "browser-process-hrtime": "1.0.0",
     "choo": "7.0.0",
-    "chrome-dgram": "3.0.2",
+    "chrome-dgram": "https://github.com/lidel/chrome-dgram/tarball/2bd217a29ea91b313fe5f46828621bb27d69cb06/chrome-dgram.tar.gz",
     "chrome-net": "3.3.2",
     "debug": "4.1.1",
     "doc-sniff": "1.0.1",

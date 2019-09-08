@@ -3050,10 +3050,9 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.2.tgz#a18f1e0b269c8a6a5d3c86eb298beb14c3dd7bf6"
   integrity sha512-GkfeAQh+QNy3wquu9oIZr6SS5x7wGdSgNQvD10X3r+AZr1Oys22HW8kAmDMvNg2+Dm0TeGaEuO8gFwdBXxwO8A==
 
-chrome-dgram@3.0.2:
+"chrome-dgram@https://github.com/lidel/chrome-dgram/tarball/2bd217a29ea91b313fe5f46828621bb27d69cb06/chrome-dgram.tar.gz":
   version "3.0.2"
-  resolved "https://registry.yarnpkg.com/chrome-dgram/-/chrome-dgram-3.0.2.tgz#7e0e00084b57971714214372368ad18a7785ad52"
-  integrity sha512-Ay741EHF/Ib18un+LUtBNK43NrabD6GOuwVaka7uUbV0gFRLEPULm2Q05YSzRNBtSrbaO4eErmDdniiy/u8Lig==
+  resolved "https://github.com/lidel/chrome-dgram/tarball/2bd217a29ea91b313fe5f46828621bb27d69cb06/chrome-dgram.tar.gz#a0ecacafc6ef22a58e11d6664037ef6734db8024"
   dependencies:
     inherits "^2.0.1"
     run-series "^1.1.2"
