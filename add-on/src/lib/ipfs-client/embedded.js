@@ -15,7 +15,7 @@ exports.init = function init (opts) {
 
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsOpts = mergeOptions.call({ concatArrays: true }, defaultOpts, userOpts, { start: false })
+  const ipfsOpts = mergeOptions(defaultOpts, userOpts, { start: false })
 
   node = new Ipfs(ipfsOpts)
 

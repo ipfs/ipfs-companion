@@ -3055,9 +3055,10 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.2.tgz#a18f1e0b269c8a6a5d3c86eb298beb14c3dd7bf6"
   integrity sha512-GkfeAQh+QNy3wquu9oIZr6SS5x7wGdSgNQvD10X3r+AZr1Oys22HW8kAmDMvNg2+Dm0TeGaEuO8gFwdBXxwO8A==
 
-"chrome-dgram@https://github.com/lidel/chrome-dgram/tarball/2bd217a29ea91b313fe5f46828621bb27d69cb06/chrome-dgram.tar.gz":
-  version "3.0.2"
-  resolved "https://github.com/lidel/chrome-dgram/tarball/2bd217a29ea91b313fe5f46828621bb27d69cb06/chrome-dgram.tar.gz#a0ecacafc6ef22a58e11d6664037ef6734db8024"
+chrome-dgram@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/chrome-dgram/-/chrome-dgram-3.0.3.tgz#121935a81d52d4012273e17bcd6079f31a3fa30c"
+  integrity sha512-rktbTuXuzriInBm9qESjTqRhnscp26gAdsQnUSWIY4a3miF9gnFOBGib+DO0zcJ0ZF2wj6wwQrPgyWfT4+as3g==
   dependencies:
     inherits "^2.0.1"
     run-series "^1.1.2"
@@ -7326,9 +7327,9 @@ ipfs-utils@~0.2.0:
     pull-stream-to-async-iterator "^1.0.2"
     readable-stream "^3.4.0"
 
-"ipfs@https://github.com/ipfs/js-ipfs/tarball/ddd49ce41f6f9abd48b1e54bc4c7dd3e58fd0ee9/js-ipfs.tar.gz":
+"ipfs@https://github.com/ipfs/js-ipfs/tarball/cf38aead2b0cb0b5f269daf265a2b868c50a81f8/js-ipfs.tar.gz":
   version "0.38.0-pre.1"
-  resolved "https://github.com/ipfs/js-ipfs/tarball/ddd49ce41f6f9abd48b1e54bc4c7dd3e58fd0ee9/js-ipfs.tar.gz#ce05cb0f16fdcabbc7482e13637ebcff8a322c4f"
+  resolved "https://github.com/ipfs/js-ipfs/tarball/cf38aead2b0cb0b5f269daf265a2b868c50a81f8/js-ipfs.tar.gz#90189b730a6e5123807891a606de7bf7a86c9538"
   dependencies:
     "@hapi/ammo" "^3.1.1"
     "@hapi/boom" "^7.4.3"
