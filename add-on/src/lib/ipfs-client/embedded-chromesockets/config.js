@@ -23,9 +23,9 @@ const chromeSocketsOpts = {
       */
       Swarm: [
         // TODO: listening on TCP (override IP and port at runtime in buildConfig()?)
-        '/ip4/0.0.0.0/tcp/0'
-        // TODO: disabled -star signaling: it makes a backup non-LAN peer discovery, but break the boot if server is down
-        // '/dns4/ws-star1.par.dwebops.pub.com/tcp/443/wss/p2p-websocket-star'
+        '/ip4/0.0.0.0/tcp/0',
+        // optional ws-star signaling provides a backup non-LAN peer discovery
+        '/dns4/ws-star1.par.dwebops.pub.com/tcp/443/wss/p2p-websocket-star'
       ],
       // Delegated Content and Peer Routing: https://github.com/ipfs/js-ipfs/pull/2195
       Delegates: // [] // TODO: enable delegates
