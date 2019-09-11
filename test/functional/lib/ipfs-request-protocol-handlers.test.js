@@ -1,6 +1,5 @@
 'use strict'
 const { describe, it, before, beforeEach, after } = require('mocha')
-// const sinon = require('sinon')
 const { expect } = require('chai')
 const { URL } = require('url')
 const browser = require('sinon-chrome')
@@ -30,6 +29,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
+      dnslinkPolicy: false, // dnslink test suite is in ipfs-request-dnslink.test.js
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
       pubGwURLString: 'https://ipfs.io'
@@ -66,12 +66,16 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const request = url2request('https://gateway.ipfs.io/ipfs/QmXQY7mKr28B964Uj4ouq3fPgkNLqzaKiajTA7surAiQuD#ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
-        it('should not be normalized if ipns:/{foo}', function () {
+        it('should not be normalized if ipns:/{fqdn}', function () {
           const request = url2request('https://gateway.ipfs.io/ipfs/QmXQY7mKr28B964Uj4ouq3fPgkNLqzaKiajTA7surAiQuD#ipns%3A%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
-        it('should be normalized if ipns://{foo}', function () {
+        it('should be normalized if ipns://{fqdn}', function () {
           const request = url2request('https://gateway.ipfs.io/ipfs/QmXQY7mKr28B964Uj4ouq3fPgkNLqzaKiajTA7surAiQuD#ipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+        })
+        it('should be normalized if ipfs://{fqdn}', function () {
+          const request = url2request('https://gateway.ipfs.io/ipfs/QmXQY7mKr28B964Uj4ouq3fPgkNLqzaKiajTA7surAiQuD#ipfs%3A%2F%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should be normalized if dweb:/ipfs/{CID}', function () {
@@ -149,6 +153,10 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if ipns://{foo}', function () {
           const request = url2request('https://duckduckgo.com/?q=ipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+        })
+        it('should be normalized if ipfs://{fqdn}', function () {
+          const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
         })
         it('should be normalized if dweb:/ipfs/{CID}', function () {
