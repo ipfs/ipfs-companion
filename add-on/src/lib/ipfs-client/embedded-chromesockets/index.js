@@ -17,7 +17,7 @@ process.hrtime = require('browser-process-hrtime')
 
 const Ipfs = require('ipfs')
 const HttpApi = require('ipfs/src/http')
-const { buildConfig, syncConfig } = require('./chrome-sockets/config')
+const { buildConfig, syncConfig } = require('./config')
 
 // js-ipfs + embedded hapi HTTP server
 let node

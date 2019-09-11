@@ -41,7 +41,7 @@ const commonConfig = {
       'process.env': {
         NODE_ENV: '"production"',
         IPFS_MONITORING: false,
-        DEBUG: true // controls verbosity of Hapi HTTP server in js-ipfs
+        DEBUG: false // controls verbosity of Hapi HTTP server in js-ipfs
       }
     })
   ],
