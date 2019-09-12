@@ -25,11 +25,13 @@ module.exports = function header (props) {
           ${browser.i18n.getMessage('panel_headerIpfsNodeIconLabel')}
         </h1>
         <div class="tc ma0 pa0">
-  ${powerIcon({ active,
+  ${powerIcon({
+    active,
     title: 'panel_headerActiveToggleTitle',
     action: onToggleActive
   })}
-  ${optionsIcon({ active,
+  ${optionsIcon({
+    active,
     title: 'panel_openPreferences',
     action: onOpenPrefs
   })}

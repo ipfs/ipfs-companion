@@ -227,7 +227,7 @@ describe('ipfs-path.js', function () {
     })
     it('should resolve URL with /ipfs/ path to the custom gateway if provided', function () {
       const url = 'https://example.com/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest'
-      expect(ipfsPathValidator.resolveToPublicUrl(url, 'https://example.com/')).to.equal(`https://example.com/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest`)
+      expect(ipfsPathValidator.resolveToPublicUrl(url, 'https://example.com/')).to.equal('https://example.com/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
     })
     it('should resolve /ipfs/ path to itself attached to the default public gateway', function () {
       const path = '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest'
@@ -391,13 +391,13 @@ describe('ipfs-path.js', function () {
     it('should resolve URL with /ipns/ path', async function () {
       const url = 'https://example.com/ipns/docs.ipfs.io/foo/bar?argTest#hashTest'
       const expectedCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
-      spoofIpfsResolve(ipfs, `/ipns/docs.ipfs.io/foo/bar`, `/ipfs/${expectedCid}`)
+      spoofIpfsResolve(ipfs, '/ipns/docs.ipfs.io/foo/bar', `/ipfs/${expectedCid}`)
       expect(await ipfsPathValidator.resolveToCid(url)).to.equal(expectedCid)
     })
     it('should resolve /ipns/ path to the immutable /ipfs/ one', async function () {
       const path = '/ipns/libp2p.io/foo/bar?argTest#hashTest'
       const expectedCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
-      spoofIpfsResolve(ipfs, `/ipns/libp2p.io/foo/bar`, `/ipfs/${expectedCid}`)
+      spoofIpfsResolve(ipfs, '/ipns/libp2p.io/foo/bar', `/ipfs/${expectedCid}`)
       expect(await ipfsPathValidator.resolveToCid(path)).to.equal(expectedCid)
     })
     it('should resolve URL of a DNSLink website to null if the value if DNSLink is not in cache', async function () {
@@ -414,7 +414,7 @@ describe('ipfs-path.js', function () {
       spoofCachedDnslink(hostname, dnslinkResolver, dnslinkValue)
       // Note the DNSLink value is ignored, and /ipns/<fqdn> is passed to ipfs.resolv internally
       // This ensures the latest pointer is returned, instead of stale value from DNSLink cache
-      spoofIpfsResolve(ipfs, `/ipns/docs.ipfs.io/guides/concepts/dnslink/`, `/ipfs/${expectedCid}`)
+      spoofIpfsResolve(ipfs, '/ipns/docs.ipfs.io/guides/concepts/dnslink/', `/ipfs/${expectedCid}`)
       expect(await ipfsPathValidator.resolveToCid(url)).to.equal(expectedCid)
     })
     // TODO: remove when https://github.com/ipfs/js-ipfs/issues/1918 is addressed
@@ -429,7 +429,7 @@ describe('ipfs-path.js', function () {
       // This ensures the latest pointer is returned, instead of stale value from DNSLink cache
       // js-ipfs v0.34 does not support DNSLinks in ipfs.name.resolve: https://github.com/ipfs/js-ipfs/issues/1918
       const resolve = stub(ipfs, 'resolve')
-      resolve.withArgs(`/ipns/docs.ipfs.io/guides/concepts/dnslink/`).throws(new Error('resolve non-IPFS names is not implemented'))
+      resolve.withArgs('/ipns/docs.ipfs.io/guides/concepts/dnslink/').throws(new Error('resolve non-IPFS names is not implemented'))
       // until it is implemented, we have a workaround that falls back to value from dnslink
       resolve.withArgs('/ipns/QmRV5iNhGoxBaAcbucMAW9WtVHbeehXhAdr5CZQDhL55Xk/guides/concepts/dnslink/').resolves(`/ipfs/${expectedCid}`)
       resolve.throws((arg) => new Error(`Unexpected stubbed call ipfs.resolve(${arg})`))

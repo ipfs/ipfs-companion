@@ -6,7 +6,7 @@ const mainStyle = require('ipfs-http-response/src/dir-view/style')
 function buildFilesList (path, links) {
   const rows = links.map((link) => {
     let row = [
-      `<div class="ipfs-icon ipfs-_blank">&nbsp;</div>`,
+      '<div class="ipfs-icon ipfs-_blank">&nbsp;</div>',
       `<a href="${path}${path.endsWith('/') ? '' : '/'}${link.name}">${link.name}</a>`,
       filesize(link.size)
     ]

@@ -61,7 +61,7 @@ describe('storeMissingOptions()', function () {
 
 describe('hostTextToArray()', function () {
   it('should sort, dedup hostnames, drop non-FQDNs and produce an array', () => {
-    const text = `zombo.com\n two.com  \n totally not a FQDN \none.pl \nTWO.com\n\n`
+    const text = 'zombo.com\n two.com  \n totally not a FQDN \none.pl \nTWO.com\n\n'
     const array = ['one.pl', 'two.com', 'zombo.com']
     expect(hostTextToArray(text)).to.be.an('array').to.have.ordered.members(array)
   })
@@ -70,7 +70,7 @@ describe('hostTextToArray()', function () {
 describe('hostArrayToText()', function () {
   it('should sort, deduplicate, drop non-FQDNs and produce multiline string', () => {
     const array = ['zombo.com ', 'two.com  ', 'ONE.pl ', 'one.pl', 'totall not a FQDN', 'zombo.com']
-    const text = `one.pl\ntwo.com\nzombo.com`
+    const text = 'one.pl\ntwo.com\nzombo.com'
     expect(hostArrayToText(array)).to.be.a('string').equal(text)
   })
 })
