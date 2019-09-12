@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
 
@@ -113,7 +112,11 @@ async function buildConfig (opts, log) {
   chromeOpts.config.Addresses.Swarm = chromeOpts.config.Addresses.Swarm.concat(userOpts.config.Addresses.Swarm)
 
   // merge configs
-  const ipfsNodeConfig = mergeOptions(defaultOpts, userOpts, chromeOpts, { start: false, libp2p: chromeSocketsBundle })
+  const finalOpts = {
+    start: false,
+    libp2p: chromeSocketsBundle
+  }
+  const ipfsNodeConfig = mergeOptions(defaultOpts, userOpts, chromeOpts, finalOpts)
 
   // Detect when API or Gateway port is not available (taken by something else)
   // We find the next free port and update configuration to use it instead
@@ -134,26 +137,30 @@ async function buildConfig (opts, log) {
 }
 
 async function syncConfig (ipfs, opts, log) {
-  const localConfig = await browser.storage.local.get('ipfsNodeConfig')
-  if (localConfig && localConfig.ipfsNodeConfig) {
-    const gwMa = await ipfs.config.get('Addresses.Gateway')
-    const apiMa = await ipfs.config.get('Addresses.API')
-    const httpGateway = multiaddr2httpUrl(gwMa)
-    const httpApi = multiaddr2httpUrl(apiMa)
+  const storedConfig = await browser.storage.local.get('ipfsNodeConfig')
+  if (storedConfig && storedConfig.ipfsNodeConfig) {
+    const maGw = await ipfs.config.get('Addresses.Gateway')
+    const maApi = await ipfs.config.get('Addresses.API')
+    const httpGw = multiaddr2httpUrl(maGw)
+    const httpApi = multiaddr2httpUrl(maApi)
     // update config in browser.storage to ports from js-ipfs instance
-    const ipfsNodeConfig = JSON.parse(localConfig.ipfsNodeConfig)
-    ipfsNodeConfig.config.Addresses.Gateway = gwMa
-    ipfsNodeConfig.config.Addresses.API = apiMa
-    const configChanges = {
-      customGatewayUrl: httpGateway,
-      ipfsApiUrl: httpApi,
-      ipfsNodeConfig: JSON.stringify(ipfsNodeConfig, null, 2)
+    const changes = {
+      customGatewayUrl: httpGw,
+      ipfsApiUrl: httpApi
+    }
+    // update ipfsNodeConfig if ports changed (eg. due to old port being busy)
+    const cfg = JSON.parse(storedConfig.ipfsNodeConfig)
+    if (maGw !== cfg.config.Addresses.Gateway ||
+       maApi !== cfg.config.Addresses.API) {
+      cfg.config.Addresses.Gateway = maGw
+      cfg.config.Addresses.API = maApi
+      changes.ipfsNodeConfig = JSON.stringify(cfg, null, 2)
     }
     // update runtime config in place
-    Object.assign(opts, configChanges)
-    // update config in browser.storage (triggers async client restart if ports changed)
-    log(`synchronizing ipfsNodeConfig with customGatewayUrl (${configChanges.customGatewayUrl}) and ipfsApiUrl (${configChanges.ipfsApiUrl})`)
-    await browser.storage.local.set(configChanges)
+    Object.assign(opts, changes)
+    // save config to browser.storage (triggers async client restart if ports changed)
+    log(`synchronizing ipfsNodeConfig with customGatewayUrl (${changes.customGatewayUrl}) and ipfsApiUrl (${changes.ipfsApiUrl})`)
+    await browser.storage.local.set(changes)
   }
 }
 

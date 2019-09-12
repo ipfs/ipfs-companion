@@ -1,3 +1,5 @@
+'use strict'
+
 const TCP = require('libp2p-tcp')
 const MulticastDNS = require('libp2p-mdns')
 const WS = require('libp2p-websockets')
