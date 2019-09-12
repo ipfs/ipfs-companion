@@ -146,7 +146,8 @@
     "tachyons": "4.11.1",
     "timers-browserify-full": "0.0.1",
     "uri-to-multiaddr": "3.0.1",
-    "webextension-polyfill": "0.4.0"
+    "webextension-polyfill": "0.4.0",
+    "webrtc-ips": "0.1.4"
   },
   "engines": {
     "node": ">=10.0.0",

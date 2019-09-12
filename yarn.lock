@@ -12148,6 +12148,11 @@ prometheus-gc-stats@~0.6.0:
   optionalDependencies:
     gc-stats "^1.2.1"
 
+promise-controller@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/promise-controller/-/promise-controller-0.3.0.tgz#e512a5059075a0c2dedd1488695412f0650c33f7"
+  integrity sha512-w1RTaOwD5bNtYjIj5L8+ruDtMgnKC0pLtOogA3kcS4LRtiwLOpAdokjYbkjJMa6AGV0oasHa8RRNa8qEpG1qyw==
+
 promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
@@ -15702,6 +15707,13 @@ webpack@4.39.3:
     terser-webpack-plugin "^1.4.1"
     watchpack "^1.6.0"
     webpack-sources "^1.4.1"
+
+webrtc-ips@0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/webrtc-ips/-/webrtc-ips-0.1.4.tgz#c1806a1dd0a91ca01eeb44997ef2133c2a865e53"
+  integrity sha512-zjpkAmPDxkllbjprCa14s9bpqlb+pqe17T0+uF/SfJTM5XcgUdMP1RDwFcgANIYvZgYbkK075Ok+82YPodvm+A==
+  dependencies:
+    promise-controller "^0.3.0"
 
 "webrtcsupport@github:ipfs/webrtcsupport":
   version "2.2.0"

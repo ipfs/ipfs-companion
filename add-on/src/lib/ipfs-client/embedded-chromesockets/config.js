@@ -7,12 +7,14 @@ const { optionDefaults } = require('../../options')
 const chromeSocketsBundle = require('./libp2p-bundle')
 const mergeOptions = require('merge-options')
 const getPort = require('get-port')
+const { getIPv4, getIPv6 } = require('webrtc-ips')
 
 const multiaddr = require('multiaddr')
 const maToUri = require('multiaddr-to-uri')
 const multiaddr2httpUrl = (ma) => maToUri(ma.includes('/http') ? ma : multiaddr(ma).encapsulate('/http'))
 
-const chromeSocketsOpts = {
+// additional default js-ipfs config specific to runtime with chrome.sockets APIs
+const chromeDefaultOpts = {
   config: {
     Addresses: {
       API: '/ip4/127.0.0.1/tcp/5003',
@@ -22,10 +24,10 @@ const chromeSocketsOpts = {
          but Web UI needs API (can't use window.ipfs due to sandboxing)
       */
       Swarm: [
-        // TODO: listening on TCP (override IP and port at runtime in buildConfig()?)
-        '/ip4/0.0.0.0/tcp/0',
-        // optional ws-star signaling provides a backup non-LAN peer discovery
-        '/dns4/ws-star1.par.dwebops.pub.com/tcp/443/wss/p2p-websocket-star'
+        // optional ws-star signaling provides a backup for non-LAN peer discovery
+        // (this will be removed when autorelay and DHT are stable in js-ipfs)
+        '/dns4/ws-star1.par.dwebops.pub.com/tcp/443/wss/p2p-websocket-star',
+        '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
       ],
       // Delegated Content and Peer Routing: https://github.com/ipfs/js-ipfs/pull/2195
       Delegates: // [] // TODO: enable delegates
@@ -93,7 +95,25 @@ const chromeSocketsOpts = {
 async function buildConfig (opts, log) {
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsNodeConfig = mergeOptions(defaultOpts, userOpts, chromeSocketsOpts, { start: false, libp2p: chromeSocketsBundle })
+  const chromeOpts = JSON.parse(JSON.stringify(chromeDefaultOpts))
+
+  // find a free TCP port for incoming connections
+  const freeTcpPort = await getPort({ port: getPort.makeRange(4042, 4100) })
+  // find out local network IPs
+  const ipv4 = await getIPv4()
+  const ipv6 = await getIPv6()
+  // add TCP multiaddrs
+  if (ipv4) {
+    chromeOpts.config.Addresses.Swarm.unshift(`/ip4/${ipv4}/tcp/${freeTcpPort}`)
+  }
+  if (ipv6) {
+    chromeOpts.config.Addresses.Swarm.unshift(`/ip6/${ipv6}/tcp/${freeTcpPort}`)
+  }
+  // append user-provided multiaddrs
+  chromeOpts.config.Addresses.Swarm = chromeOpts.config.Addresses.Swarm.concat(userOpts.config.Addresses.Swarm)
+
+  // merge configs
+  const ipfsNodeConfig = mergeOptions(defaultOpts, userOpts, chromeOpts, { start: false, libp2p: chromeSocketsBundle })
 
   // Detect when API or Gateway port is not available (taken by something else)
   // We find the next free port and update configuration to use it instead
