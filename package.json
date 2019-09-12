@@ -68,7 +68,7 @@
   "resolutions": {
     "libp2p-delegated-content-routing": "0.2.4",
     "libp2p-delegated-peer-routing": "0.2.4",
-    "@hapi/hapi": "https://github.com/lidel/hapi/tarball/fb8626fac0522f49fe29e2f4f686dfd8926204b6/hapi.tar.gz",
+    "@hapi/hapi": "https://github.com/lidel/hapi/tarball/0d73f8dde9fc7d518f477b8e04fe5abff1b33777/hapi.tar.gz",
     "iso-stream-http": "0.1.2",
     "stream-http": "npm:iso-stream-http@0.1.2",
     "pull-to-stream": "0.1.1",
@@ -124,7 +124,7 @@
     "get-port": "5.0.0",
     "http-dns": "3.0.1",
     "http-node": "1.2.0",
-    "ipfs": "https://github.com/ipfs/js-ipfs/tarball/cf38aead2b0cb0b5f269daf265a2b868c50a81f8/js-ipfs.tar.gz",
+    "ipfs": "https://github.com/ipfs/js-ipfs/tarball/ad65329253da333885b86c7927aa8f0a1e628551/js-ipfs.tar.gz",
     "ipfs-css": "0.13.1",
     "ipfs-http-client": "36.0.0",
     "ipfs-http-response": "0.3.1",
