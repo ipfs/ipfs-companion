@@ -1,16 +1,27 @@
 # Node Types in IPFS Companion
 
 > ![screenshot of node type switch](https://user-images.githubusercontent.com/157609/42382479-b4d98768-8134-11e8-979c-69b758846bf0.png)<br/>
-> _IPFS Node Type selection_
-----
 
-> ### **TL;DR** when in doubt, run go-ipfs as _External_ node on your localhost:
-> - [IPFS Desktop](https://github.com/ipfs-shipyard/ipfs-desktop) is a GUI app for Windows/Linux/Mac that installs and manages local IPFS node for you
-> - If you prefer more on-hands approach:
->   - install IPFS node by hand: [Getting Started](https://ipfs.io/docs/getting-started/)
->   - or run it in [Docker](https://github.com/ipfs/go-ipfs#docker-usage)
 
-## External
+Available node types:
+
+- [External](#%EF%B8%8F-external)
+- [Embedded](#%EF%B8%8F-embedded)
+- [Embedded + `chrome.sockets`](#-embedded--chromesockets)
+- [Public](#-public)
+
+## TL;DR
+
+When in doubt, use _External_ node running on your localhost:
+- [IPFS Desktop](https://github.com/ipfs-shipyard/ipfs-desktop) is a GUI app for Windows/Linux/Mac that installs and manages local IPFS node for you
+- If you prefer more hands-on approach:
+  - install IPFS by following [Getting Started](https://docs.ipfs.io/introduction/usage/) guide
+  - or run it in [Docker](https://github.com/ipfs/go-ipfs#docker-usage)
+- If you are using [Brave](https://brave.com/), feel free to experiment with [Embedded + `chrome.sockets`](#-embedded--chromesockets).  
+  You can always switch back to _External_ with local IPFS Desktop
+
+
+## 🛰️ External
 
 _External_ node can be any instance of IPFS daemon that runs outside of web
 browser process and exposes _Gateway_ and writable _API_ over HTTP at TCP ports.
@@ -28,7 +39,7 @@ A good practice is to run it on localhost (`127.0.0.1`) as it provides:
 Don't know where to start? See [Getting Started](https://ipfs.io/docs/getting-started/) instructions.
 
 
-## Embedded
+## 🏗️ Embedded
 
 _Embedded_ node is a js-ipfs instance running in browser (in-memory), without need for
 any external software.
@@ -59,20 +70,26 @@ Power users can provide [custom config](https://github.com/ipfs/js-ipfs#faq) (eg
 When in doubt, run go-ipfs as External node instead.
 
 
-## Embedded + `chrome.sockets`
+## 🦄 Embedded + `chrome.sockets`
 
 This node type replaces regular _Embedded_ type if browser vendor granted us access to `chrome.sockets` APIs.  
-Those powerful APIs enable exciting possibilities:
+Those powerful APIs enable embedded js-ipfs to provide true p2p experience without the need for external daemon:
 
-- Embedded HTTP Gateway [wip]
-- True P2P over TCP/UDP transports [future]
-- Local Discovery (mDNS/DNS-SD) [future]
+### 🚪 HTTP Gateway
+- access IPFS resources over HTTP without relying on a public gateway
+- automatically picks a free localhost port
 
-**Note:** this is still work in progress: one can track progress in [ipfs-companion/issues/664](https://github.com/ipfs-shipyard/ipfs-companion/issues/664).  
-Right now only [Brave Nightly](https://brave.com/download-nightly/) supports this.  
+###  🚄 TCP transport
+- embedded js-ipfs is able to connect to go-ipfs
+- go-ipfs is able to connect to embedded js-ipfs
 
+### 🔮 Local Discovery (mDNS/DNS-SD)
 
-## Public
+- embedded node discovers go-ipfs in LAN  and automatically connects to it
+
+**Note:** this is still work in progress, see [Embedded JS-IPFS in Brave](https://github.com/ipfs-shipyard/ipfs-companion/issues/716) for the current status.
+
+## 🌐 Public
 
 Public node is not a part of the toggle UI. It is used as an implicit fallback for its Gateway functionality when External node is offline or Embedded node is used.
 It does not expose API port.
