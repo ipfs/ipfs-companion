@@ -94,7 +94,7 @@ async function processFiles (state, emitter, files) {
   } catch (err) {
     console.error('Unable to perform quick upload', err)
     // keep upload tab and display error message in it
-    state.message = `Unable to upload to IPFS API:`
+    state.message = 'Unable to upload to IPFS API:'
     state.progress = `${err}`
     emitter.emit('render')
   }

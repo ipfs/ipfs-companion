@@ -133,7 +133,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
 
     // confirm build permission request failed with error
     expect(requestAccess.called).to.equal(false)
-    expect(() => { if (error) throw error }).to.throw(`User denied access to selected commands over IPFS proxy: id`)
+    expect(() => { if (error) throw error }).to.throw('User denied access to selected commands over IPFS proxy: id')
 
     // ensure explicit version acl is still missing
     const versionAcl = await accessControl.getAccess(getScope(), 'version')
