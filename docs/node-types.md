@@ -36,7 +36,7 @@ A good practice is to run it on localhost (`127.0.0.1`) as it provides:
 - Better UX in web browser (no mixed-content warnings)
 - Improved performance (local loopback is used, no network overhead)
 
-Don't know where to start? See [Getting Started](https://ipfs.io/docs/getting-started/) instructions.
+Don't know where to start? See [Getting Started](https://docs.ipfs.io/introduction/usage/) instructions.
 
 
 ## 🏗️ Embedded
