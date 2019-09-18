@@ -164,7 +164,7 @@ To work on the extension you need to install it from source rather than from the
     ```console
     $ npm run dev-build
     ```
-3. Switch manifest to browser of your choice:
+3. Switch `add-on/manifest.json` to the browser of your choice:
     ```console
     $ npm run bundle:firefox # for Firefox (build default)
     OR
