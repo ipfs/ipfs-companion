@@ -36,13 +36,13 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
                 <option
                   value='embedded:chromesockets'
                   selected=${ipfsNodeType === 'embedded:chromesockets'}>
-                  ${browser.i18n.getMessage('option_ipfsNodeType_embedded_chromesockets')}
+                  ${browser.i18n.getMessage('option_ipfsNodeType_embedded_chromesockets')} (${browser.i18n.getMessage('option_experimental')})
                 </option>
               ` : html`
                 <option
                   value='embedded'
                   selected=${ipfsNodeType === 'embedded'}>
-                  ${browser.i18n.getMessage('option_ipfsNodeType_embedded')}
+                  ${browser.i18n.getMessage('option_ipfsNodeType_embedded')} (${browser.i18n.getMessage('option_experimental')})
                 </option>
               `}
           </select>
