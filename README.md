@@ -136,9 +136,10 @@ _(some are disabled by default, use Preferences screen to enable)_
 
 We recommend installing the stable release via your browser's add-on store.
 
-| <img src="https://unpkg.com/@browser-logos/firefox@2.0.0/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) / [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chromium@1.0.2/chromium_16x16.png" width="16" height="16"> [Chromium](https://www.chromium.org/Home)-based: <img src="https://unpkg.com/@browser-logos/chrome@1.0.4/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/),  <img src="https://unpkg.com/@browser-logos/brave@3.0.0/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/), <img src="https://unpkg.com/@browser-logos/opera@1.1.1/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)
+| <img src="https://unpkg.com/@browser-logos/firefox@2.0.0/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) / [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome@1.0.4/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) / <img src="https://unpkg.com/@browser-logos/brave@3.0.0/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) / <img src="https://unpkg.com/@browser-logos/opera@1.1.1/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  / <img src="https://unpkg.com/@browser-logos/edge@1.0.6/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Install From AMO](https://ipfs.io/ipfs/QmSX44XockQifmxE8Wdevkaa6vaqTXtGdH9t9aHWXZkuJq)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmPinSJKFYCMuTDh484dLk5Av4HpZRzBRR1KPv7TM7CBVF)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch)  |
+| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmXeTTMAxJVSZLqNcVzBdsAZKhWUpP7w7QAZ8f3Bnmk3Mj)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+
 
 **Note:** `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.  
 Make sure [IPFS is installed](https://docs.ipfs.io/introduction/usage/) on your computer.
@@ -159,16 +160,17 @@ but these builds are not signed nor will automatically update:
 To work on the extension you need to install it from source rather than from the add on store.
 
 1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
-2. Build it:
-    ```bash
-    npm install
-    npm run build    
-    npm run bundle:generic # for Chromium-based dev
-    # or
-    npm run bundle:firefox # for Firefox dev (build default)
+2. Run all-in-one dev build:
+    ```console
+    $ npm run dev-build
     ```
-
-3. Load it into browser:
+3. Switch `add-on/manifest.json` to the browser of your choice:
+    ```console
+    $ npm run bundle:firefox # for Firefox (build default)
+    OR
+    $ npm run bundle:chromium # for Chromium-based browsers
+    ```
+4. Load it into browser:
     * Chromium-based
         1. Enter `chrome://extensions` in the URL bar
         2. Enable "Developer mode"

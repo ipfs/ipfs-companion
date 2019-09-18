@@ -48,7 +48,7 @@ then click "Load Temporary Add-on" and point it at `add-on/manifest.json`
 First, build it manually:
 
 ```bash
-npm run build bundle:generic # last part is important: it overwrites manifest
+npm run build bundle:chromium # last part is important: it overwrites manifest
 ```
 
 Then open up `chrome://extensions` in Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at `add-on`
@@ -68,8 +68,10 @@ Each `npm` task can be run separately, but for most of time `dev-build`, `test` 
 
 - `npm install` -- install all NPM dependencies
 - `npm run build` -- build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
-- `npm run bundle:generic` -- overwrites manifest and packages a Brave/Chrome-compatible version
+- `npm run bundle:chromium` -- overwrites manifest and packages a generic, Chromium-compatible version
+- `npm run bundle:brave` -- overwrites manifest and packages a Brave-compatible version requesting access to `chrome.sockets`
 - `npm run bundle:firefox` -- overwrites manifest and packages a Firefox-compatible version
+- `npm run build:rename-artifacts` -- renames artifacts to include runtimes in filenames
 - `npm run ci` -- runs tests and build (with frozen yarn.lock)
 - `npm test` -- run entire test suite
 - `npm run lint` -- read-only check for potential syntax problems (run all linters)
@@ -95,4 +97,3 @@ Release build shortcuts:
 
 - [Localization Notes](localization-notes.md) (running browsers with specific locale etc)
 - [Testing persistent and restart features](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
-
