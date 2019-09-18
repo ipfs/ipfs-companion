@@ -37,7 +37,7 @@
     "bundle:fennec": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json add-on/manifest.fennec.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/fennec/  && run-s build:rename-artifacts",
     "bundle:fennec:dev": "npm run bundle:fennec",
     "bundle:fennec:stable": "npm run bundle:fennec",
-    "bundle:fennec:beta": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json add-on/manifest.firefox-beta.json add-on/manifest.fennec.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/firefox-android/  && run-s build:rename-artifacts",
+    "bundle:fennec:beta": "shx cat add-on/manifest.common.json add-on/manifest.firefox.json add-on/manifest.firefox-beta.json add-on/manifest.fennec.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/fennec/  && run-s build:rename-artifacts",
     "bundle:brave": "shx cat add-on/manifest.common.json add-on/manifest.brave.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/brave/  && run-s build:rename-artifacts",
     "bundle:brave:dev": "npm run bundle:brave",
     "bundle:brave:stable": "npm run bundle:brave",
