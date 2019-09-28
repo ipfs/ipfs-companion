@@ -17,6 +17,16 @@
   filter: blur( .15em );
 }
 
+.button {
+  width: 10em;
+  height: 3em;
+  background-color: #69c4cd;
+  color: white;
+  border-radius: .1em;
+  border: 4px solid #4A9EA1;
+  cursor: pointer;
+}
+
 /*
   https://github.com/tachyons-css/tachyons-queries
   Tachyons: $point == large
