@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 const { default: PQueue } = require('p-queue')
 
-  /*
+/*
  * This content script is responsible for performing the logic of replacing
  * plain text with IPFS addresses with clickable links.
  * Loosely based on https://github.com/mdn/webextensions-examples/blob/master/emoji-substitution/substitute.js
