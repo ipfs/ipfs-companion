@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 function getBrowserInfo (browser) {
+  // browser.runtime.getBrowserInfo is not available in Chromium-based browsers
   if (browser && browser.runtime && browser.runtime.getBrowserInfo) {
     return browser.runtime.getBrowserInfo()
   }
