@@ -224,11 +224,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Intégré (expérimental) : démarre un nœud js-ipfs dans votre navigateur (à utiliser seulement pour le développement, lisez à propos de ces limitations avec le lien ci-dessous)",
+    "message": "Embarqué: exécute un noeud js-ipfs dans le navigateur (plus d'information sur ses limitations sous le lien ci-dessous)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Intégré (expérimental) : démarre un nœud js-ipfs dans votre navigateur avec un accès à l'API chrome.sockets (Détails via le lien ci-dessous)",
+    "message": "Embarqué avec des Chrome Sockets: exécute un noeud js-ipfs dans le navigateur avec accès aux API chrome.sockets (détails sous le lien ci-dessous)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "La configuration additionnelle pour le nœud IPFS embarqué (les matrices seront fusionnées). Doit être un JSON valide.",
+    "message": "Configuration supplémentaire pour le noeud JS IPFS embarqué. Doit être un JSON valide.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -322,6 +322,10 @@
   "option_header_experiments": {
     "message": "Fonctionnalités expérimentales",
     "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_experimental": {
+    "message": "expérimental",
+    "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
     "message": "ATTENTION. Ces fonctionnalités sont récentes ou en cours de développement. Un certain niveau de connaissance est requis.",

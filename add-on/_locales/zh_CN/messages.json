@@ -224,11 +224,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "嵌入式（测试阶段）：在你的浏览器中运行js-ipfsj节点 （仅用于开发，从以下链接阅读其局限性）",
+    "message": "Embedded: run js-ipfs node in your browser (read about its limitations under the link below)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "嵌入 Chrome 套接字（实验性）：在浏览器中运行 js-ipfs 节点并访问 chrome.sockets 的 API（详情见下面的链接）",
+    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "嵌入式 IPFS 节点的额外配置（将合并阵列）。必须是合规的 JSON 。",
+    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -322,6 +322,10 @@
   "option_header_experiments": {
     "message": "试验",
     "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_experimental": {
+    "message": "experimental",
+    "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
     "message": "警告：这些功能正在完善当中。YMMV",

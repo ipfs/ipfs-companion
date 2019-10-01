@@ -224,11 +224,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embutido (experimental): executar o nó js-ipfs no seu navegador (use apenas para desenvolvimento, leia sobre as limitações no link abaixo)",
+    "message": "Embedded: run js-ipfs node in your browser (read about its limitations under the link below)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embutido com Chrome Sockets (experimental): executar o nó js-ipfs no seu navegador com acesso às APIs chrome.sockets (mais detalhes na hiperligação abaixo)",
+    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configuração adicional para o nó IPFS embutido (os arrays serão unidos). Tem que ser JSON válido.",
+    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -322,6 +322,10 @@
   "option_header_experiments": {
     "message": "Experimentos",
     "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_experimental": {
+    "message": "experimental",
+    "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
     "message": "Aviso: estas funcionalidades são novas ou trabalhos em progresso.",
