@@ -43,18 +43,6 @@
     "icons/ipfs-logo-on.svg",
     "icons/ipfs-logo-off.svg"
   ],
-  "content_scripts": [
-    {
-      "all_frames": true,
-      "js": [
-        "dist/bundles/ipfsProxyContentScript.bundle.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ],
-      "run_at": "document_start"
-    }
-  ],
   "content_security_policy": "script-src 'self'; object-src 'self'; frame-src 'self';",
   "default_locale": "en"
 }
