@@ -163,7 +163,7 @@ describe('modifyRequest processing', function () {
       const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
       expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
     })
-    it('should redirect in onBeforeRequest if DNS TXT record exists, XHR is cross-origin and runtime is not Firefox', function () {
+    it('should redirect in onBeforeRequest if DNS TXT record exists, XHR is cross-origin and runtime is Chromium', function () {
       // stub existence of a valid DNS record
       const fqdn = 'explore.ipld.io'
       dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
@@ -173,19 +173,15 @@ describe('modifyRequest processing', function () {
       const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
       expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
     })
-    it('should redirect later in onHeadersReceived if dnslink exists, XHR is cross-origin and runtime is Firefox', function () {
+    it('should redirect in onBeforeRequest if dnslink exists, XHR is cross-origin and runtime is Firefox', function () {
       // stub existence of a valid DNS record
       const fqdn = 'explore.ipld.io'
       dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
       //
-      // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
       runtime.isFirefox = true
       // Firefox uses 'originUrl' for origin
       const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
-      // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
-      expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
-      // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
-      expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
+      expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
     })
     it('should do nothing if dnslink does not exist and XHR is cross-origin in Firefox', function () {
       // stub no dnslink
@@ -325,7 +321,7 @@ describe('modifyRequest processing', function () {
           const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
-        it('should redirect later in onHeadersReceived if XHR is cross-origin and runtime is Firefox', function () {
+        it('should redirect in onBeforeRequest if XHR is cross-origin and runtime is Firefox', function () {
           // stub existence of a valid DNS record
           const fqdn = 'explore.ipld.io'
           dnslinkResolver.setDnslink(fqdn, '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
@@ -333,10 +329,7 @@ describe('modifyRequest processing', function () {
           // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
           runtime.isFirefox = true
           const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
-          // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
-          expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
-          // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
-          expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
+          expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
         it('should do nothing if DNS TXT record is missing and XHR is cross-origin in Firefox', function () {
           // stub cached info about lack of dnslink

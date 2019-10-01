@@ -20,9 +20,6 @@ const recoverableErrors = new Set([
   'net::ERR_INTERNET_DISCONNECTED' // no network
 ])
 
-// Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-const onHeadersReceivedRedirect = new Set()
-
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
 function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
@@ -316,19 +313,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       }
 
       if (state.redirect) {
-        // Late redirect as a workaround for edge cases such as:
-        // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-        if (onHeadersReceivedRedirect.has(request.requestId)) {
-          onHeadersReceivedRedirect.delete(request.requestId)
-          if (state.dnslinkPolicy) {
-            const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
-            if (dnslinkRedirect) {
-              return dnslinkRedirect
-            }
-          }
-          return redirectToGateway(request.url, state, ipfsPathValidator)
-        }
-
         // Detect X-Ipfs-Path Header and upgrade transport to IPFS:
         // 1. Check if DNSLink exists and redirect to it.
         // 2. If there is no DNSLink, validate path from the header and redirect
@@ -417,11 +401,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           })
         }
       }
-
-      // Cleanup after https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-      if (onHeadersReceivedRedirect.has(request.requestId)) {
-        onHeadersReceivedRedirect.delete(request.requestId)
-      }
     }
 
   }
@@ -429,7 +408,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 
 exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
-exports.onHeadersReceivedRedirect = onHeadersReceivedRedirect
 
 function redirectToGateway (requestUrl, state, ipfsPathValidator) {
   // TODO: redirect to `ipfs://` if hasNativeProtocolHandler === true
@@ -450,21 +428,6 @@ function isSafeToRedirect (request, runtime) {
     return false
   }
 
-  // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
-  // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
-  // TODO: revisit when upstream bug is addressed
-  if (runtime.isFirefox && request.type === 'xmlhttprequest' && !request.responseHeaders) {
-    // Sidenote on XHR Origin: Firefox 60 uses request.originUrl, Chrome 63 uses request.initiator
-    if (request.originUrl) {
-      const sourceOrigin = new URL(request.originUrl).origin
-      const targetOrigin = new URL(request.url).origin
-      if (sourceOrigin !== targetOrigin) {
-        log('Delaying redirect of CORS XHR until onHeadersReceived due to https://github.com/ipfs-shipyard/ipfs-companion/issues/436 :', request.url)
-        onHeadersReceivedRedirect.add(request.requestId)
-        return false
-      }
-    }
-  }
   return true
 }
 
