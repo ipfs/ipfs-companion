@@ -1,5 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
+const browser = require('webextension-polyfill')
+
 function createWelcomePageStore (i18n, runtime) {
   return function welcomePageStore (state, emitter) {
     state.isIpfsOnline = null
