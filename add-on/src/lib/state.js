@@ -19,7 +19,7 @@ function initState (options) {
   delete state.publicGatewayUrl
   state.redirect = options.useCustomGateway
   delete state.useCustomGateway
-  state.apiURL = safeURL(options.ipfsApiUrl)
+  state.apiURL = safeURL(options.ipfsApiUrl, { localhost: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
   state.apiURLString = state.apiURL.toString()
   delete state.ipfsApiUrl
   state.gwURL = safeURL(options.customGatewayUrl)

@@ -73,19 +73,22 @@ exports.storeMissingOptions = async (read, defaults, storage) => {
   return changes
 }
 
-function normalizeGatewayURL (url) {
+function normalizeGatewayURL (url, { localhost = true }) {
   if (typeof url === 'string') {
     url = new URL(url)
   }
-  // https://github.com/ipfs/ipfs-companion/issues/328
-  if (url.hostname.toLowerCase() === 'localhost') {
+  // localhost normalization (https://github.com/ipfs-shipyard/ipfs-companion/issues/328)
+  if (localhost && url.hostname === '127.0.0.1') {
+    url.hostname = 'localhost'
+  }
+  if (!localhost && url.hostname === 'localhost') {
     url.hostname = '127.0.0.1'
   }
   // Return string without trailing slash
   return url.toString().replace(/\/$/, '')
 }
 exports.normalizeGatewayURL = normalizeGatewayURL
-exports.safeURL = (url) => new URL(normalizeGatewayURL(url))
+exports.safeURL = (url, opts) => new URL(normalizeGatewayURL(url, opts || {}))
 
 // convert JS array to multiline textarea
 function hostArrayCleanup (array) {
