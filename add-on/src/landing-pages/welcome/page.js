@@ -85,8 +85,8 @@ const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
       </div>
       <p class="${copyClass}">${renderTranslatedSpans('page_landingWelcome_welcome_peers', [peerCount], 'class="aqua fw6"')}</p>
       <p class="${copyClass} mb4">${renderTranslatedLinks('page_landingWelcome_welcome_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</p>
-      <div class="mt4 f4 flex justify-center items-center">
-        <button class="button" onclick=${onOpenWebUi}>${i18n.getMessage('panel_openWebui')}</button>
+      <div class="mt4 f5 flex justify-center items-center">
+        <button class="mw8 pv3 ph4 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('panel_openWebui')}</button>
       </div>
     </div>
   `
