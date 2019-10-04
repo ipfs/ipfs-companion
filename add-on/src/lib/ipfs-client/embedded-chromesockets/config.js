@@ -25,7 +25,6 @@ const chromeDefaultOpts = {
       Swarm: [
         // optional ws-star signaling provides a backup for non-LAN peer discovery
         // (this will be removed when autorelay and DHT are stable in js-ipfs)
-        '/dns4/ws-star1.par.dwebops.pub.com/tcp/443/wss/p2p-websocket-star',
         '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
       ],
       // Delegated Content and Peer Routing: https://github.com/ipfs/js-ipfs/pull/2195
