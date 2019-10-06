@@ -675,6 +675,9 @@ module.exports = async function init () {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
           break
+        case 'recoverViaPublicGateway':
+          state[key] = change.newValue
+          break
         case 'logNamespaces':
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue

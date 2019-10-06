@@ -375,6 +375,14 @@
     "message": "Check before HTTP request",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
+  "option_recoverViaPublicGateway_title": {
+    "message": "Recover links via public gateway",
+    "description": "An option title on the Preferences screen (option_recoverViaPublicGateway_title)"
+  },
+  "option_recoverViaPublicGateway_description": {
+    "message": "Redirect broken public gateway requests to the default public gateway",
+    "description": "An option description on the Preferences screen (option_recoverViaPublicGateway_description)"
+  },
   "option_detectIpfsPathHeader_title": {
     "message": "Detect X-Ipfs-Path Header",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"

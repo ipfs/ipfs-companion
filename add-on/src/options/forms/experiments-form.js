@@ -11,6 +11,7 @@ function experimentsForm ({
   catchUnhandledProtocols,
   linkify,
   dnslinkPolicy,
+  recoverViaPublicGateway,
   detectIpfsPathHeader,
   ipfsProxy,
   logNamespaces,
@@ -22,6 +23,7 @@ function experimentsForm ({
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
+  const onrecoverViaPublicGatewayChange = onOptionChange('recoverViaPublicGateway')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
 
@@ -95,6 +97,15 @@ function experimentsForm ({
               ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
             </option>
           </select>
+        </div>
+        <div>
+          <label for="recoverViaPublicGateway">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_recoverViaPublicGateway_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_recoverViaPublicGateway_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'recoverViaPublicGateway', checked: recoverViaPublicGateway, onchange: onrecoverViaPublicGatewayChange })}</div>
         </div>
         <div>
           <label for="detectIpfsPathHeader">

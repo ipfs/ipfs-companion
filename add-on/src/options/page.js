@@ -75,6 +75,7 @@ module.exports = function optionsPage (state, emit) {
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
     dnslinkPolicy: state.options.dnslinkPolicy,
+    recoverViaPublicGateway: state.options.recoverViaPublicGateway,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     ipfsProxy: state.options.ipfsProxy,
     logNamespaces: state.options.logNamespaces,
