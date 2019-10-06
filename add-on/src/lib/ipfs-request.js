@@ -20,6 +20,26 @@ const recoverableErrors = new Set([
   'net::ERR_INTERNET_DISCONNECTED' // no network
 ])
 
+const recoverableErrorCodes = new Set([
+  404,
+  408,
+  410,
+  415,
+  451,
+  500,
+  502,
+  503,
+  504,
+  509,
+  520,
+  521,
+  522,
+  523,
+  524,
+  525,
+  526
+])
+
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
 function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
@@ -380,6 +400,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // console.log('onErrorOccurred:' + request.error)
       // console.log('onErrorOccurred', request)
       // Check if error is final and can be recovered via DNSLink
+      let redirect
       const recoverableViaDnslink =
         state.dnslinkPolicy &&
         request.type === 'main_frame' &&
@@ -387,22 +408,40 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)) {
         // Explicit call to ignore global DNSLink policy and force DNS TXT lookup
         const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
-        const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
-        // We can't redirect in onErrorOccurred, so if DNSLink is present
-        // recover by opening IPNS version in a new tab
-        // TODO: add tests and demo
-        if (dnslinkRedirect) {
-          log(`onErrorOccurred: recovering using dnslink for ${request.url}`, dnslinkRedirect)
-          const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
-          await browser.tabs.create({
-            active: true,
-            openerTabId: currentTabId,
-            url: dnslinkRedirect.redirectUrl
-          })
+        redirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
+        log(`onErrorOccurred: attempting to recover using dnslink for ${request.url}`, redirect)
+      }
+      // if error cannot be recovered via DNSLink
+      // direct the request to the public gateway
+      const recoverableViaPubGw = isRecoverableViaPubGw(request, state, ipfsPathValidator)
+      if (!redirect && recoverableViaPubGw) {
+        const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
+        redirect = { redirectUrl }
+        log(`onErrorOccurred: attempting to recover using public gateway for ${request.url}`, redirect)
+      }
+      // We can't redirect in onErrorOccurred, so if DNSLink is present
+      // recover by opening IPNS version in a new tab
+      // TODO: add tests and demo
+      if (redirect) {
+        createTabWithURL(redirect, browser)
+      }
+    },
+
+    async onCompleted (request) {
+      const state = getState()
+
+      const recoverableViaPubGw =
+        isRecoverableViaPubGw(request, state, ipfsPathValidator) &&
+        recoverableErrorCodes.has(request.statusCode)
+      if (recoverableViaPubGw) {
+        const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
+        const redirect = { redirectUrl }
+        if (redirect) {
+          log(`onErrorOccurred: attempting to recover using public gateway for ${request.url}`, redirect)
+          createTabWithURL(redirect, browser)
         }
       }
     }
-
   }
 }
 
@@ -507,4 +546,21 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
 
 function findHeaderIndex (name, headers) {
   return headers.findIndex(x => x.name && x.name.toLowerCase() === name.toLowerCase())
+}
+
+// utility functions for handling redirects
+// from onErrorOccurred and onCompleted
+function isRecoverableViaPubGw (request, state, ipfsPathValidator) {
+  return ipfsPathValidator.publicIpfsOrIpnsResource(request.url) &&
+    !request.url.startsWith(state.pubGwURLString) &&
+    request.type === 'main_frame'
+}
+
+async function createTabWithURL (redirect, browser) {
+  const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
+  await browser.tabs.create({
+    active: true,
+    openerTabId: currentTabId,
+    url: redirect.redirectUrl
+  })
 }
