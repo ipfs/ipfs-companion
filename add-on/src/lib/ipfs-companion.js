@@ -97,7 +97,7 @@ module.exports = async function init () {
 
   function registerListeners () {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
-    if (!runtime.isFirefox) {
+    if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
       onBeforeSendInfoSpec.push('extraHeaders')
     }
