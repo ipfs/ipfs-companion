@@ -4,6 +4,7 @@ const pull = require('pull-stream/pull')
 const drain = require('pull-stream/sinks/drain')
 const toStream = require('it-to-stream')
 const tar = require('tar-stream')
+const CID = require('cids')
 const { webuiCid } = require('./state')
 
 const debug = require('debug')
@@ -75,7 +76,9 @@ async function importTar (ipfs, tarPath, expectedCid) {
   })
 
   untarAndAdd.on('finish', async () => {
-    const results = await ipfs.add(await Promise.all(files), { pin: false })
+    const { version } = new CID(expectedCid)
+    const opts = { cidVersion: version, pin: false, preload: false }
+    const results = await ipfs.add(await Promise.all(files), opts)
     const root = results.find(e => e.hash === expectedCid)
     if (root) {
       log(`${tarPath} successfully precached`, root)

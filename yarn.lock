@@ -1472,11 +1472,7 @@ abstract-leveldown@^5.0.0, abstract-leveldown@~5.0.0:
   dependencies:
     xtend "~4.0.0"
 
-<<<<<<< HEAD
-abstract-leveldown@^6.2.1, abstract-leveldown@~6.2.1:
-=======
 abstract-leveldown@^6.1.1:
->>>>>>> feat(precache): import TAR archives on boot
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/abstract-leveldown/-/abstract-leveldown-6.2.1.tgz#37b655151e13c3d9b20fa3a04ce63ccaa345fce4"
   integrity sha512-zUgomHedGBCThDkUtc1bfilu2jEhRZ7Dk3RePhtMma/akw7UK2Upm2R5Dd8ynRBEt3uscwbWO0VQNx22/7RtWg==
@@ -1507,8 +1503,6 @@ abstract-leveldown@~6.0.1, abstract-leveldown@~6.0.3:
     level-concat-iterator "~2.0.0"
     xtend "~4.0.0"
 
-<<<<<<< HEAD
-=======
 abstract-leveldown@~6.1.0:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/abstract-leveldown/-/abstract-leveldown-6.1.1.tgz#f44bad5862d71c7b418110d7698ac25bedf24396"
@@ -1517,7 +1511,6 @@ abstract-leveldown@~6.1.0:
     level-concat-iterator "~2.0.0"
     xtend "~4.0.0"
 
->>>>>>> feat(precache): import TAR archives on boot
 abstract-logging@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/abstract-logging/-/abstract-logging-1.0.0.tgz#8b7deafd310559bc28f77724dd1bb30177278c1b"
@@ -4021,21 +4014,12 @@ deferred-leveldown@~4.0.0:
     abstract-leveldown "~5.0.0"
     inherits "^2.0.3"
 
-<<<<<<< HEAD
-deferred-leveldown@~5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/deferred-leveldown/-/deferred-leveldown-5.3.0.tgz#27a997ad95408b61161aa69bd489b86c71b78058"
-  integrity sha512-a59VOT+oDy7vtAbLRCZwWgxu2BaCfd5Hk7wxJd48ei7I+nsg8Orlb9CLG0PMZienk9BSUKgeAqkO2+Lw+1+Ukw==
-  dependencies:
-    abstract-leveldown "~6.2.1"
-=======
 deferred-leveldown@~5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/deferred-leveldown/-/deferred-leveldown-5.2.1.tgz#8da87909cd3269c2d6aff67b1e607f93e4d96c15"
   integrity sha512-PwXZRn5EmW+IKYVAYVc7G9FsRkShr0myPubPuq+mtLhDq9xSUqfvTlNZKoeQGeXACHXkeCFurKrz5oo6TZ3qwg==
   dependencies:
     abstract-leveldown "~6.1.0"
->>>>>>> feat(precache): import TAR archives on boot
     inherits "^2.0.3"
 
 define-properties@^1.1.2, define-properties@^1.1.3:
@@ -4132,14 +4116,11 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha512-ZIzRpLJrOj7jjP2miAtgqIfmzbxa4ZOr5jJc601zklsfEx9oTzmmj2nVpIPRpNlRTIh8lc1kyViIY7BWSGNmKw==
 
-<<<<<<< HEAD
 diff-match-patch@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.4.tgz#6ac4b55237463761c4daf0dc603eb869124744b1"
   integrity sha512-Uv3SW8bmH9nAtHKaKSanOQmj2DnlH65fUpcrMdfdaOxUG02QQ4YGZ8AE7kKOMisF7UqvOlGKVYWRvezdncW9lg==
 
-=======
->>>>>>> feat(precache): import TAR archives on boot
 diff@3.5.0, diff@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
@@ -4409,21 +4390,12 @@ encodeurl@~1.0.2:
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
   integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
 
-<<<<<<< HEAD
-encoding-down@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/encoding-down/-/encoding-down-6.3.0.tgz#b1c4eb0e1728c146ecaef8e32963c549e76d082b"
-  integrity sha512-QKrV0iKR6MZVJV08QY0wp1e7vF6QbhnbQhb07bwpEyuz4uZiZgPlEGdkCROuFkUwdxlFaiPIhjyarH1ee/3vhw==
-  dependencies:
-    abstract-leveldown "^6.2.1"
-=======
 encoding-down@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/encoding-down/-/encoding-down-6.2.0.tgz#7ca52446dac6e0fd09ad3584a7359809ea1a4844"
   integrity sha512-XlIoQMBMbU4aE01uSKpAix0sXBJWK8YPhuOdvKa1CroThZyUpj0zWzt+bbe7g1KWsdhNFFzHkQHSdDymVtpJ1w==
   dependencies:
     abstract-leveldown "^6.1.1"
->>>>>>> feat(precache): import TAR archives on boot
     inherits "^2.0.3"
     level-codec "^9.0.0"
     level-errors "^2.0.0"
@@ -7026,75 +6998,6 @@ ipfs-http-client@^33.1.0:
     tar-stream "^2.0.1"
     through2 "^3.0.1"
 
-<<<<<<< HEAD
-=======
-ipfs-http-client@^38.0.0:
-  version "38.0.1"
-  resolved "https://registry.yarnpkg.com/ipfs-http-client/-/ipfs-http-client-38.0.1.tgz#c74c121755456d10d179207168be147e99add21d"
-  integrity sha512-1R/qR2kpZz23jBdm+Mdje8h8GDynZVDXAIoCL4xchfeFsH7VdwWTbyhieaAsynYX5f6/KTfk1LZuulaVoJ5Fgw==
-  dependencies:
-    abort-controller "^3.0.0"
-    async "^2.6.1"
-    async-iterator-all "^1.0.0"
-    async-iterator-to-pull-stream "^1.3.0"
-    bignumber.js "^9.0.0"
-    bl "^3.0.0"
-    bs58 "^4.0.1"
-    buffer "^5.4.2"
-    cids "~0.7.1"
-    concat-stream "github:hugomrdias/concat-stream#feat/smaller"
-    debug "^4.1.0"
-    delay "^4.3.0"
-    detect-node "^2.0.4"
-    end-of-stream "^1.4.1"
-    err-code "^2.0.0"
-    explain-error "^1.0.4"
-    flatmap "0.0.3"
-    form-data "^2.5.1"
-    fs-extra "^8.1.0"
-    glob "^7.1.3"
-    ipfs-block "~0.8.1"
-    ipfs-utils "^0.4.0"
-    ipld-dag-cbor "~0.15.0"
-    ipld-dag-pb "^0.18.1"
-    ipld-raw "^4.0.0"
-    is-ipfs "~0.6.1"
-    is-pull-stream "0.0.0"
-    is-stream "^2.0.0"
-    iso-stream-http "~0.1.2"
-    iso-url "~0.4.6"
-    it-glob "0.0.4"
-    it-to-stream "^0.1.1"
-    iterable-ndjson "^1.1.0"
-    just-kebab-case "^1.1.0"
-    just-map-keys "^1.1.0"
-    kind-of "^6.0.2"
-    ky "^0.14.0"
-    ky-universal "^0.3.0"
-    lru-cache "^5.1.1"
-    merge-options "^1.0.1"
-    multiaddr "^6.0.6"
-    multibase "~0.6.0"
-    multicodec "~0.5.1"
-    multihashes "~0.4.14"
-    ndjson "github:hugomrdias/ndjson#feat/readable-stream3"
-    once "^1.4.0"
-    peer-id "~0.12.3"
-    peer-info "~0.15.1"
-    promise-nodeify "^3.0.1"
-    promisify-es6 "^1.0.3"
-    pull-defer "~0.2.3"
-    pull-stream "^3.6.9"
-    pull-stream-to-async-iterator "^1.0.2"
-    pull-to-stream "~0.1.1"
-    pump "^3.0.0"
-    qs "^6.5.2"
-    readable-stream "^3.1.1"
-    stream-to-pull-stream "^1.7.2"
-    tar-stream "^2.0.1"
-    through2 "^3.0.1"
-
->>>>>>> feat(precache): import TAR archives on boot
 ipfs-http-response@0.3.1, ipfs-http-response@~0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/ipfs-http-response/-/ipfs-http-response-0.3.1.tgz#5cc351f8abf5f77dae47a41781fd7bc0c88fcaf8"
@@ -7274,15 +7177,9 @@ ipfs-utils@~0.0.3:
     kind-of "^6.0.2"
     readable-stream "^3.3.0"
 
-<<<<<<< HEAD
 "ipfs@https://github.com/ipfs/js-ipfs/tarball/d9986ee4d7945f6a5d77dc7a2db4863d06971eb9/js-ipfs.tar.gz":
   version "0.38.0"
   resolved "https://github.com/ipfs/js-ipfs/tarball/d9986ee4d7945f6a5d77dc7a2db4863d06971eb9/js-ipfs.tar.gz#588eee8495676459592227a515eb2dd17c000d74"
-=======
-"ipfs@https://github.com/ipfs/js-ipfs/tarball/1dca93dda4b70264657cafe1893212368351f102/js-ipfs.tar.gz":
-  version "0.38.0"
-  resolved "https://github.com/ipfs/js-ipfs/tarball/1dca93dda4b70264657cafe1893212368351f102/js-ipfs.tar.gz#db038c7cb94b5619f69b3742a76809f4407ef3c4"
->>>>>>> feat(precache): import TAR archives on boot
   dependencies:
     "@hapi/ammo" "^3.1.1"
     "@hapi/boom" "^7.4.3"
@@ -7324,11 +7221,7 @@ ipfs-utils@~0.0.3:
     ipfs-bitswap "^0.26.0"
     ipfs-block "~0.8.1"
     ipfs-block-service "~0.16.0"
-<<<<<<< HEAD
     ipfs-http-client ipfs/js-ipfs-http-client#add-async-iterator-methods
-=======
-    ipfs-http-client "^38.0.0"
->>>>>>> feat(precache): import TAR archives on boot
     ipfs-http-response "~0.3.1"
     ipfs-mfs "^0.13.0"
     ipfs-multipart "^0.2.0"
@@ -7353,10 +7246,7 @@ ipfs-utils@~0.0.3:
     iso-url "~0.4.6"
     it-pipe "^1.0.1"
     it-to-stream "^0.1.1"
-<<<<<<< HEAD
     jsondiffpatch "~0.3.11"
-=======
->>>>>>> feat(precache): import TAR archives on boot
     just-safe-set "^2.1.0"
     kind-of "^6.0.2"
     ky "^0.14.0"
@@ -8166,11 +8056,7 @@ it-pipe@^1.0.1:
   resolved "https://registry.yarnpkg.com/it-pipe/-/it-pipe-1.0.1.tgz#6443f12e2a24dd71728c172eb58a159bb957095e"
   integrity sha512-clx7NMIf4eXe3rp4dKLmT5vMYv/hvZv4lNi1/xx4ZJ8CFmpGod9rTKisyBNBTurbCEa3a7503COankdBj/uUCA==
 
-<<<<<<< HEAD
-it-to-stream@^0.1.1:
-=======
 it-to-stream@0.1.1, it-to-stream@^0.1.1:
->>>>>>> feat(precache): import TAR archives on boot
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/it-to-stream/-/it-to-stream-0.1.1.tgz#3fb4a9c4df868cd8f4aaf2071eba5ada5a3fad2a"
   integrity sha512-QQx/58JBvT189imr6fD234F8aVf8EdyQHJR0MxXAOShEWK1NWyahPYIQt/tQG7PId0ZG/6/3tUiVCfw2cq+e1w==
@@ -8680,21 +8566,12 @@ level-mem@^3.0.1:
     memdown "~3.0.0"
 
 level-packager@^5.0.0:
-<<<<<<< HEAD
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/level-packager/-/level-packager-5.1.0.tgz#9c01c6c8e2380d3196d61e56bd79c2eff4a9d5c3"
-  integrity sha512-3pbJmDgGvp/lUQNULPoYQZtUbhMI8KoViYDw7Sa0kWl1mPeHWWJF7T/9upWI/NTMuEikkEE/cd6wBvmrW1+ZnQ==
-  dependencies:
-    encoding-down "^6.3.0"
-    levelup "^4.3.2"
-=======
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/level-packager/-/level-packager-5.0.3.tgz#e22bc9887663d0808ab092453d691bc319b7e5a2"
   integrity sha512-Ut62o3nvUNCxYldM5+13+0sYow6ifKj2C26/0ToB7zKgdypF5wRKcVkcztQVwsQi+ZnrmDzhimp7FKP5Ynv6Rg==
   dependencies:
     encoding-down "^6.2.0"
     levelup "^4.2.0"
->>>>>>> feat(precache): import TAR archives on boot
 
 level-packager@~4.0.0:
   version "4.0.1"
@@ -8705,15 +8582,9 @@ level-packager@~4.0.0:
     levelup "^3.0.0"
 
 level-supports@~1.0.0:
-<<<<<<< HEAD
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/level-supports/-/level-supports-1.0.1.tgz#2f530a596834c7301622521988e2c36bb77d122d"
-  integrity sha512-rXM7GYnW8gsl1vedTJIbzOrRv85c/2uCMpiiCzO2fndd06U/kUXEEU9evYn4zFggBOg36IsBW8LzqIpETwwQzg==
-=======
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/level-supports/-/level-supports-1.0.0.tgz#376f3f2339c23be0ba2fe62b0fa0e3ac7d6d9988"
   integrity sha512-01PKZumFhgysuHUbRz4c9DyA1egmcHJBAsZbm0Vf5agojC3uWOvAnhOD4swNUgHlfJBymXLi/xkBaEckeNRSvA==
->>>>>>> feat(precache): import TAR archives on boot
   dependencies:
     xtend "^4.0.2"
 
@@ -8776,21 +8647,12 @@ levelup@^3.0.0:
     level-iterator-stream "~3.0.0"
     xtend "~4.0.0"
 
-<<<<<<< HEAD
-levelup@^4.3.2:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/levelup/-/levelup-4.3.2.tgz#31c5b1b29f146d1d35d692e01a6da4d28fa55ebd"
-  integrity sha512-cRTjU4ktWo59wf13PHEiOayHC3n0dOh4i5+FHr4tv4MX9+l7mqETicNq3Aj07HKlLdk0z5muVoDL2RD+ovgiyA==
-  dependencies:
-    deferred-leveldown "~5.3.0"
-=======
 levelup@^4.2.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/levelup/-/levelup-4.3.1.tgz#ac740019789de1a2987e109b00fcbdad9ddc6ac9"
   integrity sha512-vXRqqNDSZxbY4atrfz+yXS2fdfq027chwvc6ihX/pQYplYdFoppkfHFaF0V3PDe2mCnhtyieaizRBzTpmL5wAg==
   dependencies:
     deferred-leveldown "~5.2.1"
->>>>>>> feat(precache): import TAR archives on boot
     level-errors "~2.0.0"
     level-iterator-stream "~4.0.0"
     level-supports "~1.0.0"
@@ -8926,34 +8788,20 @@ libp2p-crypto@~0.16.0, libp2p-crypto@~0.16.1:
     tweetnacl "^1.0.0"
     ursa-optional "~0.9.10"
 
-<<<<<<< HEAD
 libp2p-delegated-content-routing@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/libp2p-delegated-content-routing/-/libp2p-delegated-content-routing-0.3.1.tgz#45e1711074a68d457c9b4bd92682ad06fb8857c8"
   integrity sha512-GgEj1FHzNFH6nL0fQ5sFZWcskfWkwVLL+GtY5wZbe9izXftyg5QDVdoKSlYWQUrEjaaAJE+T4KjvtK83T/C7Yg==
-=======
-libp2p-delegated-content-routing@0.2.4, libp2p-delegated-content-routing@^0.3.1:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/libp2p-delegated-content-routing/-/libp2p-delegated-content-routing-0.2.4.tgz#2627f09f59a38829eef291693482dd9e15c815bd"
-  integrity sha512-VgupHN9DhoNIJmnoe5H1Qb+AeG+Z7A4Yc8p/8jNNuRq61Jn7uzs03k1WWFRt/+Xnb9FlnHrBo1vrp8NqXdq9NQ==
->>>>>>> feat(precache): import TAR archives on boot
   dependencies:
     debug "^4.1.1"
     ipfs-http-client "^33.1.0"
     multiaddr "^6.1.0"
     p-queue "^6.1.0"
 
-<<<<<<< HEAD
 libp2p-delegated-peer-routing@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/libp2p-delegated-peer-routing/-/libp2p-delegated-peer-routing-0.3.1.tgz#331d129559b2b257cef5e13260d7ac50d4731768"
   integrity sha512-WAN2rBsuiS1xqrAaZthKX9vVtXar0nH7ACAWoTNsk2BaAhhds0Shri48NB5jN//kxLo+vC7+WVn4Rgdg3Dp2sA==
-=======
-libp2p-delegated-peer-routing@0.2.4, libp2p-delegated-peer-routing@^0.3.1:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/libp2p-delegated-peer-routing/-/libp2p-delegated-peer-routing-0.2.4.tgz#18ee245585e2737a4f875cd6bc5e106d8ad1e95b"
-  integrity sha512-uL6QumPoXG5LhFPQaDtcW4k83LlTJEDNqqv3DnM9RG3/d+N6/yHBNqQpRmvgR4gBeaDOEpdAyK3FSa9IWNpEFA==
->>>>>>> feat(precache): import TAR archives on boot
   dependencies:
     debug "^4.1.1"
     ipfs-http-client "^33.1.0"
@@ -8976,25 +8824,6 @@ libp2p-floodsub@^0.18.0:
     pull-pushable "^2.2.0"
     pull-stream "^3.6.9"
 
-<<<<<<< HEAD
-=======
-libp2p-floodsub@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/libp2p-floodsub/-/libp2p-floodsub-0.18.0.tgz#49efd1a9936e898f62abbf041fa2f62049b796e0"
-  integrity sha512-4OihLP5A4LsxNPlfb0mq6vkjAaNu4YxuyYeoj2nNgrRSzr4H8Dz0YtA+DzEDXIgP2RBANSzS+KG9oDeUXDHa/Q==
-  dependencies:
-    async "^2.6.2"
-    bs58 "^4.0.1"
-    debug "^4.1.1"
-    length-prefixed-stream "^2.0.0"
-    libp2p-crypto "~0.16.1"
-    libp2p-pubsub "~0.2.0"
-    protons "^1.0.1"
-    pull-length-prefixed "^1.3.2"
-    pull-pushable "^2.2.0"
-    pull-stream "^3.6.9"
-
->>>>>>> feat(precache): import TAR archives on boot
 libp2p-floodsub@~0.17.1:
   version "0.17.2"
   resolved "https://registry.yarnpkg.com/libp2p-floodsub/-/libp2p-floodsub-0.17.2.tgz#c789bcd55cfb513a4d2f5291bd28d6aa2be271d1"
@@ -11654,11 +11483,7 @@ peer-info@^0.14.1:
     multiaddr "^4.0.0"
     peer-id "~0.10.7"
 
-<<<<<<< HEAD
 peer-info@~0.15.1:
-=======
-peer-info@^0.15.1, peer-info@~0.15.1:
->>>>>>> feat(precache): import TAR archives on boot
   version "0.15.1"
   resolved "https://registry.yarnpkg.com/peer-info/-/peer-info-0.15.1.tgz#21254a7c516d0dd046b150120b9aaf1b9ad02146"
   integrity sha512-Y91Q2tZRC0CpSTPd1UebhGqniOrOAk/aj60uYUcWJXCoLTAnGu+4LJGoiay8ayudS6ice7l3SKhgL/cS62QacA==

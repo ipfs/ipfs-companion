@@ -29,7 +29,7 @@
     "build:bundle-all": "cross-env RELEASE_CHANNEL=${RELEASE_CHANNEL:=dev} run-s bundle:chromium bundle:brave:$RELEASE_CHANNEL bundle:firefox:$RELEASE_CHANNEL",
     "build:rename-artifacts": "./scripts/rename-artifacts.js",
     "precache:clean": "shx rm -rf add-on/dist/precache",
-    "precache:webui": "shx mkdir -p add-on/dist/precache && ipfs-or-gateway -c QmPURAjo3oneGH53ovt68UZEBvsc8nNmEhQZEpsVEQUMZE -p add-on/dist/precache/webui.tar --archive",
+    "precache:webui": "shx mkdir -p add-on/dist/precache && ipfs-or-gateway -c QmeSXt32frzhvewLKwA1dePTSjkTfGVwTh55ZcsJxrCSnk -p add-on/dist/precache/webui.tar --archive",
     "bundle": "run-s bundle:*",
     "bundle:chromium": "run-s precache:webui && shx cat add-on/manifest.common.json add-on/manifest.chromium.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/chromium && run-s build:rename-artifacts",
     "bundle:firefox": "run-s precache:clean && shx cat add-on/manifest.common.json add-on/manifest.firefox.json | json --deep-merge > add-on/manifest.json && web-ext build -a build/firefox/  && run-s build:rename-artifacts",
