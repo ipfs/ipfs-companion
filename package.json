@@ -144,6 +144,7 @@
     "mime-types": "2.1.24",
     "multiaddr": "7.1.0",
     "multiaddr-to-uri": "5.0.0",
+    "p-memoize": "3.1.0",
     "p-queue": "6.1.1",
     "path-browserify": "1.0.0",
     "piggybacker": "2.0.0",

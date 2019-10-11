@@ -7,6 +7,7 @@ log.error = debug('ipfs-companion:main:error')
 
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
+const pMemoize = require('p-memoize')
 const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator } = require('./ipfs-path')
@@ -526,9 +527,13 @@ module.exports = async function init () {
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
     try {
-      await browser.browserAction.setBadgeBackgroundColor({ color: badgeColor })
-      await browser.browserAction.setBadgeText({ text: badgeText })
-      await setBrowserActionIcon(badgeIcon)
+      const oldColor = colorArraytoHex(await browser.browserAction.getBadgeBackgroundColor({}))
+      if (badgeColor !== oldColor) {
+        await browser.browserAction.setBadgeBackgroundColor({ color: badgeColor })
+        await setBrowserActionIcon(badgeIcon)
+      }
+      const oldText = await browser.browserAction.getBadgeText({})
+      if (oldText !== badgeText) await browser.browserAction.setBadgeText({ text: badgeText })
     } catch (error) {
       console.error('Unable to update browserAction badge due to error', error)
     }
@@ -548,35 +553,53 @@ module.exports = async function init () {
     }
   }
 
-  function rasterIconDefinition (svgPath) {
+  // ColorArray [0,0,0,0] → Hex #000000
+  // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserAction/ColorArray
+  function colorArraytoHex (colorArray) {
+    if (!colorArray) return ''
+    const colorAt = i => colorArray[i].toString(16).padStart(2, '0')
+    const r = colorAt(0)
+    const g = colorAt(1)
+    const b = colorAt(2)
+    return ('#' + r + g + b).toUpperCase()
+  }
+
+  const rasterIconDefinition = pMemoize((svgPath) => {
+    const pngPath = (size) => {
+      // point at precomputed PNG file
+      const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
+      return `/icons/png/${baseName}_${size}.png`
+    }
     // icon sizes to cover ranges from:
     // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
     // - https://developer.chrome.com/extensions/manifest/icons
-    return {
-      path: {
-        19: rasterIconPath(svgPath, 19),
-        38: rasterIconPath(svgPath, 38),
-        128: rasterIconPath(svgPath, 128)
-      }
+    const r19 = pngPath(19)
+    const r38 = pngPath(38)
+    const r128 = pngPath(128)
+    // return computed values to be cached by p-memoize
+    return { path: { 19: r19, 38: r38, 128: r128 } }
+  })
+
+  /* Alternative: raster images generated on the fly
+  const rasterIconDefinition = pMemoize((svgPath) => {
+    const rasterData = (size) => {
+      const icon = new Image()
+      icon.src = svgPath
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+      context.clearRect(0, 0, size, size)
+      context.drawImage(icon, 0, 0, size, size)
+      return context.getImageData(0, 0, size, size)
     }
-  }
-
-  function rasterIconPath (iconPath, size) {
-    // point at precomputed PNG file
-    const baseName = /\/icons\/(.+)\.svg/.exec(iconPath)[1]
-    return `/icons/png/${baseName}_${size}.png`
-  }
-
-  /* Easter-Egg: PoC that generates raster on the fly ;-)
-  function rasterIconData (iconPath, size) {
-    let icon = new Image()
-    icon.src = iconPath
-    let canvas = document.createElement('canvas')
-    let context = canvas.getContext('2d')
-    context.clearRect(0, 0, size, size)
-    context.drawImage(icon, 0, 0, size, size)
-    return context.getImageData(0, 0, size, size)
-  }
+    // icon sizes to cover ranges from:
+    // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
+    // - https://developer.chrome.com/extensions/manifest/icons
+    const r19 = rasterData(19)
+    const r38 = rasterData(38)
+    const r128 = rasterData(128)
+    // return computed values to be cached by p-memoize
+    return { imageData: { 19: r19, 38: r38, 128: r128 } }
+  })
   */
 
   // OPTIONS
