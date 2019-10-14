@@ -59,6 +59,7 @@ const commonConfig = {
     extensions: ['.js', '.json'],
     alias: {
       url: 'iso-url',
+      stream: 'readable-stream', // cure general insanity
       http: 'http-node', // chrome.sockets
       dns: 'http-dns', // chrome.sockets
       dgram: 'chrome-dgram', // chrome.sockets
