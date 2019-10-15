@@ -132,7 +132,7 @@
     "get-port": "5.0.0",
     "http-dns": "3.0.1",
     "http-node": "1.2.0",
-    "ipfs": "https://github.com/ipfs/js-ipfs/tarball/d9986ee4d7945f6a5d77dc7a2db4863d06971eb9/js-ipfs.tar.gz",
+    "ipfs": "https://github.com/ipfs/js-ipfs/tarball/b6505c1f2eda09c398af101954e6334c200b5587/js-ipfs.tar.gz",
     "ipfs-css": "0.13.1",
     "ipfs-http-client": "38.2.0",
     "ipfs-http-response": "0.3.1",
