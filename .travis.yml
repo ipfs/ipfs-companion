@@ -2,8 +2,10 @@ language: node_js
 node_js:
     - 10.15.1
 matrix:
+    fast_finish: true
     allow_failures:
         - os: windows
+        - os: osx
 cache:
     - npm
     - yarn
@@ -15,7 +17,6 @@ addons:
     homebrew:
         packages: jq
 install:
-    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install jq ; fi
     - npm run ci:install
 script:
     - npm run ci:build
