@@ -9,36 +9,20 @@ const LRU = require('lru-cache')
 const IsIpfs = require('is-ipfs')
 const isFQDN = require('is-fqdn')
 const { pathAtHttpGateway } = require('./ipfs-path')
+
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
-const recoverableErrors = new Set([
+const recoverableNetworkErrors = new Set([
   // Firefox
+  'NS_ERROR_UNKNOWN_HOST', // dns failure
   'NS_ERROR_NET_TIMEOUT', // eg. httpd is offline
   'NS_ERROR_NET_RESET', // failed to load because the server kept reseting the connection
   'NS_ERROR_NET_ON_RESOLVED', // no network
   // Chrome
+  'net::ERR_NAME_NOT_RESOLVED', // dns failure
   'net::ERR_CONNECTION_TIMED_OUT', // eg. httpd is offline
   'net::ERR_INTERNET_DISCONNECTED' // no network
 ])
-
-const recoverableErrorCodes = new Set([
-  404,
-  408,
-  410,
-  415,
-  451,
-  500,
-  502,
-  503,
-  504,
-  509,
-  520,
-  521,
-  522,
-  523,
-  524,
-  525,
-  526
-])
+const recoverableHttpError = (code) => code && code >= 400
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
@@ -171,11 +155,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     // This is a good place to listen if you want to modify HTTP request headers.
     onBeforeSendHeaders (request) {
       const state = getState()
-
-      // Skip if IPFS integrations are inactive
-      if (!state.active) {
-        return
-      }
+      if (!state.active) return
 
       // Special handling of requests made to API
       if (request.url.startsWith(state.apiURLString)) {
@@ -286,11 +266,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     // You can use this event to modify HTTP response headers or do a very late redirect.
     onHeadersReceived (request) {
       const state = getState()
-
-      // Skip if IPFS integrations are inactive
-      if (!state.active) {
-        return
-      }
+      if (!state.active) return
 
       // Special handling of requests made to API
       if (request.url.startsWith(state.apiURLString)) {
@@ -387,58 +363,53 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     },
 
     // browser.webRequest.onErrorOccurred
-    // Fired when a request could not be processed due to an error:
-    // for example, a lack of Internet connectivity.
+    // Fired when a request could not be processed due to an error on network level.
+    // For example: TCP timeout, DNS lookup failure
     async onErrorOccurred (request) {
       const state = getState()
+      if (!state.active) return
 
-      // Skip if IPFS integrations are inactive or request is marked as ignored
-      if (!state.active || isIgnored(request.requestId)) {
-        return
+      // Check if error can be recovered via EthDNS
+      if (isRecoverableViaEthDNS(request, state)) {
+        const url = new URL(request.url)
+        url.hostname = `${url.hostname}.link`
+        const redirect = { redirectUrl: url.toString() }
+        log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url}`, redirect.redirectUrl)
+        return createTabWithURL(redirect, browser)
       }
 
-      // console.log('onErrorOccurred:' + request.error)
-      // console.log('onErrorOccurred', request)
-      // Check if error is final and can be recovered via DNSLink
-      let redirect
-      const recoverableViaDnslink =
-        state.dnslinkPolicy &&
-        request.type === 'main_frame' &&
-        recoverableErrors.has(request.error)
-      if (recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)) {
-        // Explicit call to ignore global DNSLink policy and force DNS TXT lookup
-        const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
-        redirect = dnslinkResolver.dnslinkRedirect(request.url, cachedDnslink)
-        log(`onErrorOccurred: attempting to recover using dnslink for ${request.url}`, redirect)
+      // Check if error can be recovered via DNSLink
+      if (isRecoverableViaDNSLink(request, state, dnslinkResolver)) {
+        const { hostname } = new URL(request.url)
+        const dnslink = dnslinkResolver.readAndCacheDnslink(hostname)
+        if (dnslink) {
+          const redirect = dnslinkResolver.dnslinkRedirect(request.url, dnslink)
+          log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url}`, redirect.redirectUrl)
+          return createTabWithURL(redirect, browser)
+        }
       }
-      // if error cannot be recovered via DNSLink
-      // direct the request to the public gateway
-      const recoverable = isRecoverable(request, state, ipfsPathValidator)
-      if (!redirect && recoverable) {
+
+      // Check if error can be recovered by opening same content-addresed path
+      // using active gateway (public or local, depending on redirect state)
+      if (isRecoverable(request, state, ipfsPathValidator)) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
-        redirect = { redirectUrl }
-        log(`onErrorOccurred: attempting to recover failed request for ${request.url}`, redirect)
-      }
-      // We can't redirect in onErrorOccurred, so if DNSLink is present
-      // recover by opening IPNS version in a new tab
-      // TODO: add tests and demo
-      if (redirect) {
-        createTabWithURL(redirect, browser)
+        log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url}`, redirectUrl)
+        return createTabWithURL({ redirectUrl }, browser)
       }
     },
 
+    // browser.webRequest.onCompleted
+    // Fired when HTTP request is completed (successfully or with an error code)
     async onCompleted (request) {
       const state = getState()
-
-      const recoverable =
-        isRecoverable(request, state, ipfsPathValidator) &&
-        recoverableErrorCodes.has(request.statusCode)
-      if (recoverable) {
+      if (!state.active) return
+      if (request.statusCode === 200) return // finish if no error to recover from
+      if (isRecoverable(request, state, ipfsPathValidator)) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         const redirect = { redirectUrl }
         if (redirect) {
-          log(`onCompleted: attempting to recover failed request for ${request.url}`, redirect)
-          createTabWithURL(redirect, browser)
+          log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url}`, redirect)
+          return createTabWithURL(redirect, browser)
         }
       }
     }
@@ -548,18 +519,41 @@ function findHeaderIndex (name, headers) {
   return headers.findIndex(x => x.name && x.name.toLowerCase() === name.toLowerCase())
 }
 
-// utility functions for handling redirects
-// from onErrorOccurred and onCompleted
+// RECOVERY OF FAILED REQUESTS
+// ===================================================================
+
+// Recovery check for onErrorOccurred (request.error) and onCompleted (request.statusCode)
 function isRecoverable (request, state, ipfsPathValidator) {
   return state.recoverFailedHttpRequests &&
+    request.type === 'main_frame' &&
+    (recoverableNetworkErrors.has(request.error) || recoverableHttpError(request.statusCode)) &&
     ipfsPathValidator.publicIpfsOrIpnsResource(request.url) &&
-    !request.url.startsWith(state.pubGwURLString) &&
-    request.type === 'main_frame'
+    !request.url.startsWith(state.pubGwURLString)
 }
 
+// Recovery check for onErrorOccurred (request.error)
+function isRecoverableViaDNSLink (request, state, dnslinkResolver) {
+  const recoverableViaDnslink =
+    state.recoverFailedHttpRequests &&
+    request.type === 'main_frame' &&
+    state.dnslinkPolicy &&
+    recoverableNetworkErrors.has(request.error)
+  return recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)
+}
+
+// Recovery check for onErrorOccurred (request.error)
+function isRecoverableViaEthDNS (request, state) {
+  return state.recoverFailedHttpRequests &&
+    request.type === 'main_frame' &&
+    recoverableNetworkErrors.has(request.error) &&
+    new URL(request.url).hostname.endsWith('.eth')
+}
+
+// We can't redirect in onErrorOccurred/onCompleted
+// Indead, we recover by opening URL in a new tab that replaces the failed one
 async function createTabWithURL (redirect, browser) {
   const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
-  await browser.tabs.create({
+  return browser.tabs.create({
     active: true,
     openerTabId: currentTabId,
     url: redirect.redirectUrl

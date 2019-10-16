@@ -180,8 +180,7 @@ module.exports = function createDnslinkResolver (getState) {
       if (typeof url === 'string') {
         url = new URL(url)
       }
-      const fqdn = url.hostname
-      return `/ipns/${fqdn}${url.pathname}${url.search}${url.hash}`
+      return `/ipns/${url.hostname}${url.pathname}${url.search}${url.hash}`
     },
 
     // Test if URL contains a valid DNSLink FQDN
