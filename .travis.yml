@@ -19,9 +19,12 @@ addons:
 install:
     - npm run ci:install
 script:
-    - npm run ci:build
-    - npm run ci:test
-    - npm run ci:lint
+    - npm run build
+    - npm run test
+    - npm run lint
 after_success: npx nyc report --reporter=text-lcov > coverage.lcov && npx codecov
 notifications:
-    email: false
+    email:
+        if: branch = master
+        on_success: never
+        on_failure: always
