@@ -11,6 +11,7 @@ function experimentsForm ({
   catchUnhandledProtocols,
   linkify,
   dnslinkPolicy,
+  recoverFailedHttpRequests,
   detectIpfsPathHeader,
   ipfsProxy,
   logNamespaces,
@@ -22,6 +23,7 @@ function experimentsForm ({
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
+  const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
 
@@ -95,6 +97,15 @@ function experimentsForm ({
               ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
             </option>
           </select>
+        </div>
+        <div>
+          <label for="recoverFailedHttpRequests">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_recoverFailedHttpRequests_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_recoverFailedHttpRequests_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'recoverFailedHttpRequests', checked: recoverFailedHttpRequests, onchange: onrecoverFailedHttpRequestsChange })}</div>
         </div>
         <div>
           <label for="detectIpfsPathHeader">

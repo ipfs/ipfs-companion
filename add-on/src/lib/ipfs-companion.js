@@ -106,6 +106,7 @@ module.exports = async function init () {
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
     browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'] })
+    browser.webRequest.onCompleted.addListener(onCompleted, { urls: ['<all_urls>'] })
     browser.storage.onChanged.addListener(onStorageChange)
     browser.webNavigation.onCommitted.addListener(onNavigationCommitted)
     browser.webNavigation.onDOMContentLoaded.addListener(onDOMContentLoaded)
@@ -168,6 +169,10 @@ module.exports = async function init () {
 
   function onErrorOccurred (request) {
     return modifyRequest.onErrorOccurred(request)
+  }
+
+  function onCompleted (request) {
+    return modifyRequest.onCompleted(request)
   }
 
   // RUNTIME MESSAGES (one-off messaging)
@@ -692,6 +697,9 @@ module.exports = async function init () {
           if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
+          break
+        case 'recoverFailedHttpRequests':
+          state[key] = change.newValue
           break
         case 'logNamespaces':
           shouldReloadExtension = true

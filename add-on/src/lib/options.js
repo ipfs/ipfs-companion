@@ -16,6 +16,7 @@ exports.optionDefaults = Object.freeze({
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',
+  recoverFailedHttpRequests: true,
   detectIpfsPathHeader: true,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
