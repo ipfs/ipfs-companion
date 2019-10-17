@@ -380,7 +380,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Attempts to recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
