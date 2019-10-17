@@ -60,6 +60,15 @@ function experimentsForm ({
           <div>${switchToggle({ id: 'catchUnhandledProtocols', checked: catchUnhandledProtocols, onchange: onCatchUnhandledProtocolsChange })}</div>
         </div>
         <div>
+          <label for="recoverFailedHttpRequests">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_recoverFailedHttpRequests_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_recoverFailedHttpRequests_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'recoverFailedHttpRequests', checked: recoverFailedHttpRequests, onchange: onrecoverFailedHttpRequestsChange })}</div>
+        </div>
+        <div>
           <label for="linkify">
             <dl>
               <dt>${browser.i18n.getMessage('option_linkify_title')}</dt>
@@ -97,15 +106,6 @@ function experimentsForm ({
               ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
             </option>
           </select>
-        </div>
-        <div>
-          <label for="recoverFailedHttpRequests">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_recoverFailedHttpRequests_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_recoverFailedHttpRequests_description')}</dd>
-            </dl>
-          </label>
-          <div>${switchToggle({ id: 'recoverFailedHttpRequests', checked: recoverFailedHttpRequests, onchange: onrecoverFailedHttpRequestsChange })}</div>
         </div>
         <div>
           <label for="detectIpfsPathHeader">

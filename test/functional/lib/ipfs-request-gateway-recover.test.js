@@ -18,7 +18,11 @@ const urlRequestWithStatus = (url, statusCode = 200, type = 'main_frame') => {
   return { ...url2request(url, type), statusCode }
 }
 
-describe('requestHandler.onCompleted:', function () {
+const urlRequestWithNetworkError = (url, error = 'net::ERR_CONNECTION_TIMED_OUT', type = 'main_frame') => {
+  return { ...url2request(url, type), error }
+}
+
+describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   let state, dnslinkResolver, ipfsPathValidator, requestHandler, runtime
 
   before(function () {
@@ -40,6 +44,7 @@ describe('requestHandler.onCompleted:', function () {
   describe('with recoverFailedHttpRequests=true', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = true
+      state.dnslinkPolicy = false
     })
     it('should do nothing if broken request is a non-IPFS request', async function () {
       const request = urlRequestWithStatus('https://wikipedia.org', 500)
@@ -61,7 +66,7 @@ describe('requestHandler.onCompleted:', function () {
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
-    it('should redirect broken non-default public gateway IPFS request to public gateway', async function () {
+    it('should recover from unreachable third party public gateway by reopening on the public gateway', async function () {
       const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.withArgs({ url: 'https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with IPFS default public gateway URL')
@@ -71,6 +76,7 @@ describe('requestHandler.onCompleted:', function () {
   describe('with recoverFailedHttpRequests=false', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = false
+      state.dnslinkPolicy = false
     })
     it('should do nothing on broken non-default public gateway IPFS request', async function () {
       const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
@@ -90,7 +96,7 @@ describe('requestHandler.onCompleted:', function () {
   })
 })
 
-describe('requestHandler.onErrorOccurred:', function () {
+describe('requestHandler.onErrorOccurred:', function () { // network errors
   let state, dnslinkResolver, ipfsPathValidator, requestHandler, runtime
 
   before(function () {
@@ -112,42 +118,83 @@ describe('requestHandler.onErrorOccurred:', function () {
   describe('with recoverFailedHttpRequests=true', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = true
+      state.dnslinkPolicy = false
     })
     it('should do nothing if failed request is a non-IPFS request', async function () {
-      const request = url2request('https://wikipedia.org', 500)
+      const request = urlRequestWithNetworkError('https://wikipedia.org')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
     it('should do nothing if failed request is a non-public IPFS request', async function () {
-      const request = url2request('http://127.0.0.1:8080/ipfs/QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
+      const request = urlRequestWithNetworkError('http://127.0.0.1:8080/ipfs/QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
     it('should do nothing if failed request is to the default public gateway', async function () {
-      const request = url2request('https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
+      const request = urlRequestWithNetworkError('https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
     it('should do nothing if failed request is not a \'main_frame\' request', async function () {
-      const request = url2request('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 'stylesheet')
+      const requestType = 'stylesheet'
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 'net::ERR_NAME_NOT_RESOLVED', requestType)
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
-    it('should redirect failed non-default public gateway IPFS request to public gateway', async function () {
-      const request = url2request('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+    it('should recover from unreachable third party public gateway by reopening on the public gateway', async function () {
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.withArgs({ url: 'https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with IPFS default public gateway URL')
+    })
+    it('should recover from unreachable HTTP server by reopening DNSLink on the public gateway', async function () {
+      state.dnslinkPolicy = 'best-effort'
+      dnslinkResolver.setDnslink('en.wikipedia-on-ipfs.org', '/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco')
+      const expectedUrl = 'http://127.0.0.1:8080/ipns/en.wikipedia-on-ipfs.org/'
+      const request = urlRequestWithNetworkError('https://en.wikipedia-on-ipfs.org/')
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.withArgs({ url: expectedUrl, active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with ENS resource on local gateway URL')
+      dnslinkResolver.clearCache()
+    })
+    it('should recover from failed DNS for .eth opening it on EthDNS gateway at .eth.link', async function () {
+      state.dnslinkPolicy = 'best-effort'
+      dnslinkResolver.setDnslink('almonit.eth', false)
+      dnslinkResolver.setDnslink('almonit.eth.link', '/ipfs/QmPH7VMnfFKvrr7kLXNRwuxjYRLWnfcxPvnWs8ipyWAQK2')
+      const dnsFailure = 'net::ERR_NAME_NOT_RESOLVED' // chrome code
+      const expectedUrl = 'https://almonit.eth.link/'
+      const request = urlRequestWithNetworkError('https://almonit.eth', dnsFailure)
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.withArgs({ url: expectedUrl, active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with ENS resource on local gateway URL')
+      dnslinkResolver.clearCache()
     })
   })
 
   describe('with recoverFailedHttpRequests=false', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = false
+      state.dnslinkPolicy = false
     })
-    it('should do nothing on failed non-default public gateway IPFS request', async function () {
-      const request = url2request('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+    it('should do nothing on unreachable third party public gateway', async function () {
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should do nothing on unreachable HTTP server with DNSLink', async function () {
+      state.dnslinkPolicy = 'best-effort'
+      dnslinkResolver.setDnslink('en.wikipedia-on-ipfs.org', '/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco')
+      const request = urlRequestWithNetworkError('https://en.wikipedia-on-ipfs.org')
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+      dnslinkResolver.clearCache()
+    })
+    it('should do nothing on failed non-default public gateway IPFS request', async function () {
+      state.dnslinkPolicy = 'best-effort'
+      dnslinkResolver.setDnslink('almonit.eth', false)
+      dnslinkResolver.setDnslink('almonit.eth.link', '/ipfs/QmPH7VMnfFKvrr7kLXNRwuxjYRLWnfcxPvnWs8ipyWAQK2')
+      const dnsFailure = 'net::ERR_NAME_NOT_RESOLVED' // chrome code
+      const request = urlRequestWithNetworkError('https://almonit.eth', dnsFailure)
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+      dnslinkResolver.clearCache()
     })
   })
 
