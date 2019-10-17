@@ -675,7 +675,7 @@ module.exports = async function init () {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
           break
-        case 'recoverViaPublicGateway':
+        case 'recoverFailedHttpRequests':
           state[key] = change.newValue
           break
         case 'logNamespaces':

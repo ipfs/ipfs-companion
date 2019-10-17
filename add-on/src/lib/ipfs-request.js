@@ -551,7 +551,7 @@ function findHeaderIndex (name, headers) {
 // utility functions for handling redirects
 // from onErrorOccurred and onCompleted
 function isRecoverableViaPubGw (request, state, ipfsPathValidator) {
-  return state.recoverViaPublicGateway &&
+  return state.recoverFailedHttpRequests &&
     ipfsPathValidator.publicIpfsOrIpnsResource(request.url) &&
     !request.url.startsWith(state.pubGwURLString) &&
     request.type === 'main_frame'

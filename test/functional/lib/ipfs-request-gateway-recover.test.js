@@ -37,9 +37,9 @@ describe('requestHandler.onCompleted:', function () {
     requestHandler = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
-  describe('with recoverViaPublicGateway=true', function () {
+  describe('with recoverFailedHttpRequests=true', function () {
     beforeEach(function () {
-      state.recoverViaPublicGateway = true
+      state.recoverFailedHttpRequests = true
     })
     it('should do nothing if broken request is a non-IPFS request', async function () {
       const request = urlRequestWithStatus('https://ipfs.io', 500)
@@ -68,9 +68,9 @@ describe('requestHandler.onCompleted:', function () {
     })
   })
 
-  describe('with recoverViaPublicGateway=false', function () {
+  describe('with recoverFailedHttpRequests=false', function () {
     beforeEach(function () {
-      state.recoverViaPublicGateway = false
+      state.recoverFailedHttpRequests = false
     })
     it('should do nothing on broken non-default public gateway IPFS request', async function () {
       const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
@@ -109,9 +109,9 @@ describe('requestHandler.onErrorOccurred:', function () {
     requestHandler = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
-  describe('with recoverViaPublicGateway=true', function () {
+  describe('with recoverFailedHttpRequests=true', function () {
     beforeEach(function () {
-      state.recoverViaPublicGateway = true
+      state.recoverFailedHttpRequests = true
     })
     it('should do nothing if failed request is a non-IPFS request', async function () {
       const request = url2request('https://wikipedia.org', 500)
@@ -140,9 +140,9 @@ describe('requestHandler.onErrorOccurred:', function () {
     })
   })
 
-  describe('with recoverViaPublicGateway=false', function () {
+  describe('with recoverFailedHttpRequests=false', function () {
     beforeEach(function () {
-      state.recoverViaPublicGateway = false
+      state.recoverFailedHttpRequests = false
     })
     it('should do nothing on failed non-default public gateway IPFS request', async function () {
       const request = url2request('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
