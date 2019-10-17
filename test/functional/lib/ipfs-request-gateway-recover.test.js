@@ -42,7 +42,7 @@ describe('requestHandler.onCompleted:', function () {
       state.recoverFailedHttpRequests = true
     })
     it('should do nothing if broken request is a non-IPFS request', async function () {
-      const request = urlRequestWithStatus('https://ipfs.io', 500)
+      const request = urlRequestWithStatus('https://wikipedia.org', 500)
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
@@ -57,7 +57,7 @@ describe('requestHandler.onCompleted:', function () {
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
     it('should do nothing if broken request is not a \'main_frame\' request', async function () {
-      const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500, 'non_main_frame')
+      const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500, 'stylesheet')
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
@@ -129,7 +129,7 @@ describe('requestHandler.onErrorOccurred:', function () {
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
     it('should do nothing if failed request is not a \'main_frame\' request', async function () {
-      const request = url2request('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 'non_main_frame')
+      const request = url2request('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 'stylesheet')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
