@@ -10,7 +10,7 @@ const browser = require('webextension-polyfill')
 const external = require('./external')
 const embedded = require('./embedded')
 const embeddedWithChromeSockets = require('./embedded-chromesockets')
-const { webuiCid } = require('../state')
+const precache = require('../precache')
 
 let client
 
@@ -70,15 +70,8 @@ async function _reloadIpfsClientDependents (instance, opts) {
   }
   // online only
   if (client && instance) {
-    if (webuiCid && instance.refs) {
-      // Optimization: preload the root CID to speed up the first time
-      // Web UI is opened. If embedded js-ipfs is used it will trigger
-      // remote (always recursive) preload of entire DAG to one of preload nodes.
-      // This way when embedded node wants to load resource related to webui
-      // it will get it fast from preload nodes.
-      log(`preloading webui root at ${webuiCid}`)
-      instance.refs(webuiCid, { recursive: false })
-    }
+    // add important data to local ipfs repo for instant load
+    precache(instance)
   }
 }
 
