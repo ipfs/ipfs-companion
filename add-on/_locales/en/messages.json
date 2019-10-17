@@ -376,11 +376,11 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover links via public gateway",
+    "message": "Recover Failed HTTP Requests",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Redirect broken public gateway requests to the default public gateway",
+    "message": "Attempts to recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
