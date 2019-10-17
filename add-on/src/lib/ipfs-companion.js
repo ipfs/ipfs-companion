@@ -755,6 +755,10 @@ module.exports = async function init () {
       return state
     },
 
+    get runtime () {
+      return runtime
+    },
+
     get dnslinkResolver () {
       return dnslinkResolver
     },
