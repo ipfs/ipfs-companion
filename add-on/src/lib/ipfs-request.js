@@ -417,7 +417,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (!redirect && recoverable) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         redirect = { redirectUrl }
-        log(`onErrorOccurred: attempting to recover using public gateway for ${request.url}`, redirect)
+        log(`onErrorOccurred: attempting to recover failed request for ${request.url}`, redirect)
       }
       // We can't redirect in onErrorOccurred, so if DNSLink is present
       // recover by opening IPNS version in a new tab
@@ -437,7 +437,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         const redirect = { redirectUrl }
         if (redirect) {
-          log(`onErrorOccurred: attempting to recover using public gateway for ${request.url}`, redirect)
+          log(`onCompleted: attempting to recover failed request for ${request.url}`, redirect)
           createTabWithURL(redirect, browser)
         }
       }
