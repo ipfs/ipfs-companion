@@ -413,8 +413,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       }
       // if error cannot be recovered via DNSLink
       // direct the request to the public gateway
-      const recoverableViaPubGw = isRecoverableViaPubGw(request, state, ipfsPathValidator)
-      if (!redirect && recoverableViaPubGw) {
+      const recoverable = isRecoverable(request, state, ipfsPathValidator)
+      if (!redirect && recoverable) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         redirect = { redirectUrl }
         log(`onErrorOccurred: attempting to recover using public gateway for ${request.url}`, redirect)
@@ -430,10 +430,10 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     async onCompleted (request) {
       const state = getState()
 
-      const recoverableViaPubGw =
-        isRecoverableViaPubGw(request, state, ipfsPathValidator) &&
+      const recoverable =
+        isRecoverable(request, state, ipfsPathValidator) &&
         recoverableErrorCodes.has(request.statusCode)
-      if (recoverableViaPubGw) {
+      if (recoverable) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         const redirect = { redirectUrl }
         if (redirect) {
@@ -550,7 +550,7 @@ function findHeaderIndex (name, headers) {
 
 // utility functions for handling redirects
 // from onErrorOccurred and onCompleted
-function isRecoverableViaPubGw (request, state, ipfsPathValidator) {
+function isRecoverable (request, state, ipfsPathValidator) {
   return state.recoverFailedHttpRequests &&
     ipfsPathValidator.publicIpfsOrIpnsResource(request.url) &&
     !request.url.startsWith(state.pubGwURLString) &&
