@@ -16,11 +16,13 @@ function gatewaysForm ({
   useCustomGateway,
   noRedirectHostnames,
   publicGatewayUrl,
+  subdomainPublicGatewayUrl,
   onOptionChange
 }) {
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', normalizeGatewayURL)
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', normalizeGatewayURL)
+  const onSubdomainPublicGatewayUrlChange = onOptionChange('subdomainPublicGatewayUrl', normalizeGatewayURL)
   const onNoRedirectHostnamesChange = onOptionChange('noRedirectHostnames', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
   const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
@@ -99,6 +101,24 @@ function gatewaysForm ({
                 >${hostArrayToText(noRedirectHostnames)}</textarea>
             </div>
           ` : null}
+          <div>
+            <label for="subdomainPublicGatewayUrl">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_subdomainPublicGatewayUrl_title')}</dt>
+                <dd>${browser.i18n.getMessage('option_subdomainPublicGatewayUrl_description')}</dd>
+              </dl>
+            </label>
+            <input
+              id="subdomainPublicGatewayUrl"
+              type="url"
+              inputmode="url"
+              required
+              pattern="^https?://[^/]+/?$"
+              spellcheck="false"
+              title="Enter URL without any sub-path"
+              onchange=${onSubdomainPublicGatewayUrlChange}
+              value=${subdomainPublicGatewayUrl} />
+          </div>
       </fieldset>
     </form>
   `

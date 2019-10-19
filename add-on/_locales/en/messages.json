@@ -291,6 +291,14 @@
     "message": "Fallback URL used when Custom Gateway is not available and for copying shareable links",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
+  "option_subdomainPublicGatewayUrl_title": {
+    "message": "Default Subdomain Public Gateway",
+    "description": "An option title on the Preferences screen (option_subdomainPublicGatewayUrl_title)"
+  },
+  "option_subdomainPublicGatewayUrl_description": {
+    "message": "Default subdomain public gateway for recovery of broken subdomain gateways",
+    "description": "An option description on the Preferences screen (option_subdomainPublicGatewayUrl_description)"
+  },
   "option_header_api": {
     "message": "API",
     "description": "A section header on the Preferences screen (option_header_api)"

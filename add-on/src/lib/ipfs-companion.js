@@ -685,6 +685,10 @@ module.exports = async function init () {
           state.pubGwURL = new URL(change.newValue)
           state.pubGwURLString = state.pubGwURL.toString()
           break
+        case 'subdomainPublicGatewayUrl':
+          state.subdomainGwURL = new URL(change.newValue)
+          state.subdomainGwURLString = state.subdomainGwURL.toString()
+          break
         case 'useCustomGateway':
           state.redirect = change.newValue
           break

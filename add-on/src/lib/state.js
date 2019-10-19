@@ -17,6 +17,9 @@ function initState (options) {
   state.pubGwURL = safeURL(options.publicGatewayUrl)
   state.pubGwURLString = state.pubGwURL.toString()
   delete state.publicGatewayUrl
+  state.subdomainGwURL = safeURL(options.subdomainPublicGatewayUrl)
+  state.subdomainGwURLString = state.subdomainGwURL.toString()
+  delete state.subdomainPublicGatewayUrl
   state.redirect = options.useCustomGateway
   delete state.useCustomGateway
   state.apiURL = safeURL(options.ipfsApiUrl)
