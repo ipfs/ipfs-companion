@@ -392,7 +392,12 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // Check if error can be recovered by opening same content-addresed path
       // using active gateway (public or local, depending on redirect state)
       if (isRecoverable(request, state, ipfsPathValidator)) {
-        const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
+        let redirectUrl
+        if (ipfsPathValidator.ipfsOrIpnsSubdomain(request.url)) {
+          redirectUrl = ipfsPathValidator.resolveToSubdomainUrl(request.url, state.subdomainGwURL)
+        } else {
+          redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
+        }
         log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url}`, redirectUrl)
         return createTabWithURL({ redirectUrl }, browser)
       }
@@ -404,13 +409,15 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       const state = getState()
       if (!state.active) return
       if (request.statusCode === 200) return // finish if no error to recover from
+      let redirectUrl
       if (isRecoverable(request, state, ipfsPathValidator)) {
-        const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
-        const redirect = { redirectUrl }
-        if (redirect) {
-          log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url}`, redirect)
-          return createTabWithURL(redirect, browser)
+        if (ipfsPathValidator.ipfsOrIpnsSubdomain(request.url)) {
+          redirectUrl = ipfsPathValidator.resolveToSubdomainUrl(request.url, state.subdomainGwURL)
+        } else {
+          redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         }
+        log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url}`, redirectUrl)
+        return createTabWithURL({ redirectUrl: 'https://wikipedia.org' }, browser)
       }
     }
   }
@@ -527,8 +534,8 @@ function isRecoverable (request, state, ipfsPathValidator) {
   return state.recoverFailedHttpRequests &&
     request.type === 'main_frame' &&
     (recoverableNetworkErrors.has(request.error) || recoverableHttpError(request.statusCode)) &&
-    ipfsPathValidator.publicIpfsOrIpnsResource(request.url) &&
-    !request.url.startsWith(state.pubGwURLString)
+    (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) || ipfsPathValidator.ipfsOrIpnsSubdomain(request.url)) &&
+    !request.url.startsWith(state.pubGwURLString) && !request.url.includes(state.subdomainGwURL.hostname)
 }
 
 // Recovery check for onErrorOccurred (request.error)
