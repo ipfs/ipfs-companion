@@ -11,7 +11,7 @@ exports.optionDefaults = Object.freeze({
   ipfsNodeType: buildDefaultIpfsNodeType(),
   ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
   publicGatewayUrl: 'https://ipfs.io',
-  subdomainPublicGatewayUrl: 'https://ipfs.dweb.link',
+  subdomainPublicGatewayUrl: 'https://dweb.link',
   useCustomGateway: true,
   noRedirectHostnames: [],
   automaticMode: true,

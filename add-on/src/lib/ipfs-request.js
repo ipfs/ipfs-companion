@@ -393,6 +393,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // using active gateway (public or local, depending on redirect state)
       if (isRecoverable(request, state, ipfsPathValidator)) {
         let redirectUrl
+        // if subdomain request redirect to default subdomain url
         if (ipfsPathValidator.ipfsOrIpnsSubdomain(request.url)) {
           redirectUrl = ipfsPathValidator.resolveToSubdomainUrl(request.url, state.subdomainGwURL)
         } else {
@@ -411,6 +412,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (request.statusCode === 200) return // finish if no error to recover from
       let redirectUrl
       if (isRecoverable(request, state, ipfsPathValidator)) {
+        // if subdomain request redirect to default subdomain url
         if (ipfsPathValidator.ipfsOrIpnsSubdomain(request.url)) {
           redirectUrl = ipfsPathValidator.resolveToSubdomainUrl(request.url, state.subdomainGwURL)
         } else {
