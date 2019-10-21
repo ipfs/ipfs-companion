@@ -46,6 +46,16 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
       state.recoverFailedHttpRequests = true
       state.dnslinkPolicy = false
     })
+    it('should do nothing if broken request is default subdomain', async function () {
+      const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.dweb.link/wiki/', 500)
+      await requestHandler.onCompleted(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should redirect to default subdomain gateway on broken subdomain gateway request', async function () {
+      const request = urlRequestWithStatus('http://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.brokenexample.com/wiki/', 500)
+      await requestHandler.onCompleted(request)
+      assert.ok(browser.tabs.create.withArgs({ url: 'https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki/', active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with default subdomain gateway URL')
+    })
     it('should do nothing if broken request is a non-IPFS request', async function () {
       const request = urlRequestWithStatus('https://wikipedia.org', 500)
       await requestHandler.onCompleted(request)
@@ -77,6 +87,11 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
     beforeEach(function () {
       state.recoverFailedHttpRequests = false
       state.dnslinkPolicy = false
+    })
+    it('should do nothing on failed subdomain gateway request', async function () {
+      const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.brokendomain.com/wiki/', 500)
+      await requestHandler.onCompleted(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
     it('should do nothing on broken non-default public gateway IPFS request', async function () {
       const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
@@ -119,6 +134,16 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
     beforeEach(function () {
       state.recoverFailedHttpRequests = true
       state.dnslinkPolicy = false
+    })
+    it('should do nothing if failed request is default subdomain', async function () {
+      const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.dweb.link/wiki/', 500)
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should redirect to default subdomain gateway on failed subdomain gateway request', async function () {
+      const request = urlRequestWithStatus('http://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.brokenexample.com/wiki/', 500)
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.withArgs({ url: 'https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki/', active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with default subdomain gateway URL')
     })
     it('should do nothing if failed request is a non-IPFS request', async function () {
       const request = urlRequestWithNetworkError('https://wikipedia.org')
@@ -175,6 +200,11 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
     })
     it('should do nothing on unreachable third party public gateway', async function () {
       const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should do nothing on failed subdomain gateway request', async function () {
+      const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.brokendomain.com/wiki/', 500)
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
