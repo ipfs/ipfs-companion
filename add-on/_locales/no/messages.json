@@ -375,6 +375,14 @@
     "message": "Sjekk før HTTP-forespørsel",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
+  "option_recoverFailedHttpRequests_title": {
+    "message": "Recover Failed HTTP Requests",
+    "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
+  },
+  "option_recoverFailedHttpRequests_description": {
+    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
+  },
   "option_detectIpfsPathHeader_title": {
     "message": "Oppdag X-Ipfs-Path Header",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
