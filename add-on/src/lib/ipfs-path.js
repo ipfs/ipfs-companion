@@ -129,7 +129,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // subdomain path
     resolveToSubdomainUrl (url, gatewayUrl) {
       // if non-subdomain return as-is
-      if (!IsIpfs.subdomain(url)) return false
+      if (!IsIpfs.subdomain(url)) return url
 
       const gateway = gatewayUrl || getState().subdomainGwURL
       return redirectSubdomainGateway(url, gateway)
