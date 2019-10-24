@@ -135,7 +135,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       state.recoverFailedHttpRequests = true
       state.dnslinkPolicy = false
     })
-    it('should do nothing if failed request is default subdomain', async function () {
+    it('should do nothing if failed request is for the default subdomain gateway', async function () {
       const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.dweb.link/wiki/', 500)
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
