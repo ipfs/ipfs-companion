@@ -50,6 +50,29 @@ function gatewaysForm ({
               onchange=${onPublicGatewayUrlChange}
               value=${publicGatewayUrl} />
           </div>
+          <div>
+            <label for="subdomainPublicGatewayUrl">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_subdomainPublicGatewayUrl_title')}</dt>
+                <dd>
+                  ${browser.i18n.getMessage('option_subdomainPublicGatewayUrl_description')}
+                  <p><a href="https://docs.ipfs.io/guides/guides/addressing/#subdomain-gateway" target="_blank">
+                    ${browser.i18n.getMessage('option_legend_readMore')}
+                  </a></p>
+                </dd>
+              </dl>
+            </label>
+            <input
+              id="subdomainPublicGatewayUrl"
+              type="url"
+              inputmode="url"
+              required
+              pattern="^https?://[^/]+/?$"
+              spellcheck="false"
+              title="Enter URL without any sub-path"
+              onchange=${onSubdomainPublicGatewayUrlChange}
+              value=${subdomainPublicGatewayUrl} />
+          </div>
           ${supportRedirectToCustomGateway && allowChangeOfCustomGateway ? html`
             <div>
               <label for="customGatewayUrl">
@@ -101,24 +124,6 @@ function gatewaysForm ({
                 >${hostArrayToText(noRedirectHostnames)}</textarea>
             </div>
           ` : null}
-          <div>
-            <label for="subdomainPublicGatewayUrl">
-              <dl>
-                <dt>${browser.i18n.getMessage('option_subdomainPublicGatewayUrl_title')}</dt>
-                <dd>${browser.i18n.getMessage('option_subdomainPublicGatewayUrl_description')}</dd>
-              </dl>
-            </label>
-            <input
-              id="subdomainPublicGatewayUrl"
-              type="url"
-              inputmode="url"
-              required
-              pattern="^https?://[^/]+/?$"
-              spellcheck="false"
-              title="Enter URL without any sub-path"
-              onchange=${onSubdomainPublicGatewayUrlChange}
-              value=${subdomainPublicGatewayUrl} />
-          </div>
       </fieldset>
     </form>
   `
