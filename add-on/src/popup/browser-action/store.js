@@ -23,7 +23,7 @@ module.exports = (state, emitter) => {
     isIpfsOnline: false,
     ipfsApiUrl: null,
     publicGatewayUrl: null,
-    subdomainPublicGatewayUrl: null,
+    publicSubdomainGatewayUrl: null,
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,

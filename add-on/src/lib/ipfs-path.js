@@ -127,11 +127,11 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // - non-subdomain path is returned as-is
     // The purpose of this resolver is to return a valid IPFS
     // subdomain path
-    resolveToSubdomainUrl (url, gatewayUrl) {
+    resolveToPublicSubdomainUrl (url, gatewayUrl) {
       // if non-subdomain return as-is
       if (!IsIpfs.subdomain(url)) return url
 
-      const gateway = gatewayUrl || getState().subdomainGwURL
+      const gateway = gatewayUrl || getState().pubSubdomainGwURL
       return redirectSubdomainGateway(url, gateway)
     },
 
