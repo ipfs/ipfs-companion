@@ -24,11 +24,13 @@ function subdomainToIpfsPath (url) {
   if (typeof url === 'string') {
     url = new URL(url)
   }
-  const fqdn = url.hostname.split('.')
+  const match = url.toString().match(IsIpfs.subdomainPattern)
+  if (!match) throw new Error('no match for IsIpfs.subdomainPattern')
+
   // TODO: support CID split with commas
-  const cid = fqdn[0]
+  const cid = match[1]
   // TODO: support .ip(f|n)s. being at deeper levels
-  const protocol = fqdn[1]
+  const protocol = match[2]
   return `/${protocol}/${cid}${url.pathname}${url.search}${url.hash}`
 }
 
@@ -42,9 +44,10 @@ function redirectSubdomainGateway (url, subdomainGateway) {
   if (typeof url === 'string') {
     url = new URL(url)
   }
-  const fqdn = url.hostname.split('.')
-  const cid = fqdn[0]
-  const protocol = fqdn[1]
+  const match = url.toString().match(IsIpfs.subdomainPattern)
+  if (!match) throw new Error('no match for IsIpfs.subdomainPattern')
+  const cid = match[1]
+  const protocol = match[2]
   return trimDoubleSlashes(`${subdomainGateway.protocol}//${cid}.${protocol}.${subdomainGateway.hostname}${url.pathname}${url.search}${url.hash}`)
 }
 exports.redirectSubdomainGateway = redirectSubdomainGateway
@@ -126,12 +129,12 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // Resolve URL or path to subdomain gateway
     // - non-subdomain path is returned as-is
     // The purpose of this resolver is to return a valid IPFS
-    // subdomain path
-    resolveToPublicSubdomainUrl (url, gatewayUrl) {
+    // subdomain URL
+    resolveToPublicSubdomainUrl (url, optionalGatewayUrl) {
       // if non-subdomain return as-is
       if (!IsIpfs.subdomain(url)) return url
 
-      const gateway = gatewayUrl || getState().pubSubdomainGwURL
+      const gateway = optionalGatewayUrl || getState().pubSubdomainGwURL
       return redirectSubdomainGateway(url, gateway)
     },
 
