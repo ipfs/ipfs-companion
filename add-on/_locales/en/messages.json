@@ -296,7 +296,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Default subdomain public gateway for recovery of broken subdomain gateways",
+    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
