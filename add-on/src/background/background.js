@@ -3,10 +3,12 @@
 
 const browser = require('webextension-polyfill')
 const { onInstalled } = require('../lib/on-installed')
+const { getUninstallURL } = require('../lib/on-uninstalled')
 const { optionDefaults } = require('../lib/options')
 
-// register onInstalled hook early, otherwise we miss first install event
+// register lifecycle hooks early, otherwise we miss first install event
 browser.runtime.onInstalled.addListener(onInstalled)
+browser.runtime.setUninstallURL(getUninstallURL(browser))
 
 // init add-on after all libs are loaded
 document.addEventListener('DOMContentLoaded', async () => {
