@@ -66,6 +66,7 @@ module.exports = function optionsPage (state, emit) {
     customGatewayUrl: state.options.customGatewayUrl,
     useCustomGateway: state.options.useCustomGateway,
     publicGatewayUrl: state.options.publicGatewayUrl,
+    publicSubdomainGatewayUrl: state.options.publicSubdomainGatewayUrl,
     noRedirectHostnames: state.options.noRedirectHostnames,
     onOptionChange
   })}

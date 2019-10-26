@@ -16,11 +16,13 @@ function gatewaysForm ({
   useCustomGateway,
   noRedirectHostnames,
   publicGatewayUrl,
+  publicSubdomainGatewayUrl,
   onOptionChange
 }) {
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', normalizeGatewayURL)
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', normalizeGatewayURL)
+  const onPublicSubdomainGatewayUrlChange = onOptionChange('publicSubdomainGatewayUrl', normalizeGatewayURL)
   const onNoRedirectHostnamesChange = onOptionChange('noRedirectHostnames', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
   const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
@@ -47,6 +49,29 @@ function gatewaysForm ({
               title="Enter URL without any sub-path"
               onchange=${onPublicGatewayUrlChange}
               value=${publicGatewayUrl} />
+          </div>
+          <div>
+            <label for="publicSubdomainGatewayUrl">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_title')}</dt>
+                <dd>
+                  ${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_description')}
+                  <p><a href="https://docs.ipfs.io/guides/guides/addressing/#subdomain-gateway" target="_blank">
+                    ${browser.i18n.getMessage('option_legend_readMore')}
+                  </a></p>
+                </dd>
+              </dl>
+            </label>
+            <input
+              id="publicSubdomainGatewayUrl"
+              type="url"
+              inputmode="url"
+              required
+              pattern="^https?://[^/]+/?$"
+              spellcheck="false"
+              title="Enter URL without any sub-path"
+              onchange=${onPublicSubdomainGatewayUrlChange}
+              value=${publicSubdomainGatewayUrl} />
           </div>
           ${supportRedirectToCustomGateway && allowChangeOfCustomGateway ? html`
             <div>

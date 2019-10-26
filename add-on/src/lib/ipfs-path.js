@@ -24,11 +24,13 @@ function subdomainToIpfsPath (url) {
   if (typeof url === 'string') {
     url = new URL(url)
   }
-  const fqdn = url.hostname.split('.')
+  const match = url.toString().match(IsIpfs.subdomainPattern)
+  if (!match) throw new Error('no match for IsIpfs.subdomainPattern')
+
   // TODO: support CID split with commas
-  const cid = fqdn[0]
+  const cid = match[1]
   // TODO: support .ip(f|n)s. being at deeper levels
-  const protocol = fqdn[1]
+  const protocol = match[2]
   return `/${protocol}/${cid}${url.pathname}${url.search}${url.hash}`
 }
 
@@ -37,6 +39,18 @@ function pathAtHttpGateway (path, gatewayUrl) {
   return trimDoubleSlashes(new URL(`${gatewayUrl}${path}`).toString())
 }
 exports.pathAtHttpGateway = pathAtHttpGateway
+
+function redirectSubdomainGateway (url, subdomainGateway) {
+  if (typeof url === 'string') {
+    url = new URL(url)
+  }
+  const match = url.toString().match(IsIpfs.subdomainPattern)
+  if (!match) throw new Error('no match for IsIpfs.subdomainPattern')
+  const cid = match[1]
+  const protocol = match[2]
+  return trimDoubleSlashes(`${subdomainGateway.protocol}//${cid}.${protocol}.${subdomainGateway.hostname}${url.pathname}${url.search}${url.hash}`)
+}
+exports.redirectSubdomainGateway = redirectSubdomainGateway
 
 function trimDoubleSlashes (urlString) {
   return urlString.replace(/([^:]\/)\/+/g, '$1')
@@ -72,7 +86,11 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     validIpfsOrIpnsPath (path) {
       return validIpfsOrIpnsPath(path, dnslinkResolver)
     },
-
+    // Test if URL is a subdomain gateway resource
+    // TODO: add test if URL is a public subdomain resource
+    ipfsOrIpnsSubdomain (url) {
+      return IsIpfs.subdomain(url)
+    },
     // Test if actions such as 'copy URL', 'pin/unpin' should be enabled for the URL
     isIpfsPageActionsContext (url) {
       return Boolean(url && !url.startsWith(getState().apiURLString) && (
@@ -107,6 +125,17 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       if (ipfsPath) return pathAtHttpGateway(ipfsPath, gateway)
       // Return original URL (eg. DNSLink domains) or null if not an URL
       return input.startsWith('http') ? input : null
+    },
+    // Resolve URL or path to subdomain gateway
+    // - non-subdomain path is returned as-is
+    // The purpose of this resolver is to return a valid IPFS
+    // subdomain URL
+    resolveToPublicSubdomainUrl (url, optionalGatewayUrl) {
+      // if non-subdomain return as-is
+      if (!IsIpfs.subdomain(url)) return url
+
+      const gateway = optionalGatewayUrl || getState().pubSubdomainGwURL
+      return redirectSubdomainGateway(url, gateway)
     },
 
     // Resolve URL or path to IPFS Path:
