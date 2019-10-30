@@ -27,7 +27,7 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
 
   before(function () {
     global.URL = URL
-    browser.tabs = { ...browser.tabs, query: sinon.stub().resolves([{ id: 20 }]) }
+    browser.tabs = { ...browser.tabs, getCurrent: sinon.stub().resolves({ id: 20 }) }
     global.browser = browser
   })
 

@@ -33,9 +33,11 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 
   // Various types of requests are identified once and cached across all browser.webRequest hooks
   const requestCacheCfg = { max: 128, maxAge: 1000 * 30 }
+  const recoveredTabs = new LRU(requestCacheCfg)
   const ignoredRequests = new LRU(requestCacheCfg)
   const ignore = (id) => ignoredRequests.set(id, true)
   const isIgnored = (id) => ignoredRequests.get(id) !== undefined
+  const errorInFlight = new LRU({ max: 3, maxAge: 1000 })
 
   const acrhHeaders = new LRU(requestCacheCfg) // webui cors fix in Chrome
   const originUrls = new LRU(requestCacheCfg) // request.originUrl workaround for Chrome
@@ -365,17 +367,23 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     // browser.webRequest.onErrorOccurred
     // Fired when a request could not be processed due to an error on network level.
     // For example: TCP timeout, DNS lookup failure
-    async onErrorOccurred (request) {
+    // NOTE: this is executed only if webRequest.ResourceType='main_frame'
+    onErrorOccurred (request) {
       const state = getState()
       if (!state.active) return
+
+      // Avoid duplicates in Chromium, which fires two events instead of one
+      // https://github.com/ipfs-shipyard/ipfs-companion/issues/805
+      if (errorInFlight.has(request.url)) return
+      errorInFlight.set(request.url, request.requestId)
 
       // Check if error can be recovered via EthDNS
       if (isRecoverableViaEthDNS(request, state)) {
         const url = new URL(request.url)
         url.hostname = `${url.hostname}.link`
         const redirect = { redirectUrl: url.toString() }
-        log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url}`, redirect.redirectUrl)
-        return createTabWithURL(redirect, browser)
+        log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirect.redirectUrl}`, request)
+        return createTabWithURL(redirect, browser, recoveredTabs)
       }
 
       // Check if error can be recovered via DNSLink
@@ -384,8 +392,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         const dnslink = dnslinkResolver.readAndCacheDnslink(hostname)
         if (dnslink) {
           const redirect = dnslinkResolver.dnslinkRedirect(request.url, dnslink)
-          log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url}`, redirect.redirectUrl)
-          return createTabWithURL(redirect, browser)
+          log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url} → ${redirect.redirectUrl}`, request)
+          return createTabWithURL(redirect, browser, recoveredTabs)
         }
       }
 
@@ -399,14 +407,15 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         } else {
           redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         }
-        log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url}`, redirectUrl)
-        return createTabWithURL({ redirectUrl }, browser)
+        log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
+        return createTabWithURL({ redirectUrl }, browser, recoveredTabs)
       }
     },
 
     // browser.webRequest.onCompleted
     // Fired when HTTP request is completed (successfully or with an error code)
-    async onCompleted (request) {
+    // NOTE: this is executed only if webRequest.ResourceType='main_frame'
+    onCompleted (request) {
       const state = getState()
       if (!state.active) return
       if (request.statusCode === 200) return // finish if no error to recover from
@@ -418,8 +427,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         } else {
           redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         }
-        log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url}`, redirectUrl)
-        return createTabWithURL({ redirectUrl }, browser)
+        log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url} → ${redirectUrl}`, request)
+        return createTabWithURL({ redirectUrl }, browser, recoveredTabs)
       }
     }
   }
@@ -560,11 +569,27 @@ function isRecoverableViaEthDNS (request, state) {
 
 // We can't redirect in onErrorOccurred/onCompleted
 // Indead, we recover by opening URL in a new tab that replaces the failed one
-async function createTabWithURL (redirect, browser) {
-  const currentTabId = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0].id)
-  return browser.tabs.create({
+// TODO: display an user-friendly prompt when the very first recovery is done
+async function createTabWithURL (redirect, browser, recoveredTabs) {
+  const tabKey = redirect.redirectUrl
+  // reuse existing tab, if exists
+  // (this avoids duplicated tabs - https://github.com/ipfs-shipyard/ipfs-companion/issues/805)
+  try {
+    const recoveredId = recoveredTabs.get(tabKey)
+    const existingTab = recoveredId ? await browser.tabs.get(recoveredId) : undefined
+    if (existingTab) {
+      await browser.tabs.update(recoveredId, { active: true })
+      return
+    }
+  } catch (_) {
+    // tab no longer exist, let's create a new one
+  }
+  const failedTab = await browser.tabs.getCurrent()
+  const openerTabId = failedTab ? failedTab.id : undefined
+  const newTab = await browser.tabs.create({
     active: true,
-    openerTabId: currentTabId,
+    openerTabId,
     url: redirect.redirectUrl
   })
+  if (newTab) recoveredTabs.set(tabKey, newTab.id)
 }
