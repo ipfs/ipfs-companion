@@ -377,6 +377,13 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (errorInFlight.has(request.url)) return
       errorInFlight.set(request.url, request.requestId)
 
+      // Skip additional requests produced by DNS fixup logic in Firefox
+      // https://github.com/ipfs-shipyard/ipfs-companion/issues/804
+      if (request.error === 'NS_ERROR_UNKNOWN_HOST' && request.url.includes('://www.')) {
+        const urlBeforeFixup = request.url.replace('://www.', '://')
+        if (errorInFlight.has(urlBeforeFixup)) return
+      }
+
       // Check if error can be recovered via EthDNS
       if (isRecoverableViaEthDNS(request, state)) {
         const url = new URL(request.url)
