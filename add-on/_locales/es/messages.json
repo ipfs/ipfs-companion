@@ -291,6 +291,14 @@
     "message": "Recurra a usar el URL alternativo cuando la entrada personalizada no esté disponible para copiar enlaces compartibles",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
+  "option_publicSubdomainGatewayUrl_title": {
+    "message": "Default Public Subdomain Gateway",
+    "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
+  },
+  "option_publicSubdomainGatewayUrl_description": {
+    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
+    "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
   "option_header_api": {
     "message": "API",
     "description": "A section header on the Preferences screen (option_header_api)"

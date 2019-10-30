@@ -291,6 +291,14 @@
     "message": "Lien de secours utilisée lorsque la passerelle personnalisée n’est pas disponible et pour copier des liens partageables",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
+  "option_publicSubdomainGatewayUrl_title": {
+    "message": "Default Public Subdomain Gateway",
+    "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
+  },
+  "option_publicSubdomainGatewayUrl_description": {
+    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
+    "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
   "option_header_api": {
     "message": "API",
     "description": "A section header on the Preferences screen (option_header_api)"
@@ -376,11 +384,11 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Récupérer les requêtes HTTP ayant échoué",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "message": "Récupérer les requêtes HTTP ayant échoué pour les ressources IPFS en les redirigeants sur la passerelle public.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {

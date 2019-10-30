@@ -291,6 +291,14 @@
     "message": "Záložní URL pro sdílející odkazy bude použita v případě že vlastní brána nebude dostupná",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
+  "option_publicSubdomainGatewayUrl_title": {
+    "message": "Výchozí brána veřejné subdomény",
+    "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
+  },
+  "option_publicSubdomainGatewayUrl_description": {
+    "message": "Výchozí veřejná subdoménová brána pro obnovu nefunkčních subdoménových bran",
+    "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
   "option_header_api": {
     "message": "API",
     "description": "A section header on the Preferences screen (option_header_api)"

@@ -291,6 +291,14 @@
     "message": "로컬 게이트웨이가 사용 불가능 할 때, 공유 가능한 링크를 복사하면 대체 URL이 사용됩니다.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
+  "option_publicSubdomainGatewayUrl_title": {
+    "message": "Default Public Subdomain Gateway",
+    "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
+  },
+  "option_publicSubdomainGatewayUrl_description": {
+    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
+    "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
   "option_header_api": {
     "message": "API",
     "description": "A section header on the Preferences screen (option_header_api)"
