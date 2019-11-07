@@ -7,7 +7,6 @@ const html = require('choo/html')
 const logo = require('./logo')
 const drop = require('drag-and-drop-files')
 const fileReaderPullStream = require('pull-file-reader')
-const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('panel_quickUpload')
 
@@ -21,9 +20,8 @@ function quickUploadStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
   state.ipfsNodeType = 'external'
-  state.wrapWithDirectory = true
-  state.pinUpload = true
   state.expandOptions = false
+  state.uploadDir = '/ipfs-companion-uploads/'
 
   function updateState ({ ipfsNodeType, peerCount }) {
     state.ipfsNodeType = ipfsNodeType
@@ -61,34 +59,27 @@ async function processFiles (state, emitter, files) {
     }
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
     const uploadTab = await browser.tabs.getCurrent()
-    const { streams, totalSize } = files2streams(files)
-    progressHandler(0, totalSize, state, emitter)
+    const streams = files2streams(files)
     emitter.emit('render')
-    const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
     const options = {
-      progress: (len) => progressHandler(len, totalSize, state, emitter),
-      wrapWithDirectory: wrapFlag,
-      pin: state.pinUpload
+      create: true,
+      parents: true
     }
-    let result
+    state.progress = `Uploading ${streams.length} files...`
     try {
-      result = await ipfsCompanion.ipfs.add(streams, options)
-      // This is just an additional safety check, as in past combination
-      // of specific go-ipfs/js-ipfs-http-client versions
-      // produced silent errors in form of partial responses:
-      // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
-      const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
-      if (partialResponse) {
-        throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
-      }
-      await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
+      const files = streams.map(stream => (ipfsCompanion.ipfs.files.write(`${state.uploadDir}${stream.path}`, stream.content, options)))
+      await Promise.all(files)
+      await ipfsCompanion.openWebUiAtDirectory(state.uploadDir)
     } catch (err) {
-      console.error('Failed to IPFS add', err)
+      console.error('Failed to upload files to IPFS', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
       throw err
     }
+    state.progress = 'Completed'
     emitter.emit('render')
-    console.log('Upload result', result)
+    console.log(`Successfully uploaded ${streams.length} files`)
+    // function to open web UI at state.uploadDir
+    // await ipfsCompanion.uploadHandler(state.uploadDir)
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
   } catch (err) {
@@ -112,7 +103,6 @@ function file2buffer (file) {
 
 function files2streams (files) {
   const streams = []
-  let totalSize = 0
   for (const file of files) {
     if (!file.type && file.size === 0) {
       // UX fail-safe:
@@ -125,44 +115,20 @@ function files2streams (files) {
       path: file.name,
       content: fileStream
     })
-    totalSize += file.size
   }
-  return { streams, totalSize }
-}
-
-function progressHandler (doneBytes, totalBytes, state, emitter) {
-  state.message = browser.i18n.getMessage('quickUpload_state_uploading')
-  // console.log('Upload progress:', doneBytes)
-  if (doneBytes && doneBytes > 0) {
-    const format = { standard: 'iec', round: 0, output: 'object' }
-    const done = filesize(doneBytes, format)
-    const total = filesize(totalBytes, format)
-    const percent = ((doneBytes / totalBytes) * 100).toFixed(0)
-    state.progress = `${done.value} ${done.symbol} / ${total.value} ${total.symbol} (${percent}%)`
-  } else {
-    // This is a gracefull fallback for environments in which progress reporting is delayed
-    // until entire file/chunk is bufferend into memory (eg. js-ipfs-http-client)
-    state.progress = browser.i18n.getMessage('quickUpload_state_buffering')
-  }
-  emitter.emit('render')
+  return streams
 }
 
 function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
-  const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
-  const onPinUploadChange = (e) => { state.pinUpload = e.target.checked }
+  const onDirectoryChange = (e) => { state.uploadDir = e.target.value }
   if (state.expandOptions) {
     return html`
       <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
-        <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
-          <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
+        <label for='uploadDir' class='flex items-center db relative mt1 pointer'>
+          ${browser.i18n.getMessage('quickUpload_options_uploadDir')}
           <span class='mark db flex items-center relative mr2 br2'></span>
-          ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
-        </label>
-        <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
-          <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
-          <span class='mark db flex items-center relative mr2 br2'></span>
-          ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
+          <input id='uploadDir' type='text' oninput=${onDirectoryChange} value=${state.uploadDir} />
         </label>
       </div>
     `

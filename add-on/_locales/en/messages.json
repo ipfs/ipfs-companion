@@ -475,9 +475,9 @@
     "message": "upload options",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "Wrap single files in a directory to preserve their filenames.",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  "quickUpload_options_uploadDir": {
+    "message": "MFS directory to store uploaded files",
+    "description": "Textbox label on the share files page (quickUpload_options_wrapWithDirectory)"
   },
   "quickUpload_options_pinUpload": {
     "message": "Pin files so they are retained when performing garbage collection on your IPFS repo.",

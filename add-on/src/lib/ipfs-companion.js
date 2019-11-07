@@ -367,6 +367,12 @@ module.exports = async function init () {
     return result
   }
 
+  async function openWebUiAtDirectory (dir) {
+    await browser.tabs.create({
+      url: `${state.webuiRootUrl}#/files${dir}`
+    })
+  }
+
   // Page-specific Actions
   // -------------------------------------------------------------------
 
@@ -785,6 +791,10 @@ module.exports = async function init () {
 
     get uploadResultHandler () {
       return uploadResultHandler
+    },
+
+    get openWebUiAtDirectory () {
+      return openWebUiAtDirectory
     },
 
     destroy () {
