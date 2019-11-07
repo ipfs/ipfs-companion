@@ -66,10 +66,11 @@ async function processFiles (state, emitter, files) {
       parents: true
     }
     state.progress = `Uploading ${streams.length} files...`
+    const uploadDir = state.uploadDir.replace(/\/$|$/, '/')
     try {
-      const files = streams.map(stream => (ipfsCompanion.ipfs.files.write(`${state.uploadDir}${stream.path}`, stream.content, options)))
+      const files = streams.map(stream => (ipfsCompanion.ipfs.files.write(`${uploadDir}${stream.path}`, stream.content, options)))
       await Promise.all(files)
-      await ipfsCompanion.openWebUiAtDirectory(state.uploadDir)
+      await ipfsCompanion.openWebUiAtDirectory(uploadDir)
     } catch (err) {
       console.error('Failed to upload files to IPFS', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
