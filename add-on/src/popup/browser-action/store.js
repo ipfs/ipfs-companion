@@ -3,6 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const isIPFS = require('is-ipfs')
+const all = require('it-all')
 const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
 const { welcomePage } = require('../../lib/on-installed')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
@@ -288,7 +289,7 @@ module.exports = (state, emitter) => {
     if (state.isPinning || state.isUnPinning) return
     try {
       const currentPath = await resolveToPinPath(ipfs, status.currentTab.url)
-      const response = await ipfs.pin.ls(currentPath, { type: 'recursive', quiet: true })
+      const response = await all(ipfs.pin.ls(currentPath, { type: 'recursive', quiet: true }))
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {

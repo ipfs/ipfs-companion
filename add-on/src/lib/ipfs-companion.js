@@ -6,6 +6,8 @@ const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
 const browser = require('webextension-polyfill')
+const { Buffer } = require('buffer')
+
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
 const LRU = require('lru-cache')
@@ -15,7 +17,6 @@ const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
-const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createIpfsImportHandler = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
@@ -128,8 +129,7 @@ module.exports = async function init () {
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
     if (runtime.hasNativeProtocolHandler) {
-      log('registerStringProtocol available. Adding ipfs:// handler')
-      browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
+      log('native protocol handler support detected, but IPFS handler is not implemented yet :-(')
     } else {
       log('no browser.protocol API, native protocol will not be registered')
     }

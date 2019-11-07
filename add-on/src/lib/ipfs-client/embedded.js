@@ -15,29 +15,8 @@ exports.init = function init (opts) {
 
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
-  const ipfsOpts = mergeOptions(defaultOpts, userOpts, { start: false })
-
-  node = new Ipfs(ipfsOpts)
-
-  return new Promise((resolve, reject) => {
-    node.once('error', (error) => {
-      log.error('something went terribly wrong during startup of js-ipfs!', error)
-      reject(error)
-    })
-    node.once('ready', async () => {
-      node.once('start', () => {
-        resolve(node)
-      })
-      node.on('error', error => {
-        log.error('something went terribly wrong in embedded js-ipfs!', error)
-      })
-      try {
-        await node.start()
-      } catch (err) {
-        reject(err)
-      }
-    })
-  })
+  const ipfsOpts = mergeOptions(defaultOpts, userOpts, { start: true })
+  return Ipfs.create(ipfsOpts)
 }
 
 exports.destroy = async function () {

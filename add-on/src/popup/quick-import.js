@@ -8,7 +8,6 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 const drop = require('drag-and-drop-files')
-const fileReaderPullStream = require('pull-file-reader')
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 
@@ -74,17 +73,22 @@ async function processFiles (state, emitter, files) {
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
     const ipfsImportHandler = ipfsCompanion.ipfsImportHandler
     const importTab = await browser.tabs.getCurrent()
-    const streams = files2streams(files)
     emitter.emit('render')
+
+    const progress = (p) => {
+      state.progress = `Importing ${files.length} files... (${p} bytes)`
+    }
     const options = {
+      progress,
       wrapWithDirectory: true,
       pin: false // we use MFS for implicit pinning instead
     }
-    state.progress = `Importing ${streams.length} files...`
+
     const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
     let result
     try {
-      result = await ipfsImportHandler.importFiles(streams, options, importDir)
+      state.progress = `Importing ${files.length} files...`
+      result = await ipfsImportHandler.importFiles(files, options, importDir)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
       ipfsCompanion.notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
@@ -92,7 +96,7 @@ async function processFiles (state, emitter, files) {
     }
     state.progress = 'Completed'
     emitter.emit('render')
-    console.log(`Successfully imported ${streams.length} files`)
+    console.log(`Successfully imported ${files.length} files`)
     ipfsImportHandler.copyShareLink(result)
     ipfsImportHandler.preloadFilesAtPublicGateway(result)
     // open web UI at proper directory
@@ -112,34 +116,6 @@ async function processFiles (state, emitter, files) {
     state.progress = `${err}`
     emitter.emit('render')
   }
-}
-
-/* disabled in favor of fileReaderPullStream
-function file2buffer (file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(Buffer.from(reader.result))
-    reader.onerror = reject
-    reader.readAsArrayBuffer(file)
-  })
-} */
-
-function files2streams (files) {
-  const streams = []
-  for (const file of files) {
-    if (!file.type && file.size === 0) {
-      // UX fail-safe:
-      // at the moment drag&drop of an empty file without an extension
-      // looks the same as dropping a directory
-      throw new Error(`unable to add "${file.name}", directories and empty files are not supported`)
-    }
-    const fileStream = fileReaderPullStream(file, { chunkSize: 32 * 1024 * 1024 })
-    streams.push({
-      path: file.name,
-      content: fileStream
-    })
-  }
-  return streams
 }
 
 function quickImportOptions (state, emit) {

@@ -3,14 +3,21 @@
 const browser = require('webextension-polyfill')
 
 const { optionDefaults } = require('../../options')
-const chromeSocketsBundle = require('./libp2p-bundle')
 const mergeOptions = require('merge-options')
 const getPort = require('get-port')
 const { getIPv4, getIPv6 } = require('webrtc-ips')
 
+const Libp2p = require('libp2p')
+const TCP = require('libp2p-tcp')
+const MulticastDNS = require('libp2p-mdns')
+
 const multiaddr = require('multiaddr')
 const maToUri = require('multiaddr-to-uri')
 const multiaddr2httpUrl = (ma) => maToUri(ma.includes('/http') ? ma : multiaddr(ma).encapsulate('/http'))
+
+const debug = require('debug')
+const log = debug('ipfs-companion:client:embedded:config')
+log.error = debug('ipfs-companion:client:embedded:config:error')
 
 // additional default js-ipfs config specific to runtime with chrome.sockets APIs
 const chromeDefaultOpts = {
@@ -25,11 +32,10 @@ const chromeDefaultOpts = {
       Swarm: [
         // optional ws-star signaling provides a backup for non-LAN peer discovery
         // (this will be removed when autorelay and DHT are stable in js-ipfs)
-        '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+        '/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star'
       ],
       // Delegated Content and Peer Routing: https://github.com/ipfs/js-ipfs/pull/2195
-      Delegates: // [] // TODO: enable delegates
-      [
+      Delegates: [
         '/dns4/node1.delegate.ipfs.io/tcp/443/https',
         '/dns4/node0.delegate.ipfs.io/tcp/443/https'
       ]
@@ -42,8 +48,8 @@ const chromeDefaultOpts = {
     },
     Swarm: {
       ConnMgr: {
-        LowWater: 100,
-        HighWater: 250
+        LowWater: 50,
+        HighWater: 150
       }
     },
     Bootstrap: [
@@ -113,7 +119,36 @@ async function buildConfig (opts, log) {
   // merge configs
   const finalOpts = {
     start: false,
-    libp2p: chromeSocketsBundle
+    // a function that customizes libp2p config: https://github.com/ipfs/js-ipfs/pull/2591
+    libp2p: ({ libp2pOptions, peerInfo }) => {
+      libp2pOptions.modules = mergeOptions.call({ concatArrays: true }, libp2pOptions.modules, {
+        transports: [TCP]
+      })
+
+      libp2pOptions.modules = mergeOptions.call({ concatArrays: true }, libp2pOptions.modules, {
+        peerDiscovery: [MulticastDNS]
+      })
+
+      libp2pOptions.config = mergeOptions(libp2pOptions.config, {
+        peerDiscovery: {
+          autoDial: true,
+          mdns: {
+            enabled: true
+          },
+          bootstrap: {
+            enabled: true
+          },
+          webRTCStar: {
+            enabled: true
+          }
+        }
+      })
+
+      libp2pOptions.metrics = { enabled: false }
+
+      log('initializing libp2p with libp2pOptions', libp2pOptions)
+      return new Libp2p(libp2pOptions)
+    }
   }
   const ipfsNodeConfig = mergeOptions(defaultOpts, userOpts, chromeOpts, finalOpts)
 
