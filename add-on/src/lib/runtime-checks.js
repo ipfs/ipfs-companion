@@ -6,7 +6,7 @@ function getBrowserInfo (browser) {
   if (browser && browser.runtime && browser.runtime.getBrowserInfo) {
     return browser.runtime.getBrowserInfo()
   }
-  return Promise.resolve()
+  return Promise.resolve({})
 }
 
 function getPlatformInfo (browser) {
@@ -28,21 +28,20 @@ function hasChromeSocketsForTcp () {
 
 async function createRuntimeChecks (browser) {
   // browser
-  const browserInfo = await getBrowserInfo(browser)
-  const runtimeBrowserName = browserInfo ? browserInfo.name : 'unknown'
-  const runtimeIsFirefox = !!(runtimeBrowserName.includes('Firefox') || runtimeBrowserName.includes('Fennec'))
-  const runtimeHasNativeProtocol = !!(browser && browser.protocol && browser.protocol.registerStringProtocol)
+  const { name, version } = await getBrowserInfo(browser)
+  const isFirefox = name && (name.includes('Firefox') || name.includes('Fennec'))
+  const hasNativeProtocolHandler = !!(browser && browser.protocol && browser.protocol.registerStringProtocol)
   // platform
   const platformInfo = await getPlatformInfo(browser)
-  const runtimeIsAndroid = platformInfo ? platformInfo.os === 'android' : false
-  const runtimeHasSocketsForTcp = hasChromeSocketsForTcp()
+  const isAndroid = platformInfo ? platformInfo.os === 'android' : false
   return Object.freeze({
     browser,
-    isFirefox: runtimeIsFirefox,
-    isAndroid: runtimeIsAndroid,
-    isBrave: runtimeHasSocketsForTcp, // TODO: make it more robust
-    hasChromeSocketsForTcp: runtimeHasSocketsForTcp,
-    hasNativeProtocolHandler: runtimeHasNativeProtocol
+    isFirefox,
+    isAndroid,
+    isBrave: hasChromeSocketsForTcp(), // TODO: make it more robust
+    requiresXHRCORSfix: !!(isFirefox && version && version.startsWith('68')),
+    hasChromeSocketsForTcp: hasChromeSocketsForTcp(),
+    hasNativeProtocolHandler
   })
 }
 

@@ -8,7 +8,7 @@
   "applications": {
     "gecko": {
       "id": "ipfs-firefox-addon@lidel.org",
-      "strict_min_version": "69.0"
+      "strict_min_version": "68.0"
     }
   },
   "page_action": {

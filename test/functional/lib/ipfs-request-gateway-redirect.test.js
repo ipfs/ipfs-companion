@@ -160,6 +160,36 @@ describe('modifyRequest.onBeforeRequest:', function () {
         expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
     })
+    describe('with external node when runtime.requiresXHRCORSfix', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'external'
+        browser.runtime.getBrowserInfo = () => Promise.resolve({ name: 'Firefox', version: '68.0.0' })
+      })
+      it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
+        runtime.isFirefox = true
+        const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/' }
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from custom gateway if fetched from the same origin and redirect is enabled in non-Firefox', function () {
+        runtime.isFirefox = false
+        const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/' }
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from custom gateway if XHR is cross-origin and redirect is enabled in non-Firefox', function () {
+        runtime.isFirefox = false
+        const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+      it('should be served from custom gateway via late redirect in onHeadersReceived if XHR is cross-origin and redirect is enabled in Firefox', function () {
+        // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+        runtime.isFirefox = true
+        const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
+        // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
+        expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
+        // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
+        expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      })
+    })
   })
 
   describe('request for a path matching /ipns/{path}', function () {

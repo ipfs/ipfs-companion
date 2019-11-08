@@ -183,6 +183,20 @@ describe('modifyRequest processing', function () {
       const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
       expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
     })
+    it('should redirect later in onHeadersReceived if dnslink exists, XHR is cross-origin and runtime is Firefox <69', function () {
+      // stub existence of a valid DNS record
+      const fqdn = 'explore.ipld.io'
+      dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
+      //
+      // Context for CORS XHR problems in Firefox <69: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+      runtime.requiresXHRCORSfix = true
+      // Firefox uses 'originUrl' for origin
+      const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
+      // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
+      expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
+      // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
+      expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
+    })
     it('should do nothing if dnslink does not exist and XHR is cross-origin in Firefox', function () {
       // stub no dnslink
       const fqdn = 'youtube.com'
@@ -284,6 +298,19 @@ describe('modifyRequest processing', function () {
           expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
           // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
           xhrRequest.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+          expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
+        })
+        it('should redirect later in onHeadersReceived if XHR is cross-origin and runtime is Firefox <69', function () {
+          // stub existence of a valid DNS record
+          const fqdn = 'explore.ipld.io'
+          dnslinkResolver.setDnslink(fqdn, '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
+          //
+          // Context for CORS XHR problems in Firefox <69: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
+          runtime.requiresXHRCORSfix = true
+          const xhrRequest = { url: 'http://explore.ipld.io/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
+          // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
+          expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
+          // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
           expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal(activeGateway + '/ipns/explore.ipld.io/index.html?argTest#hashTest')
         })
         // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness

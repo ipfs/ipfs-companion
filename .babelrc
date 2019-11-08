@@ -7,7 +7,7 @@
       "@babel/preset-env",
       {
         "targets": {
-          "firefox": 69,
+          "firefox": 68,
           "chrome": 72
         }
       }
