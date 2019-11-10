@@ -70,7 +70,6 @@ async function processFiles (state, emitter, files) {
     try {
       const files = streams.map(stream => (ipfsCompanion.ipfs.files.write(`${uploadDir}${stream.path}`, stream.content, options)))
       await Promise.all(files)
-      await ipfsCompanion.openWebUiAtDirectory(uploadDir)
     } catch (err) {
       console.error('Failed to upload files to IPFS', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
@@ -79,6 +78,9 @@ async function processFiles (state, emitter, files) {
     state.progress = 'Completed'
     emitter.emit('render')
     console.log(`Successfully uploaded ${streams.length} files`)
+
+    // open web UI at proper directory
+    await ipfsCompanion.openWebUiAtDirectory(uploadDir)
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
   } catch (err) {
