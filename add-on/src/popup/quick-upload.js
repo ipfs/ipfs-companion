@@ -79,8 +79,6 @@ async function processFiles (state, emitter, files) {
     state.progress = 'Completed'
     emitter.emit('render')
     console.log(`Successfully uploaded ${streams.length} files`)
-    // function to open web UI at state.uploadDir
-    // await ipfsCompanion.uploadHandler(state.uploadDir)
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
   } catch (err) {
