@@ -5,6 +5,7 @@ const { describe, it, before, beforeEach, after } = require('mocha')
 const { expect } = require('chai')
 const browser = require('sinon-chrome')
 const { createRuntimeChecks, hasChromeSocketsForTcp } = require('../../../add-on/src/lib/runtime-checks')
+const promiseStub = (result) => () => Promise.resolve(result)
 
 describe('runtime-checks.js', function () {
   before(() => {
@@ -21,14 +22,6 @@ describe('runtime-checks.js', function () {
       browser.flush()
     })
 
-    // current version of sinon-chrome is missing stubs for some APIs,
-    // this is a workaround until fix is provided upstream
-    function promiseStub (result) {
-      return () => {
-        return Promise.resolve(result)
-      }
-    }
-
     it('should return true when in Firefox runtime', async function () {
       browser.runtime.getBrowserInfo = promiseStub({ name: 'Firefox' })
       const runtime = await createRuntimeChecks(browser)
@@ -39,6 +32,30 @@ describe('runtime-checks.js', function () {
       browser.runtime.getBrowserInfo = promiseStub({ name: 'SomethingElse' })
       const runtime = await createRuntimeChecks(browser)
       expect(runtime.isFirefox).to.equal(false)
+    })
+  })
+
+  describe('requiresXHRCORSfix', function () {
+    beforeEach(function () {
+      browser.flush()
+    })
+
+    it('should return true when in Firefox runtime < 69', async function () {
+      browser.runtime.getBrowserInfo = promiseStub({ name: 'Firefox', version: '68.0.0' })
+      const runtime = await createRuntimeChecks(browser)
+      expect(runtime.requiresXHRCORSfix).to.equal(true)
+    })
+
+    it('should return false when in Firefox runtime >= 69', async function () {
+      browser.runtime.getBrowserInfo = promiseStub({ name: 'Firefox', version: '69.0.0' })
+      const runtime = await createRuntimeChecks(browser)
+      expect(runtime.requiresXHRCORSfix).to.equal(false)
+    })
+
+    it('should return false when  if getBrowserInfo is not present', async function () {
+      browser.runtime.getBrowserInfo = undefined
+      const runtime = await createRuntimeChecks(browser)
+      expect(runtime.requiresXHRCORSfix).to.equal(false)
     })
   })
 
