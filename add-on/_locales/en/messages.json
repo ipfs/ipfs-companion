@@ -476,7 +476,7 @@
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_uploadDir": {
-    "message": "MFS directory to store uploaded files",
+    "message": "MFS directory to store imported files",
     "description": "Textbox label on the share files page (quickUpload_options_wrapWithDirectory)"
   },
   "page_proxyAcl_title": {

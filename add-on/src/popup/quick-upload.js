@@ -21,7 +21,7 @@ function quickUploadStore (state, emitter) {
   state.peerCount = ''
   state.ipfsNodeType = 'external'
   state.expandOptions = false
-  state.uploadDir = '/ipfs-companion-uploads/'
+  state.uploadDir = '/ipfs-companion-imports/'
 
   function updateState ({ ipfsNodeType, peerCount }) {
     state.ipfsNodeType = ipfsNodeType
@@ -65,28 +65,28 @@ async function processFiles (state, emitter, files) {
       create: true,
       parents: true
     }
-    state.progress = `Uploading ${streams.length} files...`
+    state.progress = `Importing ${streams.length} files...`
     const uploadDir = state.uploadDir.replace(/\/$|$/, '/')
     try {
       const files = streams.map(stream => (ipfsCompanion.ipfs.files.write(`${uploadDir}${stream.path}`, stream.content, options)))
       await Promise.all(files)
     } catch (err) {
-      console.error('Failed to upload files to IPFS', err)
+      console.error('Failed to import files to IPFS', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
       throw err
     }
     state.progress = 'Completed'
     emitter.emit('render')
-    console.log(`Successfully uploaded ${streams.length} files`)
+    console.log(`Successfully imported ${streams.length} files`)
 
     // open web UI at proper directory
     await ipfsCompanion.openWebUiAtDirectory(uploadDir)
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
   } catch (err) {
-    console.error('Unable to perform quick upload', err)
+    console.error('Unable to perform import', err)
     // keep upload tab and display error message in it
-    state.message = 'Unable to upload to IPFS API:'
+    state.message = 'Unable to import to IPFS:'
     state.progress = `${err}`
     emitter.emit('render')
   }
