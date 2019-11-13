@@ -427,6 +427,14 @@
     "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
+  "option_uploadDir_title": {
+    "message": "MFS Import Directory",
+    "description": "An option title on the Preferences screen (option_uploadDir_title)"
+  },
+  "option_uploadDir_description": {
+    "message": "Customize the directory used for uploading files to MFS.",
+    "description": "An option description on the Preferences screen (option_uploadDir_description)"
+  },
   "option_resetAllOptions_title": {
     "message": "Reset Everything",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"

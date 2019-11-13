@@ -15,6 +15,7 @@ function experimentsForm ({
   detectIpfsPathHeader,
   ipfsProxy,
   logNamespaces,
+  uploadDir,
   onOptionChange,
   onOptionsReset
 }) {
@@ -152,6 +153,26 @@ function experimentsForm ({
             required
             onchange=${onOptionChange('logNamespaces')}
             value=${logNamespaces} />
+        </div>
+        <div>
+          <label for="uploadDir">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_uploadDir_title')}</dt>
+              <dd>
+                ${browser.i18n.getMessage('option_uploadDir_description')}
+                <p><a href="https://docs.ipfs.io/guides/concepts/mfs/" target="_blank">
+                  ${browser.i18n.getMessage('option_legend_readMore')}
+                </a></p>
+              </dd>
+            </dl>
+          </label>
+          <input
+            id="uploadDir"
+            type="text"
+            pattern="^\/(.*)"
+            required
+            onchange=${onOptionChange('uploadDir')}
+            value=${uploadDir} />
         </div>
         <div>
           <label for="resetAllOptions">

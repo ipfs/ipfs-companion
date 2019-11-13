@@ -230,6 +230,7 @@ module.exports = async function init () {
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
       webuiRootUrl: state.webuiRootUrl,
+      uploadDir: state.uploadDir,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noRedirectHostnames: state.noRedirectHostnames,
@@ -714,6 +715,9 @@ module.exports = async function init () {
         case 'logNamespaces':
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
+          break
+        case 'uploadDir':
+          state[key] = change.newValue
           break
         case 'linkify':
         case 'catchUnhandledProtocols':

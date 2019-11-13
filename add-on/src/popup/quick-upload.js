@@ -21,11 +21,12 @@ function quickUploadStore (state, emitter) {
   state.peerCount = ''
   state.ipfsNodeType = 'external'
   state.expandOptions = false
-  state.uploadDir = '/ipfs-companion-imports/'
+  state.uploadDir = ''
 
-  function updateState ({ ipfsNodeType, peerCount }) {
+  function updateState ({ ipfsNodeType, peerCount, uploadDir }) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
+    state.uploadDir = uploadDir
   }
 
   let port
@@ -120,27 +121,6 @@ function files2streams (files) {
   return streams
 }
 
-function quickUploadOptions (state, emit) {
-  const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
-  const onDirectoryChange = (e) => { state.uploadDir = e.target.value }
-  if (state.expandOptions) {
-    return html`
-      <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
-        <label for='uploadDir' class='flex items-center db relative mt1 pointer'>
-          ${browser.i18n.getMessage('quickUpload_options_uploadDir')}
-          <span class='mark db flex items-center relative mr2 br2'></span>
-          <input id='uploadDir' type='text' oninput=${onDirectoryChange} value=${state.uploadDir} />
-        </label>
-      </div>
-    `
-  }
-  return html`
-    <button class='mt3 f6 lh-copy link bn bg-transparent moon-gray dib pa0 pointer' style='color: #6ACAD1' onclick=${onExpandOptions}>
-      ${browser.i18n.getMessage('quickUpload_options_show')} »
-    </button>
-  `
-}
-
 function quickUploadPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
   const { peerCount } = state
@@ -180,7 +160,6 @@ function quickUploadPage (state, emit) {
             </div>
           </div>
         </label>
-        ${quickUploadOptions(state, emit)}
       </div>
     </div>
   `
