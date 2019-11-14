@@ -62,14 +62,27 @@ async function processFiles (state, emitter, files) {
     const uploadTab = await browser.tabs.getCurrent()
     const streams = files2streams(files)
     emitter.emit('render')
-    const options = {
-      create: true,
-      parents: true
-    }
     state.progress = `Importing ${streams.length} files...`
     const uploadDir = state.uploadDir.replace(/\/$|$/, '/')
     try {
-      const files = streams.map(stream => (ipfsCompanion.ipfs.files.write(`${uploadDir}${stream.path}`, stream.content, options)))
+      // files are first `add`ed to IPFS
+      // and then copied to an MFS directory
+      // to ensure that CIDs for any created file
+      // remain the same for ipfs-companion and Web UI
+      const results = await ipfsCompanion.ipfs.add(streams)
+      // This is just an additional safety check, as in past combination
+      // of specific go-ipfs/js-ipfs-http-client versions
+      // produced silent errors in form of partial responses:
+      // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
+      const partialResponse = results.length !== streams.length
+      if (partialResponse) {
+        throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
+      }
+
+      // cp will fail if directory does not exist
+      await ipfsCompanion.ipfs.files.mkdir(`${uploadDir}`, { parents: true })
+
+      const files = results.map(result => (ipfsCompanion.ipfs.files.cp(`/ipfs/${result.hash}`, `${uploadDir}${result.path}`)))
       await Promise.all(files)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
