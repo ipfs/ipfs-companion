@@ -64,17 +64,18 @@ async function processFiles (state, emitter, files) {
     emitter.emit('render')
     state.progress = `Importing ${streams.length} files...`
     const uploadDir = state.uploadDir.replace(/\/$|$/, '/')
+    let result
     try {
       // files are first `add`ed to IPFS
       // and then copied to an MFS directory
       // to ensure that CIDs for any created file
       // remain the same for ipfs-companion and Web UI
-      const results = await ipfsCompanion.ipfs.add(streams)
+      result = await ipfsCompanion.ipfs.add(streams)
       // This is just an additional safety check, as in past combination
       // of specific go-ipfs/js-ipfs-http-client versions
       // produced silent errors in form of partial responses:
       // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
-      const partialResponse = results.length !== streams.length
+      const partialResponse = result.length !== streams.length
       if (partialResponse) {
         throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
       }
@@ -82,7 +83,7 @@ async function processFiles (state, emitter, files) {
       // cp will fail if directory does not exist
       await ipfsCompanion.ipfs.files.mkdir(`${uploadDir}`, { parents: true })
 
-      const files = results.map(result => (ipfsCompanion.ipfs.files.cp(`/ipfs/${result.hash}`, `${uploadDir}${result.path}`)))
+      const files = result.map(result => (ipfsCompanion.ipfs.files.cp(`/ipfs/${result.hash}`, `${uploadDir}${result.path}`)))
       await Promise.all(files)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
@@ -94,7 +95,13 @@ async function processFiles (state, emitter, files) {
     console.log(`Successfully imported ${streams.length} files`)
 
     // open web UI at proper directory
-    await ipfsCompanion.openWebUiAtDirectory(uploadDir)
+    // unless and embedded node is in use (no access to web UI)
+    // in which case, open resource.
+    if (state.ipfsNodeType === 'embedded') {
+      await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
+    } else {
+      await ipfsCompanion.openWebUiAtDirectory(uploadDir)
+    }
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
   } catch (err) {
