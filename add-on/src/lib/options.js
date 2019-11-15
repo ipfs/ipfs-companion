@@ -27,7 +27,7 @@ exports.optionDefaults = Object.freeze({
   ipfsApiPollMs: 3000,
   ipfsProxy: true, // window.ipfs
   logNamespaces: 'jsipfs*,ipfs*,libp2p:mdns*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*,-ipfs:http-api*',
-  uploadDir: '/ipfs-companion-imports/'
+  uploadDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/'
 })
 
 function buildCustomGatewayUrl () {
