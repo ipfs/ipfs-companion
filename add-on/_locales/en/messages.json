@@ -39,6 +39,10 @@
     "message": "Share files via IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
+  "quickUpload_options_openViaWebUI": {
+    "message": "Open imported files in Web UI",
+    "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
+  },
   "panel_openWebui": {
     "message": "Open Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
@@ -480,7 +484,7 @@
     "description": "Status label on the share files page (quickUpload_state_buffering)"
   },
   "quickUpload_options_show": {
-    "message": "upload options",
+    "message": "import options",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_uploadDir": {
