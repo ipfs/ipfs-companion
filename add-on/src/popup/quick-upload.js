@@ -21,6 +21,7 @@ function quickUploadStore (state, emitter) {
   state.peerCount = ''
   state.ipfsNodeType = 'external'
   state.expandOptions = false
+  state.wrapWithDirectory = true
   state.openViaWebUI = true
   state.uploadDir = ''
   state.userChangedUploadDir = false
@@ -66,6 +67,10 @@ async function processFiles (state, emitter, files) {
     const uploadTab = await browser.tabs.getCurrent()
     const streams = files2streams(files)
     emitter.emit('render')
+    const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
+    const options = {
+      wrapWithDirectory: wrapFlag
+    }
     state.progress = `Importing ${streams.length} files...`
     const uploadDir = formatUploadDirectory(state.uploadDir)
     let result
@@ -74,12 +79,12 @@ async function processFiles (state, emitter, files) {
       // and then copied to an MFS directory
       // to ensure that CIDs for any created file
       // remain the same for ipfs-companion and Web UI
-      result = await ipfsCompanion.ipfs.add(streams)
+      result = await ipfsCompanion.ipfs.add(streams, options)
       // This is just an additional safety check, as in past combination
       // of specific go-ipfs/js-ipfs-http-client versions
       // produced silent errors in form of partial responses:
       // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
-      const partialResponse = result.length !== streams.length
+      const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
       if (partialResponse) {
         throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
       }
@@ -157,6 +162,7 @@ function files2streams (files) {
 
 function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
+  const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
   const onDirectoryChange = (e) => { state.userChangedUploadDir = true; state.uploadDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.openViaWebUI = e.target.checked }
   const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
@@ -164,6 +170,11 @@ function quickUploadOptions (state, emit) {
   if (state.expandOptions) {
     return html`
       <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
+        <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
+          <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
+          <span class='mark db flex items-center relative mr2 br2'></span>
+          ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
+        </label>
         ${displayOpenWebUI ? html`<label for='openViaWebUI' class='flex items-center db relative mt1 pointer'>
           <input id='openViaWebUI' type='checkbox' onchange=${onOpenViaWebUIChange} checked=${state.openViaWebUI} />
           <span class='mark db flex items-center relative mr2 br2'></span>

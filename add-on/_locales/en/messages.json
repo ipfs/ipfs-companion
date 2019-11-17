@@ -435,6 +435,10 @@
     "message": "MFS Import Directory",
     "description": "An option title on the Preferences screen (option_uploadDir_title)"
   },
+  "quickUpload_options_wrapWithDirectory": {
+    "message": "Wrap single files in a directory to preserve their filenames.",
+    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  },
   "option_uploadDir_description": {
     "message": "Customize the directory used for uploading files to MFS.",
     "description": "An option description on the Preferences screen (option_uploadDir_description)"
