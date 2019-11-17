@@ -91,8 +91,9 @@ async function processFiles (state, emitter, files) {
 
       // cp will fail if directory does not exist
       await ipfsCompanion.ipfs.files.mkdir(`${uploadDir}`, { parents: true })
-
-      const files = result.map(result => (ipfsCompanion.ipfs.files.cp(`/ipfs/${result.hash}`, `${uploadDir}${result.path}`)))
+      // remove directory from files API import files
+      let files = result.filter(file => (file.path !== ''))
+      files = files.map(file => (ipfsCompanion.ipfs.files.cp(`/ipfs/${file.hash}`, `${uploadDir}${file.path}`)))
       await Promise.all(files)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
