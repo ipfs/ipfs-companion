@@ -39,10 +39,6 @@
     "message": "Share files via IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
   },
-  "quickUpload_options_openViaWebUI": {
-    "message": "Open imported files in Web UI",
-    "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
-  },
   "panel_openWebui": {
     "message": "Open Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
@@ -435,10 +431,6 @@
     "message": "MFS Import Directory",
     "description": "An option title on the Preferences screen (option_uploadDir_title)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "Wrap single files in a directory to preserve their filenames.",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
-  },
   "option_uploadDir_description": {
     "message": "Customize the directory used for uploading files to MFS.",
     "description": "An option description on the Preferences screen (option_uploadDir_description)"
@@ -493,7 +485,15 @@
   },
   "quickUpload_options_uploadDir": {
     "message": "MFS directory to store imported files",
-    "description": "Textbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+    "description": "Textbox label on the share files page (quickUpload_options_uploadDir)"
+  },
+  "quickUpload_options_wrapWithDirectory": {
+    "message": "Wrap single files in a directory to preserve their filenames.",
+    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  },
+  "quickUpload_options_openViaWebUI": {
+    "message": "Open imported files in Web UI",
+    "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
     "message": "Manage Permissions",
