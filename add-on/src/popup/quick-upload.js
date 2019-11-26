@@ -21,7 +21,6 @@ function quickUploadStore (state, emitter) {
   state.peerCount = ''
   state.ipfsNodeType = 'external'
   state.expandOptions = false
-  state.wrapWithDirectory = true
   state.openViaWebUI = true
   state.uploadDir = ''
   state.userChangedUploadDir = false
@@ -67,7 +66,7 @@ async function processFiles (state, emitter, files) {
     const uploadTab = await browser.tabs.getCurrent()
     const streams = files2streams(files)
     emitter.emit('render')
-    const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
+    const wrapFlag = streams.length > 1
     const options = {
       wrapWithDirectory: wrapFlag
     }
@@ -138,7 +137,7 @@ function formatUploadDirectory (path) {
   // needed to handle date symbols in the import directory
   const now = new Date()
   const dateSymbols = [/%Y/g, /%M/g, /%D/g, /%h/g, /%m/g, /%s/g]
-  const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2, "0"))
+  const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2, '0'))
   dateSymbols.forEach((symbol, i) => { path = path.replace(symbol, symbolReplacements[i]) })
   return path
 }
@@ -163,7 +162,6 @@ function files2streams (files) {
 
 function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
-  const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
   const onDirectoryChange = (e) => { state.userChangedUploadDir = true; state.uploadDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.openViaWebUI = e.target.checked }
   const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
@@ -171,11 +169,6 @@ function quickUploadOptions (state, emit) {
   if (state.expandOptions) {
     return html`
       <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
-        <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
-          <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
-          <span class='mark db flex items-center relative mr2 br2'></span>
-          ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
-        </label>
         ${displayOpenWebUI ? html`<label for='openViaWebUI' class='flex items-center db relative mt1 pointer'>
           <input id='openViaWebUI' type='checkbox' onchange=${onOpenViaWebUIChange} checked=${state.openViaWebUI} />
           <span class='mark db flex items-center relative mr2 br2'></span>

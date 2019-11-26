@@ -487,10 +487,6 @@
     "message": "Path to store imported files",
     "description": "Textbox label on the share files page (quickUpload_options_uploadDir)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "Wrap single files in a directory to preserve their filenames.",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
-  },
   "quickUpload_options_openViaWebUI": {
     "message": "Open in Web UI",
     "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
