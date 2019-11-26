@@ -428,7 +428,7 @@
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_uploadDir_title": {
-    "message": "MFS Import Directory",
+    "message": "File Import Directory",
     "description": "An option title on the Preferences screen (option_uploadDir_title)"
   },
   "option_uploadDir_description": {
@@ -484,7 +484,7 @@
     "description": "Button on the share files page (quickUpload_options_show)"
   },
   "quickUpload_options_uploadDir": {
-    "message": "MFS directory to store imported files",
+    "message": "Path to store imported files",
     "description": "Textbox label on the share files page (quickUpload_options_uploadDir)"
   },
   "quickUpload_options_wrapWithDirectory": {
@@ -492,7 +492,7 @@
     "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
   },
   "quickUpload_options_openViaWebUI": {
-    "message": "Open imported files in Web UI",
+    "message": "Open in Web UI",
     "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
