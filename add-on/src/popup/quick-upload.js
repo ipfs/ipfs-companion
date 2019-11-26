@@ -138,7 +138,7 @@ function formatUploadDirectory (path) {
   // needed to handle date symbols in the import directory
   const now = new Date()
   const dateSymbols = [/%Y/g, /%M/g, /%D/g, /%h/g, /%m/g, /%s/g]
-  const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
+  const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2, "0"))
   dateSymbols.forEach((symbol, i) => { path = path.replace(symbol, symbolReplacements[i]) })
   return path
 }
