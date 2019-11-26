@@ -134,6 +134,8 @@ function file2buffer (file) {
 
 function formatImportDirectory (path) {
   path = path.replace(/\/$|$/, '/')
+  path = path.replace(/(\/)\/+/g, '$1')
+
   // needed to handle date symbols in the import directory
   const now = new Date()
   const dateSymbols = [/%Y/g, /%M/g, /%D/g, /%h/g, /%m/g, /%s/g]
