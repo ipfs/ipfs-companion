@@ -184,7 +184,7 @@ function quickUploadOptions (state, emit) {
         <label for='uploadDir' class='flex items-center db relative mt1 pointer'>
           ${browser.i18n.getMessage('quickUpload_options_uploadDir')}
           <span class='mark db flex items-center relative mr2 br2'></span>
-          <input id='uploadDir' class='w-40' type='text' oninput=${onDirectoryChange} value=${state.uploadDir} />
+          <input id='uploadDir' class='w-40 bg-transparent aqua monospace br1 ba b--aqua pa2' type='text' oninput=${onDirectoryChange} value=${state.uploadDir} />
         </label>
       </div>
     `
