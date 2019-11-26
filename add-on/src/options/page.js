@@ -80,7 +80,7 @@ module.exports = function optionsPage (state, emit) {
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     ipfsProxy: state.options.ipfsProxy,
     logNamespaces: state.options.logNamespaces,
-    uploadDir: state.options.uploadDir,
+    importDir: state.options.importDir,
     onOptionChange,
     onOptionsReset
   })}

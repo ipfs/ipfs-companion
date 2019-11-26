@@ -22,14 +22,14 @@ function quickUploadStore (state, emitter) {
   state.ipfsNodeType = 'external'
   state.expandOptions = false
   state.openViaWebUI = true
-  state.uploadDir = ''
-  state.userChangedUploadDir = false
+  state.importDir = ''
+  state.userChangedImportDir = false
 
-  function updateState ({ ipfsNodeType, peerCount, uploadDir }) {
+  function updateState ({ ipfsNodeType, peerCount, importDir }) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
-    if (!state.userChangedUploadDir) {
-      state.uploadDir = uploadDir
+    if (!state.userChangedImportDir) {
+      state.importDir = importDir
     }
   }
 
@@ -71,7 +71,7 @@ async function processFiles (state, emitter, files) {
       wrapWithDirectory: wrapFlag
     }
     state.progress = `Importing ${streams.length} files...`
-    const uploadDir = formatUploadDirectory(state.uploadDir)
+    const importDir = formatImportDirectory(state.importDir)
     let result
     try {
       // files are first `add`ed to IPFS
@@ -89,10 +89,10 @@ async function processFiles (state, emitter, files) {
       }
 
       // cp will fail if directory does not exist
-      await ipfsCompanion.ipfs.files.mkdir(`${uploadDir}`, { parents: true })
+      await ipfsCompanion.ipfs.files.mkdir(`${importDir}`, { parents: true })
       // remove directory from files API import files
       let files = result.filter(file => (file.path !== ''))
-      files = files.map(file => (ipfsCompanion.ipfs.files.cp(`/ipfs/${file.hash}`, `${uploadDir}${file.path}`)))
+      files = files.map(file => (ipfsCompanion.ipfs.files.cp(`/ipfs/${file.hash}`, `${importDir}${file.path}`)))
       await Promise.all(files)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
@@ -109,7 +109,7 @@ async function processFiles (state, emitter, files) {
     if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
       await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
     } else {
-      await ipfsCompanion.openWebUiAtDirectory(uploadDir)
+      await ipfsCompanion.openWebUiAtDirectory(importDir)
     }
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
@@ -132,7 +132,7 @@ function file2buffer (file) {
   })
 } */
 
-function formatUploadDirectory (path) {
+function formatImportDirectory (path) {
   path = path.replace(/\/$|$/, '/')
   // needed to handle date symbols in the import directory
   const now = new Date()
@@ -162,7 +162,7 @@ function files2streams (files) {
 
 function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
-  const onDirectoryChange = (e) => { state.userChangedUploadDir = true; state.uploadDir = e.target.value }
+  const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.openViaWebUI = e.target.checked }
   const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
 
@@ -174,10 +174,10 @@ function quickUploadOptions (state, emit) {
           <span class='mark db flex items-center relative mr2 br2'></span>
           ${browser.i18n.getMessage('quickUpload_options_openViaWebUI')}
         </label>` : null}
-        <label for='uploadDir' class='flex items-center db relative mt1 pointer'>
-          ${browser.i18n.getMessage('quickUpload_options_uploadDir')}
+        <label for='importDir' class='flex items-center db relative mt1 pointer'>
+          ${browser.i18n.getMessage('quickUpload_options_importDir')}
           <span class='mark db flex items-center relative mr2 br2'></span>
-          <input id='uploadDir' class='w-40 bg-transparent aqua monospace br1 ba b--aqua pa2' type='text' oninput=${onDirectoryChange} value=${state.uploadDir} />
+          <input id='importDir' class='w-40 bg-transparent aqua monospace br1 ba b--aqua pa2' type='text' oninput=${onDirectoryChange} value=${state.importDir} />
         </label>
       </div>
     `

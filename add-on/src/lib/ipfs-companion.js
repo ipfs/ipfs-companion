@@ -230,7 +230,7 @@ module.exports = async function init () {
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
       webuiRootUrl: state.webuiRootUrl,
-      uploadDir: state.uploadDir,
+      importDir: state.importDir,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noRedirectHostnames: state.noRedirectHostnames,
@@ -716,7 +716,7 @@ module.exports = async function init () {
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
           break
-        case 'uploadDir':
+        case 'importDir':
           state[key] = change.newValue
           break
         case 'linkify':

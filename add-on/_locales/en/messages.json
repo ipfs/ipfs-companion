@@ -427,13 +427,13 @@
     "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
-  "option_uploadDir_title": {
+  "option_importDir_title": {
     "message": "File Import Directory",
-    "description": "An option title on the Preferences screen (option_uploadDir_title)"
+    "description": "An option title on the Preferences screen (option_importDir_title)"
   },
-  "option_uploadDir_description": {
+  "option_importDir_description": {
     "message": "Customize the directory used for uploading files to MFS.",
-    "description": "An option description on the Preferences screen (option_uploadDir_description)"
+    "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Reset Everything",
@@ -483,9 +483,9 @@
     "message": "import options",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
-  "quickUpload_options_uploadDir": {
+  "quickUpload_options_importDir": {
     "message": "Path to store imported files",
-    "description": "Textbox label on the share files page (quickUpload_options_uploadDir)"
+    "description": "Textbox label on the share files page (quickUpload_options_importDir)"
   },
   "quickUpload_options_openViaWebUI": {
     "message": "Open in Web UI",
