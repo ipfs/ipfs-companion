@@ -7,7 +7,6 @@ const switchToggle = require('../../pages/components/switch-toggle')
 
 function experimentsForm ({
   displayNotifications,
-  preloadAtPublicGateway,
   catchUnhandledProtocols,
   linkify,
   dnslinkPolicy,
@@ -19,7 +18,6 @@ function experimentsForm ({
   onOptionsReset
 }) {
   const onDisplayNotificationsChange = onOptionChange('displayNotifications')
-  const onPreloadAtPublicGatewayChange = onOptionChange('preloadAtPublicGateway')
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
@@ -40,15 +38,6 @@ function experimentsForm ({
             </dl>
           </label>
           <div>${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
-        </div>
-        <div>
-          <label for="preloadAtPublicGateway">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_preloadAtPublicGateway_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_preloadAtPublicGateway_description')}</dd>
-            </dl>
-          </label>
-          <div>${switchToggle({ id: 'preloadAtPublicGateway', checked: preloadAtPublicGateway, onchange: onPreloadAtPublicGatewayChange })}</div>
         </div>
         <div>
           <label for="catchUnhandledProtocols">

@@ -73,11 +73,11 @@ module.exports = function optionsPage (state, emit) {
   })}
   ${fileImportForm({
     importDir: state.options.importDir,
+    preloadAtPublicGateway: state.options.preloadAtPublicGateway,
     onOptionChange
   })}
   ${experimentsForm({
     displayNotifications: state.options.displayNotifications,
-    preloadAtPublicGateway: state.options.preloadAtPublicGateway,
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
     dnslinkPolicy: state.options.dnslinkPolicy,

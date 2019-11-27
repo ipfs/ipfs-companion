@@ -3,9 +3,11 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
+const switchToggle = require('../../pages/components/switch-toggle')
 
-function fileImportForm ({ importDir, onOptionChange }) {
+function fileImportForm ({ importDir, preloadAtPublicGateway, onOptionChange }) {
   const onImportDirChange = onOptionChange('importDir')
+  const onPreloadAtPublicGatewayChange = onOptionChange('preloadAtPublicGateway')
   return html`
     <form>
       <fieldset>
@@ -29,6 +31,15 @@ function fileImportForm ({ importDir, onOptionChange }) {
             required
             onchange=${onImportDirChange}
             value=${importDir} />
+        </div>
+        <div>
+          <label for="preloadAtPublicGateway">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_preloadAtPublicGateway_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_preloadAtPublicGateway_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'preloadAtPublicGateway', checked: preloadAtPublicGateway, onchange: onPreloadAtPublicGatewayChange })}</div>
         </div>
       </fieldset>
     </form>
