@@ -15,7 +15,6 @@ function experimentsForm ({
   detectIpfsPathHeader,
   ipfsProxy,
   logNamespaces,
-  importDir,
   onOptionChange,
   onOptionsReset
 }) {
@@ -153,26 +152,6 @@ function experimentsForm ({
             required
             onchange=${onOptionChange('logNamespaces')}
             value=${logNamespaces} />
-        </div>
-        <div>
-          <label for="importDir">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_importDir_title')}</dt>
-              <dd>
-                ${browser.i18n.getMessage('option_importDir_description')}
-                <p><a href="https://docs.ipfs.io/guides/concepts/mfs/" target="_blank">
-                  ${browser.i18n.getMessage('option_legend_readMore')}
-                </a></p>
-              </dd>
-            </dl>
-          </label>
-          <input
-            id="importDir"
-            type="text"
-            pattern="^\/(.*)"
-            required
-            onchange=${onOptionChange('importDir')}
-            value=${importDir} />
         </div>
         <div>
           <label for="resetAllOptions">

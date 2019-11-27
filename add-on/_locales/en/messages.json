@@ -215,6 +215,10 @@
     "message": "IPFS Node",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
+  "option_header_fileImport": {
+    "message": "File Import",
+    "description": "A section header on the Preferences screen (option_header_fileImport)"
+  },
   "option_ipfsNodeType_title": {
     "message": "IPFS Node Type",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
@@ -432,7 +436,7 @@
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Customize the directory used for uploading files to MFS.",
+    "message": "Customize the directory used for imported files.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {

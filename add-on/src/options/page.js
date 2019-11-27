@@ -4,6 +4,7 @@
 const html = require('choo/html')
 const globalToggleForm = require('./forms/global-toggle-form')
 const ipfsNodeForm = require('./forms/ipfs-node-form')
+const fileImportForm = require('./forms/file-import-form')
 const gatewaysForm = require('./forms/gateways-form')
 const apiForm = require('./forms/api-form')
 const experimentsForm = require('./forms/experiments-form')
@@ -70,6 +71,10 @@ module.exports = function optionsPage (state, emit) {
     noRedirectHostnames: state.options.noRedirectHostnames,
     onOptionChange
   })}
+  ${fileImportForm({
+    importDir: state.options.importDir,
+    onOptionChange
+  })}
   ${experimentsForm({
     displayNotifications: state.options.displayNotifications,
     preloadAtPublicGateway: state.options.preloadAtPublicGateway,
@@ -80,7 +85,6 @@ module.exports = function optionsPage (state, emit) {
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     ipfsProxy: state.options.ipfsProxy,
     logNamespaces: state.options.logNamespaces,
-    importDir: state.options.importDir,
     onOptionChange,
     onOptionsReset
   })}
