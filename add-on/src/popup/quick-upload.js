@@ -109,7 +109,7 @@ async function processFiles (state, emitter, files) {
     if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
       await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
     } else {
-      await ipfsCompanion.openWebUiAtDirectory(importDir)
+      await ipfsCompanion.openWebUiAtDirectory(result, importDir)
     }
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)

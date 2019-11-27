@@ -283,6 +283,16 @@ module.exports = async function init () {
     })
   }
 
+  function preloadFilesAtPublicGateway (files) {
+    for (const file in files) {
+      if (file && file.hash) {
+        const { path } = getIpfsPathAndNativeAddress(file.hash)
+        preloadAtPublicGateway(path)
+        console.info('[ipfs-companion] successfully stored', file)
+      }
+    }
+  }
+
   // Context Menu Uploader
   // -------------------------------------------------------------------
 
@@ -352,12 +362,10 @@ module.exports = async function init () {
   }
 
   async function uploadResultHandler ({ result, openRootInNewTab = false }) {
+    preloadFilesAtPublicGateway(result)
     for (const file of result) {
       if (file && file.hash) {
-        const { path, url } = getIpfsPathAndNativeAddress(file.hash)
-        preloadAtPublicGateway(path)
-        console.info('[ipfs-companion] successfully stored', file)
-        // open the wrapping directory (or the CID if wrapping was disabled)
+        const { url } = getIpfsPathAndNativeAddress(file.hash)
         if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.hash)) {
           await browser.tabs.create({
             url: url
@@ -368,7 +376,8 @@ module.exports = async function init () {
     return result
   }
 
-  async function openWebUiAtDirectory (dir) {
+  async function openWebUiAtDirectory (result, dir) {
+    preloadFilesAtPublicGateway(result)
     await browser.tabs.create({
       url: `${state.webuiRootUrl}#/files${dir}`
     })
