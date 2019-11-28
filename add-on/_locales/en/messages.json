@@ -415,6 +415,14 @@
     "message": "Manage permissions",
     "description": "Link text for managing permissions"
   },
+  "option_openViaWebUI_title": {
+    "message": "Open imported files in Web UI",
+    "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
+  },
+  "option_openViaWebUI_description": {
+    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
+  },
   "option_preloadAtPublicGateway_title": {
     "message": "Preload Imports",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"

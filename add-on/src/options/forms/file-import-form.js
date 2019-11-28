@@ -5,8 +5,9 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const switchToggle = require('../../pages/components/switch-toggle')
 
-function fileImportForm ({ importDir, preloadAtPublicGateway, onOptionChange }) {
+function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOptionChange }) {
   const onImportDirChange = onOptionChange('importDir')
+  const onOpenViaWebUIChange = onOptionChange('openViaWebUI')
   const onPreloadAtPublicGatewayChange = onOptionChange('preloadAtPublicGateway')
   return html`
     <form>
@@ -31,6 +32,15 @@ function fileImportForm ({ importDir, preloadAtPublicGateway, onOptionChange }) 
             required
             onchange=${onImportDirChange}
             value=${importDir} />
+        </div>
+        <div>
+          <label for="openViaWebUI">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_openViaWebUI_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_openViaWebUI_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'openViaWebUI', checked: openViaWebUI, onchange: onOpenViaWebUIChange })}</div>
         </div>
         <div>
           <label for="preloadAtPublicGateway">

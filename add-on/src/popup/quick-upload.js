@@ -22,14 +22,21 @@ function quickUploadStore (state, emitter) {
   state.ipfsNodeType = 'external'
   state.expandOptions = false
   state.openViaWebUI = true
+  state.userChangedOpenViaWebUI = false
   state.importDir = ''
   state.userChangedImportDir = false
 
-  function updateState ({ ipfsNodeType, peerCount, importDir }) {
+  function updateState ({ ipfsNodeType, peerCount, importDir, openViaWebUI }) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
+    // This event will fire repeatedly,
+    // we need to ensure we don't unset the user's preferences
+    // when they change the options on this page
     if (!state.userChangedImportDir) {
       state.importDir = importDir
+    }
+    if (!state.userChangedOpenViaWebUI) {
+      state.openViaWebUI = openViaWebUI
     }
   }
 
@@ -167,7 +174,7 @@ function files2streams (files) {
 function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
-  const onOpenViaWebUIChange = (e) => { state.openViaWebUI = e.target.checked }
+  const onOpenViaWebUIChange = (e) => { state.userChangedOpenViaWebUI = true; state.openViaWebUI = e.target.checked }
   const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
 
   if (state.expandOptions) {

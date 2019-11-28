@@ -73,6 +73,7 @@ module.exports = function optionsPage (state, emit) {
   })}
   ${fileImportForm({
     importDir: state.options.importDir,
+    openViaWebUI: state.options.openViaWebUI,
     preloadAtPublicGateway: state.options.preloadAtPublicGateway,
     onOptionChange
   })}

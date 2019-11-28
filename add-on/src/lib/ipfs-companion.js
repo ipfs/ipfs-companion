@@ -231,6 +231,7 @@ module.exports = async function init () {
       pubGwURLString: dropSlash(state.pubGwURLString),
       webuiRootUrl: state.webuiRootUrl,
       importDir: state.importDir,
+      openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noRedirectHostnames: state.noRedirectHostnames,
@@ -734,6 +735,7 @@ module.exports = async function init () {
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
+        case 'openViaWebUI':
         case 'noRedirectHostnames':
           state[key] = change.newValue
           break
