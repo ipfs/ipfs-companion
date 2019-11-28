@@ -75,7 +75,8 @@ async function processFiles (state, emitter, files) {
     emitter.emit('render')
     const wrapFlag = streams.length > 1
     const options = {
-      wrapWithDirectory: wrapFlag
+      wrapWithDirectory: wrapFlag,
+      pin: false // we use MFS for implicit pinning instead
     }
     state.progress = `Importing ${streams.length} files...`
     const importDir = formatImportDirectory(state.importDir)
