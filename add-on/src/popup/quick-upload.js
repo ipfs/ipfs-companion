@@ -144,6 +144,8 @@ function formatImportDirectory (path) {
   return path
 }
 
+exports.formatImportDirectory = formatImportDirectory
+
 function files2streams (files) {
   const streams = []
   for (const file of files) {
