@@ -5,21 +5,31 @@ const { useFakeTimers } = require('sinon')
 const browser = require('sinon-chrome')
 
 describe('quick-upload.js', function () {
-  let formatImportDirectory
+  let createIpfsImportHandler
+  let ipfsImportHandler
   let clock
+
   before(function () {
     global.document = {}
     global.browser = browser
-    // quick-upload depends on webextension/polyfill which can't be imported
+    // ipfs-import depends on webextension/polyfill which can't be imported
     // in a non-browser environment unless global.browser is stubbed
-    formatImportDirectory = require('../../../add-on/src/popup/quick-upload').formatImportDirectory
     // need to force Date to return a particular date
+    createIpfsImportHandler = require('../../../add-on/src/lib/ipfs-import')
+
     clock = useFakeTimers({
       now: new Date(2017, 10, 5, 12, 1, 1)
     })
   })
 
   describe('formatImportDirectory', function () {
+    let formatImportDirectory
+
+    before(function () {
+      ipfsImportHandler = createIpfsImportHandler(() => {}, {}, {}, {})
+      formatImportDirectory = ipfsImportHandler.formatImportDirectory
+    })
+
     it('should change nothing if path is properly formatted and date wildcards are not provided', function () {
       const path = '/ipfs-companion-imports/my-directory/'
       expect(formatImportDirectory(path)).to.equal('/ipfs-companion-imports/my-directory/')
@@ -45,6 +55,15 @@ describe('quick-upload.js', function () {
       expect(formatImportDirectory(path)).to.equal('/ipfs-companion-imports/2017-11-05_120101/')
     })
   })
+  // TODO: complete tests
+  // describe('openFilesAtWebUI', function () {
+  // })
+  //
+  // describe('openFilesAtGateway', function () {
+  // })
+  //
+  // describe('importFiles', function () {
+  // })
 
   after(function () {
     clock.restore()

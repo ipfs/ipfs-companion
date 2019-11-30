@@ -70,38 +70,19 @@ async function processFiles (state, emitter, files) {
       throw new Error('found no valid sources, try selecting a local file instead')
     }
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
+    const ipfsImportHandler = ipfsCompanion.ipfsImportHandler
     const uploadTab = await browser.tabs.getCurrent()
     const streams = files2streams(files)
     emitter.emit('render')
-    const wrapFlag = streams.length > 1
     const options = {
-      wrapWithDirectory: wrapFlag,
+      wrapWithDirectory: true,
       pin: false // we use MFS for implicit pinning instead
     }
     state.progress = `Importing ${streams.length} files...`
-    const importDir = formatImportDirectory(state.importDir)
+    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
     let result
     try {
-      // files are first `add`ed to IPFS
-      // and then copied to an MFS directory
-      // to ensure that CIDs for any created file
-      // remain the same for ipfs-companion and Web UI
-      result = await ipfsCompanion.ipfs.add(streams, options)
-      // This is just an additional safety check, as in past combination
-      // of specific go-ipfs/js-ipfs-http-client versions
-      // produced silent errors in form of partial responses:
-      // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
-      const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
-      if (partialResponse) {
-        throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
-      }
-
-      // cp will fail if directory does not exist
-      await ipfsCompanion.ipfs.files.mkdir(`${importDir}`, { parents: true })
-      // remove directory from files API import files
-      let files = result.filter(file => (file.path !== ''))
-      files = files.map(file => (ipfsCompanion.ipfs.files.cp(`/ipfs/${file.hash}`, `${importDir}${file.path}`)))
-      await Promise.all(files)
+      result = await ipfsImportHandler.importFiles(streams, options, importDir)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
@@ -110,14 +91,14 @@ async function processFiles (state, emitter, files) {
     state.progress = 'Completed'
     emitter.emit('render')
     console.log(`Successfully imported ${streams.length} files`)
-
+    ipfsImportHandler.preloadFilesAtPublicGateway(result)
     // open web UI at proper directory
     // unless and embedded node is in use (no access to web UI)
     // in which case, open resource.
     if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
-      await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
+      await ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
     } else {
-      await ipfsCompanion.openWebUiAtDirectory(result, importDir)
+      await ipfsImportHandler.openFilesAtWebUI(importDir)
     }
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
@@ -139,20 +120,6 @@ function file2buffer (file) {
     reader.readAsArrayBuffer(file)
   })
 } */
-
-function formatImportDirectory (path) {
-  path = path.replace(/\/$|$/, '/')
-  path = path.replace(/(\/)\/+/g, '$1')
-
-  // needed to handle date symbols in the import directory
-  const now = new Date()
-  const dateSymbols = [/%Y/g, /%M/g, /%D/g, /%h/g, /%m/g, /%s/g]
-  const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2, '0'))
-  dateSymbols.forEach((symbol, i) => { path = path.replace(symbol, symbolReplacements[i]) })
-  return path
-}
-
-exports.formatImportDirectory = formatImportDirectory
 
 function files2streams (files) {
   const streams = []
