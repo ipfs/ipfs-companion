@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Toggle all IPFS integrations",
+    "message": "Schakel alle IPFS integraties in",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -44,11 +44,11 @@
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Redirect to Gateway",
+    "message": "Omleiden naar Gateway",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
-    "message": "Click to toggle all gateway redirects",
+    "message": "Klik om alle gateway omleidingen in te schakelen",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
@@ -60,15 +60,15 @@
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Active Tab",
+    "message": "Actieve Tab",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteRedirectToggle": {
-    "message": "Redirect on $1",
+    "message": "Omleiden op $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
   },
   "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Click to toggle gateway redirects on $1",
+    "message": "Klik om alle gateway omleidingen in te schakelen op $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Een CID pinnen laat je IPFS node weten dat deze data belangrijk is en niet weggegooid mag worden.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -196,7 +196,7 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1(ctrl+shift+j voor meer details) ",
+    "message": "$1 (ctrl+shift+j voor meer details) ",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
@@ -224,7 +224,7 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded: run js-ipfs node in your browser (read about its limitations under the link below)",
+    "message": "Ingebouwd: draai een js-ipfs node in je browser (lees meer over de beperkingen in de link hieronder)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
@@ -236,7 +236,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
+    "message": "Extra configuratie voor de ingebouwde JS IPFS node. Moet geldige JSON zijn.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -280,7 +280,7 @@
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
   },
   "option_noRedirectHostnames_description": {
-    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+    "message": "Lijst van websites die niet doorverwezen moeten worden naar de eigen Gateway (inclusief sub resources van andere domeinen). Eén hostnaam per lijn.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -332,7 +332,7 @@
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experimental": {
-    "message": "experimental",
+    "message": "experimenteel",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
@@ -384,11 +384,11 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Herstel gefaalde HTTP Requests",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "message": "Herstel gefaalde HTTP requests voor IPFS resources door ze door te verbinden naar de publieke gateway.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -524,11 +524,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "Zou IPFS Companion toe moeten staan dat «$1» toegang krijgt tot «$2» op de verbonden node?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Pas deze beslissing toe op alle huidige en toekomstige toestemmingen in deze scope",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
@@ -564,19 +564,19 @@
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS does not seem to be running",
+    "message": "IPFS lijkt niet te draaien",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "message": "Download <0>IPFS Desktop</0> en je bent klaar!",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Prefer to use the command line?",
+    "message": "Gebruik je liever de command line?",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "message": "Volg <0>deze instructies </0>, en start dan een IPFS daemon in je terminal:",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
