@@ -111,6 +111,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     // This is a good place to listen if you want to cancel or redirect the request.
     onBeforeRequest (request) {
       const state = getState()
+      if (!state.active) return
       // early sanity checks
       if (preNormalizationSkip(state, request)) {
         return
@@ -131,7 +132,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         }
       }
       // handle redirects to custom gateway
-      if (state.active && state.redirect) {
+      if (state.redirect) {
         // late sanity checks
         if (postNormalizationSkip(state, request)) {
           return

@@ -243,7 +243,7 @@ module.exports = async function init () {
     } catch (error) {
       info.gatewayVersion = null
     }
-    if (info.currentTab) {
+    if (state.active && info.currentTab) {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
