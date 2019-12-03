@@ -7,7 +7,6 @@ const html = require('choo/html')
 const logo = require('./logo')
 const drop = require('drag-and-drop-files')
 const fileReaderPullStream = require('pull-file-reader')
-const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('panel_quickUpload')
 
@@ -21,13 +20,24 @@ function quickUploadStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
   state.ipfsNodeType = 'external'
-  state.wrapWithDirectory = true
-  state.pinUpload = true
   state.expandOptions = false
+  state.openViaWebUI = true
+  state.userChangedOpenViaWebUI = false
+  state.importDir = ''
+  state.userChangedImportDir = false
 
-  function updateState ({ ipfsNodeType, peerCount }) {
+  function updateState ({ ipfsNodeType, peerCount, importDir, openViaWebUI }) {
     state.ipfsNodeType = ipfsNodeType
     state.peerCount = peerCount
+    // This event will fire repeatedly,
+    // we need to ensure we don't unset the user's preferences
+    // when they change the options on this page
+    if (!state.userChangedImportDir) {
+      state.importDir = importDir
+    }
+    if (!state.userChangedOpenViaWebUI) {
+      state.openViaWebUI = openViaWebUI
+    }
   }
 
   let port
@@ -60,41 +70,42 @@ async function processFiles (state, emitter, files) {
       throw new Error('found no valid sources, try selecting a local file instead')
     }
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
+    const ipfsImportHandler = ipfsCompanion.ipfsImportHandler
     const uploadTab = await browser.tabs.getCurrent()
-    const { streams, totalSize } = files2streams(files)
-    progressHandler(0, totalSize, state, emitter)
+    const streams = files2streams(files)
     emitter.emit('render')
-    const wrapFlag = (state.wrapWithDirectory || streams.length > 1)
     const options = {
-      progress: (len) => progressHandler(len, totalSize, state, emitter),
-      wrapWithDirectory: wrapFlag,
-      pin: state.pinUpload
+      wrapWithDirectory: true,
+      pin: false // we use MFS for implicit pinning instead
     }
+    state.progress = `Importing ${streams.length} files...`
+    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
     let result
     try {
-      result = await ipfsCompanion.ipfs.add(streams, options)
-      // This is just an additional safety check, as in past combination
-      // of specific go-ipfs/js-ipfs-http-client versions
-      // produced silent errors in form of partial responses:
-      // https://github.com/ipfs-shipyard/ipfs-companion/issues/480
-      const partialResponse = result.length !== streams.length + (options.wrapWithDirectory ? 1 : 0)
-      if (partialResponse) {
-        throw new Error('Result of ipfs.add call is missing entries. This may be due to a bug in HTTP API similar to https://github.com/ipfs/go-ipfs/issues/5168')
-      }
-      await ipfsCompanion.uploadResultHandler({ result, openRootInNewTab: true })
+      result = await ipfsImportHandler.importFiles(streams, options, importDir)
     } catch (err) {
-      console.error('Failed to IPFS add', err)
+      console.error('Failed to import files to IPFS', err)
       ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
       throw err
     }
+    state.progress = 'Completed'
     emitter.emit('render')
-    console.log('Upload result', result)
+    console.log(`Successfully imported ${streams.length} files`)
+    ipfsImportHandler.preloadFilesAtPublicGateway(result)
+    // open web UI at proper directory
+    // unless and embedded node is in use (no access to web UI)
+    // in which case, open resource.
+    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
+      await ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
+    } else {
+      await ipfsImportHandler.openFilesAtWebUI(importDir)
+    }
     // close upload tab as it will be replaced with a new tab with uploaded content
     await browser.tabs.remove(uploadTab.id)
   } catch (err) {
-    console.error('Unable to perform quick upload', err)
+    console.error('Unable to perform import', err)
     // keep upload tab and display error message in it
-    state.message = 'Unable to upload to IPFS API:'
+    state.message = 'Unable to import to IPFS:'
     state.progress = `${err}`
     emitter.emit('render')
   }
@@ -112,7 +123,6 @@ function file2buffer (file) {
 
 function files2streams (files) {
   const streams = []
-  let totalSize = 0
   for (const file of files) {
     if (!file.type && file.size === 0) {
       // UX fail-safe:
@@ -125,44 +135,28 @@ function files2streams (files) {
       path: file.name,
       content: fileStream
     })
-    totalSize += file.size
   }
-  return { streams, totalSize }
-}
-
-function progressHandler (doneBytes, totalBytes, state, emitter) {
-  state.message = browser.i18n.getMessage('quickUpload_state_uploading')
-  // console.log('Upload progress:', doneBytes)
-  if (doneBytes && doneBytes > 0) {
-    const format = { standard: 'iec', round: 0, output: 'object' }
-    const done = filesize(doneBytes, format)
-    const total = filesize(totalBytes, format)
-    const percent = ((doneBytes / totalBytes) * 100).toFixed(0)
-    state.progress = `${done.value} ${done.symbol} / ${total.value} ${total.symbol} (${percent}%)`
-  } else {
-    // This is a gracefull fallback for environments in which progress reporting is delayed
-    // until entire file/chunk is bufferend into memory (eg. js-ipfs-http-client)
-    state.progress = browser.i18n.getMessage('quickUpload_state_buffering')
-  }
-  emitter.emit('render')
+  return streams
 }
 
 function quickUploadOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
-  const onWrapWithDirectoryChange = (e) => { state.wrapWithDirectory = e.target.checked }
-  const onPinUploadChange = (e) => { state.pinUpload = e.target.checked }
+  const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
+  const onOpenViaWebUIChange = (e) => { state.userChangedOpenViaWebUI = true; state.openViaWebUI = e.target.checked }
+  const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
+
   if (state.expandOptions) {
     return html`
       <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
-        <label for='wrapWithDirectory' class='flex items-center db relative mt1 pointer'>
-          <input id='wrapWithDirectory' type='checkbox' onchange=${onWrapWithDirectoryChange} checked=${state.wrapWithDirectory} />
+        ${displayOpenWebUI ? html`<label for='openViaWebUI' class='flex items-center db relative mt1 pointer'>
+          <input id='openViaWebUI' type='checkbox' onchange=${onOpenViaWebUIChange} checked=${state.openViaWebUI} />
           <span class='mark db flex items-center relative mr2 br2'></span>
-          ${browser.i18n.getMessage('quickUpload_options_wrapWithDirectory')}
-        </label>
-        <label for='pinUpload' class='flex items-center db relative mt1 pointer'>
-          <input id='pinUpload' type='checkbox' onchange=${onPinUploadChange} checked=${state.pinUpload} />
+          ${browser.i18n.getMessage('quickUpload_options_openViaWebUI')}
+        </label>` : null}
+        <label for='importDir' class='flex items-center db relative mt1 pointer'>
+          ${browser.i18n.getMessage('quickUpload_options_importDir')}
           <span class='mark db flex items-center relative mr2 br2'></span>
-          ${browser.i18n.getMessage('quickUpload_options_pinUpload')}
+          <input id='importDir' class='w-40 bg-transparent aqua monospace br1 ba b--aqua pa2' type='text' oninput=${onDirectoryChange} value=${state.importDir} />
         </label>
       </div>
     `

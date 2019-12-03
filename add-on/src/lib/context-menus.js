@@ -51,10 +51,9 @@ const menuParentLink = 'contextMenu_parentLink'
 const menuParentPage = 'contextMenu_parentPage'
 // const menuParentText = 'contextMenu_parentText'
 // Generic Add to IPFS
-const contextMenuAddToIpfsRawCid = 'contextMenu_AddToIpfsRawCid'
-const contextMenuAddToIpfsKeepFilename = 'contextMenu_AddToIpfsKeepFilename'
+const contextMenuImportToIpfs = 'contextMenu_importToIpfs'
 // Add X to IPFS
-const contextMenuAddToIpfsSelection = 'contextMenu_AddToIpfsSelection'
+const contextMenuImportToIpfsSelection = 'contextMenu_importToIpfsSelection'
 // Copy X
 const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
 const contextMenuCopyRawCid = 'panelCopy_copyRawCid'
@@ -78,15 +77,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
         contexts: [contextType]
       })
     }
-    const createSeparator = (parentId, id, contextType) => {
-      return browser.contextMenus.create({
-        id: `${parentId}_${id}`,
-        parentId,
-        type: 'separator',
-        contexts: ['all']
-      })
-    }
-    const createAddToIpfsMenuItem = (parentId, id, contextType, ipfsAddOptions) => {
+    const createImportToIpfsMenuItem = (parentId, id, contextType, ipfsAddOptions) => {
       const itemId = `${parentId}_${id}`
       apiMenuItems.add(itemId)
       return browser.contextMenus.create({
@@ -125,9 +116,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
     }
     const buildSubmenu = (parentId, contextType) => {
       createSubmenu(parentId, contextType)
-      createAddToIpfsMenuItem(parentId, contextMenuAddToIpfsKeepFilename, contextType, { wrapWithDirectory: true })
-      createAddToIpfsMenuItem(parentId, contextMenuAddToIpfsRawCid, contextType, { wrapWithDirectory: false })
-      createSeparator(parentId, 'separator-1', contextType)
+      createImportToIpfsMenuItem(parentId, contextMenuImportToIpfs, contextType, { wrapWithDirectory: true, pin: false })
       createCopierMenuItem(parentId, contextMenuCopyAddressAtPublicGw, contextType, onCopyAddressAtPublicGw)
       createCopierMenuItem(parentId, contextMenuCopyCanonicalAddress, contextType, onCopyCanonicalAddress)
       createCopierMenuItem(parentId, contextMenuCopyRawCid, contextType, onCopyRawCid)
@@ -135,9 +124,9 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
 
     /*
     createSubmenu(menuParentText, 'selection')
-    createAddToIpfsMenuItem(menuParentText, contextMenuAddToIpfsSelection, 'selection')
+    createImportToIpfsMenuItem(menuParentText, contextMenuImportToIpfsSelection, 'selection')
     */
-    createAddToIpfsMenuItem(null, contextMenuAddToIpfsSelection, 'selection')
+    createImportToIpfsMenuItem(null, contextMenuImportToIpfsSelection, 'selection', { pin: false })
     buildSubmenu(menuParentImage, 'image')
     buildSubmenu(menuParentVideo, 'video')
     buildSubmenu(menuParentAudio, 'audio')

@@ -127,17 +127,13 @@
     "message": "This Page",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
-  "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS (Keep Filename)",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  "contextMenu_importToIpfs": {
+    "message": "Import to IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
-  "contextMenu_AddToIpfsRawCid": {
-    "message": "Add to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
-  },
-  "contextMenu_AddToIpfsSelection": {
-    "message": "Add Selected Text to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+  "contextMenu_importToIpfsSelection": {
+    "message": "Import Selected Text to IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
     "message": "IPFS Add-on Issue",
@@ -214,6 +210,10 @@
   "option_header_nodeType" : {
     "message": "IPFS Node",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
+  },
+  "option_header_fileImport": {
+    "message": "File Import",
+    "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
     "message": "IPFS Node Type",
@@ -411,12 +411,20 @@
     "message": "Manage permissions",
     "description": "Link text for managing permissions"
   },
+  "option_openViaWebUI_title": {
+    "message": "Open imported files in Web UI",
+    "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
+  },
+  "option_openViaWebUI_description": {
+    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
+  },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Uploads",
+    "message": "Preload Imports",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of uploaded assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -426,6 +434,14 @@
   "option_logNamespaces_description": {
     "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
     "description": "An option description for the log level (option_logNamespaces_description)"
+  },
+  "option_importDir_title": {
+    "message": "File Import Directory",
+    "description": "An option title on the Preferences screen (option_importDir_title)"
+  },
+  "option_importDir_description": {
+    "message": "Customize the directory used for imported files.",
+    "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Reset Everything",
@@ -472,16 +488,16 @@
     "description": "Status label on the share files page (quickUpload_state_buffering)"
   },
   "quickUpload_options_show": {
-    "message": "upload options",
+    "message": "import options",
     "description": "Button on the share files page (quickUpload_options_show)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "Wrap single files in a directory to preserve their filenames.",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  "quickUpload_options_importDir": {
+    "message": "Path to store imported files",
+    "description": "Textbox label on the share files page (quickUpload_options_importDir)"
   },
-  "quickUpload_options_pinUpload": {
-    "message": "Pin files so they are retained when performing garbage collection on your IPFS repo.",
-    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  "quickUpload_options_openViaWebUI": {
+    "message": "Open in Web UI",
+    "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
     "message": "Manage Permissions",

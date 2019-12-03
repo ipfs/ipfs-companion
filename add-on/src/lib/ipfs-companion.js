@@ -12,9 +12,10 @@ const { optionDefaults, storeMissingOptions, migrateOptions } = require('./optio
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
-const { createRequestModifier, redirectOptOutHint } = require('./ipfs-request')
+const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
+const createIpfsImportHandler = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const { createRuntimeChecks } = require('./runtime-checks')
@@ -38,6 +39,7 @@ module.exports = async function init () {
   var apiStatusUpdateInterval
   var ipfsProxy
   var ipfsProxyContentScript
+  var ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
 
@@ -65,6 +67,7 @@ module.exports = async function init () {
 
     dnslinkResolver = createDnslinkResolver(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
+    ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime)
     copier = createCopier(notify, ipfsPathValidator)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
@@ -230,6 +233,8 @@ module.exports = async function init () {
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
       webuiRootUrl: state.webuiRootUrl,
+      importDir: state.importDir,
+      openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noRedirectHostnames: state.noRedirectHostnames,
@@ -257,40 +262,16 @@ module.exports = async function init () {
     }
   }
 
-  // GUI
-  // ===================================================================
-
-  function preloadAtPublicGateway (path) {
-    if (!state.preloadAtPublicGateway) return
-    // asynchronous HTTP HEAD request preloads triggers content without downloading it
-    return new Promise((resolve, reject) => {
-      const http = new XMLHttpRequest()
-      // Make sure preload request is excluded from global redirect
-      const preloadUrl = ipfsPathValidator.resolveToPublicUrl(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
-      http.open('HEAD', preloadUrl)
-      http.onreadystatechange = function () {
-        if (this.readyState === this.DONE) {
-          console.info(`[ipfs-companion] preloadAtPublicGateway(${path}):`, this.statusText)
-          if (this.status === 200) {
-            resolve(this.statusText)
-          } else {
-            reject(new Error(this.statusText))
-          }
-        }
-      }
-      http.send()
-    })
-  }
-
   // Context Menu Uploader
   // -------------------------------------------------------------------
 
   async function onAddFromContext (context, contextType, options) {
+    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
     let result
     try {
       const dataSrc = await findValueForContext(context, contextType)
       if (contextType === 'selection') {
-        result = await ipfs.add(Buffer.from(dataSrc), options)
+        result = await ipfsImportHandler.importFiles(Buffer.from(dataSrc), options, importDir)
       } else {
         // Enchanced addFromURL
         // --------------------
@@ -319,7 +300,7 @@ module.exports = async function init () {
           path: decodeURIComponent(filename),
           content: buffer
         }
-        result = await ipfs.add(data, options)
+        result = await ipfsImportHandler.importFiles(data, options, importDir)
       }
     } catch (error) {
       console.error('Error in upload to IPFS context menu', error)
@@ -334,37 +315,12 @@ module.exports = async function init () {
       }
       return
     }
-
-    return uploadResultHandler({ result, openRootInNewTab: true })
-  }
-
-  // TODO: feature detect and push to client type specific modules.
-  function getIpfsPathAndNativeAddress (hash) {
-    const path = `/ipfs/${hash}`
-    if (runtime.hasNativeProtocolHandler) {
-      return { path, url: `ipfs://${hash}` }
+    ipfsImportHandler.preloadFilesAtPublicGateway(result)
+    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
+      return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
     } else {
-      // open at public GW (will be redirected to local elsewhere, if enabled)
-      const url = new URL(path, state.pubGwURLString).toString()
-      return { path, url: url }
+      return ipfsImportHandler.openFilesAtWebUI(importDir)
     }
-  }
-
-  async function uploadResultHandler ({ result, openRootInNewTab = false }) {
-    for (const file of result) {
-      if (file && file.hash) {
-        const { path, url } = getIpfsPathAndNativeAddress(file.hash)
-        preloadAtPublicGateway(path)
-        console.info('[ipfs-companion] successfully stored', file)
-        // open the wrapping directory (or the CID if wrapping was disabled)
-        if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.hash)) {
-          await browser.tabs.create({
-            url: url
-          })
-        }
-      }
-    }
-    return result
   }
 
   // Page-specific Actions
@@ -709,12 +665,16 @@ module.exports = async function init () {
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
           break
+        case 'importDir':
+          state[key] = change.newValue
+          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
+        case 'openViaWebUI':
         case 'noRedirectHostnames':
           state[key] = change.newValue
           break
@@ -783,8 +743,8 @@ module.exports = async function init () {
       return notify
     },
 
-    get uploadResultHandler () {
-      return uploadResultHandler
+    get ipfsImportHandler () {
+      return ipfsImportHandler
     },
 
     destroy () {
@@ -796,6 +756,7 @@ module.exports = async function init () {
       dnslinkResolver = null
       modifyRequest = null
       ipfsPathValidator = null
+      ipfsImportHandler = null
       notify = null
       copier = null
       contextMenus = null
