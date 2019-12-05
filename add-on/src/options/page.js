@@ -5,6 +5,7 @@ const html = require('choo/html')
 const globalToggleForm = require('./forms/global-toggle-form')
 const ipfsNodeForm = require('./forms/ipfs-node-form')
 const fileImportForm = require('./forms/file-import-form')
+const dnslinkForm = require('./forms/dnslink-form')
 const gatewaysForm = require('./forms/gateways-form')
 const apiForm = require('./forms/api-form')
 const experimentsForm = require('./forms/experiments-form')
@@ -77,11 +78,15 @@ module.exports = function optionsPage (state, emit) {
     preloadAtPublicGateway: state.options.preloadAtPublicGateway,
     onOptionChange
   })}
+  ${dnslinkForm({
+    dnslinkPolicy: state.options.dnslinkPolicy,
+    dnslinkRedirect: state.options.dnslinkRedirect,
+    onOptionChange
+  })}
   ${experimentsForm({
     displayNotifications: state.options.displayNotifications,
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
-    dnslinkPolicy: state.options.dnslinkPolicy,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     ipfsProxy: state.options.ipfsProxy,

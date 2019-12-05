@@ -142,7 +142,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           return redirectToGateway(request.url, state, ipfsPathValidator)
         }
         // Detect dnslink using heuristics enabled in Preferences
-        if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+        if (state.dnslinkRedirect && state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
           const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
           if (dnslinkRedirect && isSafeToRedirect(request, runtime)) {
             // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
@@ -339,10 +339,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
             if (header.name.toLowerCase() === 'x-ipfs-path' && isSafeToRedirect(request, runtime)) {
               // console.log('onHeadersReceived.request.responseHeaders', request.responseHeaders.length)
               const xIpfsPath = header.value
-              log(`detected x-ipfs-path for ${request.url}: ${xIpfsPath}`)
               // First: Check if dnslink heuristic yields any results
               // Note: this depends on which dnslink lookup policy is selecten in Preferences
-              if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+              if (state.dnslinkRedirect && state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
                 // x-ipfs-path is a strong indicator of IPFS support
                 // so we force dnslink lookup to pre-populate dnslink cache
                 // in a way that works even when state.dnslinkPolicy !== 'enabled'
@@ -358,7 +357,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
               if (IsIpfs.ipnsPath(xIpfsPath)) {
                 // Ignore unhandled IPNS path by this point
                 // (means DNSLink is disabled so we don't want to make a redirect that works like DNSLink)
-                log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkPolicy=false or missing DNS TXT record)`)
+                // log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkRedirect=false, dnslinkPolicy=false or missing DNS TXT record)`)
               } else if (IsIpfs.ipfsPath(xIpfsPath)) {
                 // It is possible that someone exposed /ipfs/<cid>/ under /
                 // and our path-based onBeforeRequest heuristics were unable

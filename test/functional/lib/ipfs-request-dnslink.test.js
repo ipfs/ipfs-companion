@@ -21,7 +21,7 @@ const fakeRequestId = () => {
 
 // const nodeTypes = ['external', 'embedded']
 
-describe('modifyRequest processing', function () {
+describe('modifyRequest processing of DNSLinks', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
@@ -34,6 +34,7 @@ describe('modifyRequest processing', function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
+      dnslinkRedirect: true, // NOTE: this is opt-in now
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
       pubGwURLString: 'https://ipfs.io'

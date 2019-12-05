@@ -676,6 +676,7 @@ module.exports = async function init () {
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
         case 'noRedirectHostnames':
+        case 'dnslinkRedirect':
           state[key] = change.newValue
           break
       }
