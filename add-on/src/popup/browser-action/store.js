@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 const IsIpfs = require('is-ipfs')
 const { trimHashAndSearch } = require('../../lib/ipfs-path')
-const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
+const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -61,6 +61,11 @@ module.exports = (state, emitter) => {
       document.body.style.height = window.innerHeight + 1 + 'px'
       setTimeout(() => document.body.style.removeProperty('height'), 50)
     }, 100)
+  })
+
+  emitter.on('viewOnGateway', async () => {
+    port.postMessage({ event: contextMenuViewOnGateway })
+    window.close()
   })
 
   emitter.on('copy', function (copyAction) {

@@ -9,7 +9,6 @@ function experimentsForm ({
   displayNotifications,
   catchUnhandledProtocols,
   linkify,
-  dnslinkPolicy,
   recoverFailedHttpRequests,
   detectIpfsPathHeader,
   ipfsProxy,
@@ -20,7 +19,6 @@ function experimentsForm ({
   const onDisplayNotificationsChange = onOptionChange('displayNotifications')
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
-  const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
@@ -65,36 +63,6 @@ function experimentsForm ({
             </dl>
           </label>
           <div>${switchToggle({ id: 'linkify', checked: linkify, onchange: onLinkifyChange })}</div>
-        </div>
-        <div>
-          <label for="dnslinkPolicy">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_dnslinkPolicy_title')}</dt>
-              <dd>
-                ${browser.i18n.getMessage('option_dnslinkPolicy_description')}
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md#dnslink-support-in-ipfs-companion" target="_blank">
-                  ${browser.i18n.getMessage('option_legend_readMore')}
-                </a></p>
-              </dd>
-            </dl>
-          </label>
-          <select id="dnslinkPolicy" name='dnslinkPolicy' onchange=${onDnslinkPolicyChange}>
-            <option
-              value='false'
-              selected=${String(dnslinkPolicy) === 'false'}>
-              ${browser.i18n.getMessage('option_dnslinkPolicy_disabled')}
-            </option>
-            <option
-              value='best-effort'
-              selected=${dnslinkPolicy === 'best-effort'}>
-              ${browser.i18n.getMessage('option_dnslinkPolicy_bestEffort')}
-            </option>
-            <option
-              value='enabled'
-              selected=${dnslinkPolicy === 'enabled'}>
-              ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
-            </option>
-          </select>
         </div>
         <div>
           <label for="detectIpfsPathHeader">

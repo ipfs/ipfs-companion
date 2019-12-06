@@ -18,8 +18,9 @@ const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createIpfsImportHandler = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
+const createInspector = require('./inspector')
 const { createRuntimeChecks } = require('./runtime-checks')
-const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('./context-menus')
+const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
@@ -34,6 +35,7 @@ module.exports = async function init () {
   var modifyRequest
   var notify
   var copier
+  var inspector
   var runtime
   var contextMenus
   var apiStatusUpdateInterval
@@ -69,6 +71,7 @@ module.exports = async function init () {
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime)
     copier = createCopier(notify, ipfsPathValidator)
+    inspector = createInspector(notify, ipfsPathValidator, getState)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
       onCopyCanonicalAddress: copier.copyCanonicalAddress,
@@ -212,6 +215,7 @@ module.exports = async function init () {
 
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
+    [contextMenuViewOnGateway]: inspector.viewOnGateway,
     [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
     [contextMenuCopyRawCid]: copier.copyRawCid,
     [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
@@ -676,6 +680,7 @@ module.exports = async function init () {
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
         case 'noRedirectHostnames':
+        case 'dnslinkRedirect':
           state[key] = change.newValue
           break
       }

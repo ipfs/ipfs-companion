@@ -91,6 +91,10 @@
     "message": "Copy Public Gateway URL",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_contextMenuViewOnGateway": {
+    "message": "View on Gateway",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
+  },
   "pageAction_titleIpfsAtPublicGateway": {
     "message": "IPFS resource loaded via Public Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
@@ -275,6 +279,18 @@
     "message": "Redirect requests for IPFS resources to the Custom gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_dnslinkRedirect_title": {
+    "message": "Force page load from custom gateway",
+    "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
+  },
+  "option_dnslinkRedirect_description": {
+    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
+  },
+  "option_dnslinkRedirect_warning": {
+    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_noRedirectHostnames_title": {
     "message": "Redirect Opt-Outs",
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
@@ -327,6 +343,10 @@
     "message": "Toggle use of Custom Gateway when IPFS API availability changes",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
+  "option_header_dnslink": {
+    "message": "DNSLink",
+    "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
   "option_header_experiments": {
     "message": "Experiments",
     "description": "A section header on the Preferences screen (option_header_experiments)"
@@ -364,11 +384,11 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Support",
+    "message": "DNSLink Lookup",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
+    "message": "Lookup policy for displaying context actions on websites with DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
