@@ -5,14 +5,23 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
 const navHeader = require('./nav-header')
-const { contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
+const {
+  contextMenuViewOnGateway,
+  contextMenuCopyAddressAtPublicGw,
+  contextMenuCopyRawCid,
+  contextMenuCopyCanonicalAddress
+} = require('../../lib/context-menus')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
 function contextActions ({
   active,
   redirect,
   isRedirectContext,
+  pubGwURLString,
+  gwURLString,
+  currentTab,
   currentFqdn,
+  currentDnslinkFqdn,
   currentTabRedirectOptOut,
   ipfsNodeType,
   isIpfsContext,
@@ -22,16 +31,21 @@ function contextActions ({
   isIpfsOnline,
   isApiAvailable,
   onToggleSiteRedirect,
+  onViewOnGateway,
   onCopy,
   onPin,
   onUnPin
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable
   const activePinControls = active && isIpfsOnline && isApiAvailable
-
+  const activeViewOnGateway = currentTab && !(currentTab.url.startsWith(pubGwURLString) || currentTab.url.startsWith(gwURLString))
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
     return html`<div>
+  ${activeViewOnGateway ? navItem({
+    text: browser.i18n.getMessage(contextMenuViewOnGateway),
+    onClick: () => onViewOnGateway(contextMenuViewOnGateway)
+  }) : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
@@ -55,7 +69,7 @@ function contextActions ({
   </div>
     `
   }
-
+  // TODO: change "redirect on {fqdn}" to "disable on {fqdn}" and disable all integrations
   const renderSiteRedirectToggle = () => {
     if (!isRedirectContext) return
     return html`
@@ -69,11 +83,10 @@ function contextActions ({
   })}
       `
   }
-
   return html`
     <div class='fade-in pv1'>
-  ${renderSiteRedirectToggle()}
   ${renderIpfsContextItems()}
+  ${renderSiteRedirectToggle()}
     </div>
   `
 }
