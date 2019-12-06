@@ -69,7 +69,8 @@ function contextActions ({
   </div>
     `
   }
-  // TODO: change "redirect on {fqdn}" to "disable on {fqdn}" and disable all integrations
+  /* TODO: change "redirect on {fqdn}" to "disable on {fqdn}" and disable all integrations
+  // removed per site toggle for now: ${renderSiteRedirectToggle()}
   const renderSiteRedirectToggle = () => {
     if (!isRedirectContext) return
     return html`
@@ -83,10 +84,10 @@ function contextActions ({
   })}
       `
   }
+  */
   return html`
     <div class='fade-in pv1'>
   ${renderIpfsContextItems()}
-  ${renderSiteRedirectToggle()}
     </div>
   `
 }
