@@ -89,7 +89,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     if (request.type === 'main_frame') {
       // lazily trigger DNSLink lookup (will do anything only if status for root domain is not in cache)
       if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
-        dnslinkResolver.preloadDnslink(request.url)
+        dnslinkResolver.resolve(request.url) // no await: preload record in background
       }
     }
     return isIgnored(request.requestId)
@@ -142,15 +142,18 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           return redirectToGateway(request.url, state, ipfsPathValidator)
         }
         // Detect dnslink using heuristics enabled in Preferences
-        if (state.dnslinkRedirect && state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
-          const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
-          if (dnslinkRedirect && isSafeToRedirect(request, runtime)) {
-            // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
-            return dnslinkRedirect
+        if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+          if (state.dnslinkRedirect) {
+            const dnslinkRedirect = dnslinkResolver.dnslinkRedirect(request.url)
+            if (dnslinkRedirect && isSafeToRedirect(request, runtime)) {
+              // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
+              return dnslinkRedirect
+            }
+          } else if (state.dnslinkDataPreload) {
+            dnslinkResolver.preloadData(request.url)
           }
           if (state.dnslinkPolicy === 'best-effort') {
-            // dnslinkResolver.preloadDnslink(request.url, (dnslink) => console.log(`---> preloadDnslink(${new URL(request.url).hostname})=${dnslink}`))
-            dnslinkResolver.preloadDnslink(request.url)
+            dnslinkResolver.resolve(request.url)
           }
         }
       }

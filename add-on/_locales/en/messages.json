@@ -287,6 +287,14 @@
     "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
+  "option_dnslinkDataPreload_title": {
+    "message": "Preload visited pages",
+    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
+  },
+  "option_dnslinkDataPreload_description": {
+    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
+  },
   "option_dnslinkRedirect_warning": {
     "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"

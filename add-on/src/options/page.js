@@ -80,6 +80,7 @@ module.exports = function optionsPage (state, emit) {
   })}
   ${dnslinkForm({
     dnslinkPolicy: state.options.dnslinkPolicy,
+    dnslinkDataPreload: state.options.dnslinkDataPreload,
     dnslinkRedirect: state.options.dnslinkRedirect,
     onOptionChange
   })}
