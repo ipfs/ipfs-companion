@@ -17,8 +17,11 @@ module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, maxAge: 1000 * 60 * 60 * 12 }
   const cache = new LRU(cacheOptions)
-  // upper bound for concurrent background lookups done by preloadDnslink(url)
-  const lookupQueue = new PQueue({ concurrency: 8 })
+  // upper bound for concurrent background lookups done by resolve(url)
+  const lookupQueue = new PQueue({ concurrency: 4 })
+  // preload of DNSLink data
+  const preloadUrlCache = new LRU(cacheOptions)
+  const preloadQueue = new PQueue({ concurrency: 4 })
 
   const dnslinkResolver = {
 
@@ -89,20 +92,34 @@ module.exports = function createDnslinkResolver (getState) {
       return dnslink
     },
 
-    // does not return anything, runs async lookup in the background
-    // and saves result into cache with an optional callback
-    preloadDnslink (url, cb) {
-      if (dnslinkResolver.canLookupURL(url)) {
-        lookupQueue.add(async () => {
-          const fqdn = new URL(url).hostname
-          const result = dnslinkResolver.readAndCacheDnslink(fqdn)
-          if (cb) {
-            cb(result)
-          }
-        })
-      } else if (cb) {
-        cb(null)
-      }
+    // runs async lookup in a queue in the background and returns the record
+    async resolve (url) {
+      if (!dnslinkResolver.canLookupURL(url)) return
+      const fqdn = new URL(url).hostname
+      const cachedResult = dnslinkResolver.cachedDnslink(fqdn)
+      if (cachedResult) return cachedResult
+      return lookupQueue.add(() => {
+        return dnslinkResolver.readAndCacheDnslink(fqdn)
+      })
+    },
+
+    // preloads data behind the url to local node
+    async preloadData (url) {
+      const state = getState()
+      if (!state.dnslinkDataPreload || state.dnslinkRedirect) return
+      if (preloadUrlCache.get(url)) return
+      preloadUrlCache.set(url, true)
+      const dnslink = await dnslinkResolver.resolve(url)
+      if (!dnslink) return
+      if (state.ipfsNodeType === 'embedded') return
+      if (state.peerCount < 1) return
+      return preloadQueue.add(async () => {
+        const { pathname } = new URL(url)
+        const preloadUrl = new URL(state.gwURLString)
+        preloadUrl.pathname = `${dnslink}${pathname}`
+        await fetch(preloadUrl.toString(), { method: 'HEAD' })
+        return preloadUrl
+      })
     },
 
     // low level lookup without cache

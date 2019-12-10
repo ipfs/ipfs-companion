@@ -7,11 +7,13 @@ const switchToggle = require('../../pages/components/switch-toggle')
 
 function dnslinkForm ({
   dnslinkPolicy,
+  dnslinkDataPreload,
   dnslinkRedirect,
   onOptionChange
 }) {
   const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
   const onDnslinkRedirectChange = onOptionChange('dnslinkRedirect')
+  const onDnslinkDataPreloadChange = onOptionChange('dnslinkDataPreload')
 
   return html`
     <form>
@@ -46,6 +48,15 @@ function dnslinkForm ({
               ${browser.i18n.getMessage('option_dnslinkPolicy_enabled')}
             </option>
           </select>
+        </div>
+        <div>
+          <label for="dnslinkDataPreload">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_dnslinkDataPreload_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_dnslinkDataPreload_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({ id: 'dnslinkDataPreload', checked: dnslinkDataPreload, disabled: dnslinkRedirect, onchange: onDnslinkDataPreloadChange })}</div>
         </div>
         <div>
           <label for="dnslinkRedirect">
