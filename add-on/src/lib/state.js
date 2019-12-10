@@ -8,7 +8,7 @@ const offlinePeerCount = -1
 // which should work without setting CORS headers
 const webuiCid = 'Qmexhq2sBHnXQbvyP2GfUdbnY7HCagH2Mw5vUNSBn2nxip' // v2.7.2
 
-function initState (options) {
+function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
   const state = Object.assign({}, options)
@@ -31,6 +31,18 @@ function initState (options) {
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
   state.webuiCid = webuiCid
   state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
+  // attach helper functions
+  state.activeIntegrations = (url) => {
+    if (!state.active) return false
+    try {
+      const fqdn = new URL(url).hostname
+      return !(state.noIntegrationsHostnames.find(host => fqdn.endsWith(host)))
+    } catch (_) {
+      return false
+    }
+  }
+  // apply optional overrides
+  if (overrides) Object.assign(state, overrides)
   return state
 }
 

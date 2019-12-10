@@ -20,7 +20,7 @@ module.exports = function tools ({
   return html`
     <div>
     ${navHeader('panel_toolsSectionHeader')}
-    <div class="fade-in pv1 bb b--black-10">
+    <div class="fade-in pt1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickImport'),
     style: 'b',

@@ -3,12 +3,13 @@
 // no access decision has been made yet.
 function createPreAcl (permission, getState, getScope, accessControl, requestAccess) {
   return async (...args) => {
-    // Check if all access to the IPFS node is disabled
-    if (!getState().ipfsProxy) {
+    const scope = await getScope()
+    const state = getState()
+    // Check if access to the IPFS node is disabled
+    if (!state.ipfsProxy || !state.activeIntegrations(scope)) {
       throw createProxyAclError(undefined, undefined, 'User disabled access to API proxy in IPFS Companion')
     }
 
-    const scope = await getScope()
     const access = await getAccessWithPrompt(accessControl, requestAccess, scope, permission)
 
     if (!access.allow) {

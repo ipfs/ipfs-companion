@@ -76,11 +76,11 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     if (request.url.startsWith('http://127.0.0.1') || request.url.startsWith('http://localhost') || request.url.startsWith('http://[::1]')) {
       ignore(request.requestId)
     }
-    // skip if a per-site redirect opt-out exists
+    // skip if a per-site opt-out exists
     const parentUrl = request.originUrl || request.initiator // FF: originUrl (Referer-like Origin URL), Chrome: initiator (just Origin)
     const fqdn = new URL(request.url).hostname
     const parentFqdn = parentUrl && parentUrl !== 'null' && request.url !== parentUrl ? new URL(parentUrl).hostname : null
-    if (state.noRedirectHostnames.some(optout =>
+    if (state.noIntegrationsHostnames.some(optout =>
       fqdn !== 'gateway.ipfs.io' && (fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout))
       ))) {
       ignore(request.requestId)

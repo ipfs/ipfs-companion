@@ -32,7 +32,7 @@ module.exports = (state, emitter) => {
     currentTab: null,
     currentFqdn: null,
     currentDnslinkFqdn: null,
-    noRedirectHostnames: []
+    noIntegrationsHostnames: []
   })
 
   let port
@@ -166,22 +166,23 @@ module.exports = (state, emitter) => {
     }
   })
 
-  emitter.on('toggleSiteRedirect', async () => {
-    state.currentTabRedirectOptOut = !state.currentTabRedirectOptOut
+  emitter.on('toggleSiteIntegrations', async () => {
+    state.currentTabIntegrationsOptOut = !state.currentTabIntegrationsOptOut
     emitter.emit('render')
 
     try {
-      let noRedirectHostnames = state.noRedirectHostnames
+      let noIntegrationsHostnames = state.noIntegrationsHostnames
       // if we are on /ipns/fqdn.tld/ then use hostname from DNSLink
       const fqdn = state.currentDnslinkFqdn || state.currentFqdn
-      if (noRedirectHostnames.includes(fqdn)) {
-        noRedirectHostnames = noRedirectHostnames.filter(host => !host.endsWith(fqdn))
+      if (noIntegrationsHostnames.includes(fqdn)) {
+        noIntegrationsHostnames = noIntegrationsHostnames.filter(host => !host.endsWith(fqdn))
       } else {
-        noRedirectHostnames.push(fqdn)
+        noIntegrationsHostnames.push(fqdn)
       }
-      // console.dir('toggleSiteRedirect', state)
-      await browser.storage.local.set({ noRedirectHostnames })
+      // console.dir('toggleSiteIntegrations', state)
+      await browser.storage.local.set({ noIntegrationsHostnames })
 
+      // TODO: remove below? does it still make sense in "integrations toggle" context?
       // Reload the current tab to apply updated redirect preference
       if (!state.currentDnslinkFqdn || !IsIpfs.ipnsUrl(state.currentTab.url)) {
         // No DNSLink, reload URL as-is
@@ -198,7 +199,7 @@ module.exports = (state, emitter) => {
         })
       }
     } catch (error) {
-      console.error(`Unable to update redirect state due to ${error}`)
+      console.error(`Unable to update integrations state due to ${error}`)
       emitter.emit('render')
     }
   })

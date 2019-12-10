@@ -13,7 +13,7 @@ exports.optionDefaults = Object.freeze({
   publicGatewayUrl: 'https://ipfs.io',
   publicSubdomainGatewayUrl: 'https://dweb.link',
   useCustomGateway: true,
-  noRedirectHostnames: [],
+  noIntegrationsHostnames: [],
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',

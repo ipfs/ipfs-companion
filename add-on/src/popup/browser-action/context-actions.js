@@ -22,7 +22,7 @@ function contextActions ({
   currentTab,
   currentFqdn,
   currentDnslinkFqdn,
-  currentTabRedirectOptOut,
+  currentTabIntegrationsOptOut,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -30,7 +30,7 @@ function contextActions ({
   isPinned,
   isIpfsOnline,
   isApiAvailable,
-  onToggleSiteRedirect,
+  onToggleSiteIntegrations,
   onViewOnGateway,
   onCopy,
   onPin,
@@ -69,24 +69,22 @@ function contextActions ({
   </div>
     `
   }
-  /* TODO: change "redirect on {fqdn}" to "disable on {fqdn}" and disable all integrations
-  // removed per site toggle for now: ${renderSiteRedirectToggle()}
-  const renderSiteRedirectToggle = () => {
+  const renderSiteIntegrationsToggle = () => {
     if (!isRedirectContext) return
     return html`
   ${navItem({
-    text: browser.i18n.getMessage('panel_activeTabSiteRedirectToggle', currentFqdn),
-    title: browser.i18n.getMessage('panel_activeTabSiteRedirectToggleTooltip', currentFqdn),
+    text: browser.i18n.getMessage('panel_activeTabSiteIntegrationsToggle', currentFqdn),
+    title: browser.i18n.getMessage('panel_activeTabSiteIntegrationsToggleTooltip', currentFqdn),
     style: 'truncate',
-    disabled: !(active && redirect),
-    switchValue: active && redirect && !currentTabRedirectOptOut,
-    onClick: onToggleSiteRedirect
+    disabled: !(active),
+    switchValue: active && !currentTabIntegrationsOptOut,
+    onClick: onToggleSiteIntegrations
   })}
       `
   }
-  */
   return html`
     <div class='fade-in pv1'>
+  ${renderSiteIntegrationsToggle()}
   ${renderIpfsContextItems()}
     </div>
   `
@@ -101,7 +99,7 @@ function activeTabActions (state) {
   return html`
       <div>
       ${navHeader('panel_activeTabSectionHeader')}
-      <div class="fade-in pv1 bb b--black-10">
+      <div class="fade-in pv0 bb b--black-10">
         ${contextActions(state)}
       </div>
       </div>

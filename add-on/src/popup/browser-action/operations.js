@@ -13,7 +13,7 @@ module.exports = function operations ({
 }) {
   const activeRedirectSwitch = active && ipfsNodeType !== 'embedded'
   return html`
-    <div class="fade-in pv1 bb b--black-10">
+    <div class="fade-in pb1">
   ${navItem({
     text: browser.i18n.getMessage('panel_redirectToggle'),
     title: browser.i18n.getMessage('panel_redirectToggleTooltip'),

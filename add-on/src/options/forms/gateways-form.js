@@ -14,7 +14,7 @@ function gatewaysForm ({
   ipfsNodeType,
   customGatewayUrl,
   useCustomGateway,
-  noRedirectHostnames,
+  noIntegrationsHostnames,
   publicGatewayUrl,
   publicSubdomainGatewayUrl,
   onOptionChange
@@ -23,7 +23,7 @@ function gatewaysForm ({
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', normalizeGatewayURL)
   const onPublicSubdomainGatewayUrlChange = onOptionChange('publicSubdomainGatewayUrl', normalizeGatewayURL)
-  const onNoRedirectHostnamesChange = onOptionChange('noRedirectHostnames', hostTextToArray)
+  const onNoIntegrationsHostnamesChange = onOptionChange('noIntegrationsHostnames', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
   const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
   const allowChangeOfCustomGateway = ipfsNodeType !== 'embedded:chromesockets'
@@ -110,18 +110,18 @@ function gatewaysForm ({
           ` : null}
           ${supportRedirectToCustomGateway ? html`
             <div>
-              <label for="noRedirectHostnames">
+              <label for="noIntegrationsHostnames">
                 <dl>
-                  <dt>${browser.i18n.getMessage('option_noRedirectHostnames_title')}</dt>
-                  <dd>${browser.i18n.getMessage('option_noRedirectHostnames_description')}</dd>
+                  <dt>${browser.i18n.getMessage('option_noIntegrationsHostnames_title')}</dt>
+                  <dd>${browser.i18n.getMessage('option_noIntegrationsHostnames_description')}</dd>
                 </dl>
               </label>
               <textarea
-                id="noRedirectHostnames"
+                id="noIntegrationsHostnames"
                 spellcheck="false"
-                onchange=${onNoRedirectHostnamesChange}
+                onchange=${onNoIntegrationsHostnamesChange}
                 rows="4"
-                >${hostArrayToText(noRedirectHostnames)}</textarea>
+                >${hostArrayToText(noIntegrationsHostnames)}</textarea>
             </div>
           ` : null}
       </fieldset>

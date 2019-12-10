@@ -254,6 +254,11 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
       const directCid = IsIpfs.ipfsPath(result) ? result.split('/')[2] : result
       return directCid
+    },
+
+    // Returns true when opt-out for provided URL exists
+    activeIntegrations (url) {
+      return getState().activeIntegrations(url)
     }
   }
 
