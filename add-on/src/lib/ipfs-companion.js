@@ -266,7 +266,7 @@ module.exports = async function init () {
     }
   }
 
-  // Context Menu Uploader
+  // Context Menu Importer
   // -------------------------------------------------------------------
 
   async function onAddFromContext (context, contextType, options) {
@@ -307,15 +307,15 @@ module.exports = async function init () {
         result = await ipfsImportHandler.importFiles(data, options, importDir)
       }
     } catch (error) {
-      console.error('Error in upload to IPFS context menu', error)
+      console.error('Error in import to IPFS context menu', error)
       if (error.message === 'NetworkError when attempting to fetch resource.') {
-        notify('notify_uploadErrorTitle', 'notify_uploadTrackingProtectionErrorMsg')
-        console.warn('IPFS upload often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
+        notify('notify_importErrorTitle', 'notify_importTrackingProtectionErrorMsg')
+        console.warn('IPFS import often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
         browser.tabs.create({
           url: 'https://github.com/ipfs/ipfs-companion/issues/227'
         })
       } else {
-        notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
+        notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
       }
       return
     }

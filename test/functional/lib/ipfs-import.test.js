@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const { useFakeTimers } = require('sinon')
 const browser = require('sinon-chrome')
 
-describe('quick-upload.js', function () {
+describe('ipfs-import.js', function () {
   let createIpfsImportHandler
   let ipfsImportHandler
   let clock

@@ -128,8 +128,8 @@ module.exports = (state, emitter) => {
     }
   }
 
-  emitter.on('quickUpload', () => {
-    browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-upload.html') })
+  emitter.on('quickImport', () => {
+    browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-import.html') })
     window.close()
   })
 
@@ -254,7 +254,7 @@ module.exports = (state, emitter) => {
       } else {
         state.gatewayAddress = status.pubGwURLString
       }
-      // Upload requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
+      // Import requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
       state.isApiAvailable = state.active && !!(await getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
