@@ -34,7 +34,6 @@ describe('modifyRequest processing of DNSLinks', function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
-      dnslinkRedirect: true, // NOTE: this is opt-in now
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
       pubGwURLString: 'https://ipfs.io'
