@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2019-02-20</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/docs/privacy-policy.md))
+Last Update: 2019-12-10</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/docs/privacy-policy.md))
 
 The IPFS Companion browser extension is owned by Protocol Labs Inc. and created
 by the IPFS Project. We know you care about how your personal data is used and
@@ -29,7 +29,7 @@ None. We don’t collect your Personal Data, period.
 We do not collect, rent, store or sell your Personal Data to anyone. However
 because IPFS Companion is a web extension that provides access to the real-time,
 peer-to-peer IPFS Network (which is a public platform for which anyone may join
-and participate) the data that you add or upload to the IPFS Network using IPFS
+and participate) the data that you import to the IPFS Network using IPFS
 Companion is then publicly available and accessible to everyone participating in
 IPFS Network.
 

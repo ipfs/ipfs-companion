@@ -35,9 +35,9 @@
     "message": "The number of other IPFS nodes you can connect to",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
-  "panel_quickUpload": {
+  "panel_quickImport": {
     "message": "Share files via IPFS",
-    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
+    "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
     "message": "Open Web UI",
@@ -183,13 +183,13 @@
     "message": "Automatic Mode: Public Gateway will be used as a fallback",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
-  "notify_uploadErrorTitle": {
-    "message": "Unable to upload via IPFS API",
-    "description": "A title of system notification (notify_uploadErrorTitle)"
+  "notify_importErrorTitle": {
+    "message": "Unable to import via IPFS API",
+    "description": "A title of system notification (notify_importErrorTitle)"
   },
-  "notify_uploadTrackingProtectionErrorMsg": {
+  "notify_importTrackingProtectionErrorMsg": {
     "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)",
-    "description": "(notify_uploadTrackingProtectionErrorMsg)"
+    "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
     "message": "$1",
@@ -491,41 +491,41 @@
     "message": "Browser extension that simplifies access to IPFS resources",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers": {
+  "quickImport_subhead_peers": {
     "message": "Connected to $1 peers",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
-  "quickUpload_pick_file_button": {
+  "quickImport_pick_file_button": {
     "message": "Pick a file",
-    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
+    "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
-  "quickUpload_or": {
+  "quickImport_or": {
     "message": "or",
-    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
+    "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
-  "quickUpload_drop_it_here": {
+  "quickImport_drop_it_here": {
     "message": "drop it here to share",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
-  "quickUpload_state_uploading": {
-    "message": "Upload in progress..",
-    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  "quickImport_state_importing": {
+    "message": "Import in progress..",
+    "description": "Status label on the share files page (quickImport_state_importing)"
   },
-  "quickUpload_state_buffering": {
+  "quickImport_state_buffering": {
     "message": "(buffering, please wait)",
-    "description": "Status label on the share files page (quickUpload_state_buffering)"
+    "description": "Status label on the share files page (quickImport_state_buffering)"
   },
-  "quickUpload_options_show": {
+  "quickImport_options_show": {
     "message": "import options",
-    "description": "Button on the share files page (quickUpload_options_show)"
+    "description": "Button on the share files page (quickImport_options_show)"
   },
-  "quickUpload_options_importDir": {
+  "quickImport_options_importDir": {
     "message": "Path to store imported files",
-    "description": "Textbox label on the share files page (quickUpload_options_importDir)"
+    "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
-  "quickUpload_options_openViaWebUI": {
+  "quickImport_options_openViaWebUI": {
     "message": "Open in Web UI",
-    "description": "Checkbox label on the share files page (quickUpload_options_openViaWebUI)"
+    "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
     "message": "Manage Permissions",

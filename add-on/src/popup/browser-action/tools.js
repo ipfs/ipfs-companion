@@ -11,10 +11,10 @@ module.exports = function tools ({
   ipfsNodeType,
   isIpfsOnline,
   isApiAvailable,
-  onQuickUpload,
+  onQuickImport,
   onOpenWebUi
 }) {
-  const activeQuickUpload = active && isIpfsOnline && isApiAvailable
+  const activeQuickImport = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`
@@ -22,10 +22,10 @@ module.exports = function tools ({
     ${navHeader('panel_toolsSectionHeader')}
     <div class="fade-in pv1 bb b--black-10">
   ${navItem({
-    text: browser.i18n.getMessage('panel_quickUpload'),
+    text: browser.i18n.getMessage('panel_quickImport'),
     style: 'b',
-    disabled: !activeQuickUpload,
-    onClick: onQuickUpload
+    disabled: !activeQuickImport,
+    onClick: onQuickImport
   })}
   ${navItem({
     text: browser.i18n.getMessage('panel_openWebui'),

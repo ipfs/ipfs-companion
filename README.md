@@ -109,7 +109,7 @@ The Browser Action pop-up provides handy toggles for often used operations.
 ### IPFS Status and Context Actions
 
 - IPFS API and Gateway status
-- Add local (quick upload) or remote files (context menu) to IPFS with option to preserve filename
+- Add local (quick import) or remote files (context menu) to IPFS with option to preserve filename
 - Easy access to [WebUI](https://github.com/ipfs/webui/) and add-on Preferences
 - Toggle redirection to local gateway (automatic by default, manual mode can be enabled in Preferences)
 - Additional actions for pages loaded from IPFS
@@ -226,7 +226,7 @@ We are also available at the [#ipfs](https://webchat.freenode.net/?channels=ipfs
 
 Questions specific to this browser companion can be asked directly at [`#ipfs-in-web-browsers`](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
 
-#### Upload via Right-Click Does Not Work in Firefox
+#### Import via Right-Click Does Not Work in Firefox
 
 See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
 

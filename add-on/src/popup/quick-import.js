@@ -8,15 +8,15 @@ const logo = require('./logo')
 const drop = require('drag-and-drop-files')
 const fileReaderPullStream = require('pull-file-reader')
 
-document.title = browser.i18n.getMessage('panel_quickUpload')
+document.title = browser.i18n.getMessage('panel_quickImport')
 
 const app = choo()
 
-app.use(quickUploadStore)
-app.route('*', quickUploadPage)
+app.use(quickImportStore)
+app.route('*', quickImportPage)
 app.mount('#root')
 
-function quickUploadStore (state, emitter) {
+function quickImportStore (state, emitter) {
   state.message = ''
   state.peerCount = ''
   state.ipfsNodeType = 'external'
@@ -71,7 +71,7 @@ async function processFiles (state, emitter, files) {
     }
     const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
     const ipfsImportHandler = ipfsCompanion.ipfsImportHandler
-    const uploadTab = await browser.tabs.getCurrent()
+    const importTab = await browser.tabs.getCurrent()
     const streams = files2streams(files)
     emitter.emit('render')
     const options = {
@@ -85,7 +85,7 @@ async function processFiles (state, emitter, files) {
       result = await ipfsImportHandler.importFiles(streams, options, importDir)
     } catch (err) {
       console.error('Failed to import files to IPFS', err)
-      ipfsCompanion.notify('notify_uploadErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
+      ipfsCompanion.notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
       throw err
     }
     state.progress = 'Completed'
@@ -100,11 +100,11 @@ async function processFiles (state, emitter, files) {
     } else {
       await ipfsImportHandler.openFilesAtWebUI(importDir)
     }
-    // close upload tab as it will be replaced with a new tab with uploaded content
-    await browser.tabs.remove(uploadTab.id)
+    // close import tab as it will be replaced with a new tab with imported content
+    await browser.tabs.remove(importTab.id)
   } catch (err) {
     console.error('Unable to perform import', err)
-    // keep upload tab and display error message in it
+    // keep import tab and display error message in it
     state.message = 'Unable to import to IPFS:'
     state.progress = `${err}`
     emitter.emit('render')
@@ -139,7 +139,7 @@ function files2streams (files) {
   return streams
 }
 
-function quickUploadOptions (state, emit) {
+function quickImportOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.userChangedOpenViaWebUI = true; state.openViaWebUI = e.target.checked }
@@ -147,14 +147,14 @@ function quickUploadOptions (state, emit) {
 
   if (state.expandOptions) {
     return html`
-      <div id='quickUploadOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
+      <div id='quickImportOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
         ${displayOpenWebUI ? html`<label for='openViaWebUI' class='flex items-center db relative mt1 pointer'>
           <input id='openViaWebUI' type='checkbox' onchange=${onOpenViaWebUIChange} checked=${state.openViaWebUI} />
           <span class='mark db flex items-center relative mr2 br2'></span>
-          ${browser.i18n.getMessage('quickUpload_options_openViaWebUI')}
+          ${browser.i18n.getMessage('quickImport_options_openViaWebUI')}
         </label>` : null}
         <label for='importDir' class='flex items-center db relative mt1 pointer'>
-          ${browser.i18n.getMessage('quickUpload_options_importDir')}
+          ${browser.i18n.getMessage('quickImport_options_importDir')}
           <span class='mark db flex items-center relative mr2 br2'></span>
           <input id='importDir' class='w-40 bg-transparent aqua monospace br1 ba b--aqua pa2' type='text' oninput=${onDirectoryChange} value=${state.importDir} />
         </label>
@@ -163,12 +163,12 @@ function quickUploadOptions (state, emit) {
   }
   return html`
     <button class='mt3 f6 lh-copy link bn bg-transparent moon-gray dib pa0 pointer' style='color: #6ACAD1' onclick=${onExpandOptions}>
-      ${browser.i18n.getMessage('quickUpload_options_show')} »
+      ${browser.i18n.getMessage('quickImport_options_show')} »
     </button>
   `
 }
 
-function quickUploadPage (state, emit) {
+function quickImportPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
   const { peerCount } = state
 
@@ -183,31 +183,31 @@ function quickUploadPage (state, emit) {
   })}
           <div class="pl3">
             <h1 class="f2 fw5 ma0">
-              ${browser.i18n.getMessage('panel_quickUpload')}
+              ${browser.i18n.getMessage('panel_quickImport')}
             </h1>
             <p class="f3 fw2 lh-copy ma0 light-gray">
-              ${browser.i18n.getMessage('quickUpload_subhead_peers', [peerCount])}
+              ${browser.i18n.getMessage('quickImport_subhead_peers', [peerCount])}
             </p>
           </div>
         </header>
-        <label for="quickUploadInput" class='db relative mt5 hover-inner-shadow pointer' style="border:solid 2px #6ACAD1">
-          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickUploadInput" multiple onchange=${onFileInputChange} />
+        <label for="quickImportInput" class='db relative mt5 hover-inner-shadow pointer' style="border:solid 2px #6ACAD1">
+          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
               <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
-                ${browser.i18n.getMessage('quickUpload_pick_file_button')}
+                ${browser.i18n.getMessage('quickImport_pick_file_button')}
               </span>
               <span class='f3'>
                 <emph class='underline pl3 pr2 moon-gray'>
-                  ${browser.i18n.getMessage('quickUpload_or')}
+                  ${browser.i18n.getMessage('quickImport_or')}
                 </emph>
-                ${browser.i18n.getMessage('quickUpload_drop_it_here')}
+                ${browser.i18n.getMessage('quickImport_drop_it_here')}
               </span>
               <p class='f4 db'>${state.message}<span class='code db absolute fr pv2'>${state.progress}</span></p>
             </div>
           </div>
         </label>
-        ${quickUploadOptions(state, emit)}
+        ${quickImportOptions(state, emit)}
       </div>
     </div>
   `
