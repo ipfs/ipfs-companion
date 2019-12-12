@@ -35,9 +35,9 @@
     "message": "你可以连接的 IPFS 节点的数量",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
-  "panel_quickUpload": {
+  "panel_quickImport": {
     "message": "通过 IPFS 分享文件",
-    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
+    "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
     "message": "打开 Web UI",
@@ -91,6 +91,10 @@
     "message": "复制公共网关网址",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_contextMenuViewOnGateway": {
+    "message": "在网关上查看",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
+  },
   "pageAction_titleIpfsAtPublicGateway": {
     "message": "通过公共网关加载IPFS资源",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
@@ -127,17 +131,13 @@
     "message": "这一页",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
-  "contextMenu_AddToIpfsKeepFilename": {
-    "message": "添加到 IPFS（保持文件名）",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  "contextMenu_importToIpfs": {
+    "message": "导入至IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
-  "contextMenu_AddToIpfsRawCid": {
-    "message": "添加到 IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
-  },
-  "contextMenu_AddToIpfsSelection": {
-    "message": "将选定的文本添加到IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+  "contextMenu_importToIpfsSelection": {
+    "message": "导入选择的文本至IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
     "message": "IPFS 附加组件问题报告",
@@ -183,13 +183,13 @@
     "message": "自动模式：公共网关将作为后备方案",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
-  "notify_uploadErrorTitle": {
-    "message": "无法通过 IPFS API 上传",
-    "description": "A title of system notification (notify_uploadErrorTitle)"
+  "notify_importErrorTitle": {
+    "message": "Unable to import via IPFS API",
+    "description": "A title of system notification (notify_importErrorTitle)"
   },
-  "notify_uploadTrackingProtectionErrorMsg": {
+  "notify_importTrackingProtectionErrorMsg": {
     "message": "请尝试禁用“跟踪保护”（详细信息请见 ctrl+shift+j）",
-    "description": "(notify_uploadTrackingProtectionErrorMsg)"
+    "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
     "message": "$1",
@@ -215,6 +215,10 @@
     "message": "IPFS 节点",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
+  "option_header_fileImport": {
+    "message": "导入文件",
+    "description": "A section header on the Preferences screen (option_header_fileImport)"
+  },
   "option_ipfsNodeType_title": {
     "message": "IPFS 节点类型",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
@@ -224,11 +228,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded: run js-ipfs node in your browser (read about its limitations under the link below)",
+    "message": "嵌入模式：在你的浏览器里运行js-ipfs节点（点击以下链接了解其局限性）",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "message": "使用Chrome套接字的嵌入模式：在你的浏览器里利用chrome.sockets API运行js-ipfs节点（详情请见以下链接）",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -236,7 +240,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
+    "message": "嵌入式JS IPFS节点的额外配置。必须是有效的JSON。",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -275,6 +279,26 @@
     "message": "公共网关重定向至自定义网关",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_dnslinkRedirect_title": {
+    "message": "强制从自定义网关加载网页",
+    "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
+  },
+  "option_dnslinkRedirect_description": {
+    "message": "如果全局重定向已启用，就会在自定义网关包括DNSLink网站并重定向至对应的/ipfs/{fqdn}路径",
+    "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
+  },
+  "option_dnslinkDataPreload_title": {
+    "message": "Preload visited pages",
+    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
+  },
+  "option_dnslinkDataPreload_description": {
+    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
+  },
+  "option_dnslinkRedirect_warning": {
+    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_noRedirectHostnames_title": {
     "message": "重定向选择退出",
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
@@ -292,7 +316,7 @@
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "默认公用子域名网关",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
@@ -327,12 +351,16 @@
     "message": "当API可用性发生变化时，切换使用自定义网关",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
+  "option_header_dnslink": {
+    "message": "DNSLink",
+    "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
   "option_header_experiments": {
     "message": "试验",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experimental": {
-    "message": "experimental",
+    "message": "实验性",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
@@ -364,11 +392,11 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink 支持",
+    "message": "DNSLink查询",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "选择 DNS TXT 查找策略以尽可能通过IPFS加载通过IPFS托管的站点",
+    "message": "Lookup policy for displaying context actions on websites with DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -411,12 +439,20 @@
     "message": "管理权限",
     "description": "Link text for managing permissions"
   },
+  "option_openViaWebUI_title": {
+    "message": "Open imported files in Web UI",
+    "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
+  },
+  "option_openViaWebUI_description": {
+    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
+  },
   "option_preloadAtPublicGateway_title": {
-    "message": "预加载上传",
+    "message": "Preload Imports",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "通过公共网关的异步 HTTP 头请求开启对已上传资产的自动预加载",
+    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -426,6 +462,14 @@
   "option_logNamespaces_description": {
     "message": "确认哪些命名空间会被记录到浏览器控制台中。改变这些值会导致外接程序重启。",
     "description": "An option description for the log level (option_logNamespaces_description)"
+  },
+  "option_importDir_title": {
+    "message": "File Import Directory",
+    "description": "An option title on the Preferences screen (option_importDir_title)"
+  },
+  "option_importDir_description": {
+    "message": "自定义导入文件的目录",
+    "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
     "message": "全部重置",
@@ -447,41 +491,41 @@
     "message": "简化 IPFS 资源访问的浏览器扩展",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers": {
+  "quickImport_subhead_peers": {
     "message": "已连接到$1个节点",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
-  "quickUpload_pick_file_button": {
+  "quickImport_pick_file_button": {
     "message": "选一个文件",
-    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
+    "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
-  "quickUpload_or": {
+  "quickImport_or": {
     "message": "或",
-    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
+    "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
-  "quickUpload_drop_it_here": {
+  "quickImport_drop_it_here": {
     "message": "拖放文件到此处以分享",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
-  "quickUpload_state_uploading": {
-    "message": "正在上传..",
-    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  "quickImport_state_importing": {
+    "message": "Import in progress..",
+    "description": "Status label on the share files page (quickImport_state_importing)"
   },
-  "quickUpload_state_buffering": {
+  "quickImport_state_buffering": {
     "message": "（正在缓冲，请稍候）",
-    "description": "Status label on the share files page (quickUpload_state_buffering)"
+    "description": "Status label on the share files page (quickImport_state_buffering)"
   },
-  "quickUpload_options_show": {
-    "message": "上传选项",
-    "description": "Button on the share files page (quickUpload_options_show)"
+  "quickImport_options_show": {
+    "message": "导入选项",
+    "description": "Button on the share files page (quickImport_options_show)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "保留文件名称（如果勾选，文件会被包装在一个文件夹中，否则通过 IPFS 分享的文件没有文件名称）。",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  "quickImport_options_importDir": {
+    "message": "导入的文件会被储存在这个路径",
+    "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
-  "quickUpload_options_pinUpload": {
-    "message": "固定文件（如果勾选，文件会被 IPFS 库保留，否则执行垃圾回收时文件可能会被从 IPFS 库中删除）。",
-    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  "quickImport_options_openViaWebUI": {
+    "message": "在Web界面打开",
+    "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
     "message": "管理权限",

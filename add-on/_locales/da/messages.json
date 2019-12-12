@@ -35,9 +35,9 @@
     "message": "Antallet af andre IPFS-klienter du kan forbinde til",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
-  "panel_quickUpload": {
+  "panel_quickImport": {
     "message": "Del filer via IPFS",
-    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
+    "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
     "message": "Åbn webkonsollen",
@@ -91,6 +91,10 @@
     "message": "Kopier URL for Offentlig Gateway",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_contextMenuViewOnGateway": {
+    "message": "View on Gateway",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
+  },
   "pageAction_titleIpfsAtPublicGateway": {
     "message": "IPFS resource indlæst via Offentlig Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
@@ -127,17 +131,13 @@
     "message": "Denne side",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
-  "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Tilføj til IPFS (Behold filnavn)",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  "contextMenu_importToIpfs": {
+    "message": "Import to IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
-  "contextMenu_AddToIpfsRawCid": {
-    "message": "Tilføj til IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
-  },
-  "contextMenu_AddToIpfsSelection": {
-    "message": "Tilføj valgte tekst til IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+  "contextMenu_importToIpfsSelection": {
+    "message": "Import Selected Text to IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
     "message": "Problem med IPFS-udvidelse",
@@ -183,13 +183,13 @@
     "message": "Automatisk tilstand: Den offentlige vil blive benyttet som backup",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
-  "notify_uploadErrorTitle": {
-    "message": "Ude af stand til at uploade via IPFS API'et",
-    "description": "A title of system notification (notify_uploadErrorTitle)"
+  "notify_importErrorTitle": {
+    "message": "Unable to import via IPFS API",
+    "description": "A title of system notification (notify_importErrorTitle)"
   },
-  "notify_uploadTrackingProtectionErrorMsg": {
+  "notify_importTrackingProtectionErrorMsg": {
     "message": "Prøv at deaktivere Sporingsbeskyttelse (tryk ctrl+shift+j for flere detaljer)",
-    "description": "(notify_uploadTrackingProtectionErrorMsg)"
+    "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
     "message": "$1",
@@ -214,6 +214,10 @@
   "option_header_nodeType" : {
     "message": "IPFS-klient",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
+  },
+  "option_header_fileImport": {
+    "message": "File Import",
+    "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
     "message": "IPFS-klient-type",
@@ -275,6 +279,26 @@
     "message": "Ormdiriger forespørgsler på IPFS-resourcer til den Valgfri Gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_dnslinkRedirect_title": {
+    "message": "Force page load from custom gateway",
+    "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
+  },
+  "option_dnslinkRedirect_description": {
+    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
+  },
+  "option_dnslinkDataPreload_title": {
+    "message": "Preload visited pages",
+    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
+  },
+  "option_dnslinkDataPreload_description": {
+    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
+  },
+  "option_dnslinkRedirect_warning": {
+    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_noRedirectHostnames_title": {
     "message": "Omdirrigerer fravalg",
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
@@ -327,6 +351,10 @@
     "message": "Til/Frakobling af Valgfri Gateway når tilgængelighed ændres for IPFS API'et",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
+  "option_header_dnslink": {
+    "message": "DNSLink",
+    "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
   "option_header_experiments": {
     "message": "Eksperimenter",
     "description": "A section header on the Preferences screen (option_header_experiments)"
@@ -364,11 +392,11 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink understøttelse",
+    "message": "DNSLink Lookup",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Vælg opslagspolitik for hvornår at IPFS-hostede sider med DNS TXT skal hentes via IPFS",
+    "message": "Lookup policy for displaying context actions on websites with DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -411,12 +439,20 @@
     "message": "Opsætning af rettigheder",
     "description": "Link text for managing permissions"
   },
+  "option_openViaWebUI_title": {
+    "message": "Open imported files in Web UI",
+    "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
+  },
+  "option_openViaWebUI_description": {
+    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
+  },
   "option_preloadAtPublicGateway_title": {
-    "message": "Fonhåndsindlæsning af uploads",
+    "message": "Preload Imports",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Aktiver automatisk forhåndsindlæsning af uploadede aktiver via asynkrone HTTP HEAD-forespørgsler til en Offentlig Gateway",
+    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -426,6 +462,14 @@
   "option_logNamespaces_description": {
     "message": "Skræddersy hvilke navnerum der logges til browser konsollen. Ændringer af denne værdi vil medføre genstart af udvidelsen.",
     "description": "An option description for the log level (option_logNamespaces_description)"
+  },
+  "option_importDir_title": {
+    "message": "File Import Directory",
+    "description": "An option title on the Preferences screen (option_importDir_title)"
+  },
+  "option_importDir_description": {
+    "message": "Customize the directory used for imported files.",
+    "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Komplet nulstilling",
@@ -447,41 +491,41 @@
     "message": "Browser-udvidelse som gør det let at tilgå IPFS resourcer",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers": {
+  "quickImport_subhead_peers": {
     "message": "Forbundet til $1 klienter",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
-  "quickUpload_pick_file_button": {
+  "quickImport_pick_file_button": {
     "message": "Vælg en fil",
-    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
+    "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
-  "quickUpload_or": {
+  "quickImport_or": {
     "message": "eller",
-    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
+    "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
-  "quickUpload_drop_it_here": {
+  "quickImport_drop_it_here": {
     "message": "Træk hertil for at dele",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
-  "quickUpload_state_uploading": {
-    "message": "Upload i gang..",
-    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  "quickImport_state_importing": {
+    "message": "Import in progress..",
+    "description": "Status label on the share files page (quickImport_state_importing)"
   },
-  "quickUpload_state_buffering": {
+  "quickImport_state_buffering": {
     "message": "(indlæser, vent venligst)",
-    "description": "Status label on the share files page (quickUpload_state_buffering)"
+    "description": "Status label on the share files page (quickImport_state_buffering)"
   },
-  "quickUpload_options_show": {
-    "message": "upload-indstillinger",
-    "description": "Button on the share files page (quickUpload_options_show)"
+  "quickImport_options_show": {
+    "message": "import options",
+    "description": "Button on the share files page (quickImport_options_show)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "Indpak enkelt-filer i en mappe for at bevare deres filnavn.",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  "quickImport_options_importDir": {
+    "message": "Path to store imported files",
+    "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
-  "quickUpload_options_pinUpload": {
-    "message": "Fastgør filer sådan at de bevares under oprydnings-processen af dit IPFS-depot",
-    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  "quickImport_options_openViaWebUI": {
+    "message": "Open in Web UI",
+    "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
     "message": "Indstil rettigheder",

@@ -35,9 +35,9 @@
     "message": "The number of other IPFS nodes you can connect to",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
-  "panel_quickUpload": {
+  "panel_quickImport": {
     "message": "Încărcare rapidă",
-    "description": "A menu item in Browser Action pop-up (panel_quickUpload)"
+    "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
     "message": "Open Web UI",
@@ -91,6 +91,10 @@
     "message": "Copiază URL-ul gateway-ului public",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_contextMenuViewOnGateway": {
+    "message": "View on Gateway",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
+  },
   "pageAction_titleIpfsAtPublicGateway": {
     "message": "IPFS resource loaded via Public Gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
@@ -127,17 +131,13 @@
     "message": "This Page",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
-  "contextMenu_AddToIpfsKeepFilename": {
-    "message": "Add to IPFS (Keep Filename)",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsKeepFilename)"
+  "contextMenu_importToIpfs": {
+    "message": "Import to IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
-  "contextMenu_AddToIpfsRawCid": {
-    "message": "Add to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsRawCid)"
-  },
-  "contextMenu_AddToIpfsSelection": {
-    "message": "Add Selected Text to IPFS",
-    "description": "An item in right-click context menu (contextMenu_AddToIpfsSelection)"
+  "contextMenu_importToIpfsSelection": {
+    "message": "Import Selected Text to IPFS",
+    "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
     "message": "Probleme cu un addon IPFS",
@@ -183,13 +183,13 @@
     "message": "Modul automat: gateway-ul public va fi utilizat ca opțiune de siguranță",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
-  "notify_uploadErrorTitle": {
-    "message": "Nu s-a putut încărca prin API-ul IPFS",
-    "description": "A title of system notification (notify_uploadErrorTitle)"
+  "notify_importErrorTitle": {
+    "message": "Unable to import via IPFS API",
+    "description": "A title of system notification (notify_importErrorTitle)"
   },
-  "notify_uploadTrackingProtectionErrorMsg": {
+  "notify_importTrackingProtectionErrorMsg": {
     "message": "Încearcă să dezactivezi Protecția la Urmărire (apasă ctrl+shift+j pentru mai multe detalii)",
-    "description": "(notify_uploadTrackingProtectionErrorMsg)"
+    "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
     "message": "$1",
@@ -214,6 +214,10 @@
   "option_header_nodeType" : {
     "message": "IPFS Node",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
+  },
+  "option_header_fileImport": {
+    "message": "File Import",
+    "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
     "message": "IPFS Node Type",
@@ -275,6 +279,26 @@
     "message": "Redirecționează cereri pentru resursele IPFS către gateway-ul personalizat",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_dnslinkRedirect_title": {
+    "message": "Force page load from custom gateway",
+    "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
+  },
+  "option_dnslinkRedirect_description": {
+    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
+  },
+  "option_dnslinkDataPreload_title": {
+    "message": "Preload visited pages",
+    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
+  },
+  "option_dnslinkDataPreload_description": {
+    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
+  },
+  "option_dnslinkRedirect_warning": {
+    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
+  },
   "option_noRedirectHostnames_title": {
     "message": "Redirect Opt-Outs",
     "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
@@ -327,6 +351,10 @@
     "message": "Activează utilizarea gateway-ului personalizat atunci când disponibilitatea API-ului IPFS se schimbă",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
+  "option_header_dnslink": {
+    "message": "DNSLink",
+    "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
   "option_header_experiments": {
     "message": "Experimente",
     "description": "A section header on the Preferences screen (option_header_experiments)"
@@ -364,11 +392,11 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Support",
+    "message": "DNSLink Lookup",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Select DNS TXT lookup policy to load IPFS hosted sites over IPFS where possible",
+    "message": "Lookup policy for displaying context actions on websites with DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -411,12 +439,20 @@
     "message": "Manage permissions",
     "description": "Link text for managing permissions"
   },
+  "option_openViaWebUI_title": {
+    "message": "Open imported files in Web UI",
+    "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
+  },
+  "option_openViaWebUI_description": {
+    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
+  },
   "option_preloadAtPublicGateway_title": {
-    "message": "Încarcă în avans",
+    "message": "Preload Imports",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Permite preîncărcarea automată a resurselor încărcare prin cereri asincrone HTTPS HEAD către un gateway public",
+    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -426,6 +462,14 @@
   "option_logNamespaces_description": {
     "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
     "description": "An option description for the log level (option_logNamespaces_description)"
+  },
+  "option_importDir_title": {
+    "message": "File Import Directory",
+    "description": "An option title on the Preferences screen (option_importDir_title)"
+  },
+  "option_importDir_description": {
+    "message": "Customize the directory used for imported files.",
+    "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
     "message": "Resetează totul",
@@ -447,41 +491,41 @@
     "message": "Extensie a browserului care simplifică accesul la resursele IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
-  "quickUpload_subhead_peers": {
+  "quickImport_subhead_peers": {
     "message": "Connected to $1 peers",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_subhead_peers)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
-  "quickUpload_pick_file_button": {
+  "quickImport_pick_file_button": {
     "message": "Pick a file",
-    "description": "Text on the 'pick a file' button (quickUpload_pick_file_button)"
+    "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
-  "quickUpload_or": {
+  "quickImport_or": {
     "message": "or",
-    "description": "seperates the pick a file button from the drop message (quickUpload_or)"
+    "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
-  "quickUpload_drop_it_here": {
+  "quickImport_drop_it_here": {
     "message": "drop it here to share",
-    "description": "Partial info stats beneath the header on the share files page (quickUpload_drop_it_here)"
+    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
-  "quickUpload_state_uploading": {
-    "message": "Upload in progress..",
-    "description": "Status label on the share files page (quickUpload_state_uploading)"
+  "quickImport_state_importing": {
+    "message": "Import in progress..",
+    "description": "Status label on the share files page (quickImport_state_importing)"
   },
-  "quickUpload_state_buffering": {
+  "quickImport_state_buffering": {
     "message": "(buffering, please wait)",
-    "description": "Status label on the share files page (quickUpload_state_buffering)"
+    "description": "Status label on the share files page (quickImport_state_buffering)"
   },
-  "quickUpload_options_show": {
-    "message": "upload options",
-    "description": "Button on the share files page (quickUpload_options_show)"
+  "quickImport_options_show": {
+    "message": "import options",
+    "description": "Button on the share files page (quickImport_options_show)"
   },
-  "quickUpload_options_wrapWithDirectory": {
-    "message": "Wrap single files in a directory to preserve their filenames.",
-    "description": "Checkbox label on the share files page (quickUpload_options_wrapWithDirectory)"
+  "quickImport_options_importDir": {
+    "message": "Path to store imported files",
+    "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
-  "quickUpload_options_pinUpload": {
-    "message": "Pin files so they are retained when performing garbage collection on your IPFS repo.",
-    "description": "Checkbox label on the share files page (quickUpload_options_pinUpload)"
+  "quickImport_options_openViaWebUI": {
+    "message": "Open in Web UI",
+    "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
     "message": "Manage Permissions",
