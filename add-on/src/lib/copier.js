@@ -33,6 +33,10 @@ async function copyTextToClipboard (text, notify) {
 
 function createCopier (notify, ipfsPathValidator) {
   return {
+    async copyTextToClipboard (text) {
+      await copyTextToClipboard(text, notify)
+    },
+
     async copyCanonicalAddress (context, contextType) {
       const url = await findValueForContext(context, contextType)
       const ipfsPath = ipfsPathValidator.resolveToIpfsPath(url)

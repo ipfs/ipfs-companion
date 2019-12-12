@@ -69,8 +69,8 @@ module.exports = async function init () {
 
     dnslinkResolver = createDnslinkResolver(getState)
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
-    ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime)
     copier = createCopier(notify, ipfsPathValidator)
+    ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
     inspector = createInspector(notify, ipfsPathValidator, getState)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
@@ -319,6 +319,7 @@ module.exports = async function init () {
       }
       return
     }
+    ipfsImportHandler.copyShareLink(result)
     ipfsImportHandler.preloadFilesAtPublicGateway(result)
     if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
       return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
