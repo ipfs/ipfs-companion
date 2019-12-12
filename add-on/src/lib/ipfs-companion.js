@@ -241,7 +241,7 @@ module.exports = async function init () {
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
-      noRedirectHostnames: state.noRedirectHostnames,
+      noIntegrationsHostnames: state.noIntegrationsHostnames,
       currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     }
     try {
@@ -257,7 +257,7 @@ module.exports = async function init () {
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
-      info.currentTabRedirectOptOut = info.noRedirectHostnames && info.noRedirectHostnames.includes(info.currentFqdn)
+      info.currentTabIntegrationsOptOut = info.noIntegrationsHostnames && info.noIntegrationsHostnames.includes(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
     // Still here?
@@ -365,7 +365,8 @@ module.exports = async function init () {
 
   async function onDOMContentLoaded (details) {
     if (!state.active) return // skip content script injection when off
-    if (!details.url.startsWith('http')) return // skip special pages
+    if (!details.url || !details.url.startsWith('http')) return // skip empty and special pages
+    if (!state.activeIntegrations(details.url)) return // skip if opt-out exists
     // console.info(`[ipfs-companion] onDOMContentLoaded`, details)
     if (state.linkify) {
       console.info(`[ipfs-companion] Running linkfy experiment for ${details.url}`)
@@ -679,7 +680,7 @@ module.exports = async function init () {
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
-        case 'noRedirectHostnames':
+        case 'noIntegrationsHostnames':
         case 'dnslinkRedirect':
           state[key] = change.newValue
           break

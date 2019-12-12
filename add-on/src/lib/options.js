@@ -13,7 +13,7 @@ exports.optionDefaults = Object.freeze({
   publicGatewayUrl: 'https://ipfs.io',
   publicSubdomainGatewayUrl: 'https://dweb.link',
   useCustomGateway: true,
-  noRedirectHostnames: [],
+  noIntegrationsHostnames: [],
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',
@@ -131,5 +131,12 @@ exports.migrateOptions = async (storage) => {
       ipfsNodeType: 'embedded:chromesockets',
       ipfsNodeConfig: buildDefaultIpfsNodeConfig()
     })
+  }
+  // ~ v2.9.x: migrating noRedirectHostnames → noIntegrationsHostnames
+  // https://github.com/ipfs-shipyard/ipfs-companion/pull/830
+  const { noRedirectHostnames } = await storage.get('noRedirectHostnames')
+  if (noRedirectHostnames) {
+    await storage.set({ noIntegrationsHostnames: noRedirectHostnames })
+    await storage.remove('noRedirectHostnames')
   }
 }

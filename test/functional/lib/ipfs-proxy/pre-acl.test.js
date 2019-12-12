@@ -6,6 +6,8 @@ const Storage = require('mem-storage-area/Storage')
 const Sinon = require('sinon')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const { createPreAcl } = require('../../../../add-on/src/lib/ipfs-proxy/pre-acl')
+const { initState } = require('../../../../add-on/src/lib/state')
+const { optionDefaults } = require('../../../../add-on/src/lib/options')
 
 describe('lib/ipfs-proxy/pre-acl', () => {
   before(() => {
@@ -13,7 +15,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   })
 
   it('should throw if access is disabled', async () => {
-    const getState = () => ({ ipfsProxy: false })
+    const getState = () => initState(optionDefaults, { ipfsProxy: false })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
@@ -33,8 +35,32 @@ describe('lib/ipfs-proxy/pre-acl', () => {
     expect(error.permissions).to.be.equal(undefined)
   })
 
+  it('should throw if ALL IPFS integrations are disabled for requested scope', async () => {
+    const getState = () => initState(optionDefaults, {
+      ipfsProxy: true,
+      noIntegrationsHostnames: ['foo.tld']
+    })
+    const accessControl = new AccessControl(new Storage())
+    const getScope = () => 'https://2.foo.tld/bar/buzz/'
+    const permission = 'files.add'
+
+    const preAcl = createPreAcl(permission, getState, getScope, accessControl)
+
+    let error
+
+    try {
+      await preAcl()
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('User disabled access to API proxy in IPFS Companion')
+    expect(error.scope).to.equal(undefined)
+    expect(error.permissions).to.be.equal(undefined)
+  })
+
   it('should request access if no grant exists', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
@@ -47,7 +73,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   })
 
   it('should deny access when user denies request', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
@@ -67,7 +93,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   })
 
   it('should not re-request if denied', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
@@ -99,7 +125,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   })
 
   it('should have a well-formed Error if denied', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'
@@ -124,7 +150,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   })
 
   it('should not re-request if allowed', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://ipfs.io/'
     const permission = 'files.add'

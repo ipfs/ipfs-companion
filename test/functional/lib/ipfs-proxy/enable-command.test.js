@@ -10,6 +10,8 @@ const Sinon = require('sinon')
 const AccessControl = require('../../../../add-on/src/lib/ipfs-proxy/access-control')
 const createEnableCommand = require('../../../../add-on/src/lib/ipfs-proxy/enable-command')
 const createRequestAccess = require('../../../../add-on/src/lib/ipfs-proxy/request-access')
+const { initState } = require('../../../../add-on/src/lib/state')
+const { optionDefaults } = require('../../../../add-on/src/lib/options')
 
 describe('lib/ipfs-proxy/enable-command', () => {
   before(() => {
@@ -18,7 +20,32 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should throw if proxy access is disabled globally', async () => {
-    const getState = () => ({ ipfsProxy: false })
+    const getState = () => initState(optionDefaults, { ipfsProxy: false })
+    const accessControl = new AccessControl(new Storage())
+    const getScope = () => 'https://1.foo.tld/path/'
+    const getIpfs = () => {}
+    const requestAccess = createRequestAccess(browser, screen)
+    const enable = createEnableCommand(getIpfs, getState, getScope, accessControl, requestAccess)
+    const permissions = { commands: ['files.mkdir', 'id', 'version'] }
+
+    let error
+
+    try {
+      await enable(permissions)
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => { if (error) throw error }).to.throw('User disabled access to API proxy in IPFS Companion')
+    expect(error.scope).to.equal(undefined)
+    expect(error.permissions).to.be.equal(undefined)
+  })
+
+  it('should throw if ALL IPFS integrations are disabled for requested scope', async () => {
+    const getState = () => initState(optionDefaults, {
+      ipfsProxy: true,
+      noIntegrationsHostnames: ['foo.tld']
+    })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://1.foo.tld/path/'
     const getIpfs = () => {}
@@ -40,7 +67,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should throw if access to unknown command is requested', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://2.foo.tld/path/'
     const getIpfs = () => {}
@@ -59,7 +86,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should return without prompt if called without any arguments', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://3.foo.tld/path/'
     const getIpfs = () => {}
@@ -73,7 +100,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should request access if no grant exists', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://4.foo.tld/path/'
     const getIpfs = () => {}
@@ -89,7 +116,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should request access if partial grant exists', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://4.foo.tld/path/'
     const getIpfs = () => {}
@@ -110,7 +137,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should deny access if any partial deny already exists', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://4.foo.tld/path/'
     const getIpfs = () => {}
@@ -141,7 +168,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should deny access when user denies request', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://5.foo.tld/path/'
     const getIpfs = () => {}
@@ -162,7 +189,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should not re-request if denied', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://6.foo.tld/path/'
     const getIpfs = () => {}
@@ -195,7 +222,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should have a well-formed Error if denied', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://7.foo.tld/path/'
     const getIpfs = () => {}
@@ -222,7 +249,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   })
 
   it('should not re-request if allowed', async () => {
-    const getState = () => ({ ipfsProxy: true })
+    const getState = () => initState(optionDefaults, { ipfsProxy: true })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://8.foo.tld/path/'
     const getIpfs = () => {}

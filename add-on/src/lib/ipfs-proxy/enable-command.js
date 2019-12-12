@@ -10,10 +10,11 @@ const { createProxyAclError } = require('./pre-acl')
 function createEnableCommand (getIpfs, getState, getScope, accessControl, requestAccess) {
   return async (opts) => {
     const scope = await getScope()
+    const state = getState()
     log(`received window.ipfs.enable request from ${scope}`, opts)
 
-    // Check if all access to the IPFS node is disabled
-    if (!getState().ipfsProxy) throw new Error('User disabled access to API proxy in IPFS Companion')
+    // Check if access to the IPFS node is disabled
+    if (!state.ipfsProxy || !state.activeIntegrations(scope)) throw new Error('User disabled access to API proxy in IPFS Companion')
 
     // NOOP if .enable() was called without any arguments
     if (!opts) return

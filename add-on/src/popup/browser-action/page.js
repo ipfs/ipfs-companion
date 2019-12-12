@@ -20,19 +20,19 @@ module.exports = function browserActionPage (state, emit) {
   const onOpenWebUi = () => emit('openWebUi')
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleGlobalRedirect = () => emit('toggleGlobalRedirect')
-  const onToggleSiteRedirect = () => emit('toggleSiteRedirect')
+  const onToggleSiteIntegrations = () => emit('toggleSiteIntegrations')
   const onToggleActive = () => emit('toggleActive')
 
   const headerProps = Object.assign({ onToggleActive, onOpenPrefs }, state)
-  const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteRedirect, onCopy, onPin, onUnPin }, state)
+  const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickImport, onOpenWebUi, onToggleGlobalRedirect }, state)
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">
       ${header(headerProps)}
-      ${operations(opsProps)}
       ${activeTabActions(activeTabActionsProps)}
       ${tools(opsProps)}
+      ${operations(opsProps)}
     </div>
   `
 }
