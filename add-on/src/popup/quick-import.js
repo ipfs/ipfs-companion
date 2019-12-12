@@ -91,6 +91,7 @@ async function processFiles (state, emitter, files) {
     state.progress = 'Completed'
     emitter.emit('render')
     console.log(`Successfully imported ${streams.length} files`)
+    ipfsImportHandler.copyShareLink(result)
     ipfsImportHandler.preloadFilesAtPublicGateway(result)
     // open web UI at proper directory
     // unless and embedded node is in use (no access to web UI)

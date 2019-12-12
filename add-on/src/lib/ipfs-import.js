@@ -5,7 +5,7 @@ const browser = require('webextension-polyfill')
 
 const { redirectOptOutHint } = require('./ipfs-request')
 
-function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime) {
+function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime, copier) {
   const ipfsImportHandler = {
     formatImportDirectory (path) {
       path = path.replace(/\/$|$/, '/')
@@ -87,7 +87,24 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime)
         http.send()
       })
     },
-    preloadFilesAtPublicGateway (files) {
+    async copyShareLink (files) {
+      if (!files || !copier) return
+      const root = files.find(file => file.path === '')
+      if (!root) return
+      let path
+      if (files.length === 2) {
+        // share path to a single file in a dir
+        const file = files.find(file => file.path !== '')
+        path = `/ipfs/${root.hash}/${file.path}`
+      } else {
+        // share wrapping dir
+        path = `/ipfs/${root.hash}/`
+      }
+      const state = getState()
+      const url = ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString)
+      await copier.copyTextToClipboard(url)
+    },
+    async preloadFilesAtPublicGateway (files) {
       files.forEach(file => {
         if (file && file.hash) {
           const { path } = this.getIpfsPathAndNativeAddress(file.hash)
