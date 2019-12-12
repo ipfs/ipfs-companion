@@ -368,7 +368,7 @@ module.exports = async function init () {
     if (!details.url.startsWith('http')) return // skip special pages
     // console.info(`[ipfs-companion] onDOMContentLoaded`, details)
     if (state.linkify) {
-      console.info(`[ipfs-companion] Running linkfy experiment for ${details.url}`)
+      log(`running linkfy experiment on ${details.url}`)
       try {
         await browser.tabs.executeScript(details.tabId, {
           file: '/dist/bundles/linkifyContentScript.bundle.js',
@@ -377,29 +377,7 @@ module.exports = async function init () {
           runAt: 'document_idle'
         })
       } catch (error) {
-        console.error(`Unable to linkify DOM at '${details.url}' due to`, error)
-      }
-    }
-    if (state.catchUnhandledProtocols) {
-      // console.log(`[ipfs-companion] Normalizing links with unhandled protocols at ${tab.url}`)
-      // See: https://github.com/ipfs/ipfs-companion/issues/286
-      try {
-        // pass the URL of user-preffered public gateway
-        await browser.tabs.executeScript(details.tabId, {
-          code: `window.ipfsCompanionPubGwURL = '${state.pubGwURLString}'`,
-          matchAboutBlank: false,
-          allFrames: true,
-          runAt: 'document_start'
-        })
-        // inject script that normalizes `href` and `src` containing unhandled protocols
-        await browser.tabs.executeScript(details.tabId, {
-          file: '/dist/bundles/normalizeLinksContentScript.bundle.js',
-          matchAboutBlank: false,
-          allFrames: true,
-          runAt: 'document_end'
-        })
-      } catch (error) {
-        console.error(`Unable to normalize links at '${details.url}' due to`, error)
+        log.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
     }
     if (details.url.startsWith(state.webuiRootUrl)) {

@@ -141,8 +141,7 @@ const contentScriptsConfig = merge(commonConfig, {
   name: 'contentScripts',
   entry: {
     ipfsProxyContentScriptPayload: './add-on/src/contentScripts/ipfs-proxy/page.js',
-    linkifyContentScript: './add-on/src/contentScripts/linkifyDOM.js',
-    normalizeLinksContentScript: './add-on/src/contentScripts/normalizeLinksWithUnhandledProtocols.js'
+    linkifyContentScript: './add-on/src/contentScripts/linkifyDOM.js'
   }
 })
 
