@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Přepnout všechny integrace IPFS",
+    "message": "Zapnout/vypnout IPFS integraci",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -63,13 +63,13 @@
     "message": "Aktivní karta",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_activeTabSiteRedirectToggle": {
-    "message": "Přesměrovat na $1",
-    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  "panel_activeTabSiteIntegrationsToggle": {
+    "message": "Povolit na $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
-  "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Klepnutím přepnete přesměrování brány na$1",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
+  "panel_activeTabSiteIntegrationsToggleTooltip": {
+    "message": "Klepnutím přepnete všechny integrace IPFS na $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Připnout IPFS objekt",
@@ -92,7 +92,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "View on Gateway",
+    "message": "Zobrazit na bráně",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
@@ -132,11 +132,11 @@
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Import to IPFS",
+    "message": "Importovat do IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Import Selected Text to IPFS",
+    "message": "Import vybraného textu do IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -184,7 +184,7 @@
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "Nelze importovat přes IPFS API",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -216,7 +216,7 @@
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "File Import",
+    "message": "Import souboru",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
@@ -280,31 +280,31 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Force page load from custom gateway",
+    "message": "Načíst webové stránky z vlastní brány",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "message": "Pokud je povoleno globální přesměrování, bude to zahrnovat webové stránky DNSLink a přesměruje je na příslušné /ipns/{fqdn} cesty na vlastní bráně.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Preload visited pages",
+    "message": "Předběžné načítání navštívených stránek",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "message": "Webové servery DNSLink budou předběžně načteny do místního uzlu IPFS, aby se umožnil přístup offline a zvýšila odolnost proti selhání sítě",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "message": "Přesměrování na bránu založenou na cestě přerušuje zabezpečení založeném na původu webových stránek DNSLink. Ujistěte se, že rozumíte souvisejícím rizikům.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noRedirectHostnames_title": {
-    "message": "Přesměrovat Opt-Outs",
-    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  "option_noIntegrationsHostnames_title": {
+    "message": "IPFS integrace Opt-Outů",
+    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
-  "option_noRedirectHostnames_description": {
-    "message": "Seznam webových stránek, které by neměly být přesměrovány na vlastní bránu (včetně subresources z jiných domén). Jeden název hostitele na řádek.",
+  "option_noIntegrationsHostnames_description": {
+    "message": "Seznam webových stránek, které by neměly mít povolenou integraci IPFS. Jeden název hostitele na řádek.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -380,7 +380,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Povolit podporu pro ipfs://, ipns:// and dweb: skrze normalizování odkazů a požadavků provedeny pomocí neregistrované protokolů ",
+    "message": "Povoluje dočasnou podporu pro ipfs://, ipns:// a dweb: přesměrováním neošetřených požadavků adresního řádku na bránu HTTP",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -396,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Lookup policy for displaying context actions on websites with DNSLink",
+    "message": "Zásady vyhledávání pro zobrazování kontextových akcí na webech s DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -440,19 +440,19 @@
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Open imported files in Web UI",
+    "message": "Otevřít importované soubory ve webovém rozhraní",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "message": "Místo otevírání souboru nebo nadřazeného adresáře na bráně zobrazit soubory ve webovém rozhraní.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Imports",
+    "message": "Předběžné importy",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Umožnit automatické předběžné načtení importovaných dat prostřednictvím asynchronního požadavku HTTP HEAD na veřejnou bránu",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -464,11 +464,11 @@
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "Adresář pro import souborů",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Customize the directory used for imported files.",
+    "message": "Přizpůsobte adresář používaný pro importované soubory.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -508,7 +508,7 @@
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "Probíhá import...",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
@@ -516,15 +516,15 @@
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "Možnosti importu",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "Cesta k uložení importovaných souborů",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Otevřít ve webovém rozhraní",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {

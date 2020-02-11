@@ -63,13 +63,13 @@
     "message": "Onglet Actif",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_activeTabSiteRedirectToggle": {
-    "message": "Rediriger sur  $1",
-    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  "panel_activeTabSiteIntegrationsToggle": {
+    "message": "Activer sur $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
-  "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Cliquez pour basculer les redirections vers la passerelle sur $1",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
+  "panel_activeTabSiteIntegrationsToggleTooltip": {
+    "message": "Cliquez pour basculer toutes les intégrations IPFS sur $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Épingler la ressource IPFS",
@@ -92,7 +92,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "View on Gateway",
+    "message": "Voir sur la passerelle",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
@@ -132,11 +132,11 @@
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Import to IPFS",
+    "message": "Importer sur IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Import Selected Text to IPFS",
+    "message": "Importer le texte sélectionné sur IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -184,7 +184,7 @@
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "Impossible d'importer via l'API IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -216,7 +216,7 @@
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "File Import",
+    "message": "Importation de fichier",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
@@ -280,31 +280,31 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Force page load from custom gateway",
+    "message": "Charger les sites internets via une passerelle personnalisée",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "message": "Si la redirection globale est activée, cela inclura les sites internets DNSLink et les rediriger vers leur lien /ipns/{fqdn} respectifs à une passerelle personnalisée.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Preload visited pages",
+    "message": "Précharger les pages visitées",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "message": "Les sites web de DNSLink seront préchargés sur le nœud IPFS local pour permettre un accès hors ligne et améliorer la résilience contre les défaillances du réseau",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "message": "La redirection vers une passerelle basée sur le chemin d'accès brise l'isolement de sécurité basé sur l'origine des sites web de DNSLink. Assurez-vous de bien comprendre les risques associés.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noRedirectHostnames_title": {
-    "message": "Désengagement des redirections",
-    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  "option_noIntegrationsHostnames_title": {
+    "message": "Intégrations de l'IPFS Opt-Outs",
+    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
-  "option_noRedirectHostnames_description": {
-    "message": "Liste des sites web qui ne doivent pas être redirigés vers la passerelle personnalisée (inclut les sous-ressources d'autres domaines). Un nom d'hôte par ligne.",
+  "option_noIntegrationsHostnames_description": {
+    "message": "Liste des sites web qui ne doivent pas avoir d'intégration IPFS activée. Un nom d'hôte par ligne.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -380,7 +380,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Active le support des protocoles ipfs://, ipns:// et dweb: en normalisant les liens et demandes faites avec des protocoles non gérés",
+    "message": "Active provisoirement le support pour ipfs:// ipns:// et dweb: En redérigeant pour les addresse non traité par une passerelle HTTP",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -392,11 +392,11 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup",
+    "message": "Recherche DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Lookup policy for displaying context actions on websites with DNSLink",
+    "message": "Politique de recherche pour l'affichage des actions contextuelles sur les sites web avec DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -440,19 +440,19 @@
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Open imported files in Web UI",
+    "message": "Ouvrir les fichiers importés pour l'interface web",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "message": "Affiché les fichiers dans l'interface web plutôt que d'ouvrir le fichier ou le répertoire parent à la passerelle.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Imports",
+    "message": "Préchargement des importations",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Permet le préchargement automatique des biens importés via une requête HTTP HEAD asynchrone vers une passerelle publique",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -464,11 +464,11 @@
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "répertoire d'import de fichiers",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Customize the directory used for imported files.",
+    "message": "Choisir le répertoire utilisé pour les fichiers importés.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -508,7 +508,7 @@
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "import en progression...",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
@@ -516,15 +516,15 @@
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "options d'import",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "Chemin pour stocker les fichiers importé",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "ouvrir l'interface web",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {

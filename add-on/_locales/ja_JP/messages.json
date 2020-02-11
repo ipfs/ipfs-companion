@@ -63,13 +63,13 @@
     "message": "アクティブタブ",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_activeTabSiteRedirectToggle": {
-    "message": "$1にリダイレクト",
-    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  "panel_activeTabSiteIntegrationsToggle": {
+    "message": "$1 で有効にする",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
-  "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "クリックして$1のゲートウェイリダイレクトを切り替えます",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
+  "panel_activeTabSiteIntegrationsToggleTooltip": {
+    "message": "クリックして $1 のすべてのIPFS統合を切り替えます",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "IPFSリソースの固定",
@@ -280,7 +280,7 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "カスタムゲートウェイからページを強制的に読み込む",
+    "message": "カスタムゲートウェイからWebサイトを読み込む",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
@@ -296,15 +296,15 @@
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "パスベースのゲートウェイにリダイレクトすると、DNSLink Webサイトのオリジンベースのセキュリティ分離が壊されます！関連するリスクを認識していない限り（およびそれで問題ない場合）、これを無効のままにしてください。",
+    "message": "パスベースのゲートウェイにリダイレクトすると、DNSLink Webサイトのオリジンベースのセキュリティ分離が壊れます。関連するリスクを確実に理解してください。",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noRedirectHostnames_title": {
-    "message": "リダイレクトのオプトアウト",
-    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  "option_noIntegrationsHostnames_title": {
+    "message": "IPFSインテグレーションのオプトアウト",
+    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
-  "option_noRedirectHostnames_description": {
-    "message": "カスタムゲートウェイ（他のドメインからのサブリソースを含む）にリダイレクトすべきではないWebサイトのリスト。 1行に1つのホスト名。",
+  "option_noIntegrationsHostnames_description": {
+    "message": "IPFS統合を有効にしてはならないWebサイトのリスト。 1行に1つのホスト名。",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -380,7 +380,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "未処理のプロトコルで正規化されたリンクとリクエストを行なうことにより、ipfs://、ipns://、dweb: のサポートを有効にします",
+    "message": "未処理のアドレスバー要求をHTTPゲートウェイにリダイレクトすることにより、ipfs:// 、ipns:// 、および dweb: の暫定的なサポートを有効にします",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {

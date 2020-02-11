@@ -63,13 +63,13 @@
     "message": "Aktivt faneblad",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_activeTabSiteRedirectToggle": {
-    "message": "Omdirriger for $1",
-    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  "panel_activeTabSiteIntegrationsToggle": {
+    "message": "Enable on $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
-  "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Klik for at omskifte gateway omdirrigeringer for $1",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
+  "panel_activeTabSiteIntegrationsToggleTooltip": {
+    "message": "Click to toggle all IPFS integrations on $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Fastgør IPFS resource",
@@ -280,7 +280,7 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Force page load from custom gateway",
+    "message": "Load websites from Custom Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
@@ -296,15 +296,15 @@
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink websites. Make sure you understand related risks.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noRedirectHostnames_title": {
-    "message": "Omdirrigerer fravalg",
-    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  "option_noIntegrationsHostnames_title": {
+    "message": "IPFS Integrations Opt-Outs",
+    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
-  "option_noRedirectHostnames_description": {
-    "message": "Liste med hjemmesider som ikke bør omdirrigeres til den valgfrie Gateway (inkluderer under-ressourcer fra øvrige domæner). Et værtsnavn per linje.",
+  "option_noIntegrationsHostnames_description": {
+    "message": "List of websites that should not have any IPFS integrations enabled. One hostname per line.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -380,7 +380,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Aktiver understøttelse for ipfs://, ipns:// og dweb: gennem at normalisere links og forespørgsler foretaget via ikke-håndterede protokoller",
+    "message": "Enables provisional support for ipfs://, ipns:// and dweb: by redirecting unhandled address bar requests to an HTTP gateway",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {

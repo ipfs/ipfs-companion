@@ -63,20 +63,20 @@
     "message": "Scheda Attiva",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
-  "panel_activeTabSiteRedirectToggle": {
-    "message": "Reindirizza a $1",
-    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectToggle)"
+  "panel_activeTabSiteIntegrationsToggle": {
+    "message": "Abilita su $1",
+    "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
-  "panel_activeTabSiteRedirectToggleTooltip": {
-    "message": "Clicca qui per attivare tutti i reindirizzamenti del gateway a $1",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteRedirectToggleTooltip)"
+  "panel_activeTabSiteIntegrationsToggleTooltip": {
+    "message": "Clicca per impostare tutte le integrazioni IPFS su $1",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
     "message": "Fissare Risorsa IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Fissando un CID comunichi al tuo nodo IPFS che quei dati sono importanti e non devono essere gettati via.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -92,7 +92,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "View on Gateway",
+    "message": "Visualizza su Gateway",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
@@ -132,11 +132,11 @@
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Import to IPFS",
+    "message": "Importa su IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Import Selected Text to IPFS",
+    "message": "Importa il Testo Selezionato su IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -184,7 +184,7 @@
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "Non è possibile importare via API IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -216,7 +216,7 @@
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "File Import",
+    "message": "Importo File",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
@@ -228,11 +228,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded: run js-ipfs node in your browser (read about its limitations under the link below)",
+    "message": "Integrato: avvia js-ipfs node nel tuo browser (leggi riguardo alle sue limitazioni nel collegamento sottostante)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "message": "Integrato con Chrome Sockets: avvia js-ipfs node nel tuo browser con accesso a chrome.sockets API (dettagli nel collegamento sottostante)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -240,7 +240,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
+    "message": "Configurazione aggiuntiva per i nodi JS IPFS integrati. Deve essere JSON valido.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -252,7 +252,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "Integrato + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -280,31 +280,31 @@
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Force page load from custom gateway",
+    "message": "Carica siti web da Gateway personalizzato",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "message": "Se il reindirizzamento globale è abilitato, ciò includerà i siti web DNSLink e li reindirizzerà ai rispettivi percorsi /ipns/{fqdn} nel Gateway personalizzato",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Preload visited pages",
+    "message": "Precarica pagine visitate",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "message": "I siti web DNSLink verranno precaricati al nodo IPFS locale per abilitare l'accesso offline e migliorare la resistenza ai guasti della rete",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink website! Please leave this disabled unless you are aware of (and ok with) related risks.",
+    "message": "Reindirizzando ad un gateway path-based viola l'isolamento di sicurezza Origin-based dei siti web DNSLink. Assicurati di comprenderne i relativi rischi.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noRedirectHostnames_title": {
-    "message": "Redirect Opt-Outs",
-    "description": "An option title on the Preferences screen (option_noRedirectHostnames_title)"
+  "option_noIntegrationsHostnames_title": {
+    "message": "Omissioni delle integrazioni IPFS",
+    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
-  "option_noRedirectHostnames_description": {
-    "message": "List of websites that should not be redirected to the Custom Gateway (includes subresources from other domains). One hostname per line.",
+  "option_noIntegrationsHostnames_description": {
+    "message": "Lista di siti web che non dovrebbero avere integrazioni IPFS abilitate. Un solo nome di host per riga.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -316,11 +316,11 @@
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "Gateway di Sottodominio Pubblico Predefinito",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
+    "message": "Gateway di sottodominio pubblico predefinito per il recupero di gateway di sottodominio guasti",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -360,7 +360,7 @@
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experimental": {
-    "message": "experimental",
+    "message": "sperimentale",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
@@ -380,7 +380,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Attiva il supporto per ipfs://, ipns:// e dweb: normalizzando i collegamenti e le richieste fatte con protocolli non gestiti",
+    "message": "Abilita supporto provvisorio per ipfs://, ipns:// e dweb: reindirizzando richieste non gestite, inserite nella barra degli indirizzi, ad un gateway HTTP",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -392,11 +392,11 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup",
+    "message": "Lookup DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Lookup policy for displaying context actions on websites with DNSLink",
+    "message": "Politica di lookup per visualizzare azioni contestuali su siti web con DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -412,11 +412,11 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Recupera Richieste HTTP Fallite",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "message": "Recupera richieste HTTP fallite per risorse IPFS reindirizzandole al gateway pubblico.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -440,19 +440,19 @@
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Open imported files in Web UI",
+    "message": "Apri file importati in Web UI",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "message": "Mostra file in Web UI piuttosto che aprirli o mostrare il loro percorso nel gateway",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Imports",
+    "message": "Precarica Importazioni",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Abilita il precaricamento automatico di risorse importare tramite richieste HTTP-HEAD asincrone ad un Gateway Pubblico",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -460,15 +460,15 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "message": "Personalizza quali namespace sono registrati nella Console del Browser. Cambiando questo valore innescherai un riavvio dell'estensione.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "Directory importo file",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Customize the directory used for imported files.",
+    "message": "Personalizza la directory utilizzata per i file importati",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -508,7 +508,7 @@
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "Importo in corso...",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
@@ -516,15 +516,15 @@
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "Opzioni importo",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "Percorso in cui archiviare i file importati",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Apri in Web UI",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
@@ -568,11 +568,11 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "IPFS Companion dovrebbe permettere «$1» di accedere «$2» al nodo connesso?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Applica questa decisione a tutti i correnti e futuri permessi in questo ambito",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
