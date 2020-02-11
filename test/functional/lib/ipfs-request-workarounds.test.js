@@ -1,6 +1,6 @@
 'use strict'
 const { describe, it, before, beforeEach, after } = require('mocha')
-const { expect } = require('chai')
+const { expect, assert } = require('chai')
 const { URL } = require('url') // URL implementation with support for .origin attribute
 const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
@@ -156,6 +156,30 @@ describe('modifyRequest processing', function () {
       expect(responseHeaders).to.deep.include(acahHeader)
 
       browser.runtime.getURL.flush()
+    })
+  })
+
+  // We've moved blog to blog.ipfs.io and fixe but links to ipfs.io/blog/*
+  // are still around due to the way Discourse integration was done for comments.
+  // https://github.com/ipfs/blog/issues/360
+  describe('a failed main_frame request to /ipns/ipfs.io/blog', function () {
+    it('should be updated to /ipns/blog.ipfs.io', async function () {
+      const brokenDnslinkUrl = 'http://example.com/ipns/ipfs.io/blog/some-post'
+      const fixedDnslinkUrl = 'http://example.com/ipns/blog.ipfs.io/some-post'
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const request = {
+        statusCode: 404,
+        type: 'main_frame',
+        url: brokenDnslinkUrl
+      }
+      browser.tabs.update.flush()
+      assert.ok(browser.tabs.update.notCalled)
+      modifyRequest.onCompleted(request)
+      assert.ok(browser.tabs.update.withArgs({ url: fixedDnslinkUrl }).calledOnce)
+      browser.tabs.update.flush()
     })
   })
 

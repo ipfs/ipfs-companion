@@ -450,6 +450,16 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       const state = getState()
       if (!state.active) return
       if (request.statusCode === 200) return // finish if no error to recover from
+
+      // Seamlessly fix canonical link when DNSLink breaks ipfs.io/blog/*
+      /// https://github.com/ipfs/blog/issues/360
+      if (request.type === 'main_frame' &&
+          request.statusCode === 404 &&
+          request.url.includes('/ipns/ipfs.io/blog')) {
+        log('onCompleted: fixing /ipns/ipfs.io/blog → /ipns/blog.ipfs.io')
+        return browser.tabs.update({ url: request.url.replace('/ipns/ipfs.io/blog', '/ipns/blog.ipfs.io') })
+      }
+
       let redirectUrl
       if (isRecoverable(request, state, ipfsPathValidator)) {
         // if subdomain request redirect to default public subdomain url
