@@ -455,7 +455,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       /// https://github.com/ipfs/blog/issues/360
       if (request.type === 'main_frame' &&
           request.statusCode === 404 &&
-          request.url.includes('/ipns/ipfs.io/blog')) {
+          request.url.match(/\/\/[^/]+\/ipns\/ipfs\.io\/blog\//)) {
         log('onCompleted: fixing /ipns/ipfs.io/blog → /ipns/blog.ipfs.io')
         return browser.tabs.update({ url: request.url.replace('/ipns/ipfs.io/blog', '/ipns/blog.ipfs.io') })
       }

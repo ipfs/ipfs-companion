@@ -6,7 +6,7 @@ const browser = require('sinon-chrome')
 const { initState } = require('../../../add-on/src/lib/state')
 const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
 const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
-const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
+const createDNSLinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
@@ -33,7 +33,7 @@ describe('modifyRequest processing', function () {
     state = initState(optionDefaults)
     getState = () => state
     const getIpfs = () => {}
-    dnslinkResolver = createDnslinkResolver(getState)
+    dnslinkResolver = createDNSLinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
@@ -159,13 +159,13 @@ describe('modifyRequest processing', function () {
     })
   })
 
-  // We've moved blog to blog.ipfs.io and fixe but links to ipfs.io/blog/*
+  // We've moved blog to blog.ipfs.io but links to ipfs.io/blog/*
   // are still around due to the way Discourse integration was done for comments.
   // https://github.com/ipfs/blog/issues/360
   describe('a failed main_frame request to /ipns/ipfs.io/blog', function () {
     it('should be updated to /ipns/blog.ipfs.io', async function () {
-      const brokenDnslinkUrl = 'http://example.com/ipns/ipfs.io/blog/some-post'
-      const fixedDnslinkUrl = 'http://example.com/ipns/blog.ipfs.io/some-post'
+      const brokenDNSLinkUrl = 'http://example.com/ipns/ipfs.io/blog/some-post'
+      const fixedDNSLinkUrl = 'http://example.com/ipns/blog.ipfs.io/some-post'
       // ensure clean modifyRequest
       runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
@@ -173,12 +173,12 @@ describe('modifyRequest processing', function () {
       const request = {
         statusCode: 404,
         type: 'main_frame',
-        url: brokenDnslinkUrl
+        url: brokenDNSLinkUrl
       }
       browser.tabs.update.flush()
       assert.ok(browser.tabs.update.notCalled)
       modifyRequest.onCompleted(request)
-      assert.ok(browser.tabs.update.withArgs({ url: fixedDnslinkUrl }).calledOnce)
+      assert.ok(browser.tabs.update.withArgs({ url: fixedDNSLinkUrl }).calledOnce)
       browser.tabs.update.flush()
     })
   })
