@@ -457,7 +457,13 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           request.statusCode === 404 &&
           request.url.match(/\/\/[^/]+\/ipns\/ipfs\.io\/blog\//)) {
         log('onCompleted: fixing /ipns/ipfs.io/blog → /ipns/blog.ipfs.io')
-        return browser.tabs.update({ url: request.url.replace('/ipns/ipfs.io/blog', '/ipns/blog.ipfs.io') })
+        const fixedUrl = request.url.replace('/ipns/ipfs.io/blog', '/ipns/blog.ipfs.io')
+
+        // Chromium bug: sometimes tabs.update does not work from onCompleted,
+        // we run additional update after 1s just to be sure
+        setTimeout(() => browser.tabs.update({ url: fixedUrl }), 1000)
+
+        return browser.tabs.update({ url: fixedUrl })
       }
 
       let redirectUrl
