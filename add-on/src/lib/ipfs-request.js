@@ -407,6 +407,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (isRecoverableViaEthDNS(request, state)) {
         const url = new URL(request.url)
         url.hostname = `${url.hostname}.link`
+        url.protocol = 'https:' // force HTTPS, as HSTS may be missing on initial load
         const redirect = { redirectUrl: url.toString() }
         log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirect.redirectUrl}`, request)
         return createTabWithURL(redirect, browser, recoveredTabs)
