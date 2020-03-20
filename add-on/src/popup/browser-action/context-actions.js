@@ -5,6 +5,7 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
 const navHeader = require('./nav-header')
+const { sameGateway } = require('../../lib/ipfs-path')
 const {
   contextMenuViewOnGateway,
   contextMenuCopyAddressAtPublicGw,
@@ -38,11 +39,16 @@ function contextActions ({
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable
   const activePinControls = active && isIpfsOnline && isApiAvailable
-  const activeViewOnGateway = currentTab && !(currentTab.url.startsWith(pubGwURLString) || currentTab.url.startsWith(gwURLString))
+  const activeViewOnGateway = (currentTab) => {
+    if (!currentTab) return false
+    const { url } = currentTab
+    return !(sameGateway(url, gwURLString) || sameGateway(url, pubGwURLString))
+  }
+
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
     return html`<div>
-  ${activeViewOnGateway ? navItem({
+  ${activeViewOnGateway(currentTab) ? navItem({
     text: browser.i18n.getMessage(contextMenuViewOnGateway),
     onClick: () => onViewOnGateway(contextMenuViewOnGateway)
   }) : null}
@@ -105,4 +111,5 @@ function activeTabActions (state) {
       </div>
   `
 }
+
 module.exports.activeTabActions = activeTabActions

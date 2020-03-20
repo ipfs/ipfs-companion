@@ -6,6 +6,7 @@ const browser = require('webextension-polyfill')
 const { redirectOptOutHint } = require('./ipfs-request')
 
 function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime, copier) {
+  const { resolveToPublicUrl } = ipfsPathValidator
   const ipfsImportHandler = {
     formatImportDirectory (path) {
       path = path.replace(/\/$|$/, '/')
@@ -72,7 +73,7 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
       return new Promise((resolve, reject) => {
         const http = new XMLHttpRequest()
         // Make sure preload request is excluded from global redirect
-        const preloadUrl = ipfsPathValidator.resolveToPublicUrl(`${path}#${redirectOptOutHint}`, state.pubGwURLString)
+        const preloadUrl = resolveToPublicUrl(`${path}#${redirectOptOutHint}`)
         http.open('HEAD', preloadUrl)
         http.onreadystatechange = function () {
           if (this.readyState === this.DONE) {
@@ -100,8 +101,7 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
         // share wrapping dir
         path = `/ipfs/${root.hash}/`
       }
-      const state = getState()
-      const url = ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString)
+      const url = resolveToPublicUrl(path)
       await copier.copyTextToClipboard(url)
     },
     async preloadFilesAtPublicGateway (files) {

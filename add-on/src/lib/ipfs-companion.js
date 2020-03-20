@@ -8,9 +8,9 @@ log.error = debug('ipfs-companion:main:error')
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
-const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
+const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator } = require('./ipfs-path')
+const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
@@ -22,6 +22,7 @@ const createInspector = require('./inspector')
 const { createRuntimeChecks } = require('./runtime-checks')
 const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
+const { registerSubdomainProxy } = require('./http-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
 // init happens on addon load in background/background.js
@@ -84,6 +85,7 @@ module.exports = async function init () {
     log('register all listeners')
     registerListeners()
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
     await showPendingLandingPages()
   } catch (error) {
@@ -189,7 +191,8 @@ module.exports = async function init () {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString) : null
+      const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
+      const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }
@@ -321,7 +324,7 @@ module.exports = async function init () {
     }
     ipfsImportHandler.copyShareLink(result)
     ipfsImportHandler.preloadFilesAtPublicGateway(result)
-    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
+    if (!state.localGwAvailable || !state.openViaWebUI) {
       return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
     } else {
       return ipfsImportHandler.openFilesAtWebUI(importDir)
@@ -353,7 +356,7 @@ module.exports = async function init () {
     // Chrome does not permit for both pageAction and browserAction to be enabled at the same time
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
     if (runtime.isFirefox && ipfsPathValidator.isIpfsPageActionsContext(url)) {
-      if (url.startsWith(state.gwURLString) || url.startsWith(state.apiURLString)) {
+      if (sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL)) {
         await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-on.svg' })
         await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
       } else {
@@ -554,7 +557,7 @@ module.exports = async function init () {
     // enable/disable gw redirect based on API going online or offline
     // newPeerCount === -1 currently implies node is offline.
     // TODO: use `node.isOnline()` if available (js-ipfs)
-    if (state.automaticMode && state.ipfsNodeType !== 'embedded') {
+    if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         browser.storage.local.set({ useCustomGateway: true })
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
@@ -619,7 +622,8 @@ module.exports = async function init () {
         case 'customGatewayUrl':
           state.gwURL = new URL(change.newValue)
           state.gwURLString = state.gwURL.toString()
-          state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
+          // TODO: for now we load webui from API port, should we remove this?
+          // state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)
@@ -632,8 +636,26 @@ module.exports = async function init () {
         case 'useCustomGateway':
           state.redirect = change.newValue
           break
+        case 'useSubdomainProxy':
+          state[key] = change.newValue
+          // More work is needed, as this key decides how requests are routed
+          // to the gateway:
+          await browser.storage.local.set({
+            // We need to update the hostname in customGatewayUrl:
+            // 127.0.0.1 - path gateway
+            // localhost - subdomain gateway
+            customGatewayUrl: guiURLString(
+              state.gwURLString, {
+                useLocalhostName: state.useSubdomainProxy
+              }
+            )
+          })
+          // Finally, update proxy settings based on the state
+          await registerSubdomainProxy(getState, runtime)
+          break
         case 'ipfsProxy':
           state[key] = change.newValue
+          // This is window.ipfs proxy, requires update of the content script:
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
           break
         case 'dnslinkPolicy':
@@ -642,16 +664,12 @@ module.exports = async function init () {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
           break
-        case 'recoverFailedHttpRequests':
-          state[key] = change.newValue
-          break
         case 'logNamespaces':
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
           break
+        case 'recoverFailedHttpRequests':
         case 'importDir':
-          state[key] = change.newValue
-          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':

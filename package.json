@@ -83,8 +83,8 @@
     "multiaddr": "6.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.7.5",
-    "@babel/preset-env": "7.7.5",
+    "@babel/core": "7.9.0",
+    "@babel/preset-env": "7.9.0",
     "babel-loader": "8.0.6",
     "babel-plugin-syntax-async-generators": "6.13.0",
     "chai": "4.2.0",
@@ -110,13 +110,13 @@
     "sinon-chrome": "3.0.1",
     "standard": "14.3.1",
     "tar": "5.0.5",
-    "terser": "4.4.2",
-    "terser-webpack-plugin": "2.2.2",
+    "terser": "4.6.7",
+    "terser-webpack-plugin": "2.3.5",
     "transform-loader": "0.2.4",
     "web-ext": "4.1.0",
-    "webpack": "4.41.2",
-    "webpack-bundle-analyzer": "3.6.0",
-    "webpack-cli": "3.3.10",
+    "webpack": "4.42.0",
+    "webpack-bundle-analyzer": "3.6.1",
+    "webpack-cli": "3.3.11",
     "webpack-merge": "4.2.2"
   },
   "dependencies": {
@@ -140,7 +140,7 @@
     "ipfs-postmsg-proxy": "3.1.1",
     "ipfsx": "0.17.0",
     "is-fqdn": "1.0.1",
-    "is-ipfs": "0.6.1",
+    "is-ipfs": "https://github.com/ipfs/is-ipfs/tarball/d9e7082587595a5c7a192405342fae18865c33f9/is-ipfs.tar.gz",
     "is-svg": "4.2.0",
     "it-to-stream": "0.1.1",
     "lru-cache": "5.1.1",
@@ -156,10 +156,10 @@
     "pull-file-reader": "1.0.2",
     "readable-stream": "3.4.0",
     "tachyons": "4.11.1",
-    "tar-stream": "2.1.0",
+    "tar-stream": "2.1.2",
     "timers-browserify-full": "0.0.1",
     "uri-to-multiaddr": "3.0.1",
-    "webextension-polyfill": "0.5.0",
+    "webextension-polyfill": "0.6.0",
     "webrtc-ips": "0.1.4"
   },
   "engines": {

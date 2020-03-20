@@ -268,7 +268,7 @@
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://localhost”, “http://127.0.0.1”, “http://[::1]” or “https://”",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {

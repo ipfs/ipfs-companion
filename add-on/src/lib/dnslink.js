@@ -9,7 +9,7 @@ const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
 const { default: PQueue } = require('p-queue')
 const { offlinePeerCount } = require('./state')
-const { pathAtHttpGateway } = require('./ipfs-path')
+const { sameGateway, pathAtHttpGateway } = require('./ipfs-path')
 
 // TODO: add Preferences toggle to disable redirect of DNSLink  websites (while keeping async dnslink lookup)
 
@@ -47,11 +47,11 @@ module.exports = function createDnslinkResolver (getState) {
       return state.dnslinkPolicy &&
         requestUrl.startsWith('http') &&
         !IsIpfs.url(requestUrl) &&
-        !requestUrl.startsWith(state.apiURLString) &&
-        !requestUrl.startsWith(state.gwURLString)
+        !sameGateway(requestUrl, state.apiURL) &&
+        !sameGateway(requestUrl, state.gwURL)
     },
 
-    dnslinkRedirect (url, dnslink) {
+    dnslinkAtGateway (url, dnslink) {
       if (typeof url === 'string') {
         url = new URL(url)
       }
@@ -61,9 +61,8 @@ module.exports = function createDnslinkResolver (getState) {
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
         const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
-        const gateway = state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString
-        // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
-        return { redirectUrl: pathAtHttpGateway(ipnsPath, gateway) }
+        const gateway = state.localGwAvailable ? state.gwURLString : state.pubGwURLString
+        return pathAtHttpGateway(ipnsPath, gateway)
       }
     },
 
@@ -111,7 +110,7 @@ module.exports = function createDnslinkResolver (getState) {
       preloadUrlCache.set(url, true)
       const dnslink = await dnslinkResolver.resolve(url)
       if (!dnslink) return
-      if (state.ipfsNodeType === 'embedded') return
+      if (!state.localGwAvailable) return
       if (state.peerCount < 1) return
       return preloadQueue.add(async () => {
         const { pathname } = new URL(url)

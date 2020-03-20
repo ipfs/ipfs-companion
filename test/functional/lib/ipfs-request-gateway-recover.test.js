@@ -61,8 +61,18 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
-    it('should do nothing if broken request is a non-public IPFS request', async function () {
+    it('should do nothing if broken request is a local request to 127.0.0.1/ipfs', async function () {
       const request = urlRequestWithStatus('http://127.0.0.1:8080/ipfs/QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
+      await requestHandler.onCompleted(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should do nothing if broken request is a local request to localhost/ipfs', async function () {
+      const request = urlRequestWithStatus('http://localhost:8080/ipfs/QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
+      await requestHandler.onCompleted(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should do nothing if broken request is a local request to *.ipfs.localhost', async function () {
+      const request = urlRequestWithStatus('http://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhw.ipfs.localhost:8080/', 500)
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
@@ -171,13 +181,14 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.create.withArgs({ url: 'https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with IPFS default public gateway URL')
     })
-    it('should recover from unreachable HTTP server by reopening DNSLink on the public gateway', async function () {
+    it('should recover from unreachable HTTP server by reopening DNSLink on the active gateway', async function () {
       state.dnslinkPolicy = 'best-effort'
       dnslinkResolver.setDnslink('en.wikipedia-on-ipfs.org', '/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco')
-      const expectedUrl = 'http://127.0.0.1:8080/ipns/en.wikipedia-on-ipfs.org/'
+      // avoid DNS failures when recovering to local gateweay (if available)
+      const expectedUrl = 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org/'
       const request = urlRequestWithNetworkError('https://en.wikipedia-on-ipfs.org/')
       await requestHandler.onErrorOccurred(request)
-      assert.ok(browser.tabs.create.withArgs({ url: expectedUrl, active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with ENS resource on local gateway URL')
+      assert.ok(browser.tabs.create.withArgs({ url: expectedUrl, active: true, openerTabId: 20 }).calledOnce, 'tabs.create should be called with DNSLink on local gateway URL')
       dnslinkResolver.clearCache()
     })
     it('should recover from failed DNS for .eth opening it on EthDNS gateway at .eth.link', async function () {
