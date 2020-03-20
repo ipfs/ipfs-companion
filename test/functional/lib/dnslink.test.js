@@ -81,8 +81,10 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
       const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
       dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
       expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+      // note: locahost will redirect to subdomain if its go-ipfs >0.5,
+      // so companion does not need to handle that
       expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
-        .to.equal('http://127.0.0.1:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
+        .to.equal('http://localhost:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
     })
     it('[embedded node] should return redirect to public gateway if dnslink is present in cache', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
@@ -163,8 +165,10 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
       spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
+      // note: locahost will redirect to subdomain if its go-ipfs >0.5,
+      // so companion does not need to handle that
       expect(dnslinkResolver.dnslinkRedirect(url.toString()).redirectUrl)
-        .to.equal('http://127.0.0.1:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
+        .to.equal('http://localhost:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
     })
     it('[embedded node] should return redirect to public gateway if DNS TXT record is present and path does not belong to a gateway', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')

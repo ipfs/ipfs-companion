@@ -67,6 +67,7 @@ module.exports = function optionsPage (state, emit) {
     ipfsNodeType: state.options.ipfsNodeType,
     customGatewayUrl: state.options.customGatewayUrl,
     useCustomGateway: state.options.useCustomGateway,
+    useSubdomainProxy: state.options.useSubdomainProxy,
     publicGatewayUrl: state.options.publicGatewayUrl,
     publicSubdomainGatewayUrl: state.options.publicSubdomainGatewayUrl,
     noIntegrationsHostnames: state.options.noIntegrationsHostnames,

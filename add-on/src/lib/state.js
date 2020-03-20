@@ -22,15 +22,30 @@ function initState (options, overrides) {
   delete state.publicSubdomainGatewayUrl
   state.redirect = options.useCustomGateway
   delete state.useCustomGateway
-  state.apiURL = safeURL(options.ipfsApiUrl)
+  state.apiURL = safeURL(options.ipfsApiUrl, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
   state.apiURLString = state.apiURL.toString()
   delete state.ipfsApiUrl
-  state.gwURL = safeURL(options.customGatewayUrl)
+  state.gwURL = safeURL(options.customGatewayUrl, { useLocalhostName: state.useSubdomainProxy })
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
   state.webuiCid = webuiCid
-  state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
+
+  // TODO: unify the way webui is opened
+  // - https://github.com/ipfs-shipyard/ipfs-companion/pull/737
+  // - https://github.com/ipfs-shipyard/ipfs-companion/pull/738
+  // Context: previously, we loaded webui from gateway port
+  // (`${state.gwURLString}ipfs/${state.webuiCid}/`) because API port
+  // has hardcoded list of whitelisted webui versions.
+  // To enable API access from webui loaded from Gateway port Companion
+  // removed Origin header to avoid CORS, now we move away from that
+  // complexity and for now just load version whitelisted on API port.
+  // In the future, we want to load webui from $webuiCid.ipfs.localhost
+  // and whitelist API access from that specific hostname
+  // by appending it to API.HTTPHeaders.Access-Control-Allow-Origin list
+  // When that is possible, we can remove Origin manipulation (see PR #737 for PoC)
+  state.webuiRootUrl = `${state.apiURLString}webui/`
+
   // attach helper functions
   state.activeIntegrations = (url) => {
     if (!state.active) return false

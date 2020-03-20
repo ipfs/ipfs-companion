@@ -497,11 +497,14 @@ function isSafeToRedirect (request, runtime) {
     return false
   }
 
+  /* TODO: unify the way subdomain redirect and DNSLink is handled,
+   *  It should be redirected to local node when its name is 'localhost'
+   * (provide a single toggle for disabling redirect via Preferences?)
   // For now we do not redirect if cid-in-subdomain is used
   // as it would break origin-based security perimeter
   if (IsIpfs.subdomain(request.url)) {
     return false
-  }
+  }*/
 
   // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox
   // See: https://github.com/ipfs-shipyard/ipfs-companion/issues/436

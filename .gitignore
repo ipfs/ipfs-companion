@@ -7,6 +7,7 @@ build
 npm-debug.log
 yarn-error.log
 crowdin.yml
+.connect-deps*
 .*~
 add-on/dist
 add-on/webui/
