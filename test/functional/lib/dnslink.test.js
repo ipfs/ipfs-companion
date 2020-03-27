@@ -209,6 +209,44 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
     })
   })
 
+  describe('findDNSLinkHostname(url)', function () {
+    it('should match <fqdn> directly', function () {
+      const fqdn = 'dnslink-site.com'
+      const url = new URL(`https://${fqdn}/some/path?ds=sdads#dfsdf`)
+      const dnslinkResolver = createDnslinkResolver(getState)
+      spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
+    })
+    /* TODO
+    it('should return null if no DNSLink record', function () {
+      const url = new URL(`https://no-dnslink.example.com/some/path?ds=sdads#dfsdf`)
+      const dnslinkResolver = createDnslinkResolver(getState)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(undefined)
+    })
+    */
+    it('should match /ipns/<fqdn> on path gateway', function () {
+      const fqdn = 'dnslink-site.com'
+      const url = `https://path-gateway.com/ipns/${fqdn}/some/path?ds=sdads#dfsdf`
+      const dnslinkResolver = createDnslinkResolver(getState)
+      spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
+    })
+    it('should match <fqdn>.ipns on local subdomain gateway', function () {
+      const fqdn = 'dnslink-site.com'
+      const url = `https://${fqdn}.ipns.localhost:8080/some/path?ds=sdads#dfsdf`
+      const dnslinkResolver = createDnslinkResolver(getState)
+      spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
+    })
+    it('should match <fqdn>.ipns on public subdomain gateway', function () {
+      const fqdn = 'dnslink-site.com'
+      const url = `https://${fqdn}.ipns.dweb.link/some/path?ds=sdads#dfsdf`
+      const dnslinkResolver = createDnslinkResolver(getState)
+      spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
+    })
+  })
+
   after(() => {
     delete global.URL
   })

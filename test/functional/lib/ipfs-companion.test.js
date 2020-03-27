@@ -25,7 +25,7 @@ describe('init', function () {
     browser.storage.local.set.returns(Promise.resolve())
     const ipfsCompanion = await init()
     browser.storage.local.get.calledWith(optionDefaults)
-    ipfsCompanion.destroy()
+    await ipfsCompanion.destroy()
   })
 
   it('should fixup migrated files APIs', async function () {
@@ -42,7 +42,7 @@ describe('init', function () {
       expect(typeof ipfsCompanion.ipfs[cmd], `ipfs.${cmd} expected to be a function`).to.equal('function')
       expect(typeof ipfsCompanion.ipfs.files[cmd], `ipfs.files.${cmd} expected to be a function`).to.equal('function')
     }
-    ipfsCompanion.destroy()
+    await ipfsCompanion.destroy()
   })
 
   after(function () {
@@ -86,7 +86,7 @@ describe.skip('onStorageChange()', function () {
     const ipfs = global.window.ipfs
     browser.storage.onChanged.dispatch(changes, area)
     expect(ipfs).to.not.equal(window.ipfs)
-    ipfsCompanion.destroy()
+    await ipfsCompanion.destroy()
   })
 
   after(function () {

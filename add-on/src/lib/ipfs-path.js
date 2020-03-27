@@ -170,8 +170,8 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
     // Test if actions such as 'per site redirect toggle' should be enabled for the URL
     isRedirectPageActionsContext (url) {
-      const { ipfsNodeType, gwURL, apiURL } = getState()
-      return ipfsNodeType !== 'embedded' && // hide with embedded node
+      const { localGwAvailable, gwURL, apiURL } = getState()
+      return localGwAvailable && // show only when redirect is possible
       (isIPFS.ipnsUrl(url) || // show on /ipns/<fqdn>
         (url.startsWith('http') && // hide on non-HTTP pages
          !sameGateway(url, gwURL) && // hide on /ipfs/* and *.ipfs.
@@ -204,8 +204,9 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
         // Instead, we resolve it to the canonical FQDN Origin
         //
         // Remove gateway suffix to get potential FQDN
-        const url = new URL(input)
-        const ipnsId = url.hostname.replace(`.ipns.${pubSubdomainGwURL.hostname}`, '')
+        const url = new URL(subdomainUrl)
+        // TODO: replace below with regex that match any subdomain gw
+        const { id: ipnsId } = subdomainPatternMatch(url)
         // Ensure it includes .tld (needs at least one dot)
         if (ipnsId.includes('.')) {
           // Confirm DNSLink record is present and its not a false-positive

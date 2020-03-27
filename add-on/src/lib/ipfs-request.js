@@ -63,6 +63,31 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     }
   }
 
+  // Returns a canonical hostname representing the site from url
+  // Main reason for this is unwrapping DNSLink from local subdomain
+  // <fqdn>.ipns.localhost → <fqdn>
+  const findSiteFqdn = (url) => {
+    if (isIPFS.ipnsSubdomain(url)) {
+      // convert subdomain's <fqdn>.ipns.gateway.tld to <fqdn>
+      const fqdn = dnslinkResolver.findDNSLinkHostname(url)
+      if (fqdn) return fqdn
+    }
+    return new URL(url).hostname
+  }
+
+  // Finds canonical hostname of request.url and its parent page (if present)
+  const findSiteHostnames = (request) => {
+    const { url, originUrl, initiator } = request
+    const fqdn = findSiteFqdn(url)
+    // FF: originUrl (Referer-like Origin URL), Chrome: initiator (just Origin)
+    const parentUrl = originUrl || initiator
+    // String value 'null' is explicitly set by Chromium in some contexts
+    const parentFqdn = parentUrl && parentUrl !== 'null' && url !== parentUrl
+      ? findSiteFqdn(parentUrl)
+      : null
+    return { fqdn, parentFqdn }
+  }
+
   const preNormalizationSkip = (state, request) => {
     // skip requests to the custom gateway or API (otherwise we have too much recursion)
     if (sameGateway(request.url, state.gwURL) || sameGateway(request.url, state.apiURL)) {
@@ -76,15 +101,19 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     if (request.url.startsWith('http://127.0.0.1') || request.url.startsWith('http://localhost') || request.url.startsWith('http://[::1]')) {
       ignore(request.requestId)
     }
+
     // skip if a per-site opt-out exists
-    const parentUrl = request.originUrl || request.initiator // FF: originUrl (Referer-like Origin URL), Chrome: initiator (just Origin)
-    const fqdn = new URL(request.url).hostname
-    const parentFqdn = parentUrl && parentUrl !== 'null' && request.url !== parentUrl ? new URL(parentUrl).hostname : null
-    if (state.noIntegrationsHostnames.some(optout =>
-      fqdn !== 'gateway.ipfs.io' && (fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout))
-      ))) {
+    const { fqdn, parentFqdn } = findSiteHostnames(request)
+    const triggerOptOut = (optout) => {
+      // Disable optout on canonical public gateway
+      if (fqdn === 'gateway.ipfs.io') return false
+      if (fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout))) return true
+      return false
+    }
+    if (state.noIntegrationsHostnames.some(triggerOptOut)) {
       ignore(request.requestId)
     }
+
     // additional checks limited to requests for root documents
     if (request.type === 'main_frame') {
       // lazily trigger DNSLink lookup (will do anything only if status for root domain is not in cache)
