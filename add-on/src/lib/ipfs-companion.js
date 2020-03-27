@@ -84,8 +84,8 @@ module.exports = async function init () {
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
     log('register all listeners')
     registerListeners()
-    await registerSubdomainProxy(getState, runtime)
     await setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
     await showPendingLandingPages()
   } catch (error) {
@@ -324,7 +324,7 @@ module.exports = async function init () {
     }
     ipfsImportHandler.copyShareLink(result)
     ipfsImportHandler.preloadFilesAtPublicGateway(result)
-    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
+    if (!state.localGwAvailable || !state.openViaWebUI) {
       return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
     } else {
       return ipfsImportHandler.openFilesAtWebUI(importDir)
@@ -557,7 +557,7 @@ module.exports = async function init () {
     // enable/disable gw redirect based on API going online or offline
     // newPeerCount === -1 currently implies node is offline.
     // TODO: use `node.isOnline()` if available (js-ipfs)
-    if (state.automaticMode && state.ipfsNodeType !== 'embedded') {
+    if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         browser.storage.local.set({ useCustomGateway: true })
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))

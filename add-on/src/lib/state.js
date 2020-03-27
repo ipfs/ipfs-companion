@@ -56,8 +56,12 @@ function initState (options, overrides) {
       return false
     }
   }
-  state.isNodeConnected = () => state.peerCount > 0
-  state.isNodeActive = () => state.peerCount > offlinePeerCount
+  // TODO state.connected ~= state.peerCount > 0
+  // TODO state.nodeActive ~= API is online,eg. state.peerCount > offlinePeerCount
+  Object.defineProperty(state, 'localGwAvailable', {
+    // TODO: make quick fetch to confirm it works?
+    get: function () { return this.ipfsNodeType !== 'embedded' }
+  })
   // apply optional overrides
   if (overrides) Object.assign(state, overrides)
   return state

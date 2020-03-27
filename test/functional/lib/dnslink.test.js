@@ -63,8 +63,8 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
     dnslinkPolicy: 'detectIpfsPathHeader',
     peerCount: 1
   })
-  const getExternalNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'external' })
-  const getEmbeddedNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'embedded' })
+  const getExternalNodeState = () => Object.assign(getState(), { ipfsNodeType: 'external' })
+  const getEmbeddedNodeState = () => Object.assign(getState(), { ipfsNodeType: 'embedded' })
 
   describe('dnslinkAtGateway(url)', function () {
     ['/api/v0/foo', '/ipfs/foo', '/ipns/foo'].forEach(path => {
@@ -149,8 +149,8 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
     dnslinkPolicy: 'enabled',
     peerCount: 1
   })
-  const getExternalNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'external' })
-  const getEmbeddedNodeState = () => Object.assign({}, getState(), { ipfsNodeType: 'embedded' })
+  const getExternalNodeState = () => Object.assign(getState(), { ipfsNodeType: 'external' })
+  const getEmbeddedNodeState = () => Object.assign(getState(), { ipfsNodeType: 'embedded' })
 
   describe('dnslinkAtGateway(url)', function () {
     ['/api/v0/foo', '/ipfs/foo', '/ipns/foo'].forEach(path => {

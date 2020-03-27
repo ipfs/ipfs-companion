@@ -96,8 +96,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
   }
 
   const postNormalizationSkip = (state, request) => {
-    // skip requests to the public gateway if embedded node is running (otherwise we have too much recursion)
-    if (state.ipfsNodeType === 'embedded' && sameGateway(request.url, state.pubGwURL)) {
+    // skip requests to the public gateway if we can't reedirect them to local
+    // node is running (otherwise we have too much recursion)
+    if (!state.localGwAvailable && sameGateway(request.url, state.pubGwURL)) {
       ignore(request.requestId)
       // TODO: do not skip and redirect to `ipfs://` and `ipns://` if hasNativeProtocolHandler === true
     }
@@ -351,7 +352,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 // All the following requests will be upgraded to IPNS
                 const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
                 const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url, cachedDnslink)
-                if (redirectUrl) {
+                // redirect only if local node is around, as we can't guarantee DNSLink support
+                // at a public subdomain gateway (requires more than 1 level of wildcard TLS certs)
+                if (redirectUrl && state.localGwAvailable) {
                   log(`onHeadersReceived: dnslinkRedirect from ${request.url} to ${redirectUrl}`)
                   return { redirectUrl }
                 }
@@ -371,8 +374,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 const url = new URL(request.url)
                 const pathWithArgs = `${xIpfsPath}${url.search}${url.hash}`
                 const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString)
-                // redirect only if anything changed
-                if (newUrl !== request.url) {
+                // redirect only if local node is around
+                if (newUrl && state.localGwAvailable) {
                   log(`onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
                   return redirectToGateway(request, newUrl, state, ipfsPathValidator)
                 }
@@ -407,9 +410,10 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (isRecoverableViaEthDNS(request, state)) {
         const url = new URL(request.url)
         url.hostname = `${url.hostname}.link`
-        const redirect = { redirectUrl: url.toString() }
-        log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirect.redirectUrl}`, request)
-        return createTabWithURL(redirect, browser, recoveredTabs)
+        const redirectUrl = url.toString()
+        log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirectUrl}`, request)
+        // TODO: update existing tab
+        return createTabWithURL(request, redirectUrl, browser, recoveredTabs)
       }
 
       // Check if error can be recovered via DNSLink
@@ -419,7 +423,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         if (dnslink) {
           const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
           log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url} → ${redirectUrl}`, request)
-          return createTabWithURL({ redirectUrl }, browser, recoveredTabs)
+          return createTabWithURL(request, redirectUrl, browser, recoveredTabs)
         }
       }
 
@@ -433,7 +437,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (isRecoverable(request, state, ipfsPathValidator)) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url)
         log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
-        return createTabWithURL({ redirectUrl }, browser, recoveredTabs)
+        return createTabWithURL(request, redirectUrl, browser, recoveredTabs)
       }
     },
 
@@ -463,7 +467,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (isRecoverable(request, state, ipfsPathValidator)) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url)
         log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url} → ${redirectUrl}`, request)
-        return createTabWithURL({ redirectUrl }, browser, recoveredTabs)
+        return createTabWithURL(request, redirectUrl, browser, recoveredTabs)
       }
     }
   }
@@ -474,11 +478,8 @@ exports.createRequestModifier = createRequestModifier
 
 function redirectToGateway (request, url, state, ipfsPathValidator) {
   const { resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
-  const useLocal = state.ipfsNodeType !== 'embedded'
-  const redirectUrl = useLocal ? resolveToLocalUrl(url) : resolveToPublicUrl(url)
+  const redirectUrl = state.localGwAvailable ? resolveToLocalUrl(url) : resolveToPublicUrl(url)
   // redirect only if we actually change anything
-  console.log('request.url', request.url)
-  console.log('redirectUrl', redirectUrl)
   if (redirectUrl && request.url !== redirectUrl) return { redirectUrl }
 }
 
@@ -588,11 +589,17 @@ function findHeaderIndex (name, headers) {
 
 // Recovery check for onErrorOccurred (request.error) and onCompleted (request.statusCode)
 function isRecoverable (request, state, ipfsPathValidator) {
-  return state.recoverFailedHttpRequests &&
+  // Note: we are unable to recover default public gateways without a local one
+  const { error, statusCode, url } = request
+  const { redirect, localGwAvailable, pubGwURL, pubSubdomainGwURL } = state
+  return (state.recoverFailedHttpRequests &&
     request.type === 'main_frame' &&
-    (recoverableNetworkErrors.has(request.error) || recoverableHttpError(request.statusCode)) &&
-    (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) || isIPFS.subdomain(request.url)) &&
-    !sameGateway(request.url, state.pubGwURL) && !sameGateway(request.url, state.pubSubdomainGwURL)
+    (recoverableNetworkErrors.has(error) ||
+      recoverableHttpError(statusCode)) &&
+    ipfsPathValidator.publicIpfsOrIpnsResource(url) &&
+    ((redirect && localGwAvailable) ||
+      (!sameGateway(url, pubGwURL) &&
+       !sameGateway(url, pubSubdomainGwURL))))
 }
 
 // Recovery check for onErrorOccurred (request.error)
@@ -616,8 +623,11 @@ function isRecoverableViaEthDNS (request, state) {
 // We can't redirect in onErrorOccurred/onCompleted
 // Indead, we recover by opening URL in a new tab that replaces the failed one
 // TODO: display an user-friendly prompt when the very first recovery is done
-async function createTabWithURL (redirect, browser, recoveredTabs) {
-  const tabKey = redirect.redirectUrl
+async function createTabWithURL (request, redirectUrl, browser, recoveredTabs) {
+  // Do nothing if the URL remains the same
+  if (request.url === redirectUrl) return
+
+  const tabKey = redirectUrl
   // reuse existing tab, if exists
   // (this avoids duplicated tabs - https://github.com/ipfs-shipyard/ipfs-companion/issues/805)
   try {
@@ -635,7 +645,7 @@ async function createTabWithURL (redirect, browser, recoveredTabs) {
   const newTab = await browser.tabs.create({
     active: true,
     openerTabId,
-    url: redirect.redirectUrl
+    url: redirectUrl
   })
   if (newTab) recoveredTabs.set(tabKey, newTab.id)
 }

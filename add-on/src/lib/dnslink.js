@@ -61,7 +61,7 @@ module.exports = function createDnslinkResolver (getState) {
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
         const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
-        const gateway = state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString
+        const gateway = state.localGwAvailable ? state.gwURLString : state.pubGwURLString
         return pathAtHttpGateway(ipnsPath, gateway)
       }
     },
@@ -110,7 +110,7 @@ module.exports = function createDnslinkResolver (getState) {
       preloadUrlCache.set(url, true)
       const dnslink = await dnslinkResolver.resolve(url)
       if (!dnslink) return
-      if (state.ipfsNodeType === 'embedded') return
+      if (!state.localGwAvailable) return
       if (state.peerCount < 1) return
       return preloadQueue.add(async () => {
         const { pathname } = new URL(url)

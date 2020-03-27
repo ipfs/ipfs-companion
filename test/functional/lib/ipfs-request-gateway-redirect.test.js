@@ -262,8 +262,9 @@ describe('modifyRequest.onBeforeRequest:', function () {
     describe('with external node', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'external'
+        // dweb.link is the default subdomain gw
       })
-      it('should be redirected to localhost gateway (*.ipfs)', function () {
+      it('should be redirected to localhost gateway (*.ipfs on default gw)', function () {
         state.redirect = true
         const request = url2request(`https://${cid}.ipfs.dweb.link/`)
 
@@ -276,7 +277,14 @@ describe('modifyRequest.onBeforeRequest:', function () {
         expect(modifyRequest.onBeforeRequest(request).redirectUrl)
           .to.equal(`http://localhost:8080/ipfs/${cid}/`)
       })
-      it('should be redirected to localhost gateway (*.ipns)', function () {
+      it('should be redirected to localhost gateway (*.ipfs on 3rd party gw)', function () {
+        state.redirect = true
+        const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal(`http://localhost:8080/ipfs/${cid}/`)
+      })
+      it('should be redirected to localhost gateway (*.ipns on default gw)', function () {
         state.redirect = true
         const request = url2request(`https://${peerid}.ipns.dweb.link/`)
         request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
@@ -288,14 +296,22 @@ describe('modifyRequest.onBeforeRequest:', function () {
     describe('with embedded node', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'embedded'
+        // dweb.link is the default subdomain gw
       })
-      it('should be left untouched for dweb.link', function () {
+      it('should be left untouched for *.ipfs at default public subdomain gw', function () {
         state.redirect = true
         const request = url2request(`https://${cid}.ipfs.dweb.link/`)
         request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
         expectNoRedirect(modifyRequest, request)
       })
-      it('should be left untouched for IPNS', function () {
+      it('should be redirected to user-prefered public gateway if 3rd party subdomain gw', function () {
+        state.redirect = true
+        const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal(`https://${cid}.ipfs.dweb.link/`)
+      })
+      it('should be left untouched for *.ipns at default public subdomain gw', function () {
         state.redirect = true
         const request = url2request(`https://${peerid}.ipns.dweb.link/`)
         request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]

@@ -23,20 +23,31 @@ log.error = debug('ipfs-companion:http-proxy:error')
 // registerSubdomainProxy is necessary wourkaround for supporting subdomains
 // under 'localhost' (*.ipfs.localhost) because some operating systems do not
 // resolve them to local IP and return NX error not found instead
-async function registerSubdomainProxy (getState, runtime) {
-  const { useSubdomainProxy: enable, gwURLString } = getState()
+async function registerSubdomainProxy (getState, runtime, notify) {
+  try {
+    const { useSubdomainProxy: enable, gwURLString } = getState()
 
-  // HTTP Proxy feature is exposed on the gateway port
-  // Just ensure we use localhost IP to remove any dependency on DNS
-  const proxy = safeURL(gwURLString, { useLocalhostName: false })
+    // HTTP Proxy feature is exposed on the gateway port
+    // Just ensure we use localhost IP to remove any dependency on DNS
+    const proxy = safeURL(gwURLString, { useLocalhostName: false })
 
-  // Firefox uses own APIs for selective proxying
-  if (runtime.isFirefox) {
-    return registerSubdomainProxyFirefox(enable, proxy.hostname, proxy.port)
+    // Firefox uses own APIs for selective proxying
+    if (runtime.isFirefox) {
+      return await registerSubdomainProxyFirefox(enable, proxy.hostname, proxy.port)
+    }
+
+    // at this point we asume Chromium
+    return await registerSubdomainProxyChromium(enable, proxy.host)
+  } catch (err) {
+    // registerSubdomainProxy is just a failsafe, not necessary in most cases,
+    // so we should not break init when it fails.
+    // For now we just log error and exit as NOOP
+    log.error('registerSubdomainProxy failed', err)
+    // Show pop-up only the first time, during init() when notify is passed
+    try {
+      if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
+    } catch (_) {}
   }
-
-  // at this point we asume Chromium
-  return registerSubdomainProxyChromium(enable, proxy.host)
 }
 
 // storing listener for later
