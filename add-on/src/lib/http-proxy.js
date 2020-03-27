@@ -46,7 +46,8 @@ async function registerSubdomainProxy (getState, runtime, notify) {
     // Show pop-up only the first time, during init() when notify is passed
     try {
       if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
-    } catch (_) {}
+    } catch (_) {
+    }
   }
 }
 

@@ -9,9 +9,7 @@ const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
 const { default: PQueue } = require('p-queue')
 const { offlinePeerCount } = require('./state')
-const { sameGateway, pathAtHttpGateway } = require('./ipfs-path')
-
-// TODO: add Preferences toggle to disable redirect of DNSLink  websites (while keeping async dnslink lookup)
+const { ipfsContentPath, sameGateway, pathAtHttpGateway } = require('./ipfs-path')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
@@ -203,11 +201,11 @@ module.exports = function createDnslinkResolver (getState) {
     // in url.hostname OR in url.pathname (/ipns/<fqdn>)
     // and return matching FQDN if present
     findDNSLinkHostname (url) {
-      const { hostname, pathname } = new URL(url)
-      // check //foo.tld/ipns/<fqdn>
-      if (IsIpfs.ipnsPath(pathname)) {
+      // Normalize subdomain and path gateways to to /ipns/<fqdn>
+      const contentPath = ipfsContentPath(url)
+      if (IsIpfs.ipnsPath(contentPath)) {
         // we may have false-positives here, so we do additional checks below
-        const ipnsRoot = pathname.match(/^\/ipns\/([^/]+)/)[1]
+        const ipnsRoot = contentPath.match(/^\/ipns\/([^/]+)/)[1]
         // console.log('findDNSLinkHostname ==> inspecting IPNS root', ipnsRoot)
         // Ignore PeerIDs, match DNSLink only
         if (!IsIpfs.cid(ipnsRoot) && dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
@@ -215,7 +213,8 @@ module.exports = function createDnslinkResolver (getState) {
           return ipnsRoot
         }
       }
-      // check //<fqdn>/foo/bar
+      // Check main hostname
+      const { hostname } = new URL(url)
       if (dnslinkResolver.readAndCacheDnslink(hostname)) {
         // console.log('findDNSLinkHostname ==> found DNSLink for url.hostname', hostname)
         return hostname
