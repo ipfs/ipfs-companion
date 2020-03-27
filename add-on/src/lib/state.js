@@ -56,6 +56,8 @@ function initState (options, overrides) {
       return false
     }
   }
+  state.isNodeConnected = () => state.peerCount > 0
+  state.isNodeActive = () => state.peerCount > offlinePeerCount
   // apply optional overrides
   if (overrides) Object.assign(state, overrides)
   return state

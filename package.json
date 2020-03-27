@@ -140,7 +140,7 @@
     "ipfs-postmsg-proxy": "3.1.1",
     "ipfsx": "0.17.0",
     "is-fqdn": "1.0.1",
-    "is-ipfs": "https://github.com/ipfs/is-ipfs/tarball/f1823cc0b12e97ac1f202ba7c06663b5b9b5d265/is-ipfs.tar.gz",
+    "is-ipfs": "https://github.com/ipfs/is-ipfs/tarball/d9e7082587595a5c7a192405342fae18865c33f9/is-ipfs.tar.gz",
     "is-svg": "4.2.0",
     "it-to-stream": "0.1.1",
     "lru-cache": "5.1.1",

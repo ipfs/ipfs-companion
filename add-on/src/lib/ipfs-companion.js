@@ -191,7 +191,8 @@ module.exports = async function init () {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString) : null
+      const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
+      const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }

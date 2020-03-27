@@ -61,8 +61,13 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })
-    it('should do nothing if broken request is a non-public IPFS request', async function () {
+    it('should do nothing if broken request is a non-public IPFS request to 127.0.0.1', async function () {
       const request = urlRequestWithStatus('http://127.0.0.1:8080/ipfs/QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
+      await requestHandler.onCompleted(request)
+      assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
+    })
+    it('should do nothing if broken request is a non-public IPFS request to localhost', async function () {
+      const request = urlRequestWithStatus('http://localhost:8080/ipfs/QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.create.notCalled, 'tabs.create should not be called')
     })

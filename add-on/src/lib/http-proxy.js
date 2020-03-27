@@ -116,5 +116,4 @@ async function registerSubdomainProxyChromium (enable, proxyHost) {
   }
 }
 
-
 module.exports.registerSubdomainProxy = registerSubdomainProxy
