@@ -32,7 +32,8 @@ log.error = debug('ipfs-companion:http-proxy:error')
 //   https://bugzilla.mozilla.org/show_bug.cgi?id=1220810
 async function registerSubdomainProxy (getState, runtime, notify) {
   try {
-    const { useSubdomainProxy: enable, gwURLString } = getState()
+    const { active, useSubdomainProxy, gwURLString } = getState()
+    const enable = active && useSubdomainProxy
 
     // HTTP Proxy feature is exposed on the gateway port
     // Just ensure we use localhost IP to remove any dependency on DNS
