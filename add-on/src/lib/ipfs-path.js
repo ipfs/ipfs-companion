@@ -160,6 +160,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
     // Test if actions such as 'copy URL', 'pin/unpin' should be enabled for the URL
     isIpfsPageActionsContext (url) {
+      if (!url) return false
       const { apiURLString } = getState()
       const { hostname } = new URL(url)
       return Boolean(url && !url.startsWith(apiURLString) && (
