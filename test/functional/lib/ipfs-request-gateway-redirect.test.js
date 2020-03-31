@@ -259,6 +259,10 @@ describe('modifyRequest.onBeforeRequest:', function () {
     const cid = 'bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
     const peerid = 'bafzbeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
 
+    // Tests use different CID in X-Ipfs-Path header just to ensure it does not
+    // override the one from path
+    const fakeXIpfsPathHdrVal = '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ'
+
     describe('with external node', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'external'
@@ -269,20 +273,28 @@ describe('modifyRequest.onBeforeRequest:', function () {
         const request = url2request(`https://${cid}.ipfs.dweb.link/`)
 
         // X-Ipfs-Path to ensure value from URL takes a priority
-        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
 
         /// We expect redirect to path-based gateway because go-ipfs >=0.5 will
-        // return redirect to subdomain, and we don't want to break older
-        // versions
+        // return redirect to a subdomain, and we don't want to break users
+        // running older versions of go-ipfs by loading subdomain first and
+        // failing.
         expect(modifyRequest.onBeforeRequest(request).redirectUrl)
           .to.equal(`http://localhost:8080/ipfs/${cid}/`)
       })
       it('should be redirected to localhost gateway (*.ipfs on 3rd party gw)', function () {
         state.redirect = true
         const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
-        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
         expect(modifyRequest.onBeforeRequest(request).redirectUrl)
           .to.equal(`http://localhost:8080/ipfs/${cid}/`)
+      })
+      it('should be redirected to localhost gateway and keep URL encoding of original path', function () {
+        state.redirect = true
+        const request = url2request('https://bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy.ipfs.dweb.link/%3Ffilename=test.jpg?arg=val')
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal('http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy/%3Ffilename=test.jpg?arg=val')
       })
       it('should be redirected to localhost gateway (*.ipns on default gw)', function () {
         state.redirect = true
@@ -301,13 +313,13 @@ describe('modifyRequest.onBeforeRequest:', function () {
       it('should be left untouched for *.ipfs at default public subdomain gw', function () {
         state.redirect = true
         const request = url2request(`https://${cid}.ipfs.dweb.link/`)
-        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
         expectNoRedirect(modifyRequest, request)
       })
       it('should be redirected to user-prefered public gateway if 3rd party subdomain gw', function () {
         state.redirect = true
         const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
-        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
         expect(modifyRequest.onBeforeRequest(request).redirectUrl)
           .to.equal(`https://${cid}.ipfs.dweb.link/`)
       })

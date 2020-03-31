@@ -25,7 +25,7 @@ function ipfsContentPath (urlOrPath, opts) {
 
   // To get IPFS content path we need to reverse URI encoding of special
   // characters (https://github.com/ipfs/ipfs-companion/issues/303)
-  const contentPath = decodeURIComponent(url.pathname)
+  const contentPath = decodeURI(url.pathname)
 
   // End if not a content path
   if (!isIPFS.path(contentPath)) return null

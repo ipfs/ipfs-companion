@@ -23,6 +23,13 @@ log.error = debug('ipfs-companion:http-proxy:error')
 // registerSubdomainProxy is necessary wourkaround for supporting subdomains
 // under 'localhost' (*.ipfs.localhost) because some operating systems do not
 // resolve them to local IP and return NX error not found instead
+//
+// State in Q2 2020:
+// - Chromium hardcodes `localhost` name to point at local IP and proxy is not
+//   really necessary, but we do it just to be safe.
+// - Firefox requires proxy to avoid DNS lookup, but there is an open issue
+//   that will remove that need at some point:
+//   https://bugzilla.mozilla.org/show_bug.cgi?id=1220810
 async function registerSubdomainProxy (getState, runtime, notify) {
   try {
     const { useSubdomainProxy: enable, gwURLString } = getState()
