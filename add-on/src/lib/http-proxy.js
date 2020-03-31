@@ -29,15 +29,15 @@ async function registerSubdomainProxy (getState, runtime, notify) {
 
     // HTTP Proxy feature is exposed on the gateway port
     // Just ensure we use localhost IP to remove any dependency on DNS
-    const proxy = safeURL(gwURLString, { useLocalhostName: false })
+    const { hostname, port } = safeURL(gwURLString, { useLocalhostName: false })
 
     // Firefox uses own APIs for selective proxying
     if (runtime.isFirefox) {
-      return await registerSubdomainProxyFirefox(enable, proxy.hostname, proxy.port)
+      return await registerSubdomainProxyFirefox(enable, hostname, port)
     }
 
     // at this point we asume Chromium
-    return await registerSubdomainProxyChromium(enable, proxy.host)
+    return await registerSubdomainProxyChromium(enable, hostname, port)
   } catch (err) {
     // registerSubdomainProxy is just a failsafe, not necessary in most cases,
     // so we should not break init when it fails.
@@ -56,7 +56,7 @@ var onRequestProxyListener
 
 // registerSubdomainProxyFirefox sets proxy using API available in Firefox
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/proxy/onRequest
-async function registerSubdomainProxyFirefox (enable, host, port) {
+async function registerSubdomainProxyFirefox (enable, hostname, port) {
   const { onRequest } = browser.proxy
 
   // always remove the old listener (host and port could change)
@@ -66,15 +66,22 @@ async function registerSubdomainProxyFirefox (enable, host, port) {
   }
 
   if (enable) {
-    // create new listener with the latest host:port
-    onRequestProxyListener = (request) => ({ type: 'http', host, port })
+    // create new listener with the latest host:port note: the listener is
+    // handling requests made to all localhost ports (limitation of the API,
+    // port is ignored) that is why we manually check port inside of the listener
+    onRequestProxyListener = (request) => {
+      if (new URL(request.url).port === port) {
+        return { type: 'http', host: hostname, port }
+      }
+      return { type: 'direct' }
+    }
 
     // register the listener
     onRequest.addListener(onRequestProxyListener, {
       urls: ['http://*.localhost/*'],
       incognito: false
     })
-    log(`enabled ${host}:${port} as HTTP proxy for *.localhost`)
+    log(`enabled ${hostname}:${port} as HTTP proxy for *.localhost`)
     return
   }
 
@@ -94,7 +101,7 @@ const clear = async (opts) => new Promise((resolve, reject) => chrome.proxy.sett
 
 // registerSubdomainProxyChromium sets proxy using API available in Chromium
 // https://developer.chrome.com/extensions/proxy
-async function registerSubdomainProxyChromium (enable, proxyHost) {
+async function registerSubdomainProxyChromium (enable, hostname, port) {
   const scope = 'regular_only'
 
   // read current proxy settings
@@ -108,14 +115,14 @@ async function registerSubdomainProxyChromium (enable, proxyHost) {
       mode: 'pac_script',
       pacScript: {
         data: 'function FindProxyForURL(url, host) {\n' +
-                "  if (shExpMatch(host, '*.localhost'))\n" +
-                `    return 'PROXY ${proxyHost}';\n` +
+                `  if (shExpMatch(host, '*.localhost:${port}'))\n` +
+                `    return 'PROXY ${hostname}:${port}';\n` +
                 "  return 'DIRECT';\n" +
                 '}'
       }
     }
     await set({ value: pacConfig, scope })
-    log(`enabled ${proxyHost} as HTTP proxy for *.localhost`)
+    log(`enabled ${hostname}:${port} as HTTP proxy for *.localhost`)
     // log('updated chrome.proxy.settings', await get({ incognito: false }))
     return
   }
