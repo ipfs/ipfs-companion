@@ -94,7 +94,7 @@ function sameGateway (url, gwUrl) {
     return url.hostname === gwUrl.hostname
   }
 
-  const gws = [gwUrl.hostname]
+  const gws = [gwUrl.host]
 
   // localhost gateway has more than one hostname
   if (gwUrl.hostname === 'localhost') {
@@ -106,7 +106,7 @@ function sameGateway (url, gwUrl) {
 
   for (const gwName of gws) {
     // match against the end to include subdomain gateways
-    if (url.hostname.endsWith(gwName)) return true
+    if (url.host.endsWith(gwName)) return true
   }
   return false
 }

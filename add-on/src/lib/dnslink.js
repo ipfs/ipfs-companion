@@ -201,6 +201,7 @@ module.exports = function createDnslinkResolver (getState) {
     // in url.hostname OR in url.pathname (/ipns/<fqdn>)
     // and return matching FQDN if present
     findDNSLinkHostname (url) {
+      if (!url) return
       // Normalize subdomain and path gateways to to /ipns/<fqdn>
       const contentPath = ipfsContentPath(url)
       if (IsIpfs.ipnsPath(contentPath)) {

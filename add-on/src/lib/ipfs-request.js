@@ -9,6 +9,7 @@ const LRU = require('lru-cache')
 const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
 const { pathAtHttpGateway, sameGateway } = require('./ipfs-path')
+const { safeURL } = require('./options')
 
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableNetworkErrors = new Set([
@@ -142,6 +143,15 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     onBeforeRequest (request) {
       const state = getState()
       if (!state.active) return
+
+      // When Subdomain Proxy is enabled we normalize address bar requests made
+      // to the local gateway and replace raw IP with 'localhost' hostname to
+      // take advantage of subdomain redirect provided by go-ipfs >= 0.5
+      if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
+        const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomainProxy }).toString()
+        if (redirectUrl !== request.url) return { redirectUrl }
+      }
+
       // early sanity checks
       if (preNormalizationSkip(state, request)) {
         return
@@ -169,7 +179,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         }
         // Detect valid /ipfs/ and /ipns/ on any site
         if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
-          return redirectToGateway(request, request.url, state, ipfsPathValidator)
+          return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
         }
         // Detect dnslink using heuristics enabled in Preferences
         if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
@@ -358,7 +368,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
               return { redirectUrl }
             }
           }
-          return redirectToGateway(request, request.url, state, ipfsPathValidator)
+          return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
         }
 
         // Detect X-Ipfs-Path Header and upgrade transport to IPFS:
@@ -406,7 +416,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 // redirect only if local node is around
                 if (newUrl && state.localGwAvailable) {
                   log(`onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
-                  return redirectToGateway(request, newUrl, state, ipfsPathValidator)
+                  return redirectToGateway(request, newUrl, state, ipfsPathValidator, runtime)
                 }
               }
             }
@@ -505,10 +515,42 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 exports.redirectOptOutHint = redirectOptOutHint
 exports.createRequestModifier = createRequestModifier
 
-function redirectToGateway (request, url, state, ipfsPathValidator) {
+// Returns a string with URL at the active gateway (local or public)
+function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {
   const { resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
-  const redirectUrl = state.localGwAvailable ? resolveToLocalUrl(url) : resolveToPublicUrl(url)
-  // redirect only if we actually change anything
+  let redirectUrl = state.localGwAvailable ? resolveToLocalUrl(url) : resolveToPublicUrl(url)
+
+  // SUBRESOURCE ON HTTPS PAGE: THE WORKAROUND EXTRAVAGANZA
+  // ------------------------------------------------------ \o/
+  //
+  // Firefox 74 does not mark *.localhost subdomains as Secure Context yet
+  // (https://bugzilla.mozilla.org/show_bug.cgi?id=1220810#c23) so we can't
+  // redirect there when we have IPFS resource embedded on HTTPS page (eg.
+  // image loaded from a public gateway) because that would cause mixed-content
+  // warning and subresource would fail to load.  Given the fact that
+  // localhost/ipfs/* provided by go-ipfs 0.5+ returns a redirect to
+  // *.ipfs.localhost subdomain we need to check requests for subresources, and
+  // manually replace 'localhost' hostname with '127.0.0.1' (IP is hardcoded as
+  // Secure Context in Firefox). The need for this workaround can be revisited
+  // when Firefox closes mentioned bug.
+  //
+  // Chromium 80 seems to force HTTPS in the final URL (after all redirects) so
+  // https://*.localhost fails TODO: needs additional research (could be a bug
+  // in Chromium). For now we reuse the same workaround as Firefox.
+  //
+  if (state.localGwAvailable) {
+    const { type, originUrl, initiator } = request
+    // match request types for embedded subdresources, but skip ones coming from local gateway
+    const parentUrl = originUrl || initiator // FF || Chromium
+    if (type !== 'main_frame' && (parentUrl && !sameGateway(parentUrl, state.gwURL))) {
+      // use raw IP to ensure subresource will be loaded from the path gateway
+      // at 127.0.0.1, which is marked as Secure Context in all browsers
+      const useLocalhostName = false
+      redirectUrl = safeURL(redirectUrl, { useLocalhostName }).toString()
+    }
+  }
+
+  // return a redirect only if URL changed
   if (redirectUrl && request.url !== redirectUrl) return { redirectUrl }
 }
 
