@@ -111,7 +111,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
     })
   })
 
-  describe('XHR request for a path matching /ipfs/{CIDv0}', function () {
+  describe('XHR request for a path matching /ipfs/{CIDv0} coming from 3rd party Origin', function () {
     describe('with external node', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'external'
@@ -119,22 +119,22 @@ describe('modifyRequest.onBeforeRequest:', function () {
       it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/' }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
       it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Chromium', function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/' }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
       it('should be served from custom gateway if XHR is cross-origin and redirect is enabled in Chromium', function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
       it('should be served from custom gateway if XHR is cross-origin and redirect is enabled in Firefox', function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
     })
     describe('with embedded node', function () {
@@ -170,17 +170,17 @@ describe('modifyRequest.onBeforeRequest:', function () {
       it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Firefox', function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/' }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
       it('should be served from custom gateway if fetched from the same origin and redirect is enabled in non-Firefox', function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/' }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
       it('should be served from custom gateway if XHR is cross-origin and redirect is enabled in non-Firefox', function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
-        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
       it('should be served from custom gateway via late redirect in onHeadersReceived if XHR is cross-origin and redirect is enabled in Firefox', function () {
         // Context for CORS XHR problems in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
@@ -189,7 +189,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
         // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
         expect(modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
         // onHeadersReceived is after CORS validation happens, so its ok to cancel and redirect late
-        expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onHeadersReceived(xhrRequest).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
     })
   })
@@ -255,7 +255,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
     })
   })
 
-  describe('request to a public subdomain gateway (CID in subdomain)', function () {
+  describe('request to a subdomain gateway', function () {
     const cid = 'bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
     const peerid = 'bafzbeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
 
@@ -339,7 +339,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
       state.redirect = true
     })
     describe(`with ${nodeType} node:`, function () {
-      describe('request for IPFS path at a localhost', function () {
+      describe('request for IPFS path at the localhost', function () {
         // we do not touch local requests, as it may interfere with other nodes running at the same machine
         // or could produce false-positives such as redirection from localhost:5001/ipfs/path to localhost:8080/ipfs/path
         it('should be left untouched if localhost is used', function () {
@@ -361,6 +361,16 @@ describe('modifyRequest.onBeforeRequest:', function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
           const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
           expectNoRedirect(modifyRequest, request)
+        })
+        it('should be redirected to localhost (subdomain in go-ipfs >0.5) if type=main_frame and  127.0.0.1 (path gw) is used un URL', function () {
+          state.redirect = true
+          state.useSubdomainProxy = true
+          expect(state.gwURL.hostname).to.equal('localhost')
+          const cid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+          const request = url2request(`http://127.0.0.1:8080/ipfs/${cid}?arg=val#hash`)
+          request.type = 'main_frame' // explicit
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal(`http://localhost:8080/ipfs/${cid}?arg=val#hash`)
         })
       })
     })

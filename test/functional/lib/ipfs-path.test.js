@@ -3,7 +3,7 @@ const { stub } = require('sinon')
 const { describe, it, beforeEach, afterEach } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
-const { ipfsContentPath, createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
+const { ipfsContentPath, createIpfsPathValidator, sameGateway } = require('../../../add-on/src/lib/ipfs-path')
 const { initState } = require('../../../add-on/src/lib/state')
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
@@ -99,6 +99,29 @@ describe('ipfs-path.js', function () {
     it('should return null if there is no valid path for input path', function () {
       const path = '/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
       expect(ipfsContentPath(path)).to.equal(null)
+    })
+  })
+
+  describe('sameGateway', function () {
+    it('should return true on direct host match', function () {
+      const url = 'https://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      const gw = 'http://127.0.0.1:8080'
+      expect(sameGateway(url, gw)).to.equal(true)
+    })
+    it('should return true on localhost/127.0.0.1 host match', function () {
+      const url = 'https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      const gw = 'http://127.0.0.1:8080'
+      expect(sameGateway(url, gw)).to.equal(true)
+    })
+    it('should return true on 127.0.0.1/localhost host match', function () {
+      const url = 'https://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      const gw = 'http://localhost:8080'
+      expect(sameGateway(url, gw)).to.equal(true)
+    })
+    it('should return false on hostname match but different port', function () {
+      const url = 'https://localhost:8081/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      const gw = 'http://localhost:8080'
+      expect(sameGateway(url, gw)).to.equal(false)
     })
   })
 

@@ -39,6 +39,56 @@ describe('modifyRequest processing', function () {
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
+  // Additional handling is required for redirected IPFS subresources on regular HTTPS pages
+  // (eg. image embedded from public gateway on HTTPS website)
+  describe('a subresource request on HTTPS website', function () {
+    const cid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    it('should be routed to "127.0.0.1" gw in Chromium if type is image', function () {
+      runtime.isFirefox = false
+      const request = {
+        method: 'GET',
+        type: 'image',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        initiator: 'https://some-website.example.com' // Chromium
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
+    })
+    it('should be routed to "localhost" gw in Chromium if not a subresource', function () {
+      runtime.isFirefox = false
+      const request = {
+        method: 'GET',
+        type: 'main_frame',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        initiator: 'https://some-website.example.com' // Chromium
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+    })
+    it('should be routed to "127.0.0.1" gw to avoid mixed content warning in Firefox', function () {
+      runtime.isFirefox = true
+      const request = {
+        method: 'GET',
+        type: 'image',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        originUrl: 'https://some-website.example.com/some/page.html' // FF only
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
+    })
+    it('should be routed to "localhost" gw in Firefox if not a subresource', function () {
+      runtime.isFirefox = true
+      const request = {
+        method: 'GET',
+        type: 'main_frame',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        originUrl: 'https://some-website.example.com/some/page.html' // FF only
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+    })
+  })
+
   describe('a request to <apiURL>/api/v0/add with stream-channels=true', function () {
     const expectHeader = { name: 'Expect', value: '100-continue' }
     it('should apply the "Expect: 100-continue" fix for https://github.com/ipfs/go-ipfs/issues/5168 ', function () {
