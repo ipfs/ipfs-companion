@@ -84,9 +84,9 @@ module.exports = async function init () {
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
     log('register all listeners')
     registerListeners()
-    await setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
+    setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await showPendingLandingPages()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
@@ -429,7 +429,7 @@ module.exports = async function init () {
   async function getSwarmPeerCount () {
     if (!ipfs) return offlinePeerCount
     try {
-      const peerInfos = await ipfs.swarm.peers()
+      const peerInfos = await ipfs.swarm.peers({ timeout: 2500 })
       return peerInfos.length
     } catch (error) {
       console.error(`Error while ipfs.swarm.peers: ${error}`)
@@ -583,6 +583,7 @@ module.exports = async function init () {
         case 'active':
           state[key] = change.newValue
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
+          await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
           break
@@ -638,18 +639,16 @@ module.exports = async function init () {
           break
         case 'useSubdomainProxy':
           state[key] = change.newValue
-          // More work is needed, as this key decides how requests are routed
-          // to the gateway:
-          await browser.storage.local.set({
-            // We need to update the hostname in customGatewayUrl:
-            // 127.0.0.1 - path gateway
-            // localhost - subdomain gateway
-            customGatewayUrl: guiURLString(
-              state.gwURLString, {
-                useLocalhostName: state.useSubdomainProxy
-              }
-            )
-          })
+          // Normalize hostname if enabled
+          if (state.useSubdomainProxy) {
+            await browser.storage.local.set({
+              // We need to update the hostname in customGatewayUrl because:
+              // 127.0.0.1 - path gateway
+              // localhost - subdomain gateway
+              // and we need to use the latter
+              customGatewayUrl: guiURLString(state.gwURLString, { useLocalhostName: true })
+            })
+          }
           // Finally, update proxy settings based on the state
           await registerSubdomainProxy(getState, runtime)
           break
