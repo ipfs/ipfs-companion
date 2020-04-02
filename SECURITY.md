@@ -1,9 +1,14 @@
 # Security notes
 
+The IPFS protocol and its implementations are still in heavy development. This means that there may be problems in our protocols, or there may be mistakes in our implementations. And — though IPFS is not production-ready yet — many people are already running nodes on their machines, so we take security vulnerabilities very seriously.
+
 ## Reporting security issues
 
-If you found a security issue, please email `lidel [-at-] protocol.ai` ([gpg](https://keybase.io/lidel))  
-and CC `ipfs-companion-maintainers [-at-] googlegroups.com`
+If you discover a security issue in ipfs-companion, please bring it to our attention right away!
+
+If you find a vulnerability that may affect live deployments — for example, by exposing a remote execution exploit — please send your report privately to security@ipfs.io **Please do not file a public issue.**
+
+If the issue is a protocol weakness that cannot be immediately exploited, or something not yet deployed, just discuss it openly.
 
 ## Local build and source verification
 
