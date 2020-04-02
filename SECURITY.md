@@ -12,7 +12,7 @@ Security-conscious users can confirm that downloaded package does match source c
 Required steps:
 
 1. Download package version that is to be verified
-2. Checkout sources of the [same tag](https://github.com/ipfs/ipfs-companion/tags)
+2. Check out sources of the [same tag](https://github.com/ipfs/ipfs-companion/tags)
 2. Build package from sources using `yarn dev-build` command.    
    As a result, you will have freshly built packages in `build/` directory
 3. Unzip contents and compare manually or use handy one-liners below.
@@ -76,4 +76,3 @@ $ diff <(unzip -v -l ipfs-firefox-addon1.xpi | cut -c 1-9,59-,49-57 | sort -k3) 
 >      984 83079aef resources/ipfs-firefox-addon/lib/package.json
 not_same
 ```
-
