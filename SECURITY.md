@@ -1,19 +1,23 @@
-# Security Considerations
+# Security notes
 
-The Firefox platform has no mechanisms to restrict the privileges of add-ons
-and add-on code is fully trusted by Firefox.
+## Reporting security issues
 
-Security-conscious users should confirm that downloaded XPI package does match source code BEFORE installation.
+If you found a security issue, please email `lidel [-at-] protocol.ai` ([gpg](https://keybase.io/lidel))  
+and CC `ipfs-companion-maintainers [-at-] googlegroups.com`
+
+## Local build and source verification
+
+Security-conscious users can confirm that downloaded package does match source code.
 
 Required steps:
 
-1. Download XPI package in version that is to be verified
+1. Download package version that is to be verified
 2. Checkout sources of the [same tag](https://github.com/ipfs/ipfs-companion/tags)
-2. Build XPI package from sources using `jpm xpi` command (`npm install jpm -g`).    
-   As a result, you will have two XPI files which are in fact just ZIPs with different extension.   
+2. Build package from sources using `yarn dev-build` command.    
+   As a result, you will have freshly built packages in `build/` directory
 3. Unzip contents and compare manually or use handy one-liners below.
 
-Convention used in commands below:
+Convention used in examples below:
 - `ipfs-firefox-addon1.xpi` and `ipfs-firefox-addon2.xpi` are equal and match Git sources
 -  `ipfs-firefox-addon3.xpi` contains changes not present in current sources
 
