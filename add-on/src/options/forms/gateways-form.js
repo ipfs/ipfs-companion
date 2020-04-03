@@ -15,15 +15,15 @@ function gatewaysForm ({
   ipfsNodeType,
   customGatewayUrl,
   useCustomGateway,
-  useSubdomainProxy,
+  useSubdomains,
   noIntegrationsHostnames,
   publicGatewayUrl,
   publicSubdomainGatewayUrl,
   onOptionChange
 }) {
-  const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', (url) => guiURLString(url, { useLocalhostName: useSubdomainProxy }))
+  const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', (url) => guiURLString(url, { useLocalhostName: useSubdomains }))
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
-  const onUseSubdomainProxyChange = onOptionChange('useSubdomainProxy')
+  const onUseSubdomainProxyChange = onOptionChange('useSubdomains')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', guiURLString)
   const onPublicSubdomainGatewayUrlChange = onOptionChange('publicSubdomainGatewayUrl', guiURLString)
   const onNoIntegrationsHostnamesChange = onOptionChange('noIntegrationsHostnames', hostTextToArray)
@@ -113,18 +113,18 @@ function gatewaysForm ({
           ` : null}
           ${supportRedirectToCustomGateway ? html`
             <div>
-              <label for="useSubdomainProxy">
+              <label for="useSubdomains">
                 <dl>
-                  <dt>${browser.i18n.getMessage('option_useSubdomainProxy_title')}</dt>
+                  <dt>${browser.i18n.getMessage('option_useSubdomains_title')}</dt>
                   <dd>
-                    ${browser.i18n.getMessage('option_useSubdomainProxy_description')}
+                    ${browser.i18n.getMessage('option_useSubdomains_description')}
                     <p><a href="https://docs.ipfs.io/guides/guides/addressing/#subdomain-gateway" target="_blank">
                       ${browser.i18n.getMessage('option_legend_readMore')}
                     </a></p>
                   </dd>
                 </dl>
               </label>
-              <div>${switchToggle({ id: 'useSubdomainProxy', checked: useSubdomainProxy, onchange: onUseSubdomainProxyChange })}</div>
+              <div>${switchToggle({ id: 'useSubdomains', checked: useSubdomains, onchange: onUseSubdomainProxyChange })}</div>
             </div>
           ` : null}
           ${supportRedirectToCustomGateway ? html`

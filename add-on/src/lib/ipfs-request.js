@@ -148,7 +148,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // to the local gateway and replace raw IP with 'localhost' hostname to
       // take advantage of subdomain redirect provided by go-ipfs >= 0.5
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
-        const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomainProxy }).toString()
+        const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
         if (redirectUrl !== request.url) return { redirectUrl }
       }
 

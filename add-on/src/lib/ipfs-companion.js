@@ -637,18 +637,17 @@ module.exports = async function init () {
         case 'useCustomGateway':
           state.redirect = change.newValue
           break
-        case 'useSubdomainProxy':
+        case 'useSubdomains':
           state[key] = change.newValue
-          // Normalize hostname if enabled
-          if (state.useSubdomainProxy) {
-            await browser.storage.local.set({
-              // We need to update the hostname in customGatewayUrl because:
-              // 127.0.0.1 - path gateway
-              // localhost - subdomain gateway
-              // and we need to use the latter
-              customGatewayUrl: guiURLString(state.gwURLString, { useLocalhostName: true })
+          await browser.storage.local.set({
+            // We need to update the hostname in customGatewayUrl because:
+            // 127.0.0.1 - path gateway
+            // localhost - subdomain gateway
+            // and we need to use the latter
+            customGatewayUrl: guiURLString(state.gwURLString, {
+              useLocalhostName: state.useSubdomains
             })
-          }
+          })
           // Finally, update proxy settings based on the state
           await registerSubdomainProxy(getState, runtime)
           break

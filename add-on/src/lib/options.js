@@ -13,7 +13,7 @@ exports.optionDefaults = Object.freeze({
   publicGatewayUrl: 'https://ipfs.io',
   publicSubdomainGatewayUrl: 'https://dweb.link',
   useCustomGateway: true,
-  useSubdomainProxy: true,
+  useSubdomains: true,
   noIntegrationsHostnames: [],
   automaticMode: true,
   linkify: false,
@@ -169,8 +169,8 @@ exports.migrateOptions = async (storage) => {
   // migrate old default 127.0.0.1 to localhost hostname
   const { customGatewayUrl: gwUrl } = await storage.get('customGatewayUrl')
   if (gwUrl && (localhostIpUrl(gwUrl) || localhostNameUrl(gwUrl))) {
-    const { useSubdomainProxy } = await storage.get('useSubdomainProxy')
-    const newUrl = guiURLString(gwUrl, { useLocalhostName: useSubdomainProxy })
+    const { useSubdomains } = await storage.get('useSubdomains')
+    const newUrl = guiURLString(gwUrl, { useLocalhostName: useSubdomains })
     if (gwUrl !== newUrl) {
       await storage.set({ customGatewayUrl: newUrl })
     }

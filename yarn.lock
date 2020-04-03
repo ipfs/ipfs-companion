@@ -7931,9 +7931,9 @@ is-ip@^3.1.0:
   dependencies:
     ip-regex "^4.0.0"
 
-"is-ipfs@https://github.com/ipfs/is-ipfs/tarball/d9e7082587595a5c7a192405342fae18865c33f9/is-ipfs.tar.gz":
+"is-ipfs@https://github.com/ipfs/is-ipfs/tarball/d5717e910d864d738faf39480897342c7cbf065d/is-ipfs.tar.gz":
   version "0.6.3"
-  resolved "https://github.com/ipfs/is-ipfs/tarball/d9e7082587595a5c7a192405342fae18865c33f9/is-ipfs.tar.gz#733850d100cb80d08d251706d4b91ab14b58bd56"
+  resolved "https://github.com/ipfs/is-ipfs/tarball/d5717e910d864d738faf39480897342c7cbf065d/is-ipfs.tar.gz#c3f2f4d5423be1bfff4712488c742eb89d5f7ac0"
   dependencies:
     bs58 "^4.0.1"
     cids "~0.7.0"
