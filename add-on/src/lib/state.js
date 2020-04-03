@@ -25,7 +25,7 @@ function initState (options, overrides) {
   state.apiURL = safeURL(options.ipfsApiUrl, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
   state.apiURLString = state.apiURL.toString()
   delete state.ipfsApiUrl
-  state.gwURL = safeURL(options.customGatewayUrl, { useLocalhostName: state.useSubdomainProxy })
+  state.gwURL = safeURL(options.customGatewayUrl, { useLocalhostName: state.useSubdomains })
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy

@@ -364,7 +364,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be redirected to localhost (subdomain in go-ipfs >0.5) if type=main_frame and  127.0.0.1 (path gw) is used un URL', function () {
           state.redirect = true
-          state.useSubdomainProxy = true
+          state.useSubdomains = true
           expect(state.gwURL.hostname).to.equal('localhost')
           const cid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
           const request = url2request(`http://127.0.0.1:8080/ipfs/${cid}?arg=val#hash`)

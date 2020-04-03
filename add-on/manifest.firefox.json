@@ -18,6 +18,20 @@
     "default_title": "__MSG_pageAction_titleNonIpfs__",
     "default_popup": "dist/popup/page-action/index.html"
   },
+  "permissions": [
+    "<all_urls>",
+    "idle",
+    "tabs",
+    "notifications",
+    "proxy",
+    "storage",
+    "unlimitedStorage",
+    "contextMenus",
+    "clipboardWrite",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
+  ],
   "content_scripts": [ ],
   "protocol_handlers": [
     {

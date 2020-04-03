@@ -279,13 +279,13 @@
     "message": "Redirect requests for IPFS resources to the Custom gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
-  "option_useSubdomainProxy_title": {
-    "message": "Use Subdomain Proxy",
-    "description": "An option title on the Preferences screen (option_useSubdomainProxy_title)"
+  "option_useSubdomains_title": {
+    "message": "Use Subdomains",
+    "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
-  "option_useSubdomainProxy_description": {
-    "message": "Use Custom Gateway as HTTP Proxy to enable Origin isolation per content root at *.ipfs.localhost",
-    "description": "An option description on the Preferences screen (option_useSubdomainProxy_description)"
+  "option_useSubdomains_description": {
+    "message": "Isolate content roots from each other by loading them from subdomains at *.localhost and creating a unique Origin for each CID, IPNS or DNSLink record. Requires a local go-ipfs 0.5.0 or later.",
+    "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
     "message": "Load websites from Custom Gateway",

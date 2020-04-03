@@ -26,14 +26,17 @@ log.error = debug('ipfs-companion:http-proxy:error')
 //
 // State in Q2 2020:
 // - Chromium hardcodes `localhost` name to point at local IP and proxy is not
-//   really necessary, but we do it just to be safe.
+//   really necessary. The code is here (inactivE) in case we need it in the future.
 // - Firefox requires proxy to avoid DNS lookup, but there is an open issue
 //   that will remove that need at some point:
 //   https://bugzilla.mozilla.org/show_bug.cgi?id=1220810
 async function registerSubdomainProxy (getState, runtime, notify) {
+  // At the moment only firefox requires proxy registration
+  if (!runtime.isFirefox) return
+
   try {
-    const { active, useSubdomainProxy, gwURLString } = getState()
-    const enable = active && useSubdomainProxy
+    const { active, useSubdomains, gwURLString } = getState()
+    const enable = active && useSubdomains
 
     // HTTP Proxy feature is exposed on the gateway port
     // Just ensure we use localhost IP to remove any dependency on DNS
@@ -44,8 +47,9 @@ async function registerSubdomainProxy (getState, runtime, notify) {
       return await registerSubdomainProxyFirefox(enable, hostname, port)
     }
 
-    // at this point we asume Chromium
-    return await registerSubdomainProxyChromium(enable, hostname, port)
+    // At this point we would asume Chromium, but its not needed atm
+    // Uncomment below if ever needed (+ add 'proxy' permission to manifest.json)
+    // return await registerSubdomainProxyChromium(enable, hostname, port)
   } catch (err) {
     // registerSubdomainProxy is just a failsafe, not necessary in most cases,
     // so we should not break init when it fails.
@@ -97,6 +101,10 @@ async function registerSubdomainProxyFirefox (enable, hostname, port) {
   log('disabled HTTP proxy for *.localhost')
 }
 
+/*
+ * Chromium 80 does not need proxy, so below is not used.
+ * Uncomment below if ever needed (+ add 'proxy' permission to manifest.json)
+
 // Helpers for converting callback chrome.* API to promises
 const cb = (resolve, reject) => (result) => {
   const err = chrome.runtime.lastError
@@ -142,5 +150,6 @@ async function registerSubdomainProxyChromium (enable, hostname, port) {
     log('disabled HTTP proxy for *.localhost')
   }
 }
+*/
 
 module.exports.registerSubdomainProxy = registerSubdomainProxy
