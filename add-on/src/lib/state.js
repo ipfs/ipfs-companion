@@ -4,10 +4,6 @@
 const { safeURL } = require('./options')
 const offlinePeerCount = -1
 
-// CID of a 'blessed' Web UI release
-// which should work without setting CORS headers
-const webuiCid = 'Qmexhq2sBHnXQbvyP2GfUdbnY7HCagH2Mw5vUNSBn2nxip' // v2.7.2
-
 function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
@@ -29,21 +25,6 @@ function initState (options, overrides) {
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
-  state.webuiCid = webuiCid
-
-  // TODO: unify the way webui is opened
-  // - https://github.com/ipfs-shipyard/ipfs-companion/pull/737
-  // - https://github.com/ipfs-shipyard/ipfs-companion/pull/738
-  // Context: previously, we loaded webui from gateway port
-  // (`${state.gwURLString}ipfs/${state.webuiCid}/`) because API port
-  // has hardcoded list of whitelisted webui versions.
-  // To enable API access from webui loaded from Gateway port Companion
-  // removed Origin header to avoid CORS, now we move away from that
-  // complexity and for now just load version whitelisted on API port.
-  // In the future, we want to load webui from $webuiCid.ipfs.localhost
-  // and whitelist API access from that specific hostname
-  // by appending it to API.HTTPHeaders.Access-Control-Allow-Origin list
-  // When that is possible, we can remove Origin manipulation (see PR #737 for PoC)
   state.webuiRootUrl = `${state.apiURLString}webui/`
 
   // attach helper functions
@@ -69,4 +50,3 @@ function initState (options, overrides) {
 
 exports.initState = initState
 exports.offlinePeerCount = offlinePeerCount
-exports.webuiCid = webuiCid

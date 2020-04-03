@@ -6,7 +6,6 @@ const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
 const browser = require('webextension-polyfill')
-const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
@@ -107,7 +106,8 @@ module.exports = async function init () {
   function registerListeners () {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
-      // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
+      // Chrome 72+  requires 'extraHeaders' for accessing all headers
+      // Note: we need this for code ensuring ipfs-http-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
@@ -385,18 +385,6 @@ module.exports = async function init () {
         log.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
     }
-    if (details.url.startsWith(state.webuiRootUrl)) {
-      // Ensure API backend points at one from IPFS Companion
-      const apiMultiaddr = toMultiaddr(state.apiURLString)
-      await browser.tabs.executeScript(details.tabId, {
-        runAt: 'document_start',
-        code: `if (!localStorage.getItem('ipfsApi')) {
-          console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
-          localStorage.setItem('ipfsApi', '${apiMultiaddr}');
-          window.location.reload();
-        }`
-      })
-    }
   }
 
   // API STATUS UPDATES
@@ -615,6 +603,7 @@ module.exports = async function init () {
         case 'ipfsApiUrl':
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()
+          state.webuiRootUrl = `${state.apiURLString}webui/`
           shouldRestartIpfsClient = true
           break
         case 'ipfsApiPollMs':
@@ -623,8 +612,6 @@ module.exports = async function init () {
         case 'customGatewayUrl':
           state.gwURL = new URL(change.newValue)
           state.gwURLString = state.gwURL.toString()
-          // TODO: for now we load webui from API port, should we remove this?
-          // state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)
