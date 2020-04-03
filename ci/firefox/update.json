@@ -23,34 +23,14 @@
                     "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.8.4.824/ipfs_companion_beta_build-2.8.4.824-fx.xpi"
                 },
                 {
-                    "version": "2.9.0.881",
+                    "version": "2.10.0.902",
                     "applications": {
                         "gecko": {
                             "strict_min_version": "68"
                         }
                     },
-                    "update_hash": "sha256:af6ec13c14b061da4304844b5662700dafd2b82b555bcf094a1a6374ce61fe78",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.9.0.881/ipfs_companion_beta_build-2.9.0.881-an+fx.xpi"
-                },
-                {
-                    "version": "2.10.0.889",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "68"
-                        }
-                    },
-                    "update_hash": "sha256:2e52e813ba1f091a602333c457c18a2aa1829e7107f3fe619222ab4e70986de7",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.10.0.889/ipfs_companion_beta_build-2.10.0.889-an+fx.xpi"
-                },
-                {
-                    "version": "2.10.0.893",
-                    "applications": {
-                        "gecko": {
-                            "strict_min_version": "68"
-                        }
-                    },
-                    "update_hash": "sha256:bf32c54fed0f3e7fde31b76f2b92e48b44851a17ae11e08a6141393e96c03291",
-                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.10.0.893/ipfs_companion_beta_build-2.10.0.893-an+fx.xpi"
+                    "update_hash": "sha256:3dab3738a74b3cdeebea22a2612bdf91fe8153c4c29b137935c64d9c56ff594e",
+                    "update_link": "https://github.com/ipfs-shipyard/ipfs-companion/releases/download/v2.10.0.902/ipfs_companion_beta_build-2.10.0.902-an+fx.xpi"
                 }
             ]
         }
