@@ -279,6 +279,14 @@
     "message": "Redirect requests for IPFS resources to the Custom gateway",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_useSubdomains_title": {
+    "message": "Use Subdomains",
+    "description": "An option title on the Preferences screen (option_useSubdomains_title)"
+  },
+  "option_useSubdomains_description": {
+    "message": "Isolate content roots from each other by loading them from subdomains at *.localhost and creating a unique Origin for each CID, IPNS or DNSLink record. Requires a local go-ipfs 0.5.0 or later.",
+    "description": "An option description on the Preferences screen (option_useSubdomains_description)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "Load websites from Custom Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
@@ -296,7 +304,7 @@
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink websites. Make sure you understand related risks.",
+    "message": "Avoid using this if your IPFS Node does not support *.ipfs.localhost. Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink websites. Make sure you understand related risks.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {

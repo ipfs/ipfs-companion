@@ -3,11 +3,11 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
-const { normalizeGatewayURL } = require('../../lib/options')
+const { guiURLString } = require('../../lib/options')
 const switchToggle = require('../../pages/components/switch-toggle')
 
 function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
-  const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', normalizeGatewayURL)
+  const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', (url) => guiURLString(url, { useLocalhostName: false }))
   const onIpfsApiPollMsChange = onOptionChange('ipfsApiPollMs')
   const onAutomaticModeChange = onOptionChange('automaticMode')
 

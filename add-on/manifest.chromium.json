@@ -1,4 +1,17 @@
 {
   "minimum_chrome_version": "72",
+  "permissions": [
+    "<all_urls>",
+    "idle",
+    "tabs",
+    "notifications",
+    "storage",
+    "unlimitedStorage",
+    "contextMenus",
+    "clipboardWrite",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
+  ],
   "incognito": "not_allowed"
 }

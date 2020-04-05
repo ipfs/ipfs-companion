@@ -11,19 +11,6 @@
     "38": "icons/png/ipfs-logo-on_38.png",
     "128": "icons/png/ipfs-logo-on_128.png"
   },
-  "permissions": [
-    "<all_urls>",
-    "idle",
-    "tabs",
-    "notifications",
-    "storage",
-    "unlimitedStorage",
-    "contextMenus",
-    "clipboardWrite",
-    "webNavigation",
-    "webRequest",
-    "webRequestBlocking"
-  ],
   "background": {
     "page": "dist/background/background.html"
   },
