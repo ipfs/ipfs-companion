@@ -217,13 +217,11 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
       spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
     })
-    /* TODO
-    it('should return null if no DNSLink record', function () {
-      const url = new URL(`https://no-dnslink.example.com/some/path?ds=sdads#dfsdf`)
+    it('should return nothing if no DNSLink record', function () {
+      const url = new URL('https://no-dnslink.example.com/some/path?ds=sdads#dfsdf')
       const dnslinkResolver = createDnslinkResolver(getState)
       expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(undefined)
     })
-    */
     it('should match /ipns/<fqdn> on path gateway', function () {
       const fqdn = 'dnslink-site.com'
       const url = `https://path-gateway.com/ipns/${fqdn}/some/path?ds=sdads#dfsdf`
