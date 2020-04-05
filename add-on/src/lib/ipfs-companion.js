@@ -497,6 +497,9 @@ module.exports = async function init () {
   }
 
   async function setBrowserActionIcon (iconPath) {
+    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    /* Below fallback does not work since Chromium 80
+     * (it fails in a way that does not produce error we can catch)
     const iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
@@ -508,6 +511,7 @@ module.exports = async function init () {
       // Still, we want icon, so we precompute rasters of popular sizes and use them instead
       await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
     }
+    */
   }
 
   // ColorArray [0,0,0,0] → Hex #000000
