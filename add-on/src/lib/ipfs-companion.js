@@ -141,7 +141,15 @@ module.exports = async function init () {
     if (previousHandle) {
       previousHandle.unregister()
     }
-    if (!state.active || !state.ipfsProxy || !browser.contentScripts) {
+    // TODO:
+    // No window.ipfs for now.
+    // We will restore when Migration to JS API with Async Await and Async Iterables
+    // is done:
+    // https://github.com/ipfs-shipyard/ipfs-companion/pull/777
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/843
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/852#issuecomment-594510819
+    const forceOff = true
+    if (forceOff || !state.active || !state.ipfsProxy || !browser.contentScripts) {
       // no-op if global toggle is off, window.ipfs is disabled in Preferences
       // or if runtime has no contentScript API
       // (Chrome loads content script via manifest)
@@ -749,8 +757,10 @@ module.exports = async function init () {
         ipfsProxyContentScript.unregister()
         ipfsProxyContentScript = null
       }
-      destroyTasks.push(ipfsProxy.destroy())
-      ipfsProxy = null
+      if (ipfsProxy) {
+        destroyTasks.push(ipfsProxy.destroy())
+        ipfsProxy = null
+      }
       destroyTasks.push(destroyIpfsClient())
       return Promise.all(destroyTasks)
     }
