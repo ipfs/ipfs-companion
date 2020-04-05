@@ -77,24 +77,27 @@ function experimentsForm ({
           </label>
           <div>${switchToggle({ id: 'detectIpfsPathHeader', checked: detectIpfsPathHeader, onchange: onDetectIpfsPathHeaderChange })}</div>
         </div>
-        <div>
+        <div class="o-50">
           <label for="ipfsProxy">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
               <dd>
+                Disabled due to JS API migration
+                <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 <p>${ipfsProxy ? html`
                     <a href="${browser.extension.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
                       ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md#notes-on-exposing-ipfs-api-as-windowipfs" target="_blank">
+                -->
+                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md#%EF%B8%8F-windowipfs-is-disabled-for-now" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, onchange: onIpfsProxyChange })}</div>
+          <div>${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, disabled: true, onchange: onIpfsProxyChange })}</div>
         </div>
         <div>
           <label for="logNamespaces">
