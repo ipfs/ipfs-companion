@@ -1,4 +1,4 @@
-FROM node:10.15.1
+FROM node:12.16.1
 
 ARG USER_ID
 ARG GROUP_ID
