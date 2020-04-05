@@ -1,6 +1,5 @@
 'use strict'
 
-const _Buffer = Buffer
 const { assign, freeze } = Object
 
 // TODO: (wip) this should not be injected by default into every page,
@@ -46,7 +45,4 @@ function createWindowIpfs () {
   return freeze(proxyClient)
 }
 
-// TODO: we should remove Buffer and add support for Uint8Array/ArrayBuffer natively
-// See: https://github.com/ipfs/interface-ipfs-core/issues/404
-window.Buffer = window.Buffer || _Buffer
 window.ipfs = window.ipfs || createWindowIpfs()

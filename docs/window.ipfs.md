@@ -68,8 +68,6 @@ if (window.ipfs && window.ipfs.enable) {
 }
 ```
 
-Note that IPFS Companion also adds `window.Buffer` if it doesn't already exist.
-
 See also: [How do I fallback if `window.ipfs` is not available?](#how-do-i-fallback-if-windowipfs-is-not-available)
 
 ### Error Codes
