@@ -74,12 +74,14 @@ It is possible to opt-out from Gateway redirect by:
 - b) suspending redirect for via per website opt-out (in [_Active Tab_ section of _Browser Action_](#disable-gateway-redirect-per-website) or _Preferences_)
 - c) including `x-ipfs-companion-no-redirect` in the URL (as a [hash](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect) or [query](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect) parameter).
 
+<!-- TODO: restore after https://github.com/ipfs-shipyard/ipfs-companion/issues/843 is closed
 ### IPFS API as `window.ipfs`
 
 Your IPFS node is exposed as `window.ipfs` on every webpage.
 Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
+-->
 
 ### Quick Toggles
 
