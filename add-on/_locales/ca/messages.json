@@ -1,194 +1,194 @@
 {
   "browserAction_title": {
-    "message": "IPFS-seuralainen",
+    "message": "Acompanyant IPFS",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS-seuralainen",
+    "message": "Acompanyant IPFS",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Kaikkien IPFS-integraatioiden kytkin",
+    "message": "Alterna totes les integracions IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
-    "message": "yhteydetön",
+    "message": "Desconectat",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
-    "message": "Yhdyskäytävä",
+    "message": "Gateway",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusApiAddress": {
-    "message": "Ohjelmointirajapinta",
+    "message": "API",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusGatewayVersion": {
-    "message": "versio",
+    "message": "versió",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
-    "message": "Vertaisia",
+    "message": "Peers",
     "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "Muiden yhdistettävissä olevien IPFS-solmujen lukumäärä",
+    "message": "El número de nodes IPFS als quals et pots conectar",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Jaa tiedostoja IPFS:n kautta",
+    "message": "Compartir arxius via IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
-    "message": "Avaa verkkokäyttöliittymä",
+    "message": "Obrir l'interficie web",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Uudelleenohjaa yhdyskäytävään",
+    "message": "Redirigir al Gateway",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
-    "message": "Klikkaa kytkeäksesi kaikki yhdyskäytävä-uudelleenohjaukset",
+    "message": "Clica per alternar totes les redireccions gateway",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
-    "message": "Työkalut",
+    "message": "Eines",
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
-    "message": "Avaa selainlisäosan asetukset",
+    "message": "Obrir la configuració de l'extensió del navegador",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Aktiivinen välilehti",
+    "message": "Pestanya Activa",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Ota käyttöön kohteessa $1",
+    "message": "Activar a  $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Klikkaa kytkeäksesi kaikki IPFS-integraatiot kohteessa  $1",
+    "message": "Clica per alternar totes les integracions IPFS a  $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Kiinnitä IPFS-resurssi",
+    "message": "Marcar recurs IPFS (pin)",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Sisältö-ID:n (CID) kiinnittäminen merkitsee datan tärkeäksi IPFS-solmulle ja kieltää sen pois heittämisen.",
+    "message": "Clavant un CID li dius al teu node IPFS que aquesta informació és important i que no s'ha de llançar.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Kopioi IPFS-polku",
+    "message": "Copiar enllaç d'IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Kopioi sisältö-ID (CID)",
+    "message": "Copiar el CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Kopioi julkisen yhdyskäytävän URL",
+    "message": "Copiar l'enllaç del gateway públic",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "Näytä yhdyskäytävällä",
+    "message": "Veure al Gateway",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "IPFS-resurssi ladattiin julkisen yhdyskäytävän kautta",
+    "message": "Recurs d'IPFS carregat via una gateway pública",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS-resurssi ladattiin mukautetun yhdyskäytävän kautta",
+    "message": "Recurs d'IPFS carregat via una gateway personalitzada",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Ei-IPFS-resurssi",
+    "message": "Recurs que no és d'IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Valittu kuva",
+    "message": "Seleccionar imatge",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Valittu video",
+    "message": "Seleccionar video",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Valittu audio",
+    "message": "Seleccionar audio",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Linkitetty sisältö",
+    "message": "Enllaçar contingut",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Valittu kirjoitus",
+    "message": "Seleccionar text",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "Tämä sivu",
+    "message": "Aquesta pàgina",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Tuo IPFS:iin",
+    "message": "Importar a IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Tuo valittu teksti IPFS:iin",
+    "message": "Importar el text seleccionat a IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
-    "message": "IPFS-lisäosan ongelma",
+    "message": "Problema amb l'Add-on d'IPFS",
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Lisätietoja Browser Console:sta",
+    "message": "Veure la consola del navegador per més detalls",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Kopioitu",
+    "message": "Copiat",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS-resurssi on nyt kiinnitetty",
+    "message": "El recurs d'IPFS a estat marcat  (pin)",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Poistettu IPFS-kiinnitys",
+    "message": "Eliminar marcatge (pin) d'IPFS",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Virhe kiinnitettäessä IPFS-resurssia",
+    "message": "Error al marcar el recurs d'IPFS",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Virhe poistaessa IPFS-kiinnitystä",
+    "message": "Error al eliminar el marcatge d'IPFS",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS-ohjelmointirajapinta on yhteyksissä",
+    "message": "L'APi de IPFS està conectada",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automaattinen tila: Uuudelleenohjaus mukautettuun yhdyskäytävään on käytössä",
+    "message": "Mode automàtic: El gateway personalitzat és actiu",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "IPFS-ohjelmointirajapinta on yhteydetön",
+    "message": "L'API d'IPFS està desconectada",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automaattinen tila: julkista yhdyskäytävää käytetään varaNa",
+    "message": "Mode automàtic: El gateway públic s'utilitzarà com a suport",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "IPFS-ohjelmistorajapinnan kautta tuominen ei onnistu",
+    "message": "No s'ha pogut importar via l'API IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
-    "message": "Yritä poistaa seurannansuojaus käytöstä (paina ctrl+vaihto+j saadaksesi lisätietoja)",
+    "message": "Intenta desactivar la protecció contra seguiment (prem ctrl+shift+j per més detalls)",
     "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -196,159 +196,159 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1 (paina ctrl+vaihto+j saadaksesi lisätietoja)",
+    "message": "$1 (pitja crtl+shift+j per més detalls)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "IPFS-solmun käynnistäminen epäonnistui",
+    "message": "Error al iniciar el node d'IPFS",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "IPFS-solmun pysäyttäminen epäonnistui",
+    "message": "Error al parar el node d'IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_legend_readMore" : {
-    "message": "Lue lisää",
+    "message": "Llegir més",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType" : {
-    "message": "IPFS-solmu",
+    "message": "Node IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "Tiedoston tuonti",
+    "message": "Importar Arxiu",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS-solmun tyyppi",
+    "message": "Tipus de node d'IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Ulkoinen: yhdistä solmuun HTTP ohjelmointirajapinnan yli",
+    "message": "Extern: Conectar al node a través d'una API HTTP",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Sulautettu: suorita js-ipfs -solmu selaimessasi (lue sen rajoituksista alla olevasta linkistä)",
+    "message": "Incrustat: Executa un node js-ipfs al teu navegador (llegeix-ne les limitacions al link de sota)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Sulautettu Chrome Socket:eilla: suorita js-ipfs -solmu selaimessasi pääsyllä chrome.sockets -ohjelmointirajapintaan (lisätietoja alla olevasta linkistä)",
+    "message": "Incrustat amb Sockets Chrome: executa un node js-ipfs al teu navegador amb accés a les APIs chrome.sockets (detalls al link de sota)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS solmun asetukset",
+    "message": "Configurar Node IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Lisä-asetukset sulautetulle JS-IPFS-solmulle. Tämän täytyy olla kelvollisessa JSON-muodossa.",
+    "message": "Configuració addicional pel node incrustat JS IPFS. Ha de ser un JSON vàlid.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "Ulkoinen",
+    "message": "Extern",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Sisäänrakennettu",
+    "message": "Incrustat",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Sisäänrakennettu + chrome.socket:it",
+    "message": "Incrustat + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
-    "message": "Yhdyskäytävät",
+    "message": "Gateways",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Mukautettu paikallinen yhdyskäytävä",
+    "message": "Gateway Local Personalitzat",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "Halutun HTTP2IPFS Yhdyskäytävän URL",
+    "message": "URL del Gateway HTTP2IPFS preferent",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "IPFS-sisällön lataaminen tulee olemaan estetty HTTPS-verkkosivuilla, ellei yhdyskäytävän URL ala “http://127.0.0.1”, “http://[::1]” tai “https://”",
+    "message": "El contingut IPFS no serà carregat en webs HTTPS almenys que l'adreça del teu gateway comenci amb “http://127.0.0.1”, “http://[::1]” or “https://”",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Käytä mukautettua yhdyskäytävää",
+    "message": "Utilitzar un Gateway personalitzat",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Uudelleenohjaa IPFS-resurssien sisältöpyynnöt mukautetulle yhdyskäytävälle",
+    "message": "Redirigir les peticions a recursos IPFS al Gateway Personalitzat",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Lataa verkkosivut mukautetun yhdyskäytävän kautta",
+    "message": "Carrega els webs des d'un Gateway personalitzat",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "If global redirect is enabled, this will include DNSLink websites and redirect them to respective /ipns/{fqdn} paths at Custom Gateway",
+    "message": "Si la redirecció global està activada, inclourà els llocs web DNSLink i els dirigirà a les seves respectives rutes /ipns/{fqdn} del Gateway Personalitzat",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Esilataa katsellut sivut",
+    "message": "Pre-carrega les pàgines visitades",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "message": "Els llocs web DNSLink es pre-carregarant al node local IPFS per permetre-hi l'accés fora de línia. Això millorarà la resistència als errors de la xarxa.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink websites. Make sure you understand related risks.",
+    "message": "Redirigir a un gateway que es basi en Rutes trenca la seguretat basada en Orígens dels llocs DNSLink. Assegura't de comprendre'n els riscos relacionats.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "IPFS Integrations Opt-Outs",
+    "message": "Integracions IPFS descartades",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "List of websites that should not have any IPFS integrations enabled. One hostname per line.",
+    "message": "Llistat d'espais web que no han de tenir activades les integracions IPFS. Un nom de host per linia.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Oletus julkinen yhdyskäytävä",
+    "message": "Gateway Públic per defecte",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Fallback URL used when Custom Gateway is not available and for copying shareable links",
+    "message": "URL de reemplaç quan el Gateway Personalitzat no està disponible per copiar enllaços  per compartir",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "Subdomini Públic del Gateway per defecte",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
+    "message": "subdomini de gateway públic per defecte per recuperar-se de subdominis de gateway trencats",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
-    "message": "Ohjelmointirajapinta",
+    "message": "API",
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "URL de l'API IPFS",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where /api/v0/config lives",
+    "message": "Pista: aquí és troba el /api/v0/config",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Status Poll Interval",
+    "message": "Interval de Verificació d'Status",
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "How often peer count is refreshed (in miliseconds)",
+    "message": "Cada quan es refresca el recompte de peers (en mil·lisegons)",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Automaattinen tila",
+    "message": "Mode Automàtic",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Toggle use of Custom Gateway when IPFS API availability changes",
+    "message": "Alternar l'ús del Gateway Personalitzat quan la disponibilitat de l 'API IPFS canvia",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -356,75 +356,75 @@
     "description": "A section header on the Preferences screen (option_header_dnslink)"
   },
   "option_header_experiments": {
-    "message": "Kokeilut",
+    "message": "Experiments",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experimental": {
-    "message": "kokeellinen",
+    "message": "experimental",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "Be warned: these features are new or work-in-progress. YMMV.",
+    "message": "Atenció: Aquestes prestacions són noves o s'estan creant. Tu mateix...",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_displayNotifications_title": {
-    "message": "Enable Notifications",
+    "message": "Activar Notificacions",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Displays system notifications when API state changes, a link is copied etc",
+    "message": "Mostra les notificacions de sistema quan canvia l'estat de l'API, es copia un enllaç etc",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Catch Unhandled IPFS Protocols",
+    "message": "Entomar els protocols IPFS no atesos",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enables provisional support for ipfs://, ipns:// and dweb: by redirecting unhandled address bar requests to an HTTP gateway",
+    "message": "Activar el suport provisional per ipfs://, ipns:// i dweb: bo i redirigint les peticions no ateses a un gateway HTTP",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
-    "message": "Muuta IPFS-osoitteet linkeiksi",
+    "message": "Converteix les Adresses IPFS en enllaços",
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Turn plaintext /ipfs/ paths into clickable links",
+    "message": "Converteix el text de les rutes /ipfs/ en enllaços clicables",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup",
+    "message": "Buscar el DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Lookup policy for displaying context actions on websites with DNSLink",
+    "message": "Política de cerca per mostrar les accions contextuals en espais web amb DNSLink",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Off",
+    "message": "Apagat",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "Comprovar després de la Petició HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "Comprovar abans de la Petició HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Recuperar les Peticions HTTP Fallades",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "message": "Recuperar les peticions HTTP de recursos IPFS fallides redireccionant al gateway públic.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detect X-Ipfs-Path Header",
+    "message": "Detectar la Capçalera X-Ipfs-Path",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Drop HTTP transport and load over IPFS if value is an IPFS path. Redirect of IPNS paths requires DNSLink support to be enabled as well.",
+    "message": "Deixa el transport HTTP i carrega via IPFS si el valor és una ruta IPFS. La redirecció de rutes IPNS  requereix la prèvia activació del suport DNSLink.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -432,239 +432,239 @@
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
+    "message": "IPFS s'afegeix a l'objecte window a cada pàgina. Activa/desactiva l'accés a les funcions que exposa.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
+    "message": "Gestionar permisos",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Open imported files in Web UI",
+    "message": "Obrir els arxius importats a l'UI Web",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "message": "Mostrar els arxius a la interfície web en comptes d'obrir l'arxiu o el directori pare al gateway.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Imports",
+    "message": "Pre-carrega les importacions",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "Activar la pre-càrrega automàtica dels elements importats per mitjà d'una petició HTTP HEAD asíncrona al Gateway Públic",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "Namespaces dels Logs",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Customize which namespaces are logged to Browser Console. Changing this value will trigger extension restart.",
+    "message": "Personalitza quins namespaces generen registres a la Consola del Navegador. Canviar aquest valor forçarà que l'extensió es reinicii.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "Directori pels Arxius Importats",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Customize the directory used for imported files.",
+    "message": "Personalitza el directori utilitzat per importar arxius.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Reset Everything",
+    "message": "Reiniciar-ho Tot",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Replaces user preferences with default ones (can't be undone!)",
+    "message": "Substitueix les preferències d'usuari per les originals (no es pot desfer)",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
-    "message": "IPFS-seuralainen",
+    "message": "Acompanyant IPFS",
     "description": "Extension name in the Manifest file (manifest_extensionName)"
   },
   "manifest_shortExtensionName": {
-    "message": "IPFS-seuralainen",
+    "message": "Acompanyant IPFS",
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Browser extension that simplifies access to IPFS resources",
+    "message": "L'extensió pel navegador simplifica l'accés als recursos IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {
-    "message": "Yhdistetty $1 vertaiseen",
+    "message": "Connectat amb  $1 peers",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
-    "message": "Pick a file",
+    "message": "Tria un arxiu",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_or": {
-    "message": "tai",
+    "message": "o",
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "drop it here to share",
+    "message": "Deixa'l caure aquí per compartir-lo",
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "S'està important...",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
-    "message": "(puskuroidaan, odota hetki)",
+    "message": "(buffering, paciència)",
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "importar opcions",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "Ruta per guardar els arxius importats",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Obrir a l'UI Web",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
-    "message": "Manage Permissions",
+    "message": "Gestionar Permisos",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "View, change and revoke granted access rights to your IPFS instance.",
+    "message": "Veure, canviar i revocar drets d'accés a la teva instància IPFS",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "No permissions granted.",
+    "message": "Sense permís.",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $1 for $2?",
+    "message": "Enretirar el permís  $1 per  $2?",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $1?",
+    "message": "Retirar tots els permisos per  $1?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Click to allow",
+    "message": "Clicar per permetre",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Click to deny",
+    "message": "Clicar per denegar",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Allow",
+    "message": "Permetre",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Deny",
+    "message": "Denegar",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Revoke $1",
+    "message": "Retirar  $1",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "L' Acompanyant IPFS ha de permetre a «$1 accedir «$2 al node connectat?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Des d'ara i en endavant, aplica aquesta decisió a tots els permisos d'aquest àmbit",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Revoke all permissions",
+    "message": "Retirar tots els permisos",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Allow",
+    "message": "Permetre",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Deny",
+    "message": "Denegar",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "Acompanyant IPFS - Benvingut!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
-    "message": "IPFS-seuralainen",
+    "message": "Acompanyant IPFS",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_title": {
-    "message": "You are all set!",
+    "message": "Està tot apunt!",
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Juuri nyt solmusi on yhteydessä <0>$1</0> vertaiseen.",
+    "message": "Ara mateix el teu node està connectat a __TX_TAG__2e7a3d8709699e8f9b6925fc476cc112__$1</0>peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
-    "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",
+    "message": "Descobreix què <0>pots fer amb l'Acompanyant</0> i endinsat la web distribuïda amb IPFS!",
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS ei vaikuta olevan suorituksessa",
+    "message": "Sembla que l'IPFS no funciona",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Get <0>IPFS Desktop</0> and you will be all set!",
+    "message": "Aconsegueix <0>l'IPFS d'Escriptori</0> i ho tindràs tot solucionat!",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Prefer to use the command line?",
+    "message": "Prefereixes fer servir la línia de comandament?",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "message": "Segueix <0>aquestes instruccions</0>, després posa en marxa el proces IPFS al teu terminal:",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Onko IPFS uusi tuttavuus?",
+    "message": "Ets nou a IPFS?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
-    "message": "Read the <0>documentation</0> to learn about the basic <1>concepts</1> and working with IPFS.",
+    "message": "Llegeix la <0>documentació</0> per aprendre els <1>conceptes</1> bàsics per treballar amb IPFS.",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
   },
   "page_landingWelcome_resources_title_discover": {
-    "message": "Löydä?",
+    "message": "Descobreix!",
     "description": "Resources title (page_landingWelcome_resources_title_discover)"
   },
   "page_landingWelcome_resources_discover": {
-    "message": "Find <0>useful resources</0> for using IPFS and <1>building things</1> on top of it.",
+    "message": "Troba <0>recursos útils</0> per fer servir IPFS i <1>construir-hi</1>al damunt.",
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
-    "message": "Kysymyksiä?",
+    "message": "Tens preguntes?",
     "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
   },
   "page_landingWelcome_resources_got_questions": {
-    "message": "Visit the <0>Discussion and Support Forum</0>.",
+    "message": "Visita el <0>Fòrum de Suport i Debat</0>. ",
     "description": "Resources copy (page_landingWelcome_resources_got_questions)"
   },
   "page_landingWelcome_resources_title_want_to_help": {
-    "message": "Haluatko auttaa?",
+    "message": "Vols ajudar?",
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
-    "message": "Join the <0>IPFS Community</0>! Contribute with <1>code</1>, <2>documentation</2>, <3>translations</3> or help by <4>supporting other users</4>.",
+    "message": "Uneix-te a la <0>Comunitat IPFS</0>!  Contribueix amb <1>codi</1>, <2>documentació</2>,<3> traduccions</3> o ajuda bo i donant suport a <4>altres usuaris</4>.",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
   "page_landingWelcome_videos_alpha_demo": {
-    "message": "IPFS Alpha Demo",
+    "message": "IPFS Demo Alfa",
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
-    "message": "The Permanent Web",
+    "message": "La Web Permanent",
     "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Related Projects",
+    "message": "Projectes Relacionats",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }

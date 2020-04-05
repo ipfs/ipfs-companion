@@ -52,7 +52,7 @@
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
-    "message": "Tools",
+    "message": "도구",
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
@@ -168,7 +168,7 @@
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "IPFS API가 사용가능 합니다.",
+    "message": "IPFS API가 사용 가능합니다.",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
@@ -180,15 +180,15 @@
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "자동 모드: 공공 게이트웨이는 대체제로 사용됩니다.",
+    "message": "자동 모드: 공공 게이트웨이를 실패할 경우 사용합니다.",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "IPFS API를 사용하여 가져올 수 없습니다",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
-    "message": "Try disabling Tracking Protection (press ctrl+shift+j for more details)",
+    "message": "추적 보호 기능을 비활성화 해보세요. (Ctrl+Shift+J 키를 눌러 자세히 보기)",
     "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -216,7 +216,7 @@
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "File Import",
+    "message": "파일 가져오기",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
@@ -248,11 +248,11 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "내장된 노드",
+    "message": "내장 노드",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "내장 노드 + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -332,11 +332,11 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Hint: this is where /api/v0/config lives",
+    "message": "힌트: /api/v0/config가 있는 곳입니다.",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Status Poll Interval",
+    "message": "상태 폴링 주기",
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
@@ -356,7 +356,7 @@
     "description": "A section header on the Preferences screen (option_header_dnslink)"
   },
   "option_header_experiments": {
-    "message": "실험기능",
+    "message": "실험 기능",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experimental": {
@@ -392,7 +392,7 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup",
+    "message": "DNSLink 조회",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
@@ -400,15 +400,15 @@
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Off",
+    "message": "꺼짐",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "HTTP 요청 후 확인",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "HTTP 요청 전 확인",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
@@ -436,7 +436,7 @@
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
+    "message": "권한 관리",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
@@ -452,11 +452,11 @@
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "자동적으로 비동기 공개 게이트웨이에 HTTP HEAD 요청을 보내 가져온 자산을 미리 로드하기",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "로그 네임스페이스",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
@@ -464,7 +464,7 @@
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "파일을 가져오는 디렉터리",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
@@ -472,7 +472,7 @@
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Reset Everything",
+    "message": "모두 초기화",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
@@ -492,23 +492,23 @@
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {
-    "message": "Connected to $1 peers",
+    "message": " $1개의 피어에 연결됨",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
-    "message": "Pick a file",
+    "message": "파일 선택",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_or": {
-    "message": "or",
+    "message": "혹은",
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "drop it here to share",
+    "message": "여기에 파일을 놔서 공유",
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "가져오는 중..",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
@@ -516,7 +516,7 @@
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "가져오기 옵션",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
@@ -524,7 +524,7 @@
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "웹 UI에서 열기",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
@@ -588,7 +588,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "IPFS Companion - 환영합니다!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -596,7 +596,7 @@
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_title": {
-    "message": "You are all set!",
+    "message": "모두 준비되었습니다!",
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
@@ -608,7 +608,7 @@
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS does not seem to be running",
+    "message": "IPFS가 응답하지 않습니다",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
@@ -616,15 +616,15 @@
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Prefer to use the command line?",
+    "message": "터미널에서 사용하고 싶으신가요?",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Follow <0>these instructions</0>, then start an IPFS daemon in your terminal:",
+    "message": "<0>이 지침</0>을 따라 터미널에서 IPFS 데몬을 실행하세요:",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "New to IPFS?",
+    "message": "IPFS가 처음이세요?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs": {
@@ -640,7 +640,7 @@
     "description": "Resources copy (page_landingWelcome_resources_discover)"
   },
   "page_landingWelcome_resources_title_got_questions": {
-    "message": "질문이 있습니까?",
+    "message": "질문이 있으신가요?",
     "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
   },
   "page_landingWelcome_resources_got_questions": {
@@ -648,7 +648,7 @@
     "description": "Resources copy (page_landingWelcome_resources_got_questions)"
   },
   "page_landingWelcome_resources_title_want_to_help": {
-    "message": "도움이 필요한가요?",
+    "message": "도움이 필요하신 가요?",
     "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
   },
   "page_landingWelcome_resources_want_to_help": {
@@ -660,11 +660,11 @@
     "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
   },
   "page_landingWelcome_videos_permanent_web": {
-    "message": "영속성 웹",
+    "message": "영구적인 웹",
     "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "연계된 프로젝트들",
+    "message": "연관된 프로젝트",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }
