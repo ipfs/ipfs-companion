@@ -6,6 +6,7 @@ const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
 const browser = require('webextension-polyfill')
+const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
@@ -247,7 +248,7 @@ module.exports = async function init () {
       peerCount: state.peerCount,
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
-      webuiRootUrl: state.webuiRootUrl,
+      webuiRootUrl: dropSlash(state.webuiRootUrl), // TODO: fix js-ipfs - it fails with trailing slash
       importDir: state.importDir,
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
@@ -392,6 +393,18 @@ module.exports = async function init () {
       } catch (error) {
         log.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
+    }
+    // Ensure embedded js-ipfs in Brave uses correct API
+    if (details.url.startsWith(state.webuiRootUrl)) {
+      const apiMultiaddr = toMultiaddr(state.apiURLString)
+      await browser.tabs.executeScript(details.tabId, {
+        runAt: 'document_start',
+        code: `if (!localStorage.getItem('ipfsApi')) {
+        console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
+        localStorage.setItem('ipfsApi', '${apiMultiaddr}');
+        window.location.reload();
+      }`
+      })
     }
   }
 
@@ -611,7 +624,6 @@ module.exports = async function init () {
         case 'ipfsApiUrl':
           state.apiURL = new URL(change.newValue)
           state.apiURLString = state.apiURL.toString()
-          state.webuiRootUrl = `${state.apiURLString}webui/`
           shouldRestartIpfsClient = true
           break
         case 'ipfsApiPollMs':

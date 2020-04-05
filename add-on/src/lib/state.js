@@ -2,6 +2,7 @@
 /* eslint-env browser, webextensions */
 
 const { safeURL } = require('./options')
+const { precachedWebuiCid } = require('./precache')
 const offlinePeerCount = -1
 
 function initState (options, overrides) {
@@ -25,7 +26,6 @@ function initState (options, overrides) {
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
-  state.webuiRootUrl = `${state.apiURLString}webui/`
 
   // attach helper functions
   state.activeIntegrations = (url) => {
@@ -42,6 +42,16 @@ function initState (options, overrides) {
   Object.defineProperty(state, 'localGwAvailable', {
     // TODO: make quick fetch to confirm it works?
     get: function () { return this.ipfsNodeType !== 'embedded' }
+  })
+  Object.defineProperty(state, 'webuiRootUrl', {
+    get: function () {
+      // Below is needed to make webui work for embedded js-ipfs
+      // TODO: revisit if below is still needed after upgrading to js-ipfs >= 44
+      const webuiUrl = state.ipfsNodeType === 'embedded:chromesockets'
+        ? `${state.gwURLString}ipfs/${precachedWebuiCid}/`
+        : `${state.apiURLString}webui`
+      return webuiUrl
+    }
   })
   // apply optional overrides
   if (overrides) Object.assign(state, overrides)

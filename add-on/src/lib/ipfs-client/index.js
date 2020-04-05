@@ -10,7 +10,7 @@ const browser = require('webextension-polyfill')
 const external = require('./external')
 const embedded = require('./embedded')
 const embeddedWithChromeSockets = require('./embedded-chromesockets')
-const precache = require('../precache')
+const { precache } = require('../precache')
 
 let client
 
