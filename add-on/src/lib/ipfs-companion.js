@@ -8,7 +8,7 @@ log.error = debug('ipfs-companion:main:error')
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
-const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString } = require('./options')
+const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
@@ -626,7 +626,7 @@ module.exports = async function init () {
           state[key] = change.newValue
           break
         case 'ipfsApiUrl':
-          state.apiURL = new URL(change.newValue)
+          state.apiURL = safeURL(change.newValue, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
           state.apiURLString = state.apiURL.toString()
           shouldRestartIpfsClient = true
           break
@@ -634,7 +634,7 @@ module.exports = async function init () {
           setApiStatusUpdateInterval(change.newValue)
           break
         case 'customGatewayUrl':
-          state.gwURL = new URL(change.newValue)
+          state.gwURL = safeURL(change.newValue, { useLocalhostName: state.useSubdomains })
           state.gwURLString = state.gwURL.toString()
           break
         case 'publicGatewayUrl':
