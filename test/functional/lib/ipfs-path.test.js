@@ -118,6 +118,11 @@ describe('ipfs-path.js', function () {
       const gw = 'http://localhost:8080'
       expect(sameGateway(url, gw)).to.equal(true)
     })
+    it('should return true on 127.0.0.1/0.0.0.0 host match', function () {
+      const url = 'http://0.0.0.0:5001/webui'
+      const api = 'http://127.0.0.1:5001'
+      expect(sameGateway(url, api)).to.equal(true)
+    })
     it('should return false on hostname match but different port', function () {
       const url = 'https://localhost:8081/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
       const gw = 'http://localhost:8080'

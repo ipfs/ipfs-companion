@@ -86,6 +86,13 @@ function safeURL (url, opts) {
   if (typeof url === 'string') {
     url = new URL(url)
   }
+  if (url.hostname === '0.0.0.0') {
+    // normalize 0.0.0.0 (used by go-ipfs in the console)
+    // to 127.0.0.1 to minimize the number of edge cases we need to handle later
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/867
+    url = new URL(url.toString())
+    url.hostname = '127.0.0.1'
+  }
   // "localhost" gateway normalization matters because:
   // - 127.0.0.1 is a path gateway
   // - localhost is a subdomain gateway

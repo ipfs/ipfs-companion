@@ -130,6 +130,11 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
         if (redirectUrl !== request.url) return { redirectUrl }
       }
+      // For now normalize API to the IP to comply with go-ipfs checks
+      if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.apiURL)) {
+        const redirectUrl = safeURL(request.url, { useLocalhostName: false }).toString()
+        if (redirectUrl !== request.url) return { redirectUrl }
+      }
 
       // early sanity checks
       if (preNormalizationSkip(state, request)) {

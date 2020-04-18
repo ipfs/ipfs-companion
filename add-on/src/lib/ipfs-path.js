@@ -93,6 +93,13 @@ function sameGateway (url, gwUrl) {
     // match as path-based gateway, and not subdomains.
     return url.hostname === gwUrl.hostname
   }
+  if (url.hostname === '0.0.0.0') {
+    // normalize 0.0.0.0 (used by go-ipfs in the console)
+    // to 127.0.0.1 to minimize the number of edge cases we need to handle later
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/867
+    url = new URL(url.toString())
+    url.hostname = '127.0.0.1'
+  }
 
   const gws = [gwUrl.host]
 
