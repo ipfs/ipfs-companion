@@ -59,7 +59,7 @@ function gatewaysForm ({
                 <dt>${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_title')}</dt>
                 <dd>
                   ${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_description')}
-                  <p><a href="https://docs.ipfs.io/guides/guides/addressing/#subdomain-gateway" target="_blank">
+                  <p><a href="https://docs-beta.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
                     ${browser.i18n.getMessage('option_legend_readMore')}
                   </a></p>
                 </dd>
@@ -118,7 +118,7 @@ function gatewaysForm ({
                   <dt>${browser.i18n.getMessage('option_useSubdomains_title')}</dt>
                   <dd>
                     ${browser.i18n.getMessage('option_useSubdomains_description')}
-                    <p><a href="https://docs.ipfs.io/guides/guides/addressing/#subdomain-gateway" target="_blank">
+                    <p><a href="https://docs-beta.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
                       ${browser.i18n.getMessage('option_legend_readMore')}
                     </a></p>
                   </dd>

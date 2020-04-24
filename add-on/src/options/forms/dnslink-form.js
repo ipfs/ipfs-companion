@@ -25,7 +25,7 @@ function dnslinkForm ({
               <dt>${browser.i18n.getMessage('option_dnslinkPolicy_title')}</dt>
               <dd>
                 ${browser.i18n.getMessage('option_dnslinkPolicy_description')}
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md#dnslink-support-in-ipfs-companion" target="_blank">
+                <p><a href="https://docs-beta.ipfs.io/how-to/dnslink-companion/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
