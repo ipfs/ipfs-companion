@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "复制 IPFS 路径",
+    "message": "复制 IPFS 内容路径",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "复制公共网关网址",
+    "message": "复制可分享的链接",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -279,6 +279,14 @@
     "message": "公共网关重定向至自定义网关",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_useSubdomains_title": {
+    "message": "使用子域名",
+    "description": "An option title on the Preferences screen (option_useSubdomains_title)"
+  },
+  "option_useSubdomains_description": {
+    "message": "通过在 *.localhost 子域名加载内容并为各 CID、IPNS 或 DNSLink 记录创建唯一的 Origin，使内容的根互相隔离。需要本地 go-ipfs 版本为 0.5.0 或更高。",
+    "description": "An option description on the Preferences screen (option_useSubdomains_description)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "从自定义网关加载网站",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
@@ -292,19 +300,19 @@
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "DNSLink websites will be preloaded to the local IPFS node to enable offline access and improve resiliency against network failures",
+    "message": "DNSLink 网站将预先加载到本地 IPFS 节点，以实现离线访问，以及提升对网络故障的抵御能力",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirecting to a path-based gateway breaks Origin-based security isolation of DNSLink websites. Make sure you understand related risks.",
+    "message": "如果您的 IPFS 节点不支持 *.ipfs.localhost，则请避免使用该功能。重定向到基于路径的网关会损害基于 Origin 的 DNSLink 网站的安全性隔离。请务必确保自己了解相关风险。",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "IPFS Integrations Opt-Outs",
+    "message": "IPFS 整合排除列表",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "List of websites that should not have any IPFS integrations enabled. One hostname per line.",
+    "message": "不需启用 IPFS 整合的网站列表。每行一个主机名。",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -320,7 +328,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Default public subdomain gateway for recovery of broken subdomain gateways",
+    "message": "用于恢复故障子域名网关的默认公共子域名网关",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -380,7 +388,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enables provisional support for ipfs://, ipns:// and dweb: by redirecting unhandled address bar requests to an HTTP gateway",
+    "message": "通过将未处理的地址栏请求重定向到 http 网关实现对 ipfs://、ipns:// 以及 dweb: 的临时支持",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -396,7 +404,7 @@
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Lookup policy for displaying context actions on websites with DNSLink",
+    "message": "对使用 DNSLink 的网站查询显示上下文动作的策略",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -416,7 +424,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Recover failed HTTP requests for IPFS resources by redirecting to the public gateway.",
+    "message": "通过重定向到公共网关恢复对 IPFS 资源的失败 http 请求。",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -444,7 +452,7 @@
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Display files in Web UI rather than opening file or parent directory at gateway.",
+    "message": "在 Web 用户界面显示文件，而非在网关打开文件或上级目录。",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
@@ -452,7 +460,7 @@
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Enables automatic preload of imported assets via asynchronous HTTP HEAD request to a Public Gateway",
+    "message": "启用通过对公共网关的异步 http HEAD 请求自动预加载已导入的资产",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -508,7 +516,7 @@
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "导入正在进行..",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {

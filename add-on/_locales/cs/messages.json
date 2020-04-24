@@ -72,7 +72,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Připnout IPFS objekt",
+    "message": "Připnout prostředek IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Zkopírovat IPFS cestu",
+    "message": "Zkopírovat cestu obsahu IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Zkopírovat URL používající veřejnou bránu",
+    "message": "Kopírovat odkaz, který lze sdílet",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -279,6 +279,14 @@
     "message": "Přesměrovat požadavky pro IPFS objekt skrze vlastní bránu",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_useSubdomains_title": {
+    "message": "Použít subdomény",
+    "description": "An option title on the Preferences screen (option_useSubdomains_title)"
+  },
+  "option_useSubdomains_description": {
+    "message": "Izolovejte od sebe kořeny obsahu jejich načtením ze subdomén v *.localhost a vytvořením jedinečného původu pro každý záznam CID, IPNS nebo záznamu DNSLink. Vyžaduje to místní go-ipfs 0.5.0 nebo novější.",
+    "description": "An option description on the Preferences screen (option_useSubdomains_description)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "Načíst webové stránky z vlastní brány",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
@@ -296,7 +304,7 @@
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Přesměrování na bránu založenou na cestě přerušuje zabezpečení založeném na původu webových stránek DNSLink. Ujistěte se, že rozumíte souvisejícím rizikům.",
+    "message": "Toto nepoužívejte, pokud váš uzel IPFS nepodporuje *.ipfs.localhost. Přesměrování na bránu založenou na cestě přerušuje zabezpečení založené na původu webových stránek DNSLink. Ujistěte se, že rozumíte souvisejícím rizikům.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {

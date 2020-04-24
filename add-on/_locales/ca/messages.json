@@ -40,7 +40,7 @@
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
-    "message": "Obrir l'interficie web",
+    "message": "Obrir la interfície web",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
@@ -72,7 +72,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Marcar recurs IPFS (pin)",
+    "message": "Clavar recurs IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copiar enllaç d'IPFS",
+    "message": "Copiar la ruta del contingut IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copiar l'enllaç del gateway públic",
+    "message": "Copiar l'enllaç de compartir",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -279,6 +279,14 @@
     "message": "Redirigir les peticions a recursos IPFS al Gateway Personalitzat",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_useSubdomains_title": {
+    "message": "Utilitzar subdominis",
+    "description": "An option title on the Preferences screen (option_useSubdomains_title)"
+  },
+  "option_useSubdomains_description": {
+    "message": "Aïllar l'arrel dels continguts bo i carregant-los des de subdominis al localhost i creant un origen únic per cada CID, IPNS o entrada DNSLink.\nÉs necessari un node local go-ipfs 0.5.0 o superior.",
+    "description": "An option description on the Preferences screen (option_useSubdomains_description)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "Carrega els webs des d'un Gateway personalitzat",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
@@ -296,7 +304,7 @@
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Redirigir a un gateway que es basi en Rutes trenca la seguretat basada en Orígens dels llocs DNSLink. Assegura't de comprendre'n els riscos relacionats.",
+    "message": "Evita utilitzar això si el teu Node IPFS no suporta *.ipfs.localhost. Redirigir a una porta basada en rutes trencar la seguretat basada en l'aïllament basat en Orígens dels webs DNSLink. Assegura't de comprendre'n els riscos relacionats",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
