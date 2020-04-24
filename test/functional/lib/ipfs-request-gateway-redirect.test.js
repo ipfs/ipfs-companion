@@ -342,19 +342,39 @@ describe('modifyRequest.onBeforeRequest:', function () {
       describe('request for IPFS path at the localhost', function () {
         // we do not touch local requests, as it may interfere with other nodes running at the same machine
         // or could produce false-positives such as redirection from localhost:5001/ipfs/path to localhost:8080/ipfs/path
-        it('should be left untouched if localhost is used', function () {
+        it('should fix localhost API hostname to IP', function () {
           const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          // expectNoRedirect(modifyRequest, request)
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        })
+        it('should be left untouched if localhost Gateway is used', function () {
+          const request = url2request('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
           expectNoRedirect(modifyRequest, request)
         })
-        it('should be left untouched if localhost is used', function () {
+        it('should fix 127.0.0.1 Gateway to localhost', function () {
+          const request = url2request('http://127.0.0.1:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          // expectNoRedirect(modifyRequest, request)
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        })
+        it('should fix 0.0.0.0 to localhost IP API', function () {
+          // https://github.com/ipfs-shipyard/ipfs-companion/issues/867
+          const request = url2request('http://0.0.0.0:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        })
+        it('should fix localhost API to IP', function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
-          const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-          expectNoRedirect(modifyRequest, request)
+          const request = url2request('http://localhost:5001/webui')
+          // expectNoRedirect(modifyRequest, request)
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://127.0.0.1:5001/webui')
         })
-        it('should be left untouched if localhost is used, even when x-ipfs-path is present', function () {
+        it('should be left untouched if localhost API IP is used, even when x-ipfs-path is present', function () {
           // https://github.com/ipfs-shipyard/ipfs-companion/issues/604
-          const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+          const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DDIFF' }]
           expectNoRedirect(modifyRequest, request)
         })
         it('should be left untouched if [::1] is used', function () {
