@@ -258,7 +258,7 @@ Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript
 
 ## Privacy Policy
 
-See [`docs/privacy-policy.md`](docs/privacy-policy.md)
+See [`privacy-policy.md`](privacy-policy.md)
 
 ## License
 
