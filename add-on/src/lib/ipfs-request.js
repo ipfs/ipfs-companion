@@ -10,7 +10,6 @@ const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
 const { pathAtHttpGateway, sameGateway } = require('./ipfs-path')
 const { safeURL } = require('./options')
-
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableNetworkErrors = new Set([
   // Firefox
@@ -128,11 +127,13 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // take advantage of subdomain redirect provided by go-ipfs >= 0.5
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
+        // console.log('first if redirectUrl = ', redirectUrl);
         if (redirectUrl !== request.url) return { redirectUrl }
       }
       // For now normalize API to the IP to comply with go-ipfs checks
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.apiURL)) {
         const redirectUrl = safeURL(request.url, { useLocalhostName: false }).toString()
+        // console.log('second if redirectUrl = ', redirectUrl);
         if (redirectUrl !== request.url) return { redirectUrl }
       }
 
@@ -163,14 +164,17 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         }
         // Detect valid /ipfs/ and /ipns/ on any site
         if (ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
+          // console.log('right before redirectToGateway = ', request.url);
           return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
         }
         // Detect dnslink using heuristics enabled in Preferences
         if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+          // console.log('inside the dnslinkbs');
           if (state.dnslinkRedirect) {
             const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url)
             if (redirectUrl && isSafeToRedirect(request, runtime)) {
               // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
+              // console.log('dnsLinkResolver redirectUrl = ', redirectUrl);
               return { redirectUrl }
             }
           } else if (state.dnslinkDataPreload) {
