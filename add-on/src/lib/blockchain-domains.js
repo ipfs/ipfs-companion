@@ -8,10 +8,16 @@ const resolution = new Resolution({
   }
 })
 
+const loadingPageURL = browser.extension.getURL('dist/pages/loading/loading.html')
+
 function domainResolution (request) {
   const url = new URL(request.url)
   const domain = url.hostname
+  console.log('domain = ', domain)
   if (resolution.isSupportedDomain(domain)) {
+    console.log('trying to redirect to loading while hash is generating?', loadingPageURL)
+    browser.tabs.update({ url: loadingPageURL })
+    console.log('oinside hte redirect...')
     return resolution.ipfsHash(domain).then(hash => {
       const redirectUrl = `https://cloudflare-ipfs.com/ipfs/${hash}${url.pathname}`
       browser.tabs.update({ url: redirectUrl })
