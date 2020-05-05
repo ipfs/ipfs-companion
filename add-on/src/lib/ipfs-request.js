@@ -379,7 +379,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         if (dnslink) {
           const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
           log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url} → ${redirectUrl}`, request)
-          browser.tabs.update({ url: redirectUrl })
           return updateTabWithURL(request, redirectUrl, browser)
         }
       }
