@@ -62,11 +62,14 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
       // and then copied to an MFS directory
       // to ensure that CIDs for any created file
       // remain the same for ipfs-companion and Web UI
+      // TODO: remove logs
       log('importFiles', data)
       log('importFiles', JSON.stringify(data))
 
       const data2 = []
       log('typeof data', (typeof data))
+
+      // Convert FileList items to objects that preserve filenames
       if (typeof data.item === 'function') {
         for (const file of data) {
           data2.push({
