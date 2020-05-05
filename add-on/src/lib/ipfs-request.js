@@ -369,8 +369,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         const redirectUrl = url.toString()
         log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirectUrl}`, request)
         // TODO: update existing tab
-        browser.tabs.update({ url: redirectUrl })
-        return
+        return updateTabWithURL(request, redirectUrl, browser)
       }
 
       // Check if error can be recovered via DNSLink
@@ -381,7 +380,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
           log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url} → ${redirectUrl}`, request)
           browser.tabs.update({ url: redirectUrl })
-          return
+          return updateTabWithURL(request, redirectUrl, browser)
         }
       }
 
@@ -613,7 +612,7 @@ async function updateTabWithURL (request, redirectUrl, browser) {
   // Do nothing if the URL remains the same
   if (request.url === redirectUrl) return
 
-  browser.tabs.update({
+  return browser.tabs.update({
     active: true,
     url: redirectUrl
   })
