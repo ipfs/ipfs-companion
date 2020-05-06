@@ -674,5 +674,13 @@
   "page_landingWelcome_projects_title": {
     "message": "Related Projects",
     "description": "Projects section title (page_landingWelcome_projects_title)"
+  },
+  "option_supportUnstoppableDomains_title": {
+    "message": "Enable UnstoppableDomains (.crypto and .zil)",
+    "description": "An option title on the Preferences screen (option_supportUnstoppableDomains_title)"
+  },
+  "option_supportUnstoppableDomains_description": {
+    "message": "Allows visit decentralized ipfs sites with top level domain being .crypto or .zil",
+    "description": "An option description on the Preferences screen (option_supportUnstoppableDomains_description)"
   }
 }

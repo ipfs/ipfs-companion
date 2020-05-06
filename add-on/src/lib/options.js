@@ -31,7 +31,8 @@ exports.optionDefaults = Object.freeze({
   ipfsProxy: true, // window.ipfs
   logNamespaces: 'jsipfs*,ipfs*,libp2p:mdns*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*,-ipfs:http-api*',
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
-  openViaWebUI: true
+  openViaWebUI: true,
+  supportUnstoppableDomains: false
 })
 
 function buildCustomGatewayUrl () {

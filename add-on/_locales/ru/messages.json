@@ -674,5 +674,13 @@
   "page_landingWelcome_projects_title": {
     "message": "Связанные проекты",
     "description": "Projects section title (page_landingWelcome_projects_title)"
+  },
+  "option_supportUnstoppableDomains_title": {
+    "message": "Включить поддержку домейнов (.crypto и .zil)",
+    "description": "An option title on the Preferences screen (option_supportUnstoppableDomains_title)"
+  },
+  "option_supportUnstoppableDomains_description": {
+    "message": "Позволяет посещать сайты под домейнами .crypto и .zil",
+    "description": "An option description on the Preferences screen (option_supportUnstoppableDomains_description)"
   }
 }

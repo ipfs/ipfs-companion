@@ -207,11 +207,11 @@
     "message": "Failed to stop IPFS node",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_legend_readMore" : {
+  "option_legend_readMore": {
     "message": "Read more",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "IPFS Node",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -674,5 +674,13 @@
   "page_landingWelcome_projects_title": {
     "message": "Related Projects",
     "description": "Projects section title (page_landingWelcome_projects_title)"
+  },
+  "option_supportUnstoppableDomains_title": {
+    "message": "Enable UnstoppableDomains (.crypto and .zil)",
+    "description": "An option title on the Preferences screen (option_supportUnstoppableDomains_title)"
+  },
+  "option_supportUnstoppableDomains_description": {
+    "message": "Allows visit decentralized ipfs sites with top level domain being .crypto or .zil",
+    "description": "An option description on the Preferences screen (option_supportUnstoppableDomains_description)"
   }
 }

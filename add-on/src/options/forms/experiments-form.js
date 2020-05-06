@@ -6,6 +6,7 @@ const html = require('choo/html')
 const switchToggle = require('../../pages/components/switch-toggle')
 
 function experimentsForm ({
+  supportUnstoppableDomains,
   displayNotifications,
   catchUnhandledProtocols,
   linkify,
@@ -22,6 +23,7 @@ function experimentsForm ({
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
   const onIpfsProxyChange = onOptionChange('ipfsProxy')
+  const onSupportUnstoppableDomainsChange = onOptionChange('supportUnstoppableDomains')
 
   return html`
     <form>
@@ -36,6 +38,15 @@ function experimentsForm ({
             </dl>
           </label>
           <div>${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
+        </div>
+        <div>
+          <label for="supportUnstoppableDomains">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_supportUnstoppableDomains_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_supportUnstoppableDomains_description')}</dd>
+            </dl>
+          </label>
+          <div>${switchToggle({id: 'supportUnstoppableDomains', checked: supportUnstoppableDomains, onchange: onSupportUnstoppableDomainsChange})} </div>
         </div>
         <div>
           <label for="catchUnhandledProtocols">
