@@ -46,7 +46,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_supportUnstoppableDomains_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({id: 'supportUnstoppableDomains', checked: supportUnstoppableDomains, onchange: onSupportUnstoppableDomainsChange})} </div>
+          <div>${switchToggle({ id: 'supportUnstoppableDomains', checked: supportUnstoppableDomains, onchange: onSupportUnstoppableDomainsChange })} </div>
         </div>
         <div>
           <label for="catchUnhandledProtocols">

@@ -24,7 +24,7 @@ const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicG
 const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
 const { showPendingLandingPages } = require('./on-installed')
-const { domainResolution, parseGoogleSearch } = require('./blockchain-domains')
+const { createUnstoppableDomainsController } = require('./blockchain-domains')
 // init happens on addon load in background/background.js
 module.exports = async function init () {
   // INIT
@@ -43,6 +43,7 @@ module.exports = async function init () {
   var ipfsProxy
   var ipfsProxyContentScript
   var ipfsImportHandler
+  var unstoppableDomainsController
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
 
@@ -72,6 +73,7 @@ module.exports = async function init () {
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
     copier = createCopier(notify, ipfsPathValidator)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
+    unstoppableDomainsController = createUnstoppableDomainsController(getState)
     inspector = createInspector(notify, ipfsPathValidator, getState)
     contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
       onAddFromContext,
@@ -112,8 +114,8 @@ module.exports = async function init () {
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
-    browser.webRequest.onBeforeRequest.addListener(parseGoogleSearch, { urls: ['*://*.google.com/*'], types: ['main_frame'] }, ['blocking'])
-    browser.webRequest.onBeforeRequest.addListener(domainResolution, { urls: ['*://*.crypto/*', '*://*.zil/*', '*://*.eth/*'], types: ['main_frame'] }, ['blocking'])
+    browser.webRequest.onBeforeRequest.addListener(unstoppableDomainsController.parseGoogleSearch, { urls: ['*://*.google.com/*'], types: ['main_frame'] }, ['blocking'])
+    browser.webRequest.onBeforeRequest.addListener(unstoppableDomainsController.domainResolution, { urls: ['*://*.crypto/*', '*://*.zil/*', '*://*.eth/*'], types: ['main_frame'] }, ['blocking'])
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
     browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'], types: ['main_frame'] })
@@ -689,6 +691,7 @@ module.exports = async function init () {
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
         case 'noIntegrationsHostnames':
+        case 'supportUnstoppableDomains':
         case 'dnslinkRedirect':
           state[key] = change.newValue
           break
