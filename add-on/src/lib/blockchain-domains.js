@@ -3,7 +3,7 @@ const browser = require('webextension-polyfill')
 // Main tool to resolve blockchain domains
 const resolution = new Resolution({
   blockchain: {
-    ens: { url: 'https://mainnet.infura.io/v3/7253dea473954208bede79ae26ae1225' },
+    ens: false,
     cns: { url: 'https://mainnet.infura.io/v3/7253dea473954208bede79ae26ae1225' }
   }
 })
