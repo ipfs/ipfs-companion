@@ -121,7 +121,7 @@
   },
   "dependencies": {
     "@material/switch": "4.0.0",
-    "@unstoppabledomains/resolution": "^1.3.6",
+    "@unstoppabledomains/resolution": "1.3.6",
     "browser-process-hrtime": "1.0.0",
     "choo": "7.0.0",
     "chrome-dgram": "3.0.4",
