@@ -1366,7 +1366,7 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@unstoppabledomains/resolution@^1.3.6":
+"@unstoppabledomains/resolution@1.3.6":
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/@unstoppabledomains/resolution/-/resolution-1.3.6.tgz#743ca7870efdf0a5d6afca7cf7f3f2a44613bfbb"
   integrity sha512-OuGn2KphJXNDr6vuF6keTpSZax5TqZf989rsD2i+V8ZXgcQwqJBIqKE/07R+R0O2i5AItiMXLDOSMMlxfmv2SQ==
