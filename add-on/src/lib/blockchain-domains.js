@@ -57,6 +57,10 @@ function createUnstoppableDomainsController (getState) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(`/ipfs/${hash}${url.pathname}`)
         browser.tabs.update({ url: redirectUrl })
         return { cancel: true }
+      }).catch(err => {
+        console.log('capture error!', err.code)
+        const errorPageURL = loadingPageURL + `?error=${err.code}&domain=${domain}`
+        browser.tabs.update({ url: errorPageURL })
       })
     },
     parseGoogleSearch (requestDetails) {

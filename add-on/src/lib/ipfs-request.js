@@ -149,7 +149,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           return fix
         }
       }
+      console.log('right before')
       if (unstoppableDomainsController.isSupportedDomain(request)) {
+        console.log('catched', request.url)
         return unstoppableDomainsController.domainResolution(request, ipfsPathValidator)
       }
       // handler for protocol_handlers from manifest.json
