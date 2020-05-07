@@ -100,12 +100,6 @@ const bgConfig = merge(commonConfig, {
           enforce: true,
           // Include js-ipfs and js-ipfs-http-client
           test: /\/node_modules\/(ipfs|ipfs-api|ipfs-http-client)\//
-        },
-        domainResolution: {
-          name: 'unstoppableDomains',
-          priority: 10,
-          enforce: true,
-          test: /\/node_modules\/@unstoppabledomains/
         }
       }
     }
