@@ -35,29 +35,30 @@ function createUnstoppableDomainsController (getState) {
   }
 
   return {
-    domainResolution (request) {
+
+    isSupportedDomain (request) {
+      const url = new URL(request.url)
+      const domain = url.hostname
+      return resolution.isSupportedDomain(domain)
+    },
+
+    domainResolution (request, ipfsPathValidator) {
       var state = getState()
-      console.log(state)
       if (!state.supportUnstoppableDomains) {
-        console.log({ loadingPageURL, enableOptionPageURL })
         browser.tabs.update({ url: enableOptionPageURL })
         return { cancel: true }
       }
       const url = new URL(request.url)
       const domain = url.hostname
-      console.log('domain = ', domain)
-      if (resolution.isSupportedDomain(domain)) {
-        console.log('trying to redirect to loading while hash is generating?', loadingPageURL)
-        browser.tabs.update({ url: loadingPageURL })
-        console.log('oinside hte redirect...')
-        return resolution.ipfsHash(domain).then(hash => {
-          const redirectUrl = `https://cloudflare-ipfs.com/ipfs/${hash}${url.pathname}`
-          browser.tabs.update({ url: redirectUrl })
-          return { cancel: true }
-        })
-      }
+      console.log('trying to redirect to loading while hash is generating?', loadingPageURL)
+      browser.tabs.update({ url: loadingPageURL })
+      console.log('oinside hte redirect...')
+      return resolution.ipfsHash(domain).then(hash => {
+        const redirectUrl = ipfsPathValidator.resolveToPublicUrl(`/ipfs/${hash}${url.pathname}`)
+        browser.tabs.update({ url: redirectUrl })
+        return { cancel: true }
+      })
     },
-
     parseGoogleSearch (requestDetails) {
       const url = new URL(requestDetails.url)
       const params = url.searchParams.get('q').trim().toLowerCase()
@@ -73,10 +74,7 @@ function createUnstoppableDomainsController (getState) {
       browser.tabs.update({ url: q.toString() })
       return { cancel: true }
     }
-
   }
 }
 
-// exports.domainResolution = domainResolution
-// exports.parseGoogleSearch = parseGoogleSearch
 exports.createUnstoppableDomainsController = createUnstoppableDomainsController

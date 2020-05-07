@@ -10,6 +10,7 @@ const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
 const { pathAtHttpGateway, sameGateway } = require('./ipfs-path')
 const { safeURL } = require('./options')
+const { createUnstoppableDomainsController } = require('./blockchain-domains')
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableNetworkErrors = new Set([
   // Firefox
@@ -113,6 +114,8 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     return isIgnored(request.requestId)
   }
 
+  const unstoppableDomainsController = createUnstoppableDomainsController(getState)
+
   // Build RequestModifier
   return {
     // browser.webRequest.onBeforeRequest
@@ -145,6 +148,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         if (fix) {
           return fix
         }
+      }
+      if (unstoppableDomainsController.isSupportedDomain(request)) {
+        return unstoppableDomainsController.domainResolution(request, ipfsPathValidator)
       }
       // handler for protocol_handlers from manifest.json
       if (redirectingProtocolRequest(request)) {
