@@ -1,47 +1,47 @@
-# Localization Notes
+# Localization in IPFS Companion
 
 ### Table of Contents
 
-* [Contributing Translations](#contributing-translations)
-* [Running Chrome with specific locale](#running-chrome-with-specific-locale)
-* [Running Firefox with specific locale](#running-firefox-with-specific-locale)
+* [Running Chrome with a specific locale](#running-chrome-with-a-specific-locale)
+* [Running Firefox with a specific locale](#running-firefox-with-a-specific-locale)
+* [Contributing translations](#contributing-translations)
 
-## Contributing Translations
+IPFS Companion supports running in specific locales, with translations provided by the community via Transifex.
 
-Go to https://www.transifex.com/ipfs/ipfs-companion/, send a request to join specific language team and start translating!
-You can also download raw files from Transifex, translate them in your own editor/tool and then upload them back there, but most of people prefer using Transifex GUI.
+## Running Chrome with a specific locale
 
-If your language is not present in `add-on/_locales` yet, but is supported by mainstream browsers
-please create a [new issue](https://github.com/ipfs/ipfs-companion/issues/new) requesting it :+1: 
+Chrome comes with locales out of the box, so it is enough to set the proper env:
 
-Don't worry if GitHub does not reflect translations added at Transifex:
-translations are merged manually before every release, locale files at GitHub are often behind what is already translated at Transifex. It is a good idea to keep Transifex email notifications enabled to be notified about new strings to translate.
+```go
+LANGUAGE=pl chromium --user-data-dir=`mktemp -d`
+```
 
-Thanks again for your translations!
+### Further resources
 
-## Running Chrome with specific locale
-
-Chrome comes with locales out of the box, so it is enouh to set proper env:
-
-    LANGUAGE=pl chromium --user-data-dir=`mktemp -d`
-
-#### References
 - [Language Codes in Chromium Project](https://src.chromium.org/viewvc/chrome/trunk/src/third_party/cld/languages/internal/languages.cc)
 
-## Running Firefox with specific locale
+## Running Firefox with a specific locale
 
-Unless user installed locale-specific build, Firefox will have English only.  
-If your build already has the locale you are interested in, skip step #2.
+Unless you've installed a locale-specific build, Firefox will have English only. If your build already has the locale you are interested in, skip step #2.
 
-1. Set `intl.locale.requested` in `about:config` or commandline via:
-   ```
+1. Set `intl.locale.requested` in `about:config` or the command line via:
+
+   ```bash
    web-ext run --pref intl.locale.requested=pl
    ```
-2. Install language pack from https://addons.mozilla.org/firefox/language-tools/
-3. Reload browser extension – it should detect new locale
 
+2. Install your language pack from https://addons.mozilla.org/firefox/language-tools/
+3. Reload the browser extension; it should detect your new locale
 
-#### References
- - [How to change the language of the user interface](https://support.mozilla.org/en-US/kb/use-firefox-interface-other-languages-language-pack#w_how-to-change-the-language-of-the-user-interface)
- - [Language Codes at Mozilla](http://l10n.mozilla-community.org/webdashboard/)
+### Further resources
 
+- [Mozilla: Use Firefox in another language](https://support.mozilla.org/en-US/kb/use-firefox-interface-other-languages-language-pack#w_how-to-change-the-language-of-the-user-interface)
+- [Mozilla: Locale Codes](https://wiki.mozilla.org/L10n:Locale_Codes)
+
+## Contributing translations
+
+Internationalization in IPFS Companion (and all IPFS-related projects) depends on the contributions of the community. You can give back by contributing translations in your language(s)! Go to the [IPFS Companion Transifex page](https://www.transifex.com/ipfs/ipfs-companion/), send a request to join a specific language team, and start translating. You can also download raw files from Transifex, translate them in your own editor/tool, and then upload them back there, but many people prefer using the simple and friendly Transifex GUI.
+
+If your language is not present in `add-on/_locales` yet, but is supported by mainstream browsers, please create a [new issue](https://github.com/ipfs/ipfs-companion/issues/new) requesting it.
+
+Don't worry if GitHub does not immediately reflect translations added at Transifex: New translations are merged manually before every release. Locale files at GitHub are often behind what is already translated at Transifex. It is a good idea to keep Transifex email notifications enabled to be notified about new strings to translate.
