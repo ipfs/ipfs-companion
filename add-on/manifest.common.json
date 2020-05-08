@@ -24,6 +24,8 @@
     "default_popup": "dist/popup/browser-action/index.html"
   },
   "options_ui": {
+    "open_in_tab": true,
+    "browser_style": false,
     "page": "dist/options/options.html"
   },
   "web_accessible_resources": [
