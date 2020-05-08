@@ -2,16 +2,6 @@
 @import url('/ui-kit/ipfs.css');
 @import url('../pages/components/switch-toggle.css');
 
-html {
-  overflow: hidden;
-}
-.is-chrome body {
-  margin: 0;
-  min-width: 650px;
-  height: 450px;
-  padding: 15px;
-  overflow-y: auto;
-}
 form * {
   font: caption;
   font-size: 1em;
