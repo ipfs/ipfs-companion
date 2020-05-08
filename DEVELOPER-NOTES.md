@@ -23,7 +23,7 @@ You can use `yarn` instead of `npm`. We provide `yarn.lock` if you choose to do 
 
 ### Clone and install dependencies
 
-First, clone the [`ipfs-shipyard/ipfs-companion` repository](https://github.com/ipfs-shipyard/ipfs-companion):
+First, clone the `ipfs-shipyard/ipfs-companion` [repository](https://github.com/ipfs-shipyard/ipfs-companion):
 
  ```bash
  git clone https://github.com/ipfs-shipyard/ipfs-companion.git
@@ -103,7 +103,7 @@ Release build shortcuts:
 
 ## Other tips
 
-- - You can switch to an alternative Firefox version by overriding your `PATH`:
+- You can switch to an alternative Firefox version by overriding your `PATH`:
 
   ```bash
   export PATH="/path/to/alternative/version/of/firefox/:${PATH}"
