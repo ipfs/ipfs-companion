@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2019-12-10</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/privacy-policy.md))
+Last Update: 2020-05-08</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/PRIVACY-POLICY.md))
 
 The IPFS Companion browser extension is owned by Protocol Labs Inc. and created
 by the IPFS Project. We know you care about how your personal data is used and
