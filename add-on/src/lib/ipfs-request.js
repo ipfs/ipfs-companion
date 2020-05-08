@@ -368,7 +368,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         url.hostname = `${url.hostname}.link`
         const redirectUrl = url.toString()
         log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirectUrl}`, request)
-        // TODO: update existing tab
         return updateTabWithURL(request, redirectUrl, browser)
       }
 
