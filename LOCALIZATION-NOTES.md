@@ -1,6 +1,6 @@
 # Localization in IPFS Companion
 
-### Table of Contents
+### Table of contents
 
 * [Running Chrome with a specific locale](#running-chrome-with-a-specific-locale)
 * [Running Firefox with a specific locale](#running-firefox-with-a-specific-locale)
