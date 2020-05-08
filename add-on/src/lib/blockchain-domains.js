@@ -35,7 +35,6 @@ function createUnstoppableDomainsController (getState) {
   }
 
   return {
-
     isSupportedDomain (request) {
       const url = new URL(request.url)
       const domain = url.hostname
@@ -63,7 +62,15 @@ function createUnstoppableDomainsController (getState) {
         browser.tabs.update({ url: errorPageURL })
       })
     },
-    parseGoogleSearch (requestDetails) {
+    isSearchEngine (request) {
+      const url = new URL(request.url)
+      console.log(url)
+      const params = url.searchParams.get('q')
+      console.log(params)
+      if (params) return true
+      return false
+    },
+    parseSearchEngine (requestDetails) {
       const url = new URL(requestDetails.url)
       const params = url.searchParams.get('q').trim().toLowerCase()
       const q = new URL(url.protocol + '//' + params)

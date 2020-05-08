@@ -149,7 +149,10 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
           return fix
         }
       }
-      console.log('right before')
+      if (unstoppableDomainsController.isSearchEngine(request)) {
+        console.log('found search Engine')
+        return unstoppableDomainsController.parseSearchEngine(request)
+      }
       if (unstoppableDomainsController.isSupportedDomain(request)) {
         console.log('catched', request.url)
         return unstoppableDomainsController.domainResolution(request, ipfsPathValidator)
