@@ -69,9 +69,9 @@ npm run build bundle:chromium # last part is important: it overwrites manifest
 
 Then open `chrome://extensions` in your Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at the `add-on` folder within your project folder.
 
-| Chrome "unpacked extension" | Firefox "temporary add-on" |
-|-----------------------------|----------------------------|
-| ![installing ipfs-companion as an unpacked extension in chrome](gifs/ipfs-companion-install-chrome-dev.gif) | ![installing ipfs-companion as a temporary add on in firefox](gifs/ipfs-companion-install-firefox-dev.gif) |
+| Chrome "unpacked extension"                                                                                                                                                               | Firefox "temporary add-on"                                                                                                                                                               |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![installing ipfs-companion as an unpacked extension in chrome](https://bafybeih34e3a5sgkh57lwv26c6253fxn2jdvte6ilhyld6l4ghuhybzldi.ipfs.dweb.link/ipfs-companion-install-chrome-dev.gif) | ![installing ipfs-companion as a temporary add on in firefox](https://bafybeih34e3a5sgkh57lwv26c6253fxn2jdvte6ilhyld6l4ghuhybzldi.ipfs.dweb.link/ipfs-companion-install-firefox-dev.gif) |
 
 
 ## Useful tasks
