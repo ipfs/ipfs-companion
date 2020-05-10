@@ -65,7 +65,7 @@ function dnslinkForm ({
               <dd>
                 ${browser.i18n.getMessage('option_dnslinkRedirect_description')}
                 ${dnslinkRedirect ? html`<p class="red i">${browser.i18n.getMessage('option_dnslinkRedirect_warning')}</p>` : null}
-                <p><a href="https://github.com/ipfs-shipyard/ipfs-companion/issues/667" target="_blank">
+                <p><a href="https://docs-beta.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
