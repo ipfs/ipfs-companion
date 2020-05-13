@@ -12,6 +12,10 @@
   text-underline-position: under;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 .state-unknown {
   opacity: 0;
   filter: blur( .15em );

@@ -19,7 +19,7 @@ function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOp
               <dt>${browser.i18n.getMessage('option_importDir_title')}</dt>
               <dd>
                 ${browser.i18n.getMessage('option_importDir_description')}
-                <p><a href="https://docs-beta.ipfs.io/concepts/file-systems/#mutable-file-system-mfs" target="_blank">
+                <p><a class="link" href="https://docs-beta.ipfs.io/concepts/file-systems/#mutable-file-system-mfs" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>

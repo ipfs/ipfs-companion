@@ -16,6 +16,9 @@ header {
 	margin-right: 2em;
 	width: 7.15em
 }
+a:hover {
+  text-decoration: underline;
+}
 form * {
   font-family: Inter,system-ui,sans-serif;
   font-size: 0.875rem;
@@ -68,7 +71,6 @@ input, textarea, select {
 fieldset > div > div,
 #resetAllOptions {
   flex: 1;
-  text-align: center;
 }
 input[type=text],
 input[type=url],
@@ -84,4 +86,7 @@ textarea
 input:invalid {
   border: 1px solid #ea5037;
   background-color: #f36149;
+}
+.mdc-switch {
+  display: block;
 }

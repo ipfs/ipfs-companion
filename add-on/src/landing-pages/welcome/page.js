@@ -119,7 +119,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
 const renderResources = (i18n) => {
   const labelClass = 'aqua mb1'
   const copyClass = 'mt0 mb4 lh-copy'
-  const anchorClass = 'navy link underline-under hover-aqua'
+  const anchorClass = 'navy link'
 
   return html`
     <div class="w-80 mv4 navy f5">

@@ -69,7 +69,7 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
               <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
-                <p><a href="https://docs-beta.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
+                <p><a class="link" href="https://docs-beta.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
@@ -86,12 +86,12 @@ function experimentsForm ({
                 <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 <p>${ipfsProxy ? html`
-                    <a href="${browser.extension.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
+                    <a class="link" href="${browser.extension.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
                       ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
                 -->
-                <p><a href="https://docs-beta.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
+                <p><a class="link" href="https://docs-beta.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
