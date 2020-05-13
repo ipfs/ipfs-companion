@@ -11,8 +11,8 @@ function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOp
   const onPreloadAtPublicGatewayChange = onOptionChange('preloadAtPublicGateway')
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_fileImport')}</legend>
+      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_fileImport')}</h2>
         <div>
           <label for="importDir">
             <dl>
@@ -26,6 +26,7 @@ function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOp
             </dl>
           </label>
           <input
+            class="bg-navy white"
             id="importDir"
             type="text"
             pattern="^\/(.*)"

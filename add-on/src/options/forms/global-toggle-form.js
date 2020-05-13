@@ -8,7 +8,7 @@ const switchToggle = require('../../pages/components/switch-toggle')
 function globalToggleForm ({ active, onOptionChange }) {
   const toggle = onOptionChange('active')
   return html`
-    <form class="dib mb3">
+    <form class="db mb3 bg-aqua-muted charcoal">
       <label for="active" class="dib pa3 flex items-center pointer ${!active ? 'charcoal bg-gray-muted br2' : ''}">
         ${switchToggle({ id: 'active', checked: active, onchange: toggle, style: 'mr3' })}
         ${browser.i18n.getMessage('panel_headerActiveToggleTitle')}

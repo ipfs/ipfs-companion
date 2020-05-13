@@ -13,8 +13,8 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
 
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_api')}</legend>
+      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_api')}</h2>
         <div>
           <label for="ipfsApiUrl">
             <dl>
@@ -23,6 +23,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             </dl>
           </label>
           <input
+            class="bg-navy white"
             id="ipfsApiUrl"
             type="url"
             inputmode="url"
@@ -41,6 +42,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             </dl>
           </label>
           <input
+            class="bg-navy white"
             id="ipfsApiPollMs"
             type="number"
             inputmode="numeric"

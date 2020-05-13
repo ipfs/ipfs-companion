@@ -25,8 +25,8 @@ function experimentsForm ({
 
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_experiments')}</legend>
+      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_experiments')}</h2>
         <div>${browser.i18n.getMessage('option_experiments_warning')}</div>
         <div>
           <label for="displayNotifications">
@@ -107,6 +107,7 @@ function experimentsForm ({
             </dl>
           </label>
           <input
+            class="bg-navy white"
             id="logNamespaces"
             type="text"
             required
@@ -120,7 +121,7 @@ function experimentsForm ({
               <dd>${browser.i18n.getMessage('option_resetAllOptions_description')}</dd>
             </dl>
           </label>
-          <div><button id="resetAllOptions" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
+          <div><button id="resetAllOptions" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
         </div>
       </fieldset>
     </form>

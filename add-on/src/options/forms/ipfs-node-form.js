@@ -11,8 +11,8 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
   const withChromeSockets = hasChromeSocketsForTcp()
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_nodeType')}</legend>
+      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_nodeType')}</h2>
         <div>
           <label for="ipfsNodeType">
             <dl>
