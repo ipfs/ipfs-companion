@@ -43,7 +43,7 @@ function gatewaysForm ({
               </dl>
             </label>
             <input
-              class="bg-navy white"
+              class="bg-white navy"
               id="publicGatewayUrl"
               type="url"
               inputmode="url"
@@ -67,7 +67,7 @@ function gatewaysForm ({
               </dl>
             </label>
             <input
-              class="bg-navy white"
+              class="bg-white navy"
               id="publicSubdomainGatewayUrl"
               type="url"
               inputmode="url"
@@ -89,7 +89,7 @@ function gatewaysForm ({
                 </dl>
               </label>
               <input
-                class="bg-navy white"
+                class="bg-white navy"
                 id="customGatewayUrl"
                 type="url"
                 inputmode="url"
@@ -139,7 +139,7 @@ function gatewaysForm ({
                 </dl>
               </label>
               <textarea
-                class="bg-navy white"
+                class="bg-white navy"
                 id="noIntegrationsHostnames"
                 spellcheck="false"
                 onchange=${onNoIntegrationsHostnamesChange}

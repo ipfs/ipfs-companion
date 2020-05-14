@@ -23,7 +23,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             </dl>
           </label>
           <input
-            class="bg-navy white"
+            class="bg-white navy"
             id="ipfsApiUrl"
             type="url"
             inputmode="url"
@@ -42,7 +42,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             </dl>
           </label>
           <input
-            class="bg-navy white"
+            class="bg-white navy"
             id="ipfsApiPollMs"
             type="number"
             inputmode="numeric"

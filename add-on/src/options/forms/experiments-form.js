@@ -107,7 +107,7 @@ function experimentsForm ({
             </dl>
           </label>
           <input
-            class="bg-navy white"
+            class="bg-white navy"
             id="logNamespaces"
             type="text"
             required

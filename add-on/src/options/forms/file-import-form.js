@@ -26,7 +26,7 @@ function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOp
             </dl>
           </label>
           <input
-            class="bg-navy white"
+            class="bg-white navy"
             id="importDir"
             type="text"
             pattern="^\/(.*)"

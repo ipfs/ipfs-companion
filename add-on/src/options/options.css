@@ -14,6 +14,7 @@ header {
 #page-header-logo {
 	height: 3.2em;
 	margin-right: 2em;
+  margin-top: 0.25em;
 	width: 7.15em
 }
 a:hover {
