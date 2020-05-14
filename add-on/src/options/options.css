@@ -17,9 +17,6 @@ header {
   margin-top: 0.25em;
 	width: 7.15em
 }
-a:hover {
-  text-decoration: underline;
-}
 form * {
   font-family: Inter,system-ui,sans-serif;
   font-size: 0.875rem;

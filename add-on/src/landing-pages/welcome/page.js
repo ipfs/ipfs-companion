@@ -119,7 +119,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
 const renderResources = (i18n) => {
   const labelClass = 'ttu tracked f6 fw4 teal mt0 mb3'
   const copyClass = 'mt0 mb4 lh-copy'
-  const anchorClass = 'link'
+  const anchorClass = 'link underline-under hover-aqua'
 
   return html`
     <div class="w-80 mv4 navy f5">
@@ -179,7 +179,7 @@ const renderVideos = (i18n) => {
 }
 
 const renderProjects = (i18n) => {
-  const anchorClass = 'flex flex-column items-center navy link'
+  const anchorClass = 'flex flex-column items-center navy link underline-under hover-aqua'
   const logoWidth = 80
 
   return html`

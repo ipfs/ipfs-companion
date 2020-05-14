@@ -27,7 +27,7 @@ function experimentsForm ({
     <form>
       <fieldset class="mb3 pa4 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_experiments')}</h2>
-        <div>${browser.i18n.getMessage('option_experiments_warning')}</div>
+        <div class="mb2">${browser.i18n.getMessage('option_experiments_warning')}</div>
         <div>
           <label for="displayNotifications">
             <dl>
@@ -69,7 +69,7 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
               <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
-                <p><a class="link" href="https://docs-beta.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
@@ -86,12 +86,12 @@ function experimentsForm ({
                 <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 <p>${ipfsProxy ? html`
-                    <a class="link" href="${browser.extension.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
+                    <a class="link underline hover-aqua" href="${browser.extension.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
                       ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
                 -->
-                <p><a class="link" href="https://docs-beta.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
