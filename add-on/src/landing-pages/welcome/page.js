@@ -57,7 +57,7 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
 }
 
 const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
-  const anchorClass = 'aqua no-underline'
+  const anchorClass = 'aqua hover-white'
   const copyClass = 'mv0 tc lh-copy f5'
   const svgWidth = 80
 
