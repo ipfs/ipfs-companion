@@ -94,7 +94,7 @@ const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
 
 const renderInstallSteps = (i18n, isIpfsOnline) => {
   const copyClass = 'mv0 white f5 lh-copy'
-  const anchorClass = 'white link underline-under hover-aqua'
+  const anchorClass = 'aqua hover-white'
   const stateUnknown = isIpfsOnline === null
 
   return html`
