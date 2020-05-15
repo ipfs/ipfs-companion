@@ -195,7 +195,7 @@ function quickImportPage (state, emit) {
           <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
-              <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
+              <span class="f3 dim br1 ph4 pv3 dib navy" style="background: #6ACAD1">
                 ${browser.i18n.getMessage('quickImport_pick_file_button')}
               </span>
               <span class='f3'>
