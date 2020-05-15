@@ -11,8 +11,8 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
   const withChromeSockets = hasChromeSocketsForTcp()
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_nodeType')}</legend>
+      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_nodeType')}</h2>
         <div>
           <label for="ipfsNodeType">
             <dl>
@@ -20,7 +20,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
               <dd>
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
                 <p>${browser.i18n.getMessage(withChromeSockets ? 'option_ipfsNodeType_embedded_chromesockets_description' : 'option_ipfsNodeType_embedded_description')}</p>
-                <p><a href="https://docs-beta.ipfs.io/how-to/companion-node-types/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/companion-node-types/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>

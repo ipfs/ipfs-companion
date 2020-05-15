@@ -57,7 +57,7 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
 }
 
 const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
-  const anchorClass = 'white link underline-under hover-aqua'
+  const anchorClass = 'aqua hover-white'
   const copyClass = 'mv0 tc lh-copy f5'
   const svgWidth = 80
 
@@ -94,7 +94,7 @@ const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
 
 const renderInstallSteps = (i18n, isIpfsOnline) => {
   const copyClass = 'mv0 white f5 lh-copy'
-  const anchorClass = 'white link underline-under hover-aqua'
+  const anchorClass = 'aqua hover-white'
   const stateUnknown = isIpfsOnline === null
 
   return html`
@@ -117,9 +117,9 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
    ======================================================== */
 
 const renderResources = (i18n) => {
-  const labelClass = 'aqua mb1'
+  const labelClass = 'ttu tracked f6 fw4 teal mt0 mb3'
   const copyClass = 'mt0 mb4 lh-copy'
-  const anchorClass = 'navy link underline-under hover-aqua'
+  const anchorClass = 'link underline-under hover-aqua'
 
   return html`
     <div class="w-80 mv4 navy f5">
@@ -158,7 +158,7 @@ const renderVideos = (i18n) => {
   return html`
     <div class="w-80 flex flex-column flex-row-ns justify-between-ns aqua f5">
       <div class="flex flex-column mr1">
-        <p>${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}</p>
+        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=8CMxDNuuAiQ" target="_blank">
           <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/zb2rhoo8LXEwek8HLLYsXhra9YuYxRDEun3rHRc18mLvK3A5w" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
           ${overlayDiv()}
@@ -167,7 +167,7 @@ const renderVideos = (i18n) => {
       </div>
 
       <div class="flex flex-column">
-        <p>${i18n.getMessage('page_landingWelcome_videos_permanent_web')}</p>
+        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_permanent_web')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=HUVmypx9HGI" target="_blank">
           <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/zb2rhbCqh6W5Veot1sgZC5v7oLMnrkxq8ikd7auyy9UKSLBBa" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
           ${overlayDiv()}
@@ -179,12 +179,12 @@ const renderVideos = (i18n) => {
 }
 
 const renderProjects = (i18n) => {
-  const anchorClass = 'flex flex-column items-center navy link hover-aqua'
+  const anchorClass = 'flex flex-column items-center navy link underline-under hover-aqua'
   const logoWidth = 80
 
   return html`
     <div class="w-80 mv4 navy f6">
-      <p class="mb4 aqua f5">${i18n.getMessage('page_landingWelcome_projects_title')}</p>
+      <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_projects_title')}</p>
 
       <div class="flex justify-between-ns">
         <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">

@@ -17,15 +17,15 @@ function dnslinkForm ({
 
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_dnslink')}</legend>
+      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_dnslink')}</h2>
         <div>
           <label for="dnslinkPolicy">
             <dl>
               <dt>${browser.i18n.getMessage('option_dnslinkPolicy_title')}</dt>
               <dd>
                 ${browser.i18n.getMessage('option_dnslinkPolicy_description')}
-                <p><a href="https://docs-beta.ipfs.io/how-to/dnslink-companion/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/dnslink-companion/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
@@ -65,7 +65,7 @@ function dnslinkForm ({
               <dd>
                 ${browser.i18n.getMessage('option_dnslinkRedirect_description')}
                 ${dnslinkRedirect ? html`<p class="red i">${browser.i18n.getMessage('option_dnslinkRedirect_warning')}</p>` : null}
-                <p><a href="https://docs-beta.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
