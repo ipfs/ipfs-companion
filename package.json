@@ -113,7 +113,7 @@
     "terser": "4.6.7",
     "terser-webpack-plugin": "2.3.5",
     "transform-loader": "0.2.4",
-    "web-ext": "4.1.0",
+    "web-ext": "4.2.0",
     "webpack": "4.42.0",
     "webpack-bundle-analyzer": "3.6.1",
     "webpack-cli": "3.3.11",
