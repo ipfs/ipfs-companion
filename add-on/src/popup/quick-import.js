@@ -1,6 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+require('./quick-import.css')
+
 const browser = require('webextension-polyfill')
 const choo = require('choo')
 const html = require('choo/html')

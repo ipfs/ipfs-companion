@@ -1,5 +1,5 @@
-@import url('/ui-kit/tachyons.css');
-@import url('/ui-kit/ipfs.css');
+@import url('~tachyons/css/tachyons.css');
+@import url('~ipfs-css/ipfs.css');
 @import url('../pages/components/switch-toggle.css');
 
 header {

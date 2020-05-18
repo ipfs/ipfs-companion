@@ -1,5 +1,6 @@
-@import url('../../../ui-kit/tachyons.css');
-@import url('../../../ui-kit/ipfs.css');
+@import url('~tachyons/css/tachyons.css');
+@import url('~ipfs-css/ipfs.css');
+@import url('../../popup/heartbeat.css');
 
 #left-col {
   background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%, #043b55 100%);

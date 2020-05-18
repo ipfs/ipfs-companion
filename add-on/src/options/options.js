@@ -1,6 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+require('./options.css')
+
 const { i18n } = require('webextension-polyfill')
 const choo = require('choo')
 const optionsPage = require('./page')

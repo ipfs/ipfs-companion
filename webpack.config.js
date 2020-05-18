@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -33,6 +34,9 @@ const commonConfig = {
   },
   // plugins: [new BundleAnalyzerPlugin()]
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    }),
     new SimpleProgressWebpackPlugin({
       format: process.env.CI ? 'expanded' : 'minimal'
     }),
@@ -47,6 +51,30 @@ const commonConfig = {
   ],
   module: {
     rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development'
+            }
+          },
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg|eot|otf|ttf|woff|woff2)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
+      },
+      {
+        // Ignore legacy fonts (both Firefox and Chromium talk WOFF2)
+        test: /\.(otf|eot|ttf|woff)(\?.*$|$)/,
+        use: ['raw-loader', 'ignore-loader']
+      },
       {
         exclude: /node_modules/,
         test: /\.js$/,
