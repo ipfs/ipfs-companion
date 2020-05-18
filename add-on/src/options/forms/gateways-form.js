@@ -143,7 +143,7 @@ function gatewaysForm ({
                 id="noIntegrationsHostnames"
                 spellcheck="false"
                 onchange=${onNoIntegrationsHostnamesChange}
-                rows="2"
+                rows="1"
                 >${hostArrayToText(noIntegrationsHostnames)}</textarea>
             </div>
           ` : null}
