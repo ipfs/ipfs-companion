@@ -11,9 +11,9 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
   const withChromeSockets = hasChromeSocketsForTcp()
   return html`
     <form>
-      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
-        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_nodeType')}</h2>
-        <div>
+      <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_nodeType')}</h2>
+        <div class="flex-row-ns pb0-ns">
           <label for="ipfsNodeType">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsNodeType_title')}</dt>
@@ -26,7 +26,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
               </dd>
             </dl>
           </label>
-          <select id="ipfsNodeType" name='ipfsNodeType' onchange=${onIpfsNodeTypeChange}>
+          <select id="ipfsNodeType" name='ipfsNodeType' class="self-center-ns bg-white" onchange=${onIpfsNodeTypeChange}>
             <option
               value='external'
               selected=${ipfsNodeType === 'external'}>
@@ -48,7 +48,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
           </select>
         </div>
         ${ipfsNodeType.startsWith('embedded') ? html`
-          <div>
+          <div class="flex-row-ns pb0-ns">
             <label for="ipfsNodeConfig">
               <dl>
                 <dt>${browser.i18n.getMessage('option_ipfsNodeConfig_title')}</dt>

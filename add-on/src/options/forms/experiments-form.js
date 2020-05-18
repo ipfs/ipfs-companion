@@ -25,46 +25,46 @@ function experimentsForm ({
 
   return html`
     <form>
-      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
-        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_experiments')}</h2>
+      <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_experiments')}</h2>
         <div class="mb2">${browser.i18n.getMessage('option_experiments_warning')}</div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="displayNotifications">
             <dl>
               <dt>${browser.i18n.getMessage('option_displayNotifications_title')}</dt>
               <dd>${browser.i18n.getMessage('option_displayNotifications_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="catchUnhandledProtocols">
             <dl>
               <dt>${browser.i18n.getMessage('option_catchUnhandledProtocols_title')}</dt>
               <dd>${browser.i18n.getMessage('option_catchUnhandledProtocols_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'catchUnhandledProtocols', checked: catchUnhandledProtocols, onchange: onCatchUnhandledProtocolsChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'catchUnhandledProtocols', checked: catchUnhandledProtocols, onchange: onCatchUnhandledProtocolsChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="recoverFailedHttpRequests">
             <dl>
               <dt>${browser.i18n.getMessage('option_recoverFailedHttpRequests_title')}</dt>
               <dd>${browser.i18n.getMessage('option_recoverFailedHttpRequests_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'recoverFailedHttpRequests', checked: recoverFailedHttpRequests, onchange: onrecoverFailedHttpRequestsChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'recoverFailedHttpRequests', checked: recoverFailedHttpRequests, onchange: onrecoverFailedHttpRequestsChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="linkify">
             <dl>
               <dt>${browser.i18n.getMessage('option_linkify_title')}</dt>
               <dd>${browser.i18n.getMessage('option_linkify_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'linkify', checked: linkify, onchange: onLinkifyChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'linkify', checked: linkify, onchange: onLinkifyChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="detectIpfsPathHeader">
             <dl>
               <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
@@ -75,9 +75,9 @@ function experimentsForm ({
               </dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'detectIpfsPathHeader', checked: detectIpfsPathHeader, onchange: onDetectIpfsPathHeaderChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'detectIpfsPathHeader', checked: detectIpfsPathHeader, onchange: onDetectIpfsPathHeaderChange })}</div>
         </div>
-        <div class="o-50">
+        <div class="flex-row-ns pb0-ns o-50">
           <label for="ipfsProxy">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
@@ -97,9 +97,9 @@ function experimentsForm ({
               </dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, disabled: true, onchange: onIpfsProxyChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, disabled: true, onchange: onIpfsProxyChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="logNamespaces">
             <dl>
               <dt>${browser.i18n.getMessage('option_logNamespaces_title')}</dt>
@@ -107,21 +107,21 @@ function experimentsForm ({
             </dl>
           </label>
           <input
-            class="bg-white navy"
+            class="bg-white navy self-center-ns"
             id="logNamespaces"
             type="text"
             required
             onchange=${onOptionChange('logNamespaces')}
             value=${logNamespaces} />
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="resetAllOptions">
             <dl>
               <dt>${browser.i18n.getMessage('option_resetAllOptions_title')}</dt>
               <dd>${browser.i18n.getMessage('option_resetAllOptions_description')}</dd>
             </dl>
           </label>
-          <div><button id="resetAllOptions" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
+          <div class="self-center-ns"><button id="resetAllOptions" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
         </div>
       </fieldset>
     </form>

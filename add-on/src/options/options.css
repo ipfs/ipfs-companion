@@ -21,14 +21,12 @@ fieldset {
 }
 fieldset > div {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
+  padding-bottom: 1.5em;
 }
 fieldset > div + div {
   border-top: 1px solid #ccc;
-}
-fieldset > div > * {
-  align-self: center;
 }
 label {
   flex: 1;

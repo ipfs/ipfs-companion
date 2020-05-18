@@ -17,9 +17,9 @@ function dnslinkForm ({
 
   return html`
     <form>
-      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
-        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_dnslink')}</h2>
-        <div>
+      <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_dnslink')}</h2>
+        <div class="flex-row-ns pb0-ns">
           <label for="dnslinkPolicy">
             <dl>
               <dt>${browser.i18n.getMessage('option_dnslinkPolicy_title')}</dt>
@@ -31,7 +31,7 @@ function dnslinkForm ({
               </dd>
             </dl>
           </label>
-          <select id="dnslinkPolicy" name='dnslinkPolicy' onchange=${onDnslinkPolicyChange}>
+          <select id="dnslinkPolicy" name='dnslinkPolicy' class="self-center-ns bg-white" onchange=${onDnslinkPolicyChange}>
             <option
               value='false'
               selected=${String(dnslinkPolicy) === 'false'}>
@@ -49,16 +49,16 @@ function dnslinkForm ({
             </option>
           </select>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="dnslinkDataPreload">
             <dl>
               <dt>${browser.i18n.getMessage('option_dnslinkDataPreload_title')}</dt>
               <dd>${browser.i18n.getMessage('option_dnslinkDataPreload_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'dnslinkDataPreload', checked: dnslinkDataPreload, disabled: dnslinkRedirect, onchange: onDnslinkDataPreloadChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'dnslinkDataPreload', checked: dnslinkDataPreload, disabled: dnslinkRedirect, onchange: onDnslinkDataPreloadChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="dnslinkRedirect">
             <dl>
               <dt>${browser.i18n.getMessage('option_dnslinkRedirect_title')}</dt>
@@ -71,7 +71,7 @@ function dnslinkForm ({
               </dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'dnslinkRedirect', checked: dnslinkRedirect, onchange: onDnslinkRedirectChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'dnslinkRedirect', checked: dnslinkRedirect, onchange: onDnslinkRedirectChange })}</div>
         </div>
       </fieldset>
     </form>

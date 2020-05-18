@@ -13,9 +13,9 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
 
   return html`
     <form>
-      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
-        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_api')}</h2>
-        <div>
+      <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_api')}</h2>
+        <div class="flex-row-ns pb0-ns">
           <label for="ipfsApiUrl">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsApiUrl_title')}</dt>
@@ -23,7 +23,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             </dl>
           </label>
           <input
-            class="bg-white navy"
+            class="bg-white navy self-center-ns"
             id="ipfsApiUrl"
             type="url"
             inputmode="url"
@@ -34,7 +34,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             onchange=${onIpfsApiUrlChange}
             value=${ipfsApiUrl} />
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="ipfsApiPollMs">
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsApiPollMs_title')}</dt>
@@ -42,7 +42,7 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             </dl>
           </label>
           <input
-            class="bg-white navy"
+            class="bg-white navy self-center-ns"
             id="ipfsApiPollMs"
             type="number"
             inputmode="numeric"
@@ -53,14 +53,14 @@ function apiForm ({ ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) 
             onchange=${onIpfsApiPollMsChange}
             value=${ipfsApiPollMs} />
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="automaticMode">
             <dl>
               <dt>${browser.i18n.getMessage('option_automaticMode_title')}</dt>
               <dd>${browser.i18n.getMessage('option_automaticMode_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'automaticMode', checked: automaticMode, onchange: onAutomaticModeChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'automaticMode', checked: automaticMode, onchange: onAutomaticModeChange })}</div>
         </div>
       </fieldset>
     </form>
