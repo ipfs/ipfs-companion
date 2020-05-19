@@ -207,6 +207,10 @@
     "message": "Failed to stop IPFS node",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
+  "option_page_header" : {
+    "message": "Companion Preferences",
+    "description": "Main header on the Preferences screen (option_page_header)"
+  },
   "option_legend_readMore" : {
     "message": "Read more",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"

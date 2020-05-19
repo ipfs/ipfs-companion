@@ -33,9 +33,9 @@ function gatewaysForm ({
 
   return html`
     <form>
-      <fieldset class="mb3 pa4 bg-snow-muted charcoal">
-        <h2 class="ttu tracked f6 fw4 teal mt0 mb3">${browser.i18n.getMessage('option_header_gateways')}</h2>
-          <div>
+      <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_gateways')}</h2>
+          <div class="flex-row-ns pb0-ns">
             <label for="publicGatewayUrl">
               <dl>
                 <dt>${browser.i18n.getMessage('option_publicGatewayUrl_title')}</dt>
@@ -43,7 +43,7 @@ function gatewaysForm ({
               </dl>
             </label>
             <input
-              class="bg-white navy"
+              class="bg-white navy self-center-ns"
               id="publicGatewayUrl"
               type="url"
               inputmode="url"
@@ -54,7 +54,7 @@ function gatewaysForm ({
               onchange=${onPublicGatewayUrlChange}
               value=${publicGatewayUrl} />
           </div>
-          <div>
+          <div class="flex-row-ns pb0-ns">
             <label for="publicSubdomainGatewayUrl">
               <dl>
                 <dt>${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_title')}</dt>
@@ -67,7 +67,7 @@ function gatewaysForm ({
               </dl>
             </label>
             <input
-              class="bg-white navy"
+              class="bg-white navy self-center-ns"
               id="publicSubdomainGatewayUrl"
               type="url"
               inputmode="url"
@@ -79,7 +79,7 @@ function gatewaysForm ({
               value=${publicSubdomainGatewayUrl} />
           </div>
           ${supportRedirectToCustomGateway && allowChangeOfCustomGateway ? html`
-            <div>
+            <div class="flex-row-ns pb0-ns">
               <label for="customGatewayUrl">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_customGatewayUrl_title')}</dt>
@@ -89,7 +89,7 @@ function gatewaysForm ({
                 </dl>
               </label>
               <input
-                class="bg-white navy"
+                class="bg-white navy self-center-ns"
                 id="customGatewayUrl"
                 type="url"
                 inputmode="url"
@@ -104,18 +104,18 @@ function gatewaysForm ({
             </div>
           ` : null}
           ${supportRedirectToCustomGateway ? html`
-            <div>
+            <div class="flex-row-ns pb0-ns">
               <label for="useCustomGateway">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_useCustomGateway_title')}</dt>
                   <dd>${browser.i18n.getMessage('option_useCustomGateway_description')}</dd>
                 </dl>
               </label>
-              <div>${switchToggle({ id: 'useCustomGateway', checked: useCustomGateway, onchange: onUseCustomGatewayChange })}</div>
+              <div class="self-center-ns">${switchToggle({ id: 'useCustomGateway', checked: useCustomGateway, onchange: onUseCustomGatewayChange })}</div>
             </div>
           ` : null}
           ${supportRedirectToCustomGateway ? html`
-            <div>
+            <div class="flex-row-ns pb0-ns">
               <label for="useSubdomains">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_useSubdomains_title')}</dt>
@@ -127,11 +127,11 @@ function gatewaysForm ({
                   </dd>
                 </dl>
               </label>
-              <div>${switchToggle({ id: 'useSubdomains', checked: useSubdomains, onchange: onUseSubdomainProxyChange })}</div>
+              <div class="self-center-ns">${switchToggle({ id: 'useSubdomains', checked: useSubdomains, onchange: onUseSubdomainProxyChange })}</div>
             </div>
           ` : null}
           ${supportRedirectToCustomGateway ? html`
-            <div>
+            <div class="flex-row-ns pb0-ns">
               <label for="noIntegrationsHostnames">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_noIntegrationsHostnames_title')}</dt>
@@ -139,11 +139,11 @@ function gatewaysForm ({
                 </dl>
               </label>
               <textarea
-                class="bg-white navy"
+                class="bg-white navy self-center-ns"
                 id="noIntegrationsHostnames"
                 spellcheck="false"
                 onchange=${onNoIntegrationsHostnamesChange}
-                rows="4"
+                rows="1"
                 >${hostArrayToText(noIntegrationsHostnames)}</textarea>
             </div>
           ` : null}
