@@ -18,4 +18,6 @@ app.route('*', optionsPage)
 app.mount('#root')
 
 // Set header translation
-document.getElementById('header-text').innerText = i18n.getMessage('option_page_header')
+const headerText = i18n.getMessage('option_page_header')
+document.getElementById('header-text').innerText = headerText
+document.title = headerText
