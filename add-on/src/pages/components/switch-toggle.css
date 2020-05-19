@@ -1,4 +1,4 @@
-@import url('/ui-kit/mdc.switch.min.css');
+@import url('~@material/switch/dist/mdc.switch.css');
 
 .mdc-switch {
   --mdc-theme-secondary: #3e9096 /* teal */

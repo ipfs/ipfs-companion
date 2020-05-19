@@ -1,5 +1,7 @@
 'use strict'
 
+require('./proxy-acl.css')
+
 const browser = require('webextension-polyfill')
 const choo = require('choo')
 const AccessControl = require('../../lib/ipfs-proxy/access-control')

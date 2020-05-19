@@ -1,6 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+require('./welcome.css')
+
 const browser = require('webextension-polyfill')
 const choo = require('choo')
 const createWelcomePageStore = require('./store')
