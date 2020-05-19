@@ -83,9 +83,10 @@ const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
         ${checkmarkSvg()}
         <p class="mt2 mb0 f3 tc">${renderTranslatedSpans('page_landingWelcome_welcome_peers', [peerCount], 'class="aqua fw6"')}</p>
       </div>
-      <p class="${copyClass} mb4">${renderTranslatedLinks('page_landingWelcome_welcome_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</p>
       <div class="mt4 f5 flex justify-center items-center">
-        <button class="pv3 ph4 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('panel_openWebui')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('panel_openWebui')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('panel_openWebui')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('panel_openWebui')}</button>
       </div>
     </div>
   `
@@ -123,6 +124,7 @@ const renderResources = (i18n) => {
   return html`
     <div class="w-80 mv4 navy f5">
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_new_ipfs')}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_welcome_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs', ['https://docs.ipfs.io', 'https://docs.ipfs.io/guides/concepts'], `target="_blank" class="${anchorClass}"`)}</p>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_discover')}</p>
