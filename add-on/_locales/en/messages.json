@@ -612,7 +612,7 @@
     "description": "Ready message title (page_landingWelcome_welcome_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Right now your node is connected to <0>$1</0> peers.",
+    "message": "Your node is connected to <0>$1</0> peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_discover": {
