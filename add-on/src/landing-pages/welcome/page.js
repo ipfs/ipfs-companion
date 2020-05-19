@@ -160,7 +160,7 @@ const renderVideos = (i18n) => {
       <div class="flex flex-column mr1">
         <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=zE_WSLbqqvo" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/zb2rhoo8LXEwek8HLLYsXhra9YuYxRDEun3rHRc18mLvK3A5w" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmS4Ae3WBzkaANSPD82Dsax8QuJQpS4TEfaC53FMPkdxMA" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
@@ -169,7 +169,7 @@ const renderVideos = (i18n) => {
       <div class="flex flex-column">
         <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_permanent_web')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=0IGzEYixJHk" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/zb2rhbCqh6W5Veot1sgZC5v7oLMnrkxq8ikd7auyy9UKSLBBa" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmP5uNwDjYZmoLxw8zJeeheSJEnBKYpFn4uuEQQWFYGKvM" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
