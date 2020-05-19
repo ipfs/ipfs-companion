@@ -187,7 +187,7 @@ To work on the extension you need to install it from source rather than from the
         3. Click "Load Temporary Add-on"
         4. Pick the _file_ `add-on/manifest.json`
 
-**See [`docs/developer-notes.md`](docs/developer-notes.md) for more detailed instructions**
+**See [`DEVELOPER-NOTES.md`](DEVELOPER-NOTES.md) for more detailed instructions**
 
 ### Reproducible Build in Docker
 
