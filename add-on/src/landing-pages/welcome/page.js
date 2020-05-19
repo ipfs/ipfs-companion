@@ -103,14 +103,10 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="120" fill="#ffffff"><path d="M86.39 70.49L58.6 22.37a7.13 7.13 0 00-12.37 0L18.45 70.49a7.15 7.15 0 006.19 10.72H80.2a7.15 7.15 0 006.19-10.72zm-2.26 5.84a4.48 4.48 0 01-3.93 2.28H24.64a4.55 4.55 0 01-3.94-6.82l27.78-48.12a4.55 4.55 0 017.87 0l27.78 48.12a4.45 4.45 0 010 4.54z"/><path d="M55.16 64.24h-5.49a.76.76 0 00-.75.75v5.49a.76.76 0 00.75.75h5.49a.76.76 0 00.75-.75V65a.76.76 0 00-.75-.76zm-.75 5.49h-4v-4h4zm.75-32.02h-5.49a.76.76 0 00-.75.75v21.76a.76.76 0 00.75.75h5.49a.76.76 0 00.75-.75V38.46a.76.76 0 00-.75-.75zm-.75 21.76h-4V39.21h4z"/></svg>
         <p class="mt2 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
       </div>
-      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
-      <p class="mb2 yellow f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>
-      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/introduction/usage/'], `target="_blank" class="${anchorClass}"`)}</p>
-      <div className='db w-100 mw6 mv3 pa3 bg-black-70 bt bw4 br2 snow f7'>
-        <code className='db'>$ ipfs daemon</code>
-        <code className='db'>Initializing daemon...</code>
-        <code className='db'>API server listening on /ip4/127.0.0.1/tcp/5001</code>
-      </div>
+      <p class="mb2 aqua b f4 lh-title">IPFS Desktop users</p>
+      <p class="${copyClass}">Make sure your copy of IPFS Desktop is running. Don't have IPFS Desktop? ${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>
+      <p class="${copyClass}">If you already have IPFS installed on the command line, start a daemon by entering <code class="yellow">ipfs daemon</code> in your terminal. Don't have it installed yet? ${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/introduction/usage/'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
@@ -193,17 +189,17 @@ const renderProjects = (i18n) => {
       <div class="flex justify-between-ns">
         <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">
           <img width="${logoWidth}" src="${multiformatsLogo}" alt="Multiformats Logo">
-          <p>multiformats.io</p>
+          <p>Multiformats</p>
         </a>
 
         <a class="${anchorClass}" href="https://ipld.io/" target="_blank">
           <img width="${logoWidth}" src="${ipldLogo}" alt="IPLD Logo">
-          <p>ipld.io</p>
+          <p>IPLD</p>
         </a>
 
         <a class="${anchorClass}" href="https://libp2p.io/" target="_blank">
         <img width="${logoWidth}" src="${libp2pLogo}" alt="libp2p Logo">
-          <p>libp2p.io</p>
+          <p>libp2p</p>
         </a>
       </div>
     </div>
