@@ -620,7 +620,7 @@
     "description": "Ready message copy (page_landingWelcome_welcome_discover)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS does not seem to be running",
+    "message": "IPFS is not running",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
