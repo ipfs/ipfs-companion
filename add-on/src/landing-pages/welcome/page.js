@@ -124,24 +124,28 @@ const renderResources = (i18n) => {
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_new_ipfs')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_welcome_discover', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</li>
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs', ['https://docs.ipfs.io', 'https://docs.ipfs.io/guides/concepts'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_companion_features', ['https://github.com/ipfs-shipyard/ipfs-companion#features'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_concepts', ['https://docs.ipfs.io/concepts/how-ipfs-works/'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_docs', ['https://docs.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_discover')}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_build')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_discover', ['https://awesome.ipfs.io', 'https://github.com/ipfs/ipfs#project-links'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_build_tutorials', ['https://docs.ipfs.io/how-to/'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_build_examples', ['https://awesome.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_got_questions')}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_get_help')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_got_questions', ['https://discuss.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_get_help', ['https://discuss.ipfs.io'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
-      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_want_to_help')}</p>
+      <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_community')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_want_to_help', ['https://github.com/ipfs/community/#community', 'https://github.com/ipfs/ipfs#project-links', 'https://github.com/ipfs/docs', 'https://github.com/ipfs/i18n#ipfs-translation-project--%EF%B8%8F', 'https://discuss.ipfs.io/c/help'], `target="_blank" class="${anchorClass}"`)}</li>
-      </ul>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_contribute', ['https://docs.ipfs.io/community/contribute/ways-to-contribute/'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_translate', ['https://www.transifex.com/ipfs/public/'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_resources', ['https://docs.ipfs.io/community/'], `target="_blank" class="${anchorClass}"`)}</li>
+    </ul>
     </div>
   `
 }
