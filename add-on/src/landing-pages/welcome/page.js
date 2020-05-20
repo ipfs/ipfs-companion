@@ -106,7 +106,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
       <p class="mb2 aqua b f4 lh-title">IPFS Desktop users</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>
-      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/introduction/usage/'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/how-to/command-line-quick-start/'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
