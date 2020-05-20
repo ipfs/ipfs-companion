@@ -29,7 +29,7 @@
   },
   "panel_statusSwarmPeers": {
     "message": "Peers",
-    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
+    "description": "A label in Node status section of Browser Action pop-up, also used as Welcome ready message button text for opening Web UI peers page (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
     "message": "The number of other IPFS nodes you can connect to",
@@ -607,13 +607,17 @@
     "message": "IPFS Companion",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
-  "page_landingWelcome_welcome_title": {
-    "message": "You are all set!",
-    "description": "Ready message title (page_landingWelcome_welcome_title)"
-  },
   "page_landingWelcome_welcome_peers": {
     "message": "Your node is connected to <0>$1</0> peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
+  },
+  "page_landingWelcome_welcome_status": {
+    "message": "Status",
+    "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_status)"
+  },
+  "page_landingWelcome_welcome_files": {
+    "message": "Files",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_files)"
   },
   "page_landingWelcome_welcome_discover": {
     "message": "Discover what you <0>can do with Companion</0> and dive into the distributed web with IPFS!",

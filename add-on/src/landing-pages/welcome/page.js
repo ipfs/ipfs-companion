@@ -84,9 +84,9 @@ const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
         <p class="mt2 mb0 f3 tc">${renderTranslatedSpans('page_landingWelcome_welcome_peers', [peerCount], 'class="aqua fw6"')}</p>
       </div>
       <div class="mt3 f5 flex justify-center items-center">
-        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>Status</button>
-        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>Files</button>
-        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>Peers</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('page_landingWelcome_welcome_status')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('page_landingWelcome_welcome_files')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('panel_statusSwarmPeers')}</button>
       </div>
     </div>
   `
