@@ -30,7 +30,7 @@ function createWelcomePage (i18n) {
           ${isIpfsOnline ? renderWelcome(i18n, peerCount, onOpenWebUiStatus) : renderInstallSteps(i18n, isIpfsOnline)}
         </div>
 
-        <div id="right-col" class="min-vh-100 flex flex-column justify-around items-center">
+        <div id="right-col" class="min-vh-100 w-100 flex flex-column justify-around items-center">
           ${renderResources(i18n)}
           ${renderVideos(i18n)}
           ${renderProjects(i18n)}
@@ -120,7 +120,7 @@ const renderResources = (i18n) => {
   const anchorClass = 'link underline-under hover-aqua'
 
   return html`
-    <div class="w-80 mt4 mb2 navy f5">
+    <div class="w-80 mt4 mb0 navy f5">
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_new_ipfs')}</p>
       <ul class="${copyClass}">
