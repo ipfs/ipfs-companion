@@ -12,6 +12,7 @@ const ipldLogo = '../../../images/ipld.svg'
 // Colors
 const colorIpfsLogo = '#57cbd0'
 const colorWhite = '#ffffff'
+const colorYellow = '#f39021'
 
 function createWelcomePage (i18n) {
   return function welcomePage (state, emit) {
@@ -49,7 +50,7 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
   const stateUnknown = isIpfsOnline === null
 
   return html`
-    <div class="mt4 mb4 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
+    <div class="mt4 mb2 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
       ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
       <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
     </div>
@@ -59,29 +60,20 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
 const renderWelcome = (i18n, peerCount, onOpenWebUi) => {
   const anchorClass = 'aqua hover-white'
   const copyClass = 'mv0 tc lh-copy f5'
-  const svgWidth = 80
+  const svgWidth = 130
 
-  const checkmarkSvg = () => html`
-    <svg x="0px" y="0px" viewBox="0 0 84 84" width="${svgWidth}">
-      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g transform="translate(-802.000000, -218.000000)">
-          <g transform="translate(805.000000, 221.000000)">
-            <rect stroke="${colorIpfsLogo}" stroke-width="5" x="0" y="0" width="78" height="78" rx="39"/>
-            <g transform="translate(15.000000, 23.000000)" fill="${colorWhite}">
-              <rect transform="translate(10.747845, 24.447908) scale(-1, -1) rotate(-135.000000) translate(-10.747845, -24.447908) " x="-1" y="21.4479076" width="23.495689" height="6" rx="3"/>
-              <rect transform="translate(30.017983, 17.552092) scale(-1, -1) rotate(-45.000000) translate(-30.017983, -17.552092) " x="8.51798323" y="14.5520924" width="43" height="6" rx="3"/>
-            </g>
-          </g>
-        </g>
-      </g>
+  const nodeOnSvg = () => html`
+    <svg x="0px" y="0px" viewBox="0 0 100 100" width="${svgWidth}">
+      <path fill="${colorIpfsLogo}" d="M52.42 18.81A31.19 31.19 0 1083.6 50a31.22 31.22 0 00-31.18-31.19zm0 59.78A28.59 28.59 0 1181 50a28.62 28.62 0 01-28.58 28.59z"/>
+      <path fill="${colorWhite}" d="M66.49 35.87a.75.75 0 00-1.06 0L46.6 54.7l-7.2-7.2a.75.75 0 00-1.06 0l-3.92 3.92a.75.75 0 000 1.06l11.65 11.65a.75.75 0 001.06 0l23.28-23.28a.74.74 0 000-1.06zM46.6 62.54L36 52l2.86-2.86 7.2 7.2a.75.75 0 001.06 0L66 37.46l2.86 2.86z"/>
     </svg>
   `
 
   return html`
     <div class="w-80 flex flex-column justify-center">
       <div class="mb3 flex flex-column justify-center items-center">
-        ${checkmarkSvg()}
-        <p class="mt2 mb0 f3 tc">${renderTranslatedSpans('page_landingWelcome_welcome_peers', [peerCount], 'class="aqua fw6"')}</p>
+        ${nodeOnSvg()}
+        <p class="mt0 mb0 f3 tc">${renderTranslatedSpans('page_landingWelcome_welcome_peers', [peerCount], 'class="aqua fw6"')}</p>
       </div>
       <div class="mt3 f5 flex justify-center items-center">
         <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${onOpenWebUi}>${i18n.getMessage('page_landingWelcome_welcome_status')}</button>
@@ -96,12 +88,19 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
   const copyClass = 'mv0 white f5 lh-copy'
   const anchorClass = 'aqua hover-white'
   const stateUnknown = isIpfsOnline === null
+  const svgWidth = 130
+
+  const nodeOffSvg = () => html`
+    <svg x="0px" y="0px" viewBox="0 0 100 100" width="${svgWidth}">
+      <path fill="${colorYellow}" d="M82.84 71.14L55.06 23a5.84 5.84 0 00-10.12 0L17.16 71.14a5.85 5.85 0 005.06 8.77h55.56a5.85 5.85 0 005.06-8.77zm-30.1-.66h-5.48V65h5.48zm0-10.26h-5.48V38.46h5.48z"/>
+    </svg>
+  `
 
   return html`
-    <div class="w-80 mt3 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
+    <div class="w-80 mt0 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <div class="mb4 flex flex-column justify-center items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="120" fill="#ffffff"><path d="M86.39 70.49L58.6 22.37a7.13 7.13 0 00-12.37 0L18.45 70.49a7.15 7.15 0 006.19 10.72H80.2a7.15 7.15 0 006.19-10.72zm-2.26 5.84a4.48 4.48 0 01-3.93 2.28H24.64a4.55 4.55 0 01-3.94-6.82l27.78-48.12a4.55 4.55 0 017.87 0l27.78 48.12a4.45 4.45 0 010 4.54z"/><path d="M55.16 64.24h-5.49a.76.76 0 00-.75.75v5.49a.76.76 0 00.75.75h5.49a.76.76 0 00.75-.75V65a.76.76 0 00-.75-.76zm-.75 5.49h-4v-4h4zm.75-32.02h-5.49a.76.76 0 00-.75.75v21.76a.76.76 0 00.75.75h5.49a.76.76 0 00.75-.75V38.46a.76.76 0 00-.75-.75zm-.75 21.76h-4V39.21h4z"/></svg>
-        <p class="mt2 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
+        ${nodeOffSvg()}
+        <p class="mt0 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
       </div>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_desktop_title')}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
