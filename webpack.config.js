@@ -67,7 +67,7 @@ const commonConfig = {
         test: /\.(png|jpe?g|gif|svg|eot|otf|ttf|woff|woff2)$/i,
         loader: 'file-loader',
         options: {
-          name: '[path][name].[ext]'
+          name: 'assets/[name].[ext]'
         }
       },
       {

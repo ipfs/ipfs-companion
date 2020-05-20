@@ -61,14 +61,15 @@
     "ci:build": "./ci/update-manifest.sh && npx yarn@1.22.4 build",
     "ci:test": "npx yarn@1.22.4 test",
     "ci:lint": "npx yarn@1.22.4 lint",
-    "beta-build": "docker build -t ipfs-companion-beta-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=beta -v $(pwd)/build:/home/node/app/build ipfs-companion-beta-build yarn ci:build",
-    "release-build": "docker build -t ipfs-companion-release-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=stable -v $(pwd)/build:/home/node/app/build ipfs-companion-release-build yarn ci:build",
+    "beta-build": "docker rmi -f ipfs-companion-beta-build && docker build -t ipfs-companion-beta-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=beta -v $(pwd)/build:/home/node/app/build ipfs-companion-beta-build yarn ci:build",
+    "release-build": "docker rmi -f ipfs-companion-release-build && docker build -t ipfs-companion-release-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=stable -v $(pwd)/build:/home/node/app/build ipfs-companion-release-build yarn ci:build",
     "dev-build": "npx yarn@1.22.4 && npx yarn@1.22.4 build",
     "yarn-build": "npm run dev-build"
   },
   "private": true,
   "preferGlobal": false,
   "resolutions": {
+    "v8": "npm:empty-module@0.0.2",
     "@hapi/hapi": "18.4.0",
     "iso-stream-http": "0.1.2",
     "stream-http": "npm:iso-stream-http@0.1.2",
