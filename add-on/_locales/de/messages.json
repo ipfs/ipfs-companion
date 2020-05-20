@@ -663,13 +663,13 @@
     "message": "Werde Teil der <0>IPFS-Gemeinschaft</0>! Trage bei mit <1>Programmierung</1>, <2>Dokumentation</2>, <3>Übersetzungen</3>, oder der <4>Unterstützung anderer Nutzer</4>.",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
+  "page_landingWelcome_videos_why_ipfs": {
     "message": "IPFS-Alpha-Demo",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
-  "page_landingWelcome_videos_permanent_web": {
+  "page_landingWelcome_videos_how_ipfs_works": {
     "message": "Das permanente Web",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
     "message": "Verwandte Projekte",

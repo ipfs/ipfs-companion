@@ -104,9 +104,9 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
         <p class="mt2 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
       </div>
       <p class="mb2 aqua b f4 lh-title">IPFS Desktop users</p>
-      <p class="${copyClass}">Make sure your copy of IPFS Desktop is running. Don't have IPFS Desktop? ${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>
-      <p class="${copyClass}">If you already have IPFS installed on the command line, start a daemon by entering <code class="yellow">ipfs daemon</code> in your terminal. Don't have it installed yet? ${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/introduction/usage/'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.io/introduction/usage/'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
   `
 }
@@ -158,18 +158,18 @@ const renderVideos = (i18n) => {
   return html`
     <div class="w-80 flex flex-column flex-row-ns justify-between-ns aqua f5">
       <div class="flex flex-column mr1">
-        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}</p>
+        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_why_ipfs')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=zE_WSLbqqvo" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmS4Ae3WBzkaANSPD82Dsax8QuJQpS4TEfaC53FMPkdxMA" alt="${i18n.getMessage('page_landingWelcome_videos_alpha_demo')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmS4Ae3WBzkaANSPD82Dsax8QuJQpS4TEfaC53FMPkdxMA" alt="${i18n.getMessage('page_landingWelcome_videos_why_ipfs')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>
       </div>
 
       <div class="flex flex-column">
-        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_permanent_web')}</p>
+        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_how_ipfs_works')}</p>
         <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=0IGzEYixJHk" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmP5uNwDjYZmoLxw8zJeeheSJEnBKYpFn4uuEQQWFYGKvM" alt="${i18n.getMessage('page_landingWelcome_videos_permanent_web')}" />
+          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmP5uNwDjYZmoLxw8zJeeheSJEnBKYpFn4uuEQQWFYGKvM" alt="${i18n.getMessage('page_landingWelcome_videos_how_ipfs_works')}" />
           ${overlayDiv()}
           ${playSvg()}
         </a>

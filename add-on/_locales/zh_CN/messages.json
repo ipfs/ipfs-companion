@@ -663,13 +663,13 @@
     "message": "加入<0>IPFS社区</0>！贡献<1>代码</1>，<2>文档</2>，<3>翻译</3>或通过<4>给其他用户提供支持</4>来帮忙。",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
+  "page_landingWelcome_videos_why_ipfs": {
     "message": "IPFS Alpha 演示",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
-  "page_landingWelcome_videos_permanent_web": {
+  "page_landingWelcome_videos_how_ipfs_works": {
     "message": "永久性网络",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
     "message": "相关项目",

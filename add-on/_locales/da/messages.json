@@ -663,13 +663,13 @@
     "message": "Tilslut dig <0>IPFS Fællesskabet</0>! Bidrag med <1>kode</1>, <2>dokumentation</2>, <3>oversættelser</3> eller hjælp vedat <4>supportere andre brugere</4>.",
     "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
+  "page_landingWelcome_videos_why_ipfs": {
     "message": "IPFS Alfa Demo",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
-  "page_landingWelcome_videos_permanent_web": {
+  "page_landingWelcome_videos_how_ipfs_works": {
     "message": "Det Permanente Net",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
     "message": "Relaterede Projekter",
