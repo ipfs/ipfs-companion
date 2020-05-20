@@ -17,7 +17,7 @@ module.exports = function browserActionPage (state, emit) {
   const onUnPin = () => emit('unPin')
 
   const onQuickImport = () => emit('quickImport')
-  const onOpenWebUi = () => emit('openWebUi')
+  const onOpenWebUiStatus = () => emit('openWebUiStatus')
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleGlobalRedirect = () => emit('toggleGlobalRedirect')
   const onToggleSiteIntegrations = () => emit('toggleSiteIntegrations')
@@ -25,7 +25,7 @@ module.exports = function browserActionPage (state, emit) {
 
   const headerProps = Object.assign({ onToggleActive, onOpenPrefs }, state)
   const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onPin, onUnPin }, state)
-  const opsProps = Object.assign({ onQuickImport, onOpenWebUi, onToggleGlobalRedirect }, state)
+  const opsProps = Object.assign({ onQuickImport, onOpenWebUiStatus, onToggleGlobalRedirect }, state)
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">

@@ -26,7 +26,7 @@ function createWelcomePageStore (i18n, runtime) {
       })
     })
 
-    emitter.on('openWebUi', async () => {
+    emitter.on('openWebUiStatus', async () => {
       try {
         browser.tabs.create({ url: state.webuiRootUrl })
       } catch (error) {

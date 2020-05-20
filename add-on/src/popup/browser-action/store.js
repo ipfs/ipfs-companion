@@ -133,7 +133,7 @@ module.exports = (state, emitter) => {
     window.close()
   })
 
-  emitter.on('openWebUi', async () => {
+  emitter.on('openWebUiStatus', async () => {
     try {
       browser.tabs.create({ url: state.webuiRootUrl })
       window.close()
