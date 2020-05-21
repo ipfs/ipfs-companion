@@ -69,7 +69,7 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
               <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
-                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
@@ -91,7 +91,7 @@ function experimentsForm ({
                     </a>` : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
                 </p>
                 -->
-                <p><a class="link underline hover-aqua" href="https://docs-beta.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>

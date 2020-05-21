@@ -13,7 +13,7 @@ log.error = debug('ipfs-companion:http-proxy:error')
 // When go-ipfs runs on localhost, it exposes two types of gateway:
 // 127.0.0.1:8080 - old school path gateway
 // localhost:8080 - subdomain gateway supporting Origins like $cid.ipfs.localhost
-// More: https://docs-beta.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway
+// More: https://docs.ipfs.io/how-to/address-ipfs-on-web/#subdomain-gateway
 //
 // In a web browser contexts we care about Origin per content root (CID)
 // because entire web security model uses it as a basis for sandboxing and
