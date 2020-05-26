@@ -53,6 +53,7 @@
     "prepush": "run-s clean build lint test",
     "chromium": "run-s bundle:chromium && web-ext run --target chromium",
     "firefox": "run-s bundle:firefox && web-ext run --url about:debugging",
+    "firefox:nightly": "cross-env PATH=\"./firefox:$PATH\" run-s get-firefox-nightly firefox",
     "firefox:beta:add": "faauv --update ci/firefox/update.json ",
     "get-firefox-nightly": "shx test -e ./firefox/firefox || get-firefox -b nightly -e",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
