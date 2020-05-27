@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const isIPFS = require('is-ipfs')
 const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
+const { welcomePage } = require('../../lib/on-installed')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
@@ -133,12 +134,22 @@ module.exports = (state, emitter) => {
     window.close()
   })
 
-  emitter.on('openWebUi', async () => {
+  emitter.on('openWelcomePage', async () => {
     try {
-      browser.tabs.create({ url: state.webuiRootUrl })
+      await browser.tabs.create({ url: welcomePage })
       window.close()
     } catch (error) {
-      console.error(`Unable Open Web UI due to ${error}`)
+      console.error(`Unable Open WelcomePage (${welcomePage})`, error)
+    }
+  })
+
+  emitter.on('openWebUi', async (page = '/') => {
+    const url = `${state.webuiRootUrl}#${page}`
+    try {
+      await browser.tabs.create({ url })
+      window.close()
+    } catch (error) {
+      console.error(`Unable Open Web UI (${url})`, error)
     }
   })
 

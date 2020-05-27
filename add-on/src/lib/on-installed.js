@@ -3,6 +3,8 @@
 
 const browser = require('webextension-polyfill')
 
+exports.welcomePage = '/dist/landing-pages/welcome/index.html'
+
 exports.onInstalled = async (details) => {
   // details.temporary === run via `npm run firefox`
   if (details.reason === 'install' || details.temporary) {
@@ -16,7 +18,7 @@ exports.showPendingLandingPages = async () => {
     case 'onInstallWelcome':
       await browser.storage.local.remove('showLandingPage')
       return browser.tabs.create({
-        url: '/dist/landing-pages/welcome/index.html'
+        url: exports.welcomePage
       })
     // case 'onVersionUpdate'
   }

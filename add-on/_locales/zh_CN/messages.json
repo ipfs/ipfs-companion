@@ -611,9 +611,9 @@
     "message": "当前您的节点已经连接上<0>$1</0>个节点",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_welcome_discover": {
+  "page_landingWelcome_resources_new_ipfs_companion_features": {
     "message": "发现什么是你 <0>通过伴侣能做的</0> 并通过 IPFS 参与到分布式 web ！",
-    "description": "Ready message copy (page_landingWelcome_welcome_discover)"
+    "description": "Ready message copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS 似乎没有运行",
@@ -635,41 +635,41 @@
     "message": "刚接触 IPFS？",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
-  "page_landingWelcome_resources_new_ipfs": {
+  "page_landingWelcome_resources_new_ipfs_docs": {
     "message": "阅读<0>文档</0>来学习基本的<1>概念</1>，开始 IPFS 相关的工作",
-    "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
-  "page_landingWelcome_resources_title_discover": {
+  "page_landingWelcome_resources_title_build": {
     "message": "发现！",
-    "description": "Resources title (page_landingWelcome_resources_title_discover)"
+    "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
-  "page_landingWelcome_resources_discover": {
+  "page_landingWelcome_resources_build_examples": {
     "message": "在它上面寻找使用IPFS的 <0>有用资源</0> 和 <1>正在做的事</1> 。",
-    "description": "Resources copy (page_landingWelcome_resources_discover)"
+    "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
-  "page_landingWelcome_resources_title_got_questions": {
+  "page_landingWelcome_resources_title_get_help": {
     "message": "遇到问题？",
-    "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
+    "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
-  "page_landingWelcome_resources_got_questions": {
+  "page_landingWelcome_resources_get_help": {
     "message": "浏览<0>讨论与支持论坛</0>。",
-    "description": "Resources copy (page_landingWelcome_resources_got_questions)"
+    "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
-  "page_landingWelcome_resources_title_want_to_help": {
+  "page_landingWelcome_resources_title_community": {
     "message": "需要帮助？",
-    "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
+    "description": "Resources title (page_landingWelcome_resources_title_community)"
   },
-  "page_landingWelcome_resources_want_to_help": {
+  "page_landingWelcome_resources_community_resources": {
     "message": "加入<0>IPFS社区</0>！贡献<1>代码</1>，<2>文档</2>，<3>翻译</3>或通过<4>给其他用户提供支持</4>来帮忙。",
-    "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
+    "description": "Resources copy (page_landingWelcome_resources_community)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
+  "page_landingWelcome_videos_why_ipfs": {
     "message": "IPFS Alpha 演示",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
-  "page_landingWelcome_videos_permanent_web": {
+  "page_landingWelcome_videos_how_ipfs_works": {
     "message": "永久性网络",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
     "message": "相关项目",

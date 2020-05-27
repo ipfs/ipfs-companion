@@ -611,9 +611,9 @@
     "message": "Lige nu er din klient forbundet til <0>$1</0> andre klienter.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_welcome_discover": {
+  "page_landingWelcome_resources_new_ipfs_companion_features": {
     "message": "Udforsk hvad du <0> kan gøre med Følgesvend</0> og dyk ned i det distribuerede net med IPFS!",
-    "description": "Ready message copy (page_landingWelcome_welcome_discover)"
+    "description": "Ready message copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS ser ikke ud til at være kørende",
@@ -635,41 +635,41 @@
     "message": "Er du nybegynder til IPFS?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
-  "page_landingWelcome_resources_new_ipfs": {
+  "page_landingWelcome_resources_new_ipfs_docs": {
     "message": "Læs <0>dokumentationen</0> for at lære omkring basis <1>koncepter</1> og arbejdet med IPFS.",
-    "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
-  "page_landingWelcome_resources_title_discover": {
+  "page_landingWelcome_resources_title_build": {
     "message": "Udforsk!",
-    "description": "Resources title (page_landingWelcome_resources_title_discover)"
+    "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
-  "page_landingWelcome_resources_discover": {
+  "page_landingWelcome_resources_build_examples": {
     "message": "Find <0>nyttige ressourcer</0>om brugen af IPFS og opbygning af ting</1>oven på.",
-    "description": "Resources copy (page_landingWelcome_resources_discover)"
+    "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
-  "page_landingWelcome_resources_title_got_questions": {
+  "page_landingWelcome_resources_title_get_help": {
     "message": "Har du spørgsmål?",
-    "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
+    "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
-  "page_landingWelcome_resources_got_questions": {
+  "page_landingWelcome_resources_get_help": {
     "message": "Besøg <0>Diskussions og Support Forum</0>.",
-    "description": "Resources copy (page_landingWelcome_resources_got_questions)"
+    "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
-  "page_landingWelcome_resources_title_want_to_help": {
+  "page_landingWelcome_resources_title_community": {
     "message": "Lyst til at hjælpe?",
-    "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
+    "description": "Resources title (page_landingWelcome_resources_title_community)"
   },
-  "page_landingWelcome_resources_want_to_help": {
+  "page_landingWelcome_resources_community_resources": {
     "message": "Tilslut dig <0>IPFS Fællesskabet</0>! Bidrag med <1>kode</1>, <2>dokumentation</2>, <3>oversættelser</3> eller hjælp vedat <4>supportere andre brugere</4>.",
-    "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
+    "description": "Resources copy (page_landingWelcome_resources_community)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
+  "page_landingWelcome_videos_why_ipfs": {
     "message": "IPFS Alfa Demo",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
-  "page_landingWelcome_videos_permanent_web": {
+  "page_landingWelcome_videos_how_ipfs_works": {
     "message": "Det Permanente Net",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
     "message": "Relaterede Projekter",

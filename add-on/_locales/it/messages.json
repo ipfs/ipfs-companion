@@ -611,9 +611,9 @@
     "message": "Al momento il tuo nodo è connesso a <0>$1</0> nodi.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_welcome_discover": {
+  "page_landingWelcome_resources_new_ipfs_companion_features": {
     "message": "Scopri cosa <0>puoi fare con Companion</0> e tuffati nel web distribuito con IPFS!",
-    "description": "Ready message copy (page_landingWelcome_welcome_discover)"
+    "description": "Ready message copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "Sembra che IPFS non sia in esecuzione",
@@ -635,41 +635,41 @@
     "message": "Nuovo to IPFS?",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
-  "page_landingWelcome_resources_new_ipfs": {
+  "page_landingWelcome_resources_new_ipfs_docs": {
     "message": "Leggi la <0>documentazione</0> per scoprire i <1>concetti</1> base e lavorare con IPFS.",
-    "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
-  "page_landingWelcome_resources_title_discover": {
+  "page_landingWelcome_resources_title_build": {
     "message": "Scopri!",
-    "description": "Resources title (page_landingWelcome_resources_title_discover)"
+    "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
-  "page_landingWelcome_resources_discover": {
+  "page_landingWelcome_resources_build_examples": {
     "message": "Trova <0>risorse utili</0> per usare e <1>costruire cose</1> con IPFS.",
-    "description": "Resources copy (page_landingWelcome_resources_discover)"
+    "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
-  "page_landingWelcome_resources_title_got_questions": {
+  "page_landingWelcome_resources_title_get_help": {
     "message": "Domande?",
-    "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
+    "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
-  "page_landingWelcome_resources_got_questions": {
+  "page_landingWelcome_resources_get_help": {
     "message": "Visita il <0>Forum di Discussione e Supporto</0>",
-    "description": "Resources copy (page_landingWelcome_resources_got_questions)"
+    "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
-  "page_landingWelcome_resources_title_want_to_help": {
+  "page_landingWelcome_resources_title_community": {
     "message": "Hai bisogno di aiuto?",
-    "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
+    "description": "Resources title (page_landingWelcome_resources_title_community)"
   },
-  "page_landingWelcome_resources_want_to_help": {
+  "page_landingWelcome_resources_community_resources": {
     "message": "Unisciti alla <0>Comunitià IPFS</0>! Contribuisci con <1>codice</1>, <2>documentazione</2>, <3>traduzioni</3> o dai <4>supporto ad altri utenti</4>.",
-    "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
+    "description": "Resources copy (page_landingWelcome_resources_community)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
+  "page_landingWelcome_videos_why_ipfs": {
     "message": "Demo Alpha di IPFS",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
-  "page_landingWelcome_videos_permanent_web": {
+  "page_landingWelcome_videos_how_ipfs_works": {
     "message": "Il Web Permanente",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
     "message": "Progetti simili ",
