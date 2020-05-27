@@ -29,7 +29,7 @@
   },
   "panel_statusSwarmPeers": {
     "message": "Peers",
-    "description": "A label in Node status section of Browser Action pop-up, also used as Welcome ready message button text for opening Web UI peers page (panel_statusSwarmPeers)"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
     "message": "The number of other IPFS nodes you can connect to",
@@ -618,6 +618,10 @@
   "page_landingWelcome_welcome_files": {
     "message": "Files",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_files)"
+  },
+  "page_landingWelcome_welcome_peers": {
+    "message": "Peers",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS is not running",
