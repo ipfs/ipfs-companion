@@ -1,1 +1,1 @@
-Content present in this directory was moved to [IPFS Docs](https://docs-beta.ipfs.io).
+Content present in this directory was moved to [IPFS Docs](https://docs.ipfs.io).

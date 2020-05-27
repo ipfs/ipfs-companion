@@ -1,1 +1,1 @@
-Moved [here](https://docs-beta.ipfs.io/how-to/companion-node-types/)
+Moved [here](https://docs.ipfs.io/how-to/companion-node-types/)
