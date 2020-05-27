@@ -75,9 +75,9 @@ const renderWelcome = (i18n, peerCount, openWebUi) => {
         <p class="mt0 mb0 f3 tc">${renderTranslatedSpans('page_landingWelcome_welcome_peers', [peerCount], 'class="aqua fw6"')}</p>
       </div>
       <div class="mt3 f5 flex justify-center items-center">
-        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${openWebUi('/')}>${i18n.getMessage('page_landingWelcome_welcome_status')}</button>
-        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${openWebUi('/files')}>${i18n.getMessage('page_landingWelcome_welcome_files')}</button>
-        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${openWebUi('/peers')}>${i18n.getMessage('page_landingWelcome_welcome_peers')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${openWebUi('/')}>${i18n.getMessage('page_landingWelcome_welcome_statusButton_text')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${openWebUi('/files')}>${i18n.getMessage('page_landingWelcome_welcome_filesButton_text')}</button>
+        <button class="pv3 ph4 mh2 b navy br2 bn bg-white hover-bg-white-90 pointer" onclick=${openWebUi('/peers')}>${i18n.getMessage('page_landingWelcome_welcome_peersButton_text')}</button>
       </div>
     </div>
   `

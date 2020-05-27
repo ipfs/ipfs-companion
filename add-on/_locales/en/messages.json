@@ -611,17 +611,17 @@
     "message": "Your node is connected to <0>$1</0> peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_welcome_status": {
+  "page_landingWelcome_welcome_statusButton_text": {
     "message": "Status",
-    "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_status)"
+    "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
   },
-  "page_landingWelcome_welcome_files": {
+  "page_landingWelcome_welcome_filesButton_text": {
     "message": "Files",
-    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_files)"
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
   },
-  "page_landingWelcome_welcome_peers": {
+  "page_landingWelcome_welcome_peersButton_text": {
     "message": "Peers",
-    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peers)"
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS is not running",
