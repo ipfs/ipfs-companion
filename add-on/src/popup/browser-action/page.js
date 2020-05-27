@@ -18,12 +18,13 @@ module.exports = function browserActionPage (state, emit) {
 
   const onQuickImport = () => emit('quickImport')
   const onOpenWebUi = () => emit('openWebUi', '/')
+  const onOpenWelcomePage = () => emit('openWelcomePage')
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleGlobalRedirect = () => emit('toggleGlobalRedirect')
   const onToggleSiteIntegrations = () => emit('toggleSiteIntegrations')
   const onToggleActive = () => emit('toggleActive')
 
-  const headerProps = Object.assign({ onToggleActive, onOpenPrefs }, state)
+  const headerProps = Object.assign({ onToggleActive, onOpenPrefs, onOpenWelcomePage }, state)
   const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickImport, onOpenWebUi, onToggleGlobalRedirect }, state)
 

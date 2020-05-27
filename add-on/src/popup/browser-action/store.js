@@ -4,6 +4,7 @@
 const browser = require('webextension-polyfill')
 const isIPFS = require('is-ipfs')
 const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
+const { welcomePage } = require('../../lib/on-installed')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
@@ -131,6 +132,15 @@ module.exports = (state, emitter) => {
   emitter.on('quickImport', () => {
     browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-import.html') })
     window.close()
+  })
+
+  emitter.on('openWelcomePage', async () => {
+    try {
+      await browser.tabs.create({ url: welcomePage })
+      window.close()
+    } catch (error) {
+      console.error(`Unable Open WelcomePage (${welcomePage})`, error)
+    }
   })
 
   emitter.on('openWebUi', async (page = '/') => {
