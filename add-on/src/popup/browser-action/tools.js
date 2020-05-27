@@ -12,7 +12,7 @@ module.exports = function tools ({
   isIpfsOnline,
   isApiAvailable,
   onQuickImport,
-  onOpenWebUiStatus
+  onOpenWebUi
 }) {
   const activeQuickImport = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
@@ -30,7 +30,7 @@ module.exports = function tools ({
   ${navItem({
     text: browser.i18n.getMessage('panel_openWebui'),
     disabled: !activeWebUI,
-    onClick: onOpenWebUiStatus
+    onClick: onOpenWebUi
   })}
     </div>
     </div>
