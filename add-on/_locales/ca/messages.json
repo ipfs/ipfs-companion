@@ -29,7 +29,7 @@
   },
   "panel_statusSwarmPeers": {
     "message": "Peers",
-    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
     "message": "El número de nodes IPFS als quals et pots conectar",
@@ -72,11 +72,11 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Clavar recurs IPFS",
+    "message": "Ancora el recurs IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Clavant un CID li dius al teu node IPFS que aquesta informació és important i que no s'ha de llançar.",
+    "message": "Ancorant un CID li dius al teu node IPFS que aquesta informació és important i que no s'ha de llançar.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -152,19 +152,19 @@
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "El recurs d'IPFS a estat marcat  (pin)",
+    "message": "El recurs d'IPFS a estat ancorat",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Eliminar marcatge (pin) d'IPFS",
+    "message": "Eliminar l'ancoratge d'IPFS",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Error al marcar el recurs d'IPFS",
+    "message": "Error a l'ancorar el recurs d'IPFS",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Error al eliminar el marcatge d'IPFS",
+    "message": "Error a l'eliminar l'ancoratge d'IPFS",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
@@ -206,6 +206,10 @@
   "notify_stopIpfsNodeErrorTitle": {
     "message": "Error al parar el node d'IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
+  },
+  "option_page_header" : {
+    "message": "Companion Preferences",
+    "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
     "message": "Llegir més",
@@ -603,72 +607,100 @@
     "message": "Acompanyant IPFS",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
-  "page_landingWelcome_welcome_title": {
-    "message": "Està tot apunt!",
-    "description": "Ready message title (page_landingWelcome_welcome_title)"
-  },
   "page_landingWelcome_welcome_peers": {
-    "message": "Ara mateix el teu node està connectat a __TX_TAG__2e7a3d8709699e8f9b6925fc476cc112__$1</0>peers.",
+    "message": "Your node is connected to <0>$1</0> peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "Descobreix què <0>pots fer amb l'Acompanyant</0> i endinsat la web distribuïda amb IPFS!",
-    "description": "Ready message copy (page_landingWelcome_resources_new_ipfs_companion_features)"
+  "page_landingWelcome_welcome_statusButton_text": {
+    "message": "Estat",
+    "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
+  },
+  "page_landingWelcome_welcome_filesButton_text": {
+    "message": "Fitxers",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
+  },
+  "page_landingWelcome_welcome_peersButton_text": {
+    "message": "Llavors",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "Sembla que l'IPFS no funciona",
+    "message": "IPFS no està en marxa",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
+  "page_landingWelcome_installSteps_desktop_title": {
+    "message": "IPFS Desktop users",
+    "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
+  },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Aconsegueix <0>l'IPFS d'Escriptori</0> i ho tindràs tot solucionat!",
+    "message": "Make sure IPFS Desktop is running. Don't have it installed? <0>Download IPFS Desktop now.</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Prefereixes fer servir la línia de comandament?",
+    "message": "Command-line users",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Segueix <0>aquestes instruccions</0>, després posa en marxa el proces IPFS al teu terminal:",
+    "message": "Start IPFS by entering <code class=\"yellow\">ipfs daemon</code> in your terminal. If you don't have IPFS installed yet, follow the <0>CLI quick-start guide</0> first.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Ets nou a IPFS?",
+    "message": "Learn about IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
+  "page_landingWelcome_resources_new_ipfs_companion_features": {
+    "message": "Read about <0>IPFS Companion's features</0>",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
+  },
+  "page_landingWelcome_resources_new_ipfs_concepts": {
+    "message": "Learn basic concepts in the <0>How IPFS Works</0> guide",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
+  },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Llegeix la <0>documentació</0> per aprendre els <1>conceptes</1> bàsics per treballar amb IPFS.",
+    "message": "Visit the <0>IPFS documentation site</0> to dig deeper",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
-    "message": "Descobreix!",
+    "message": "Build on IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
+  "page_landingWelcome_resources_build_tutorials": {
+    "message": "Find <0>how-tos and tutorials</0> to help get you started",
+    "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
+  },
   "page_landingWelcome_resources_build_examples": {
-    "message": "Troba <0>recursos útils</0> per fer servir IPFS i <1>construir-hi</1>al damunt.",
+    "message": "See what <0>awesome things</0> others are building with IPFS",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
-    "message": "Tens preguntes?",
+    "message": "Get help",
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Visita el <0>Fòrum de Suport i Debat</0>. ",
+    "message": "Ask questions and discuss IPFS in the <0>official forums</0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
-    "message": "Vols ajudar?",
-    "description": "Resources title (page_landingWelcome_resources_title_community)"
+    "message": "Join the community",
+    "description": "Community title (page_landingWelcome_resources_title_community)"
+  },
+  "page_landingWelcome_resources_community_contribute": {
+    "message": "<0>Contribute</0> with code, documentation, and more",
+    "description": "Community copy (page_landingWelcome_resources_community_contribute)"
+  },
+  "page_landingWelcome_resources_community_translate": {
+    "message": "<0>Translate</0> IPFS into your favorite language",
+    "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {
-    "message": "Uneix-te a la <0>Comunitat IPFS</0>!  Contribueix amb <1>codi</1>, <2>documentació</2>,<3> traduccions</3> o ajuda bo i donant suport a <4>altres usuaris</4>.",
-    "description": "Resources copy (page_landingWelcome_resources_community)"
+    "message": "Explore all <0>IPFS community resources</0>",
+    "description": "Community copy (page_landingWelcome_resources_community_resources)"
   },
   "page_landingWelcome_videos_why_ipfs": {
-    "message": "IPFS Demo Alfa",
+    "message": "Why IPFS?",
     "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
   "page_landingWelcome_videos_how_ipfs_works": {
-    "message": "La Web Permanent",
+    "message": "How IPFS Works",
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {

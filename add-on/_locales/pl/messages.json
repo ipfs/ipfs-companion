@@ -29,7 +29,7 @@
   },
   "panel_statusSwarmPeers": {
     "message": "połączenia",
-    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
     "message": "Liczba węzłów IPFS umożliwiających połączenie",
@@ -206,6 +206,10 @@
   "notify_stopIpfsNodeErrorTitle": {
     "message": "Nie udało się zatrzymać węzła IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
+  },
+  "option_page_header" : {
+    "message": "Companion Preferences",
+    "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
     "message": "Dowiedz się więcej",
@@ -603,72 +607,100 @@
     "message": "Asystent IPFS",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
-  "page_landingWelcome_welcome_title": {
-    "message": "Wszystko gotowe!",
-    "description": "Ready message title (page_landingWelcome_welcome_title)"
-  },
   "page_landingWelcome_welcome_peers": {
-    "message": "Twój węzeł jest połączony z <0>$1</0> innymi.",
+    "message": "Your node is connected to <0>$1</0> peers.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "Odkryj co <0>możesz zrobić dzięki temu rozszerzeniu</0> i rozpocznij przygodę z IPFS!",
-    "description": "Ready message copy (page_landingWelcome_resources_new_ipfs_companion_features)"
+  "page_landingWelcome_welcome_statusButton_text": {
+    "message": "Status",
+    "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
+  },
+  "page_landingWelcome_welcome_filesButton_text": {
+    "message": "Pliki",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
+  },
+  "page_landingWelcome_welcome_peersButton_text": {
+    "message": "Węzły",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS nie jest dostępny",
+    "message": "IPFS is not running",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
+  "page_landingWelcome_installSteps_desktop_title": {
+    "message": "IPFS Desktop users",
+    "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
+  },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Zainstaluj <0>IPFS Desktop</0>  i dołącz do sieci!",
+    "message": "Make sure IPFS Desktop is running. Don't have it installed? <0>Download IPFS Desktop now.</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Preferujesz linię poleceń?",
+    "message": "Command-line users",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Zapoznaj się z <0>tymi instrukcjami</0>, następnie uruchom daemon IPFS w terminalu:",
+    "message": "Start IPFS by entering <code class=\"yellow\">ipfs daemon</code> in your terminal. If you don't have IPFS installed yet, follow the <0>CLI quick-start guide</0> first.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Zaczynasz z IPFS?",
+    "message": "Learn about IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
+  "page_landingWelcome_resources_new_ipfs_companion_features": {
+    "message": "Read about <0>IPFS Companion's features</0>",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
+  },
+  "page_landingWelcome_resources_new_ipfs_concepts": {
+    "message": "Learn basic concepts in the <0>How IPFS Works</0> guide",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
+  },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Przeczytaj <0>dokumentację</0> i zapoznaj się z podstawową  <1>terminologią</1> oraz pracą z IPFS.",
+    "message": "Visit the <0>IPFS documentation site</0> to dig deeper",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
-    "message": "Odkryj więcej!",
+    "message": "Build on IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
+  "page_landingWelcome_resources_build_tutorials": {
+    "message": "Find <0>how-tos and tutorials</0> to help get you started",
+    "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
+  },
   "page_landingWelcome_resources_build_examples": {
-    "message": "Poznaj <0>istniejące zasoby</0> związane z użytkowaniem i <1>tworzeniem rozwiązań</1> opartych o IPFS.",
+    "message": "See what <0>awesome things</0> others are building with IPFS",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
-    "message": "Masz pytania?",
+    "message": "Get help",
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Odwiedź <0>forum dyskusyjne</0>.",
+    "message": "Ask questions and discuss IPFS in the <0>official forums</0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
-    "message": "Chcesz pomóc?",
-    "description": "Resources title (page_landingWelcome_resources_title_community)"
+    "message": "Join the community",
+    "description": "Community title (page_landingWelcome_resources_title_community)"
+  },
+  "page_landingWelcome_resources_community_contribute": {
+    "message": "<0>Contribute</0> with code, documentation, and more",
+    "description": "Community copy (page_landingWelcome_resources_community_contribute)"
+  },
+  "page_landingWelcome_resources_community_translate": {
+    "message": "<0>Translate</0> IPFS into your favorite language",
+    "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {
-    "message": "Dołącz do <0>społeczności IPFS</0>! Ulepszaj <1>kod</1>, <2>dokumentację</2>, <3>tłumaczenia</3> lub pomagaj <4>odpowiadając na pytania i problemy</4> innych użytkowników.",
-    "description": "Resources copy (page_landingWelcome_resources_community)"
+    "message": "Explore all <0>IPFS community resources</0>",
+    "description": "Community copy (page_landingWelcome_resources_community_resources)"
   },
   "page_landingWelcome_videos_why_ipfs": {
-    "message": "IPFS Alpha Demo (ang.)",
+    "message": "Why IPFS?",
     "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
   "page_landingWelcome_videos_how_ipfs_works": {
-    "message": "The Permanent Web (ang.)",
+    "message": "How IPFS Works",
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
