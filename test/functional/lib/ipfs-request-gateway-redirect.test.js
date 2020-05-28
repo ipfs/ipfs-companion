@@ -98,6 +98,15 @@ describe('modifyRequest.onBeforeRequest:', function () {
           expectNoRedirect(modifyRequest, request)
           expect(redirectOptOutHint).to.equal('x-ipfs-companion-no-redirect')
         })
+        it(`should be left untouched if request is for subresource on a page loaded from URL that includes opt-out hint (${nodeType} node)`, function () {
+          // ensure opt-out works for subresources (Firefox only for now)
+          const subRequest = {
+            type: 'script',
+            url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
+            originUrl: 'https://example.com/?x-ipfs-companion-no-redirect#hashTest'
+          }
+          expectNoRedirect(modifyRequest, subRequest)
+        })
         it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
           expectNoRedirect(modifyRequest, request)

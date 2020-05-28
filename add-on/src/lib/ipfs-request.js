@@ -471,8 +471,14 @@ function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {
 }
 
 function isSafeToRedirect (request, runtime) {
+  const { url, type, originUrl } = request
   // Do not redirect if URL includes opt-out hint
-  if (request.url.includes('x-ipfs-companion-no-redirect')) {
+  if (url.includes(redirectOptOutHint)) {
+    return false
+  }
+  // Do not redirect if parent URL in address bar includes opt-out hint
+  // Note: this works only in Firefox, Chromium does not provide full originUrl, only hostname in request.initiator
+  if (type !== 'main_frame' && originUrl && originUrl.includes(redirectOptOutHint)) {
     return false
   }
 
