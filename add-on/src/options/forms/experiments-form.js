@@ -6,6 +6,7 @@ const html = require('choo/html')
 const switchToggle = require('../../pages/components/switch-toggle')
 
 function experimentsForm ({
+  useLatestWebUI,
   displayNotifications,
   catchUnhandledProtocols,
   linkify,
@@ -17,6 +18,7 @@ function experimentsForm ({
   onOptionsReset
 }) {
   const onDisplayNotificationsChange = onOptionChange('displayNotifications')
+  const onUseLatestWebUIChange = onOptionChange('useLatestWebUI')
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
@@ -28,6 +30,15 @@ function experimentsForm ({
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_experiments')}</h2>
         <div class="mb2">${browser.i18n.getMessage('option_experiments_warning')}</div>
+        <div class="flex-row-ns pb0-ns">
+          <label for="useLatestWebUI">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_useLatestWebUI_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_useLatestWebUI_description')}</dd>
+            </dl>
+          </label>
+          <div class="self-center-ns">${switchToggle({ id: 'useLatestWebUI', checked: useLatestWebUI, onchange: onUseLatestWebUIChange })}</div>
+        </div>
         <div class="flex-row-ns pb0-ns">
           <label for="displayNotifications">
             <dl>

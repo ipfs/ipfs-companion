@@ -686,6 +686,7 @@ module.exports = async function init () {
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
+        case 'useLatestWebUI':
         case 'noIntegrationsHostnames':
         case 'dnslinkRedirect':
           state[key] = change.newValue
