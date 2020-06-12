@@ -86,6 +86,7 @@ module.exports = function optionsPage (state, emit) {
     onOptionChange
   })}
   ${experimentsForm({
+    useLatestWebUI: state.options.useLatestWebUI,
     displayNotifications: state.options.displayNotifications,
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
