@@ -1,22 +1,22 @@
 {
   "browserAction_title": {
-    "message": "IPFS Companion",
+    "message": "رفيق IPFS",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "IPFS Companion",
+    "message": "رفيق IPFS",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Basculer toutes les intégrations IPFS",
+    "message": "قم بتبديل كافة تكاملات IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
-    "message": "hors ligne",
+    "message": "غير متصل",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
-    "message": "Passerelle",
+    "message": "بوابة",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusApiAddress": {
@@ -24,171 +24,171 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusGatewayVersion": {
-    "message": "version",
+    "message": "الاصدار",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusSwarmPeers": {
-    "message": "Pairs",
+    "message": "الأقران",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "Le nombre de nœuds IPFS auxquels vous pouvez vous connecter",
+    "message": "عدد عقد IPFS الأخرى التي يمكنك الاتصال بها",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Partager des fichiers par IPFS",
+    "message": "مشاركة الملفات عبر IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
-    "message": "Ouvrir l'interface Web",
+    "message": "افتح الويب UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Rediriger vers la passerelle",
+    "message": "إعادة التوجيه إلى البوابة",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
-    "message": "Cliquez pour basculer toutes les redirections vers la passerelle",
+    "message": "انقر لتبديل كل عمليات إعادة توجيه البوابة",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
-    "message": "Outils",
+    "message": "أدوات",
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
-    "message": "Ouvrir les préférences de l'extension navigateur",
+    "message": "افتح تفضيلات ملحق المستعرض",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Onglet Actif",
+    "message": "تبويب نشط",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Activer sur $1",
+    "message": "$1 تمكين على ",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Cliquez pour basculer toutes les intégrations IPFS sur $1",
+    "message": "انقر للتبديل بين كافة عمليات دمج IPFS $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Epingler la ressource IPFS",
+    "message": "تثبيت مورد IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Épingler un CID indique à votre nœud IPFS que cette donnée est importante et ne doit pas être jetée.",
+    "message": "يخبر تثبيت CID عقدة IPFS أن هذه البيانات مهمة ولا يجب التخلص منها.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copier le chemin du contenu IPFS",
+    "message": "نسخ مسار محتوى IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copier le CID",
+    "message": "انسخ CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copier le lien partageable",
+    "message": "انسخ الرابط القابل للمشاركة",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "Voir sur la passerelle",
+    "message": "عرض على البوابة",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "Ressource IPFS chargée via la passerelle publique",
+    "message": "تم تحميل مورد IPFS عبر البوابة العامة",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "Ressource IPFS chargée via une passerelle personnalisée",
+    "message": "تم تحميل مورد IPFS عبر بوابة مخصصة",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Ressource non-IPFS",
+    "message": "مورد غير IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Image sélectionnée",
+    "message": "الصورة المحددة",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Vidéo sélectionnée",
+    "message": "فيديو محدد",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Audio sélectionné",
+    "message": "الصوت المحدد",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Contenu lié",
+    "message": "المحتوى المرتبط",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Texte sélectionné",
+    "message": "النص المحدد",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "Cette page",
+    "message": "هذه الصفحة",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Importer sur IPFS",
+    "message": "الاستيراد إلى IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Importer le texte sélectionné sur IPFS",
+    "message": "استيراد النص المحدد إلى IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
-    "message": "Erreur de l'add-on IPFS",
+    "message": "مشكلة الوظيفة الإضافية IPFS",
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Regarder la console du navigateur pour plus de détails",
+    "message": "راجع وحدة تحكم المستعرض لمزيد من التفاصيل",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Copié",
+    "message": "نسخ",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "Ressource IPFS épinglée",
+    "message": "تم تثبيت مورد IPFS ",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Épingle IPFS supprimée",
+    "message": "إزالة رمز IPFS",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Erreur pendant l'épinglage de la Ressource IPFS",
+    "message": "حدث خطأ أثناء تثبيت مورد IPFS",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Erreur pendant la suppression de l'épingle IPFS",
+    "message": "حدث خطأ أثناء إزالة رمز IPFS",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
-    "message": "L'API IPFS est en ligne",
+    "message": "IPFS API متصل",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Mode automatique : redirection vers la passerelle personnalisée activée",
+    "message": "الوضع التلقائي: إعادة توجيه العبّارة المخصصة نشطة",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "L'API IPFS est hors ligne",
+    "message": "IPFS API غير متصل",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Mode automatique : la passerelle publique sera utilisée en cas d'erreur",
+    "message": "الوضع التلقائي: سيتم استخدام البوابة العامة كبديل",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Impossible d'importer via l'API IPFS",
+    "message": "تعذر الاستيراد عبر IPFS API",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
-    "message": "Essayez de désactiver la protection contre le pistage (appuyez sur Ctrl+Shift+J pour plus de détails)",
+    "message": "جرب تعطيل حماية التتبع (اضغط على ctrl + shift + j لمزيد من التفاصيل)",
     "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -196,143 +196,143 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1 (appuyer Ctrl+Shift+J pour obtenir plus de détails)",
+    "message": "$1 (اضغط ctrl + shift + j لمزيد من التفاصيل)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Le nœud IPFS n'a pas pu démarrer",
+    "message": "فشل في بدء عقدة IPFS",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Le noeud IPFS n'a pas pu s'arrêter",
+    "message": "فشل في إيقاف عقدة IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_page_header" : {
-    "message": "Préférences de Companion",
+    "message": "التفضيلات المصاحبة",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
-    "message": "En savoir plus",
+    "message": "اقرأ المزيد",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType" : {
-    "message": "Nœud IPFS",
+    "message": "عقدة IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "Importation de fichier",
+    "message": "استيراد ملف",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
-    "message": "Type de nœud IPFS",
+    "message": "نوع عقدة IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Externe : connexion à un nœud par l'API HTTP",
+    "message": "خارجي: الاتصال بعُقدة عبر HTTP API",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embarqué: exécute un noeud js-ipfs dans le navigateur (plus d'information sur ses limitations sous le lien ci-dessous)",
+    "message": "مضمن: تشغيل عقدة js-ipfs في متصفحك (اقرأ عن حدودها تحت الرابط أدناه)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embarqué avec des Chrome Sockets: exécute un noeud js-ipfs dans le navigateur avec accès aux API chrome.sockets (détails sous le lien ci-dessous)",
+    "message": "مضمن مع مقابس Chrome: تشغيل عقدة js-ipfs في متصفحك مع الوصول إلى chrome.sockets APIs (التفاصيل تحت الرابط أدناه)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "Configuration du nœud IPFS",
+    "message": "تكوين عقدة IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configuration supplémentaire pour le noeud JS IPFS embarqué. Doit être un JSON valide.",
+    "message": "تكوين إضافي للعقدة JS IPFS المضمنة. يجب أن يكون JSON صالحًا.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "Externe",
+    "message": "خارجي",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Intégré",
+    "message": "المضمنة",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Intégré + chrome.sockets",
+    "message": "مضمن + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
-    "message": "Passerelles",
+    "message": "مدخل",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Passerelle locale personnalisée",
+    "message": "مدخل محلي مخصص",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "Lien de la passerelle préférée HTTP2IPFS",
+    "message": "عنوان URL لمدخل HTTP2IPFS المفضل",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "Le chargement du contenu IPFS sera bloqué sur les sites HTTPS sauf si le lien de la passerelle commence par \"http://127.0.0.1\", \"http://[::1]\" ou \"https://\".",
+    "message": "سيتم حظر تحميل محتوى IPFS على مواقع HTTPS ما لم يبدأ عنوان URL الخاص بالبوابة بـ \"http://127.0.0.1\" أو \"http: // [:: 1]\" أو \"https: //\"",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Utiliser une passerelle personnalisée",
+    "message": "استخدم مدخل مخصص",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Rediriger les demandes de ressources IPFS vers la passerelle personnalisée",
+    "message": "إعادة توجيه طلبات موارد IPFS إلى العبّارة المخصصة",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
-    "message": "Utiliser des Sous-Domaines",
+    "message": "استخدم النطاقات الفرعية",
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isole chaque racine des contenus en les téléchargeant depuis des sous-domaines de *.localhost et crée une Origin unique pour chaque CID, IPNS ou DNSLink record. Nécessite une version go-ipfs 0.5.0 ou plus récente.  ",
+    "message": "قم بعزل جذور المحتوى عن بعضها البعض عن طريق تحميلها من نطاقات فرعية في * .localhost وإنشاء أصل فريد لكل سجل CID أو IPNS أو DNSLink. يتطلب go-ipfs محليًا 0.5.0 أو أحدث.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Charger les sites internets via une passerelle personnalisée",
+    "message": "تحميل مواقع الويب من مدخل مخصص",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "Si la redirection globale est activée, cela inclura les sites internets DNSLink et les redirigera vers leur lien /ipns/{fqdn} respectifs sur une passerelle personnalisée.",
+    "message": "إذا تم تمكين إعادة التوجيه العامة ، فسيشمل ذلك مواقع DNSLink وإعادة توجيهها إلى مسارات / ipns / {fqdn} المعنية في مداخل مخصصة",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Précharger les pages visitées",
+    "message": "زار التحميل المسبق للصفحات",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "Les sites web de DNSLink seront préchargés sur le nœud IPFS local pour permettre un accès hors ligne et améliorer la résilience contre les défaillances du réseau",
+    "message": "سيتم تحميل مواقع DNSLink مسبقًا على عقدة IPFS المحلية لتمكين الوصول دون اتصال بالإنترنت وتحسين المرونة ضد أعطال الشبكة",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Ne pas utiliser si votre noeud IPFS ne supporte pas *.ipfs.localhost. Rediriger vers une passerelle basée sur l'utilisation de chemins brise la sécurité permise par l'isolation des origines pour les sites web demandés via les DNSLink. Soyez sûr de bien comprendre les risques. ",
+    "message": "تجنب استخدام هذا إذا كانت عقدة IPFS الخاصة بك لا تدعم * .ipfs.localhost. تؤدي إعادة التوجيه إلى مدخل يعتمد على المسار إلى كسر العزلة الأمنية القائمة على الأصل لمواقع DNSLink. تأكد من أنك تفهم المخاطر ذات الصلة.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "Refuser les intégrations d'IPFS",
+    "message": "عمليات إلغاء الاشتراك في تكاملات IPFS",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "Liste des sites web qui ne doivent pas avoir d'intégration IPFS activée. Un nom d'hôte par ligne.",
+    "message": "قائمة مواقع الويب التي لا يجب تمكين أي تكاملات IPFS لها. اسم مضيف واحد لكل سطر.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Passerelle publique par défaut",
+    "message": "المدخل العام الافتراضي",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Lien de secours utilisée lorsque la passerelle personnalisée n’est pas disponible et pour copier des liens partageables",
+    "message": "يُستخدم عنوان URL الاحتياطي عند عدم توفر مدخل عام لنسخ الروابط القابلة للمشاركة",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Sous-Domaine de la Passerelle Publique par Défaut",
+    "message": "مدخل المجال الفرعي العام الافتراضي",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Sous-domaine public de la passerelle par défaut pour rétablir les sous-domaines de passerelles problématiques.",
+    "message": "المدخل الافتراضي العام للنطاق الفرعي لاسترداد مداخل النطاق الفرعي للمقطوعة",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -340,111 +340,111 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "Lien de l'API IPFS",
+    "message": "IPFS API URL",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Indice : c'est là où se trouve /api/v0/config",
+    "message": "تلميح: هذا هو المكان الذي يستوطن فيه / api / v0 / config",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Intervalle entre chaque requête de status",
+    "message": "حالة فاصل الاستقصاء",
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Intervalle d'actualisation du nombre de pairs (en millisecondes)",
+    "message": "عدد مرات تحديث عدد الأقران (بالمللي ثانية)",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Mode automatique",
+    "message": "الوضع التلقائي",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Activer/désactiver l'utilisation de la passerelle personalisée en fonction de la disponibilité de l'API IPFS",
+    "message": "تبديل استخدام المدخل العام عند توفر متغيرات IPFS API",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
-    "message": "DNSLink",
+    "message": "رابط DNS",
     "description": "A section header on the Preferences screen (option_header_dnslink)"
   },
   "option_header_experiments": {
-    "message": "Fonctionnalités expérimentales",
+    "message": "التجارب",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_experimental": {
-    "message": "expérimental",
+    "message": "تجريبي",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "ATTENTION. Ces fonctionnalités sont récentes ou en cours de développement. Un certain niveau de connaissance est requis.",
+    "message": "كن حذرًا: هذه الميزات جديدة أو قيد التحديث. YMMV.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
-    "message": "Utiliser la dernière Interface Web",
+    "message": "Use Latest WebUI",
     "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
   },
   "option_useLatestWebUI_description": {
-    "message": "Charger la toute dernière Interface Web grâce à un DNSLink présent sur webui.ipfs.io, plutôt que la version précise  définie par le CID inclus dans le daemon IPFS. N'autorisez que si vous faites confiance à votre résolveur DNS et que vous savez comment configurer les headers CORS nécessaires. ",
+    "message": "Loads bleeding-edge Web UI from DNSLink at webui.ipfs.io, instead of the hardcoded release CID shipped with IPFS daemon. Enable only if you trust your DNS resolver and know how to set up the required CORS headers.",
     "description": "An option description on the Preferences screen (option_useLatestWebUI_description)"
   },
   "option_displayNotifications_title": {
-    "message": "Activer les Notifications",
+    "message": "تمكين الإخطارات",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Affiche des notifications quand l'état de l'API change, quand un lien est copié, etc",
+    "message": "يعرض إشعارات النظام عندما تتغير حالة واجهة برمجة التطبيقات ، يتم نسخ الرابط وما إلى ذلك",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
-    "message": "Attraper les erreurs non gérées par IPFS",
+    "message": "جذب بروتوكولات IPFS غير المعالجة",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Active provisoirement le support pour ipfs:// ipns:// et dweb: en redirigeant les addresses non traités vers une passerelle HTTP",
+    "message": "تمكين الدعم المؤقت لـ ipfs: // و ipns: // و dweb: من خلال إعادة توجيه طلبات شريط العناوين غير المعالجة إلى مدخل HTTP",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
-    "message": "Rendre les liens IPFS cliquables",
+    "message": "ربط عناوين IPFS",
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Rendre les chemins /ipfs/ cliquables",
+    "message": "حوّل المسارات العادية / ipfs / المسارات إلى روابط قابلة للنقر",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "Recherche DNSLink",
+    "message": "بحث رابط DNS",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Politique de recherche pour l'affichage des actions contextuelles sur les sites web avec DNSLink",
+    "message": "سياسة البحث لعرض إجراءات السياق على مواقع الويب باستخدام رابط DNS ",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Éteint",
+    "message": "إيقاف",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Vérifier après la requête HTTP",
+    "message": "تحقق بعد طلب HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Vérifier avant la requête HTTP",
+    "message": "تحقق قبل طلب HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Récupérer les requêtes HTTP ayant échouées",
+    "message": "استعادة طلبات HTTP فشلت",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Récupérer les requêtes HTTP pour les ressources IPFS ayant échouées en les redirigeant vers la passerelle public.",
+    "message": "استعادة طلبات HTTP الفاشلة لموارد IPFS عن طريق إعادة التوجيه إلى المدخل العام.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Détecter l'en-tête HTTP X-Ipfs-Path",
+    "message": "كشف رأس مسار X-Ipfs",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Éviter le transport par HTTP et afficher via IPFS si la valeur est un chemin IPFS. La redirection des chemins IPNS nécessite également que le support de DNSLink soit également activé.",
+    "message": "إسقاط نقل HTTP وتحميله على IPFS إذا كانت قيمة مسار IPFS. تتطلب إعادة توجيه مسارات IPNS تمكين دعم رابط DNS أيضًا.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -452,267 +452,267 @@
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "IPFS est ajouté à l'objet fenêtre sur toutes les pages. Activer/Désactiver l'accès aux fonctions qu'il expose.",
+    "message": "تتم إضافة IPFS إلى كائن النافذة في كل صفحة. تمكين / تعطيل الوصول إلى الوظائف التي يعرضها.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Gérer les permissions",
+    "message": "إدارة الأذونات",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Ouvrir les fichiers importés dans l'interface web",
+    "message": "فتح الملفات المستوردة في واجهة مستخدم الويب",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Afficher les fichiers dans l'interface web plutôt que d'ouvrir le fichier ou le répertoire parent sur la passerelle.",
+    "message": "عرض الملفات في الويب بدلاً من فتح الملف أو الدليل الرئيسي عند المدخل.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Préchargement des imports",
+    "message": "واردات التحميل",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Permet le préchargement automatique des éléments importés via une requête HTTP HEAD asynchrone vers une passerelle publique",
+    "message": "تمكين التحميل المسبق التلقائي للأصول المستوردة عبر طلب HTTP HEAD غير المتزامن إلى المدخل العام",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Enregistrer les noms de domaines",
+    "message": "تسجيل مساحات الأسماء",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Choisir quels noms de domaines enregistrer dans le navigateur. Changer cette valeur  redémarrera l'extension.",
+    "message": "تخصيص مساحات الأسماء التي تم تسجيلها في وحدة تحكم المتصفح. سيؤدي تغيير هذه القيمة إلى تشغيل إعادة التمديد.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "Répertoire d'import de fichiers",
+    "message": "دليل استيراد الملفات",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Choisir le répertoire utilisé pour les fichiers importés.",
+    "message": "تخصيص الدليل المستخدم للملفات المستوردة.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Tout effacer",
+    "message": "إعادة تعيين كل شيء",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Restaurer les préférences utilisateurs à leurs valeurs par défaut. ( Irréversible ! )",
+    "message": "استبدال تفضيلات المستخدم بالتفضيلات الافتراضية (لا يمكن التراجع عنها!)",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
-    "message": "IPFS Companion",
+    "message": "رفيق IPFS",
     "description": "Extension name in the Manifest file (manifest_extensionName)"
   },
   "manifest_shortExtensionName": {
-    "message": "IPFS Companion",
+    "message": "رفيق IPFS",
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Extension de navigateur qui simplifie l’accès aux ressources IPFS",
+    "message": "ملحق المستعرض الذي يبسط الوصول إلى موارد IPFS",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {
-    "message": "Connecté à $1 noeuds",
+    "message": "متصل $1  بالأقران",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
-    "message": "Choisissez un fichier",
+    "message": "اختر ملفًا",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_or": {
-    "message": "ou",
+    "message": "أو",
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "déposez-le ici pour le partager",
+    "message": "أسقطه هنا للمشاركة",
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import en cours...",
+    "message": "جاري الاستيراد ..",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
-    "message": "(chargement, veuillez patienter)",
+    "message": "(التخزين المؤقت ، يرجى الانتظار)",
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "options d'import",
+    "message": "خيارات الاستيراد",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Chemin où stocker les fichiers importés",
+    "message": "مسار لتخزين الملفات المستوردة",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Ouvrir l'interface web",
+    "message": "فتح في واجهة مستخدم الويب",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
-    "message": "Gérer les permissions",
+    "message": "إدارة الأذونات",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "Voir, modifier ou révoquer les autorisations d'accès à votre nœud IPFS.",
+    "message": "عرض وتغيير وسحب حقوق الوصول الممنوحة لمثيل IPFS الخاص بك.",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "Aucune autorisation accordée.",
+    "message": "لا أذونات مؤكدة",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Révoquer la permission $1 pour $2 ?",
+    "message": "إلغاء الإذن $1  على $2 ؟",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Révoquer toutes les permissions pour $1 ?",
+    "message": "إبطال جميع الأذونات لـ $1 ?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Cliquez pour autoriser",
+    "message": "انقر للسماح",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Cliquez pour refuser",
+    "message": "انقر للرفض",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Autoriser",
+    "message": "السماح",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Refuser",
+    "message": "رفض",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Révoquer $1",
+    "message": "سحب $1",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "IPFS Companion doit-il autoriser «$1» à accéder à «$2» au nœud connecté?",
+    "message": "هل يجب أن يسمح رفيق IPFS لـ «$1» بالوصول إلى «$2» عند العقدة المتصلة؟",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Appliquer ce choix à toutes les permissions courantes et futures de ce périmètre",
+    "message": "تطبيق هذا القرار على جميع الأذونات الحالية والمستقبلية في هذا النطاق",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Révoquer toutes les autorisations",
+    "message": "إبطال جميع الأذونات",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Autoriser",
+    "message": "السماح",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Refuser",
+    "message": "رفض",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Bienvenue !",
+    "message": "رفيق IPFS - مرحبًا!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
-    "message": "IPFS Companion",
+    "message": "رفيق IPFS",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Votre pair est connecté à <0>$1</0>pairs.",
+    "message": "عقدة متصلة <0>$1</0>  بأقرانهم.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_statusButton_text": {
-    "message": "Statut",
+    "message": "الحالة",
     "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
   },
   "page_landingWelcome_welcome_filesButton_text": {
-    "message": "Fichiers",
+    "message": "الملفات",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
   },
   "page_landingWelcome_welcome_peersButton_text": {
-    "message": "Pairs",
+    "message": "الأقران",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS est à l'arrêt",
+    "message": "IPFS لا يعمل",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
-    "message": "Utilisateurs d'IPFS Desktop",
+    "message": "مستخدمو IPFS لسطح المكتب",
     "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Vérifiez qu'IPFS Desktop est lancé. Vous ne l'avez pas installé? <0>Téléchargez IPFS Desktop</0>.",
+    "message": "تأكد من تشغيل IPFS لسطح المكتب. لم تقم بتثبيته؟ <0> قم بتنزيل IPFS سطح المكتب الآن. </0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Utilisateurs de ligne de commande",
+    "message": "مستخدمو سطر الأوامر",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Démarrez IPFS en entrant <code class=\"yellow\">ipfs daemon</code>dans votre terminal. Si vous n'avez pas encore installé IPFS, suivez d'abord le <0>court guide de démarrage pour CLI</0>.",
+    "message": "ابدأ تشغيل IPFS عن طريق إدخال برنامج<code class=\"yellow\"> ipfs daemon </code> في جهازك. إذا لم يكن IPFS مثبتًا لديك بعد ، فاتبع  <0> دليل البدء السريع لـ CLI </0> أولاً.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "En savoir plus sur IPFS",
+    "message": "تعرف على IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "En lire plus sur les <0>fonctionnalités d'IPFS Companion</0>",
+    "message": "اقرأ عن <0> ميزات رفيق IPFS </0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_resources_new_ipfs_concepts": {
-    "message": "Apprendre les concepts de base dans le guide <0>Comment fonctionne IPFS </0>",
+    "message": "تعلم المفاهيم الأساسية في دليل <0> كيفية عمل IPFS </0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Visiter le <0>site de documentation d'IPFS</0>pour aller plus loin",
+    "message": "قم بزيارة موقع <0> وثائق IPFS  </0> للتعمق أكثر",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
-    "message": "Construire sur IPFS",
+    "message": "البناء على IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
   "page_landingWelcome_resources_build_tutorials": {
-    "message": "Trouver<0>des recettes et tutoriaux</0>pour vous aider à commencer",
+    "message": "اعثر على <0> تعليمات الاستخدام والبرامج التعليمية </0> لمساعدتك على البدء",
     "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
   },
   "page_landingWelcome_resources_build_examples": {
-    "message": "Découvrir les <0>projets géniaux</0>qu'on construit d'autres personnes avec IPFS",
+    "message": "شاهد  <0> الأشياء الرائعة  </0>  التي يبنيها الآخرون باستخدام IPFS",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
-    "message": "Trouver de l'aide",
+    "message": "احصل على مساعدة",
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Poser des questions et échanger sur IPFS sur les <0>forums officiels</0>",
+    "message": "طرح الأسئلة ومناقشة IPFS في <0> المنتديات الرسمية </0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
-    "message": "Rejoindre la communauté",
+    "message": "الانضمام إلى المجتمع",
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_contribute": {
-    "message": "<0>Contribuer</0>au code, la documentation, et autre",
+    "message": "<0> ساهم </0> بالرمز والوثائق والمزيد",
     "description": "Community copy (page_landingWelcome_resources_community_contribute)"
   },
   "page_landingWelcome_resources_community_translate": {
-    "message": "<0>Traduire</0>IPFS dans votre langue",
+    "message": "<0> ترجم </0>  IPFS إلى لغتك المفضلة",
     "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {
-    "message": "Explorer toute les <0>ressources de la communauté IPFS</0>",
+    "message": " استكشف جميع  <0> موارد مجتمع IPFS  </0>",
     "description": "Community copy (page_landingWelcome_resources_community_resources)"
   },
   "page_landingWelcome_videos_why_ipfs": {
-    "message": "Pourquoi IPFS?",
+    "message": "لماذا IPFS؟",
     "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
   "page_landingWelcome_videos_how_ipfs_works": {
-    "message": "Comment fonctionne IPFS",
+    "message": "كيف يعمل IPFS",
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Projets en relation",
+    "message": "مشاريع ذات صلة",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }

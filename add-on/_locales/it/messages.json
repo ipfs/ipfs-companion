@@ -379,6 +379,14 @@
     "message": "Attenzione: queste caratteristiche sono nuove o work-in-progress. Usa a tuo rischio.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
+  "option_useLatestWebUI_title": {
+    "message": "Use Latest WebUI",
+    "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
+  },
+  "option_useLatestWebUI_description": {
+    "message": "Loads bleeding-edge Web UI from DNSLink at webui.ipfs.io, instead of the hardcoded release CID shipped with IPFS daemon. Enable only if you trust your DNS resolver and know how to set up the required CORS headers.",
+    "description": "An option description on the Preferences screen (option_useLatestWebUI_description)"
+  },
   "option_displayNotifications_title": {
     "message": "Abilita Notifiche",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
