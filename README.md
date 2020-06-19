@@ -148,7 +148,7 @@ Developers and enthusiasts can opt in to the beta-quality channel:
 It's also possible to grab the [last successful build from `master`](https://ci.ipfs.team/job/IPFS%20Shipyard/job/ipfs-companion/job/master/lastSuccessfulBuild/),
 but these builds are not signed, nor will automatically update. `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium) or `about:debugging` (Firefox) for smoke-testing.
 
-## Development
+### Development
 
 To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
