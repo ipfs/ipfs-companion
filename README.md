@@ -26,8 +26,8 @@
 - [Features](#features)
 - [Install](#install)
 - [Contribute](#contribute)
-- [Troubleshooting](#troubleshooting)
-- [Privacy Policy & License](#privacy-policy-license)
+- [Help & Troubleshooting](#help--troubleshooting)
+- [Privacy Policy & Licenses](#privacy-policy--license)
 
 ## About IPFS Companion
 
@@ -161,10 +161,10 @@ but these builds are not signed nor will automatically update:
 
 ## Development
 
-To work on the extension you need to install it from source rather than from the add on store.
+To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
 1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
-2. Run all-in-one dev build:
+2. Run this all-in-one dev build:
     ```console
     $ npm run dev-build
     ```
@@ -174,8 +174,8 @@ To work on the extension you need to install it from source rather than from the
     OR
     $ npm run bundle:chromium # for Chromium-based browsers
     ```
-4. Load it into browser:
-    * Chromium-based
+4. Load it into your browser:
+    * Chromium
         1. Enter `chrome://extensions` in the URL bar
         2. Enable "Developer mode"
         3. Click "Load unpacked extension..."
@@ -187,61 +187,25 @@ To work on the extension you need to install it from source rather than from the
         3. Click "Load Temporary Add-on"
         4. Pick the _file_ `add-on/manifest.json`
 
-**See [`DEVELOPER-NOTES.md`](DEVELOPER-NOTES.md) for more detailed instructions**
-
-### Reproducible Build in Docker
-
-Want to ensure prebuilt bundle does not include any additional code?  
-Don't want to install JS dependencies such as NodeJS and yarn?  
-
-Do an isolated build inside of Docker!
-
-Run the following command for ending up
-with a built extension inside the `build/` directory:
-
-```sh
-npm run release-build
-```
-
-It is an alias for running `ci:build` script inside of immutable Docker image, which guarantees the same output on all platforms.
-
-### Legacy Firefox (< 53) and XUL-Compatible Browsers
-
-Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
-While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
-For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
-
 ## Contribute
 
 [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](CONTRIBUTING.md)
 
-Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/ipfs-companion/issues)!
+All are welcome to help make IPFS Companion even better!
+- Check out the [contribution guide](CONTRIBUTING.md) for how to get started as a developer
+- Open an [issue](https://github.com/ipfs/ipfs-companion/issues)
+- Make sure you read and abide by the [IPFS Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md)
 
-If you want to help in developing this extension, please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
+## Help & Troubleshooting
 
-The browser extension team hangs out at the [#ipfs-in-web-browsers](https://webchat.freenode.net/?channels=ipfs-in-web-browsers) channel on Freenode.
+### Ask a question
+The best place to ask about IPFS Companion (or IPFS in general!) is in the [official IPFS Forums](https://discuss.ipfs.io/), where you can search past discussions for others who may have had the same questions, too. There's also an active [#ipfs](https://webchat.freenode.net/?channels=ipfs) community on IRC.
 
-This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
-
-### TROUBLESHOOTING
-
-The best place to ask your questions about IPFS in general, how it works and what you can do with it is at [discuss.ipfs.io](https://discuss.ipfs.io/).  
-We are also available at the [#ipfs](https://webchat.freenode.net/?channels=ipfs) channel, where most of IPFS community hangs out.
-
-Questions specific to this browser companion can be asked directly at [`#ipfs-in-web-browsers`](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
-
-#### Import via Right-Click Does Not Work in Firefox
-
-See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
-
-#### Workaround for HTTP Redirect to Work with Ghostery
-
-[Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways. More details in [#466](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until it is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected site.
-
-#### Rule to Work with NoScript with ABE Enabled
-
-By default [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks this addon by blocking assets loaded from IPFS Gateway running on localhost.    
-To make it work, one needs to extend the SYSTEM Rulset and prepend it with IPFS whitelist:
+### Common troubleshooting steps
+These frequently encountered troubleshooting situations may be helpful:
+- **Import via right-click does not work in Firefox:** See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
+- **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
+- **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first):
 
 ```
 # Enable IPFS redirect to LOCAL
@@ -253,8 +217,6 @@ Site LOCAL
 Accept from LOCAL
 Deny
 ```
-
-Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
 
 ## Privacy Policy & License
 
