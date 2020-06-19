@@ -10,7 +10,7 @@
 * [Reproducible build in Docker](#reproducible-build-in-docker)
 * [Useful tasks](#useful-tasks)
 * [Other tips](#other-tips)
-* [## Legacy Firefox (< 53) and XUL-compatible browsers](#tbd)
+* [Legacy Firefox (< 53) and XUL-compatible browsers](#legacy-firefox--53-and-xul-compatible-browsers)
 * [Using IPFS Companion on Firefox for Android](#using-ipfs-companion-on-firefox-for-android)
     * [Install Firefox for Android](#install-firefox-for-android)
     * [Install IPFS Companion](#install-ipfs-companion)
