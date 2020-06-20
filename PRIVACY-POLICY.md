@@ -69,9 +69,8 @@ To disable this behavior set "DNSLink lookup" to "Off" in Preferences.
 
 We’re constantly trying to improve IPFS Companion, so we may need to change this
 Privacy Policy sometimes. When we do, we will update the date at the top of this
-Privacy Policy and will also post an update
-[here](https://ipfs-shipyard.github.io/ipfs-companion/docs/privacy-policy). We
-encourage you to periodically review this Privacy Policy to stay informed, which
+Privacy Policy and will also post an update at https://ipfs.io/companion-privacy/
+We encourage you to periodically review this Privacy Policy to stay informed, which
 is ultimately your responsibility. If you use IPFS Companion after any changes
 to the Privacy Policy have been posted, that means you agree to all of those
 changes.
