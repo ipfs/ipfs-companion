@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2020-05-08</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/PRIVACY-POLICY.md))
+Last Update: 2020-06-20</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/PRIVACY-POLICY.md))
 
 The IPFS Companion browser extension is owned by Protocol Labs Inc. and created
 by the IPFS Project. We know you care about how your personal data is used and
@@ -59,6 +59,11 @@ If you are using “window.ipfs”, “Linkify IPFS Addresses” or “Catch Unh
 IPFS Protocols” experiments, websites will be able to detect you are running
 IPFS Companion. This behavior can be changed on Preferences screen by disabling
 mentioned experiments.
+
+If you are using DNSLink (its lookup is enabled by default), then IPFS node
+will be executing DNS queries for all domain names visited during browsing,
+and those queries will use DNS resolver configured in your operating system.
+To disable this behavior set "DNSLink lookup" to "Off" in Preferences.
 
 **Will We Ever Change This Privacy Policy?**
 
