@@ -24,7 +24,7 @@
 
 - [About IPFS Companion](#about-ipfs-companion)
 - [Features](#features)
-- [Install](#install)
+- [Install IPFS Companion](#install-ipfs-companion)
 - [Contribute](#contribute)
 - [Help & Troubleshooting](#help--troubleshooting)
 - [Privacy & Licenses](#privacy--license)
@@ -92,32 +92,29 @@ Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/
     
 ### Toggle common functions
 
-The IPFS Companion browser bar pop-up manu provides handy toggles for frequent functions.
+The IPFS Companion browser bar pop-up menu provides handy toggles for frequent functions.
 
 #### Disable gateway redirect per website
 
-> _Active Tab_ actions include option to opt-out current website from Gateway redirect of any IPFS subresources.    
-> Disabling redirect for DNSLink website will restore original URL as well:
->
-> ![per-site-opt-out](https://user-images.githubusercontent.com/157609/55317805-90452900-5471-11e9-9e0f-293afd261648.gif)
+In the _Active Tab_ section of the pop-up, you'll see a toggle to disable redirects (of any IPFS sub-resources) for the site in your currently active tab. If that site uses DNSLink, turning off the toggle will restore the site's original URL, too.
+
+![per-site-opt-out](https://user-images.githubusercontent.com/157609/55317805-90452900-5471-11e9-9e0f-293afd261648.gif)
 
 #### Disable all redirects
 
-> A handy toggle to disable all gateway redirects while keeping all other features enabled:
->
-> ![redirect](https://user-images.githubusercontent.com/157609/55317804-90452900-5471-11e9-9fc1-42bee5b15a6a.gif)
+Use this toggle to disable all gateway redirects, but keep all other IPFS Companion features enabled.
+
+![redirect](https://user-images.githubusercontent.com/157609/55317804-90452900-5471-11e9-9fc1-42bee5b15a6a.gif)
 
 #### Suspend IPFS Companion
 
-> The "power" icon can be used to temporarily suspend all IPFS integrations
-> (redirects, API status, content scripts, protocol handlers etc).
-> Useful during testing. Extension can be re-enabled with a single click:
->
-> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/55317803-8fac9280-5471-11e9-96e3-f068cc62148b.gif)
+Use the "power button" to temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc). 
 
-### Experiments
+![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/55317803-8fac9280-5471-11e9-96e3-f068cc62148b.gif)
 
-_(some are disabled by default, use Preferences screen to enable)_
+### Try out experiments
+
+Note that some of these experiments are disabled by default. You can enable them in IPFS Companion's Preferences.
 
 - Requests made via [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) are re-routed to HTTP gateway (public or custom):
     - `ipfs://$cid`
@@ -128,7 +125,7 @@ _(some are disabled by default, use Preferences screen to enable)_
 - Switch between _External_ HTTP API and _Embedded_ js-ipfs node. Read about differences at [docs/node-types](docs/node-types.md).
   > [![screenshot of node type switch](https://user-images.githubusercontent.com/157609/42382479-b4d98768-8134-11e8-979c-69b758846bf0.png)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md)
 
-## Install
+## Install IPFS Companion
 
 ### Latest stable release
 
@@ -185,7 +182,7 @@ All are welcome to help make IPFS Companion even better!
 - Open an [issue](https://github.com/ipfs/ipfs-companion/issues)
 - Make sure you read and abide by the [IPFS Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md)
 
-## Help & Troubleshooting
+## Help & troubleshooting
 
 ### Ask a question
 The best place to ask about IPFS Companion (or IPFS in general!) is in the [official IPFS Forums](https://discuss.ipfs.io/), where you can search past discussions for others who may have had the same questions, too. There's also an active [#ipfs](https://webchat.freenode.net/?channels=ipfs) community on IRC.
@@ -207,7 +204,7 @@ Accept from LOCAL
 Deny
 ```
 
-## Privacy & License
+## Privacy & license
 
 - [Privacy policy](PRIVACY-POLICY.md)
 - The IPFS logo belongs to the [IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a> license
