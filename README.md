@@ -136,7 +136,7 @@ Developers and enthusiasts can opt in to the beta-quality channel:
 - [Firefox self-hosted signed dev build](https://ipfs.io/ipfs/QmR8W5wg8BuAyBTruHnHovfWRavwvidVh3qtyinXi6NnLa)
 - [Chromium-based dev build at the Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
 
-It's also possible to grab the [last successful build from `master`](https://ci.ipfs.team/job/IPFS%20Shipyard/job/ipfs-companion/job/master/lastSuccessfulBuild/),
+It's also possible to grab [vendor-specific packages for each release](https://github.com/ipfs-shipyard/ipfs-companion/releases),
 but these builds are not signed, nor will automatically update. `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium) or `about:debugging` (Firefox) for smoke-testing.
 
 ### Development
