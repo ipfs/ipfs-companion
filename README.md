@@ -51,7 +51,7 @@ IPFS Companion detects and tests requests for IPFS-like paths ( such as `/ipfs/{
 IPFS Companion [detects DNSLink info](http://docs.ipfs.io/how-to/dnslink-companion/) in the DNS records of websites. If a site uses DNSLink (a few examples are https://docs.ipfs.io, https://ipld.io, and http://tr.wikipedia-on-ipfs.org), IPFS Companion redirects the HTTP request to your local gateway:
 
 > `http://docs.ipfs.io`  
-> → `http://127.0.0.1:8080/ipns/docs.ipfs.io`
+> → `http://localhost:8080/ipns/docs.ipfs.io` → `http://docs.ipfs.io.ipns.localhost:8080/`
 
 #### Detect pages with `x-ipfs-path` headers
 
