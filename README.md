@@ -31,7 +31,7 @@
 
 ## About IPFS Companion
 
-IPFS Companion harnesses the power of your locally running IPFS node (either through the IPFS Desktop app or the command-line daemon) directly inside your favorite Chromium-based or Firefox browser, enabling support for `ipfs://` addresses, automatic IPFS gateway loading of websites and file paths, easy IPFS file import and sharing, and more.
+IPFS Companion harnesses the power of your locally running IPFS node (either through the [IPFS Desktop](https://github.com/ipfs-shipyard/ipfs-desktop/#ipfs-desktop) app or the command-line daemon) directly inside your favorite Chromium-based or Firefox browser, enabling support for `ipfs://` addresses, automatic IPFS gateway loading of websites and file paths, easy IPFS file import and sharing, and more.
 
 IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safer, more resilient, and more open. It enables the creation and dissemination of completely distributed sites and applications that don’t rely on centralized hosting and stay true to the original vision of an open, flat web. Visit [the IPFS Project website](https://ipfs.io) to learn more.
 
