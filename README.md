@@ -1,5 +1,5 @@
 # IPFS Companion
-**Harness the power of [IPFS](https://ipfs.io/) in your browser**
+**Harness the power of [IPFS](https://ipfs.io/) in your browser!**
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
@@ -16,11 +16,11 @@
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
-## Lead Maintainer
+## Lead maintainer
 
-[Marcin Rataj](https://github.com/lidel)
+[Marcin Rataj](https://github.com/lidel), with help from the [IPFS GUI working group](https://github.com/ipfs/ipfs-gui).
 
-## Table of Contents
+## Table of contents
 
 - [About IPFS Companion](#about-ipfs-companion)
 - [Features](#features)
@@ -31,7 +31,7 @@
 
 ## About IPFS Companion
 
-IPFS Companion harnesses the power of your locally running IPFS node (either through the IPFS Desktop app or the command-line daemon) directly inside your favorite browser, enabling support for `ipfs://` addresses, automatic IPFS gateway loading of websites and file paths, easy IPFS file import and sharing, and more.
+IPFS Companion harnesses the power of your locally running IPFS node (either through the IPFS Desktop app or the command-line daemon) directly inside your favorite Chromium-based or Firefox browser, enabling support for `ipfs://` addresses, automatic IPFS gateway loading of websites and file paths, easy IPFS file import and sharing, and more.
 
 IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safer, more resilient, and more open. It enables the creation and dissemination of completely distributed sites and applications that don’t rely on centralized hosting and stay true to the original vision of an open, flat web. Visit [the IPFS Project website](https://ipfs.io) to learn more.
 
@@ -41,28 +41,28 @@ IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safe
 
 #### Detect URLs with IPFS paths
 
-IPFS Companion detects and tests requests for IPFS-like paths (`/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it gets redirected to load from your local gateway:  
+IPFS Companion detects and tests requests for IPFS-like paths ( such as `/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it is redirected to load from your local gateway:  
 > `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
 > → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
 
 #### Detect DNSLink-enabled URLs
 
-IPFS Companion [detects DNSLink info](http://docs.ipfs.io/how-to/dnslink-companion/) in the DNS records of websites. If a site uses DNSLink (a few examples are https://docs.ipfs.io, https://ipld.io, http://tr.wikipedia-on-ipfs.org), IPFS Companion redirects the HTTP request to your local gateway:
+IPFS Companion [detects DNSLink info](http://docs.ipfs.io/how-to/dnslink-companion/) in the DNS records of websites. If a site uses DNSLink (a few examples are https://docs.ipfs.io, https://ipld.io, and http://tr.wikipedia-on-ipfs.org), IPFS Companion redirects the HTTP request to your local gateway:
 
 > `http://docs.ipfs.io`  
 > → `http://127.0.0.1:8080/ipns/docs.ipfs.io`
 
 #### Detect pages with `x-ipfs-path` headers
 
-IPFS Companion also upgrades transport to IPFS if it finds the `x-ipfs-path` in any HTTP response headers as a fallback for cases when an IPFS path is not present in the URL. [Learn more here.](http://docs.ipfs.io/how-to/companion-x-ipfs-path-header/)
+IPFS Companion also upgrades transport to IPFS if it finds the `x-ipfs-path` in any HTTP response headers; this also acts as a fallback for cases when an IPFS path is not present in the URL. [Learn more.](http://docs.ipfs.io/how-to/companion-x-ipfs-path-header/)
 
 
 #### Toggle redirects globally or per site
 
-It's easy to opt out of local gateway redirects by several means:
-- Suspend redirects **globally** using the global toggle ([illustrated below](#disable-all-redirects))
-- Suspend redirects **per site** using the toggle under "Active tab" ([illustrated below](#disable-gateway-redirect-per-website)) or in IPFS Companion's preferences
-- Include `x-ipfs-companion-no-redirect` in the URL as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect)) parameter)
+You can disable and re-enable local gateway redirects by several means:
+- Suspend redirects **globally** using the global toggle ([illustrated below](#toggle-gateway-redirects-globally))
+- Suspend redirects **per site** using the toggle under "Active tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
+- Add `x-ipfs-companion-no-redirect` to the URL itself as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect))
 
 <!-- TODO: restore after https://github.com/ipfs-shipyard/ipfs-companion/issues/843 is closed
 ### IPFS API as `window.ipfs`
@@ -75,20 +75,20 @@ Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/
 
 ### Access frequently-used IPFS actions from your browser bar
 
-IPFS Companion enables you to quickly and easily access common IPFS actions from your browser bar with just a few clicks, including:
+IPFS Companion enables you to quickly and easily access common actions from your browser bar with just a few clicks:
 
-- See how many peers you're connected to by glancing at the cube icon in your browser bar
-- Check your IPFS API and gateway status by clicking the cube icon
-- Right-click images and other page assets to easily add to IPFS (including the option to preserve file names)
-- Choose the "Share files via IPFS" option in the main menu for quick drag-and-drop import from your browser
+- See how many peers you're connected with a glance at the cube icon in your browser bar
+- Check your IPFS API and gateway status by clicking the cube icon to reveal the main menu
+- Right-click images and other page assets to easily add them to IPFS (including the option to preserve file names)
+- Choose the _Share files via IPFS_ option in the main menu for quick drag-and-drop import from a browser tab
 - Pin or unpin IPFS resources (via API) directly from the main menu
-- Copy shareable (public gateway) links, CIDs, or IPFS content paths of IPFS resources directly from the main menu
+- Copy shareable public gateway links, IPFS content paths, or CIDs of IPFS resources directly from the main menu
 - Launch the [IPFS Web UI dashboard](https://github.com/ipfs/webui/) from the main menu with a single click
-- Toggle gateway redirects (globally or per website) or switch all IPFS Companion features on/off quickly and easily from the main menu (illustrations below) ...
+- Toggle gateway redirects or switch all IPFS Companion features on/off quickly and easily from the main menu (illustrations below)
 
 #### Toggle gateway redirects on a per-website basis
 
-You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Active Tab_ section of the main menu. If that site uses DNSLink, switching off the toggle will restore the site's original URL, too.
+You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Active Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
 ![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmWwTmeyNb8eTYgB7q7PhtKzG6CFWTCN4UHkczZ7xsc64r)
 
@@ -100,13 +100,13 @@ Use the _Redirect to Gateway_ toggle under _Tools_ to disable gateway redirects 
 
 #### Switch all IPFS Companion features on/off
 
-To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc), use the "on/off button" at the top of the IPFS Companion menu.
+To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc.), use the on/off button at the top of the IPFS Companion menu.
 
 ![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmYEWTZCUUh2pWRQ3boccJmKtbFC1XvEoNuYTjyCU4Eknk)
 
 ### Try out experiments!
 
-IPFS Companion ships with a variety of experimental features. Some are disabled by default, so be sure to check out all the experiments in IPFS Companion's Preferences.
+IPFS Companion ships with a variety of experimental features. Some are disabled by default, so be sure to check out IPFS Companion's Preferences to see them all.
 
 - Make plaintext IPFS links clickable ([demo](https://ipfs.io/ipfs/bafybeidvtwx54qr44kidymvhfzefzxhgkieigwth6oswk75zhlzjdmunoy/linkify-demo.html))
 - Re-route requests made via the following [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) to an HTTP gateway (public or custom):
@@ -115,7 +115,7 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
 
-- Switch between the external HTTP API of your local IPFS node (default) and a js-ipfs node embedded in your browser (note that this has some [functionality limitations](docs/node-types.md))
+- Switch between the external HTTP API of your local IPFS node (default setting) and a js-ipfs node embedded in your browser (note that this has some [functionality limitations](docs/node-types.md))
 [![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmW56BoDKUYychJ4Z4Kau1zVj5s33ovNqhLXQmgK9EN66k)](http://docs.ipfs.io/how-to/companion-node-types/)
 
 ## Install IPFS Companion
@@ -185,7 +185,6 @@ These frequently encountered troubleshooting situations may be helpful:
 - **Import via right-click does not work in Firefox:** See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
 - **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
 - **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first):
-
 ```
 # Enable IPFS redirect to LOCAL
 Site ^http://127.0.0.1:8080/(ipfs|ipns)*
@@ -197,9 +196,9 @@ Accept from LOCAL
 Deny
 ```
 
-## Privacy & license
+## Privacy & license info
 
-- [Privacy policy](PRIVACY-POLICY.md)
+- IPFS Companion [Privacy policy](PRIVACY-POLICY.md)
 - The IPFS logo belongs to the [IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a> license
-- [is-ipfs](https://github.com/ipfs-shipyard/is-ipfs), [js-multihash](https://github.com/multiformats/js-multihash), and other NPM dependencies are under MIT license, unless stated otherwise
-- IPFS Companion itself is released under [CC0](LICENSE): To the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain
+- [is-ipfs](https://github.com/ipfs-shipyard/is-ipfs), [js-multihash](https://github.com/multiformats/js-multihash), and other npm dependencies are under MIT license, unless stated otherwise
+- IPFS Companion itself is released under [CC0](LICENSE); to the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain
