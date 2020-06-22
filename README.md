@@ -110,7 +110,7 @@ Use this toggle to disable all gateway redirects, but keep all other IPFS Compan
 
 Use the "power button" to temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc). 
 
-![Screenshot of power button in use](https://gateway.ipfs.io/ipfs/QmRsnUvHajLGGaNX2DQHhSfvVv2WnYquBSwAJP7jJQXr9t)
+![Screenshot of power button in use](https://gateway.ipfs.io/ipfs/QmYEWTZCUUh2pWRQ3boccJmKtbFC1XvEoNuYTjyCU4Eknk)
 
 ### Try out experiments
 
