@@ -123,7 +123,7 @@ Note that some of these experiments are disabled by default. You can enable them
     - `dweb:/ipns/$cid_or_fqdn`
 - Make plaintext IPFS links clickable ([demo](https://ipfs.io/ipfs/bafybeidvtwx54qr44kidymvhfzefzxhgkieigwth6oswk75zhlzjdmunoy/linkify-demo.html))
 - Switch between _External_ HTTP API and _Embedded_ js-ipfs node. Read about differences at [docs/node-types](docs/node-types.md).
-  > [![screenshot of node type switch](https://user-images.githubusercontent.com/157609/42382479-b4d98768-8134-11e8-979c-69b758846bf0.png)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md)
+  > [![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmW56BoDKUYychJ4Z4Kau1zVj5s33ovNqhLXQmgK9EN66k)](http://docs.ipfs.io/how-to/companion-node-types/)
 
 ## Install IPFS Companion
 
