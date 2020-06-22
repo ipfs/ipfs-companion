@@ -133,7 +133,7 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
 
 Developers and enthusiasts can opt in to the beta-quality channel:
 
-- [Firefox self-hosted signed dev build](https://ipfs.io/ipfs/QmR8W5wg8BuAyBTruHnHovfWRavwvidVh3qtyinXi6NnLa)
+- [Firefox self-hosted signed dev build](https://bafybeibjozlsoxzrxsoklis775aglnwpal2hjl42ippo57jdwiv6zoij7m.ipfs.dweb.link/)
 - [Chromium-based dev build at the Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
 
 It's also possible to grab [vendor-specific packages for each release](https://github.com/ipfs-shipyard/ipfs-companion/releases),
