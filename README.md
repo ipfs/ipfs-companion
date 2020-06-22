@@ -23,7 +23,7 @@
 ## Table of contents
 
 - [About IPFS Companion](#about-ipfs-companion)
-- [Features](#features)
+- [Features](#ipfs-companion-features)
 - [Install](#install-ipfs-companion)
 - [Contribute](#contribute)
 - [Help & Troubleshooting](#help--troubleshooting)
