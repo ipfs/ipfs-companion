@@ -104,7 +104,7 @@ In the _Active Tab_ section of the pop-up, you'll see a toggle to disable redire
 
 Use this toggle to disable all gateway redirects, but keep all other IPFS Companion features enabled.
 
-![redirect](https://user-images.githubusercontent.com/157609/55317804-90452900-5471-11e9-9fc1-42bee5b15a6a.gif)
+![Toggle all gateway redirects](https://gateway.ipfs.io/ipfs/Qma2DdfpRseby7i8faJPzbWa36xXU1MbCy5CbghCNbwcDC)
 
 #### Suspend IPFS Companion
 
