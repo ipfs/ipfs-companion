@@ -84,7 +84,7 @@ IPFS Companion enables you to quickly and easily access common actions from your
 - Choose the _Share files via IPFS_ option in the main menu for quick drag-and-drop import from a browser tab
 - Pin or unpin IPFS resources (via API) directly from the main menu
 - Copy shareable public gateway links, IPFS content paths, or CIDs of IPFS resources directly from the main menu
-- Launch the [IPFS Web UI dashboard](https://github.com/ipfs/webui/) from the main menu with a single click
+- Launch the [IPFS Web UI dashboard](https://github.com/ipfs-shipyard/ipfs-webui) from the main menu with a single click
 - Toggle gateway redirects or switch all IPFS Companion features on/off quickly and easily from the main menu (illustrations below)
 
 #### Toggle gateway redirects on a per-website basis
