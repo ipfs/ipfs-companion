@@ -98,7 +98,7 @@ The IPFS Companion browser bar pop-up menu provides handy toggles for frequent f
 
 In the _Active Tab_ section of the pop-up, you'll see a toggle to disable redirects (of any IPFS sub-resources) for the site in your currently active tab. If that site uses DNSLink, turning off the toggle will restore the site's original URL, too.
 
-![per-site-opt-out](https://user-images.githubusercontent.com/157609/55317805-90452900-5471-11e9-9e0f-293afd261648.gif)
+![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmWwTmeyNb8eTYgB7q7PhtKzG6CFWTCN4UHkczZ7xsc64r)
 
 #### Disable all redirects
 
