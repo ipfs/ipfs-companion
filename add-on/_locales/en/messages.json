@@ -371,6 +371,10 @@
     "message": "Experiments",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Reset Preferences",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "experimental",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
