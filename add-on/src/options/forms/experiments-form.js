@@ -92,7 +92,7 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
               <dd>
-                Disabled due to JS API migration
+                Disabled until move to JavaScript API with async await and async iterables
                 <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 <p>${ipfsProxy ? html`
