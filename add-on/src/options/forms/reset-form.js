@@ -3,12 +3,10 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
-const switchToggle = require('../../pages/components/switch-toggle')
 
 function resetForm ({
   onOptionsReset
 }) {
-
   return html`
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
