@@ -10,10 +10,10 @@ function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueC
   labelLegend = labelLegend ? browser.i18n.getMessage(labelLegend) : label
   value = value || value === 0 ? value : offline
   return html`
-      <li class="flex ${check ? '' : 'o-60'} ${itemClass}" title="${labelLegend}">
+      <div class="flex ${check ? '' : 'o-60'} ${itemClass}" title="${labelLegend}">
         <span class="w-40 f7 ttu no-user-select">${label}</span>
         <span class="w-60 f7 tr monospace truncate force-select-all ${valueClass}" title="${value}">${value}</span>
-      </li>
+      </div>
     `
 }
 
@@ -36,12 +36,6 @@ module.exports = function gatewayStatus ({
   ${statusEntry({
     label: 'panel_statusApiAddress',
     value: api,
-    check: gatewayVersion,
-    itemClass: 'mb1'
-  })}
-  ${statusEntry({
-    label: 'panel_statusGatewayVersion',
-    value: gatewayVersion,
     check: gatewayVersion,
     itemClass: 'mb1'
   })}
