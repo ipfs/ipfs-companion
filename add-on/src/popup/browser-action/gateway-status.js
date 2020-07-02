@@ -18,8 +18,8 @@ function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueC
     `
 }
 
-function gatewayToggle ({ icon, textLocal, textPublic, title, disabled, style, onClick, switchValue }) {
-  let buttonStyle = 'outline-0--focus f7 small-caps'
+function gatewayToggle ({ icon, text, title, disabled, style, onClick, switchValue }) {
+  let buttonStyle = 'outline-0--focus f7 tl'
   if (disabled) {
     buttonStyle += ' o-40'
   } else {
@@ -32,8 +32,9 @@ function gatewayToggle ({ icon, textLocal, textPublic, title, disabled, style, o
     title = ''
   }
   return html`
-    <div class="flex justify-end ${buttonStyle}" onclick=${disabled ? null : onClick}  title="${title || ''}" ${disabled ? 'disabled' : ''}>
-      <div class="truncate">${textLocal}</div>${switchToggle({ checked: switchValue, disabled, style: 'mh2' })}<div class="truncate">${textPublic}</div>
+    <div class="flex flex-row items-center justify-between ${buttonStyle}"
+            onclick=${disabled ? null : onClick}  title="${title || ''}" ${disabled ? 'disabled' : ''}>
+      <div class="truncate">${text}</div>${switchToggle({ checked: switchValue, disabled, style: 'fr ml2' })}
     </div>
   `
 }
@@ -71,8 +72,7 @@ module.exports = function gatewayStatus ({
       check: gatewayAddress,
     })}
     ${gatewayToggle({
-      textLocal: browser.i18n.getMessage('panel_redirectToggleLocal'),
-      textPublic: browser.i18n.getMessage('panel_redirectTogglePublic'),
+      text: browser.i18n.getMessage('panel_redirectToggle'),
       title: browser.i18n.getMessage('panel_redirectToggleTooltip'),
       disabled: !activeRedirectSwitch,
       switchValue: redirect && activeRedirectSwitch,
