@@ -33,6 +33,7 @@ module.exports = function browserActionPage (state, emit) {
       ${header(headerProps)}
       ${activeTabActions(activeTabActionsProps)}
       ${tools(opsProps)}
+      ${operations(opsProps)}
     </div>
   `
 }

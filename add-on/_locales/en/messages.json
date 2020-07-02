@@ -36,15 +36,15 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Share files",
+    "message": "Share files via IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
-    "message": "Go to node",
+    "message": "Open Web UI",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "F",
+    "message": "Redirect to Gateway",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
