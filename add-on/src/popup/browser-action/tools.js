@@ -18,8 +18,6 @@ module.exports = function tools ({
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`
-    <div>
-    ${navHeader('panel_toolsSectionHeader')}
     <div class="fade-in pt1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickImport'),
@@ -31,7 +29,6 @@ module.exports = function tools ({
     disabled: !activeWebUI,
     onClick: onOpenWebUi
   })}
-    </div>
     </div>
   `
 }
