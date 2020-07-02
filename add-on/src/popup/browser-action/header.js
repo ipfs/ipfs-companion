@@ -12,7 +12,7 @@ const gatewayStatus = require('./gateway-status')
 module.exports = function header (props) {
   const { ipfsNodeType, active, onToggleActive, onOpenPrefs, isIpfsOnline, onOpenWelcomePage } = props
   return html`
-    <div class="br2 br--top ba bw1 b--white" style="background: linear-gradient(to bottom, #041727 0%,#043b55 100%);">
+    <div class="br2 br--top bt br bl bw1 b--white" style="background: linear-gradient(to bottom, #041727 0%,#043b55 100%);">
       <div class="pt3 pr3 pb2 pl3 no-user-select flex justify-between items-center">
         <div class="inline-flex items-center">
         <div
