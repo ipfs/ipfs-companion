@@ -23,7 +23,6 @@ module.exports = function tools ({
     <div class="fade-in pt1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickImport'),
-    style: 'b',
     disabled: !activeQuickImport,
     onClick: onQuickImport
   })}
