@@ -4,8 +4,6 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const toolsButton = require('./tools-button')
-const toolsItem = require('./tools-item')
-
 
 module.exports = function tools ({
   active,
@@ -33,15 +31,6 @@ module.exports = function tools ({
         disabled: !activeWebUI,
         onClick: onOpenWebUi
       })}
-    </div>
-    <div>
-    ${toolsItem({
-      text: browser.i18n.getMessage('panel_redirectToggle'),
-      title: browser.i18n.getMessage('panel_redirectToggleTooltip'),
-      disabled: !activeRedirectSwitch,
-      switchValue: redirect && activeRedirectSwitch,
-      onClick: onToggleGlobalRedirect
-    })}
     </div>
   `
 }
