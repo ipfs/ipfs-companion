@@ -51,12 +51,16 @@
     "message": "Click to toggle all gateway redirects",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
+  "panel_toolsSectionHeader": {
+    "message": "Tools",
+    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  },
   "panel_openPreferences": {
     "message": "Preferences",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Current Tab",
+    "message": "Active Tab",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
