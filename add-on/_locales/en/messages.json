@@ -40,11 +40,11 @@
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
-    "message": "Go to my node",
+    "message": "Go to node",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Fetch all sites via IPFS",
+    "message": "F",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
@@ -56,7 +56,7 @@
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
-    "message": "Preferences",
+    "message": "Open Preferences of Browser Extension",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
