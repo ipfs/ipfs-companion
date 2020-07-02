@@ -26,7 +26,7 @@ module.exports = function browserActionPage (state, emit) {
 
   const headerProps = Object.assign({ onToggleActive, onOpenPrefs, onOpenWelcomePage }, state)
   const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onPin, onUnPin }, state)
-  const opsProps = Object.assign({ onQuickImport, onOpenWebUi, onToggleGlobalRedirect }, state)
+  const opsProps = Object.assign({ onQuickImport, onOpenPrefs, onOpenWebUi, onToggleGlobalRedirect }, state)
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">

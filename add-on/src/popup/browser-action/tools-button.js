@@ -2,10 +2,9 @@
 /* eslint-env browser, webextensions */
 
 const html = require('choo/html')
-const switchToggle = require('../../pages/components/switch-toggle')
 
-function toolsButton ({ icon, text, title, disabled, style, onClick, switchValue }) {
-  let buttonStyle = 'teal button-reset db bg-white b--none outline-0--focus pv2 ph3 tc mh1 br-pill f6 tl'
+function toolsButton ({ icon, text, title, disabled, style, onClick }) {
+  let buttonStyle = 'teal button-reset db bg-white b--none outline-0--focus pv1 ph2 tc mh1 br-pill f6 tl'
   if (disabled) {
     buttonStyle += ' o-40'
   } else {
@@ -20,9 +19,9 @@ function toolsButton ({ icon, text, title, disabled, style, onClick, switchValue
 
   return html`
 
-    <button class="inline-flex flex-row items-center ${buttonStyle}"
+    <button class="inline-flex items-center w-50 ${buttonStyle}"
             onclick=${disabled ? null : onClick}  title="${title || ''}" ${disabled ? 'disabled' : ''}>
-      <div class="tc truncate">${text}</div>${switchToggle({ checked: switchValue, disabled, style: 'fr ml2' })}
+      <div class="w-100 tc truncate">${text}</div>
     </button>
   `
 }
