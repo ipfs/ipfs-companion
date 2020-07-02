@@ -23,6 +23,7 @@ module.exports = function ipfsVersion ({
   return html`
   ${statusEntry({
     label: 'panel_statusGatewayVersion',
+    title: 'panel_statusGatewayVersionTitle',
     value: gatewayVersion,
     check: gatewayVersion
   })}

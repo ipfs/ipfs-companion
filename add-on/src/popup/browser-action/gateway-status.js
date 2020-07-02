@@ -36,12 +36,14 @@ module.exports = function gatewayStatus ({
     })}
     ${statusEntry({
       label: 'panel_statusGatewayAddress',
+      labelLegend: 'panel_statusGatewayAddressTitle',
       value: gatewayAddress,
       check: gatewayAddress,
       itemClass: 'mb1'
     })}
     ${statusEntry({
       label: 'panel_statusApiAddress',
+      labelLegend: 'panel_statusApiAddressTitle',
       value: api,
       check: gatewayVersion,
       itemClass: 'mb1'
