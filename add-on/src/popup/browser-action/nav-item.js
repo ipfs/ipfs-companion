@@ -23,7 +23,7 @@ function navItem ({ icon, text, title, subtitle, disabled, style, onClick, switc
     <button class="${buttonStyle}"
             onclick=${disabled ? null : onClick}  title="${title || ''}" ${disabled ? 'disabled' : ''}>
       <div class="flex flex-row items-center justify-between"><div class="truncate">${text}</div>${switchToggle({ checked: switchValue, disabled, style: 'fr ml2' })}</div>
-      <div class="f7 o-40 truncate mt1">bafybeieltqren5gbivmavam532nvlsyxy725bpxqk77zvmaflrdyvu4yxm</div>
+      <div class="f7 o-40 w-80 truncate mt1">bafybeieltqren5gbivmavam532nvlsyxy725bpxqk77zvmaflrdyvu4yxm</div>
     </button>
   `
 }
