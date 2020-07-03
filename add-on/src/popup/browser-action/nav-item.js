@@ -5,7 +5,7 @@ const html = require('choo/html')
 const switchToggle = require('../../pages/components/switch-toggle')
 
 function navItem ({ icon, text, title, disabled, style, onClick, switchValue }) {
-  let buttonStyle = 'black button-reset db w-100 bg-white b--none outline-0--focus pv2 ph3 f5 tl'
+  let buttonStyle = 'black button-reset db w-100 bg-white b--none outline-0--focus pv2 ph3 f6 tl'
   if (disabled) {
     buttonStyle += ' o-40'
   } else {
