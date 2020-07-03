@@ -511,6 +511,10 @@
     "message": "Harness the power of IPFS in your browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
+  "quickImport_head_peers": {
+    "message": "Import & share files",
+    "description": "Header on the share files page (quickImport_subhead_peers)"
+  },
   "quickImport_subhead_peers": {
     "message": "Connected to $1 peers",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
@@ -524,8 +528,8 @@
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "drop it here to share",
-    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
+    "message": "drop it here",
+    "description": "Drop message on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
     "message": "Import in progress..",
