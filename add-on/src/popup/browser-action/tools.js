@@ -17,7 +17,7 @@ module.exports = function tools ({
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`
-    <div class="fade-in pt1">
+    <div class="fade-in pv1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickImport'),
     disabled: !activeQuickImport,
