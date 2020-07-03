@@ -54,17 +54,17 @@ function contextActions ({
   }) : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-    helperText: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+    helperText: 'PublicGw',
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-    helperText: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+    helperText: 'ipfsPath',
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
-    helperText: browser.i18n.getMessage(contextMenuCopyRawCid),
+    helperText: 'cid',
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
