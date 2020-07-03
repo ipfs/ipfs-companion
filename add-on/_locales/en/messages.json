@@ -48,7 +48,7 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Quick Import/Share...",
+    "message": "Quick Import/Share…",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
