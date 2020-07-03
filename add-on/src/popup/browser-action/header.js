@@ -1,7 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const logo = require('../logo')
 const powerIcon = require('./power-icon')

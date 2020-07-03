@@ -4,7 +4,6 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
-const navHeader = require('./nav-header')
 
 module.exports = function tools ({
   active,
