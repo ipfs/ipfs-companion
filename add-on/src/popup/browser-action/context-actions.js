@@ -106,8 +106,7 @@ function activeTabActions (state) {
       <div>
       ${navHeader('panel_activeTabSectionHeader')}
       <div class="fade-in pv0 bb b--black-10">
-        ${contextActions(state)}
-      </div>
+        ${contextActions(state)}      </div>
       </div>
   `
 }
