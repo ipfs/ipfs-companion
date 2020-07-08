@@ -212,7 +212,7 @@
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_page_title" : {
-    "message": "IPFS Companion | Preferences",
+    "message": "Preferences | IPFS Companion",
     "description": "Title of the Preferences page (option_page_title)"
   },
   "option_page_header" : {
@@ -520,7 +520,7 @@
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_page_title": {
-    "message": "IPFS Companion | Import & Share Files",
+    "message": "Import & Share Files | IPFS Companion",
     "description": "Page title (quickImport_page_title)"
   },
   "quickImport_head_peers": {
@@ -624,7 +624,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion | Welcome!",
+    "message": "Welcome | IPFS Companion",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
