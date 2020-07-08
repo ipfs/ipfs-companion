@@ -1,14 +1,14 @@
 {
   "browserAction_title": {
-    "message": "Companionul IPFS",
+    "message": "Însoțitorul IPFS",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
-    "message": "Companionul IPFS",
+    "message": "Însoțitorul IPFS",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Toggle all IPFS integrations",
+    "message": "Pornește toate integrările IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -32,111 +32,111 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "The number of other IPFS nodes you can connect to",
+    "message": "Numărul celorlalte noduri IPFS la care te poți conecta",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Încărcare rapidă",
+    "message": "Distribuie fișiere prin IPFS",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_openWebui": {
-    "message": "Open Web UI",
+    "message": "UI-ul Open Web",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_redirectToggle": {
-    "message": "Redirect to Gateway",
+    "message": "Redirectare către Gateway",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
   },
   "panel_redirectToggleTooltip": {
-    "message": "Click to toggle all gateway redirects",
+    "message": "Apasă pentru a porni toate redirectările gateway",
     "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
   },
   "panel_toolsSectionHeader": {
-    "message": "Tools",
+    "message": "Instrumente",
     "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
   },
   "panel_openPreferences": {
-    "message": "Accesează preferințele",
+    "message": "Deschide preferințele extensiei din browser",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Active Tab",
+    "message": "Tab-ul activ",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Enable on $1",
+    "message": "Activează pe $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Click to toggle all IPFS integrations on $1",
+    "message": "Clic pentru a activa toate integrările IPFS pe $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource",
+    "message": "Atașează resursa IPFS",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Atașarea unui CID îi spune propriului nod IPFS faptul că respectivele date sunt importante și nu trebuie aruncate.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Content Path",
+    "message": "Copiază calea conținutului IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
-    "message": "Copy CID",
+    "message": "Copiază CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "Copiază link partajabil",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "View on Gateway",
+    "message": "Vezi în Gateway",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "IPFS resource loaded via Public Gateway",
+    "message": "Resursă IPFS încărcată prin intermediul Gateway-ului Public",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS resource loaded via Custom Gateway",
+    "message": "Resursă IPFS încărcată prin intermediul Gateway-ului Particularizat",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Non-IPFS resource",
+    "message": "Resursă Non-IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Selected Image",
+    "message": "Imagine selectată",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Selected Video",
+    "message": "Video selectat",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Selected Audio",
+    "message": "Audio selectat",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Linked Content",
+    "message": "Conținut cu link",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Selected Text",
+    "message": "Text selectat",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "This Page",
+    "message": "Această pagină",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Import to IPFS",
+    "message": "Importă în IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Import Selected Text to IPFS",
+    "message": "Importă textul selectat în IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -148,23 +148,23 @@
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Copied",
+    "message": "Copiat",
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "Resursa IPFS este prinsă acum",
+    "message": "Resursa IPFS este acum atașată",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "Resursă IPFS desprinsă",
+    "message": "Atașament IPFS eliminat",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Eroare în timp ce prindeam resursa IPFS",
+    "message": "Eroare în timp ce atașam Resursa IPFS",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Eroare la desprinderea resursei IPFS",
+    "message": "Eroare la eliminarea Atașamentului IPFS",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
@@ -172,7 +172,7 @@
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Mod automat: redirecționarea configurată pe gateway este activă",
+    "message": "Mod automat: Custom Gateway Redirect este activ",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
@@ -184,7 +184,7 @@
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "Nu pot importa prin API-ul IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -196,35 +196,35 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1 (press ctrl+shift+j for more details)",
+    "message": "$1 (press ctrl+shift+j pentru mai multe detalii)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Failed to start IPFS node",
+    "message": "Pornirea nodului IPFS a eșuat",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Failed to stop IPFS node",
+    "message": "Oprirea nodului IPFS a eșuat",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_page_header" : {
-    "message": "Companion Preferences",
+    "message": "Preferințe Însoțitor",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
-    "message": "Read more",
+    "message": "Mai multe",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType" : {
-    "message": "IPFS Node",
+    "message": "Nod IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "File Import",
+    "message": "Import fișier",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
-    "message": "IPFS Node Type",
+    "message": "Tipul nodului IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
@@ -236,27 +236,27 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
+    "message": "Inclus în Chrome Sockets: rulează nodul js-ipfs în browser cu accesarea API-ului chrome.sockets (detalii sub link-ul de mai jos)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "Configurarea Nodului IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
+    "message": "Configurări suplimentare pentru nodul IPFS JS inclus. Trebuie să fie JSON valid.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
-    "message": "External",
+    "message": "Extern",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_embedded": {
-    "message": "Embedded",
+    "message": "Inclus",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
+    "message": "Inclus + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
@@ -268,23 +268,23 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL-ul Gateway-ului HTTP2IPFS preferat",
+    "message": "Set the URL of your preferred custom local gateway.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "message": "Conținutul IPFS va fi blocat de la încărcarea pe site-urile HTTPS dacă URL-ul tău de gateway nu începe cu „http://127.0.0.1”, „http://[::1]” sau „https://”",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Folosește un Gateway personalizat",
+    "message": "Folosește un Gateway Personalizat",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Redirecționează cereri pentru resursele IPFS către gateway-ul personalizat",
+    "message": "Redirect requests for IPFS resources to your custom local gateway.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
-    "message": "Use Subdomains",
+    "message": "Folosește subdomenii",
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
@@ -320,15 +320,15 @@
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Gateway-ul public implicit",
+    "message": "Gateway-ul Public din oficiu",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "URL-ul de siguranță folosit de gateway-ul personalizat nu este disponibil și/sau pentru linkuri de copiere ce pot fi distribuite",
+    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "Gateway-ul pentru Subdomenii Publice din oficiu",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
@@ -352,15 +352,15 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "De câte ori este actualizat numărul partenerilor (în milisecunde)",
+    "message": "Specify how frequently (in milliseconds) to refresh your peer count.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Mod automat",
+    "message": "Use Automatic Mode",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Activează utilizarea gateway-ului personalizat atunci când disponibilitatea API-ului IPFS se schimbă",
+    "message": "Enable/disable use of your custom gateway as appropriate when IPFS API availability changes.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -371,12 +371,16 @@
     "message": "Experimente",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Reset Preferences",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "experimental",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "Atenție: aceste instrumente sunt noi sau în dezvoltare. YMMV.",
+    "message": "Warning! These experimental features are works in progress and are subject to changes in availability and functionality.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
@@ -392,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Afișează notificările sistemului atunci când starea API-ului se modifică, se copiază un link, etc",
+    "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
@@ -408,7 +412,7 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Transformă căile text simplu de genul /ipfs/ în linkuri active",
+    "message": "Turn /ipfs/ paths displayed as plaintext on web pages into clickable links.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
@@ -424,15 +428,15 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "Verifică după cererea HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "Verifică înainte de cererea HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Recuperează cererile HTTP eșuate",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
@@ -452,11 +456,11 @@
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
+    "message": "IPFS este adăugat obiectului window al fiecărei pagini. Activarea/dezactivarea accesului la funcțiile care-l expune.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
+    "message": "Gestionează permisiunile",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
@@ -476,7 +480,7 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "Jurnalizează Namespace-urile",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
@@ -484,7 +488,7 @@
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "Directorul importului de fișiere",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
@@ -496,223 +500,223 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Înlocuiește preferințele utilizatorilor cu cele implicite (nu poți reveni!)",
+    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
-    "message": "Companionul IPFS",
+    "message": "Însoțitorul IPFS",
     "description": "Extension name in the Manifest file (manifest_extensionName)"
   },
   "manifest_shortExtensionName": {
-    "message": "Companionul IPFS",
+    "message": "Însoțitorul IPFS",
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Extensie a browserului care simplifică accesul la resursele IPFS",
+    "message": "Beneficiază de puterea IPFS-ului în propriul browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {
-    "message": "Connected to $1 peers",
+    "message": "Conectat la $1 peers",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
-    "message": "Pick a file",
+    "message": "Alege un fișier",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_or": {
-    "message": "or",
+    "message": "sau",
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "drop it here to share",
+    "message": "pune-l aici pentru a-l distribui",
     "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "Import în desfășurare",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
-    "message": "(buffering, please wait)",
+    "message": "(buffering, așteptați)",
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "opțiunile de import",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "Calea de stocare a fișierelor importate",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Deschide în Web UI",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
-    "message": "Manage Permissions",
+    "message": "Gestionează permisiunile",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "View, change and revoke granted access rights to your IPFS instance.",
+    "message": "Vezi, modifică și revocă drepturile de acces acordate instanței IPFS.",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "No permissions granted.",
+    "message": "Nu sunt acordate permisiuni.",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $1 for $2?",
+    "message": "Revocă permisiunea $1 pentru $2?",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $1?",
+    "message": "Revocă permisiunile pentru $1?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Click to allow",
+    "message": "Apasă pentru a permite",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Click to deny",
+    "message": "Apasă pentru a interzice",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Allow",
+    "message": "Permite",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Deny",
+    "message": "Interzice",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Revoke $1",
+    "message": "Revocă $1",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "Ar trebui ca Însoțitorul IPFS să permită «$1» accesul «$2» la nodul conectat?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Aplică această decizie pentru toate permisiunile curente și viitoare pentru această zonă",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Revoke all permissions",
+    "message": "Revocă toate permisiunile",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Allow",
+    "message": "Permite",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Deny",
+    "message": "Interzice",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "Insoțitorul IPFS - Bine ai venit!",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
-    "message": "Companionul IPFS",
+    "message": "Însoțitorul IPFS",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Your node is connected to <0>$1</0> peers.",
+    "message": "Nodul tău este conectat la <0>$1</0> noduri.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_statusButton_text": {
-    "message": "Status",
+    "message": "Stare",
     "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
   },
   "page_landingWelcome_welcome_filesButton_text": {
-    "message": "Files",
+    "message": "Fișiere",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
   },
   "page_landingWelcome_welcome_peersButton_text": {
-    "message": "nodurile partenere",
+    "message": "Noduri partenere",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS is not running",
+    "message": "IPFS nu rulează",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
-    "message": "IPFS Desktop users",
+    "message": "Utilizatori IPFS Desktop",
     "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Make sure IPFS Desktop is running. Don't have it installed? <0>Download IPFS Desktop now.</0>",
+    "message": "Asigură-te că IPFS Desktop rulează deja. Nu-l ai instalat? <0>Descarcă acum IPFS Desktop.</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Command-line users",
+    "message": "Utilizatorii liniei de comandă",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Start IPFS by entering <code class=\"yellow\">ipfs daemon</code> in your terminal. If you don't have IPFS installed yet, follow the <0>CLI quick-start guide</0> first.",
+    "message": "Pornește IPFS lansând în execuție <code class=\"yellow\">ipfs daemon</code> în terminal. Dacă nu ai IPFS instalat deja, mai întâi consultă <0>ghidul rapid pentru CLI </0>.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Learn about IPFS",
+    "message": "Învață despre IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "Read about <0>IPFS Companion's features</0>",
+    "message": "Citește despre <0>funcționalitățile Însoțitorului IPFS </0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_resources_new_ipfs_concepts": {
-    "message": "Learn basic concepts in the <0>How IPFS Works</0> guide",
+    "message": "Învață conceptele de bază din ghidul <0>Cum funcționează IPFS </0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Visit the <0>IPFS documentation site</0> to dig deeper",
+    "message": "Vizitează <0>site-ul documentației IPFS </0> pentru a săpa mai adânc",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
-    "message": "Build on IPFS",
+    "message": "Construit cu IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
   "page_landingWelcome_resources_build_tutorials": {
-    "message": "Find <0>how-tos and tutorials</0> to help get you started",
+    "message": "Caută <0>tutorialele despre cum se face </0>pentru a porni",
     "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
   },
   "page_landingWelcome_resources_build_examples": {
-    "message": "See what <0>awesome things</0> others are building with IPFS",
+    "message": "Vezi ce <0>lucruri grozave</0> au construit alții cu IPFS",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
-    "message": "Get help",
+    "message": "Asistență",
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Ask questions and discuss IPFS in the <0>official forums</0>",
+    "message": "Pune întrebări și discută despre IPFS în <0>forumurile oficiale</0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
-    "message": "Join the community",
+    "message": "Alătură-te comunității",
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_contribute": {
-    "message": "<0>Contribute</0> with code, documentation, and more",
+    "message": "<0>Contribuie</0> cu documentație, cod sau mai multe",
     "description": "Community copy (page_landingWelcome_resources_community_contribute)"
   },
   "page_landingWelcome_resources_community_translate": {
-    "message": "<0>Translate</0> IPFS into your favorite language",
+    "message": "<0>Tradu</0> IPFS în limba preferată",
     "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {
-    "message": "Explore all <0>IPFS community resources</0>",
+    "message": "Explorează <0>resursele IPFS ale comunității</0>",
     "description": "Community copy (page_landingWelcome_resources_community_resources)"
   },
   "page_landingWelcome_videos_why_ipfs": {
-    "message": "Why IPFS?",
+    "message": "De ce IPFS?",
     "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
   "page_landingWelcome_videos_how_ipfs_works": {
-    "message": "How IPFS Works",
+    "message": "Cum funcționează IPFS",
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Related Projects",
+    "message": "Proiecte conectate",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }

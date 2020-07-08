@@ -72,7 +72,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource",
+    "message": "Pin IPFS resource",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Content Path",
+    "message": "Copy IPFS content path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "Copy shareable link",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -228,7 +228,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Ekstern: forbind til en klient via HTTP-API'et",
+    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
@@ -268,7 +268,7 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL for foretrukken HTTP2IPFS Gateway",
+    "message": "Set the URL of your preferred custom local gateway.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
@@ -280,7 +280,7 @@
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Ormdiriger forespørgsler på IPFS-resourcer til den Valgfri Gateway",
+    "message": "Redirect requests for IPFS resources to your custom local gateway.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -324,7 +324,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Backup-URL som benyttes i tilfælde af at Valgfri Gateway er utilgængelig og for deling af links.",
+    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -344,7 +344,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Ledetråd: det er hvor at /api/v0/config findes",
+    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -352,15 +352,15 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Hvor ofte antal klient-forbindelser opdateres (i millisekunder)",
+    "message": "Specify how frequently (in milliseconds) to refresh your peer count.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Automatisk Tilstand",
+    "message": "Use Automatic Mode",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Til/Frakobling af Valgfri Gateway når tilgængelighed ændres for IPFS API'et",
+    "message": "Enable/disable use of your custom gateway as appropriate when IPFS API availability changes.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -371,12 +371,16 @@
     "message": "Eksperimenter",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Reset Preferences",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "experimental",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "Advarsel: Disse funktioner er nye og under udarbejdelse.",
+    "message": "Warning! These experimental features are works in progress and are subject to changes in availability and functionality.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
@@ -392,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Viser en system notifikation når status for API'et ændres, et link kopieres etc.",
+    "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
@@ -408,7 +412,7 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Omdan klartekst /ipfs/ stier til klikbare links",
+    "message": "Turn /ipfs/ paths displayed as plaintext on web pages into clickable links.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
@@ -440,11 +444,11 @@
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Udforsk X-Ipfs-Path header",
+    "message": "Detect x-ipfs-path Headers",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Drop HTTP overførsel og hent via IPFS når værdien er en IPFS sti. Omdirrigering af IPFS stier kræver herudover at DNSLink understørrelse er aktiveret.",
+    "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -480,7 +484,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Skræddersy hvilke navnerum der logges til browser konsollen. Ændringer af denne værdi vil medføre genstart af udvidelsen.",
+    "message": "Namespaces in this comma-separated list will be logged to your browser's console. Changing this list will restart IPFS Companion.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -496,7 +500,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Erstatter valgte brugerindstillinger med standardindstillingerne (kan ikke fortrydes!)",
+    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -508,7 +512,7 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Browser-udvidelse som gør det let at tilgå IPFS resourcer",
+    "message": "Harness the power of IPFS in your browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {

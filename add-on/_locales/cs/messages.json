@@ -228,11 +228,11 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Externí: přípojit se k uzlu skrze HTTP API",
+    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Embedded: ve vašem prohlížeči spusťte uzel js-ipfs (o jeho omezeních si přečtěte na níže uvedeném odkazu)",
+    "message": "Set to \"Embedded\" to run a js-ipfs node directly in your browser. (Click \"Read more\" to learn about the limitations of this experimental feature.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
@@ -268,7 +268,7 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL preferovaný HTTP2IPFS brány",
+    "message": "Set the URL of your preferred custom local gateway.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
@@ -280,7 +280,7 @@
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Přesměrovat požadavky pro IPFS objekt skrze vlastní bránu",
+    "message": "Redirect requests for IPFS resources to your custom local gateway.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -288,35 +288,35 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Izolovejte od sebe kořeny obsahu jejich načtením ze subdomén v *.localhost a vytvořením jedinečného původu pro každý záznam CID, IPNS nebo záznamu DNSLink. Vyžaduje to místní go-ipfs 0.5.0 nebo novější.",
+    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. Requires go-ipfs 0.5.0 or later on your local node.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Načíst webové stránky z vlastní brány",
+    "message": "Load DNSLink Sites from Custom Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "Pokud je povoleno globální přesměrování, bude to zahrnovat webové stránky DNSLink a přesměruje je na příslušné /ipns/{fqdn} cesty na vlastní bráně.",
+    "message": "When global gateway redirect is enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths at your custom gateway.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Předběžné načítání navštívených stránek",
+    "message": "Preload Visited Pages",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "Webové servery DNSLink budou předběžně načteny do místního uzlu IPFS, aby se umožnil přístup offline a zvýšila odolnost proti selhání sítě",
+    "message": "Preload DNSLink sites to your local IPFS node, enabling offline access and improving your resiliency against network failure.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Toto nepoužívejte, pokud váš uzel IPFS nepodporuje *.ipfs.localhost. Přesměrování na bránu založenou na cestě přerušuje zabezpečení založené na původu webových stránek DNSLink. Ujistěte se, že rozumíte souvisejícím rizikům.",
+    "message": "Do not use if your IPFS node does not support *.ipfs.localhost. Redirecting to a path-based gateway breaks the origin-based security isolation of DNSLink websites, so make sure you understand the related risks.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "IPFS integrace Opt-Outů",
+    "message": "Site Opt-Out List",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "Seznam webových stránek, které by neměly mít povolenou integraci IPFS. Jeden název hostitele na řádek.",
+    "message": "Sites in this list (one hostname per line) will have all IPFS integrations disabled.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -324,7 +324,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Záložní URL pro sdílející odkazy bude použita v případě že vlastní brána nebude dostupná",
+    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -332,7 +332,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Výchozí veřejná subdoménová brána pro obnovu nefunkčních subdoménových bran",
+    "message": "Set a default public subdomain gateway for the recovery of broken subdomain gateways.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -344,7 +344,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Nápověda: toto je umístění /api/v0/config",
+    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -352,15 +352,15 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Jak často je obnoven počet připojení (v milisekundách)",
+    "message": "Specify how frequently (in milliseconds) to refresh your peer count.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Automatický mód",
+    "message": "Use Automatic Mode",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Přepnout použití vlastní brány když se dostupnost IPFS API změní",
+    "message": "Enable/disable use of your custom gateway as appropriate when IPFS API availability changes.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -371,12 +371,16 @@
     "message": "Experimenty",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Reset Preferences",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "experimentální",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "Upozornění: tyto funkcionality jsou nové nebo stále ve vývoji.",
+    "message": "Warning! These experimental features are works in progress and are subject to changes in availability and functionality.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
@@ -392,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Zobrazit systémové notifikace když se změní stav API, odkaz je zkopírován apod.",
+    "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
@@ -400,7 +404,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Povoluje dočasnou podporu pro ipfs://, ipns:// a dweb: přesměrováním neošetřených požadavků adresního řádku na bránu HTTP",
+    "message": "Enable provisional support for ipfs://, ipns://, and dweb: requests by redirecting them to an HTTP gateway.",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -408,7 +412,7 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Převést /ipfs/ adresy na klikatelné odkazy",
+    "message": "Turn /ipfs/ paths displayed as plaintext on web pages into clickable links.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
@@ -416,7 +420,7 @@
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Zásady vyhledávání pro zobrazování kontextových akcí na webech s DNSLink",
+    "message": "Choose your policy for looking up and displaying contextual actions on DNSLink-enabled sites.",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -436,15 +440,15 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Obnovení neúspěšných požadavků HTTP na prostředky IPFS přesměrováním na veřejnou bránu.",
+    "message": "Redirect failed HTTP requests for IPFS resources to the public gateway.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detekovat X-Ipfs-Path Header",
+    "message": "Detect x-ipfs-path Headers",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Ignorovat HTTP požadavky a načíst skrze IPFS pokud je hodnota IPFS adresa. Přesměrování IPNS cest vyžaduje zapnutou podporu DNSLink.",
+    "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -460,19 +464,19 @@
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Otevřít importované soubory ve webovém rozhraní",
+    "message": "Open Imported Files in the Files Screen",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Místo otevírání souboru nebo nadřazeného adresáře na bráně zobrazit soubory ve webovém rozhraní.",
+    "message": "After importing a file, open it in the Files screen instead of opening it or its parent directory in the gateway.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Předběžné importy",
+    "message": "Preload Imported Assets",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Umožnit automatické předběžné načtení importovaných dat prostřednictvím asynchronního požadavku HTTP HEAD na veřejnou bránu",
+    "message": "Automatically preload assets imported to IPFS via asynchronous HTTP HEAD requests to a public gateway.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -480,7 +484,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Přizpůsobte, které jmenné prostory jsou přihlášeny do konzoly prohlížeče. Změna této hodnoty spustí restart rozšíření.",
+    "message": "Namespaces in this comma-separated list will be logged to your browser's console. Changing this list will restart IPFS Companion.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -488,7 +492,7 @@
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Přizpůsobte adresář používaný pro importované soubory.",
+    "message": "Set the directory you wish to use for files you import using IPFS Companion.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -496,7 +500,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Nahradí uživatelovo nastavení výchozími hodnotami (nevratná akce!)",
+    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -508,7 +512,7 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Rozšíření prohlížeče který zjednodušuje přístup k IPFS objektům",
+    "message": "Harness the power of IPFS in your browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {

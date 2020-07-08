@@ -72,7 +72,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource",
+    "message": "Pin IPFS resource",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Content Path",
+    "message": "Copy IPFS content path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "Copy shareable link",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -228,7 +228,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "외부 노드: HTTP API를 이용하여 노드에 연결합니다.",
+    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
@@ -324,7 +324,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "로컬 게이트웨이가 사용 불가능 할 때, 공유 가능한 링크를 복사하면 대체 URL이 사용됩니다.",
+    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -344,7 +344,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "힌트: /api/v0/config가 있는 곳입니다.",
+    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -356,7 +356,7 @@
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "자동 모드",
+    "message": "Use Automatic Mode",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
@@ -370,6 +370,10 @@
   "option_header_experiments": {
     "message": "실험 기능",
     "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_header_reset": {
+    "message": "Reset Preferences",
+    "description": "A section header on the Preferences screen (option_header_reset)"
   },
   "option_experimental": {
     "message": "experimental",
@@ -412,7 +416,7 @@
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink 조회",
+    "message": "DNSLink Lookup Policy",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
@@ -472,7 +476,7 @@
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "자동적으로 비동기 공개 게이트웨이에 HTTP HEAD 요청을 보내 가져온 자산을 미리 로드하기",
+    "message": "Automatically preload assets imported to IPFS via asynchronous HTTP HEAD requests to a public gateway.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {

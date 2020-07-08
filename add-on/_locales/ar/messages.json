@@ -228,11 +228,11 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "خارجي: الاتصال بعُقدة عبر HTTP API",
+    "message": "اضبط على \"خارجي\" للاتصال بالعقدة المحلية باستخدام HTTP API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "مضمن: تشغيل عقدة js-ipfs في متصفحك (اقرأ عن حدودها تحت الرابط أدناه)",
+    "message": "اضبط على \"Embedded\" لتشغيل عقدة js-ipfs مباشرة في متصفحك. (انقر فوق \"قراءة المزيد\" للتعرف على قيود هذه الميزة التجريبية.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
@@ -268,7 +268,7 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "عنوان URL لمدخل HTTP2IPFS المفضل",
+    "message": "حدد عنوان URL الخاص بالبوابة المحلية المخصصة المفضلة لديك.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
@@ -280,7 +280,7 @@
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "إعادة توجيه طلبات موارد IPFS إلى العبّارة المخصصة",
+    "message": "إعادة توجيه طلبات موارد IPFS إلى البوابة المحلية المخصصة الخاصة بك.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -288,35 +288,35 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "قم بعزل جذور المحتوى عن بعضها البعض عن طريق تحميلها من نطاقات فرعية في * .localhost وإنشاء أصل فريد لكل سجل CID أو IPNS أو DNSLink. يتطلب go-ipfs محليًا 0.5.0 أو أحدث.",
+    "message": "قم بعزل جذور المحتوى عن بعضها البعض عن طريق تحميلها كنطاقات فرعية (في * .localhost) وإنشاء أصل فريد لكل سجل CID أو IPNS أو DNSLink. يتطلب go-ipfs 0.5.0 أو أحدث على العقدة المحلية.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "تحميل مواقع الويب من مدخل مخصص",
+    "message": "تحميل مواقع DNSLink من مخارج مخصصة",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "إذا تم تمكين إعادة التوجيه العامة ، فسيشمل ذلك مواقع DNSLink وإعادة توجيهها إلى مسارات / ipns / {fqdn} المعنية في مداخل مخصصة",
+    "message": "عند تمكين إعادة توجيه البوابة العامة ، قم بتضمين مواقع DNSLink بإعادة توجيهها إلى مساراتها / ipns / {fqdn} الخاصة بها في المخارج المخصصة الخاصة بك.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "زار التحميل المسبق للصفحات",
+    "message": "الصفحات التي تمت زيارتها قبل التحميل",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "سيتم تحميل مواقع DNSLink مسبقًا على عقدة IPFS المحلية لتمكين الوصول دون اتصال بالإنترنت وتحسين المرونة ضد أعطال الشبكة",
+    "message": "التحميل المسبق لمواقع DNSLink إلى عقدة IPFS المحلية الخاصة بك ، مما يتيح الوصول دون اتصال بالإنترنت وتحسين مرونتك ضد فشل الشبكة.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "تجنب استخدام هذا إذا كانت عقدة IPFS الخاصة بك لا تدعم * .ipfs.localhost. تؤدي إعادة التوجيه إلى مدخل يعتمد على المسار إلى كسر العزلة الأمنية القائمة على الأصل لمواقع DNSLink. تأكد من أنك تفهم المخاطر ذات الصلة.",
+    "message": "لا تستخدمه إذا كانت عقدة IPFS الخاصة بك لا تدعم * .ipfs.localhost. تؤدي إعادة التوجيه إلى بوابة تستند إلى المسار إلى كسر العزلة الأمنية القائمة على الأصل لمواقع DNSLink ، لذا تأكد من فهمك للمخاطر ذات الصلة.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "عمليات إلغاء الاشتراك في تكاملات IPFS",
+    "message": "قائمة إلغاء الاشتراك في الموقع",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "قائمة مواقع الويب التي لا يجب تمكين أي تكاملات IPFS لها. اسم مضيف واحد لكل سطر.",
+    "message": "المواقع في هذه القائمة (اسم مضيف واحد لكل سطر) سيتم تعطيل كل تكاملات IPFS.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -324,7 +324,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "يُستخدم عنوان URL الاحتياطي عند عدم توفر مدخل عام لنسخ الروابط القابلة للمشاركة",
+    "message": "قم بتعيين بوابة عامة افتراضية لاستخدامها في الارتباطات القابلة للمشاركة بشكل عام وكعنوان URL احتياطي عندما لا تكون المخارج المخصصة متاحة.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -332,7 +332,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "المدخل الافتراضي العام للنطاق الفرعي لاسترداد مداخل النطاق الفرعي للمقطوعة",
+    "message": "تعيين مخارج افتراضية عامة للنطاق الفرعي لاسترداد مخرج النطاق الفرعي للمقطوعة.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -344,7 +344,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "تلميح: هذا هو المكان الذي يستوطن فيه / api / v0 / config",
+    "message": "تعيين عنوان URL الخاص بواجهة برمجة تطبيقات IPFS الخاصة بك. (تلميح: هذا هو المكان / api / v0 / config.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -352,15 +352,15 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "عدد مرات تحديث عدد الأقران (بالمللي ثانية)",
+    "message": "حدد عدد المرات (بالمللي ثانية) لتحديث عدد الأقران.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "الوضع التلقائي",
+    "message": "استخدم الوضع التلقائي",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "تبديل استخدام المدخل العام عند توفر متغيرات IPFS API",
+    "message": "تمكين / تعطيل استخدام العبارة المخصصة الخاصة بك حسب الاقتضاء عندما يتغير توفر IPFS API.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -371,20 +371,24 @@
     "message": "التجارب",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "اعادة التعيين للتفضيلات",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "تجريبي",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "كن حذرًا: هذه الميزات جديدة أو قيد التحديث. YMMV.",
+    "message": "تحذير! هذه الميزات التجريبية قيد التنفيذ وتخضع للتغييرات في التوفر والوظائف.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
-    "message": "Use Latest Version of IPFS Web UI",
+    "message": "استخدم أحدث إصدار من واجهة مستخدم ويب IPFS",
     "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
   },
   "option_useLatestWebUI_description": {
-    "message": "Use the very latest version of the Status, Files, Explore, Peers, and Settings screens from webui.ipfs.io (via DNSLink) instead of the hard-coded CIDs shipped with the IPFS daemon. (Enable only if you trust your DNS resolver and understand how to set up the required CORS headers.)",
+    "message": "استخدم أحدث إصدار من شاشات الحالة والملفات والاستكشاف والأقران والإعدادات من webui.ipfs.io (عبر DNSLink) بدلاً من معرفات CID المشفرة التي تم شحنها مع البرنامج الخفي لـ IPFS. (قم بتمكينه فقط إذا كنت تثق في محلل DNS الخاص بك وفهم كيفية إعداد رؤوس CORS المطلوبة.)",
     "description": "An option description on the Preferences screen (option_useLatestWebUI_description)"
   },
   "option_displayNotifications_title": {
@@ -392,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "يعرض إشعارات النظام عندما تتغير حالة واجهة برمجة التطبيقات ، يتم نسخ الرابط وما إلى ذلك",
+    "message": "عرض الإخطارات على مستوى نظام التشغيل عند نسخ الرابط إلى الحافظة ، وتغيير حالة واجهة برمجة التطبيقات ، وما إلى ذلك.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
@@ -400,7 +404,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "تمكين الدعم المؤقت لـ ipfs: // و ipns: // و dweb: من خلال إعادة توجيه طلبات شريط العناوين غير المعالجة إلى مدخل HTTP",
+    "message": "قم بتمكين الدعم المؤقت لطلبات ipfs: // و ipns: // و dweb: بإعادة توجيههم إلى مخرج HTTP.",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -408,15 +412,15 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "حوّل المسارات العادية / ipfs / المسارات إلى روابط قابلة للنقر",
+    "message": "عرض مسارات / ipfs / كنص عادي على صفحات الويب إلى روابط قابلة للنقر.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "بحث رابط DNS",
+    "message": "سياسة بحث DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "سياسة البحث لعرض إجراءات السياق على مواقع الويب باستخدام رابط DNS ",
+    "message": "اختر سياستك للبحث عن الإجراءات السياقية وعرضها على المواقع التي تدعم DNSLink.",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -436,19 +440,19 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "استعادة طلبات HTTP الفاشلة لموارد IPFS عن طريق إعادة التوجيه إلى المدخل العام.",
+    "message": "إعادة توجيه طلبات HTTP الفاشلة لموارد IPFS إلى المخرج العام.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "كشف رأس مسار X-Ipfs",
+    "message": "كشف رؤوس x-ipfs-path",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "إسقاط نقل HTTP وتحميله على IPFS إذا كانت قيمة مسار IPFS. تتطلب إعادة توجيه مسارات IPNS تمكين دعم رابط DNS أيضًا.",
+    "message": "قم بتحميل العناصر باستخدام رؤوس x-ipfs-path عبر IPFS (بدلاً من HTTP) إذا كانت قيمة الرأس هي مسار IPFS. لإعادة توجيه مسارات IPNS أيضًا ، قم بتمكين دعم DNSLink.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
-    "message": "Support for window.ipfs",
+    "message": "دعم window.ipfs",
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
@@ -460,19 +464,19 @@
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "فتح الملفات المستوردة في واجهة مستخدم الويب",
+    "message": "افتح الملفات المستوردة في شاشة الملفات",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "عرض الملفات في الويب بدلاً من فتح الملف أو الدليل الرئيسي عند المدخل.",
+    "message": "بعد استيراد ملف ، قم بفتحه في شاشة الملفات بدلاً من فتحه أو دليله الرئيسي في المخرج.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "واردات التحميل",
+    "message": "التحميل المسبق للأصول المستوردة",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "تمكين التحميل المسبق التلقائي للأصول المستوردة عبر طلب HTTP HEAD غير المتزامن إلى المدخل العام",
+    "message": "التحميل المسبق للأصول المستوردة إلى IPFS تلقائيًا عبر طلبات HTTP HEAD غير المتزامنة إلى بوابة عامة.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -480,7 +484,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "تخصيص مساحات الأسماء التي تم تسجيلها في وحدة تحكم المتصفح. سيؤدي تغيير هذه القيمة إلى تشغيل إعادة التمديد.",
+    "message": "سيتم تسجيل مساحات الأسماء في هذه القائمة المفصولة بفواصل إلى وحدة تحكم المتصفح. سيؤدي تغيير هذه القائمة إلى إعادة تشغيل Companion IPFS.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -488,7 +492,7 @@
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "تخصيص الدليل المستخدم للملفات المستوردة.",
+    "message": "قم بتعيين الدليل الذي ترغب في استخدامه للملفات التي تستوردها باستخدام IPFS Companion.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -496,7 +500,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "استبدال تفضيلات المستخدم بالتفضيلات الافتراضية (لا يمكن التراجع عنها!)",
+    "message": "إعادة تعيين كافة تفضيلات رفيق IPFS إلى قيمها الافتراضية (تحذير: لا يمكن التراجع عن ذلك!).",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -508,7 +512,7 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "ملحق المستعرض الذي يبسط الوصول إلى موارد IPFS",
+    "message": "تسخير قوة IPFS في المستعرض الخاص بك",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {

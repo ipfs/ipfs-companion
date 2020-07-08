@@ -72,7 +72,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource",
+    "message": "Pin IPFS resource",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Content Path",
+    "message": "Copy IPFS content path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_copyRawCid": {
@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "Copy shareable link",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -228,11 +228,11 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "外部：HTTP APIを介してノードに接続する",
+    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "埋め込み：ブラウザでjs-ipfsノードを実行します（以下のリンクの下でその制限について読んでください）",
+    "message": "Set to \"Embedded\" to run a js-ipfs node directly in your browser. (Click \"Read more\" to learn about the limitations of this experimental feature.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
@@ -268,7 +268,7 @@
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "優先HTTP2IPFSゲートウェイのURL",
+    "message": "Set the URL of your preferred custom local gateway.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
@@ -280,7 +280,7 @@
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "IPFSリソースのリクエストをカスタムゲートウェイにリダイレクトする",
+    "message": "Redirect requests for IPFS resources to your custom local gateway.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -292,19 +292,19 @@
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "カスタムゲートウェイからWebサイトを読み込む",
+    "message": "Load DNSLink Sites from Custom Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "グローバルリダイレクトが有効な場合、これにはDNSLink Webサイトが含まれ、カスタムゲートウェイのそれぞれの/ipns/{fqdn}パスにリダイレクトされます",
+    "message": "When global gateway redirect is enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths at your custom gateway.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "訪問済みページのプリロード",
+    "message": "Preload Visited Pages",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "DNSLink WebサイトがローカルIPFSノードにプリロードされ、オフラインアクセスが可能になり、ネットワーク障害に対する回復力が向上します。",
+    "message": "Preload DNSLink sites to your local IPFS node, enabling offline access and improving your resiliency against network failure.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
@@ -312,11 +312,11 @@
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "IPFSインテグレーションのオプトアウト",
+    "message": "Site Opt-Out List",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "IPFS統合を有効にしてはならないWebサイトのリスト。 1行に1つのホスト名。",
+    "message": "Sites in this list (one hostname per line) will have all IPFS integrations disabled.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
@@ -324,7 +324,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "カスタムゲートウェイが利用できない場合、および共有可能なリンクをコピーするために使用されるフォールバックURL",
+    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -332,7 +332,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "壊れたサブドメインゲートウェイを回復するためのデフォルトのパブリックサブドメインゲートウェイ",
+    "message": "Set a default public subdomain gateway for the recovery of broken subdomain gateways.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -344,7 +344,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "ヒント：これは/api/v0/configが存在する場所です",
+    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -352,15 +352,15 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "ピアカウントが更新される頻度（ミリ秒）",
+    "message": "Specify how frequently (in milliseconds) to refresh your peer count.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "自動モード",
+    "message": "Use Automatic Mode",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "IPFS APIの可用性が変化したときのカスタムゲートウェイの使用を切り替えます",
+    "message": "Enable/disable use of your custom gateway as appropriate when IPFS API availability changes.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -371,12 +371,16 @@
     "message": "実験",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Reset Preferences",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "実験的",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "注意してください：これらの機能は新しいか、進行中です。 YMMV。",
+    "message": "Warning! These experimental features are works in progress and are subject to changes in availability and functionality.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
@@ -392,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "APIの状態が変化したとき、リンクがコピーされたときなどにシステム通知を表示します",
+    "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_catchUnhandledProtocols_title": {
@@ -400,7 +404,7 @@
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "未処理のアドレスバー要求をHTTPゲートウェイにリダイレクトすることにより、ipfs:// 、ipns:// 、および dweb: の暫定的なサポートを有効にします",
+    "message": "Enable provisional support for ipfs://, ipns://, and dweb: requests by redirecting them to an HTTP gateway.",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -408,15 +412,15 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "プレーンテキストの/ipfs/パスをクリック可能なリンクに変換します",
+    "message": "Turn /ipfs/ paths displayed as plaintext on web pages into clickable links.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLinkのサポート",
+    "message": "DNSLink Lookup Policy",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "DNS TXTルックアップポリシーを選択して、可能な場合はIPFS経由でIPFSホストサイトをロードします",
+    "message": "Choose your policy for looking up and displaying contextual actions on DNSLink-enabled sites.",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -436,15 +440,15 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "パブリックゲートウェイにリダイレクトして、IPFSリソースの失敗したHTTPリクエストを回復します。",
+    "message": "Redirect failed HTTP requests for IPFS resources to the public gateway.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "X-Ipfs-Pathヘッダーの検出",
+    "message": "Detect x-ipfs-path Headers",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "値がIPFSパスの場合、HTTPトランスポートをドロップし、IPFSを介してロードします。 IPNSパスのリダイレクトには、DNSLinkサポートも有効にする必要があります。",
+    "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
@@ -460,19 +464,19 @@
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "インポートされたファイルをWeb UIで開く",
+    "message": "Open Imported Files in the Files Screen",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "ゲートウェイでファイルまたは親ディレクトリを開くのではなく、Web UIでファイルを表示します。",
+    "message": "After importing a file, open it in the Files screen instead of opening it or its parent directory in the gateway.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "プリロードインポート",
+    "message": "Preload Imported Assets",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "パブリックゲートウェイへの非同期HTTP HEADリクエストを介してインポートされたアセットの自動プリロードを有効にします",
+    "message": "Automatically preload assets imported to IPFS via asynchronous HTTP HEAD requests to a public gateway.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -480,7 +484,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "ブラウザコンソールに記録されるネームスペースをカスタマイズします。この値を変更すると、拡張機能の再起動がトリガーされます。",
+    "message": "Namespaces in this comma-separated list will be logged to your browser's console. Changing this list will restart IPFS Companion.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -488,7 +492,7 @@
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "インポートされたファイルに使用されるディレクトリをカスタマイズします。",
+    "message": "Set the directory you wish to use for files you import using IPFS Companion.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -496,7 +500,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "ユーザー設定をデフォルトのものに置き換えます（元に戻せません！）Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
+    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -508,7 +512,7 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "IPFSリソースへのアクセスを簡素化するブラウザー拡張機能",
+    "message": "Harness the power of IPFS in your browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
   "quickImport_subhead_peers": {
