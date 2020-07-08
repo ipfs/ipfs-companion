@@ -242,6 +242,7 @@ module.exports = async function init () {
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
     const dropSlash = url => url.replace(/\/$/, '')
+    const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     const info = {
       active: state.active,
       ipfsNodeType: state.ipfsNodeType,
@@ -254,7 +255,7 @@ module.exports = async function init () {
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noIntegrationsHostnames: state.noIntegrationsHostnames,
-      currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+      currentTab
     }
     try {
       const v = await ipfs.version()
@@ -267,6 +268,11 @@ module.exports = async function init () {
     if (state.active && info.currentTab) {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
+      if (info.isIpfsContext) {
+        info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+        info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
+        info.currentTabCid = await ipfsPathValidator.resolveToCid(url)
+      }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
       info.currentTabIntegrationsOptOut = info.noIntegrationsHostnames && info.noIntegrationsHostnames.includes(info.currentFqdn)

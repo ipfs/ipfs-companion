@@ -24,6 +24,9 @@ function contextActions ({
   currentFqdn,
   currentDnslinkFqdn,
   currentTabIntegrationsOptOut,
+  currentTabContentPath,
+  currentTabCid,
+  currentTabPublicUrl,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -54,17 +57,17 @@ function contextActions ({
   }) : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-    helperText: 'PublicGw',
+    helperText: currentTabPublicUrl,
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-    helperText: 'ipfsPath',
+    helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
-    helperText: 'cid',
+    helperText: currentTabCid,
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
