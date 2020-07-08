@@ -8,6 +8,7 @@ log.error = debug('ipfs-companion:main:error')
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
+const LRU = require('lru-cache')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
@@ -213,6 +214,10 @@ module.exports = async function init () {
   // e.g. signalling between browser action popup and background page that works
   // in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
 
+  // Cache for async URL2CID resolution used by browser action
+  // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
+  const url2cidCache = new LRU({ max: 10, maxAge: 1000 * 30 })
+
   var browserActionPort
 
   function onRuntimeConnect (port) {
@@ -271,7 +276,13 @@ module.exports = async function init () {
       if (info.isIpfsContext) {
         info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
-        info.currentTabCid = await ipfsPathValidator.resolveToCid(url)
+        if (!url2cidCache.has(url)) {
+          // run async resolution in the next event loop
+          setImmediate(async () => {
+            url2cidCache.set(url, await ipfsPathValidator.resolveToCid(url))
+          })
+        }
+        info.currentTabCid = url2cidCache.get(url)
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname

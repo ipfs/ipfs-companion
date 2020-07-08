@@ -40,7 +40,7 @@ function contextActions ({
   onPin,
   onUnPin
 }) {
-  const activeCidResolver = active && isIpfsOnline && isApiAvailable
+  const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
   const activePinControls = active && isIpfsOnline && isApiAvailable
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
@@ -67,7 +67,7 @@ function contextActions ({
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
-    helperText: currentTabCid,
+    helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
