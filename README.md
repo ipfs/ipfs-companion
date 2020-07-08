@@ -81,7 +81,7 @@ IPFS Companion enables you to quickly and easily access common actions from your
 - See how many peers you're connected with a glance at the cube icon in your browser bar
 - Check your IPFS API and gateway status by clicking the cube icon to reveal the main menu
 - Right-click images and other page assets to easily add them to IPFS (including the option to preserve file names)
-- Choose the _Share files via IPFS_ option in the main menu for quick drag-and-drop import from a browser tab
+- Choose the _Quick Import/Share..._ option in the main menu for quick drag-and-drop import from a browser tab
 - Pin or unpin IPFS resources (via API) directly from the main menu
 - Copy shareable public gateway links, IPFS content paths, or CIDs of IPFS resources directly from the main menu
 - Launch the [IPFS Web UI dashboard](https://github.com/ipfs-shipyard/ipfs-webui) from the main menu with a single click

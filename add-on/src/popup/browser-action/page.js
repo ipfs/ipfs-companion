@@ -4,7 +4,6 @@
 const html = require('choo/html')
 const header = require('./header')
 const { activeTabActions } = require('./context-actions')
-const operations = require('./operations')
 const tools = require('./tools')
 
 // Render the browser action page:
@@ -31,9 +30,8 @@ module.exports = function browserActionPage (state, emit) {
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">
       ${header(headerProps)}
-      ${activeTabActions(activeTabActionsProps)}
       ${tools(opsProps)}
-      ${operations(opsProps)}
+      ${activeTabActions(activeTabActionsProps)}
     </div>
   `
 }
