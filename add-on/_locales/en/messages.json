@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidNotReadyHint": {
-    "message": "(not ready: waiting for DAG data)",
+    "message": "(waiting for DAG data)",
     "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
