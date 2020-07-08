@@ -57,16 +57,19 @@ function contextActions ({
   }) : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+    title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
     helperText: currentTabPublicUrl,
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+    title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
     helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
+    title: browser.i18n.getMessage('panelCopy_copyRawCidTooltip'),
     helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)

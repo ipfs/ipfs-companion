@@ -20,11 +20,13 @@ module.exports = function tools ({
     <div class="fade-in pv1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickImport'),
+    title: browser.i18n.getMessage('panel_quickImportTooltip'),
     disabled: !activeQuickImport,
     onClick: onQuickImport
   })}
   ${navItem({
     text: browser.i18n.getMessage('panel_openWebui'),
+    title: browser.i18n.getMessage('panel_openWebuiTooltip'),
     disabled: !activeWebUI,
     onClick: onOpenWebUi
   })}
