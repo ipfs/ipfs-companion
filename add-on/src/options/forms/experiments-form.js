@@ -14,8 +14,7 @@ function experimentsForm ({
   detectIpfsPathHeader,
   ipfsProxy,
   logNamespaces,
-  onOptionChange,
-  onOptionsReset
+  onOptionChange
 }) {
   const onDisplayNotificationsChange = onOptionChange('displayNotifications')
   const onUseLatestWebUIChange = onOptionChange('useLatestWebUI')
@@ -93,7 +92,7 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
               <dd>
-                Disabled due to JS API migration
+                Disabled until move to JavaScript API with async await and async iterables
                 <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 <p>${ipfsProxy ? html`
@@ -124,15 +123,6 @@ function experimentsForm ({
             required
             onchange=${onOptionChange('logNamespaces')}
             value=${logNamespaces} />
-        </div>
-        <div class="flex-row-ns pb0-ns">
-          <label for="resetAllOptions">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_resetAllOptions_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_resetAllOptions_description')}</dd>
-            </dl>
-          </label>
-          <div class="self-center-ns"><button id="resetAllOptions" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
         </div>
       </fieldset>
     </form>
