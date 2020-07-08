@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Pin this page's IPFS resources to your node to have a local copy that's available offline and never thrown away.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
