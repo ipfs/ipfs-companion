@@ -10,7 +10,7 @@ const logo = require('./logo')
 const drop = require('drag-and-drop-files')
 const fileReaderPullStream = require('pull-file-reader')
 
-document.title = browser.i18n.getMessage('panel_quickImport')
+document.title = browser.i18n.getMessage('quickImport_page_title')
 
 const app = choo()
 
