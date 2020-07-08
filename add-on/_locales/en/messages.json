@@ -528,7 +528,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
+    "message": "Reset all IPFS Companion preferences to their default values. Warning: Cannot be undone!",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
