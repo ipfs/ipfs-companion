@@ -103,7 +103,7 @@ Use the _Redirect to Gateway_ toggle under _Tools_ to disable gateway redirects 
 
 To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc.), use the on/off button at the top of the IPFS Companion menu.
 
-![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmYEWTZCUUh2pWRQ3boccJmKtbFC1XvEoNuYTjyCU4Eknk)
+![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmVWFueChvoxfRpPcB9C7TJFucr2TJx6tPT3udtYd58GSy)
 
 ### Try out experiments!
 
