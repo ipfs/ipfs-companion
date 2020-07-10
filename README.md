@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/ipfs-shipyard/ipfs-companion/branch/master/graph/badge.svg)](https://codecov.io/gh/ipfs-shipyard/ipfs-companion)
 [![#ipfs-in-web-browsers](https://img.shields.io/badge/irc-%23ipfs--in--web--browsers-808080.svg)](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
 
-![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmShhuV4SXTfqBxerxxPvmvbu8Z98LzePtVMmq47AU7PTL)
+![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmeF2v4UFFvZ341ZDQh1xLeeyN4u8Cr9XSTUj6krDEwfrr)
 
 
 
