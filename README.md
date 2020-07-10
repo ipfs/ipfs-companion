@@ -61,8 +61,8 @@ IPFS Companion also upgrades transport to IPFS if it finds the `x-ipfs-path` in 
 #### Toggle redirects globally or per site
 
 You can disable and re-enable local gateway redirects by several means:
-- Suspend redirects **globally** using the global toggle ([illustrated below](#toggle-gateway-redirects-globally))
-- Suspend redirects **per site** using the toggle under "Active tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
+- Suspend redirects **globally** in IPFS Companion's preferences
+- Suspend redirects **per site** using the toggle under "Current tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
 - Add `x-ipfs-companion-no-redirect` to the URL itself as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect))
 
 <!-- TODO: restore after https://github.com/ipfs-shipyard/ipfs-companion/issues/843 is closed
@@ -89,15 +89,9 @@ IPFS Companion enables you to quickly and easily access common actions from your
 
 #### Toggle gateway redirects on a per-website basis
 
-You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Active Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
+You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
-![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmWwTmeyNb8eTYgB7q7PhtKzG6CFWTCN4UHkczZ7xsc64r)
-
-#### Toggle gateway redirects globally
-
-Use the _Redirect to Gateway_ toggle under _Tools_ to disable gateway redirects globally, but keep all other IPFS Companion features enabled.
-
-![Toggle all gateway redirects](https://gateway.ipfs.io/ipfs/Qma2DdfpRseby7i8faJPzbWa36xXU1MbCy5CbghCNbwcDC)
+![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmbAWhTk8GjtFqpNQVCRXWyJbh9YFC61nTNcBPZi87e4qo)
 
 #### Switch all IPFS Companion features on/off
 
