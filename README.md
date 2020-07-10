@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/ipfs-shipyard/ipfs-companion/branch/master/graph/badge.svg)](https://codecov.io/gh/ipfs-shipyard/ipfs-companion)
 [![#ipfs-in-web-browsers](https://img.shields.io/badge/irc-%23ipfs--in--web--browsers-808080.svg)](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
 
-![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmShhuV4SXTfqBxerxxPvmvbu8Z98LzePtVMmq47AU7PTL)
+![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmeF2v4UFFvZ341ZDQh1xLeeyN4u8Cr9XSTUj6krDEwfrr)
 
 
 
@@ -61,8 +61,8 @@ IPFS Companion also upgrades transport to IPFS if it finds the `x-ipfs-path` in 
 #### Toggle redirects globally or per site
 
 You can disable and re-enable local gateway redirects by several means:
-- Suspend redirects **globally** using the global toggle ([illustrated below](#toggle-gateway-redirects-globally))
-- Suspend redirects **per site** using the toggle under "Active tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
+- Suspend redirects **globally** in IPFS Companion's preferences
+- Suspend redirects **per site** using the toggle under "Current tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
 - Add `x-ipfs-companion-no-redirect` to the URL itself as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect))
 
 <!-- TODO: restore after https://github.com/ipfs-shipyard/ipfs-companion/issues/843 is closed
@@ -89,21 +89,15 @@ IPFS Companion enables you to quickly and easily access common actions from your
 
 #### Toggle gateway redirects on a per-website basis
 
-You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Active Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
+You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
-![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmWwTmeyNb8eTYgB7q7PhtKzG6CFWTCN4UHkczZ7xsc64r)
-
-#### Toggle gateway redirects globally
-
-Use the _Redirect to Gateway_ toggle under _Tools_ to disable gateway redirects globally, but keep all other IPFS Companion features enabled.
-
-![Toggle all gateway redirects](https://gateway.ipfs.io/ipfs/Qma2DdfpRseby7i8faJPzbWa36xXU1MbCy5CbghCNbwcDC)
+![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmbAWhTk8GjtFqpNQVCRXWyJbh9YFC61nTNcBPZi87e4qo)
 
 #### Switch all IPFS Companion features on/off
 
 To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc.), use the on/off button at the top of the IPFS Companion menu.
 
-![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmYEWTZCUUh2pWRQ3boccJmKtbFC1XvEoNuYTjyCU4Eknk)
+![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmVWFueChvoxfRpPcB9C7TJFucr2TJx6tPT3udtYd58GSy)
 
 ### Try out experiments!
 
@@ -117,7 +111,7 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
     - `dweb:/ipns/$cid_or_fqdn`
 
 - Switch between the external HTTP API of your local IPFS node (default setting) and a js-ipfs node embedded in your browser (note that this has some [functionality limitations](https://docs.ipfs.io/how-to/companion-node-types/))
-[![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmW56BoDKUYychJ4Z4Kau1zVj5s33ovNqhLXQmgK9EN66k)](http://docs.ipfs.io/how-to/companion-node-types/)
+[![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmZVAyxih3qt99qED3Xp8wzHxsV3XJ3vVa7HuW21AGapPP)](http://docs.ipfs.io/how-to/companion-node-types/)
 
 ## Install IPFS Companion
 
