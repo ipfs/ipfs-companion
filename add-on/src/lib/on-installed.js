@@ -4,11 +4,14 @@
 const browser = require('webextension-polyfill')
 
 exports.welcomePage = '/dist/landing-pages/welcome/index.html'
+exports.updatePage = 'https://github.com/ipfs/ipfs-companion/releases/latest'
 
 exports.onInstalled = async (details) => {
   // details.temporary === run via `npm run firefox`
   if (details.reason === 'install' || details.temporary) {
     await browser.storage.local.set({ showLandingPage: 'onInstallWelcome' })
+  } else if (details.reason === 'update' || details.temporary) {
+    await browser.storage.local.set({ showLandingPage: 'onVersionUpdate' })
   }
 }
 
@@ -20,6 +23,10 @@ exports.showPendingLandingPages = async () => {
       return browser.tabs.create({
         url: exports.welcomePage
       })
-    // case 'onVersionUpdate'
+    case 'onVersionUpdate':
+      await browser.storage.local.remove('showLandingPage')
+      return browser.tabs.create({
+        url: exports.updatePage
+      })
   }
 }
