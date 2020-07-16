@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 
 exports.welcomePage = '/dist/landing-pages/welcome/index.html'
-exports.updatePage = ('https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v' + browser.runtime.getManifest().version)
+exports.updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v' + browser.runtime.getManifest().version
 
 exports.onInstalled = async (details) => {
   // details.temporary === run via `npm run firefox`
