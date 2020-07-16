@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 
 exports.welcomePage = '/dist/landing-pages/welcome/index.html'
-exports.updatePage = 'https://github.com/ipfs/ipfs-companion/releases/latest'
+exports.updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v'
 
 exports.onInstalled = async (details) => {
   // details.temporary === run via `npm run firefox`
@@ -26,7 +26,7 @@ exports.showPendingLandingPages = async () => {
     case 'onVersionUpdate':
       await browser.storage.local.remove('showLandingPage')
       return browser.tabs.create({
-        url: exports.updatePage
+        url: exports.updatePage + browser.runtime.getManifest().version
       })
   }
 }
