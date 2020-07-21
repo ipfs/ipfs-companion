@@ -427,6 +427,14 @@
     "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
+  "option_displayReleaseNotes_title": {
+    "message": "Show Release Notes",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Open Release Notes in a new tab after an update is installed.",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
+  },
   "option_catchUnhandledProtocols_title": {
     "message": "Catch Unhandled IPFS Protocols",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"

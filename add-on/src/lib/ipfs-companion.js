@@ -699,6 +699,7 @@ module.exports = async function init () {
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
+        case 'displayReleaseNotes':
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':

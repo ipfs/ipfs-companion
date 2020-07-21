@@ -16,7 +16,10 @@ exports.onInstalled = async (details) => {
 }
 
 exports.showPendingLandingPages = async () => {
-  const hint = await browser.storage.local.get('showLandingPage')
+  const hint = await browser.storage.local.get([
+    'showLandingPage',
+    'displayReleaseNotes'
+  ])
   switch (hint.showLandingPage) {
     case 'onInstallWelcome':
       await browser.storage.local.remove('showLandingPage')
@@ -25,6 +28,7 @@ exports.showPendingLandingPages = async () => {
       })
     case 'onVersionUpdate':
       await browser.storage.local.remove('showLandingPage')
+      if (!hint.displayReleaseNotes) return
       return browser.tabs.create({
         url: exports.updatePage + browser.runtime.getManifest().version
       })

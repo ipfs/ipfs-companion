@@ -8,6 +8,7 @@ const switchToggle = require('../../pages/components/switch-toggle')
 function experimentsForm ({
   useLatestWebUI,
   displayNotifications,
+  displayReleaseNotes,
   catchUnhandledProtocols,
   linkify,
   recoverFailedHttpRequests,
@@ -17,6 +18,7 @@ function experimentsForm ({
   onOptionChange
 }) {
   const onDisplayNotificationsChange = onOptionChange('displayNotifications')
+  const onDisplayReleaseNotesChange = onOptionChange('displayReleaseNotes')
   const onUseLatestWebUIChange = onOptionChange('useLatestWebUI')
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
@@ -46,6 +48,15 @@ function experimentsForm ({
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
+        </div>
+        <div class="flex-row-ns pb0-ns">
+          <label for="displayReleaseNotes">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_displayReleaseNotes_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_displayReleaseNotes_description')}</dd>
+            </dl>
+          </label>
+          <div class="self-center-ns">${switchToggle({ id: 'displayReleaseNotes', checked: displayReleaseNotes, onchange: onDisplayReleaseNotesChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="catchUnhandledProtocols">
