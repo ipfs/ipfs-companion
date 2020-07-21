@@ -432,7 +432,7 @@
     "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
   },
   "option_displayReleaseNotes_description": {
-    "message": "Open Release Notes in a new tab after an update is installed.",
+    "message": "Open release notes in a new tab when a new version of IPFS Companion is installed.",
     "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
   },
   "option_catchUnhandledProtocols_title": {
