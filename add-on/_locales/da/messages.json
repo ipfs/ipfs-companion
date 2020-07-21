@@ -19,13 +19,25 @@
     "message": "Gateway",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
+  "panel_statusGatewayAddressTitle": {
+    "message": "The URL of the gateway, either public or local, you are using to fetch content (change this in Preferences)",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
+  },
   "panel_statusApiAddress": {
     "message": "API",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
+  "panel_statusApiAddressTitle": {
+    "message": "The URL of your local node's API",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
+  },
   "panel_statusGatewayVersion": {
     "message": "version",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
+  },
+  "panel_statusGatewayVersionTitle": {
+    "message": "The version of IPFS your local node is using",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
   },
   "panel_statusSwarmPeers": {
     "message": "Klient-forbindelser",
@@ -36,31 +48,27 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Del filer via IPFS",
+    "message": "Quick Import/Share…",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
+  "panel_quickImportTooltip": {
+    "message": "Import files to IPFS and copy a publicly shareable link to your clipboard",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
+  },
   "panel_openWebui": {
-    "message": "Åbn webkonsollen",
+    "message": "Go to My Node…",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
-  "panel_redirectToggle": {
-    "message": "Omdirriger til Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
-  },
-  "panel_redirectToggleTooltip": {
-    "message": "Klik for at skifte alle gateway omdirrigeringer",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
-  },
-  "panel_toolsSectionHeader": {
-    "message": "Værktøjer",
-    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  "panel_openWebuiTooltip": {
+    "message": "Open your IPFS node's controls in your browser",
+    "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
-    "message": "Åben indstillinger",
+    "message": "Open IPFS Companion preferences",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Aktivt faneblad",
+    "message": "Current Tab",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
@@ -68,28 +76,44 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Click to toggle all IPFS integrations on $1",
+    "message": "Enable/disable all IPFS integrations on $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS resource",
+    "message": "Fastgør IPFS resource",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Fastgørelse af en CID fortæller din IPFS-klient at denne data er vigtig og ikke må fjernes.",
+    "message": "Pin this page's IPFS resources to your node to have a local copy that's available offline and never thrown away.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS content path",
+    "message": "Copy IPFS Content Path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+  },
+  "panelCopy_currentIpfsAddressTooltip": {
+    "message": "A canonical content path that you can use with IPFS tools and gateways",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
     "message": "Kopier CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
+  "panelCopy_copyRawCidTooltip": {
+    "message": "The unique IPFS content identifier for this page",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
+  },
+  "panelCopy_copyRawCidNotReadyHint": {
+    "message": "(waiting for DAG data)",
+    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+  },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy shareable link",
+    "message": "Copy Shareable Link",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
+  },
+  "panel_copyCurrentPublicGwUrlTooltip": {
+    "message": "This link works for anyone, even if they don't use IPFS",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
     "message": "View on Gateway",
@@ -100,11 +124,11 @@
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS-resource indlæst via Valgfri Gateway",
+    "message": "IPFS resource loaded via local gateway",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Ikke-IPFS resource",
+    "message": "Non-IPFS Resource",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
@@ -144,7 +168,7 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Se Browser-konsollen for flere detaljer",
+    "message": "See your browser's developer console for more details",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
@@ -152,7 +176,7 @@
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS resource er nu fastgjort",
+    "message": "IPFS Resource Pinned",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
@@ -160,11 +184,11 @@
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "En fejl opstod ved fastgørelse af IPFS-resource",
+    "message": "Error Pinning IPFS Resource",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "En fejl opstod ved frigørelse af IPFS-resource",
+    "message": "Error Removing IPFS Pin",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
@@ -172,7 +196,7 @@
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatisk tilstand: Valgfri Gateway Omstilling er aktiv",
+    "message": "Automatic Mode: Custom gateway redirect is active",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
@@ -180,11 +204,11 @@
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatisk tilstand: Den offentlige vil blive benyttet som backup",
+    "message": "Automatic Mode: Public gateway will be used as a fallback",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "Unable to Import via IPFS API",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -200,12 +224,16 @@
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Det mislykkedes at starte IPFS-klienten",
+    "message": "Failed to Start IPFS Node",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Det mislykkedes at stoppe IPFS-klienten",
+    "message": "Failed to Stop IPFS Node",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
+  },
+  "option_page_title" : {
+    "message": "Preferences | IPFS Companion",
+    "description": "Title of the Preferences page (option_page_title)"
   },
   "option_page_header" : {
     "message": "Companion Preferences",
@@ -264,11 +292,11 @@
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Valgfri Lokal Gateway",
+    "message": "Local Gateway",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "Set the URL of your preferred custom local gateway.",
+    "message": "Set the URL of your local gateway.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
@@ -276,11 +304,11 @@
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Anvend Valgfri Gateway",
+    "message": "Use Local Gateway",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Redirect requests for IPFS resources to your custom local gateway.",
+    "message": "Redirect requests for IPFS resources to your local gateway.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -324,7 +352,7 @@
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
+    "message": "Set the URL of a default public gateway to use in publicly shareable links and as a fallback if your local gateway is unavailable.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -332,7 +360,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Set a default public subdomain gateway for the recovery of broken subdomain gateways.",
+    "message": "Set the URL of a default public subdomain gateway for the recovery of broken subdomain gateways.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -360,7 +388,7 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Enable/disable use of your custom gateway as appropriate when IPFS API availability changes.",
+    "message": "Automatically switch from your local gateway to your default public gateway if the IPFS API is unavailable.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -500,7 +528,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
+    "message": "Reset all IPFS Companion preferences to their default values. Warning: Cannot be undone!",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -515,6 +543,14 @@
     "message": "Harness the power of IPFS in your browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
+  "quickImport_page_title": {
+    "message": "Import & Share Files | IPFS Companion",
+    "description": "Page title (quickImport_page_title)"
+  },
+  "quickImport_head_peers": {
+    "message": "Import & share files",
+    "description": "Header on the share files page (quickImport_subhead_peers)"
+  },
   "quickImport_subhead_peers": {
     "message": "Forbundet til $1 klienter",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
@@ -528,8 +564,8 @@
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "Træk hertil for at dele",
-    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
+    "message": "drop it here",
+    "description": "Drop message on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
     "message": "Import in progress..",
@@ -548,7 +584,7 @@
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Open in Files page",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
@@ -612,7 +648,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Følgesvend - Velkommen!\n",
+    "message": "Welcome | IPFS Companion",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
