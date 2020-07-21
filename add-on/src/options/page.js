@@ -89,6 +89,7 @@ module.exports = function optionsPage (state, emit) {
   ${experimentsForm({
     useLatestWebUI: state.options.useLatestWebUI,
     displayNotifications: state.options.displayNotifications,
+    displayReleaseNotes: state.options.displayReleaseNotes,
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
