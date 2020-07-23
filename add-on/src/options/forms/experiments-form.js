@@ -6,17 +6,20 @@ const html = require('choo/html')
 const switchToggle = require('../../pages/components/switch-toggle')
 
 function experimentsForm ({
+  useLatestWebUI,
   displayNotifications,
+  displayReleaseNotes,
   catchUnhandledProtocols,
   linkify,
   recoverFailedHttpRequests,
   detectIpfsPathHeader,
   ipfsProxy,
   logNamespaces,
-  onOptionChange,
-  onOptionsReset
+  onOptionChange
 }) {
   const onDisplayNotificationsChange = onOptionChange('displayNotifications')
+  const onDisplayReleaseNotesChange = onOptionChange('displayReleaseNotes')
+  const onUseLatestWebUIChange = onOptionChange('useLatestWebUI')
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
@@ -29,6 +32,15 @@ function experimentsForm ({
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_experiments')}</h2>
         <div class="mb2">${browser.i18n.getMessage('option_experiments_warning')}</div>
         <div class="flex-row-ns pb0-ns">
+          <label for="useLatestWebUI">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_useLatestWebUI_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_useLatestWebUI_description')}</dd>
+            </dl>
+          </label>
+          <div class="self-center-ns">${switchToggle({ id: 'useLatestWebUI', checked: useLatestWebUI, onchange: onUseLatestWebUIChange })}</div>
+        </div>
+        <div class="flex-row-ns pb0-ns">
           <label for="displayNotifications">
             <dl>
               <dt>${browser.i18n.getMessage('option_displayNotifications_title')}</dt>
@@ -36,6 +48,15 @@ function experimentsForm ({
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'displayNotifications', checked: displayNotifications, onchange: onDisplayNotificationsChange })}</div>
+        </div>
+        <div class="flex-row-ns pb0-ns">
+          <label for="displayReleaseNotes">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_displayReleaseNotes_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_displayReleaseNotes_description')}</dd>
+            </dl>
+          </label>
+          <div class="self-center-ns">${switchToggle({ id: 'displayReleaseNotes', checked: displayReleaseNotes, onchange: onDisplayReleaseNotesChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="catchUnhandledProtocols">
@@ -82,7 +103,7 @@ function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
               <dd>
-                Disabled due to JS API migration
+                Disabled until move to JavaScript API with async await and async iterables
                 <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
                 ${browser.i18n.getMessage('option_ipfsProxy_description')}
                 <p>${ipfsProxy ? html`
@@ -113,15 +134,6 @@ function experimentsForm ({
             required
             onchange=${onOptionChange('logNamespaces')}
             value=${logNamespaces} />
-        </div>
-        <div class="flex-row-ns pb0-ns">
-          <label for="resetAllOptions">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_resetAllOptions_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_resetAllOptions_description')}</dd>
-            </dl>
-          </label>
-          <div class="self-center-ns"><button id="resetAllOptions" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${onOptionsReset}>${browser.i18n.getMessage('option_resetAllOptions_title')}</button></div>
         </div>
       </fieldset>
     </form>

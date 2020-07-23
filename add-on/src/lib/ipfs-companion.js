@@ -8,6 +8,7 @@ log.error = debug('ipfs-companion:main:error')
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
+const LRU = require('lru-cache')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
@@ -213,6 +214,10 @@ module.exports = async function init () {
   // e.g. signalling between browser action popup and background page that works
   // in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
 
+  // Cache for async URL2CID resolution used by browser action
+  // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
+  const url2cidCache = new LRU({ max: 10, maxAge: 1000 * 30 })
+
   var browserActionPort
 
   function onRuntimeConnect (port) {
@@ -242,6 +247,7 @@ module.exports = async function init () {
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
     const dropSlash = url => url.replace(/\/$/, '')
+    const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     const info = {
       active: state.active,
       ipfsNodeType: state.ipfsNodeType,
@@ -254,7 +260,7 @@ module.exports = async function init () {
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noIntegrationsHostnames: state.noIntegrationsHostnames,
-      currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+      currentTab
     }
     try {
       const v = await ipfs.version()
@@ -267,6 +273,17 @@ module.exports = async function init () {
     if (state.active && info.currentTab) {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
+      if (info.isIpfsContext) {
+        info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+        info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
+        if (!url2cidCache.has(url)) {
+          // run async resolution in the next event loop
+          setImmediate(async () => {
+            url2cidCache.set(url, await ipfsPathValidator.resolveToCid(url))
+          })
+        }
+        info.currentTabCid = url2cidCache.get(url)
+      }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
       info.currentTabIntegrationsOptOut = info.noIntegrationsHostnames && info.noIntegrationsHostnames.includes(info.currentFqdn)
@@ -682,10 +699,12 @@ module.exports = async function init () {
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
+        case 'displayReleaseNotes':
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
+        case 'useLatestWebUI':
         case 'noIntegrationsHostnames':
         case 'dnslinkRedirect':
           state[key] = change.newValue

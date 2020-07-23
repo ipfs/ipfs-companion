@@ -24,6 +24,9 @@ function contextActions ({
   currentFqdn,
   currentDnslinkFqdn,
   currentTabIntegrationsOptOut,
+  currentTabContentPath,
+  currentTabCid,
+  currentTabPublicUrl,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -37,7 +40,7 @@ function contextActions ({
   onPin,
   onUnPin
 }) {
-  const activeCidResolver = active && isIpfsOnline && isApiAvailable
+  const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
   const activePinControls = active && isIpfsOnline && isApiAvailable
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
@@ -54,14 +57,20 @@ function contextActions ({
   }) : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+    title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
+    helperText: currentTabPublicUrl,
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+    title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
+    helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
+    title: browser.i18n.getMessage('panelCopy_copyRawCidTooltip'),
+    helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
@@ -103,11 +112,10 @@ function activeTabActions (state) {
   const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
-      <div>
+      <div class="mv1">
       ${navHeader('panel_activeTabSectionHeader')}
-      <div class="fade-in pv0 bb b--black-10">
-        ${contextActions(state)}
-      </div>
+      <div class="fade-in pv0">
+        ${contextActions(state)}      </div>
       </div>
   `
 }

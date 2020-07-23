@@ -6,8 +6,11 @@
     * [Clone and install dependencies](#clone-and-install-dependencies)
     * [Build and run in Firefox](#build-and-run-in-firefox)
     * [Build and manually install in Chromium](#build-and-manually-install-in-chromium)
+    * [Run build on file changes](#run-build-on-file-changes)
+* [Reproducible build in Docker](#reproducible-build-in-docker)
 * [Useful tasks](#useful-tasks)
 * [Other tips](#other-tips)
+* [Legacy Firefox (< 53) and XUL-compatible browsers](#legacy-firefox--53-and-xul-compatible-browsers)
 * [Using IPFS Companion on Firefox for Android](#using-ipfs-companion-on-firefox-for-android)
     * [Install Firefox for Android](#install-firefox-for-android)
     * [Install IPFS Companion](#install-ipfs-companion)
@@ -73,6 +76,33 @@ Then open `chrome://extensions` in your Chromium-based browser, enable "Develope
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ![installing ipfs-companion as an unpacked extension in chrome](https://bafybeih34e3a5sgkh57lwv26c6253fxn2jdvte6ilhyld6l4ghuhybzldi.ipfs.dweb.link/ipfs-companion-install-chrome-dev.gif) | ![installing ipfs-companion as a temporary add on in firefox](https://bafybeih34e3a5sgkh57lwv26c6253fxn2jdvte6ilhyld6l4ghuhybzldi.ipfs.dweb.link/ipfs-companion-install-firefox-dev.gif) |
 
+### Run build on file changes
+
+Regular build minifies code and strips source maps. It is possible to run build  in the `watch` mode, which will rebuild a debug version of all changed bundles:
+
+```bash
+npm run build # do regular build first
+npm run watch # watch for new changes
+```
+
+**Note:** `watch` is a blocking command, so one needs to run it in a different terminal than `firefox` or `chromium`. Press ctrl+c to stop it.
+
+
+## Reproducible build in Docker
+
+Want to ensure prebuilt bundle does not include any additional code?  
+Don't want to install JS dependencies such as NodeJS and yarn?  
+
+Do an isolated build inside of Docker!
+
+Run the following command for ending up
+with a built extension inside the `build/` directory:
+
+```sh
+npm run release-build
+```
+
+It is an alias for running `ci:build` script inside of immutable Docker image, which guarantees the same output on all platforms.
 
 ## Useful tasks
 
@@ -80,6 +110,7 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 
 - `npm install`: Install all NPM dependencies
 - `npm run build`: Build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
+- `npm run watch`: Rebuild JS/CSS on file changes (run regular `build` first to ensure everything else is in place)
 - `npm run bundle:chromium`: Overwrite manifest and package a generic, Chromium-compatible version
 - `npm run bundle:brave`: Overwrite manifest and package a Brave-compatible version requesting access to `chrome.sockets`
 - `npm run bundle:firefox`: Overwrite manifest and package a Firefox-compatible version
@@ -112,6 +143,11 @@ Release build shortcuts:
 
 - [Using localization in IPFS Companion](LOCALIZATION-NOTES.md) (running browsers with specific locale, etc)
 - [Testing persistent and restart features (Mozilla)](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
+
+## Legacy Firefox (< 53) and XUL-compatible browsers
+
+Legacy versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
+While it is not maintained any more, one can inspect, build, and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch. For historical background on the rewrite, see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
 
 ## Using IPFS Companion on Firefox for Android
 

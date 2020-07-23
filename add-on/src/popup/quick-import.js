@@ -10,7 +10,7 @@ const logo = require('./logo')
 const drop = require('drag-and-drop-files')
 const fileReaderPullStream = require('pull-file-reader')
 
-document.title = browser.i18n.getMessage('panel_quickImport')
+document.title = browser.i18n.getMessage('quickImport_page_title')
 
 const app = choo()
 
@@ -186,7 +186,7 @@ function quickImportPage (state, emit) {
   })}
           <div class="pl3">
             <h1 class="f2 fw5 ma0">
-              ${browser.i18n.getMessage('panel_quickImport')}
+              ${browser.i18n.getMessage('quickImport_head_peers')}
             </h1>
             <p class="f3 fw2 lh-copy ma0 light-gray">
               ${browser.i18n.getMessage('quickImport_subhead_peers', [peerCount])}

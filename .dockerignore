@@ -1,7 +1,7 @@
-vendor
-build
-coverage/
-node_modules
-add-on/dist
-firefox
-package-lock.json
+/vendor
+/build
+/coverage/
+/node_modules
+/add-on/dist
+/firefox
+/package-lock.json

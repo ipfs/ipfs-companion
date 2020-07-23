@@ -9,6 +9,7 @@ const dnslinkForm = require('./forms/dnslink-form')
 const gatewaysForm = require('./forms/gateways-form')
 const apiForm = require('./forms/api-form')
 const experimentsForm = require('./forms/experiments-form')
+const resetForm = require('./forms/reset-form')
 
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -86,14 +87,18 @@ module.exports = function optionsPage (state, emit) {
     onOptionChange
   })}
   ${experimentsForm({
+    useLatestWebUI: state.options.useLatestWebUI,
     displayNotifications: state.options.displayNotifications,
+    displayReleaseNotes: state.options.displayReleaseNotes,
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     ipfsProxy: state.options.ipfsProxy,
     logNamespaces: state.options.logNamespaces,
-    onOptionChange,
+    onOptionChange
+  })}
+  ${resetForm({
     onOptionsReset
   })}
     </div>

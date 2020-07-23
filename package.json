@@ -149,7 +149,7 @@
     "mime-types": "2.1.25",
     "multiaddr": "7.2.1",
     "multiaddr-to-uri": "5.0.0",
-    "p-memoize": "3.1.0",
+    "p-memoize": "4.0.0",
     "p-queue": "6.2.1",
     "path-browserify": "1.0.0",
     "piggybacker": "2.0.0",

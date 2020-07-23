@@ -45,6 +45,9 @@ function initState (options, overrides) {
   })
   Object.defineProperty(state, 'webuiRootUrl', {
     get: function () {
+      // Did user opt-in for rolling release published on DNSLink?
+      if (state.useLatestWebUI) return `${state.gwURLString}ipns/webui.ipfs.io/`
+
       // Below is needed to make webui work for embedded js-ipfs
       // TODO: revisit if below is still needed after upgrading to js-ipfs >= 44
       const webuiUrl = state.ipfsNodeType === 'embedded:chromesockets'

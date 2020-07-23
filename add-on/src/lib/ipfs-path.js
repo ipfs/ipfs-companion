@@ -1,8 +1,12 @@
 'use strict'
 /* eslint-env browser */
 
+const pMemoize = require('p-memoize')
 const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
+
+// For how long more expensive lookups (DAG traversal etc) should be cached
+const RESULT_TTL_MS = 30 * 1000
 
 // Turns URL or URIencoded path into a content path
 function ipfsContentPath (urlOrPath, opts) {
@@ -279,7 +283,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // - Returns null if no valid path can be produced
     // The purpose of this resolver is to return immutable /ipfs/ address
     // even if /ipns/ is present in its input.
-    async resolveToImmutableIpfsPath (urlOrPath) {
+    resolveToImmutableIpfsPath: pMemoize(async function (urlOrPath) {
       const path = ipfsPathValidator.resolveToIpfsPath(urlOrPath)
       // Fail fast if no IPFS Path
       if (!path) return null
@@ -322,14 +326,14 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       }
       // Return /ipfs/ path
       return path
-    },
+    }, { maxAge: RESULT_TTL_MS }),
 
     // Resolve URL or path to a raw CID:
     // - Result is the direct CID
     // - Ignores ?search and #hash from original URL
     // - Returns null if no CID can be produced
     // The purpose of this resolver is to return direct CID without anything else.
-    async resolveToCid (urlOrPath) {
+    resolveToCid: pMemoize(async function (urlOrPath) {
       const path = ipfsPathValidator.resolveToIpfsPath(urlOrPath)
       // Fail fast if no IPFS Path
       if (!path) return null
@@ -366,7 +370,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
       const directCid = isIPFS.ipfsPath(result) ? result.split('/')[2] : result
       return directCid
-    }
+    }, { maxAge: RESULT_TTL_MS })
   }
 
   return ipfsPathValidator
