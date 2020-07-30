@@ -427,6 +427,14 @@
     "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
+  "option_displayReleaseNotes_title": {
+    "message": "Show Release Notes on Update",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Open release notes in a new tab when a new version of IPFS Companion is installed.",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
+  },
   "option_catchUnhandledProtocols_title": {
     "message": "Fang ikke-håndterede IPFS-protokoller",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"

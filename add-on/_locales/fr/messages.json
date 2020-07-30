@@ -427,6 +427,14 @@
     "message": "Afficher les notifications du système d'exploitation quand le lien est copié vers le press-papier, l'état de l'API change, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
+  "option_displayReleaseNotes_title": {
+    "message": "Montrer les notes de version lors des mises-à-jour",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Ouvre les notes de version dans un nouvel onglet quand une nouvelle version d'IPFS Companion est installée. ",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
+  },
   "option_catchUnhandledProtocols_title": {
     "message": "Attraper les erreurs non gérées par IPFS",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"

@@ -427,6 +427,14 @@
     "message": "Visualizza le notifiche di sistema quando lo stato dell'API cambia, un collegamento viene copiato, ecc...",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
+  "option_displayReleaseNotes_title": {
+    "message": "Show Release Notes on Update",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Open release notes in a new tab when a new version of IPFS Companion is installed.",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
+  },
   "option_catchUnhandledProtocols_title": {
     "message": "Cattura Protocolli IPFS non gestiti",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
