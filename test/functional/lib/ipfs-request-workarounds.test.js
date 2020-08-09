@@ -193,7 +193,7 @@ describe('modifyRequest processing', function () {
       browser.tabs.update.flush()
       assert.ok(browser.tabs.update.notCalled)
       modifyRequest.onCompleted(request)
-      assert.ok(browser.tabs.update.withArgs({ url: fixedDNSLinkUrl }).calledOnce)
+      assert.ok(browser.tabs.update.withArgs(request.tabId,{ url: fixedDNSLinkUrl }).calledOnce)
       browser.tabs.update.flush()
     })
   })
