@@ -11,8 +11,8 @@ const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
 
-const url2request = (url, type = 'main_frame') => {
-  return { url, type }
+const url2request = (url, type = 'main_frame', tabId = new Date().valueOf()) => {
+  return { url, type, tabId }
 }
 const urlRequestWithStatus = (url, statusCode = 200, type = 'main_frame') => {
   return { ...url2request(url, type), statusCode }
