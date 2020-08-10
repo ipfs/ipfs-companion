@@ -414,9 +414,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
 
         // Chromium bug: sometimes tabs.update does not work from onCompleted,
         // we run additional update after 1s just to be sure
-        setTimeout(() => browser.tabs.update({ url: fixedUrl }), 1000)
+        setTimeout(() => browser.tabs.update(request.tabId, { url: fixedUrl }), 1000)
 
-        return browser.tabs.update({ url: fixedUrl })
+        return browser.tabs.update(request.tabId, { url: fixedUrl })
       }
 
       if (isRecoverable(request, state, ipfsPathValidator)) {
@@ -616,7 +616,7 @@ async function updateTabWithURL (request, redirectUrl, browser) {
   // Do nothing if the URL remains the same
   if (request.url === redirectUrl) return
 
-  return browser.tabs.update({
+  return browser.tabs.update(request.tabId, {
     active: true,
     url: redirectUrl
   })
