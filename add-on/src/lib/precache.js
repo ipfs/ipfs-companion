@@ -80,7 +80,7 @@ async function importTar (ipfs, tarReader, expectedCid) {
     pin: false,
     preload: false
   }
-  const results = await all(ipfs.add(files, opts))
+  const results = await all(ipfs.addAll(files, opts))
 
   const root = results.find(e => e.cid.toString(multibaseName) === expectedCid)
   if (!root) {

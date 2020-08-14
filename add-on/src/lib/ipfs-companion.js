@@ -5,12 +5,8 @@ const debug = require('debug')
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
-const browser = require('webextension-polyfill')
 const { Buffer } = require('buffer')
-
-const { urlSource } = require('ipfs-http-client')
-const all = require('it-all')
-
+const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
 const LRU = require('lru-cache')
@@ -306,32 +302,43 @@ module.exports = async function init () {
     let result
     try {
       const dataSrc = await findValueForContext(context, contextType)
+      log('onAddFromContext.context', context) // TODO
+      log('onAddFromContext.dataSrc', dataSrc) // TODO
       if (contextType === 'selection') {
-        result = await ipfsImportHandler.importFiles(Buffer.from(dataSrc), options, importDir)
+        const textFile = {
+          path: `${new URL(context.pageUrl).hostname}.txt`,
+          content: dataSrc
+        }
+        // TODO: persist full pageUrl somewhere (eg. append at the end of the content but add toggle to disable it)
+        result = await ipfsImportHandler.importFiles(textFile, options, importDir)
       } else {
         // Enchanced addFromURL
         // --------------------
         // Initially, this was a workaround due to https://github.com/ipfs/ipfs-companion/issues/227
         // but now we have additional rules about keeping file name, so we can't use valilla ipfs.addFromURL
-        log('onAddFromContext.context', context) // TODO
-        log('onAddFromContext.dataSrc', dataSrc) // TODO
-        /* TODO: move below to import.js
-        const { pathname, hostname } = new URL(dataSrc)
+        const fetchOptions = {
+          cache: 'force-cache',
+          referrer: context.pageUrl
+        }
+        // console.log('onAddFromContext.context', context)
+        // console.log('onAddFromContext.fetchOptions', fetchOptions)
+        const response = await fetch(dataSrc, fetchOptions)
+        const blob = await response.blob()
+        const buffer = await new Promise((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve(Buffer.from(reader.result))
+          reader.onerror = reject
+          reader.readAsArrayBuffer(blob)
+        })
+        const url = new URL(response.url)
         // https://github.com/ipfs-shipyard/ipfs-companion/issues/599
-        const filename = pathname === '/'
-          ? hostname
-          : pathname.replace(/[\\/]+$/, '').split('/').pop()
+        const filename = url.pathname === '/'
+          ? url.hostname
+          : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
         const data = {
           path: decodeURIComponent(filename),
-          content: (await concat(urlSource(dataSrc))).slice()
+          content: buffer
         }
-        */
-
-        // TODO: handle datauri(when right click on image)
-        // TODO: fix urlSource -- add test in js-ipfs repo
-        const data = await all(urlSource(dataSrc))
-        log('onAddFromContext.urlSource.data', data)
-
         result = await ipfsImportHandler.importFiles(data, options, importDir)
       }
     } catch (error) {
