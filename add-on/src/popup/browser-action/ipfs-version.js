@@ -11,7 +11,7 @@ function statusEntry ({ label, labelLegend, title, value, check, valueClass = ''
   value = value || value === 0 ? value : offline
   return html`
       <div title="${labelLegend}" class="ma0 pa0" style="line-height: 0.25">
-        <span class="f7 tr monospace force-select-all ${valueClass}" title="${title}">${value}</span>
+        <span class="f7 tr monospace force-select-all ${valueClass}" title="${title}">${value.substring(0, 13)}</span>
       </div>
     `
 }

@@ -10069,7 +10069,7 @@ moment@^2.10.6:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
   integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
 
-mortice@^2.0.0:
+mortice@2.0.0, mortice@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/mortice/-/mortice-2.0.0.tgz#7be171409c2115561ba3fc035e4527f9082eefde"
   integrity sha512-rXcjRgv2MRhpwGHErxKcDcp5IoA9CPvPFLXmmseQYIuQ2fSVu8tsMKi/eYUXzp/HH1s6y3IID/GwRqlSglDdRA==
@@ -11930,7 +11930,10 @@ progress@^2.0.0, progress@^2.0.1:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-prom-client@^11.5.3, prom-client@^12.0.0, "prom-client@npm:empty-module@0.0.2", prometheus-gc-stats@^0.6.0, "prometheus-gc-stats@npm:empty-module@0.0.2", "v8@npm:empty-module@0.0.2":
+prom-client@^11.5.3, prom-client@^12.0.0, "prom-client@file:./scripts/prom-client-stub":
+  version "0.0.0"
+
+prometheus-gc-stats@^0.6.0, "prometheus-gc-stats@npm:empty-module@0.0.2", "v8@npm:empty-module@0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/empty-module/-/empty-module-0.0.2.tgz#13b4dd8d4afeddd35e50c18dcd788c51087f1545"
   integrity sha1-E7TdjUr+3dNeUMGNzXiMUQh/FUU=

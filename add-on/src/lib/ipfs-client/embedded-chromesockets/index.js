@@ -30,11 +30,14 @@ exports.init = async function init (opts) {
 
   log('creating js-ipfs with opts: ', ipfsOpts)
   node = await Ipfs.create(ipfsOpts)
+  await node.start()
 
   log('starting HTTP servers with opts: ', ipfsOpts)
   const httpServers = new HttpApi(node, ipfsOpts)
   nodeHttpApi = await httpServers.start()
-  await syncConfig(node, opts, log)
+
+  await syncConfig(ipfsOpts, log)
+
   return node
 }
 
