@@ -93,7 +93,7 @@ const chromeDefaultOpts = {
     ]
   },
   preload: {
-    enabled: true,
+    enabled: false, /* TODO */
     addresses: [
       '/dns4/node3.preload.ipfs.io/tcp/443/https',
       '/dns4/node2.preload.ipfs.io/tcp/443/https',
@@ -163,13 +163,12 @@ async function buildConfig (opts, log) {
         }
       })
 
-      /* TODO: find out the best valus for chrome apps context
       libp2pOptions.dialer = {
         // https://github.com/ipfs/js-ipfs/blob/ipfs%400.49.0/packages/ipfs/src/core/runtime/libp2p-browser.js#L14
         maxParallelDials: 150, // 150 total parallel multiaddr dials
         maxDialsPerPeer: 4, // Allow 4 multiaddrs to be dialed per peer in parallel
         dialTimeout: 10e3 // 10 second dial timeout per peer dial
-      }*/
+      }
 
       log('initializing libp2p with libp2pOptions', libp2pOptions)
       return new Libp2p(libp2pOptions)
@@ -214,12 +213,13 @@ async function syncConfig (liveConfig, log) {
       cfg.config.Addresses.Gateway = maGw
       cfg.config.Addresses.API = maApi
       changes.ipfsNodeConfig = JSON.stringify(cfg, null, 2)
+      // update runtime config in place
+      Object.assign(liveConfig, changes)
+      // save config to browser.storage (triggers async client restart if ports changed)
+      log(`synchronizing ipfsNodeConfig with customGatewayUrl (${changes.customGatewayUrl}) and ipfsApiUrl (${changes.ipfsApiUrl})`)
+      await browser.storage.local.set(changes)
+      return true
     }
-    // update runtime config in place
-    Object.assign(liveConfig, changes)
-    // save config to browser.storage (triggers async client restart if ports changed)
-    log(`synchronizing ipfsNodeConfig with customGatewayUrl (${changes.customGatewayUrl}) and ipfsApiUrl (${changes.ipfsApiUrl})`)
-    await browser.storage.local.set(changes)
   }
 }
 
