@@ -39,10 +39,16 @@ function createOfflinePage (i18n) {
           <button class="f5 pv3 ph4 mh2 mb3 b white br2 bn bg-teal-muted hover-bg-teal pointer">Try Public Gateway</button>
         </div>
         <p class="f4 fw4">
-          You tried to load a DNSLink-enabled site from a remote host that's currently unavailable. Try loading it from the original host instead.
+          You tried to load a DNSLink-enabled site from a custom local gateway that's currently unavailable. Try loading it from the original host instead.
         </p>
         <div class="tc tr-ns">
           <button class="f5 pv3 ph4 mh2 mb3 b white br2 bn bg-teal-muted hover-bg-teal pointer">Use Original Host</button>
+        </div>
+        <p class="f4 fw4">
+          You tried to load a DNSLink-enabled site from a host that's currently unavailable. Try loading it from the local/public gateway instead.
+        </p>
+        <div class="tc tr-ns">
+          <button class="f5 pv3 ph4 mh2 mb3 b white br2 bn bg-teal-muted hover-bg-teal pointer">Use Local/Public Gateway</button>
         </div>
       </div>
     </div>
