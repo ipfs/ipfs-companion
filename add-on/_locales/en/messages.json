@@ -655,6 +655,42 @@
     "message": "Deny",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
+  "page_landingOffline_title": {
+    "message": "Offline Error | IPFS Companion",
+    "description": "Page title (page_landingOffline_title)"
+  },
+  "page_landingOffline_subtitle": {
+    "message": "IPFS Companion tried opening the following resource, but failed:",
+    "description": "Page subtitle (page_landingOffline_subtitle)"
+  },
+  "page_landingOffline_gatewayOffline_text": {
+    "message": "Your custom local gateway might be offline. You can update your local gateway in the preferences, or try loading this resource from a public gateway instead.",
+    "description": "Offline error message copy (page_landingOffline_gatewayOffline_text)"
+  },
+  "page_landingOffline_gatewayOffline_updatePrefsButton_text": {
+    "message": "Update Preferences",
+    "description": "Offline error message button text for opening Companion preferences (page_landingOffline_gatewayOffline_updatePrefsButton_text)"
+  },
+  "page_landingOffline_gatewayOffline_publicGatewayButton_text": {
+    "message": "Try Public Gateway",
+    "description": "Offline error message button text for loading from public gateway (page_landingOffline_gatewayOffline_publicGatewayButton_text)"
+  },
+  "page_landingOffline_dnsLinkGatewayUnavailable_text": {
+    "message": "You tried to load a DNSLink-enabled site from a custom local gateway that's currently unavailable. Try loading it from the original host instead.",
+    "description": "Offline error message copy (page_landingOffline_dnsLinkGatewayUnavailable_text)"
+  },
+  "page_landingOffline_dnsLinkGatewayUnavailable_useOriginalHostButton_text": {
+    "message": "Use Original Host",
+    "description": "Offline error message button text for loading from original host (page_landingOffline_dnsLinkGatewayUnavailable_useOriginalHostButton_text)"
+  },
+  "page_landingOffline_dnsLinkHostUnavailable_text": {
+    "message": "You tried to load a DNSLink-enabled site from a host that's currently unavailable. Try loading it from the local/public gateway instead.",
+    "description": "Offline error message copy (page_landingOffline_dnsLinkHostUnavailable_text)"
+  },
+  "page_landingOffline_dnsLinkHostUnavailable_useOriginalHostButton_text": {
+    "message": "Use Local/Public Gateway",
+    "description": "Offline error message button text for loading from local/public gateway (page_landingOffline_dnsLinkHostUnavailable_useOriginalHostButton_text)"
+  },
   "page_landingWelcome_title": {
     "message": "Welcome | IPFS Companion",
     "description": "Page title (page_landingWelcome_title)"
