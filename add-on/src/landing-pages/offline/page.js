@@ -1,11 +1,9 @@
 'use strict'
 
 const html = require('choo/html')
-const { renderTranslatedLinks, renderTranslatedSpans } = require('../../utils/i18n')
 
 function createOfflinePage (i18n) {
   return function offlinePage (emit) {
-
     // Set translated title
     document.title = i18n.getMessage('page_landingOffline_title')
 
