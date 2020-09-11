@@ -659,9 +659,13 @@
     "message": "Offline Error | IPFS Companion",
     "description": "Page title (page_landingOffline_title)"
   },
-  "page_landingOffline_subtitle": {
+  "page_landingOffline_head": {
+    "message": "Offline Error",
+    "description": "Page header (page_landingOffline_head)"
+  },
+  "page_landingOffline_subhead": {
     "message": "IPFS Companion tried opening the following resource, but failed:",
-    "description": "Page subtitle (page_landingOffline_subtitle)"
+    "description": "Page subheader (page_landingOffline_subhead)"
   },
   "page_landingOffline_gatewayOffline_text": {
     "message": "Your custom local gateway might be offline. You can update your local gateway in the preferences, or try loading this resource from a public gateway instead.",
