@@ -1,23 +1,10 @@
 'use strict'
 
 const html = require('choo/html')
-const logo = require('../../popup/logo')
 const { renderTranslatedLinks, renderTranslatedSpans } = require('../../utils/i18n')
 
-// Assets
-const libp2pLogo = '../../../images/libp2p.svg'
-const multiformatsLogo = '../../../images/multiformats.svg'
-const ipldLogo = '../../../images/ipld.svg'
-
-// Colors
-const colorIpfsLogo = '#57cbd0'
-const colorWhite = '#ffffff'
-const colorYellow = '#f39021'
-
 function createOfflinePage (i18n) {
-  return function offlinePage (state, emit) {
-    const { isIpfsOnline, peerCount } = state
-    const openWebUi = (page) => () => emit('openWebUi', page)
+  return function offlinePage (emit) {
 
     // Set translated title
     document.title = i18n.getMessage('page_landingOffline_title')
