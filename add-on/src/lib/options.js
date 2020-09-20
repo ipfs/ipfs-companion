@@ -13,6 +13,7 @@ exports.optionDefaults = Object.freeze({
   publicGatewayUrl: 'https://ipfs.io',
   publicSubdomainGatewayUrl: 'https://dweb.link',
   useCustomGateway: true,
+  useSubdomains: true,
   noIntegrationsHostnames: [],
   automaticMode: true,
   linkify: false,
@@ -24,19 +25,21 @@ exports.optionDefaults = Object.freeze({
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
+  displayReleaseNotes: true,
   customGatewayUrl: buildCustomGatewayUrl(),
   ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
   ipfsProxy: true, // window.ipfs
   logNamespaces: 'jsipfs*,ipfs*,libp2p:mdns*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*,-ipfs:http-api*',
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
+  useLatestWebUI: false,
   openViaWebUI: true
 })
 
 function buildCustomGatewayUrl () {
   // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
   const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 9091 : 8080
-  return `http://127.0.0.1:${port}`
+  return `http://localhost:${port}`
 }
 
 function buildIpfsApiUrl () {
@@ -79,19 +82,38 @@ exports.storeMissingOptions = async (read, defaults, storage) => {
   return changes
 }
 
-function normalizeGatewayURL (url) {
+// safeURL produces URL object with optional normalizations
+function safeURL (url, opts) {
+  opts = opts || { useLocalhostName: true }
   if (typeof url === 'string') {
     url = new URL(url)
   }
-  // https://github.com/ipfs/ipfs-companion/issues/328
-  if (url.hostname.toLowerCase() === 'localhost') {
+  if (url.hostname === '0.0.0.0') {
+    // normalize 0.0.0.0 (used by go-ipfs in the console)
+    // to 127.0.0.1 to minimize the number of edge cases we need to handle later
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/867
+    url = new URL(url.toString())
     url.hostname = '127.0.0.1'
   }
-  // Return string without trailing slash
-  return url.toString().replace(/\/$/, '')
+  // "localhost" gateway normalization matters because:
+  // - 127.0.0.1 is a path gateway
+  // - localhost is a subdomain gateway
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/328#issuecomment-537383212
+  if (opts.useLocalhostName && localhostIpUrl(url)) {
+    url.hostname = 'localhost'
+  }
+  if (!opts.useLocalhostName && localhostNameUrl(url)) {
+    url.hostname = '127.0.0.1'
+  }
+  return url
 }
-exports.normalizeGatewayURL = normalizeGatewayURL
-exports.safeURL = (url) => new URL(normalizeGatewayURL(url))
+
+// Return string without trailing slash
+function guiURLString (url, opts) {
+  return safeURL(url, opts).toString().replace(/\/$/, '')
+}
+exports.safeURL = safeURL
+exports.guiURLString = guiURLString
 
 // convert JS array to multiline textarea
 function hostArrayCleanup (array) {
@@ -109,6 +131,19 @@ function hostTextToArray (text) {
 }
 exports.hostArrayToText = hostArrayToText
 exports.hostTextToArray = hostTextToArray
+
+function localhostIpUrl (url) {
+  if (typeof url === 'string') {
+    url = new URL(url)
+  }
+  return url.hostname === '127.0.0.1' || url.hostname === '[::1]'
+}
+function localhostNameUrl (url) {
+  if (typeof url === 'string') {
+    url = new URL(url)
+  }
+  return url.hostname.toLowerCase() === 'localhost'
+}
 
 exports.migrateOptions = async (storage) => {
   // <= v2.4.4
@@ -138,5 +173,15 @@ exports.migrateOptions = async (storage) => {
   if (noRedirectHostnames) {
     await storage.set({ noIntegrationsHostnames: noRedirectHostnames })
     await storage.remove('noRedirectHostnames')
+  }
+  // ~v2.11: subdomain proxy at *.ipfs.localhost
+  // migrate old default 127.0.0.1 to localhost hostname
+  const { customGatewayUrl: gwUrl } = await storage.get('customGatewayUrl')
+  if (gwUrl && (localhostIpUrl(gwUrl) || localhostNameUrl(gwUrl))) {
+    const { useSubdomains } = await storage.get('useSubdomains')
+    const newUrl = guiURLString(gwUrl, { useLocalhostName: useSubdomains })
+    if (gwUrl !== newUrl) {
+      await storage.set({ customGatewayUrl: newUrl })
+    }
   }
 }

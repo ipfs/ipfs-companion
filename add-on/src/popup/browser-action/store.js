@@ -2,8 +2,9 @@
 /* eslint-env browser, webextensions */
 
 const browser = require('webextension-polyfill')
-const IsIpfs = require('is-ipfs')
-const { trimHashAndSearch } = require('../../lib/ipfs-path')
+const isIPFS = require('is-ipfs')
+const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
+const { welcomePage } = require('../../lib/on-installed')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
@@ -133,12 +134,22 @@ module.exports = (state, emitter) => {
     window.close()
   })
 
-  emitter.on('openWebUi', async () => {
+  emitter.on('openWelcomePage', async () => {
     try {
-      browser.tabs.create({ url: state.webuiRootUrl })
+      await browser.tabs.create({ url: welcomePage })
       window.close()
     } catch (error) {
-      console.error(`Unable Open Web UI due to ${error}`)
+      console.error(`Unable Open WelcomePage (${welcomePage})`, error)
+    }
+  })
+
+  emitter.on('openWebUi', async (page = '/') => {
+    const url = `${state.webuiRootUrl}#${page}`
+    try {
+      await browser.tabs.create({ url })
+      window.close()
+    } catch (error) {
+      console.error(`Unable Open Web UI (${url})`, error)
     }
   })
 
@@ -182,17 +193,18 @@ module.exports = (state, emitter) => {
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ noIntegrationsHostnames })
 
-      // TODO: remove below? does it still make sense in "integrations toggle" context?
       // Reload the current tab to apply updated redirect preference
-      if (!state.currentDnslinkFqdn || !IsIpfs.ipnsUrl(state.currentTab.url)) {
+      if (!state.currentDnslinkFqdn || !isIPFS.ipnsUrl(state.currentTab.url)) {
         // No DNSLink, reload URL as-is
         await browser.tabs.reload(state.currentTab.id)
       } else {
         // DNSLinked websites require URL change
-        // from  http?://gateway.tld/ipns/{fqdn}/some/path
+        // from  http?://gateway.tld/ipns/{fqdn}/some/path OR
+        // from  http?://{fqdn}.ipns.gateway.tld/some/path
         // to    http://{fqdn}/some/path
         // (defaulting to http: https websites will have HSTS or a redirect)
-        const originalUrl = state.currentTab.url.replace(/^.*\/ipns\//, 'http://')
+        const path = ipfsContentPath(state.currentTab.url, { keepURIParams: true })
+        const originalUrl = path.replace(/^.*\/ipns\//, 'http://')
         await browser.tabs.update(state.currentTab.id, {
           // FF only: loadReplace: true,
           url: originalUrl

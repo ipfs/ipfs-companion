@@ -41,10 +41,12 @@ describe('modifyRequest.onBeforeRequest:', function () {
       redirect: true,
       dnslinkPolicy: false, // dnslink testi suite is in ipfs-request-dnslink.test.js
       catchUnhandledProtocols: true,
-      gwURLString: 'http://127.0.0.1:8080',
-      gwURL: new URL('http://127.0.0.1:8080'),
+      gwURLString: 'http://localhost:8080',
+      gwURL: new URL('http://localhost:8080'),
       pubGwURLString: 'https://ipfs.io',
-      pubGwURL: new URL('https://ipfs.io')
+      pubGwURL: new URL('https://ipfs.io'),
+      pubSubdomainGwURLString: 'https://dweb.link',
+      pubSubdomainGwURL: new URL('https://dweb.link')
     })
     const getState = () => state
     const getIpfs = () => {}
@@ -61,7 +63,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
       })
       it('should be served from custom gateway if redirect is enabled', function () {
         const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-        expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       })
     })
     describe('with embedded node', function () {
@@ -96,6 +98,15 @@ describe('modifyRequest.onBeforeRequest:', function () {
           expectNoRedirect(modifyRequest, request)
           expect(redirectOptOutHint).to.equal('x-ipfs-companion-no-redirect')
         })
+        it(`should be left untouched if request is for subresource on a page loaded from URL that includes opt-out hint (${nodeType} node)`, function () {
+          // ensure opt-out works for subresources (Firefox only for now)
+          const subRequest = {
+            type: 'script',
+            url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
+            originUrl: 'https://example.com/?x-ipfs-companion-no-redirect#hashTest'
+          }
+          expectNoRedirect(modifyRequest, subRequest)
+        })
         it(`should be left untouched if CID is invalid (${nodeType} node)`, function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
           expectNoRedirect(modifyRequest, request)
@@ -109,7 +120,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
     })
   })
 
-  describe('XHR request for a path matching /ipfs/{CIDv0}', function () {
+  describe('XHR request for a path matching /ipfs/{CIDv0} coming from 3rd party Origin', function () {
     describe('with external node', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'external'
@@ -204,12 +215,12 @@ describe('modifyRequest.onBeforeRequest:', function () {
         dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns('/ipfs/Qmazvovg6Sic3m9igZMKoAPjkiVZsvbWWc8ZvgjjK1qMss')
         // pretend API is online and we can do dns lookups with it
         state.peerCount = 1
-        expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://localhost:8080/ipns/ipfs.git.sexy/index.html?argTest#hashTest')
       })
       it('should be served from custom gateway if {path} starts with a valid PeerID', function () {
         const request = url2request('https://google.com/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
         dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().returns(false)
-        expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://127.0.0.1:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('http://localhost:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
       })
     })
 
@@ -253,6 +264,83 @@ describe('modifyRequest.onBeforeRequest:', function () {
     })
   })
 
+  describe('request to a subdomain gateway', function () {
+    const cid = 'bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
+    const peerid = 'bafzbeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
+
+    // Tests use different CID in X-Ipfs-Path header just to ensure it does not
+    // override the one from path
+    const fakeXIpfsPathHdrVal = '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ'
+
+    describe('with external node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'external'
+        // dweb.link is the default subdomain gw
+      })
+      it('should be redirected to localhost gateway (*.ipfs on default gw)', function () {
+        state.redirect = true
+        const request = url2request(`https://${cid}.ipfs.dweb.link/`)
+
+        // X-Ipfs-Path to ensure value from URL takes a priority
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
+
+        /// We expect redirect to path-based gateway because go-ipfs >=0.5 will
+        // return redirect to a subdomain, and we don't want to break users
+        // running older versions of go-ipfs by loading subdomain first and
+        // failing.
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal(`http://localhost:8080/ipfs/${cid}/`)
+      })
+      it('should be redirected to localhost gateway (*.ipfs on 3rd party gw)', function () {
+        state.redirect = true
+        const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal(`http://localhost:8080/ipfs/${cid}/`)
+      })
+      it('should be redirected to localhost gateway and keep URL encoding of original path', function () {
+        state.redirect = true
+        const request = url2request('https://bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy.ipfs.dweb.link/%3Ffilename=test.jpg?arg=val')
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal('http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy/%3Ffilename=test.jpg?arg=val')
+      })
+      it('should be redirected to localhost gateway (*.ipns on default gw)', function () {
+        state.redirect = true
+        const request = url2request(`https://${peerid}.ipns.dweb.link/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal(`http://localhost:8080/ipns/${peerid}/`)
+      })
+    })
+
+    describe('with embedded node', function () {
+      beforeEach(function () {
+        state.ipfsNodeType = 'embedded'
+        // dweb.link is the default subdomain gw
+      })
+      it('should be left untouched for *.ipfs at default public subdomain gw', function () {
+        state.redirect = true
+        const request = url2request(`https://${cid}.ipfs.dweb.link/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
+        expectNoRedirect(modifyRequest, request)
+      })
+      it('should be redirected to user-prefered public gateway if 3rd party subdomain gw', function () {
+        state.redirect = true
+        const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: fakeXIpfsPathHdrVal }]
+        expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+          .to.equal(`https://${cid}.ipfs.dweb.link/`)
+      })
+      it('should be left untouched for *.ipns at default public subdomain gw', function () {
+        state.redirect = true
+        const request = url2request(`https://${peerid}.ipns.dweb.link/`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+        expectNoRedirect(modifyRequest, request)
+      })
+    })
+  })
+
   // tests in which results should be the same for all node types
   nodeTypes.forEach(function (nodeType) {
     beforeEach(function () {
@@ -260,22 +348,42 @@ describe('modifyRequest.onBeforeRequest:', function () {
       state.redirect = true
     })
     describe(`with ${nodeType} node:`, function () {
-      describe('request for IPFS path at a localhost', function () {
+      describe('request for IPFS path at the localhost', function () {
         // we do not touch local requests, as it may interfere with other nodes running at the same machine
-        // or could produce false-positives such as redirection from 127.0.0.1:5001/ipfs/path to 127.0.0.1:8080/ipfs/path
-        it('should be left untouched if 127.0.0.1 is used', function () {
-          const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        // or could produce false-positives such as redirection from localhost:5001/ipfs/path to localhost:8080/ipfs/path
+        it('should fix localhost API hostname to IP', function () {
+          const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          // expectNoRedirect(modifyRequest, request)
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        })
+        it('should be left untouched if localhost Gateway is used', function () {
+          const request = url2request('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
           expectNoRedirect(modifyRequest, request)
         })
-        it('should be left untouched if localhost is used', function () {
+        it('should fix 127.0.0.1 Gateway to localhost', function () {
+          const request = url2request('http://127.0.0.1:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          // expectNoRedirect(modifyRequest, request)
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        })
+        it('should fix 0.0.0.0 to localhost IP API', function () {
+          // https://github.com/ipfs-shipyard/ipfs-companion/issues/867
+          const request = url2request('http://0.0.0.0:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+        })
+        it('should fix localhost API to IP', function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
-          const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-          expectNoRedirect(modifyRequest, request)
+          const request = url2request('http://localhost:5001/webui')
+          // expectNoRedirect(modifyRequest, request)
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal('http://127.0.0.1:5001/webui')
         })
-        it('should be left untouched if localhost is used, even when x-ipfs-path is present', function () {
+        it('should be left untouched if localhost API IP is used, even when x-ipfs-path is present', function () {
           // https://github.com/ipfs-shipyard/ipfs-companion/issues/604
-          const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
-          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
+          const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
+          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DDIFF' }]
           expectNoRedirect(modifyRequest, request)
         })
         it('should be left untouched if [::1] is used', function () {
@@ -283,22 +391,15 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
           expectNoRedirect(modifyRequest, request)
         })
-      })
-
-      describe('request to FQDN with valid CID in subdomain', function () {
-        // we do not touch such requests for now, as HTTP-based local node usually can't provide the same origin-based guarantees
-        // we will redirect subdomains to ipfs:// when native handler is available
-        it('should be left untouched for IPFS', function () {
+        it('should be redirected to localhost (subdomain in go-ipfs >0.5) if type=main_frame and  127.0.0.1 (path gw) is used un URL', function () {
           state.redirect = true
-          const request = url2request('http://bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge.ipfs.dweb.link/')
-          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
-          expectNoRedirect(modifyRequest, request)
-        })
-        it('should be left untouched for IPNS', function () {
-          state.redirect = true
-          const request = url2request('http://bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge.ipns.dweb.link/')
-          request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ' }]
-          expectNoRedirect(modifyRequest, request)
+          state.useSubdomains = true
+          expect(state.gwURL.hostname).to.equal('localhost')
+          const cid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+          const request = url2request(`http://127.0.0.1:8080/ipfs/${cid}?arg=val#hash`)
+          request.type = 'main_frame' // explicit
+          expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+            .to.equal(`http://localhost:8080/ipfs/${cid}?arg=val#hash`)
         })
       })
     })

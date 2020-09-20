@@ -1,19 +1,28 @@
-# Security Considerations
+# Security notes
 
-The Firefox platform has no mechanisms to restrict the privileges of add-ons
-and add-on code is fully trusted by Firefox.
+The IPFS protocol and its implementations are still in heavy development. This means that there may be problems in our protocols, or there may be mistakes in our implementations. And — though IPFS is not production-ready yet — many people are already running nodes on their machines, so we take security vulnerabilities very seriously.
 
-Security-conscious users should confirm that downloaded XPI package does match source code BEFORE installation.
+## Reporting security issues
+
+If you discover a security issue in ipfs-companion, please bring it to our attention right away!
+
+If you find a vulnerability that may affect live deployments — for example, by exposing a remote execution exploit — please send your report privately to security@ipfs.io **Please do not file a public issue.**
+
+If the issue is a protocol weakness that cannot be immediately exploited, or something not yet deployed, just discuss it openly.
+
+## Local build and source verification
+
+Security-conscious users can confirm that downloaded package does match source code.
 
 Required steps:
 
-1. Download XPI package in version that is to be verified
-2. Checkout sources of the [same tag](https://github.com/ipfs/ipfs-companion/tags)
-2. Build XPI package from sources using `jpm xpi` command (`npm install jpm -g`).    
-   As a result, you will have two XPI files which are in fact just ZIPs with different extension.   
+1. Download package version that is to be verified
+2. Check out sources of the [same tag](https://github.com/ipfs/ipfs-companion/tags)
+2. Build package from sources using `yarn dev-build` command.    
+   As a result, you will have freshly built packages in `build/` directory
 3. Unzip contents and compare manually or use handy one-liners below.
 
-Convention used in commands below:
+Convention used in examples below:
 - `ipfs-firefox-addon1.xpi` and `ipfs-firefox-addon2.xpi` are equal and match Git sources
 -  `ipfs-firefox-addon3.xpi` contains changes not present in current sources
 
@@ -72,4 +81,3 @@ $ diff <(unzip -v -l ipfs-firefox-addon1.xpi | cut -c 1-9,59-,49-57 | sort -k3) 
 >      984 83079aef resources/ipfs-firefox-addon/lib/package.json
 not_same
 ```
-

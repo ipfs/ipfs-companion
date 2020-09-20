@@ -10,7 +10,7 @@ const browser = require('webextension-polyfill')
 const external = require('./external')
 const embedded = require('./embedded')
 const embeddedWithChromeSockets = require('./embedded-chromesockets')
-const precache = require('../precache')
+const { precache } = require('../precache')
 
 let client
 
@@ -71,7 +71,7 @@ async function _reloadIpfsClientDependents (instance, opts) {
   // online only
   if (client && instance) {
     // add important data to local ipfs repo for instant load
-    precache(instance)
+    setTimeout(() => precache(instance), 10000)
   }
 }
 

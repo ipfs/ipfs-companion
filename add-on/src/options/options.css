@@ -1,54 +1,32 @@
-@import url('/ui-kit/tachyons.css');
-@import url('/ui-kit/ipfs.css');
+@import url('~tachyons/css/tachyons.css');
+@import url('~ipfs-css/ipfs.css');
 @import url('../pages/components/switch-toggle.css');
 
-html {
-  overflow: hidden;
+header {
+  border-color: #69c4cd;
+  text-transform: uppercase;
 }
-.is-chrome body {
-  margin: 0;
-  min-width: 650px;
-  height: 450px;
-  padding: 15px;
-  overflow-y: auto;
+#header-logo {
+  height: 50px;
+  width: 117.5px;
 }
 form * {
-  font: caption;
-  font-size: 1em;
-}
-strong {
-  font-weight: bold;
-}
-em {
-  font-style: italic;
-}
-code {
-  font-family: monospace;
+  font-family: Inter,system-ui,sans-serif;
+  font-size: 0.875rem;
 }
 fieldset {
   border: none;
-  border-top: 3px solid #6BC4CE;
   display: flex;
   flex-direction: column;
-  margin-bottom: .5em;
-}
-legend {
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  padding: .5em;
-  font-weight: bold;
 }
 fieldset > div {
-  padding: 1em;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
+  padding-bottom: 1.5em;
 }
 fieldset > div + div {
   border-top: 1px solid #ccc;
-}
-fieldset > div > * {
-  align-self: center;
 }
 label {
   flex: 1;
@@ -58,79 +36,46 @@ button:hover,
 label:hover {
   cursor: pointer;
 }
+label > dl {
+  margin-right: 2em;
+}
+label > dl > dt {
+  font-weight: 600;
+}
 label > dl > dd {
-  color: #888;
-  margin-top: .2em;
-  margin-left: 0;
-  margin-right: .2em;
-}
-fieldset > div:hover {
-  background-color: rgba(62, 148, 152, 0.05);
-}
-fieldset > div:hover > label > dl > dd {
-  color: #333;
-}
-label a {
-  color: #3B6177;
-}
-label a:hover {
-  color: #073A53;
+  margin: .5em 0 .5em 0;
 }
 label a[href^="http"]:after {
-  content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfiBQIJABWXvYi2AAAAfklEQVQY05XPuw3CQBBF0YPZjHLINmDbAEEFliiACiBHcgWsXIcTSwSUQ4hEgD9LQMBEV/P0rmb4MYsZ993MOYURz93KceADqjE4pbtLoQpsJ8WmCCpotZZqUT+1wmj9rBtc5wa1h17jJaennKYgWmvchjMKFVH8ejDAzh/zBh37F0UDekL1AAAAAElFTkSuQmCC);
+  content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%2334373f" viewBox="20 12 60 70"><path d="M75.4 49.9c-.9 0-1.6.7-1.6 1.6v21.8c0 1.5-.6 2.9-1.7 4s-2.5 1.7-4 1.7h-40c-1.5 0-2.9-.6-4-1.7s-1.7-2.5-1.7-4v-40c0-1.5.6-2.9 1.7-4s2.5-1.7 4-1.7h21.8c.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6H28.1c-2.4 0-4.6.9-6.3 2.6-1.7 1.7-2.6 3.9-2.6 6.3v40c0 2.4.9 4.6 2.6 6.3 1.7 1.7 3.9 2.6 6.3 2.6h40c2.4 0 4.6-.9 6.3-2.6 1.7-1.7 2.6-3.9 2.6-6.3V51.5c0-.9-.7-1.6-1.6-1.6z"/><path d="M83.8 19.3V19v-.2-.2c0-.1-.1-.1-.1-.2 0 0 0-.1-.1-.1-.1-.1-.1-.2-.2-.2l-.2-.2s-.1 0-.1-.1l-.1-.1c-.1 0-.1 0-.2-.1H60.3c-.9 0-1.6.7-1.6 1.6s.7 1.6 1.6 1.6h17.9l-25.8 26c-.6.6-.6 1.7 0 2.3.3.3.7.5 1.1.5s.8-.2 1.1-.5l25.8-25.8v17.9c0 .9.7 1.6 1.6 1.6s1.6-.7 1.6-1.6l.2-21.9z"/></svg>');
   padding-left: 0.25em;
+}
+input, textarea {
+  flex: 1;
+  padding: .75em;
+  font-family: monospace;
 }
 input, textarea, select {
   flex: 1;
-  padding: .5em;
-  font-family: monospace;
 }
 fieldset > div > div,
 #resetAllOptions {
   flex: 1;
-  text-align: center;
 }
 input[type=text],
 input[type=url],
 input[type=number],
-textarea,
-select {
+textarea
+ {
   -webkit-transition: all 0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
-  border-radius: 3px;
-  border: 1px solid #9ad4db;
-  background-color: white;
-}
-input[type=text]:focus,
-input[type=url]:focus,
-input[type=number]:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border: 1px solid #3E9398;
-  box-shadow: 0 0 5px #5FCBCF;
+  border-radius: 0.25rem;
+  border: 1px solid #b7bbc8;
 }
 
-button#resetAllOptions:hover,
 input:invalid {
-  border: 1px solid red;
-  background-color: #FFF0F0;
-  box-shadow: 0 0 5px red;
-  color: red;
-  transition: box-shadow 0.3s;
+  border: 1px solid #ea5037;
+  background-color: #f36149;
 }
-button#resetAllOptions {
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
-  border-radius: 3px;
-  border: 1px solid #f36149;
-  background-color: #f7f8fa;
-  color: #f36149;
-  padding: .5em;
-}
-button#resetAllOptions:active {
-  border: 1px solid #3E9398 !important;
-  box-shadow: 0 0 5px #5FCBCF !important;
-  color: #3E9398;
-  background-color: white;
+.mdc-switch {
+  display: block;
 }

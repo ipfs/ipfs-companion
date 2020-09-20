@@ -4,7 +4,6 @@
 const html = require('choo/html')
 const header = require('./header')
 const { activeTabActions } = require('./context-actions')
-const operations = require('./operations')
 const tools = require('./tools')
 
 // Render the browser action page:
@@ -17,22 +16,22 @@ module.exports = function browserActionPage (state, emit) {
   const onUnPin = () => emit('unPin')
 
   const onQuickImport = () => emit('quickImport')
-  const onOpenWebUi = () => emit('openWebUi')
+  const onOpenWebUi = () => emit('openWebUi', '/')
+  const onOpenWelcomePage = () => emit('openWelcomePage')
   const onOpenPrefs = () => emit('openPrefs')
   const onToggleGlobalRedirect = () => emit('toggleGlobalRedirect')
   const onToggleSiteIntegrations = () => emit('toggleSiteIntegrations')
   const onToggleActive = () => emit('toggleActive')
 
-  const headerProps = Object.assign({ onToggleActive, onOpenPrefs }, state)
+  const headerProps = Object.assign({ onToggleActive, onOpenPrefs, onOpenWelcomePage }, state)
   const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onPin, onUnPin }, state)
   const opsProps = Object.assign({ onQuickImport, onOpenWebUi, onToggleGlobalRedirect }, state)
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">
       ${header(headerProps)}
-      ${activeTabActions(activeTabActionsProps)}
       ${tools(opsProps)}
-      ${operations(opsProps)}
+      ${activeTabActions(activeTabActionsProps)}
     </div>
   `
 }

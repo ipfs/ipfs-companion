@@ -5,11 +5,15 @@ const drain = require('pull-stream/sinks/drain')
 const toStream = require('it-to-stream')
 const tar = require('tar-stream')
 const CID = require('cids')
-const { webuiCid } = require('./state')
 
 const debug = require('debug')
 const log = debug('ipfs-companion:precache')
 log.error = debug('ipfs-companion:precache:error')
+
+// Web UI release that should be precached
+// WARNING: do not remove this constant, as its used in package.json
+const webuiCid = 'Qmexhq2sBHnXQbvyP2GfUdbnY7HCagH2Mw5vUNSBn2nxip' // v2.7.2
+module.exports.precachedWebuiCid = webuiCid
 
 const PRECACHE_ARCHIVES = [
   { tarPath: '/dist/precache/webui.tar', cid: webuiCid }
@@ -19,7 +23,7 @@ const PRECACHE_ARCHIVES = [
  * Adds important assets such as Web UI to the local js-ipfs-repo.
  * This ensures they load instantly, even in offline environments.
  */
-module.exports = async (ipfs) => {
+module.exports.precache = async (ipfs) => {
   for (const { cid, tarPath } of PRECACHE_ARCHIVES) {
     if (!await inRepo(ipfs, cid)) {
       await importTar(ipfs, tarPath, cid)
