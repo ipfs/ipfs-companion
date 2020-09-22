@@ -5,8 +5,6 @@ const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 // common configuration shared by all targets
 const commonConfig = {
   target: 'web',
@@ -32,13 +30,16 @@ const commonConfig = {
       })
     ]
   },
-  // plugins: [new BundleAnalyzerPlugin()]
   plugins: [
+    // new require('webpack-bundle-analyzer').BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
     new SimpleProgressWebpackPlugin({
       format: process.env.CI ? 'expanded' : 'minimal'
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
     }),
     new webpack.DefinePlugin({
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
@@ -113,6 +114,7 @@ const commonConfig = {
     /* mainFields: ['browser', 'main'], */
     extensions: ['.js', '.json'],
     alias: {
+      buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
       joi: path.resolve(__dirname, 'node_modules/joi/lib/index.js'), // hapijs needs Joi.binary, which is missing in prebuilt bundle
       url: 'iso-url',
       stream: 'readable-stream', // cure general insanity
@@ -129,7 +131,7 @@ const commonConfig = {
   },
   node: {
     global: false, // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
-    Buffer: true,
+    Buffer: false, // we don't want to use old and buggy version bundled node-libs
     fs: 'empty',
     tls: 'empty',
     cluster: 'empty' // expected by js-ipfs dependency: node_modules/prom-client/lib/cluster.js

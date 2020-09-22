@@ -14,7 +14,7 @@ const embeddedWithChromeSockets = require('./embedded-chromesockets')
 const { precache } = require('../precache')
 
 // ensure single client at all times, and no overlap between init and destroy
-// TODO: replace mortice with state machine?
+// TODO: this can be removed when Chrome Apps code is deprecated
 const mutex = mortice('ipfs-client-lock')
 let client
 
