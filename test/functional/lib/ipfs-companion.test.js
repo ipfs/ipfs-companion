@@ -3,13 +3,14 @@ const { expect } = require('chai')
 const browser = require('sinon-chrome')
 const { URL } = require('url')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
+const { AbortController } = require('abort-controller')
 
 describe('init', function () {
   let init
 
   before(function () {
     global.localStorage = {}
-    global.window = {}
+    global.window = { AbortController }
     global.browser = browser
     global.URL = URL
     global.screen = {}
