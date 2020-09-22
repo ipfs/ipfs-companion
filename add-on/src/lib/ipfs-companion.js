@@ -5,7 +5,6 @@ const debug = require('debug')
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
-const { Buffer } = require('buffer')
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
@@ -324,13 +323,6 @@ module.exports = async function init () {
         // console.log('onAddFromContext.fetchOptions', fetchOptions)
         const response = await fetch(dataSrc, fetchOptions)
         const blob = await response.blob()
-        const buffer = await new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          // TODO: remove Buffer?
-          reader.onloadend = () => resolve(Buffer.from(reader.result))
-          reader.onerror = reject
-          reader.readAsArrayBuffer(blob)
-        })
         const url = new URL(response.url)
         // https://github.com/ipfs-shipyard/ipfs-companion/issues/599
         const filename = url.pathname === '/'
@@ -338,7 +330,7 @@ module.exports = async function init () {
           : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
         const data = {
           path: decodeURIComponent(filename),
-          content: buffer
+          content: blob
         }
         result = await ipfsImportHandler.importFiles(data, options, importDir)
       }
@@ -520,24 +512,6 @@ module.exports = async function init () {
     }
   }
 
-  async function setBrowserActionIcon (iconPath) {
-    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    /* Below fallback does not work since Chromium 80
-     * (it fails in a way that does not produce error we can catch)
-    const iconDefinition = { path: iconPath }
-    try {
-      // Try SVG first -- Firefox supports it natively
-      await browser.browserAction.setIcon(iconDefinition)
-    } catch (error) {
-      // Fallback!
-      // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
-      // Still, we want icon, so we precompute rasters of popular sizes and use them instead
-      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    }
-    */
-  }
-
   // ColorArray [0,0,0,0] → Hex #000000
   // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserAction/ColorArray
   function colorArraytoHex (colorArray) {
@@ -586,6 +560,24 @@ module.exports = async function init () {
     return { imageData: { 19: r19, 38: r38, 128: r128 } }
   })
   */
+
+  async function setBrowserActionIcon (iconPath) {
+    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    /* Below fallback does not work since Chromium 80
+     * (it fails in a way that does not produce error we can catch)
+    const iconDefinition = { path: iconPath }
+    try {
+      // Try SVG first -- Firefox supports it natively
+      await browser.browserAction.setIcon(iconDefinition)
+    } catch (error) {
+      // Fallback!
+      // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
+      // Still, we want icon, so we precompute rasters of popular sizes and use them instead
+      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    }
+    */
+  }
 
   // OPTIONS
   // ===================================================================
