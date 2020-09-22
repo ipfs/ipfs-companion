@@ -79,6 +79,33 @@ const commonConfig = {
         exclude: /node_modules/,
         test: /\.js$/,
         use: ['babel-loader']
+      },
+      {
+        // hapijs is node-centric and needs additional handling
+        include: /node_modules\/(@hapi|joi)/,
+        test: /\.js$/,
+        use: [
+          'remove-hashbag-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: {
+                      esmodules: true
+                    }
+                  }
+                ]
+              ],
+              plugins: [
+                'syntax-async-generators',
+                '@babel/plugin-proposal-class-properties'
+              ]
+            }
+          }
+        ]
       }
     ]
   },
@@ -86,12 +113,18 @@ const commonConfig = {
     /* mainFields: ['browser', 'main'], */
     extensions: ['.js', '.json'],
     alias: {
+      joi: path.resolve(__dirname, 'node_modules/joi/lib/index.js'), // hapijs needs Joi.binary, which is missing in prebuilt bundle
       url: 'iso-url',
       stream: 'readable-stream', // cure general insanity
       http: 'http-node', // chrome.sockets
       dns: 'http-dns', // chrome.sockets
       dgram: 'chrome-dgram', // chrome.sockets
       net: 'chrome-net' // chrome.sockets
+    }
+  },
+  resolveLoader: {
+    alias: {
+      'remove-hashbag-loader': path.join(__dirname, './scripts/remove-hashbag-loader') // hapijs
     }
   },
   node: {

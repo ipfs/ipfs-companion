@@ -58,6 +58,12 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
 
     async importFiles (data, options, importDir) {
       const ipfs = getIpfs()
+      const state = getState()
+
+      // ipfs.addAll in js-ipfs 0.49 does not support async iterators nor ArrayBuffer fully
+      // so we fallback to flat Buffer
+      const stream = state.ipfsNodeType === 'external'
+
       // files are first `add`ed to IPFS
       // and then copied to an MFS directory
       // to ensure that CIDs for any created file
@@ -68,9 +74,15 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
         const files = []
         for (const file of data) {
           if (typeof file.stream !== 'function') continue
+          console.log('→ file', file) // TODO
+          const content = file.stream()
+          if (!stream) {
+            // TODO: fix js-ipfs
+          }
+          console.log('→ content', content) // TODO
           files.push({
             path: file.name,
-            content: file.stream()
+            content
           })
         }
         data = files

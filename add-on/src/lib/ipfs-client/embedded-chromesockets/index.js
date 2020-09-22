@@ -27,22 +27,15 @@ exports.init = async function init (opts) {
   log('init embedded:chromesockets')
 
   const ipfsOpts = await buildConfig(opts, log)
-  const reload = await syncConfig(ipfsOpts, log)
+  await syncConfig(ipfsOpts, log)
 
   log('creating js-ipfs with opts: ', ipfsOpts)
   node = await Ipfs.create(ipfsOpts)
-
-  if (reload) {
-    log('embedded js-ipfs requires extension reload')
-    return node
-  }
-
   await node.start()
 
   log('starting HTTP servers with opts: ', ipfsOpts)
   const httpServers = new HttpApi(node, ipfsOpts)
   nodeHttpApi = await httpServers.start()
-
 
   return node
 }

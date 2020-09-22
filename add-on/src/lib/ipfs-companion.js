@@ -326,6 +326,7 @@ module.exports = async function init () {
         const blob = await response.blob()
         const buffer = await new Promise((resolve, reject) => {
           const reader = new FileReader()
+          // TODO: remove Buffer?
           reader.onloadend = () => resolve(Buffer.from(reader.result))
           reader.onerror = reject
           reader.readAsArrayBuffer(blob)
@@ -609,10 +610,6 @@ module.exports = async function init () {
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
 
-    // Releasing old port via Chrome Apps API prooved to be buggy,
-    // as it is deprecated anyway we just reload and avoid the problem.
-    const chromeAppRuntime = state.ipfsNodeType === 'embedded:chromesockets'
-
     for (const key in changes) {
       const change = changes[key]
       if (change.oldValue === change.newValue) continue
@@ -656,12 +653,6 @@ module.exports = async function init () {
           state.apiURL = safeURL(change.newValue, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
           state.apiURLString = state.apiURL.toString()
           shouldRestartIpfsClient = true
-          if (chromeAppRuntime) {
-            // Releasing old port via Chrome Apps API prooved to be buggy,
-            // as it is deprecated anyway we just reload and avoid the problem.
-            shouldStopIpfsClient = true
-            shouldReloadExtension = true
-          }
           break
         case 'ipfsApiPollMs':
           setApiStatusUpdateInterval(change.newValue)
@@ -669,10 +660,6 @@ module.exports = async function init () {
         case 'customGatewayUrl':
           state.gwURL = safeURL(change.newValue, { useLocalhostName: state.useSubdomains })
           state.gwURLString = state.gwURL.toString()
-          if (chromeAppRuntime) {
-            shouldStopIpfsClient = true
-            shouldReloadExtension = true
-          }
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)
