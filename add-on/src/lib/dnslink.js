@@ -80,7 +80,6 @@ module.exports = function createDnslinkResolver (getState) {
           }
         } catch (error) {
           log.error(`error in readAndCacheDnslink for '${fqdn}'`, error)
-          console.error(error)
         }
       } else {
         // Most of the time we will hit cache, which makes below line is too noisy
