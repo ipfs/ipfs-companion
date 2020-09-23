@@ -7,6 +7,8 @@ const browser = require('webextension-polyfill')
 const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
+const externalApiClient = require('../lib/ipfs-client/external')
+const all = require('it-all')
 const drop = require('drag-and-drop-files')
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
@@ -63,6 +65,7 @@ function quickImportStore (state, emitter) {
 
 async function processFiles (state, emitter, files) {
   console.log('Processing files', files)
+  const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
   try {
     if (!files.length) {
       // File list may be empty in some rare cases
@@ -70,13 +73,25 @@ async function processFiles (state, emitter, files) {
       // We just ignore those UI interactions.
       throw new Error('found no valid sources, try selecting a local file instead')
     }
-    const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
-    const ipfsImportHandler = ipfsCompanion.ipfsImportHandler
-    const importTab = await browser.tabs.getCurrent()
+    state.progress = `Importing ${files.length} files...`
+    console.log('importing files', files)
     emitter.emit('render')
+
+    const {
+      formatImportDirectory,
+      copyImportResultToFiles,
+      copyShareLink,
+      preloadFilesAtPublicGateway,
+      openFilesAtGateway,
+      openFilesAtWebUI
+    } = ipfsCompanion.ipfsImportHandler
+    // const importTab = await browser.tabs.getCurrent()
+    const importDir = formatImportDirectory(state.importDir)
+    const httpStreaming = ipfsCompanion.state.ipfsNodeType === 'external'
 
     const progress = (p) => {
       state.progress = `Importing ${files.length} files... (${p} bytes)`
+      emitter.emit('render')
     }
     const options = {
       progress,
@@ -84,37 +99,60 @@ async function processFiles (state, emitter, files) {
       pin: false // we use MFS for implicit pinning instead
     }
 
-    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
-    let result
-    try {
-      state.progress = `Importing ${files.length} files...`
-      result = await ipfsImportHandler.importFiles(files, options, importDir)
-    } catch (err) {
-      console.error('Failed to import files to IPFS', err)
-      ipfsCompanion.notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
-      throw err
+    let ipfs
+    if (httpStreaming) {
+      // We create separate instance of http client running in thie same page to
+      // avoid serialization issues in Chromium
+      // (https://bugs.chromium.org/p/chromium/issues/detail?id=112163) when
+      // crossing process boundary, which enables streaming upload of big files
+      // (4GB+) without buffering entire thing.
+      ipfs = await externalApiClient.init(ipfsCompanion.state)
+      // Note: at the time of writing this it was possible to use SharedWorker,
+      // but it felt brittle given Google's approach to browser extension APIs,
+      // and this way seems to be more future-proof.
+    } else {
+      ipfs = ipfsCompanion.ipfs
     }
+
+    const data = []
+    for (const file of files) {
+      data.push({
+        path: file.name,
+        content: (httpStreaming ? file : file.stream())
+      })
+    }
+
+    // ipfs.add
+    const result = await all(ipfs.addAll(data, options))
+
+    // ipfs cp → MFS
+    await copyImportResultToFiles(result, importDir)
     state.progress = 'Completed'
     emitter.emit('render')
     console.log(`Successfully imported ${files.length} files`)
-    ipfsImportHandler.copyShareLink(result)
-    ipfsImportHandler.preloadFilesAtPublicGateway(result)
+
+    // copy shareable URL & preload
+    copyShareLink(result)
+    preloadFilesAtPublicGateway(result)
+
     // open web UI at proper directory
     // unless and embedded node is in use (no access to web UI)
     // in which case, open resource.
     if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
-      await ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
+      await openFilesAtGateway({ result, openRootInNewTab: true })
     } else {
-      await ipfsImportHandler.openFilesAtWebUI(importDir)
+      await openFilesAtWebUI(importDir)
     }
+
     // close import tab as it will be replaced with a new tab with imported content
-    await browser.tabs.remove(importTab.id)
+    // TODO await browser.tabs.remove(importTab.id)
   } catch (err) {
-    console.error('Unable to perform import', err)
+    console.error('Failed to import files to IPFS', err)
     // keep import tab and display error message in it
     state.message = 'Unable to import to IPFS:'
     state.progress = `${err}`
     emitter.emit('render')
+    ipfsCompanion.notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
   }
 }
 

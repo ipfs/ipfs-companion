@@ -41,7 +41,7 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
       for (const file of result) {
         if (file && file.cid) {
           if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.cid)) {
-            const { url } = this.getIpfsPathAndNativeAddress(file.cid.toString())
+            const { url } = ipfsImportHandler.getIpfsPathAndNativeAddress(file.cid.toString())
             await browser.tabs.create({ url })
           }
         }
@@ -79,15 +79,22 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
 
       log('importing data', data)
       const result = await all(ipfs.addAll(data, options))
+      await ipfsImportHandler.copyImportResultToFiles(result, importDir)
+      return result
+    },
+
+    async copyImportResultToFiles (result, importDir) {
+      const ipfs = getIpfs()
       // cp will fail if directory does not exist
       await ipfs.files.mkdir(`${importDir}`, { parents: true })
       log(`created import dir at ${importDir}`)
       // remove directory from files API import files
       const files = result.filter(file => (file.path !== ''))
+      console.log('copyImportResultToFiles.result', files)
+      console.log('copyImportResultToFiles.files', files)
       for (const file of files) {
         await ipfs.files.cp(`/ipfs/${file.cid}`, `${importDir}${file.path}`)
       }
-      return result
     },
 
     async copyShareLink (files) {
@@ -112,7 +119,7 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
       if (!state.preloadAtPublicGateway) return
       for (const file of files) {
         if (file && file.cid) {
-          const { path } = this.getIpfsPathAndNativeAddress(file.cid)
+          const { path } = ipfsImportHandler.getIpfsPathAndNativeAddress(file.cid)
           const preloadUrl = resolveToPublicUrl(`${path}#${redirectOptOutHint}`)
           try {
             await fetch(preloadUrl, { method: 'HEAD' })
