@@ -9,6 +9,7 @@ const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
 const LRU = require('lru-cache')
+const all = require('it-all')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
@@ -297,19 +298,27 @@ module.exports = async function init () {
   // -------------------------------------------------------------------
 
   async function onAddFromContext (context, contextType, options) {
-    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
-    let result
+    const {
+      formatImportDirectory,
+      copyImportResultsToFiles,
+      copyShareLink,
+      preloadFilesAtPublicGateway,
+      openFilesAtGateway,
+      openFilesAtWebUI
+    } = ipfsImportHandler
+    const importDir = formatImportDirectory(state.importDir)
+    let data
+    let results
     try {
       const dataSrc = await findValueForContext(context, contextType)
       log('onAddFromContext.context', context) // TODO
       log('onAddFromContext.dataSrc', dataSrc) // TODO
       if (contextType === 'selection') {
-        const textFile = {
+        // TODO: persist full pageUrl somewhere (eg. append at the end of the content but add toggle to disable it)
+        data = {
           path: `${new URL(context.pageUrl).hostname}.txt`,
           content: dataSrc
         }
-        // TODO: persist full pageUrl somewhere (eg. append at the end of the content but add toggle to disable it)
-        result = await ipfsImportHandler.importFiles(textFile, options, importDir)
       } else {
         // Enchanced addFromURL
         // --------------------
@@ -328,12 +337,19 @@ module.exports = async function init () {
         const filename = url.pathname === '/'
           ? url.hostname
           : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
-        const data = {
+        data = {
           path: decodeURIComponent(filename),
           content: blob
         }
-        result = await ipfsImportHandler.importFiles(data, options, importDir)
       }
+      results = await all(ipfs.addAll([data], options))
+      await copyImportResultsToFiles(results, importDir)
+      copyShareLink(results)
+      preloadFilesAtPublicGateway(results)
+      if (!state.localGwAvailable || !state.openViaWebUI) {
+        return openFilesAtGateway({ results, openRootInNewTab: true })
+      }
+      return openFilesAtWebUI(importDir)
     } catch (error) {
       console.error('Error in import to IPFS context menu', error)
       if (error.message === 'NetworkError when attempting to fetch resource.') {
@@ -345,14 +361,6 @@ module.exports = async function init () {
       } else {
         notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
       }
-      return
-    }
-    ipfsImportHandler.copyShareLink(result)
-    ipfsImportHandler.preloadFilesAtPublicGateway(result)
-    if (!state.localGwAvailable || !state.openViaWebUI) {
-      return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
-    } else {
-      return ipfsImportHandler.openFilesAtWebUI(importDir)
     }
   }
 

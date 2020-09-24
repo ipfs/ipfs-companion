@@ -6,7 +6,6 @@ const log = debug('ipfs-companion:import')
 log.error = debug('ipfs-companion:import:error')
 
 const browser = require('webextension-polyfill')
-const all = require('it-all')
 
 const { redirectOptOutHint } = require('./ipfs-request')
 
@@ -56,42 +55,13 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
       })
     },
 
-    async importFiles (data, options, importDir) {
-      const ipfs = getIpfs()
-
-      // Convert FileList items to array of FileObjects to preserve filenames
-      if (typeof data.item === 'function') {
-        const files = []
-        for (const file of data) {
-          console.log('→ file', file) // TODO
-          files.push({
-            path: file.name,
-            content: file
-          })
-        }
-        data = files
-      }
-
-      // Ensure input works with addAll
-      if (typeof data[Symbol.iterator] !== 'function') {
-        data = [data]
-      }
-
-      log('importing data', data)
-      const result = await all(ipfs.addAll(data, options))
-      await ipfsImportHandler.copyImportResultToFiles(result, importDir)
-      return result
-    },
-
-    async copyImportResultToFiles (result, importDir) {
+    async copyImportResultsToFiles (results, importDir) {
       const ipfs = getIpfs()
       // cp will fail if directory does not exist
       await ipfs.files.mkdir(`${importDir}`, { parents: true })
       log(`created import dir at ${importDir}`)
       // remove directory from files API import files
-      const files = result.filter(file => (file.path !== ''))
-      console.log('copyImportResultToFiles.result', files)
-      console.log('copyImportResultToFiles.files', files)
+      const files = results.filter(file => (file.path !== ''))
       for (const file of files) {
         await ipfs.files.cp(`/ipfs/${file.cid}`, `${importDir}${file.path}`)
       }

@@ -80,7 +80,7 @@ async function processFiles (state, emitter, files) {
 
     const {
       formatImportDirectory,
-      copyImportResultToFiles,
+      copyImportResultsToFiles,
       copyShareLink,
       preloadFilesAtPublicGateway,
       openFilesAtGateway,
@@ -126,23 +126,23 @@ async function processFiles (state, emitter, files) {
       ipfs = ipfsCompanion.ipfs
     }
     // ipfs.add
-    const result = await all(ipfs.addAll(data, options))
+    const results = await all(ipfs.addAll(data, options))
 
     // ipfs cp → MFS
-    await copyImportResultToFiles(result, importDir)
+    await copyImportResultsToFiles(results, importDir)
     state.progress = 'Completed'
     emitter.emit('render')
     console.log(`Successfully imported ${files.length} files`)
 
     // copy shareable URL & preload
-    copyShareLink(result)
-    preloadFilesAtPublicGateway(result)
+    copyShareLink(results)
+    preloadFilesAtPublicGateway(results)
 
     // open web UI at proper directory
     // unless and embedded node is in use (no access to web UI)
     // in which case, open resource.
     if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
-      await openFilesAtGateway({ result, openRootInNewTab: true })
+      await openFilesAtGateway({ results, openRootInNewTab: true })
     } else {
       await openFilesAtWebUI(importDir)
     }
