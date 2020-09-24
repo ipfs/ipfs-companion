@@ -10,6 +10,7 @@ const logo = require('./logo')
 const externalApiClient = require('../lib/ipfs-client/external')
 const all = require('it-all')
 const drop = require('drag-and-drop-files')
+const filesize = require('filesize')
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 
@@ -73,7 +74,7 @@ async function processFiles (state, emitter, files) {
       // We just ignore those UI interactions.
       throw new Error('found no valid sources, try selecting a local file instead')
     }
-    state.progress = `Importing ${files.length} files...`
+    state.progress = 'Importing... (keep this page open)'
     console.log('importing files', files)
     emitter.emit('render')
 
@@ -89,8 +90,19 @@ async function processFiles (state, emitter, files) {
     const importDir = formatImportDirectory(state.importDir)
     const httpStreaming = ipfsCompanion.state.ipfsNodeType === 'external'
 
-    const progress = (p) => {
-      state.progress = `Importing ${files.length} files... (${p} bytes)`
+    const data = []
+    let total = 0
+    for (const file of files) {
+      data.push({
+        path: file.name,
+        content: (httpStreaming ? file : file.stream())
+      })
+      total += file.size
+    }
+    const humanTotal = filesize(total, { round: 2 })
+    const progress = (bytes) => {
+      const percent = ((bytes / total) * 100).toFixed(0)
+      state.progress = `Importing... (${percent}% of ${humanTotal})`
       emitter.emit('render')
     }
     const options = {
@@ -113,15 +125,6 @@ async function processFiles (state, emitter, files) {
     } else {
       ipfs = ipfsCompanion.ipfs
     }
-
-    const data = []
-    for (const file of files) {
-      data.push({
-        path: file.name,
-        content: (httpStreaming ? file : file.stream())
-      })
-    }
-
     // ipfs.add
     const result = await all(ipfs.addAll(data, options))
 
