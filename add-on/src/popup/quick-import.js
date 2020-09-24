@@ -68,16 +68,13 @@ async function processFiles (state, emitter, files) {
   console.log('Processing files', files)
   const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
   try {
+    console.log('importing files', files)
     if (!files.length) {
       // File list may be empty in some rare cases
       // eg. when user drags something from proprietary browser context
       // We just ignore those UI interactions.
       throw new Error('found no valid sources, try selecting a local file instead')
     }
-    state.progress = 'Importing... (keep this page open)'
-    console.log('importing files', files)
-    emitter.emit('render')
-
     const {
       formatImportDirectory,
       copyImportResultsToFiles,
@@ -86,9 +83,10 @@ async function processFiles (state, emitter, files) {
       openFilesAtGateway,
       openFilesAtWebUI
     } = ipfsCompanion.ipfsImportHandler
-    // const importTab = await browser.tabs.getCurrent()
+    const importTab = await browser.tabs.getCurrent()
     const importDir = formatImportDirectory(state.importDir)
     const httpStreaming = ipfsCompanion.state.ipfsNodeType === 'external'
+    const jsIpfsInBrave = ipfsCompanion.state.ipfsNodeType === 'embedded:chromesockets'
 
     const data = []
     let total = 0
@@ -100,6 +98,9 @@ async function processFiles (state, emitter, files) {
       total += file.size
     }
     const humanTotal = filesize(total, { round: 2 })
+    state.progress = `Importing ${humanTotal}... (keep this page open)`
+    emitter.emit('render')
+
     const progress = (bytes) => {
       const percent = ((bytes / total) * 100).toFixed(0)
       state.progress = `Importing... (${percent}% of ${humanTotal})`
@@ -141,14 +142,14 @@ async function processFiles (state, emitter, files) {
     // open web UI at proper directory
     // unless and embedded node is in use (no access to web UI)
     // in which case, open resource.
-    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
-      await openFilesAtGateway({ results, openRootInNewTab: true })
+    if (!state.localGwAvailable || !state.openViaWebUI || jsIpfsInBrave) {
+      await openFilesAtGateway(importDir)
     } else {
       await openFilesAtWebUI(importDir)
     }
 
     // close import tab as it will be replaced with a new tab with imported content
-    // TODO await browser.tabs.remove(importTab.id)
+    await browser.tabs.remove(importTab.id)
   } catch (err) {
     console.error('Failed to import files to IPFS', err)
     // keep import tab and display error message in it

@@ -342,14 +342,18 @@ module.exports = async function init () {
           content: blob
         }
       }
+
       results = await all(ipfs.addAll([data], options))
-      await copyImportResultsToFiles(results, importDir)
       copyShareLink(results)
       preloadFilesAtPublicGateway(results)
-      if (!state.localGwAvailable || !state.openViaWebUI) {
-        return openFilesAtGateway({ results, openRootInNewTab: true })
+
+      await copyImportResultsToFiles(results, importDir)
+      const jsIpfsInBrave = state.ipfsNodeType === 'embedded:chromesockets' // opening via webui is broken, but chromesockets runtime is going to be removed anyway so no point in fixing it
+      if (!state.localGwAvailable || !state.openViaWebUI || jsIpfsInBrave) {
+        await openFilesAtGateway(importDir)
+      } else {
+        await openFilesAtWebUI(importDir)
       }
-      return openFilesAtWebUI(importDir)
     } catch (error) {
       console.error('Error in import to IPFS context menu', error)
       if (error.message === 'NetworkError when attempting to fetch resource.') {
@@ -530,22 +534,6 @@ module.exports = async function init () {
     const b = colorAt(2)
     return ('#' + r + g + b).toUpperCase()
   }
-
-  const rasterIconDefinition = pMemoize((svgPath) => {
-    const pngPath = (size) => {
-      // point at precomputed PNG file
-      const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
-      return `/icons/png/${baseName}_${size}.png`
-    }
-    // icon sizes to cover ranges from:
-    // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
-    // - https://developer.chrome.com/extensions/manifest/icons
-    const r19 = pngPath(19)
-    const r38 = pngPath(38)
-    const r128 = pngPath(128)
-    // return computed values to be cached by p-memoize
-    return { path: { 19: r19, 38: r38, 128: r128 } }
-  })
 
   /* Alternative: raster images generated on the fly
   const rasterIconDefinition = pMemoize((svgPath) => {
@@ -813,3 +801,19 @@ module.exports = async function init () {
 
   return api
 }
+
+const rasterIconDefinition = pMemoize((svgPath) => {
+  const pngPath = (size) => {
+    // point at precomputed PNG file
+    const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
+    return `/icons/png/${baseName}_${size}.png`
+  }
+  // icon sizes to cover ranges from:
+  // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
+  // - https://developer.chrome.com/extensions/manifest/icons
+  const r19 = pngPath(19)
+  const r38 = pngPath(38)
+  const r128 = pngPath(128)
+  // return computed values to be cached by p-memoize
+  return { path: { 19: r19, 38: r38, 128: r128 } }
+})

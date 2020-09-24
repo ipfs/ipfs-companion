@@ -36,35 +36,30 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
       }
     },
 
-    async openFilesAtGateway ({ result, openRootInNewTab = false }) {
-      for (const file of result) {
-        if (file && file.cid) {
-          if (openRootInNewTab && (result.length === 1 || file.path === '' || file.path === file.cid)) {
-            const { url } = ipfsImportHandler.getIpfsPathAndNativeAddress(file.cid.toString())
-            await browser.tabs.create({ url })
-          }
-        }
-      }
-      return result
+    async openFilesAtGateway (mfsPath) {
+      const ipfs = getIpfs()
+      const { cid } = await ipfs.files.stat(mfsPath)
+      const { url } = ipfsImportHandler.getIpfsPathAndNativeAddress(cid)
+      await browser.tabs.create({ url })
     },
 
-    async openFilesAtWebUI (dir) {
+    async openFilesAtWebUI (mfsPath) {
       const state = getState()
       await browser.tabs.create({
-        url: `${state.webuiRootUrl}#/files${dir}`
+        url: `${state.webuiRootUrl}#/files${mfsPath}`
       })
     },
 
     async copyImportResultsToFiles (results, importDir) {
       const ipfs = getIpfs()
       // cp will fail if directory does not exist
-      await ipfs.files.mkdir(`${importDir}`, { parents: true })
-      log(`created import dir at ${importDir}`)
+      await ipfs.files.mkdir(importDir, { parents: true })
       // remove directory from files API import files
       const files = results.filter(file => (file.path !== ''))
       for (const file of files) {
         await ipfs.files.cp(`/ipfs/${file.cid}`, `${importDir}${file.path}`)
       }
+      log(`created import dir at ${importDir}`)
     },
 
     async copyShareLink (files) {
