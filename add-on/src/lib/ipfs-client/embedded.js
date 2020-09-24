@@ -10,13 +10,13 @@ const { optionDefaults } = require('../options')
 
 let node = null
 
-exports.init = function init (opts) {
+exports.init = async function init (opts) {
   log('init')
-
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
   const ipfsOpts = mergeOptions(defaultOpts, userOpts, { start: true })
-  return Ipfs.create(ipfsOpts)
+  node = await Ipfs.create(ipfsOpts)
+  return node
 }
 
 exports.destroy = async function () {
