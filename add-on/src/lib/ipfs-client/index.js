@@ -34,7 +34,7 @@ async function initIpfsClient (opts) {
 
   const instance = await client.init(opts)
   easeApiChanges(instance)
-  _reloadIpfsClientDependents(instance) // async (API is present)
+  _reloadIpfsClientDependents(instance, opts) // async (API is present)
   return instance
 }
 
@@ -71,9 +71,9 @@ async function _reloadIpfsClientDependents (instance, opts) {
     }
   }
   // online only
-  if (client && instance) {
+  if (client && instance && opts) {
     // add important data to local ipfs repo for instant load
-    setTimeout(() => precache(instance), 10000)
+    setTimeout(() => precache(instance, opts), 5000)
   }
 }
 

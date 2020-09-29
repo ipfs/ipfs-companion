@@ -311,8 +311,6 @@ module.exports = async function init () {
     let results
     try {
       const dataSrc = await findValueForContext(context, contextType)
-      log('onAddFromContext.context', context) // TODO
-      log('onAddFromContext.dataSrc', dataSrc) // TODO
       if (contextType === 'selection') {
         // TODO: persist full pageUrl somewhere (eg. append at the end of the content but add toggle to disable it)
         data = {

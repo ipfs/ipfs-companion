@@ -11,48 +11,86 @@ const debug = require('debug')
 const log = debug('ipfs-companion:precache')
 log.error = debug('ipfs-companion:precache:error')
 
-// Web UI release that should be precached
-// WARNING: do not remove this constant, as its used in package.json
-const webuiCid = 'bafybeigkbbjnltbd4ewfj7elajsbnjwinyk6tiilczkqsibf3o7dcr6nn4' // v2.9.0
-module.exports.precachedWebuiCid = webuiCid
-
-const PRECACHE_ARCHIVES = [
-  { tarPath: '/dist/precache/webui.tar', cid: webuiCid }
-]
+// TODO: can be removed when embedded:chromesockets is gone
+module.exports.braveJsIpfsWebuiCid = 'bafybeigkbbjnltbd4ewfj7elajsbnjwinyk6tiilczkqsibf3o7dcr6nn4' //  v2.9.0 for js-ipfs in Brave (import in newer ones does not work)
 
 /**
  * Adds important assets such as Web UI to the local js-ipfs-repo.
  * This ensures they load instantly, even in offline environments.
  */
-module.exports.precache = async (ipfs) => {
-  for (const { cid, tarPath } of PRECACHE_ARCHIVES) {
-    if (!await inRepo(ipfs, cid)) {
-      try {
-        const { body } = await fetch(tarPath)
-        log(`importing ${tarPath} to js-ipfs-repo`)
-        await importTar(ipfs, body.getReader(), cid)
-        log(`${tarPath} successfully cached under CID ${cid}`)
-      } catch (err) {
-        if (err.message === 'Error in body stream') {
-          // This error means .tar is missing from the extension bundle:
-          // It is the case in Firefox, due to https://github.com/ipfs-shipyard/ipfs-webui/issues/959
-          log(`unable to find/read ${tarPath}, skipping`)
+module.exports.precache = async (ipfs, state) => {
+  // simplified prefetch over HTTP when in Brave
+  if (state.ipfsNodeType === 'embedded:chromesockets') {
+    return preloadOverHTTP(log, ipfs, state, module.exports.braveJsIpfsWebuiCid)
+  }
+
+  const roots = []
+  // find out the content path of webui, and add it to precache list
+  try {
+    let cid, name
+    if (state.useLatestWebUI) { // resolve DNSLink
+      cid = await ipfs.dns('webui.ipfs.io', { recursive: true })
+      name = 'latest webui from DNSLink at webui.ipfs.io'
+    } else { // find out safelisted path behind <api-port>/webui
+      cid = new URL((await fetch(`${state.apiURLString}webui`)).url).pathname
+      name = `stable webui hardcoded at ${state.apiURLString}webui`
+    }
+    roots.push({
+      nodeType: 'external',
+      name,
+      cid
+    })
+  } catch (e) {
+    log.error('unable to find webui content path for precache', e)
+  }
+
+  // precache each root
+  for (const { name, cid, nodeType } of roots) {
+    if (state.ipfsNodeType !== nodeType) continue
+    if (await inRepo(ipfs, cid)) {
+      log(`${name} (${cid}) already in local repo, skipping import`)
+      continue
+    }
+    log(`importing ${name} (${cid}) to local ipfs repo`)
+
+    // prefetch over IPFS
+    try {
+      for await (const ref of ipfs.refs(cid, { recursive: true })) {
+        if (ref.err) {
+          log.error(`error while preloading ${name} (${cid})`, ref.err)
           continue
         }
-        log.error(`error while processing ${tarPath}`, err)
       }
-    } else {
-      log(`${cid} already in local repo, skipping import`)
+      log(`${name} successfully cached under CID ${cid}`)
+    } catch (err) {
+      log.error(`error while processing ${name}`, err)
     }
   }
 }
 
 async function inRepo (ipfs, cid) {
-  for await (const ref of ipfs.refs.local()) {
-    if (ref.err) return false
-    if (ref.ref === cid) return true
+  // dag.get in offline mode will throw block is not present in local repo
+  // (we also have timeout as a failsafe)
+  try {
+    await ipfs.dag.get(cid, { offline: true, timeout: 5000 })
+    return true
+  } catch (_) {
+    return false
   }
-  return false
+}
+
+// Downloads CID from a public gateway
+// (alternative to ipfs.refs -r)
+async function preloadOverHTTP (log, ipfs, state, cid) {
+  const url = `${state.pubGwURLString}api/v0/get?arg=${cid}&archive=true`
+  try {
+    log(`importing ${url} (${cid}) to local ipfs repo`)
+    const { body } = await fetch(url)
+    await importTar(ipfs, body.getReader(), cid)
+    log(`successfully fetched TAR from ${url} and cached under CID ${cid}`)
+  } catch (err) {
+    log.error(`error while processing ${url}`, err)
+  }
 }
 
 async function importTar (ipfs, tarReader, expectedCid) {
@@ -84,7 +122,7 @@ async function importTar (ipfs, tarReader, expectedCid) {
 
   const root = results.find(e => e.cid.toString(multibaseName) === expectedCid)
   if (!root) {
-    throw new Error('imported CID does not match expected one')
+    throw new Error(`imported CID (${root}) does not match expected one: ${expectedCid}`)
   }
 }
 
