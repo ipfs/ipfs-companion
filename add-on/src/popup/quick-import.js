@@ -86,7 +86,6 @@ async function processFiles (state, emitter, files) {
     const importTab = await browser.tabs.getCurrent()
     const importDir = formatImportDirectory(state.importDir)
     const httpStreaming = ipfsCompanion.state.ipfsNodeType === 'external'
-    const jsIpfsInBrave = ipfsCompanion.state.ipfsNodeType === 'embedded:chromesockets'
 
     const data = []
     let total = 0
@@ -139,10 +138,8 @@ async function processFiles (state, emitter, files) {
     copyShareLink(results)
     preloadFilesAtPublicGateway(results)
 
-    // open web UI at proper directory
-    // unless and embedded node is in use (no access to web UI)
-    // in which case, open resource.
-    if (!state.localGwAvailable || !state.openViaWebUI || jsIpfsInBrave) {
+    // present result to the user using the beast available way
+    if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
       await openFilesAtGateway(importDir)
     } else {
       await openFilesAtWebUI(importDir)

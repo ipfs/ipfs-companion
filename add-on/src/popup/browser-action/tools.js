@@ -13,7 +13,7 @@ module.exports = function tools ({
   onQuickImport,
   onOpenWebUi
 }) {
-  const activeQuickImport = active && isIpfsOnline && isApiAvailable && ipfsNodeType !== 'embedded:chromesockets'
+  const activeQuickImport = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`

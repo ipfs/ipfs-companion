@@ -348,8 +348,7 @@ module.exports = async function init () {
       preloadFilesAtPublicGateway(results)
 
       await copyImportResultsToFiles(results, importDir)
-      const jsIpfsInBrave = state.ipfsNodeType === 'embedded:chromesockets' // opening via webui is broken, but chromesockets runtime is going to be removed anyway so no point in fixing it
-      if (!state.localGwAvailable || !state.openViaWebUI || jsIpfsInBrave) {
+      if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
         await openFilesAtGateway(importDir)
       } else {
         await openFilesAtWebUI(importDir)
