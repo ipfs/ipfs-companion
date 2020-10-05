@@ -289,35 +289,9 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       if (!path) return null
       // Resolve /ipns/ → /ipfs/
       if (isIPFS.ipnsPath(path)) {
-        const labels = path.split('/')
         // We resolve /ipns/<fqdn> as value in DNSLink cache may be out of date
-        const ipnsRoot = `/ipns/${labels[2]}`
-
-        // js-ipfs v0.34 does not support DNSLinks in ipfs.name.resolve: https://github.com/ipfs/js-ipfs/issues/1918
-        // TODO: remove ipfsNameResolveWithDnslinkFallback when js-ipfs implements DNSLink support in ipfs.name.resolve
-        const ipfsNameResolveWithDnslinkFallback = async (resolve) => {
-          try {
-            return await resolve()
-          } catch (err) {
-            const fqdn = ipnsRoot.replace(/^.*\/ipns\/([^/]+).*/, '$1')
-            if (err.message === 'Non-base58 character' && isFQDN(fqdn)) {
-              // js-ipfs without dnslink support, fallback to the value read from DNSLink
-              const dnslink = dnslinkResolver.readAndCacheDnslink(fqdn)
-              if (dnslink) {
-                // swap problematic /ipns/{fqdn} with /ipfs/{cid} and retry lookup
-                const safePath = trimDoubleSlashes(ipnsRoot.replace(/^.*(\/ipns\/[^/]+)/, dnslink))
-                if (ipnsRoot !== safePath) {
-                  return ipfsPathValidator.resolveToImmutableIpfsPath(safePath)
-                }
-              }
-            }
-            throw err
-          }
-        }
-        const result = await ipfsNameResolveWithDnslinkFallback(async () =>
-          // dhtt/dhtrc optimize for lookup time
-          getIpfs().name.resolve(ipnsRoot, { recursive: true, dhtt: '5s', dhtrc: 1 })
-        )
+        const ipnsRoot = `/ipns/${path.split('/')[2]}`
+        const result = await getIpfs().resolve(ipnsRoot, { recursive: true })
 
         // Old API returned object, latest one returns string ¯\_(ツ)_/¯
         const ipfsRoot = result.Path ? result.Path : result

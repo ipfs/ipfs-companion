@@ -3,13 +3,14 @@ const { expect } = require('chai')
 const browser = require('sinon-chrome')
 const { URL } = require('url')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
+const { AbortController } = require('abort-controller')
 
 describe('init', function () {
   let init
 
   before(function () {
     global.localStorage = {}
-    global.window = {}
+    global.window = { AbortController }
     global.browser = browser
     global.URL = URL
     global.screen = {}
@@ -25,23 +26,6 @@ describe('init', function () {
     browser.storage.local.set.returns(Promise.resolve())
     const ipfsCompanion = await init()
     browser.storage.local.get.calledWith(optionDefaults)
-    await ipfsCompanion.destroy()
-  })
-
-  it('should fixup migrated files APIs', async function () {
-    // Companion should gracefully handle the move of regular files api to top
-    // level by supporting both old and new API. This way we can use
-    // dependencies without worrying if they already migrated to the new API.
-    // https://github.com/ipfs/interface-ipfs-core/pull/378
-    // https://github.com/ipfs/js-ipfs/releases/tag/v0.34.0-pre.0
-    browser.storage.local.get.returns(Promise.resolve(optionDefaults))
-    browser.storage.local.set.returns(Promise.resolve())
-    const ipfsCompanion = await init()
-    const { movedFilesApis } = require('../../../add-on/src/lib/ipfs-client/index.js')
-    for (const cmd of movedFilesApis) {
-      expect(typeof ipfsCompanion.ipfs[cmd], `ipfs.${cmd} expected to be a function`).to.equal('function')
-      expect(typeof ipfsCompanion.ipfs.files[cmd], `ipfs.files.${cmd} expected to be a function`).to.equal('function')
-    }
     await ipfsCompanion.destroy()
   })
 

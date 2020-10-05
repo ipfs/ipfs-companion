@@ -9,13 +9,13 @@ const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
 const LRU = require('lru-cache')
+const all = require('it-all')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
-const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createIpfsImportHandler = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
@@ -128,8 +128,7 @@ module.exports = async function init () {
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
     if (runtime.hasNativeProtocolHandler) {
-      log('registerStringProtocol available. Adding ipfs:// handler')
-      browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
+      log('native protocol handler support detected, but IPFS handler is not implemented yet :-(')
     } else {
       log('no browser.protocol API, native protocol will not be registered')
     }
@@ -299,12 +298,25 @@ module.exports = async function init () {
   // -------------------------------------------------------------------
 
   async function onAddFromContext (context, contextType, options) {
-    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
-    let result
+    const {
+      formatImportDirectory,
+      copyImportResultsToFiles,
+      copyShareLink,
+      preloadFilesAtPublicGateway,
+      openFilesAtGateway,
+      openFilesAtWebUI
+    } = ipfsImportHandler
+    const importDir = formatImportDirectory(state.importDir)
+    let data
+    let results
     try {
       const dataSrc = await findValueForContext(context, contextType)
       if (contextType === 'selection') {
-        result = await ipfsImportHandler.importFiles(Buffer.from(dataSrc), options, importDir)
+        // TODO: persist full pageUrl somewhere (eg. append at the end of the content but add toggle to disable it)
+        data = {
+          path: `${new URL(context.pageUrl).hostname}.txt`,
+          content: dataSrc
+        }
       } else {
         // Enchanced addFromURL
         // --------------------
@@ -318,22 +330,26 @@ module.exports = async function init () {
         // console.log('onAddFromContext.fetchOptions', fetchOptions)
         const response = await fetch(dataSrc, fetchOptions)
         const blob = await response.blob()
-        const buffer = await new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onloadend = () => resolve(Buffer.from(reader.result))
-          reader.onerror = reject
-          reader.readAsArrayBuffer(blob)
-        })
         const url = new URL(response.url)
         // https://github.com/ipfs-shipyard/ipfs-companion/issues/599
         const filename = url.pathname === '/'
           ? url.hostname
           : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
-        const data = {
+        data = {
           path: decodeURIComponent(filename),
-          content: buffer
+          content: blob
         }
-        result = await ipfsImportHandler.importFiles(data, options, importDir)
+      }
+
+      results = await all(ipfs.addAll([data], options))
+      copyShareLink(results)
+      preloadFilesAtPublicGateway(results)
+
+      await copyImportResultsToFiles(results, importDir)
+      if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+        await openFilesAtGateway(importDir)
+      } else {
+        await openFilesAtWebUI(importDir)
       }
     } catch (error) {
       console.error('Error in import to IPFS context menu', error)
@@ -346,14 +362,6 @@ module.exports = async function init () {
       } else {
         notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
       }
-      return
-    }
-    ipfsImportHandler.copyShareLink(result)
-    ipfsImportHandler.preloadFilesAtPublicGateway(result)
-    if (!state.localGwAvailable || !state.openViaWebUI) {
-      return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
-    } else {
-      return ipfsImportHandler.openFilesAtWebUI(importDir)
     }
   }
 
@@ -513,24 +521,6 @@ module.exports = async function init () {
     }
   }
 
-  async function setBrowserActionIcon (iconPath) {
-    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    /* Below fallback does not work since Chromium 80
-     * (it fails in a way that does not produce error we can catch)
-    const iconDefinition = { path: iconPath }
-    try {
-      // Try SVG first -- Firefox supports it natively
-      await browser.browserAction.setIcon(iconDefinition)
-    } catch (error) {
-      // Fallback!
-      // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
-      // Still, we want icon, so we precompute rasters of popular sizes and use them instead
-      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    }
-    */
-  }
-
   // ColorArray [0,0,0,0] → Hex #000000
   // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserAction/ColorArray
   function colorArraytoHex (colorArray) {
@@ -541,22 +531,6 @@ module.exports = async function init () {
     const b = colorAt(2)
     return ('#' + r + g + b).toUpperCase()
   }
-
-  const rasterIconDefinition = pMemoize((svgPath) => {
-    const pngPath = (size) => {
-      // point at precomputed PNG file
-      const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
-      return `/icons/png/${baseName}_${size}.png`
-    }
-    // icon sizes to cover ranges from:
-    // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
-    // - https://developer.chrome.com/extensions/manifest/icons
-    const r19 = pngPath(19)
-    const r38 = pngPath(38)
-    const r128 = pngPath(128)
-    // return computed values to be cached by p-memoize
-    return { path: { 19: r19, 38: r38, 128: r128 } }
-  })
 
   /* Alternative: raster images generated on the fly
   const rasterIconDefinition = pMemoize((svgPath) => {
@@ -579,6 +553,24 @@ module.exports = async function init () {
     return { imageData: { 19: r19, 38: r38, 128: r128 } }
   })
   */
+
+  async function setBrowserActionIcon (iconPath) {
+    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    /* Below fallback does not work since Chromium 80
+     * (it fails in a way that does not produce error we can catch)
+    const iconDefinition = { path: iconPath }
+    try {
+      // Try SVG first -- Firefox supports it natively
+      await browser.browserAction.setIcon(iconDefinition)
+    } catch (error) {
+      // Fallback!
+      // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
+      // Still, we want icon, so we precompute rasters of popular sizes and use them instead
+      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    }
+    */
+  }
 
   // OPTIONS
   // ===================================================================
@@ -806,3 +798,19 @@ module.exports = async function init () {
 
   return api
 }
+
+const rasterIconDefinition = pMemoize((svgPath) => {
+  const pngPath = (size) => {
+    // point at precomputed PNG file
+    const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
+    return `/icons/png/${baseName}_${size}.png`
+  }
+  // icon sizes to cover ranges from:
+  // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
+  // - https://developer.chrome.com/extensions/manifest/icons
+  const r19 = pngPath(19)
+  const r38 = pngPath(38)
+  const r128 = pngPath(128)
+  // return computed values to be cached by p-memoize
+  return { path: { 19: r19, 38: r38, 128: r128 } }
+})

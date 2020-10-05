@@ -1,11 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // common configuration shared by all targets
 const commonConfig = {
@@ -32,13 +30,16 @@ const commonConfig = {
       })
     ]
   },
-  // plugins: [new BundleAnalyzerPlugin()]
   plugins: [
+    // new require('webpack-bundle-analyzer').BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
     new SimpleProgressWebpackPlugin({
       format: process.env.CI ? 'expanded' : 'minimal'
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
     }),
     new webpack.DefinePlugin({
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
@@ -79,6 +80,33 @@ const commonConfig = {
         exclude: /node_modules/,
         test: /\.js$/,
         use: ['babel-loader']
+      },
+      {
+        // hapijs is node-centric and needs additional handling
+        include: /node_modules\/(@hapi|joi)/,
+        test: /\.js$/,
+        use: [
+          'remove-hashbag-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: {
+                      esmodules: true
+                    }
+                  }
+                ]
+              ],
+              plugins: [
+                'syntax-async-generators',
+                '@babel/plugin-proposal-class-properties'
+              ]
+            }
+          }
+        ]
       }
     ]
   },
@@ -86,6 +114,8 @@ const commonConfig = {
     /* mainFields: ['browser', 'main'], */
     extensions: ['.js', '.json'],
     alias: {
+      buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
+      joi: path.resolve(__dirname, 'node_modules/joi/lib/index.js'), // hapijs needs Joi.binary, which is missing in prebuilt bundle
       url: 'iso-url',
       stream: 'readable-stream', // cure general insanity
       http: 'http-node', // chrome.sockets
@@ -94,9 +124,14 @@ const commonConfig = {
       net: 'chrome-net' // chrome.sockets
     }
   },
+  resolveLoader: {
+    alias: {
+      'remove-hashbag-loader': path.join(__dirname, './scripts/remove-hashbag-loader') // hapijs
+    }
+  },
   node: {
     global: false, // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
-    Buffer: true,
+    Buffer: false, // we don't want to use old and buggy version bundled node-libs
     fs: 'empty',
     tls: 'empty',
     cluster: 'empty' // expected by js-ipfs dependency: node_modules/prom-client/lib/cluster.js
@@ -127,7 +162,7 @@ const bgConfig = merge(commonConfig, {
           priority: 10,
           enforce: true,
           // Include js-ipfs and js-ipfs-http-client
-          test: /\/node_modules\/(ipfs|ipfs-api|ipfs-http-client)\//
+          test: /\/node_modules\/(ipfs|ipfs-http-client|ipfs-postmsg-proxy|peer-info|bcrypto)\//
         }
       }
     }
