@@ -27,13 +27,13 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('package*json', '*config.js') }}
+          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('package*json', '*config.js') }}
+            ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm run ci:install # TODO npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+        run: npm run ci:install
 
       - name: Build
         run: npm run build
@@ -54,7 +54,7 @@ jobs:
       - name: Attach produced packages to Github Action
         uses: actions/upload-artifact@v2
         with:
-          name: build-${{ matrix.os }}
+          name: built-on-${{ matrix.os }}
           path: build/ipfs_companion*.*
           if-no-files-found: error
 

@@ -56,7 +56,7 @@
     "get-firefox-nightly": "shx test -e ./firefox/firefox || get-firefox -b nightly -e",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
     "ci": "run-s ci:*",
-    "ci:install": "npx yarn@1.22.4 install --frozen-lockfile || npx yarn@1.22.4 install --frozen-lockfile",
+    "ci:install": "npx yarn@1.22.4 install --frozen-lockfile --no-progress --non-interactive",
     "ci:build": "./ci/update-manifest.sh && npx yarn@1.22.4 build",
     "ci:test": "npx yarn@1.22.4 test",
     "ci:lint": "npx yarn@1.22.4 lint",
