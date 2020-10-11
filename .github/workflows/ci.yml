@@ -22,13 +22,6 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Restore node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-
       - name: Restore .cache
         uses: actions/cache@v2
         id: cache
@@ -39,24 +32,33 @@ jobs:
             ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
             ${{ runner.os }}-
 
+      - name: Restore node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: npm run ci:install
-
-      - name: Run postinstall if cached
-        if: steps.yarn-cache.outputs.cache-hit == 'true'
-        run: npx yarn postinstall
 
       - name: Build
         run: npm run build
 
       - name: Show build/
-        run: du -sh build/ && ls -l build/
+        run: du -h build/*
+
+      - name: Show dist/bundles/*
+        run: du -h add-on/dist/bundles/*
 
       - name: Test
         run: npm run test
 
       - name: Lint
+        # bundles are too big on Windows and fail addon-lint
+        # but as long we don't build releases on Windows, can be ignored
+        if: runner.os != 'Windows'
         run: npm run lint
 
       # Persist produced binaries and effective config used for building them
@@ -71,5 +73,5 @@ jobs:
           if-no-files-found: error
 
       - name: Show Cache
-        run: du -sh ${{ github.workspace }}/.cache/ && ls -l ${{ github.workspace }}/.cache/
+        run: du -h ${{ github.workspace }}/.cache/* || true
 

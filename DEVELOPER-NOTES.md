@@ -172,11 +172,11 @@ To run your extension in [Firefox for Android](https://www.mozilla.org/en-US/fir
 
 - [Set up your computer and Android emulator or device](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Developing_WebExtensions_for_Firefox_for_Android#Set_up_your_computer_and_Android_emulator_or_device) (enable Developer Mode, USB debugging, etc.)
 
-Build everything, and switch `add-on/manifest.json` to the Fennec profile:
+Build everything, and switch `add-on/manifest.json` to the Firefox profile:
 
 ```
 npm run dev-build
-npm run bundle:fennec
+npm run bundle:firefox
 ```
 
 Then, with your device connected to your development computer, run:
