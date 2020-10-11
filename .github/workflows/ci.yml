@@ -22,7 +22,14 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Cache bigger downloads
+      - name: Restore node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Restore .cache
         uses: actions/cache@v2
         id: cache
         with:
@@ -33,7 +40,12 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: npm run ci:install
+
+      - name: Run postinstall if cached
+        if: steps.yarn-cache.outputs.cache-hit == 'true'
+        run: npx yarn postinstall
 
       - name: Build
         run: npm run build
