@@ -36,7 +36,7 @@ const commonConfig = {
       filename: '[name].css'
     }),
     new SimpleProgressWebpackPlugin({
-      format: process.env.CI ? 'expanded' : 'minimal'
+      format: process.env.CI ? 'expanded' : 'compact'
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
@@ -83,7 +83,7 @@ const commonConfig = {
       },
       {
         // hapijs is node-centric and needs additional handling
-        include: /node_modules\/(@hapi|joi)/,
+        include: /node_modules[/\\](@hapi|joi)/,
         test: /\.js$/,
         use: [
           'remove-hashbag-loader',
@@ -162,7 +162,7 @@ const bgConfig = merge(commonConfig, {
           priority: 10,
           enforce: true,
           // Include js-ipfs and js-ipfs-http-client
-          test: /\/node_modules\/(ipfs|ipfs-http-client|ipfs-postmsg-proxy|peer-info|bcrypto)\//
+          test: /\/node_modules\/(ipfs|ipfs-http-client|ipfs-postmsg-proxy|peer-info|bcrypto|ipfsx|libp2p*)\//
         }
       }
     }

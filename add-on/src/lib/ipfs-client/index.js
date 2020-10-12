@@ -16,37 +16,37 @@ const { precache } = require('../precache')
 let client
 
 async function initIpfsClient (opts) {
-  await destroyIpfsClient()
   log('init ipfs client')
+  if (client) return // await destroyIpfsClient()
+  let backend
   switch (opts.ipfsNodeType) {
     case 'embedded':
-      client = embedded
+      backend = embedded
       break
     case 'embedded:chromesockets':
-      client = embeddedWithChromeSockets
+      backend = embeddedWithChromeSockets
       break
     case 'external':
-      client = external
+      backend = external
       break
     default:
       throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
-
-  const instance = await client.init(opts)
+  const instance = await backend.init(opts)
   easeApiChanges(instance)
   _reloadIpfsClientDependents(instance, opts) // async (API is present)
+  client = backend
   return instance
 }
 
 async function destroyIpfsClient () {
   log('destroy ipfs client')
-  if (client && client.destroy) {
-    try {
-      await client.destroy()
-    } finally {
-      client = null
-      await _reloadIpfsClientDependents() // sync (API stopped working)
-    }
+  if (!client) return
+  try {
+    await client.destroy()
+    await _reloadIpfsClientDependents() // sync (API stopped working)
+  } finally {
+    client = null
   }
 }
 
