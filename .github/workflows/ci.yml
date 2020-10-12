@@ -44,7 +44,7 @@ jobs:
         run: npm run ci:install
 
       - name: Build
-        run: npm run build
+        run: npm run ci:build
 
       - name: Show build/
         run: du -h build/*
@@ -53,13 +53,13 @@ jobs:
         run: du -h add-on/dist/bundles/*
 
       - name: Test
-        run: npm run test
+        run: npm run ci:test
 
       - name: Lint
         # bundles are too big on Windows and fail addon-lint
         # but as long we don't build releases on Windows, can be ignored
         if: runner.os != 'Windows'
-        run: npm run lint
+        run: npm run ci:lint
 
       # Persist produced binaries and effective config used for building them
       # - this is not for releases, but for quick testing during the dev
