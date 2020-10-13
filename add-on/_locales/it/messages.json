@@ -19,48 +19,56 @@
     "message": "Gateway",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
+  "panel_statusGatewayAddressTitle": {
+    "message": "L'URL del gateway, sia pubblico che locale, che stai usando per recuperare contenuti (cambiali in Preferenze)",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
+  },
   "panel_statusApiAddress": {
     "message": "API",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
+  },
+  "panel_statusApiAddressTitle": {
+    "message": "L'URL della API del tuo nodo locale",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
     "message": "versione",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
+  "panel_statusGatewayVersionTitle": {
+    "message": "La versione di IPFS che il tuo nodo locale sta utilizzando",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
+  },
   "panel_statusSwarmPeers": {
     "message": "Peers",
-    "description": "A label in Node status section of Browser Action pop-upi (panel_statusSwarmPeers)"
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
     "message": "Il numero degli altri nodi IPFS a cui è possibile connettersi",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Condividi file via IPFS",
+    "message": "Importazione/Condivisione Veloce...",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
+  "panel_quickImportTooltip": {
+    "message": "Importa file su IPFS e copia un link condivisibile nella clipboard",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
+  },
   "panel_openWebui": {
-    "message": "Apri Web UI",
+    "message": "Vai al Mio Nodo...",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
-  "panel_redirectToggle": {
-    "message": "Reindirizza al Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
-  },
-  "panel_redirectToggleTooltip": {
-    "message": "Clicca qui per attivare tutti i reindirizzamenti del gateway",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
-  },
-  "panel_toolsSectionHeader": {
-    "message": "Strumenti",
-    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  "panel_openWebuiTooltip": {
+    "message": "Apri i controlli del nodo IPFS nel browser",
+    "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
-    "message": "Apri Preferenze dell'Estensione del Browser",
+    "message": "Apri Preferenze IPFS Companion",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Scheda Attiva",
+    "message": "Scheda Corrente",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
@@ -68,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Clicca per impostare tutte le integrazioni IPFS su $1",
+    "message": "Abilita/Disabilita tutte le integrazioni IPFS su $1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -76,20 +84,36 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Fissando un CID comunichi al tuo nodo IPFS che quei dati sono importanti e non devono essere gettati via.",
+    "message": "Fissa le risorse IPFS di questa pagina al tuo nodo per averne una copia locale disponibile offline non gettabile dal Garbage Collector.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copia il Percorso IPFS",
+    "message": "Copia Percorso Contenuti IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+  },
+  "panelCopy_currentIpfsAddressTooltip": {
+    "message": "Un canonico percorso dei contenuti che puoi usare con strumenti IPFS e gateway",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
     "message": "Copia CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
+  "panelCopy_copyRawCidTooltip": {
+    "message": "L'identificatore contenuti IPFS univoco di questa pagina",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
+  },
+  "panelCopy_copyRawCidNotReadyHint": {
+    "message": "(In attesa dei dati DAG)",
+    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+  },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copia l'URL del Gateway Pubblico",
+    "message": "Copia Collegamento Condivisible",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
+  },
+  "panel_copyCurrentPublicGwUrlTooltip": {
+    "message": "Questo collegamento funziona per chiunque, anche se non utilizzano IPFS",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
     "message": "Visualizza su Gateway",
@@ -100,11 +124,11 @@
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "Risorsa IPFS caricata tramite un Gateway Personalizzato",
+    "message": "Risorsa IPFS caricata tramite gateway locale",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Risorsa non-IPFS",
+    "message": "Risorsa Non-IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
@@ -144,7 +168,7 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Apri la console del browser per maggiori dettagli",
+    "message": "Apri la console da sviluppatore del tuo browser per maggiori dettagli",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
@@ -152,19 +176,19 @@
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "La Risorsa IPFS è ora mantenuta",
+    "message": "Risorsa IPFS Fissata",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
-    "message": "La risorsa IPFS non sara piu mantenuta",
+    "message": "La risorsa IPFS non sara piu affissata",
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "Errore mentre mantenevo la risorsa IPFS",
+    "message": "Errore Fissaggio Risorsa IPFS",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "Errore mentre rimuovevo il mantenimento della risorsa IPFS",
+    "message": "Errore Rimozione Fissaggio IPFS",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
@@ -180,15 +204,15 @@
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Modalità automatica: Il Gateway pubblico verrà utilizzato come un fallback",
+    "message": "Modalità automatica: Il Gateway pubblico verrà utilizzato come fallback",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Non è possibile importare via API IPFS",
+    "message": "Non è stato possibile importare via API IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
-    "message": "Prova a disattivare la protezione del monitoraggio (premere ctrl/cmd + shift + j per maggiori dettagli)",
+    "message": "Prova a disattivare la protezione del monitoraggio (premi ctrl/cmd + shift + j per maggiori dettagli)",
     "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -196,16 +220,24 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1(premi ctrl+shift+j per maggiori dettagli)",
+    "message": "$1 (premi ctrl/cmd + shift + j per maggiori dettagli)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Impossibile avviare IPFS",
+    "message": "Avvio del nodo IPFS fallito",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Impossibile arrestare IPFS",
+    "message": "Arresto del nodo IPFS fallito",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
+  },
+  "option_page_title" : {
+    "message": "Preferenze | IPFS Companion",
+    "description": "Title of the Preferences page (option_page_title)"
+  },
+  "option_page_header" : {
+    "message": "Preferenze Companion",
+    "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
     "message": "Leggi di più",
@@ -224,15 +256,15 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "External: connect to a node over HTTP API",
+    "message": "Imposta su \"Esterno\" per connetterti ad un nodo locale utilizzando le API HTTP.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Integrato: avvia js-ipfs node nel tuo browser (leggi riguardo alle sue limitazioni nel collegamento sottostante)",
+    "message": "Imposta su \"Integrato\" per avviare un nodo js-ipfs direttamente nel tuo browser (Clicca \"Leggi di più\" per imparare le limitazioni di questa funzionalità sperimentale.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Integrato con Chrome Sockets: avvia js-ipfs node nel tuo browser con accesso a chrome.sockets API (dettagli nel collegamento sottostante)",
+    "message": "Integrato con Chrome Sockets: avvia js-ipfs node nel tuo browser con accesso alle API chrome.sockets  (dettagli nel collegamento sottostante)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -240,7 +272,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Configurazione aggiuntiva per i nodi JS IPFS integrati. Deve essere JSON valido.",
+    "message": "Configurazione aggiuntiva per il nodo JS IPFS integrato. Deve essere JSON valido.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -256,15 +288,15 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
-    "message": "Gateways",
+    "message": "Gateway",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Gateway locale personalizzato",
+    "message": "Gateway Locale",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL del preferito Gateway HTTP2IPFS",
+    "message": "Imposta l'URL del tuo gateway locale.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
@@ -272,47 +304,55 @@
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Usa un Gateway personalizzato",
+    "message": "Usa Gateway Locale",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Reindirizza le richieste per risorse IPFS al Gateway Personalizzato",
+    "message": "Reindirizza le richieste per risorse IPFS al tuo gateway locale.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
+  "option_useSubdomains_title": {
+    "message": "Utilizza Sottodomini",
+    "description": "An option title on the Preferences screen (option_useSubdomains_title)"
+  },
+  "option_useSubdomains_description": {
+    "message": "Isola le root dei contenuti le une dalle altre caricandole come sottodomini (in *.localhost) e creando un'origine univoca per ogni CID, IPNS o record DNSLink. Ciò richiede go-ipfs 0.5.0 o successivi sul tuo nodo locale.",
+    "description": "An option description on the Preferences screen (option_useSubdomains_description)"
+  },
   "option_dnslinkRedirect_title": {
-    "message": "Carica siti web da Gateway personalizzato",
+    "message": "Carica Siti DNSLink dal Gateway Personalizzato",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "Se il reindirizzamento globale è abilitato, ciò includerà i siti web DNSLink e li reindirizzerà ai rispettivi percorsi /ipns/{fqdn} nel Gateway personalizzato",
+    "message": "Quando il reindirizzamento del gateway globale è abilitato, ciò includerà anche i siti web DNSLink reindirizzandoli ai corrispettivi percorsi /ipns/{fqdn} al tuo gateway personalizzato.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Precarica pagine visitate",
+    "message": "Precarica Pagine Visitate",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "I siti web DNSLink verranno precaricati al nodo IPFS locale per abilitare l'accesso offline e migliorare la resistenza ai guasti della rete",
+    "message": "Precarica siti DNSLink sul tuo nodo IPFS locale per abilitare l'accesso offline e migliorare la tua resistenza contro i guasti della rete.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Reindirizzando ad un gateway path-based viola l'isolamento di sicurezza Origin-based dei siti web DNSLink. Assicurati di comprenderne i relativi rischi.",
+    "message": "Non usarlo se il tuo nodo IPFS non supporta *.ipfs.localhost. Il reindirizzamento ad un gateway path-based vìola l'isolamento di sicurezza origin-based dei siti web DNSLink, perciò assicurati di comprenderne i relativi rischi.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_noIntegrationsHostnames_title": {
-    "message": "Omissioni delle integrazioni IPFS",
+    "message": "Lista Omissioni Siti",
     "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
   },
   "option_noIntegrationsHostnames_description": {
-    "message": "Lista di siti web che non dovrebbero avere integrazioni IPFS abilitate. Un solo nome di host per riga.",
+    "message": "I siti in questa lista (un solo hostname per riga) avrà tutte le integrazioni IPFS disabilitate.",
     "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Default Gateway pubblico",
+    "message": "Gateway Pubblico Predefinito",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Fallback URL utilizzato quando il Gateway personalizzato non è disponibile e per la copia link condivisibile",
+    "message": "Imposta l'URL di un gateway pubblico predefinito da usare per i collegamenti condivisibili pubblicamente e come fallback nel caso in cui il tuo gateway locale non sia disponibile.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -320,7 +360,7 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Gateway di sottodominio pubblico predefinito per il recupero di gateway di sottodominio guasti",
+    "message": "Imposta l'URL di un gateway di sottodominio pubblico predefinito per il recupero di gateway di sottodominio guasti.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -328,11 +368,11 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "URL API IPFS",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Suggerimento: /api/v0/config vive qui",
+    "message": "Imposta l'URL delle tue API IPFS. (Suggerimento: qui risiede /api/v0/config)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -340,15 +380,15 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Quanto spesso il conteggio delle connessioni viene aggiornato (in millisecondi)",
+    "message": "Specifica ogni quanto (in millisecondi) ricaricare il conteggio dei peer.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Modalità automatica",
+    "message": "Usa Modalità Automatica",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Attiva/Disattiva uso di Custom Gateway quando la disponibilità delle API di IPFS cambia",
+    "message": "Cambia automaticamente dal tuo gateway locale al tuo gateway pubblico predefinito se l'API IPFS non è disponibile.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -359,44 +399,64 @@
     "message": "Esperimenti",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Ripristina Preferenze",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
     "message": "sperimentale",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "Attenzione: queste caratteristiche sono nuove o work-in-progress. Usa a tuo rischio.",
+    "message": "Attenzione! Queste funzionalità sperimentali sono un lavoro in corso, quindi sono soggette a cambiamenti in disponibilità e funzioni.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
+  },
+  "option_useLatestWebUI_title": {
+    "message": "Usa Ultima Versione di IPFS Web UI",
+    "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
+  },
+  "option_useLatestWebUI_description": {
+    "message": "Usa l'ultimissima versione di Stato, File, Esplora, Peer ed Impostazioni schermate da webui.ipfs.io (tramite DNSLink) invece dei CID predefiniti del daemon IPFS. (Abilita solamente se ti fidi del tuo DNS resolver e sai come impostare gli header CORS richiesti.)",
+    "description": "An option description on the Preferences screen (option_useLatestWebUI_description)"
   },
   "option_displayNotifications_title": {
     "message": "Abilita Notifiche",
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Visualizza le notifiche di sistema quando: cambia lo stato di API, un collegamento viene copiato, etc... etc",
+    "message": "Visualizza le notifiche di sistema quando lo stato dell'API cambia, un collegamento viene copiato, ecc...",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
+  "option_displayReleaseNotes_title": {
+    "message": "Show Release Notes on Update",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Open release notes in a new tab when a new version of IPFS Companion is installed.",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
+  },
   "option_catchUnhandledProtocols_title": {
-    "message": "Analizza i protocolli IPFS non gestiti",
+    "message": "Cattura Protocolli IPFS non gestiti",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Abilita supporto provvisorio per ipfs://, ipns:// e dweb: reindirizzando richieste non gestite, inserite nella barra degli indirizzi, ad un gateway HTTP",
+    "message": "Abilita supporto provvisorio per ipfs://, ipns:// e dweb: richieste reindirizzandole ad un gateway HTTP.",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
-    "message": "Trasforma gli indirizzi IPFS in link",
+    "message": "Trasforma gli Indirizzi IPFS in collegamenti",
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Trasformare i percorsi /ipfs/ di testo normale in link cliccabili",
+    "message": "Trasforma percorsi /ipfs/, visualizzati come semplice testo nelle pagine web, in collegamenti cliccabili.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "Lookup DNSLink",
+    "message": "Policy Lookup DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Politica di lookup per visualizzare azioni contestuali su siti web con DNSLink",
+    "message": "Seleziona la tua policy per ricercare e visualizzare azioni contestuali su siti con DNSLink abilitato.",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
@@ -404,11 +464,11 @@
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "Controlla dopo una richiesta HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "Controlla prima d'una richiesta HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
@@ -416,19 +476,19 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Recupera richieste HTTP fallite per risorse IPFS reindirizzandole al gateway pubblico.",
+    "message": "Reindirizza richieste HTTP fallite da risorse IPFS al gateway pubblico.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detect X-Ipfs-Path Header",
+    "message": "Individua Header x-ipfs-path",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Drop HTTP transport and load over IPFS if value is an IPFS path. Redirect of IPNS paths requires DNSLink support to be enabled as well.",
+    "message": "Carica oggetti con header x-ipfs-path tramite IPFS (invece di HTTP) se il valore dell'header è un percorso IPFS. Per reindirizzare anche i percorsi IPNS abilita il supporto a DNSLink.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
-    "message": "window.ipfs",
+    "message": "Supporto per window.ipfs",
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
@@ -436,23 +496,23 @@
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Gestisci Permessi",
+    "message": "Gestisci permessi",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Apri file importati in Web UI",
+    "message": "Apri File Importati nella Schermata File",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "Mostra file in Web UI piuttosto che aprirli o mostrare il loro percorso nel gateway",
+    "message": "Dopo aver importato un file, aprilo nella schermata File invece di aprire il file, od il suo percorso padre, nel gateway.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Precarica Importazioni",
+    "message": "Precarica Asset Importati",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Abilita il precaricamento automatico di risorse importare tramite richieste HTTP-HEAD asincrone ad un Gateway Pubblico",
+    "message": "Precarica automaticamente gli asset importati su IPFS tramite richieste HTTP HEAD asincrone ad un gateway pubblico.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
@@ -460,23 +520,23 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Personalizza quali namespace sono registrati nella Console del Browser. Cambiando questo valore innescherai un riavvio dell'estensione.",
+    "message": "I namespace in questa lista divisa da virgole sarà loggata nella console del tuo browser. Modificando questa lista IPFS Companion si riavvierà.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "Directory importo file",
+    "message": "Directory Importo File",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Personalizza la directory utilizzata per i file importati",
+    "message": "Imposta la directory che desideri usare per i file che importi utilizzando IPFS Companion.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Azzera tutto",
+    "message": "Resetta Tutto",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Sostituisce le preferenze dell'utente con quelle di default (non può essere annullata!)",
+    "message": "Ripristina tutte le preferenze IPFS Companion ai loro valori predefiniti. Attenzione: non è possibile annullare l'operazione!",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -488,15 +548,23 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Estensione per il browser che semplifica l'accesso alle risorse IPFS",
+    "message": "Sfrutta il potere di IPFS nel tuo browser",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
+  "quickImport_page_title": {
+    "message": "Importa e Condividi File | IPFS Companion",
+    "description": "Page title (quickImport_page_title)"
+  },
+  "quickImport_head_peers": {
+    "message": "Importa e condividi file",
+    "description": "Header on the share files page (quickImport_subhead_peers)"
+  },
   "quickImport_subhead_peers": {
-    "message": "Connesso a $1nodi",
+    "message": "Connesso a $1 peer",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
-    "message": "Seleziona un file",
+    "message": "Scegli un file",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_or": {
@@ -504,8 +572,8 @@
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "rilasciarlo qui per condividere",
-    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
+    "message": "Rilascia qui",
+    "description": "Drop message on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
     "message": "Importo in corso...",
@@ -524,7 +592,7 @@
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Apri in Web UI",
+    "message": "Apri nella pagina File",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
@@ -532,11 +600,11 @@
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "Visualizzare, modificare e revocare i diritti di accesso concessi all'istanza IPFS.",
+    "message": "Visualizza, cambia e revoca i diritti di accesso concessi alla tua istanza IPFS.",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "Nessuna autorizzazione concessa.",
+    "message": "Nessun permesso concesso.",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
@@ -544,15 +612,15 @@
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revocare tutti i permessi per $1 ?",
+    "message": "Revocare tutti i permessi per $1?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Fare clic per consentire",
+    "message": "Clicca per consentire",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Fare clic per negare",
+    "message": "Clicca per negare",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
@@ -560,7 +628,7 @@
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Rifiuta",
+    "message": "Nega",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
@@ -568,15 +636,15 @@
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "IPFS Companion dovrebbe permettere «$1» di accedere «$2» al nodo connesso?",
+    "message": "IPFS Companion, dovrebbe permettere a «$1» di accedere a «$2» al nodo connesso?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Applica questa decisione a tutti i correnti e futuri permessi in questo ambito",
+    "message": "Applica questa decisione a tutti i correnti e futuri permessi in questo campo",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Revoca permessi",
+    "message": "Revoca tutti i permessi",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
@@ -584,87 +652,115 @@
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Rifiuta",
+    "message": "Nega",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Benvenuto!",
+    "message": "Benvenuto | IPFS Companion",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
     "message": "IPFS Companion",
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
-  "page_landingWelcome_welcome_title": {
-    "message": "Tutto pronto!",
-    "description": "Ready message title (page_landingWelcome_welcome_title)"
-  },
   "page_landingWelcome_welcome_peers": {
-    "message": "Al momento il tuo nodo è connesso a <0>$1</0> nodi.",
+    "message": "Il tuo nodo è connesso a <0>$1</0> peer.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
-  "page_landingWelcome_welcome_discover": {
-    "message": "Scopri cosa <0>puoi fare con Companion</0> e tuffati nel web distribuito con IPFS!",
-    "description": "Ready message copy (page_landingWelcome_welcome_discover)"
+  "page_landingWelcome_welcome_statusButton_text": {
+    "message": "Stato",
+    "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
+  },
+  "page_landingWelcome_welcome_filesButton_text": {
+    "message": "File",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
+  },
+  "page_landingWelcome_welcome_peersButton_text": {
+    "message": "Peer",
+    "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "Sembra che IPFS non sia in esecuzione",
+    "message": "IPFS non è in esecuzione",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
+  "page_landingWelcome_installSteps_desktop_title": {
+    "message": "Utenti IPFS Desktop",
+    "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
+  },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Installa <0>IPFS Desktop</0> e sarai pronto!",
+    "message": "Assicurati che IPFS Desktop sia in esecuzione. Non ce l'hai installato? <0>Scarica IPFS Desktop ora.</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Preferisci usare la linea di comando?",
+    "message": "Utenti riga di comando",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Segui <0>queste istruzioni</0>, dopodichè avvia il servizio IPFS dal tuo terminale:",
+    "message": "Avvia IPFS inserendo <code class=\"yellow\">ipfs daemon</code> nel tuo terminale. Se non hai ancora installato IPFS, segui prima la <0>guida veloce CLI</0>.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Nuovo to IPFS?",
+    "message": "Impara riguardo ad IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
-  "page_landingWelcome_resources_new_ipfs": {
-    "message": "Leggi la <0>documentazione</0> per scoprire i <1>concetti</1> base e lavorare con IPFS.",
-    "description": "Resources copy (page_landingWelcome_resources_new_ipfs)"
+  "page_landingWelcome_resources_new_ipfs_companion_features": {
+    "message": "Leggi riguardo alle <0>funzionalità dell'IPFS Companion</0>",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
-  "page_landingWelcome_resources_title_discover": {
-    "message": "Scopri!",
-    "description": "Resources title (page_landingWelcome_resources_title_discover)"
+  "page_landingWelcome_resources_new_ipfs_concepts": {
+    "message": "Impara concetti basilari nella guida <0>Come Funziona IPFS</0>",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
-  "page_landingWelcome_resources_discover": {
-    "message": "Trova <0>risorse utili</0> per usare e <1>costruire cose</1> con IPFS.",
-    "description": "Resources copy (page_landingWelcome_resources_discover)"
+  "page_landingWelcome_resources_new_ipfs_docs": {
+    "message": "Visita il <0>Sito di documentazione IPFS</0> per saperne di più",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
-  "page_landingWelcome_resources_title_got_questions": {
-    "message": "Domande?",
-    "description": "Resources title (page_landingWelcome_resources_title_got_questions)"
+  "page_landingWelcome_resources_title_build": {
+    "message": "Sviluppa su IPFS",
+    "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
-  "page_landingWelcome_resources_got_questions": {
-    "message": "Visita il <0>Forum di Discussione e Supporto</0>",
-    "description": "Resources copy (page_landingWelcome_resources_got_questions)"
+  "page_landingWelcome_resources_build_tutorials": {
+    "message": "Trova <0>how-to e tutorial</0> per aiutarti ad iniziare",
+    "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
   },
-  "page_landingWelcome_resources_title_want_to_help": {
-    "message": "Hai bisogno di aiuto?",
-    "description": "Resources title (page_landingWelcome_resources_title_want_to_help)"
+  "page_landingWelcome_resources_build_examples": {
+    "message": "Guarda quali <0>fantastiche cose</0> altri hanno sviluppato con IPFS",
+    "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
-  "page_landingWelcome_resources_want_to_help": {
-    "message": "Unisciti alla <0>Comunitià IPFS</0>! Contribuisci con <1>codice</1>, <2>documentazione</2>, <3>traduzioni</3> o dai <4>supporto ad altri utenti</4>.",
-    "description": "Resources copy (page_landingWelcome_resources_want_to_help)"
+  "page_landingWelcome_resources_title_get_help": {
+    "message": "Chiedi aiuto",
+    "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
-  "page_landingWelcome_videos_alpha_demo": {
-    "message": "Demo Alpha di IPFS",
-    "description": "Videos section title (page_landingWelcome_videos_alpha_demo)"
+  "page_landingWelcome_resources_get_help": {
+    "message": "Chiedi e discuti riguardo IPFS nei <0>forum ufficiali</0>",
+    "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
-  "page_landingWelcome_videos_permanent_web": {
-    "message": "Il Web Permanente",
-    "description": "Videos section title (page_landingWelcome_videos_permanent_web)"
+  "page_landingWelcome_resources_title_community": {
+    "message": "Unisciti alla comunità",
+    "description": "Community title (page_landingWelcome_resources_title_community)"
+  },
+  "page_landingWelcome_resources_community_contribute": {
+    "message": "<0>Contribuisci</0> con codice, documentazione ed altro",
+    "description": "Community copy (page_landingWelcome_resources_community_contribute)"
+  },
+  "page_landingWelcome_resources_community_translate": {
+    "message": "<0>Traduci</0> IPFS nella tua lingua preferita",
+    "description": "Community copy (page_landingWelcome_resources_community_translate)"
+  },
+  "page_landingWelcome_resources_community_resources": {
+    "message": "Esplora tutte le <0>risorse della comunità IPFS</0>",
+    "description": "Community copy (page_landingWelcome_resources_community_resources)"
+  },
+  "page_landingWelcome_videos_why_ipfs": {
+    "message": "Perché IPFS?",
+    "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
+  },
+  "page_landingWelcome_videos_how_ipfs_works": {
+    "message": "Come Funziona IPFS",
+    "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Progetti simili ",
+    "message": "Progetti Correlati",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }

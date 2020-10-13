@@ -2,11 +2,8 @@
 /* eslint-env browser, webextensions */
 
 const { safeURL } = require('./options')
+const { braveJsIpfsWebuiCid } = require('./precache')
 const offlinePeerCount = -1
-
-// CID of a 'blessed' Web UI release
-// which should work without setting CORS headers
-const webuiCid = 'Qmexhq2sBHnXQbvyP2GfUdbnY7HCagH2Mw5vUNSBn2nxip' // v2.7.2
 
 function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
@@ -22,15 +19,14 @@ function initState (options, overrides) {
   delete state.publicSubdomainGatewayUrl
   state.redirect = options.useCustomGateway
   delete state.useCustomGateway
-  state.apiURL = safeURL(options.ipfsApiUrl)
+  state.apiURL = safeURL(options.ipfsApiUrl, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
   state.apiURLString = state.apiURL.toString()
   delete state.ipfsApiUrl
-  state.gwURL = safeURL(options.customGatewayUrl)
+  state.gwURL = safeURL(options.customGatewayUrl, { useLocalhostName: state.useSubdomains })
   state.gwURLString = state.gwURL.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
-  state.webuiCid = webuiCid
-  state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
+
   // attach helper functions
   state.activeIntegrations = (url) => {
     if (!state.active) return false
@@ -41,6 +37,24 @@ function initState (options, overrides) {
       return false
     }
   }
+  // TODO state.connected ~= state.peerCount > 0
+  // TODO state.nodeActive ~= API is online,eg. state.peerCount > offlinePeerCount
+  Object.defineProperty(state, 'localGwAvailable', {
+    // TODO: make quick fetch to confirm it works?
+    get: function () { return this.ipfsNodeType !== 'embedded' }
+  })
+  Object.defineProperty(state, 'webuiRootUrl', {
+    get: function () {
+      // Did user opt-in for rolling release published on DNSLink?
+      if (state.useLatestWebUI) return `${state.gwURLString}ipns/webui.ipfs.io/`
+
+      // Below is needed to make webui work for embedded js-ipfs in Brave
+      if (state.ipfsNodeType === 'embedded:chromesockets' && braveJsIpfsWebuiCid) {
+        return `${state.gwURLString}ipfs/${braveJsIpfsWebuiCid}/`
+      }
+      return `${state.apiURLString}webui`
+    }
+  })
   // apply optional overrides
   if (overrides) Object.assign(state, overrides)
   return state
@@ -48,4 +62,3 @@ function initState (options, overrides) {
 
 exports.initState = initState
 exports.offlinePeerCount = offlinePeerCount
-exports.webuiCid = webuiCid

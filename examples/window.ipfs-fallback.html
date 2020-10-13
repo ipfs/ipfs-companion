@@ -1,6 +1,14 @@
 <!doctype html>
 <div id="output"></div>
 <script>
+
+  <!--
+   TODO: below code needs to be updated to reflect changes to JS API
+         described at https://blog.ipfs.io/2020-02-01-async-await-refactor/
+         and use https://github.com/ipfs-shipyard/ipfs-provider
+         to reduce boilerplate needed for implementing a robust fallback logic
+  -->
+
   (() => {
     const output = document.getElementById('output')
     const log = (msg) => {

@@ -39,6 +39,56 @@ describe('modifyRequest processing', function () {
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
+  // Additional handling is required for redirected IPFS subresources on regular HTTPS pages
+  // (eg. image embedded from public gateway on HTTPS website)
+  describe('a subresource request on HTTPS website', function () {
+    const cid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    it('should be routed to "127.0.0.1" gw in Chromium if type is image', function () {
+      runtime.isFirefox = false
+      const request = {
+        method: 'GET',
+        type: 'image',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        initiator: 'https://some-website.example.com' // Chromium
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
+    })
+    it('should be routed to "localhost" gw in Chromium if not a subresource', function () {
+      runtime.isFirefox = false
+      const request = {
+        method: 'GET',
+        type: 'main_frame',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        initiator: 'https://some-website.example.com' // Chromium
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+    })
+    it('should be routed to "127.0.0.1" gw to avoid mixed content warning in Firefox', function () {
+      runtime.isFirefox = true
+      const request = {
+        method: 'GET',
+        type: 'image',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        originUrl: 'https://some-website.example.com/some/page.html' // FF only
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
+    })
+    it('should be routed to "localhost" gw in Firefox if not a subresource', function () {
+      runtime.isFirefox = true
+      const request = {
+        method: 'GET',
+        type: 'main_frame',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        originUrl: 'https://some-website.example.com/some/page.html' // FF only
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+    })
+  })
+
   describe('a request to <apiURL>/api/v0/add with stream-channels=true', function () {
     const expectHeader = { name: 'Expect', value: '100-continue' }
     it('should apply the "Expect: 100-continue" fix for https://github.com/ipfs/go-ipfs/issues/5168 ', function () {
@@ -55,8 +105,9 @@ describe('modifyRequest processing', function () {
     })
   })
 
-  describe('a request to <apiURL>/api/v0/ with Origin=moz-extension://{extension-installation-id}', function () {
-    it('should remove Origin header with moz-extension://', async function () {
+  describe('a request to <apiURL>/api/v0/ made with extension:// Origin', function () {
+    it('should have it replaced with API one if Origin: moz-extension://{extension-installation-id}', async function () {
+      // Context: Firefox 65 started setting this header
       // set vendor-specific Origin for WebExtension context
       browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
       // ensure clean modifyRequest
@@ -64,19 +115,22 @@ describe('modifyRequest processing', function () {
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
       const bogusOriginHeader = { name: 'Origin', value: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df' }
+      const apiOriginHeader = { name: 'Origin', value: getState().apiURL.origin }
       const request = {
         requestHeaders: [bogusOriginHeader],
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
-      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(apiOriginHeader)
       browser.runtime.getURL.flush()
     })
   })
 
-  describe('a request to <apiURL>/api/v0/ with Origin=chrome-extension://{extension-installation-id}', function () {
-    it('should remove Origin header with chrome-extension://', async function () {
+  describe('should have it removed if Origin: chrome-extension://{extension-installation-id}', function () {
+    it('should have it swapped with API one if Origin: with chrome-extension://', async function () {
+      // Context: Chromium 72 started setting this header
       // set vendor-specific Origin for WebExtension context
       browser.runtime.getURL.withArgs('/').returns('chrome-extension://trolrorlrorlrol/')
       // ensure clean modifyRequest
@@ -84,77 +138,38 @@ describe('modifyRequest processing', function () {
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
       const bogusOriginHeader = { name: 'Origin', value: 'chrome-extension://trolrorlrorlrol' }
+      const apiOriginHeader = { name: 'Origin', value: getState().apiURL.origin }
       const request = {
         requestHeaders: [bogusOriginHeader],
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
-      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(apiOriginHeader)
       browser.runtime.getURL.flush()
     })
   })
 
   describe('a request to <apiURL>/api/v0/ with Origin=null', function () {
-    it('should remove Origin header ', async function () {
-      // set vendor-specific Origin for WebExtension context
+    it('should keep the "Origin: null" header ', async function () {
+      // Presence of Origin header is important as it protects API from XSS via sandboxed iframe
+      // NOTE: Chromium <72 was setting this header in requests sent by browser extension,
+      // but they fixed it since then.
       browser.runtime.getURL.withArgs('/').returns(undefined)
       // ensure clean modifyRequest
       runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
-      const bogusOriginHeader = { name: 'Origin', value: 'null' }
+      const nullOriginHeader = { name: 'Origin', value: 'null' }
       const request = {
-        requestHeaders: [bogusOriginHeader],
+        requestHeaders: [nullOriginHeader],
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
-      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.not.include(bogusOriginHeader)
-      browser.runtime.getURL.flush()
-    })
-  })
-
-  // Web UI is loaded from hardcoded 'blessed' CID, which enables us to remove
-  // CORS limitation. This makes Web UI opened from browser action work without
-  // the need for any additional configuration of go-ipfs daemon
-  describe('a request to API from blessed webuiRootUrl', function () {
-    it('should pass without CORS limitations ', async function () {
-      // ensure clean modifyRequest
-      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
-      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-      // test
-      const webuiOriginHeader = { name: 'Origin', value: state.webuiRootUrl }
-      const webuiRefererHeader = { name: 'Referer', value: state.webuiRootUrl }
-      // CORS whitelisting does not worh in Chrome 72 without passing/restoring ACRH preflight header
-      const acrhHeader = { name: 'Access-Control-Request-Headers', value: 'X-Test' } // preflight to store
-
-      // Test request
-      let request = {
-        requestHeaders: [webuiOriginHeader, webuiRefererHeader, acrhHeader],
-        type: 'xmlhttprequest',
-        originUrl: state.webuiRootUrl,
-        url: `${state.apiURLString}api/v0/id`
-      }
-      request = modifyRequest.onBeforeRequest(request) || request // executes before onBeforeSendHeaders, may mutate state
-      const requestHeaders = modifyRequest.onBeforeSendHeaders(request).requestHeaders
-
-      // "originUrl" should be swapped to look like it came from the same origin as HTTP API
-      const expectedOriginUrl = state.webuiRootUrl.replace(state.gwURLString, state.apiURLString)
-      expect(requestHeaders).to.deep.include({ name: 'Origin', value: expectedOriginUrl })
-      expect(requestHeaders).to.deep.include({ name: 'Referer', value: expectedOriginUrl })
-      expect(requestHeaders).to.deep.include(acrhHeader)
-
-      // Test response
-      const response = Object.assign({}, request)
-      delete response.requestHeaders
-      response.responseHeaders = []
-      const responseHeaders = modifyRequest.onHeadersReceived(response).responseHeaders
-      const corsHeader = { name: 'Access-Control-Allow-Origin', value: state.gwURL.origin }
-      const acahHeader = { name: 'Access-Control-Allow-Headers', value: acrhHeader.value } // expect value restored from preflight
-      expect(responseHeaders).to.deep.include(corsHeader)
-      expect(responseHeaders).to.deep.include(acahHeader)
-
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(nullOriginHeader)
       browser.runtime.getURL.flush()
     })
   })
@@ -178,7 +193,7 @@ describe('modifyRequest processing', function () {
       browser.tabs.update.flush()
       assert.ok(browser.tabs.update.notCalled)
       modifyRequest.onCompleted(request)
-      assert.ok(browser.tabs.update.withArgs({ url: fixedDNSLinkUrl }).calledOnce)
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).calledOnce)
       browser.tabs.update.flush()
     })
   })

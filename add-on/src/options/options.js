@@ -1,6 +1,9 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+require('./options.css')
+
+const { i18n } = require('webextension-polyfill')
 const choo = require('choo')
 const optionsPage = require('./page')
 const optionsStore = require('./store')
@@ -16,7 +19,6 @@ app.route('*', optionsPage)
 // Start the application and render it to the given querySelector
 app.mount('#root')
 
-// Fix for Chrome in OSX https://github.com/ipfs-shipyard/ipfs-companion/pull/429
-if (window.navigator.vendor === 'Google Inc.') {
-  document.querySelector('html').className = 'is-chrome'
-}
+// Set page title and header translation
+document.getElementById('header-text').innerText = i18n.getMessage('option_page_header')
+document.title = i18n.getMessage('option_page_title')

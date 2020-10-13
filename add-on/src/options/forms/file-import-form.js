@@ -11,21 +11,22 @@ function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOp
   const onPreloadAtPublicGatewayChange = onOptionChange('preloadAtPublicGateway')
   return html`
     <form>
-      <fieldset>
-        <legend>${browser.i18n.getMessage('option_header_fileImport')}</legend>
-        <div>
+      <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
+        <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_fileImport')}</h2>
+        <div class="flex-row-ns pb0-ns">
           <label for="importDir">
             <dl>
               <dt>${browser.i18n.getMessage('option_importDir_title')}</dt>
               <dd>
                 ${browser.i18n.getMessage('option_importDir_description')}
-                <p><a href="https://docs.ipfs.io/guides/concepts/mfs/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/concepts/file-systems/#mutable-file-system-mfs" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
             </dl>
           </label>
           <input
+            class="bg-white navy self-center-ns"
             id="importDir"
             type="text"
             pattern="^\/(.*)"
@@ -33,23 +34,23 @@ function fileImportForm ({ importDir, openViaWebUI, preloadAtPublicGateway, onOp
             onchange=${onImportDirChange}
             value=${importDir} />
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="openViaWebUI">
             <dl>
               <dt>${browser.i18n.getMessage('option_openViaWebUI_title')}</dt>
               <dd>${browser.i18n.getMessage('option_openViaWebUI_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'openViaWebUI', checked: openViaWebUI, onchange: onOpenViaWebUIChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'openViaWebUI', checked: openViaWebUI, onchange: onOpenViaWebUIChange })}</div>
         </div>
-        <div>
+        <div class="flex-row-ns pb0-ns">
           <label for="preloadAtPublicGateway">
             <dl>
               <dt>${browser.i18n.getMessage('option_preloadAtPublicGateway_title')}</dt>
               <dd>${browser.i18n.getMessage('option_preloadAtPublicGateway_description')}</dd>
             </dl>
           </label>
-          <div>${switchToggle({ id: 'preloadAtPublicGateway', checked: preloadAtPublicGateway, onchange: onPreloadAtPublicGatewayChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'preloadAtPublicGateway', checked: preloadAtPublicGateway, onchange: onPreloadAtPublicGatewayChange })}</div>
         </div>
       </fieldset>
     </form>

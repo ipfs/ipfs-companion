@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "__MSG_manifest_extensionName__",
   "short_name": "__MSG_manifest_shortExtensionName__",
-  "version": "2.10.0",
+  "version": "2.14.0",
   "description": "__MSG_manifest_extensionDescription__",
   "homepage_url": "https://github.com/ipfs-shipyard/ipfs-companion",
   "author": "IPFS Community",
@@ -11,21 +11,6 @@
     "38": "icons/png/ipfs-logo-on_38.png",
     "128": "icons/png/ipfs-logo-on_128.png"
   },
-  "permissions": [
-    "<all_urls>",
-    "idle",
-    "activeTab",
-    "tabs",
-    "notifications",
-    "alarms",
-    "storage",
-    "unlimitedStorage",
-    "contextMenus",
-    "clipboardWrite",
-    "webNavigation",
-    "webRequest",
-    "webRequestBlocking"
-  ],
   "background": {
     "page": "dist/background/background.html"
   },
@@ -39,23 +24,13 @@
     "default_popup": "dist/popup/browser-action/index.html"
   },
   "options_ui": {
+    "open_in_tab": true,
+    "browser_style": false,
     "page": "dist/options/options.html"
   },
   "web_accessible_resources": [
     "icons/ipfs-logo-on.svg",
     "icons/ipfs-logo-off.svg"
-  ],
-  "content_scripts": [
-    {
-      "all_frames": true,
-      "js": [
-        "dist/bundles/ipfsProxyContentScript.bundle.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ],
-      "run_at": "document_start"
-    }
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'; frame-src 'self';",
   "default_locale": "en"

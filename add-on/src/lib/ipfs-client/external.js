@@ -8,7 +8,7 @@ log.error = debug('ipfs-companion:client:external:error')
 const IpfsApi = require('ipfs-http-client')
 
 exports.init = async function (opts) {
-  log(`init with API: ${opts.apiURLString}`)
+  log(`init with IPFS API at ${opts.apiURLString}`)
 
   const url = opts.apiURL
   const protocol = url.protocol.substr(0, url.protocol.length - 1) // http: -> http
@@ -20,5 +20,3 @@ exports.init = async function (opts) {
 exports.destroy = async function () {
   log('destroy')
 }
-
-// TODO: Upgrade to a caching proxy for ipfs-http-client

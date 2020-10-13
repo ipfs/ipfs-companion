@@ -1,6 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+require('./browser-action.css')
+
 const choo = require('choo')
 const browserActionPage = require('./page')
 const browserActionStore = require('./store')

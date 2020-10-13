@@ -8,13 +8,14 @@ log.error = debug('ipfs-companion:main:error')
 const browser = require('webextension-polyfill')
 const toMultiaddr = require('uri-to-multiaddr')
 const pMemoize = require('p-memoize')
-const { optionDefaults, storeMissingOptions, migrateOptions } = require('./options')
+const LRU = require('lru-cache')
+const all = require('it-all')
+const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator } = require('./ipfs-path')
+const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
-const { createIpfsUrlProtocolHandler } = require('./ipfs-protocol')
 const createIpfsImportHandler = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
@@ -22,6 +23,7 @@ const createInspector = require('./inspector')
 const { createRuntimeChecks } = require('./runtime-checks')
 const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
+const { registerSubdomainProxy } = require('./http-proxy')
 const { showPendingLandingPages } = require('./on-installed')
 
 // init happens on addon load in background/background.js
@@ -83,8 +85,9 @@ module.exports = async function init () {
     ipfsProxyContentScript = await registerIpfsProxyContentScript()
     log('register all listeners')
     registerListeners()
-    await setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
+    setApiStatusUpdateInterval(options.ipfsApiPollMs)
     await showPendingLandingPages()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
@@ -105,7 +108,8 @@ module.exports = async function init () {
   function registerListeners () {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
-      // Chrome 72+  requires 'extraHeaders' for access to Referer header (used in cors whitelisting of webui)
+      // Chrome 72+  requires 'extraHeaders' for accessing all headers
+      // Note: we need this for code ensuring ipfs-http-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
@@ -124,8 +128,7 @@ module.exports = async function init () {
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
     if (runtime.hasNativeProtocolHandler) {
-      log('registerStringProtocol available. Adding ipfs:// handler')
-      browser.protocol.registerStringProtocol('ipfs', createIpfsUrlProtocolHandler(() => ipfs))
+      log('native protocol handler support detected, but IPFS handler is not implemented yet :-(')
     } else {
       log('no browser.protocol API, native protocol will not be registered')
     }
@@ -141,7 +144,15 @@ module.exports = async function init () {
     if (previousHandle) {
       previousHandle.unregister()
     }
-    if (!state.active || !state.ipfsProxy || !browser.contentScripts) {
+    // TODO:
+    // No window.ipfs for now.
+    // We will restore when Migration to JS API with Async Await and Async Iterables
+    // is done:
+    // https://github.com/ipfs-shipyard/ipfs-companion/pull/777
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/843
+    // https://github.com/ipfs-shipyard/ipfs-companion/issues/852#issuecomment-594510819
+    const forceOff = true
+    if (forceOff || !state.active || !state.ipfsProxy || !browser.contentScripts) {
       // no-op if global toggle is off, window.ipfs is disabled in Preferences
       // or if runtime has no contentScript API
       // (Chrome loads content script via manifest)
@@ -189,7 +200,8 @@ module.exports = async function init () {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const result = ipfsPathValidator.validIpfsOrIpnsPath(path) ? ipfsPathValidator.resolveToPublicUrl(path, state.pubGwURLString) : null
+      const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
+      const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
     }
   }
@@ -200,6 +212,10 @@ module.exports = async function init () {
   // Make a connection between different contexts inside the add-on,
   // e.g. signalling between browser action popup and background page that works
   // in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
+
+  // Cache for async URL2CID resolution used by browser action
+  // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
+  const url2cidCache = new LRU({ max: 10, maxAge: 1000 * 30 })
 
   var browserActionPort
 
@@ -230,19 +246,20 @@ module.exports = async function init () {
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
     const dropSlash = url => url.replace(/\/$/, '')
+    const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     const info = {
       active: state.active,
       ipfsNodeType: state.ipfsNodeType,
       peerCount: state.peerCount,
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
-      webuiRootUrl: state.webuiRootUrl,
+      webuiRootUrl: dropSlash(state.webuiRootUrl), // TODO: fix js-ipfs - it fails with trailing slash
       importDir: state.importDir,
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
       noIntegrationsHostnames: state.noIntegrationsHostnames,
-      currentTab: await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+      currentTab
     }
     try {
       const v = await ipfs.version()
@@ -255,6 +272,17 @@ module.exports = async function init () {
     if (state.active && info.currentTab) {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
+      if (info.isIpfsContext) {
+        info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+        info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
+        if (!url2cidCache.has(url)) {
+          // run async resolution in the next event loop
+          setImmediate(async () => {
+            url2cidCache.set(url, await ipfsPathValidator.resolveToCid(url))
+          })
+        }
+        info.currentTabCid = url2cidCache.get(url)
+      }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
       info.currentTabIntegrationsOptOut = info.noIntegrationsHostnames && info.noIntegrationsHostnames.includes(info.currentFqdn)
@@ -270,12 +298,25 @@ module.exports = async function init () {
   // -------------------------------------------------------------------
 
   async function onAddFromContext (context, contextType, options) {
-    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
-    let result
+    const {
+      formatImportDirectory,
+      copyImportResultsToFiles,
+      copyShareLink,
+      preloadFilesAtPublicGateway,
+      openFilesAtGateway,
+      openFilesAtWebUI
+    } = ipfsImportHandler
+    const importDir = formatImportDirectory(state.importDir)
+    let data
+    let results
     try {
       const dataSrc = await findValueForContext(context, contextType)
       if (contextType === 'selection') {
-        result = await ipfsImportHandler.importFiles(Buffer.from(dataSrc), options, importDir)
+        // TODO: persist full pageUrl somewhere (eg. append at the end of the content but add toggle to disable it)
+        data = {
+          path: `${new URL(context.pageUrl).hostname}.txt`,
+          content: dataSrc
+        }
       } else {
         // Enchanced addFromURL
         // --------------------
@@ -289,22 +330,26 @@ module.exports = async function init () {
         // console.log('onAddFromContext.fetchOptions', fetchOptions)
         const response = await fetch(dataSrc, fetchOptions)
         const blob = await response.blob()
-        const buffer = await new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onloadend = () => resolve(Buffer.from(reader.result))
-          reader.onerror = reject
-          reader.readAsArrayBuffer(blob)
-        })
         const url = new URL(response.url)
         // https://github.com/ipfs-shipyard/ipfs-companion/issues/599
         const filename = url.pathname === '/'
           ? url.hostname
           : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
-        const data = {
+        data = {
           path: decodeURIComponent(filename),
-          content: buffer
+          content: blob
         }
-        result = await ipfsImportHandler.importFiles(data, options, importDir)
+      }
+
+      results = await all(ipfs.addAll([data], options))
+      copyShareLink(results)
+      preloadFilesAtPublicGateway(results)
+
+      await copyImportResultsToFiles(results, importDir)
+      if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+        await openFilesAtGateway(importDir)
+      } else {
+        await openFilesAtWebUI(importDir)
       }
     } catch (error) {
       console.error('Error in import to IPFS context menu', error)
@@ -317,14 +362,6 @@ module.exports = async function init () {
       } else {
         notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
       }
-      return
-    }
-    ipfsImportHandler.copyShareLink(result)
-    ipfsImportHandler.preloadFilesAtPublicGateway(result)
-    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
-      return ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
-    } else {
-      return ipfsImportHandler.openFilesAtWebUI(importDir)
     }
   }
 
@@ -353,7 +390,7 @@ module.exports = async function init () {
     // Chrome does not permit for both pageAction and browserAction to be enabled at the same time
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
     if (runtime.isFirefox && ipfsPathValidator.isIpfsPageActionsContext(url)) {
-      if (url.startsWith(state.gwURLString) || url.startsWith(state.apiURLString)) {
+      if (sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL)) {
         await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-on.svg' })
         await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
       } else {
@@ -382,16 +419,16 @@ module.exports = async function init () {
         log.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
     }
+    // Ensure embedded js-ipfs in Brave uses correct API
     if (details.url.startsWith(state.webuiRootUrl)) {
-      // Ensure API backend points at one from IPFS Companion
       const apiMultiaddr = toMultiaddr(state.apiURLString)
       await browser.tabs.executeScript(details.tabId, {
         runAt: 'document_start',
         code: `if (!localStorage.getItem('ipfsApi')) {
-          console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
-          localStorage.setItem('ipfsApi', '${apiMultiaddr}');
-          window.location.reload();
-        }`
+        console.log('[ipfs-companion] Setting API to ${apiMultiaddr}');
+        localStorage.setItem('ipfsApi', '${apiMultiaddr}');
+        window.location.reload();
+      }`
       })
     }
   }
@@ -426,7 +463,7 @@ module.exports = async function init () {
   async function getSwarmPeerCount () {
     if (!ipfs) return offlinePeerCount
     try {
-      const peerInfos = await ipfs.swarm.peers()
+      const peerInfos = await ipfs.swarm.peers({ timeout: 2500 })
       return peerInfos.length
     } catch (error) {
       console.error(`Error while ipfs.swarm.peers: ${error}`)
@@ -484,20 +521,6 @@ module.exports = async function init () {
     }
   }
 
-  async function setBrowserActionIcon (iconPath) {
-    const iconDefinition = { path: iconPath }
-    try {
-      // Try SVG first -- Firefox supports it natively
-      await browser.browserAction.setIcon(iconDefinition)
-    } catch (error) {
-      // Fallback!
-      // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
-      // Still, we want icon, so we precompute rasters of popular sizes and use them instead
-      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    }
-  }
-
   // ColorArray [0,0,0,0] → Hex #000000
   // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserAction/ColorArray
   function colorArraytoHex (colorArray) {
@@ -508,22 +531,6 @@ module.exports = async function init () {
     const b = colorAt(2)
     return ('#' + r + g + b).toUpperCase()
   }
-
-  const rasterIconDefinition = pMemoize((svgPath) => {
-    const pngPath = (size) => {
-      // point at precomputed PNG file
-      const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
-      return `/icons/png/${baseName}_${size}.png`
-    }
-    // icon sizes to cover ranges from:
-    // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
-    // - https://developer.chrome.com/extensions/manifest/icons
-    const r19 = pngPath(19)
-    const r38 = pngPath(38)
-    const r128 = pngPath(128)
-    // return computed values to be cached by p-memoize
-    return { path: { 19: r19, 38: r38, 128: r128 } }
-  })
 
   /* Alternative: raster images generated on the fly
   const rasterIconDefinition = pMemoize((svgPath) => {
@@ -547,6 +554,24 @@ module.exports = async function init () {
   })
   */
 
+  async function setBrowserActionIcon (iconPath) {
+    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    /* Below fallback does not work since Chromium 80
+     * (it fails in a way that does not produce error we can catch)
+    const iconDefinition = { path: iconPath }
+    try {
+      // Try SVG first -- Firefox supports it natively
+      await browser.browserAction.setIcon(iconDefinition)
+    } catch (error) {
+      // Fallback!
+      // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
+      // Still, we want icon, so we precompute rasters of popular sizes and use them instead
+      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+    }
+    */
+  }
+
   // OPTIONS
   // ===================================================================
 
@@ -554,7 +579,7 @@ module.exports = async function init () {
     // enable/disable gw redirect based on API going online or offline
     // newPeerCount === -1 currently implies node is offline.
     // TODO: use `node.isOnline()` if available (js-ipfs)
-    if (state.automaticMode && state.ipfsNodeType !== 'embedded') {
+    if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         browser.storage.local.set({ useCustomGateway: true })
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
@@ -580,6 +605,7 @@ module.exports = async function init () {
         case 'active':
           state[key] = change.newValue
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
+          await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
           break
@@ -609,7 +635,7 @@ module.exports = async function init () {
           state[key] = change.newValue
           break
         case 'ipfsApiUrl':
-          state.apiURL = new URL(change.newValue)
+          state.apiURL = safeURL(change.newValue, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
           state.apiURLString = state.apiURL.toString()
           shouldRestartIpfsClient = true
           break
@@ -617,9 +643,8 @@ module.exports = async function init () {
           setApiStatusUpdateInterval(change.newValue)
           break
         case 'customGatewayUrl':
-          state.gwURL = new URL(change.newValue)
+          state.gwURL = safeURL(change.newValue, { useLocalhostName: state.useSubdomains })
           state.gwURLString = state.gwURL.toString()
-          state.webuiRootUrl = `${state.gwURLString}ipfs/${state.webuiCid}/`
           break
         case 'publicGatewayUrl':
           state.pubGwURL = new URL(change.newValue)
@@ -632,8 +657,23 @@ module.exports = async function init () {
         case 'useCustomGateway':
           state.redirect = change.newValue
           break
+        case 'useSubdomains':
+          state[key] = change.newValue
+          await browser.storage.local.set({
+            // We need to update the hostname in customGatewayUrl because:
+            // 127.0.0.1 - path gateway
+            // localhost - subdomain gateway
+            // and we need to use the latter
+            customGatewayUrl: guiURLString(state.gwURLString, {
+              useLocalhostName: state.useSubdomains
+            })
+          })
+          // Finally, update proxy settings based on the state
+          await registerSubdomainProxy(getState, runtime)
+          break
         case 'ipfsProxy':
           state[key] = change.newValue
+          // This is window.ipfs proxy, requires update of the content script:
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
           break
         case 'dnslinkPolicy':
@@ -642,23 +682,21 @@ module.exports = async function init () {
             await browser.storage.local.set({ detectIpfsPathHeader: true })
           }
           break
-        case 'recoverFailedHttpRequests':
-          state[key] = change.newValue
-          break
         case 'logNamespaces':
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
           break
+        case 'recoverFailedHttpRequests':
         case 'importDir':
-          state[key] = change.newValue
-          break
         case 'linkify':
         case 'catchUnhandledProtocols':
         case 'displayNotifications':
+        case 'displayReleaseNotes':
         case 'automaticMode':
         case 'detectIpfsPathHeader':
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
+        case 'useLatestWebUI':
         case 'noIntegrationsHostnames':
         case 'dnslinkRedirect':
           state[key] = change.newValue
@@ -749,8 +787,10 @@ module.exports = async function init () {
         ipfsProxyContentScript.unregister()
         ipfsProxyContentScript = null
       }
-      destroyTasks.push(ipfsProxy.destroy())
-      ipfsProxy = null
+      if (ipfsProxy) {
+        destroyTasks.push(ipfsProxy.destroy())
+        ipfsProxy = null
+      }
       destroyTasks.push(destroyIpfsClient())
       return Promise.all(destroyTasks)
     }
@@ -758,3 +798,19 @@ module.exports = async function init () {
 
   return api
 }
+
+const rasterIconDefinition = pMemoize((svgPath) => {
+  const pngPath = (size) => {
+    // point at precomputed PNG file
+    const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
+    return `/icons/png/${baseName}_${size}.png`
+  }
+  // icon sizes to cover ranges from:
+  // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
+  // - https://developer.chrome.com/extensions/manifest/icons
+  const r19 = pngPath(19)
+  const r38 = pngPath(38)
+  const r128 = pngPath(128)
+  // return computed values to be cached by p-memoize
+  return { path: { 19: r19, 38: r38, 128: r128 } }
+})

@@ -1,0 +1,77 @@
+name: ci
+on: [push, pull_request]
+
+env:
+  XDG_CACHE_HOME: ${{ github.workspace }}/.cache
+
+jobs:
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Restore .cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ github.workspace }}/.cache
+          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
+            ${{ runner.os }}-
+
+      - name: Restore node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: npm run ci:install
+
+      - name: Build
+        run: npm run ci:build
+
+      - name: Show build/
+        run: du -h build/*
+
+      - name: Show dist/bundles/*
+        run: du -h add-on/dist/bundles/*
+
+      - name: Test
+        run: npm run ci:test
+
+      - name: Lint
+        # bundles are too big on Windows and fail addon-lint
+        # but as long we don't build releases on Windows, can be ignored
+        if: runner.os != 'Windows'
+        run: npm run ci:lint
+
+      # Persist produced binaries and effective config used for building them
+      # - this is not for releases, but for quick testing during the dev
+      # - action artifacts can be downloaded for 90 days, then are removed by github
+      # - binaries in PRs from forks won't be signed
+      - name: Attach produced packages to Github Action
+        uses: actions/upload-artifact@v2
+        with:
+          name: built-on-${{ matrix.os }}
+          path: build/ipfs_companion*.*
+          if-no-files-found: error
+
+      - name: Show Cache
+        run: du -h ${{ github.workspace }}/.cache/* || true
+

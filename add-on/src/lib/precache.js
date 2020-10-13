@@ -1,99 +1,132 @@
 'use strict'
 /* eslint-env browser, webextensions */
-const pull = require('pull-stream/pull')
-const drain = require('pull-stream/sinks/drain')
-const toStream = require('it-to-stream')
-const tar = require('tar-stream')
 const CID = require('cids')
-const { webuiCid } = require('./state')
+
+const Tar = require('it-tar')
+const pipe = require('it-pipe')
+const all = require('it-all')
+const concat = require('it-concat')
 
 const debug = require('debug')
 const log = debug('ipfs-companion:precache')
 log.error = debug('ipfs-companion:precache:error')
 
-const PRECACHE_ARCHIVES = [
-  { tarPath: '/dist/precache/webui.tar', cid: webuiCid }
-]
+// TODO: can be removed when embedded:chromesockets is gone
+module.exports.braveJsIpfsWebuiCid = 'bafybeigkbbjnltbd4ewfj7elajsbnjwinyk6tiilczkqsibf3o7dcr6nn4' //  v2.9.0 for js-ipfs in Brave (import in newer ones does not work)
 
 /**
  * Adds important assets such as Web UI to the local js-ipfs-repo.
  * This ensures they load instantly, even in offline environments.
  */
-module.exports = async (ipfs) => {
-  for (const { cid, tarPath } of PRECACHE_ARCHIVES) {
-    if (!await inRepo(ipfs, cid)) {
-      await importTar(ipfs, tarPath, cid)
-    } else {
-      log(`${cid} already in local repo, skipping import`)
+module.exports.precache = async (ipfs, state) => {
+  // simplified prefetch over HTTP when in Brave
+  if (state.ipfsNodeType === 'embedded:chromesockets') {
+    return preloadOverHTTP(log, ipfs, state, module.exports.braveJsIpfsWebuiCid)
+  }
+
+  const roots = []
+  // find out the content path of webui, and add it to precache list
+  try {
+    let cid, name
+    if (state.useLatestWebUI) { // resolve DNSLink
+      cid = await ipfs.dns('webui.ipfs.io', { recursive: true })
+      name = 'latest webui from DNSLink at webui.ipfs.io'
+    } else { // find out safelisted path behind <api-port>/webui
+      cid = new URL((await fetch(`${state.apiURLString}webui`)).url).pathname
+      name = `stable webui hardcoded at ${state.apiURLString}webui`
+    }
+    roots.push({
+      nodeType: 'external',
+      name,
+      cid
+    })
+  } catch (e) {
+    log.error('unable to find webui content path for precache', e)
+  }
+
+  // precache each root
+  for (const { name, cid, nodeType } of roots) {
+    if (state.ipfsNodeType !== nodeType) continue
+    if (await inRepo(ipfs, cid)) {
+      log(`${name} (${cid}) already in local repo, skipping import`)
+      continue
+    }
+    log(`importing ${name} (${cid}) to local ipfs repo`)
+
+    // prefetch over IPFS
+    try {
+      for await (const ref of ipfs.refs(cid, { recursive: true })) {
+        if (ref.err) {
+          log.error(`error while preloading ${name} (${cid})`, ref.err)
+          continue
+        }
+      }
+      log(`${name} successfully cached under CID ${cid}`)
+    } catch (err) {
+      log.error(`error while processing ${name}`, err)
     }
   }
 }
 
 async function inRepo (ipfs, cid) {
-  return new Promise((resolve, reject) => {
-    let local = false
-    pull(
-      ipfs.refs.localPullStream(),
-      drain(block => {
-        if (block.ref === cid) {
-          local = true
-          return false // abort stream
-        }
-      }, () => resolve(local))
-    )
-  })
+  // dag.get in offline mode will throw block is not present in local repo
+  // (we also have timeout as a failsafe)
+  try {
+    await ipfs.dag.get(cid, { offline: true, timeout: 5000 })
+    return true
+  } catch (_) {
+    return false
+  }
 }
 
-async function importTar (ipfs, tarPath, expectedCid) {
-  const stream = toStream.readable(streamTar(tarPath))
-  // TODO: HTTP 404 means precache is disabled in the current runtime
-  // (eg. in Firefox, due to https://github.com/ipfs-shipyard/ipfs-webui/issues/959)
-  const untarAndAdd = tar.extract()
+// Downloads CID from a public gateway
+// (alternative to ipfs.refs -r)
+async function preloadOverHTTP (log, ipfs, state, cid) {
+  const url = `${state.pubGwURLString}api/v0/get?arg=${cid}&archive=true`
+  try {
+    log(`importing ${url} (${cid}) to local ipfs repo`)
+    const { body } = await fetch(url)
+    await importTar(ipfs, body.getReader(), cid)
+    log(`successfully fetched TAR from ${url} and cached under CID ${cid}`)
+  } catch (err) {
+    log.error(`error while processing ${url}`, err)
+  }
+}
 
+async function importTar (ipfs, tarReader, expectedCid) {
   const files = []
 
-  untarAndAdd.on('entry', (header, stream, next) => {
-    // header is the tar header
-    // stream is the content body (might be an empty stream)
-    // call next when you are done with this entry
-
-    if (header.type !== 'file') {
-      // skip non-files
-      stream.on('end', next)
-      stream.resume() // drain stream
-      return
+  await pipe(
+    streamTar(tarReader),
+    Tar.extract(),
+    async (source) => {
+      for await (const entry of source) {
+        // we care only about files, directories will be created implicitly
+        if (entry.header.type !== 'file') continue
+        files.push({
+          path: entry.header.name.replace(`${expectedCid}/`, ''),
+          content: (await concat(entry.body)).slice() // conversion: BufferList → Buffer
+        })
+      }
     }
+  )
 
-    files.push(new Promise((resolve, reject) => {
-      let chunks = []
-      stream.on('data', data => chunks.push(data))
-      stream.on('end', () => {
-        resolve({ path: header.name, content: Buffer.concat(chunks) })
-        chunks = null
-        next()
-      })
-    }))
-  })
+  const { version, multibaseName } = new CID(expectedCid)
+  const opts = {
+    cidVersion: version,
+    wrapWithDirectory: true,
+    pin: false,
+    preload: false
+  }
+  const results = await all(ipfs.addAll(files, opts))
 
-  untarAndAdd.on('finish', async () => {
-    const { version } = new CID(expectedCid)
-    const opts = { cidVersion: version, pin: false, preload: false }
-    const results = await ipfs.add(await Promise.all(files), opts)
-    const root = results.find(e => e.hash === expectedCid)
-    if (root) {
-      log(`${tarPath} successfully precached`, root)
-    } else {
-      log.error('imported CID does not match expected one (requires new release with updated package.json)')
-    }
-  })
-
-  log(`importing ${tarPath} to js-ipfs-repo`)
-  stream.pipe(untarAndAdd)
+  const root = results.find(e => e.cid.toString(multibaseName) === expectedCid)
+  if (!root) {
+    throw new Error(`imported CID (${root}) does not match expected one: ${expectedCid}`)
+  }
 }
 
-async function * streamTar (repoPath) {
-  const response = await fetch(repoPath)
-  const reader = response.body.getReader()
+async function * streamTar (reader) {
   try {
     while (true) {
       const { done, value } = await reader.read()

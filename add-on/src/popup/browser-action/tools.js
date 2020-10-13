@@ -4,7 +4,6 @@
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const navItem = require('./nav-item')
-const navHeader = require('./nav-header')
 
 module.exports = function tools ({
   active,
@@ -18,21 +17,19 @@ module.exports = function tools ({
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`
-    <div>
-    ${navHeader('panel_toolsSectionHeader')}
-    <div class="fade-in pt1">
+    <div class="fade-in pv1">
   ${navItem({
     text: browser.i18n.getMessage('panel_quickImport'),
-    style: 'b',
+    title: browser.i18n.getMessage('panel_quickImportTooltip'),
     disabled: !activeQuickImport,
     onClick: onQuickImport
   })}
   ${navItem({
     text: browser.i18n.getMessage('panel_openWebui'),
+    title: browser.i18n.getMessage('panel_openWebuiTooltip'),
     disabled: !activeWebUI,
     onClick: onOpenWebUi
   })}
-    </div>
     </div>
   `
 }

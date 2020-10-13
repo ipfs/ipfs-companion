@@ -1,14 +1,18 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+require('./quick-import.css')
+
 const browser = require('webextension-polyfill')
 const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
+const externalApiClient = require('../lib/ipfs-client/external')
+const all = require('it-all')
 const drop = require('drag-and-drop-files')
-const fileReaderPullStream = require('pull-file-reader')
+const filesize = require('filesize')
 
-document.title = browser.i18n.getMessage('panel_quickImport')
+document.title = browser.i18n.getMessage('quickImport_page_title')
 
 const app = choo()
 
@@ -62,82 +66,95 @@ function quickImportStore (state, emitter) {
 
 async function processFiles (state, emitter, files) {
   console.log('Processing files', files)
+  const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
   try {
+    console.log('importing files', files)
     if (!files.length) {
       // File list may be empty in some rare cases
       // eg. when user drags something from proprietary browser context
       // We just ignore those UI interactions.
       throw new Error('found no valid sources, try selecting a local file instead')
     }
-    const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
-    const ipfsImportHandler = ipfsCompanion.ipfsImportHandler
+    const {
+      formatImportDirectory,
+      copyImportResultsToFiles,
+      copyShareLink,
+      preloadFilesAtPublicGateway,
+      openFilesAtGateway,
+      openFilesAtWebUI
+    } = ipfsCompanion.ipfsImportHandler
     const importTab = await browser.tabs.getCurrent()
-    const streams = files2streams(files)
+    const importDir = formatImportDirectory(state.importDir)
+    const httpStreaming = ipfsCompanion.state.ipfsNodeType === 'external'
+
+    const data = []
+    let total = 0
+    for (const file of files) {
+      data.push({
+        path: file.name,
+        content: (httpStreaming ? file : file.stream())
+      })
+      total += file.size
+    }
+    const humanTotal = filesize(total, { round: 2 })
+    state.progress = `Importing ${humanTotal}... (keep this page open)`
     emitter.emit('render')
+
+    const progress = (bytes) => {
+      const percent = ((bytes / total) * 100).toFixed(0)
+      state.progress = `Importing... (${percent}% of ${humanTotal})`
+      emitter.emit('render')
+    }
     const options = {
+      progress,
       wrapWithDirectory: true,
       pin: false // we use MFS for implicit pinning instead
     }
-    state.progress = `Importing ${streams.length} files...`
-    const importDir = ipfsImportHandler.formatImportDirectory(state.importDir)
-    let result
-    try {
-      result = await ipfsImportHandler.importFiles(streams, options, importDir)
-    } catch (err) {
-      console.error('Failed to import files to IPFS', err)
-      ipfsCompanion.notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
-      throw err
+
+    let ipfs
+    if (httpStreaming) {
+      // We create separate instance of http client running in thie same page to
+      // avoid serialization issues in Chromium
+      // (https://bugs.chromium.org/p/chromium/issues/detail?id=112163) when
+      // crossing process boundary, which enables streaming upload of big files
+      // (4GB+) without buffering entire thing.
+      ipfs = await externalApiClient.init(ipfsCompanion.state)
+      // Note: at the time of writing this it was possible to use SharedWorker,
+      // but it felt brittle given Google's approach to browser extension APIs,
+      // and this way seems to be more future-proof.
+    } else {
+      ipfs = ipfsCompanion.ipfs
     }
+    // ipfs.add
+    const results = await all(ipfs.addAll(data, options))
+
+    // ipfs cp → MFS
+    await copyImportResultsToFiles(results, importDir)
     state.progress = 'Completed'
     emitter.emit('render')
-    console.log(`Successfully imported ${streams.length} files`)
-    ipfsImportHandler.copyShareLink(result)
-    ipfsImportHandler.preloadFilesAtPublicGateway(result)
-    // open web UI at proper directory
-    // unless and embedded node is in use (no access to web UI)
-    // in which case, open resource.
-    if (state.ipfsNodeType === 'embedded' || !state.openViaWebUI) {
-      await ipfsImportHandler.openFilesAtGateway({ result, openRootInNewTab: true })
+    console.log(`Successfully imported ${files.length} files`)
+
+    // copy shareable URL & preload
+    copyShareLink(results)
+    preloadFilesAtPublicGateway(results)
+
+    // present result to the user using the beast available way
+    if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+      await openFilesAtGateway(importDir)
     } else {
-      await ipfsImportHandler.openFilesAtWebUI(importDir)
+      await openFilesAtWebUI(importDir)
     }
+
     // close import tab as it will be replaced with a new tab with imported content
     await browser.tabs.remove(importTab.id)
   } catch (err) {
-    console.error('Unable to perform import', err)
+    console.error('Failed to import files to IPFS', err)
     // keep import tab and display error message in it
     state.message = 'Unable to import to IPFS:'
     state.progress = `${err}`
     emitter.emit('render')
+    ipfsCompanion.notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${err.message}`)
   }
-}
-
-/* disabled in favor of fileReaderPullStream
-function file2buffer (file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(Buffer.from(reader.result))
-    reader.onerror = reject
-    reader.readAsArrayBuffer(file)
-  })
-} */
-
-function files2streams (files) {
-  const streams = []
-  for (const file of files) {
-    if (!file.type && file.size === 0) {
-      // UX fail-safe:
-      // at the moment drag&drop of an empty file without an extension
-      // looks the same as dropping a directory
-      throw new Error(`unable to add "${file.name}", directories and empty files are not supported`)
-    }
-    const fileStream = fileReaderPullStream(file, { chunkSize: 32 * 1024 * 1024 })
-    streams.push({
-      path: file.name,
-      content: fileStream
-    })
-  }
-  return streams
 }
 
 function quickImportOptions (state, emit) {
@@ -184,7 +201,7 @@ function quickImportPage (state, emit) {
   })}
           <div class="pl3">
             <h1 class="f2 fw5 ma0">
-              ${browser.i18n.getMessage('panel_quickImport')}
+              ${browser.i18n.getMessage('quickImport_head_peers')}
             </h1>
             <p class="f3 fw2 lh-copy ma0 light-gray">
               ${browser.i18n.getMessage('quickImport_subhead_peers', [peerCount])}
@@ -195,7 +212,7 @@ function quickImportPage (state, emit) {
           <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
           <div class='dt dim' style='padding-left: 100px; height: 300px'>
             <div class='dtc v-mid'>
-              <span class="f3 link dim br1 ph4 pv3 dib white" style="background: #6ACAD1">
+              <span class="f3 dim br1 ph4 pv3 dib navy" style="background: #6ACAD1">
                 ${browser.i18n.getMessage('quickImport_pick_file_button')}
               </span>
               <span class='f3'>

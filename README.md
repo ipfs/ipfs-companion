@@ -1,166 +1,142 @@
 # IPFS Companion
-
-> Upgrade your browser with [IPFS](https://ipfs.io/) super powers
-
-![demo of v2.8.0](https://user-images.githubusercontent.com/157609/55318231-938ce480-5472-11e9-8624-b0021a34c1a4.gif)
+**Harness the power of [IPFS](https://ipfs.io/) in your browser!**
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
-[![i18n status](https://img.shields.io/badge/i18n-translated-blue.svg)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/localization-notes.md)
-[![build-status](https://flat.badgen.net/travis/ipfs-shipyard/ipfs-companion)](https://travis-ci.com/ipfs-shipyard/ipfs-companion)
-[![codecov](https://codecov.io/gh/ipfs-shipyard/ipfs-companion/branch/master/graph/badge.svg)](https://codecov.io/gh/ipfs-shipyard/ipfs-companion)
+[![i18n status](https://img.shields.io/badge/i18n-translated-blue.svg)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/LOCALIZATION-NOTES.md)
 [![#ipfs-in-web-browsers](https://img.shields.io/badge/irc-%23ipfs--in--web--browsers-808080.svg)](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
 
-| <img src="https://unpkg.com/@browser-logos/firefox@2.0.0/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) / [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome@1.0.4/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) / <img src="https://unpkg.com/@browser-logos/brave@3.0.0/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) / <img src="https://unpkg.com/@browser-logos/opera@1.1.1/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  / <img src="https://unpkg.com/@browser-logos/edge@1.0.6/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
+![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmeF2v4UFFvZ341ZDQh1xLeeyN4u8Cr9XSTUj6krDEwfrr)
+
+
+
+| <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmXeTTMAxJVSZLqNcVzBdsAZKhWUpP7w7QAZ8f3Bnmk3Mj)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
-## Lead Maintainer
+## Lead maintainer
 
-[Marcin Rataj](https://github.com/lidel)
+[Marcin Rataj](https://github.com/lidel), with help from the [IPFS GUI working group](https://github.com/ipfs/ipfs-gui).
 
-## Table of Contents
+## Table of contents
 
-- [Background](#background)
-- [Features](#features)
-- [Install](#install)
+- [About IPFS Companion](#about-ipfs-companion)
+- [Features](#ipfs-companion-features)
+- [Install](#install-ipfs-companion)
 - [Contribute](#contribute)
-- [Troubleshooting](#troubleshooting)
-- [Privacy Policy](#privacy-policy)
-- [License](#license)
+- [Help & Troubleshooting](#help--troubleshooting)
+- [Privacy & Licenses](#privacy--license)
 
-## Background
+## About IPFS Companion
 
-This add-on enables everyone to access IPFS resources the way they were meant: from locally running IPFS node :-)
+IPFS Companion harnesses the power of your locally running IPFS node (either through the [IPFS Desktop](https://github.com/ipfs-shipyard/ipfs-desktop/#ipfs-desktop) app or the command-line daemon) directly inside your favorite Chromium-based or Firefox browser, enabling support for `ipfs://` addresses, automatic IPFS gateway loading of websites and file paths, easy IPFS file import and sharing, and more.
 
-IPFS is a new hypermedia distribution protocol, addressed by content and identities.
-IPFS enables the creation of completely distributed applications.
-It aims to make the web faster, safer, and more open.
+IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safer, more resilient, and more open. It enables the creation and dissemination of completely distributed sites and applications that don’t rely on centralized hosting and stay true to the original vision of an open, flat web. Visit [the IPFS Project website](https://ipfs.io) to learn more.
 
-Learn more at [ipfs.io](https://ipfs.io) (it is really cool, we promise!)
+## IPFS Companion features
 
-## Features
+### Automatically detect and redirect IPFS resources
 
-### Automagical Detection of IPFS Resources
+#### Detect URLs with IPFS paths
 
-#### IPFS Path in URL
-
-Requests for IPFS-like paths (`/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) are detected on any website.  
-If tested path is a [valid IPFS address](https://github.com/ipfs/is-ipfs) it gets redirected and loaded from a local gateway, e.g:  
+IPFS Companion detects and tests requests for IPFS-like paths ( such as `/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it is redirected to load from your local gateway. The gateway at `localhost` will also automatically switch to a subdomain to provide a unique origin for each website:
 > `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`  
-> → `http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+> → `http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+> → `http://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.localhost:8080`
 
-#### DNSLink
+#### Detect DNSLink-enabled URLs
 
-Companion will detect presence of [DNSLink](https://docs.ipfs.io/guides/concepts/dnslink/) in DNS records of visited websites and redirect HTTP request to a local gateway.
+IPFS Companion [detects DNSLink info](http://docs.ipfs.io/how-to/dnslink-companion/) in the DNS records of websites. If a site uses DNSLink (a few examples are https://docs.ipfs.io, https://ipld.io, and http://tr.wikipedia-on-ipfs.org), IPFS Companion redirects the HTTP request to your local gateway:
 
 > `http://docs.ipfs.io`  
-> → `http://127.0.0.1:8080/ipns/docs.ipfs.io`
+> → `http://localhost:8080/ipns/docs.ipfs.io` → `http://docs.ipfs.io.ipns.localhost:8080/`
 
-This means if you visit websites with a valid DNSLink (eg. https://docs.ipfs.io, https://ipld.io, http://tr.wikipedia-on-ipfs.org) browser will load them from IPFS.
+#### Detect pages with `x-ipfs-path` headers
 
-More details: [DNSLink Support in IPFS Companion](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md)
+IPFS Companion also upgrades transport to IPFS if it finds the `x-ipfs-path` in any HTTP response headers; this also acts as a fallback for cases when an IPFS path is not present in the URL. [Learn more.](http://docs.ipfs.io/how-to/companion-x-ipfs-path-header/)
 
-#### X-Ipfs-Path
 
-Companion will upgrade transport to IPFS if the header is found in any HTTP response headers. This is a fallback for edge cases when IPFS path is not present in URL.
+#### Toggle redirects globally or per site
 
-More details: [`x-ipfs-path` Header Support in IPFS Companion](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/x-ipfs-path-header.md)
+You can disable and re-enable local gateway redirects by several means:
+- Suspend redirects **globally** in IPFS Companion's preferences
+- Suspend redirects **per site** using the toggle under "Current tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
+- Add `x-ipfs-companion-no-redirect` to the URL itself as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect))
 
-#### Redirect Opt-Out
-
-It is possible to opt-out from Gateway redirect by:
-- a) suspending redirect via global toggle (see [_Disable All Redirects_](#disable-all-redirects) below)
-- b) suspending redirect for via per website opt-out (in [_Active Tab_ section of _Browser Action_](#disable-gateway-redirect-per-website) or _Preferences_)
-- c) including `x-ipfs-companion-no-redirect` in the URL (as a [hash](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect) or [query](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect) parameter).
-
+<!-- TODO: restore after https://github.com/ipfs-shipyard/ipfs-companion/issues/843 is closed
 ### IPFS API as `window.ipfs`
 
-Your IPFS node is exposed as `window.ipfs` on every webpage.
+Your IPFS node is exposed as `window.ipfs` on every web page.
 Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
 Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
+-->
 
-### Quick Toggles
+### Access frequently-used IPFS actions from your browser bar
 
-The Browser Action pop-up provides handy toggles for often used operations.
+IPFS Companion enables you to quickly and easily access common actions from your browser bar with just a few clicks:
 
-#### Disable Gateway Redirect Per Website
+- See how many peers you're connected with a glance at the cube icon in your browser bar
+- Check your IPFS API and gateway status by clicking the cube icon to reveal the main menu
+- Right-click images and other page assets to easily add them to IPFS (including the option to preserve file names)
+- Choose the _Quick Import/Share..._ option in the main menu for quick drag-and-drop import from a browser tab
+- Pin or unpin IPFS resources (via API) directly from the main menu
+- Copy shareable public gateway links, IPFS content paths, or CIDs of IPFS resources directly from the main menu
+- Launch the [IPFS Web UI dashboard](https://github.com/ipfs-shipyard/ipfs-webui) from the main menu with a single click
+- Toggle gateway redirects or switch all IPFS Companion features on/off quickly and easily from the main menu (illustrations below)
 
-> _Active Tab_ actions include option to opt-out current website from Gateway redirect of any IPFS subresources.    
-> Disabling redirect for DNSLink website will restore original URL as well:
->
-> ![per-site-opt-out](https://user-images.githubusercontent.com/157609/55317805-90452900-5471-11e9-9e0f-293afd261648.gif)
+#### Toggle gateway redirects on a per-website basis
 
-#### Disable All Redirects
+You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
-> A handy toggle to disable all gateway redirects while keeping all other features enabled:
->
-> ![redirect](https://user-images.githubusercontent.com/157609/55317804-90452900-5471-11e9-9fc1-42bee5b15a6a.gif)
+![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmbAWhTk8GjtFqpNQVCRXWyJbh9YFC61nTNcBPZi87e4qo)
 
-#### Suspend IPFS Extension
+#### Switch all IPFS Companion features on/off
 
-> The "power" icon can be used to temporarily suspend all IPFS integrations
-> (redirects, API status, content scripts, protocol handlers etc).
-> Useful during testing. Extension can be re-enabled with a single click:
->
-> ![screenshot of suspend toggle](https://user-images.githubusercontent.com/157609/55317803-8fac9280-5471-11e9-96e3-f068cc62148b.gif)
+To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc.), use the on/off button at the top of the IPFS Companion menu.
 
-### IPFS Status and Context Actions
+![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmVWFueChvoxfRpPcB9C7TJFucr2TJx6tPT3udtYd58GSy)
 
-- IPFS API and Gateway status
-- Add local (quick import) or remote files (context menu) to IPFS with option to preserve filename
-- Easy access to [WebUI](https://github.com/ipfs/webui/) and add-on Preferences
-- Toggle redirection to local gateway (automatic by default, manual mode can be enabled in Preferences)
-- Additional actions for pages loaded from IPFS
-    - Pin/Unpin of IPFS resources (via API)
-    - Copy canonical IPFS address
-    - Copy shareable URL to resource at preferred public gateway
+### Try out experiments!
 
-### Experiments!
+IPFS Companion ships with a variety of experimental features. Some are disabled by default, so be sure to check out IPFS Companion's Preferences to see them all.
 
-_(some are disabled by default, use Preferences screen to enable)_
-
-- Requests made via [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) are re-routed to HTTP gateway (public or custom):
+- Make plaintext IPFS links clickable ([demo](https://ipfs.io/ipfs/bafybeidvtwx54qr44kidymvhfzefzxhgkieigwth6oswk75zhlzjdmunoy/linkify-demo.html))
+- Re-route requests made via the following [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) to an HTTP gateway (public or custom):
     - `ipfs://$cid`
     - `ipns://$cid_or_fqdn`
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
-- Make plaintext IPFS links clickable ([demo](https://ipfs.io/ipfs/bafybeidvtwx54qr44kidymvhfzefzxhgkieigwth6oswk75zhlzjdmunoy/linkify-demo.html))
-- Switch between _External_ HTTP API and _Embedded_ js-ipfs node. Read about differences at [docs/node-types](docs/node-types.md).
-  > [![screenshot of node type switch](https://user-images.githubusercontent.com/157609/42382479-b4d98768-8134-11e8-979c-69b758846bf0.png)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/node-types.md)
 
-## Install
+- Switch between the external HTTP API of your local IPFS node (default setting) and a js-ipfs node embedded in your browser (note that this has some [functionality limitations](https://docs.ipfs.io/how-to/companion-node-types/))
+[![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmZVAyxih3qt99qED3Xp8wzHxsV3XJ3vVa7HuW21AGapPP)](http://docs.ipfs.io/how-to/companion-node-types/)
 
-### Release Channel
+## Install IPFS Companion
 
-We recommend installing the stable release via your browser's add-on store.
+### Latest stable release
 
-| <img src="https://unpkg.com/@browser-logos/firefox@2.0.0/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) / [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome@1.0.4/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) / <img src="https://unpkg.com/@browser-logos/brave@3.0.0/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) / <img src="https://unpkg.com/@browser-logos/opera@1.1.1/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  / <img src="https://unpkg.com/@browser-logos/edge@1.0.6/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
+| <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/) \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmXeTTMAxJVSZLqNcVzBdsAZKhWUpP7w7QAZ8f3Bnmk3Mj)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
+**Important!** Make sure you have [IPFS installed](https://ipfs.io/#install) on your computer as well. Because IPFS Companion (in its standard configuration) talks to your computer’s local IPFS node to work its browser magic, you’ll need to have IPFS running on your computer, too.
 
-**Note:** `ipfs-companion` is designed to retrieve content from a locally running IPFS daemon.  
-Make sure [IPFS is installed](https://docs.ipfs.io/introduction/usage/) on your computer.
+### Beta channel
 
-### Beta Channel
+Developers and enthusiasts can opt in to the beta-quality channel:
 
-Developers and enthusiasts can opt-in for Beta-quality channel with hand-picked Dev Builds:
+- [Firefox self-hosted signed dev build](https://bafybeibjozlsoxzrxsoklis775aglnwpal2hjl42ippo57jdwiv6zoij7m.ipfs.dweb.link/)
+- [Chromium-based dev build at the Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
 
-- Beta for Firefox: [Self-hosted Signed Dev Build](https://ipfs.io/ipfs/QmR8W5wg8BuAyBTruHnHovfWRavwvidVh3qtyinXi6NnLa)
-- Beta for Chromium-based browsers: [Dev Build at Chrome Web Store](https://chrome.google.com/webstore/detail/ipfs-companion-dev-build/hjoieblefckbooibpepigmacodalfndh)
+It's also possible to grab [vendor-specific packages for each release](https://github.com/ipfs-shipyard/ipfs-companion/releases),
+but these builds are not signed, nor will automatically update. `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium) or `about:debugging` (Firefox) for smoke-testing.
 
-It is also possible to [grab the last successful build from `master`](https://ci.ipfs.team/job/IPFS%20Shipyard/job/ipfs-companion/job/master/lastSuccessfulBuild/),
-but these builds are not signed nor will automatically update:
-`.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium-based) or `about:debugging` (Firefox) for the purpose of quick smoke-testing.
+### Development
 
-## Development
-
-To work on the extension you need to install it from source rather than from the add on store.
+To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
 1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
-2. Run all-in-one dev build:
+2. Run this all-in-one dev build:
     ```console
     $ npm run dev-build
     ```
@@ -170,8 +146,8 @@ To work on the extension you need to install it from source rather than from the
     OR
     $ npm run bundle:chromium # for Chromium-based browsers
     ```
-4. Load it into browser:
-    * Chromium-based
+4. Load it into your browser:
+    * Chromium
         1. Enter `chrome://extensions` in the URL bar
         2. Enable "Developer mode"
         3. Click "Load unpacked extension..."
@@ -183,62 +159,25 @@ To work on the extension you need to install it from source rather than from the
         3. Click "Load Temporary Add-on"
         4. Pick the _file_ `add-on/manifest.json`
 
-**See [`docs/developer-notes.md`](docs/developer-notes.md) for more detailed instructions**
-
-### Reproducible Build in Docker
-
-Want to ensure prebuilt bundle does not include any additional code?  
-Don't want to install JS dependencies such as NodeJS and yarn?  
-
-Do an isolated build inside of Docker!
-
-Run the following command for ending up
-with a built extension inside the `build/` directory:
-
-```sh
-npm run release-build
-```
-
-It is an alias for running `ci:build` script inside of immutable Docker image, which guarantees the same output on all platforms.
-
-### Legacy Firefox (< 53) and XUL-Compatible Browsers
-
-Legacy  versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
-While it is not maintained anymore, one can inspect, build and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch.    
-For historical background on the rewrite see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
-
 ## Contribute
 
 [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](CONTRIBUTING.md)
 
-Feel free to join in. All welcome. Open an [issue](https://github.com/ipfs/ipfs-companion/issues)!
+All are welcome to help make IPFS Companion even better!
+- Check out the [contribution guide](CONTRIBUTING.md) for how to get started as a developer
+- Open an [issue](https://github.com/ipfs/ipfs-companion/issues)
+- Make sure you read and abide by the [IPFS Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md)
 
-If you want to help in developing this extension, please see [CONTRIBUTING](CONTRIBUTING.md) page :sparkles:
+## Help & troubleshooting
 
-The browser extension team hangs out at the [#ipfs-in-web-browsers](https://webchat.freenode.net/?channels=ipfs-in-web-browsers) channel on Freenode.
+### Ask a question
+The best place to ask about IPFS Companion (or IPFS in general!) is in the [official IPFS Forums](https://discuss.ipfs.io/), where you can search past discussions for others who may have had the same questions, too. There's also an active [#ipfs](https://webchat.freenode.net/?channels=ipfs) community on IRC.
 
-This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
-
-### TROUBLESHOOTING
-
-The best place to ask your questions about IPFS in general, how it works and what you can do with it is at [discuss.ipfs.io](https://discuss.ipfs.io/).  
-We are also available at the [#ipfs](https://webchat.freenode.net/?channels=ipfs) channel, where most of IPFS community hangs out.
-
-Questions specific to this browser companion can be asked directly at [`#ipfs-in-web-browsers`](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
-
-#### Import via Right-Click Does Not Work in Firefox
-
-See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
-
-#### Workaround for HTTP Redirect to Work with Ghostery
-
-[Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways. More details in [#466](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until it is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected site.
-
-#### Rule to Work with NoScript with ABE Enabled
-
-By default [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks this addon by blocking assets loaded from IPFS Gateway running on localhost.    
-To make it work, one needs to extend the SYSTEM Rulset and prepend it with IPFS whitelist:
-
+### Common troubleshooting steps
+These frequently encountered troubleshooting situations may be helpful:
+- **Import via right-click does not work in Firefox:** See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
+- **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
+- **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first):
 ```
 # Enable IPFS redirect to LOCAL
 Site ^http://127.0.0.1:8080/(ipfs|ipns)*
@@ -250,16 +189,9 @@ Accept from LOCAL
 Deny
 ```
 
-Feel free to modify it, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first.
+## Privacy & license info
 
-## Privacy Policy
-
-See [`docs/privacy-policy.md`](docs/privacy-policy.md)
-
-## License
-
-[IPFS logo](https://github.com/ipfs/logo) belongs to [The IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a>.
-
-[is-ipfs](https://github.com/xicombd/is-ipfs), [js-multihash](https://github.com/jbenet/js-multihash) and other NPM dependencies are under MIT license, unless stated otherwise.
-
-The add-on itself is released under [CC0](LICENSE): to the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain.
+- IPFS Companion [Privacy policy](PRIVACY-POLICY.md)
+- The IPFS logo belongs to the [IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a> license
+- [is-ipfs](https://github.com/ipfs-shipyard/is-ipfs), [js-multihash](https://github.com/multiformats/js-multihash), and other npm dependencies are under MIT license, unless stated otherwise
+- IPFS Companion itself is released under [CC0](LICENSE); to the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain

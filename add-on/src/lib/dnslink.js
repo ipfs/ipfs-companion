@@ -9,9 +9,7 @@ const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
 const { default: PQueue } = require('p-queue')
 const { offlinePeerCount } = require('./state')
-const { pathAtHttpGateway } = require('./ipfs-path')
-
-// TODO: add Preferences toggle to disable redirect of DNSLink  websites (while keeping async dnslink lookup)
+const { ipfsContentPath, sameGateway, pathAtHttpGateway } = require('./ipfs-path')
 
 module.exports = function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
@@ -47,11 +45,11 @@ module.exports = function createDnslinkResolver (getState) {
       return state.dnslinkPolicy &&
         requestUrl.startsWith('http') &&
         !IsIpfs.url(requestUrl) &&
-        !requestUrl.startsWith(state.apiURLString) &&
-        !requestUrl.startsWith(state.gwURLString)
+        !sameGateway(requestUrl, state.apiURL) &&
+        !sameGateway(requestUrl, state.gwURL)
     },
 
-    dnslinkRedirect (url, dnslink) {
+    dnslinkAtGateway (url, dnslink) {
       if (typeof url === 'string') {
         url = new URL(url)
       }
@@ -61,9 +59,8 @@ module.exports = function createDnslinkResolver (getState) {
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
         const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
-        const gateway = state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString
-        // TODO: redirect to `ipns://` if hasNativeProtocolHandler === true
-        return { redirectUrl: pathAtHttpGateway(ipnsPath, gateway) }
+        const gateway = state.localGwAvailable ? state.gwURLString : state.pubGwURLString
+        return pathAtHttpGateway(ipnsPath, gateway)
       }
     },
 
@@ -83,7 +80,6 @@ module.exports = function createDnslinkResolver (getState) {
           }
         } catch (error) {
           log.error(`error in readAndCacheDnslink for '${fqdn}'`, error)
-          console.error(error)
         }
       } else {
         // Most of the time we will hit cache, which makes below line is too noisy
@@ -111,7 +107,7 @@ module.exports = function createDnslinkResolver (getState) {
       preloadUrlCache.set(url, true)
       const dnslink = await dnslinkResolver.resolve(url)
       if (!dnslink) return
-      if (state.ipfsNodeType === 'embedded') return
+      if (!state.localGwAvailable) return
       if (state.peerCount < 1) return
       return preloadQueue.add(async () => {
         const { pathname } = new URL(url)
@@ -128,7 +124,13 @@ module.exports = function createDnslinkResolver (getState) {
       let apiProvider
       // TODO: fix DNS resolver for ipfsNodeType='embedded:chromesockets', for now use ipfs.io
       if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
-        apiProvider = state.apiURLString
+        // Use gw port so it can be a GET:
+        // Chromium does not execute onBeforeSendHeaders for synchronous calls
+        // made from the same extension context as onBeforeSendHeaders
+        // which means we are unable to fixup Origin on the fly for this
+        // This will no longer be needed when we switch
+        // to async lookup via ipfs.dns everywhere
+        apiProvider = state.gwURLString
       } else {
         // fallback to resolver at public gateway
         apiProvider = 'https://ipfs.io/'
@@ -204,11 +206,12 @@ module.exports = function createDnslinkResolver (getState) {
     // in url.hostname OR in url.pathname (/ipns/<fqdn>)
     // and return matching FQDN if present
     findDNSLinkHostname (url) {
-      const { hostname, pathname } = new URL(url)
-      // check //foo.tld/ipns/<fqdn>
-      if (IsIpfs.ipnsPath(pathname)) {
+      if (!url) return
+      // Normalize subdomain and path gateways to to /ipns/<fqdn>
+      const contentPath = ipfsContentPath(url)
+      if (IsIpfs.ipnsPath(contentPath)) {
         // we may have false-positives here, so we do additional checks below
-        const ipnsRoot = pathname.match(/^\/ipns\/([^/]+)/)[1]
+        const ipnsRoot = contentPath.match(/^\/ipns\/([^/]+)/)[1]
         // console.log('findDNSLinkHostname ==> inspecting IPNS root', ipnsRoot)
         // Ignore PeerIDs, match DNSLink only
         if (!IsIpfs.cid(ipnsRoot) && dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
@@ -216,7 +219,8 @@ module.exports = function createDnslinkResolver (getState) {
           return ipnsRoot
         }
       }
-      // check //<fqdn>/foo/bar
+      // Check main hostname
+      const { hostname } = new URL(url)
       if (dnslinkResolver.readAndCacheDnslink(hostname)) {
         // console.log('findDNSLinkHostname ==> found DNSLink for url.hostname', hostname)
         return hostname

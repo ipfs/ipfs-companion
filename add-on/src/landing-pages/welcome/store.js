@@ -26,11 +26,12 @@ function createWelcomePageStore (i18n, runtime) {
       })
     })
 
-    emitter.on('openWebUi', async () => {
+    emitter.on('openWebUi', async (page = '/') => {
+      const url = `${state.webuiRootUrl}#${page}`
       try {
-        browser.tabs.create({ url: state.webuiRootUrl })
+        await browser.tabs.create({ url })
       } catch (error) {
-        console.error(`Unable Open Web UI due to ${error}`)
+        console.error(`Unable Open Web UI (${url})`, error)
       }
     })
   }
