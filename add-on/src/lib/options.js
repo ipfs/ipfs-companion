@@ -205,7 +205,7 @@ exports.migrateOptions = async (storage, debug) => {
     const { enabledOn, disabledOn } = await storage.get(['enabledOn', 'disabledOn'])
     for (const fqdn of [
       'proto.school', //  https://github.com/ipfs-shipyard/ipfs-companion/issues/921
-      'app.fleek.co' // TODO: confirm if ok
+      'app.fleek.co' // https://github.com/ipfs-shipyard/ipfs-companion/pull/929#pullrequestreview-509501401
     ]) {
       if (enabledOn.includes(fqdn) || disabledOn.includes(fqdn)) continue
       log(`adding '${fqdn}' to 'disabledOn' list`)
