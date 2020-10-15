@@ -22,6 +22,18 @@ describe('state.js', function () {
       const url = 'https://en.wikipedia.org/wiki/Main_Page'
       expect(state.activeIntegrations(url)).to.equal(true)
     })
+    it('should return true if parent host is on the opt-out list, but a direct match exist on opt-in one', async function () {
+      state.disabledOn = ['wikipedia.org']
+      state.enabledOn = ['en.wikipedia.org']
+      const url = 'https://en.wikipedia.org/wiki/Main_Page'
+      expect(state.activeIntegrations(url)).to.equal(true)
+    })
+    it('should return false if parent host is on the opt-in list, but a direct match exist on opt-out one', async function () {
+      state.disabledOn = ['en.wikipedia.org']
+      state.enabledOn = ['wikipedia.org']
+      const url = 'https://en.wikipedia.org/wiki/Main_Page'
+      expect(state.activeIntegrations(url)).to.equal(false)
+    })
     it('should return false if host is not on the opt-out list but global toggle is off', async function () {
       state.disabledOn = ['pl.wikipedia.org']
       state.active = false

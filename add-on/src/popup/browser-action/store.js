@@ -180,18 +180,19 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('toggleSiteIntegrations', async () => {
-    state.currentTabIntegrationsOptOut = !state.currentTabIntegrationsOptOut
+    const wasOptedOut = state.currentTabIntegrationsOptOut
+    state.currentTabIntegrationsOptOut = !wasOptedOut
     emitter.emit('render')
 
     try {
       let { enabledOn, disabledOn, currentTab, currentDnslinkFqdn, currentFqdn } = state
       // if we are on /ipns/fqdn.tld/ then use hostname from DNSLink
       const fqdn = currentDnslinkFqdn || currentFqdn
-      if (disabledOn.includes(fqdn)) {
-        disabledOn = disabledOn.filter(host => !host.endsWith(fqdn))
+      if (wasOptedOut) {
+        disabledOn = disabledOn.filter(host => host !== fqdn)
         enabledOn.push(fqdn)
       } else {
-        enabledOn = enabledOn.filter(host => !host.endsWith(fqdn))
+        enabledOn = enabledOn.filter(host => host !== fqdn)
         disabledOn.push(fqdn)
       }
       // console.dir('toggleSiteIntegrations', state)

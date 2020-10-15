@@ -1,6 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+const isFQDN = require('is-fqdn')
 const { safeURL } = require('./options')
 const { braveJsIpfsWebuiCid } = require('./precache')
 const offlinePeerCount = -1
@@ -31,8 +32,12 @@ function initState (options, overrides) {
   state.activeIntegrations = (url) => {
     if (!state.active) return false
     try {
-      const fqdn = new URL(url).hostname
-      return !(state.disabledOn.find(host => fqdn.endsWith(host)))
+      const fqdn = isFQDN(url) ? url : new URL(url).hostname
+      // opt-out has more weight, we also match parent domains
+      const disabledDirectlyOrIndirectly = state.disabledOn.some(host => fqdn.endsWith(host))
+      // ..however direct opt-in should overwrite parent's opt-out
+      const enabledDirectly = state.enabledOn.some(host => host === fqdn)
+      return !(disabledDirectlyOrIndirectly && !enabledDirectly)
     } catch (_) {
       return false
     }

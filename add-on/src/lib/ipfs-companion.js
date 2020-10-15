@@ -258,6 +258,7 @@ module.exports = async function init () {
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
+      enabledOn: state.enabledOn,
       disabledOn: state.disabledOn,
       currentTab
     }
@@ -285,7 +286,7 @@ module.exports = async function init () {
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
-      info.currentTabIntegrationsOptOut = info.disabledOn && info.disabledOn.includes(info.currentFqdn)
+      info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
     // Still here?
