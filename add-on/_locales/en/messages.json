@@ -348,7 +348,7 @@
     "description": "An option description on the Preferences screen (option_disabledOn_description)"
   },
   "option_enabledOn_title": {
-    "message": "Manual Opt-In List",
+    "message": "Always Enable IPFS Integrations",
     "description": "An option title on the Preferences screen (option_enabledOn_title)"
   },
   "option_enabledOn_description": {
