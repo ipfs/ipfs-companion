@@ -44,7 +44,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   it('should throw if ALL IPFS integrations are disabled for requested scope', async () => {
     const getState = () => initState(optionDefaults, {
       ipfsProxy: true,
-      noIntegrationsHostnames: ['foo.tld']
+      disabledOn: ['foo.tld']
     })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://1.foo.tld/path/'

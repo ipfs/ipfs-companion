@@ -18,23 +18,23 @@ describe('state.js', function () {
       expect(state.activeIntegrations(undefined)).to.equal(false)
     })
     it('should return true if host is not on the opt-out list', async function () {
-      state.noIntegrationsHostnames = ['pl.wikipedia.org']
+      state.disabledOn = ['pl.wikipedia.org']
       const url = 'https://en.wikipedia.org/wiki/Main_Page'
       expect(state.activeIntegrations(url)).to.equal(true)
     })
     it('should return false if host is not on the opt-out list but global toggle is off', async function () {
-      state.noIntegrationsHostnames = ['pl.wikipedia.org']
+      state.disabledOn = ['pl.wikipedia.org']
       state.active = false
       const url = 'https://en.wikipedia.org/wiki/Main_Page'
       expect(state.activeIntegrations(url)).to.equal(false)
     })
     it('should return false if host is on the opt-out list', async function () {
-      state.noIntegrationsHostnames = ['example.com', 'pl.wikipedia.org']
+      state.disabledOn = ['example.com', 'pl.wikipedia.org']
       const url = 'https://pl.wikipedia.org/wiki/Wikipedia:Strona_g%C5%82%C3%B3wna'
       expect(state.activeIntegrations(url)).to.equal(false)
     })
     it('should return false if parent host of a subdomain is on the opt-out list', async function () {
-      state.noIntegrationsHostnames = ['wikipedia.org']
+      state.disabledOn = ['wikipedia.org']
       const url = 'https://pl.wikipedia.org/wiki/Wikipedia:Strona_g%C5%82%C3%B3wna'
       expect(state.activeIntegrations(url)).to.equal(false)
     })

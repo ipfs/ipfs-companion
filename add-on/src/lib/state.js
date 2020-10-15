@@ -32,7 +32,7 @@ function initState (options, overrides) {
     if (!state.active) return false
     try {
       const fqdn = new URL(url).hostname
-      return !(state.noIntegrationsHostnames.find(host => fqdn.endsWith(host)))
+      return !(state.disabledOn.find(host => fqdn.endsWith(host)))
     } catch (_) {
       return false
     }

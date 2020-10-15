@@ -89,7 +89,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (fqdn.endsWith(optout) || (parentFqdn && parentFqdn.endsWith(optout))) return true
       return false
     }
-    if (state.noIntegrationsHostnames.some(triggerOptOut)) {
+    if (state.disabledOn.some(triggerOptOut)) {
       ignore(request.requestId)
     }
 

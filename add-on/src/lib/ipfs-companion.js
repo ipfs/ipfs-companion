@@ -49,8 +49,8 @@ module.exports = async function init () {
 
   try {
     log('init')
-    await migrateOptions(browser.storage.local)
     await storeMissingOptions(await browser.storage.local.get(), optionDefaults, browser.storage.local)
+    await migrateOptions(browser.storage.local, debug)
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
@@ -258,7 +258,7 @@ module.exports = async function init () {
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
       redirect: state.redirect,
-      noIntegrationsHostnames: state.noIntegrationsHostnames,
+      disabledOn: state.disabledOn,
       currentTab
     }
     try {
@@ -285,7 +285,7 @@ module.exports = async function init () {
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
-      info.currentTabIntegrationsOptOut = info.noIntegrationsHostnames && info.noIntegrationsHostnames.includes(info.currentFqdn)
+      info.currentTabIntegrationsOptOut = info.disabledOn && info.disabledOn.includes(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
     // Still here?
@@ -697,7 +697,8 @@ module.exports = async function init () {
         case 'preloadAtPublicGateway':
         case 'openViaWebUI':
         case 'useLatestWebUI':
-        case 'noIntegrationsHostnames':
+        case 'enabledOn':
+        case 'disabledOn':
         case 'dnslinkRedirect':
           state[key] = change.newValue
           break

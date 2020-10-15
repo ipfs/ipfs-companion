@@ -34,7 +34,8 @@ module.exports = (state, emitter) => {
     currentTab: null,
     currentFqdn: null,
     currentDnslinkFqdn: null,
-    noIntegrationsHostnames: []
+    enabledOn: [],
+    disabledOn: []
   })
 
   let port
@@ -183,30 +184,32 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
 
     try {
-      let noIntegrationsHostnames = state.noIntegrationsHostnames
+      let { enabledOn, disabledOn, currentTab, currentDnslinkFqdn, currentFqdn } = state
       // if we are on /ipns/fqdn.tld/ then use hostname from DNSLink
-      const fqdn = state.currentDnslinkFqdn || state.currentFqdn
-      if (noIntegrationsHostnames.includes(fqdn)) {
-        noIntegrationsHostnames = noIntegrationsHostnames.filter(host => !host.endsWith(fqdn))
+      const fqdn = currentDnslinkFqdn || currentFqdn
+      if (disabledOn.includes(fqdn)) {
+        disabledOn = disabledOn.filter(host => !host.endsWith(fqdn))
+        enabledOn.push(fqdn)
       } else {
-        noIntegrationsHostnames.push(fqdn)
+        enabledOn = enabledOn.filter(host => !host.endsWith(fqdn))
+        disabledOn.push(fqdn)
       }
       // console.dir('toggleSiteIntegrations', state)
-      await browser.storage.local.set({ noIntegrationsHostnames })
+      await browser.storage.local.set({ disabledOn, enabledOn })
 
       // Reload the current tab to apply updated redirect preference
-      if (!state.currentDnslinkFqdn || !isIPFS.ipnsUrl(state.currentTab.url)) {
+      if (!currentDnslinkFqdn || !isIPFS.ipnsUrl(currentTab.url)) {
         // No DNSLink, reload URL as-is
-        await browser.tabs.reload(state.currentTab.id)
+        await browser.tabs.reload(currentTab.id)
       } else {
         // DNSLinked websites require URL change
         // from  http?://gateway.tld/ipns/{fqdn}/some/path OR
         // from  http?://{fqdn}.ipns.gateway.tld/some/path
         // to    http://{fqdn}/some/path
         // (defaulting to http: https websites will have HSTS or a redirect)
-        const path = ipfsContentPath(state.currentTab.url, { keepURIParams: true })
+        const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
         const originalUrl = path.replace(/^.*\/ipns\//, 'http://')
-        await browser.tabs.update(state.currentTab.id, {
+        await browser.tabs.update(currentTab.id, {
           // FF only: loadReplace: true,
           url: originalUrl
         })
