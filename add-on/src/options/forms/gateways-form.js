@@ -145,7 +145,7 @@ function gatewaysForm ({
                 id="disabledOn"
                 spellcheck="false"
                 onchange=${onDisabledOnChange}
-                rows="${disabledOn.length + 1}"
+                rows="${Math.min(disabledOn.length + 1, 10)}"
                 >${hostArrayToText(disabledOn)}</textarea>
             </div>
             <div class="flex-row-ns pb0-ns">
@@ -160,7 +160,7 @@ function gatewaysForm ({
                 id="enabledOn"
                 spellcheck="false"
                 onchange=${onEnabledOnChange}
-                rows="${enabledOn.length + 1}"
+                rows="${Math.min(enabledOn.length + 1, 10)}"
                 >${hostArrayToText(enabledOn)}</textarea>
             </div>
           ` : null}

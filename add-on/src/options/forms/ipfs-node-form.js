@@ -59,7 +59,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
               class="bg-white navy self-center-ns"
               spellcheck="false"
               id="ipfsNodeConfig"
-              rows="${(ipfsNodeConfig.match(/\n/g) || []).length + 1}"
+              rows="${Math.min((ipfsNodeConfig.match(/\n/g) || []).length + 1, 30)}"
               onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
           </div>
         ` : null}
