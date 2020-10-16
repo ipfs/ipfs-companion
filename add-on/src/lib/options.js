@@ -14,7 +14,8 @@ exports.optionDefaults = Object.freeze({
   publicSubdomainGatewayUrl: 'https://dweb.link',
   useCustomGateway: true,
   useSubdomains: true,
-  noIntegrationsHostnames: [],
+  enabledOn: [], // hostnames with explicit integration opt-in
+  disabledOn: [], // hostnames with explicit integration opt-out
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',
@@ -145,7 +146,10 @@ function localhostNameUrl (url) {
   return url.hostname.toLowerCase() === 'localhost'
 }
 
-exports.migrateOptions = async (storage) => {
+exports.migrateOptions = async (storage, debug) => {
+  const log = debug('ipfs-companion:migrations')
+  log.error = debug('ipfs-companion:migrations:error')
+
   // <= v2.4.4
   // DNSLINK: convert old on/off 'dnslink' flag to text-based 'dnslinkPolicy'
   const { dnslink } = await storage.get('dnslink')
@@ -157,6 +161,7 @@ exports.migrateOptions = async (storage) => {
     })
     await storage.remove('dnslink')
   }
+
   // ~ v2.8.x + Brave
   // Upgrade js-ipfs to js-ipfs + chrome.sockets
   const { ipfsNodeType } = await storage.get('ipfsNodeType')
@@ -167,6 +172,7 @@ exports.migrateOptions = async (storage) => {
       ipfsNodeConfig: buildDefaultIpfsNodeConfig()
     })
   }
+
   // ~ v2.9.x: migrating noRedirectHostnames → noIntegrationsHostnames
   // https://github.com/ipfs-shipyard/ipfs-companion/pull/830
   const { noRedirectHostnames } = await storage.get('noRedirectHostnames')
@@ -174,6 +180,7 @@ exports.migrateOptions = async (storage) => {
     await storage.set({ noIntegrationsHostnames: noRedirectHostnames })
     await storage.remove('noRedirectHostnames')
   }
+
   // ~v2.11: subdomain proxy at *.ipfs.localhost
   // migrate old default 127.0.0.1 to localhost hostname
   const { customGatewayUrl: gwUrl } = await storage.get('customGatewayUrl')
@@ -182,6 +189,28 @@ exports.migrateOptions = async (storage) => {
     const newUrl = guiURLString(gwUrl, { useLocalhostName: useSubdomains })
     if (gwUrl !== newUrl) {
       await storage.set({ customGatewayUrl: newUrl })
+    }
+  }
+
+  { // ~v2.15.x: migrating noIntregrationsHostnames → disabledOn
+    const { disabledOn, noIntegrationsHostnames } = await storage.get(['disabledOn', 'noIntegrationsHostnames'])
+    if (noIntegrationsHostnames) {
+      log('migrating noIntregrationsHostnames → disabledOn')
+      await storage.set({ disabledOn: disabledOn.concat(noIntegrationsHostnames) })
+      await storage.remove('noIntegrationsHostnames')
+    }
+  }
+
+  { // ~v2.15.x: opt-out some hostnames if user does not have excplicit rule already
+    const { enabledOn, disabledOn } = await storage.get(['enabledOn', 'disabledOn'])
+    for (const fqdn of [
+      'proto.school', //  https://github.com/ipfs-shipyard/ipfs-companion/issues/921
+      'app.fleek.co' // https://github.com/ipfs-shipyard/ipfs-companion/pull/929#pullrequestreview-509501401
+    ]) {
+      if (enabledOn.includes(fqdn) || disabledOn.includes(fqdn)) continue
+      log(`adding '${fqdn}' to 'disabledOn' list`)
+      disabledOn.push(fqdn)
+      await storage.set({ disabledOn })
     }
   }
 }

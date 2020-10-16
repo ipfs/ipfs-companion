@@ -16,7 +16,8 @@ function gatewaysForm ({
   customGatewayUrl,
   useCustomGateway,
   useSubdomains,
-  noIntegrationsHostnames,
+  disabledOn,
+  enabledOn,
   publicGatewayUrl,
   publicSubdomainGatewayUrl,
   onOptionChange
@@ -26,7 +27,8 @@ function gatewaysForm ({
   const onUseSubdomainProxyChange = onOptionChange('useSubdomains')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', guiURLString)
   const onPublicSubdomainGatewayUrlChange = onOptionChange('publicSubdomainGatewayUrl', guiURLString)
-  const onNoIntegrationsHostnamesChange = onOptionChange('noIntegrationsHostnames', hostTextToArray)
+  const onDisabledOnChange = onOptionChange('disabledOn', hostTextToArray)
+  const onEnabledOnChange = onOptionChange('enabledOn', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
   const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
   const allowChangeOfCustomGateway = ipfsNodeType !== 'embedded:chromesockets'
@@ -132,19 +134,34 @@ function gatewaysForm ({
           ` : null}
           ${supportRedirectToCustomGateway ? html`
             <div class="flex-row-ns pb0-ns">
-              <label for="noIntegrationsHostnames">
+              <label for="disabledOn">
                 <dl>
-                  <dt>${browser.i18n.getMessage('option_noIntegrationsHostnames_title')}</dt>
-                  <dd>${browser.i18n.getMessage('option_noIntegrationsHostnames_description')}</dd>
+                  <dt>${browser.i18n.getMessage('option_disabledOn_title')}</dt>
+                  <dd>${browser.i18n.getMessage('option_disabledOn_description')}</dd>
                 </dl>
               </label>
               <textarea
                 class="bg-white navy self-center-ns"
-                id="noIntegrationsHostnames"
+                id="disabledOn"
                 spellcheck="false"
-                onchange=${onNoIntegrationsHostnamesChange}
-                rows="1"
-                >${hostArrayToText(noIntegrationsHostnames)}</textarea>
+                onchange=${onDisabledOnChange}
+                rows="${Math.min(disabledOn.length + 1, 10)}"
+                >${hostArrayToText(disabledOn)}</textarea>
+            </div>
+            <div class="flex-row-ns pb0-ns">
+              <label for="enabledOn">
+                <dl>
+                  <dt>${browser.i18n.getMessage('option_enabledOn_title')}</dt>
+                  <dd>${browser.i18n.getMessage('option_enabledOn_description')}</dd>
+                </dl>
+              </label>
+              <textarea
+                class="bg-white navy self-center-ns"
+                id="enabledOn"
+                spellcheck="false"
+                onchange=${onEnabledOnChange}
+                rows="${Math.min(enabledOn.length + 1, 10)}"
+                >${hostArrayToText(enabledOn)}</textarea>
             </div>
           ` : null}
 

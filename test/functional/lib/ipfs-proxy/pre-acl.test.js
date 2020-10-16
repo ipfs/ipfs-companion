@@ -38,7 +38,7 @@ describe('lib/ipfs-proxy/pre-acl', () => {
   it('should throw if ALL IPFS integrations are disabled for requested scope', async () => {
     const getState = () => initState(optionDefaults, {
       ipfsProxy: true,
-      noIntegrationsHostnames: ['foo.tld']
+      disabledOn: ['foo.tld']
     })
     const accessControl = new AccessControl(new Storage())
     const getScope = () => 'https://2.foo.tld/bar/buzz/'

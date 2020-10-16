@@ -31,7 +31,7 @@ function dnslinkForm ({
               </dd>
             </dl>
           </label>
-          <select id="dnslinkPolicy" name='dnslinkPolicy' class="self-center-ns bg-white" onchange=${onDnslinkPolicyChange}>
+          <select id="dnslinkPolicy" name='dnslinkPolicy' class="self-center-ns bg-white navy" onchange=${onDnslinkPolicyChange}>
             <option
               value='false'
               selected=${String(dnslinkPolicy) === 'false'}>

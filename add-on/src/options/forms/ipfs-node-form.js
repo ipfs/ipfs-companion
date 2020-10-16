@@ -26,7 +26,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
               </dd>
             </dl>
           </label>
-          <select id="ipfsNodeType" name='ipfsNodeType' class="self-center-ns bg-white" onchange=${onIpfsNodeTypeChange}>
+          <select id="ipfsNodeType" name='ipfsNodeType' class="self-center-ns bg-white navy" onchange=${onIpfsNodeTypeChange}>
             <option
               value='external'
               selected=${ipfsNodeType === 'external'}>
@@ -55,7 +55,12 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
                 <dd>${browser.i18n.getMessage('option_ipfsNodeConfig_description')}</dd>
               </dl>
             </label>
-            <textarea id="ipfsNodeConfig" rows="7" onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
+            <textarea
+              class="bg-white navy self-center-ns"
+              spellcheck="false"
+              id="ipfsNodeConfig"
+              rows="${Math.min((ipfsNodeConfig.match(/\n/g) || []).length + 1, 30)}"
+              onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
           </div>
         ` : null}
       </fieldset>
