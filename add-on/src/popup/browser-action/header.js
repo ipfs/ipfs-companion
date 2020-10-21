@@ -10,7 +10,7 @@ const ipfsVersion = require('./ipfs-version')
 const gatewayStatus = require('./gateway-status')
 
 module.exports = function header (props) {
-  const { ipfsNodeType, active, onToggleActive, onOpenPrefs, isIpfsOnline, onOpenWelcomePage } = props
+  const { ipfsNodeType, active, onToggleActive, onOpenPrefs, onOpenReleaseNotes, isIpfsOnline, onOpenWelcomePage } = props
   return html`
     <div class="br2 br--top ba bw1 b--white ipfs-gradient-0">
       <div class="pt3 pr3 pb2 pl3 no-user-select flex justify-between items-center">
@@ -39,7 +39,7 @@ module.exports = function header (props) {
           ${versionUpdateIcon({
             active,
             title: 'panel_headerNewVersionTitle',
-            action: onToggleActive
+            action: onOpenReleaseNotes
           })}
           ${powerIcon({
             active,

@@ -155,6 +155,16 @@ module.exports = (state, emitter) => {
     }
   })
 
+  emitter.on('openReleaseNotes', async (page = '/') => {
+    const url = `${state.webuiRootUrl}#${page}`
+    try {
+      await browser.tabs.create({ url })
+      window.close()
+    } catch (error) {
+      console.error(`Unable Open Web UI (${url})`, error)
+    }
+  })
+
   emitter.on('openPrefs', () => {
     browser.runtime.openOptionsPage()
       .then(() => window.close())
