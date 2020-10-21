@@ -3,6 +3,7 @@
 
 const html = require('choo/html')
 const logo = require('../logo')
+const versionUpdateIcon = require('./version-update-icon')
 const powerIcon = require('./power-icon')
 const optionsIcon = require('./options-icon')
 const ipfsVersion = require('./ipfs-version')
@@ -35,6 +36,11 @@ module.exports = function header (props) {
           </div>
         </div>
         <div class="tr ma0 pb1">
+          ${versionUpdateIcon({
+            active,
+            title: 'panel_headerNewVersionTitle',
+            action: onToggleActive
+          })}
           ${powerIcon({
             active,
             title: 'panel_headerActiveToggleTitle',
