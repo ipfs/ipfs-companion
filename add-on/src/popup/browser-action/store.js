@@ -156,12 +156,12 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('openReleaseNotes', async (page = '/') => {
-    const url = `${state.webuiRootUrl}#${page}`
+    const url = `https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v${browser.runtime.getManifest().version}`
     try {
       await browser.tabs.create({ url })
       window.close()
     } catch (error) {
-      console.error(`Unable Open Web UI (${url})`, error)
+      console.error(`Unable to open release notes (${url})`, error)
     }
   })
 
