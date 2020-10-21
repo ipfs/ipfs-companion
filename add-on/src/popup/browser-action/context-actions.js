@@ -41,7 +41,7 @@ function contextActions ({
   onUnPin
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
-  const activePinControls = active && isIpfsOnline && isApiAvailable
+  const activePinControls = active && isApiAvailable
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
     const { url } = currentTab

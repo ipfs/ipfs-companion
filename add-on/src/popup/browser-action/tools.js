@@ -13,8 +13,8 @@ module.exports = function tools ({
   onQuickImport,
   onOpenWebUi
 }) {
-  const activeQuickImport = active && isIpfsOnline && isApiAvailable
-  const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
+  const activeQuickImport = active && isApiAvailable
+  const activeWebUI = active && isApiAvailable && ipfsNodeType !== 'embedded'
 
   return html`
     <div class="fade-in pv1">
