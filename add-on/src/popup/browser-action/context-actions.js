@@ -32,16 +32,15 @@ function contextActions ({
   isPinning,
   isUnPinning,
   isPinned,
-  isIpfsOnline,
-  isApiAvailable,
+  apiAvailable,
   onToggleSiteIntegrations,
   onViewOnGateway,
   onCopy,
   onPin,
   onUnPin
 }) {
-  const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
-  const activePinControls = active && isIpfsOnline && isApiAvailable
+  const activeCidResolver = active && apiAvailable && currentTabCid
+  const activePinControls = active && apiAvailable
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
     const { url } = currentTab

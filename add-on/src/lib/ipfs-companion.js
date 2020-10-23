@@ -11,7 +11,7 @@ const pMemoize = require('p-memoize')
 const LRU = require('lru-cache')
 const all = require('it-all')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
-const { initState, offlinePeerCount } = require('./state')
+const { initState, offlinePeerCount, apiDownPeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
@@ -257,6 +257,7 @@ module.exports = async function init () {
       importDir: state.importDir,
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),
+      apiAvailable: state.apiAvailable,
       redirect: state.redirect,
       enabledOn: state.enabledOn,
       disabledOn: state.disabledOn,
@@ -462,13 +463,18 @@ module.exports = async function init () {
   }
 
   async function getSwarmPeerCount () {
-    if (!ipfs) return offlinePeerCount
+    if (!ipfs) return apiDownPeerCount
     try {
       const peerInfos = await ipfs.swarm.peers({ timeout: 2500 })
       return peerInfos.length
     } catch (error) {
+      if (error.message.includes('action must be run in online mode')) {
+        // node is running in offline mode (ipfs daemon --offline)
+        // https://github.com/ipfs-shipyard/ipfs-companion/issues/790
+        return offlinePeerCount // ipfs daemon --offline
+      }
       console.error(`Error while ipfs.swarm.peers: ${error}`)
-      return offlinePeerCount
+      return apiDownPeerCount
     }
   }
 
@@ -495,11 +501,11 @@ module.exports = async function init () {
 
     let badgeText, badgeColor, badgeIcon
     badgeText = state.peerCount.toString()
-    if (state.peerCount > 0) {
+    if (state.peerCount > offlinePeerCount) {
       // All is good (online with peers)
       badgeColor = '#418B8E'
       badgeIcon = '/icons/ipfs-logo-on.svg'
-    } else if (state.peerCount === 0) {
+    } else if (state.peerCount === offlinePeerCount) {
       // API is online but no peers
       badgeColor = 'red'
       badgeIcon = '/icons/ipfs-logo-on.svg'
@@ -578,13 +584,11 @@ module.exports = async function init () {
 
   function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
     // enable/disable gw redirect based on API going online or offline
-    // newPeerCount === -1 currently implies node is offline.
-    // TODO: use `node.isOnline()` if available (js-ipfs)
     if (state.automaticMode && state.localGwAvailable) {
-      if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
+      if (oldPeerCount === apiDownPeerCount && newPeerCount > apiDownPeerCount && !state.redirect) {
         browser.storage.local.set({ useCustomGateway: true })
           .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
-      } else if (newPeerCount === offlinePeerCount && state.redirect) {
+      } else if (newPeerCount === apiDownPeerCount && state.redirect) {
         browser.storage.local.set({ useCustomGateway: false })
           .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
       }

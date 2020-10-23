@@ -13,7 +13,7 @@ module.exports = function header ({ isIpfsContext, pageActionTitle }) {
     size: 20,
     path: '../../../icons',
     ipfsNodeType: 'external',
-    isIpfsOnline: true,
+    apiAvailable: true,
     heartbeat: false
   })} <span class="pl1 f6 fw4 v-mid">${pageActionTitle || '…'}</span>
       </h2>

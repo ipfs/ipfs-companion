@@ -8,7 +8,7 @@ function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueC
   const offline = browser.i18n.getMessage('panel_statusOffline')
   label = label ? browser.i18n.getMessage(label) : null
   labelLegend = labelLegend ? browser.i18n.getMessage(labelLegend) : label
-  value = value || value === 0 ? value : offline
+  value = value || offline
   return html`
       <div class="flex mb1 ${check ? '' : 'o-60'} ${itemClass}" title="${labelLegend}">
         <span class="w-40 f7 ttu no-user-select">${label}</span>

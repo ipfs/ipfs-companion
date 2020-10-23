@@ -22,14 +22,13 @@ module.exports = (state, emitter) => {
     isPinned: false,
     // IPFS details
     ipfsNodeType: 'external',
-    isIpfsOnline: false,
+    apiAvailable: false,
     ipfsApiUrl: null,
     publicGatewayUrl: null,
     publicSubdomainGatewayUrl: null,
     gatewayAddress: null,
     swarmPeers: null,
     gatewayVersion: null,
-    isApiAvailable: false,
     // isRedirectContext
     currentTab: null,
     currentFqdn: null,
@@ -229,7 +228,7 @@ module.exports = (state, emitter) => {
       state.ipfsApiUrl = null
       state.gatewayVersion = null
       state.swarmPeers = null
-      state.isIpfsOnline = false
+      state.apiAvailable = false
     }
     try {
       await browser.storage.local.set({ active: state.active })
@@ -257,7 +256,7 @@ module.exports = (state, emitter) => {
       // Note: access to background page will be denied in Private Browsing mode
       const ipfs = await getIpfsApi()
       // There is no point in displaying actions that require API interaction if API is down
-      const apiIsUp = ipfs && status && status.peerCount >= 0
+      const apiIsUp = ipfs && status && status.apiAvailable
       if (apiIsUp) await updatePinnedState(ipfs, status)
     }
   }
@@ -273,15 +272,14 @@ module.exports = (state, emitter) => {
         state.gatewayAddress = status.pubGwURLString
       }
       // Import requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.isApiAvailable = state.active && !!(await getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
-      state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
-      state.isIpfsOnline = state.active && status.peerCount > -1
+      state.apiAvailable = state.active && status.apiAvailable && !!(await getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
+      state.swarmPeers = state.apiAvailable ? status.peerCount : null
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
       state.ipfsApiUrl = state.active ? status.apiURLString : null
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null
-      state.isIpfsOnline = false
+      state.apiAvailable = false
       state.gatewayVersion = null
       state.isIpfsContext = false
       state.isRedirectContext = false

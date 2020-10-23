@@ -21,7 +21,7 @@ module.exports.braveJsIpfsWebuiCid = 'bafybeigkbbjnltbd4ewfj7elajsbnjwinyk6tiilc
 module.exports.precache = async (ipfs, state) => {
   // simplified prefetch over HTTP when in Brave
   if (state.ipfsNodeType === 'embedded:chromesockets') {
-    return preloadOverHTTP(log, ipfs, state, module.exports.braveJsIpfsWebuiCid)
+    return preloadOverHTTP(log, ipfs, state, module.exports.braveJsIpfsWebuiCid, 'webui for embedded:chromesockets')
   }
 
   const roots = []
@@ -32,7 +32,8 @@ module.exports.precache = async (ipfs, state) => {
       cid = await ipfs.dns('webui.ipfs.io', { recursive: true })
       name = 'latest webui from DNSLink at webui.ipfs.io'
     } else { // find out safelisted path behind <api-port>/webui
-      cid = new URL((await fetch(`${state.apiURLString}webui`)).url).pathname
+      const { pathname } = new URL((await fetch(`${state.apiURLString}webui`)).url)
+      cid = pathname.split('/')[2]
       name = `stable webui hardcoded at ${state.apiURLString}webui`
     }
     roots.push({
@@ -53,12 +54,18 @@ module.exports.precache = async (ipfs, state) => {
     }
     log(`importing ${name} (${cid}) to local ipfs repo`)
 
+    // prefetch over HTTP when node runs in offline mode
+    if (state.peerCount < 1) {
+      await preloadOverHTTP(log, ipfs, state, cid, name)
+      continue
+    }
+
     // prefetch over IPFS
     try {
       for await (const ref of ipfs.refs(cid, { recursive: true })) {
         if (ref.err) {
           log.error(`error while preloading ${name} (${cid})`, ref.err)
-          continue
+          throw new Error(ref.err)
         }
       }
       log(`${name} successfully cached under CID ${cid}`)
@@ -81,10 +88,10 @@ async function inRepo (ipfs, cid) {
 
 // Downloads CID from a public gateway
 // (alternative to ipfs.refs -r)
-async function preloadOverHTTP (log, ipfs, state, cid) {
+async function preloadOverHTTP (log, ipfs, state, cid, name) {
   const url = `${state.pubGwURLString}api/v0/get?arg=${cid}&archive=true`
   try {
-    log(`importing ${url} (${cid}) to local ipfs repo`)
+    log(`importing ${url} to local ipfs repo`)
     const { body } = await fetch(url)
     await importTar(ipfs, body.getReader(), cid)
     log(`successfully fetched TAR from ${url} and cached under CID ${cid}`)
