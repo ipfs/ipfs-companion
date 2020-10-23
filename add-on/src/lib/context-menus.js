@@ -163,7 +163,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
             ipfsContext = ipfsPathValidator.isIpfsPageActionsContext(currentTab.url)
           }
         }
-        const ifApi = getState().peerCount >= 0
+        const ifApi = getState().peerCount > -1
         for (const item of apiMenuItems) {
           await browser.contextMenus.update(item, { enabled: ifApi })
         }
