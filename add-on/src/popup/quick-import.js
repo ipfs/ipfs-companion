@@ -8,6 +8,7 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 const externalApiClient = require('../lib/ipfs-client/external')
+const { offlinePeerCount } = require('../lib/state')
 const all = require('it-all')
 const drop = require('drag-and-drop-files')
 const filesize = require('filesize')
@@ -22,7 +23,7 @@ app.mount('#root')
 
 function quickImportStore (state, emitter) {
   state.message = ''
-  state.peerCount = ''
+  state.peerCount = offlinePeerCount
   state.ipfsNodeType = 'external'
   state.expandOptions = false
   state.openViaWebUI = true

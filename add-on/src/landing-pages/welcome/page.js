@@ -16,7 +16,7 @@ const colorYellow = '#f39021'
 
 function createWelcomePage (i18n) {
   return function welcomePage (state, emit) {
-    const { isIpfsOnline, peerCount } = state
+    const { apiAvailable, peerCount } = state
     const openWebUi = (page) => () => emit('openWebUi', page)
 
     // Set translated title
@@ -25,8 +25,8 @@ function createWelcomePage (i18n) {
     return html`
       <div class="flex flex-column flex-row-l">
         <div id="left-col" class="min-vh-100 flex flex-column justify-center items-center bg-navy white">
-          ${renderCompanionLogo(i18n, isIpfsOnline)}
-          ${isIpfsOnline ? renderWelcome(i18n, peerCount, openWebUi) : renderInstallSteps(i18n, isIpfsOnline)}
+          ${renderCompanionLogo(i18n, apiAvailable)}
+          ${apiAvailable ? renderWelcome(i18n, peerCount, openWebUi) : renderInstallSteps(i18n, apiAvailable)}
         </div>
 
         <div id="right-col" class="min-vh-100 w-100 flex flex-column justify-around items-center">
@@ -43,14 +43,14 @@ function createWelcomePage (i18n) {
    Render functions for the left side
    ======================================================== */
 
-const renderCompanionLogo = (i18n, isIpfsOnline) => {
+const renderCompanionLogo = (i18n, apiAvailable) => {
   const logoPath = '../../../icons'
   const logoSize = 128
-  const stateUnknown = isIpfsOnline === null
+  const stateUnknown = apiAvailable === null
 
   return html`
     <div class="mt4 mb2 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
-      ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
+      ${logo({ path: logoPath, size: logoSize, apiAvailable: apiAvailable })}
       <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
     </div>
   `
@@ -83,10 +83,10 @@ const renderWelcome = (i18n, peerCount, openWebUi) => {
   `
 }
 
-const renderInstallSteps = (i18n, isIpfsOnline) => {
+const renderInstallSteps = (i18n, apiAvailable) => {
   const copyClass = 'mv0 white f5 lh-copy'
   const anchorClass = 'aqua hover-white'
-  const stateUnknown = isIpfsOnline === null
+  const stateUnknown = apiAvailable == null
   const svgWidth = 130
 
   const nodeOffSvg = () => html`

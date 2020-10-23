@@ -8,7 +8,6 @@ log.error = debug('ipfs-companion:dnslink:error')
 const IsIpfs = require('is-ipfs')
 const LRU = require('lru-cache')
 const { default: PQueue } = require('p-queue')
-const { offlinePeerCount } = require('./state')
 const { ipfsContentPath, sameGateway, pathAtHttpGateway } = require('./ipfs-path')
 
 module.exports = function createDnslinkResolver (getState) {
@@ -123,7 +122,7 @@ module.exports = function createDnslinkResolver (getState) {
       const state = getState()
       let apiProvider
       // TODO: fix DNS resolver for ipfsNodeType='embedded:chromesockets', for now use ipfs.io
-      if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
+      if (state.localGwAvailable && state.apiAvailable) {
         // Use gw port so it can be a GET:
         // Chromium does not execute onBeforeSendHeaders for synchronous calls
         // made from the same extension context as onBeforeSendHeaders

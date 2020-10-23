@@ -8,13 +8,13 @@ const navItem = require('./nav-item')
 module.exports = function tools ({
   active,
   ipfsNodeType,
-  isIpfsOnline,
-  isApiAvailable,
+  apiAvailable,
   onQuickImport,
   onOpenWebUi
 }) {
-  const activeQuickImport = active && isApiAvailable
-  const activeWebUI = active && isApiAvailable && ipfsNodeType !== 'embedded'
+  const localGwAvailable = ipfsNodeType !== 'embedded'
+  const activeQuickImport = active && apiAvailable
+  const activeWebUI = active && apiAvailable && localGwAvailable
 
   return html`
     <div class="fade-in pv1">

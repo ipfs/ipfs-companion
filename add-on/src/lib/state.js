@@ -4,7 +4,8 @@
 const isFQDN = require('is-fqdn')
 const { safeURL } = require('./options')
 const { braveJsIpfsWebuiCid } = require('./precache')
-const offlinePeerCount = -1
+const offlinePeerCount = 0 // always the case when running: ipfs daemon --offline
+const apiDownPeerCount = -1 // unable to read, most likely API is down
 
 function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
@@ -48,6 +49,12 @@ function initState (options, overrides) {
     // TODO: make quick fetch to confirm it works?
     get: function () { return this.ipfsNodeType !== 'embedded' }
   })
+  Object.defineProperty(state, 'apiAvailable', {
+    // TODO: when we move away from constantly polling in the backgroun,
+    // this can be replaced with ipfs.id check to confirm it works + memoize for ipfsApiPollMs
+    // that way there is no need for polling, api check would execute only when user actualy needs it
+    get: function () { return this.peerCount > apiDownPeerCount }
+  })
   Object.defineProperty(state, 'webuiRootUrl', {
     get: function () {
       // Did user opt-in for rolling release published on DNSLink?
@@ -67,3 +74,4 @@ function initState (options, overrides) {
 
 exports.initState = initState
 exports.offlinePeerCount = offlinePeerCount
+exports.apiDownPeerCount = apiDownPeerCount

@@ -9,7 +9,7 @@ const ipfsVersion = require('./ipfs-version')
 const gatewayStatus = require('./gateway-status')
 
 module.exports = function header (props) {
-  const { ipfsNodeType, active, onToggleActive, onOpenPrefs, isIpfsOnline, onOpenWelcomePage } = props
+  const { ipfsNodeType, active, onToggleActive, onOpenPrefs, apiAvailable, onOpenWelcomePage } = props
   return html`
     <div class="br2 br--top ba bw1 b--white ipfs-gradient-0">
       <div class="pt3 pr3 pb2 pl3 no-user-select flex justify-between items-center">
@@ -22,7 +22,7 @@ module.exports = function header (props) {
     size: 54,
     path: '../../../icons',
     ipfsNodeType,
-    isIpfsOnline: (active && isIpfsOnline)
+    apiAvailable
   })}
         </div>
           <div class="flex flex-column ml2 white ${active ? '' : 'o-40'}">

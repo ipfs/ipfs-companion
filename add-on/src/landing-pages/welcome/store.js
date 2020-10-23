@@ -4,7 +4,7 @@ const browser = require('webextension-polyfill')
 
 function createWelcomePageStore (i18n, runtime) {
   return function welcomePageStore (state, emitter) {
-    state.isIpfsOnline = null
+    state.apiAvailable = null
     state.peerCount = null
     state.webuiRootUrl = null
     let port
@@ -13,12 +13,10 @@ function createWelcomePageStore (i18n, runtime) {
       port = runtime.connect({ name: 'browser-action-port' })
       port.onMessage.addListener(async (message) => {
         if (message.statusUpdate) {
-          const webuiRootUrl = message.statusUpdate.webuiRootUrl
-          const peerCount = message.statusUpdate.peerCount
-          const isIpfsOnline = peerCount > -1
-          if (isIpfsOnline !== state.isIpfsOnline || peerCount !== state.peerCount || webuiRootUrl !== state.webuiRootUrl) {
+          const { webuiRootUrl, peerCount, apiAvailable } = message.statusUpdate
+          if (apiAvailable !== state.apiAvailable || peerCount !== state.peerCount || webuiRootUrl !== state.webuiRootUrl) {
             state.webuiRootUrl = webuiRootUrl
-            state.isIpfsOnline = isIpfsOnline
+            state.apiAvailable = apiAvailable
             state.peerCount = peerCount
             emitter.emit('render')
           }
