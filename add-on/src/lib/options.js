@@ -26,7 +26,7 @@ exports.optionDefaults = Object.freeze({
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
-  displayReleaseNotes: true,
+  displayReleaseNotes: false,
   customGatewayUrl: buildCustomGatewayUrl(),
   ipfsApiUrl: buildIpfsApiUrl(),
   ipfsApiPollMs: 3000,
