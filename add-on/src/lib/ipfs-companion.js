@@ -260,6 +260,7 @@ module.exports = async function init () {
       redirect: state.redirect,
       enabledOn: state.enabledOn,
       disabledOn: state.disabledOn,
+      showUpdateIndicator: state.dismissedUpdate !== browser.runtime.getManifest().version,
       currentTab
     }
     try {
@@ -687,20 +688,7 @@ module.exports = async function init () {
           shouldReloadExtension = true
           state[key] = localStorage.debug = change.newValue
           break
-        case 'recoverFailedHttpRequests':
-        case 'importDir':
-        case 'linkify':
-        case 'catchUnhandledProtocols':
-        case 'displayNotifications':
-        case 'displayReleaseNotes':
-        case 'automaticMode':
-        case 'detectIpfsPathHeader':
-        case 'preloadAtPublicGateway':
-        case 'openViaWebUI':
-        case 'useLatestWebUI':
-        case 'enabledOn':
-        case 'disabledOn':
-        case 'dnslinkRedirect':
+        default:
           state[key] = change.newValue
           break
       }

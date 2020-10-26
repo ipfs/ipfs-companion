@@ -34,6 +34,7 @@ exports.optionDefaults = Object.freeze({
   logNamespaces: 'jsipfs*,ipfs*,libp2p:mdns*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*,-ipfs:http-api*',
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
   useLatestWebUI: false,
+  dismissedUpdate: null,
   openViaWebUI: true
 })
 
@@ -211,6 +212,14 @@ exports.migrateOptions = async (storage, debug) => {
       log(`adding '${fqdn}' to 'disabledOn' list`)
       disabledOn.push(fqdn)
       await storage.set({ disabledOn })
+    }
+  }
+
+  { // ~v2.15.1: change displayReleaseNotes opt-out flag to opt-in
+    const { displayReleaseNotes, dismissedUpdate } = await storage.get(['displayReleaseNotes', 'dismissedUpdate'])
+    if (!dismissedUpdate && displayReleaseNotes) {
+      log('converting displayReleaseNotes from out-out to opt-in')
+      await storage.set({ displayReleaseNotes: false })
     }
   }
 }

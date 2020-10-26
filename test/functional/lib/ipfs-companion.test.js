@@ -14,6 +14,7 @@ describe('init', function () {
     global.browser = browser
     global.URL = URL
     global.screen = {}
+    browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
     init = require('../../../add-on/src/lib/ipfs-companion')
   })
 
