@@ -58,26 +58,25 @@ function contextActions ({
   ? navItem({
     text: browser.i18n.getMessage(contextMenuViewOnGateway),
     onClick: () => onViewOnGateway(contextMenuViewOnGateway)
-  })
-  : null}
-  ${navItem({
+  }) : null}
+  ${isRedirectContext ? navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
     helperText: currentTabPublicUrl,
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
-  })}
+  }) : ''}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyPermalink),
     title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
     helperText: 'foo ' + currentTabPermalink,
     onClick: () => onCopy(contextMenuCopyPermalink)
   })}
-  ${navItem({
+  ${isRedirectContext ? navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpnsAddressTooltip'),
     helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
-  })}
+  }) : ''}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCidAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
