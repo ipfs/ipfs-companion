@@ -29,6 +29,7 @@ function contextActions ({
   currentTabContentPath,
   currentTabCid,
   currentTabPublicUrl,
+  currentTabPermalink,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -66,15 +67,16 @@ function contextActions ({
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
   ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyPermalink),
+    title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
+    helperText: 'foo' + currentTabPermalink,
+    onClick: () => onCopy(contextMenuCopyPermalink)
+  })}
+  ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
     helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
-  })}
-  ${navItem({
-    text: browser.i18n.getMessage(contextMenuCopyPermalink),
-    title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
-    onClick: () => onCopy(contextMenuCopyPermalink)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
