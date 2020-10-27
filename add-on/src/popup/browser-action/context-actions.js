@@ -69,14 +69,20 @@ function contextActions ({
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyPermalink),
     title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
-    helperText: 'foo' + currentTabPermalink,
+    helperText: 'foo ' + currentTabPermalink,
     onClick: () => onCopy(contextMenuCopyPermalink)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-    title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
+    title: browser.i18n.getMessage('panelCopy_currentIpnsAddressTooltip'),
     helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyCidAddress),
+    title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
+    helperText: 'foo',
+    onClick: () => onCopy(contextMenuCopyCidAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
