@@ -74,9 +74,9 @@ function createCopier (notify, ipfsPathValidator) {
       const url = await findValueForContext(context, contextType)
       const publicUrl = ipfsPathValidator.resolveToPublicUrl(url)
       await copyTextToClipboard(publicUrl, notify)
-          },
+    },
 
-      async copyPermalink (context, contextType) {
+    async copyPermalink (context, contextType) {
       const url = await findValueForContext(context, contextType)
       const permalink = await ipfsPathValidator.resolveToPermalink(url)
       await copyTextToClipboard(permalink, notify)
