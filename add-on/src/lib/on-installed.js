@@ -2,6 +2,7 @@
 /* eslint-env browser */
 
 const browser = require('webextension-polyfill')
+const { version } = browser.runtime.getManifest()
 
 exports.welcomePage = '/dist/landing-pages/welcome/index.html'
 exports.updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v'
@@ -16,11 +17,8 @@ exports.onInstalled = async (details) => {
 }
 
 exports.showPendingLandingPages = async () => {
-  const hint = await browser.storage.local.get([
-    'showLandingPage',
-    'displayReleaseNotes'
-  ])
-  switch (hint.showLandingPage) {
+  const { showLandingPage, displayReleaseNotes } = await browser.storage.local.get(['showLandingPage', 'displayReleaseNotes'])
+  switch (showLandingPage) {
     case 'onInstallWelcome':
       await browser.storage.local.remove('showLandingPage')
       return browser.tabs.create({
@@ -28,9 +26,8 @@ exports.showPendingLandingPages = async () => {
       })
     case 'onVersionUpdate':
       await browser.storage.local.remove('showLandingPage')
-      if (!hint.displayReleaseNotes) return
-      return browser.tabs.create({
-        url: exports.updatePage + browser.runtime.getManifest().version
-      })
+      if (!displayReleaseNotes) return
+      await browser.storage.local.set({ dismissedUpdate: version })
+      return browser.tabs.create({ url: exports.updatePage + version })
   }
 }

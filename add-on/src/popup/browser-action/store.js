@@ -155,6 +155,20 @@ module.exports = (state, emitter) => {
     }
   })
 
+  emitter.on('openReleaseNotes', async () => {
+    const { version } = browser.runtime.getManifest()
+    const url = `https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v${version}`
+    try {
+      await browser.storage.local.set({ dismissedUpdate: version })
+      // Note: opening tab needs to happen after storage.local.set because in Chromium 86
+      // it triggers a premature window.close, which aborts storage update
+      await browser.tabs.create({ url })
+      window.close()
+    } catch (error) {
+      console.error(`Unable to open release notes (${url})`, error)
+    }
+  })
+
   emitter.on('openPrefs', () => {
     browser.runtime.openOptionsPage()
       .then(() => window.close())
