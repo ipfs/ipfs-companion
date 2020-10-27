@@ -30,8 +30,8 @@ function createProxyAclPage (i18n) {
               </p>
             </div>
           </header>
-          ${hasGrants ? html`
-            <table class="w-100 mb4" style="border-spacing: 0">
+          ${hasGrants
+          ? html`<table class="w-100 mb4" style="border-spacing: 0">
   ${scopes.reduce((rows, scope) => {
     const permissions = acl.get(scope)
 
@@ -45,9 +45,8 @@ function createProxyAclPage (i18n) {
     )
   }, [])}
             </table>
-          ` : html`
-            <p class="f5 light-gray i">${i18n.getMessage('page_proxyAcl_no_perms')}</p>
-          `}
+          `
+          : html`<p class="f5 light-gray i">${i18n.getMessage('page_proxyAcl_no_perms')}</p>`}
         </div>
       </div>
     `

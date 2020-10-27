@@ -107,7 +107,7 @@
     "simple-progress-webpack-plugin": "1.1.2",
     "sinon": "9.2.0",
     "sinon-chrome": "3.0.1",
-    "standard": "14.3.4",
+    "standard": "15.0.0",
     "style-loader": "2.0.0",
     "tar": "6.0.5",
     "terser": "5.3.8",

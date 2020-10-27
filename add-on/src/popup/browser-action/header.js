@@ -36,11 +36,13 @@ module.exports = function header (props) {
           </div>
         </div>
         <div class="tr ma0 pb1">
-          ${showUpdateIndicator ? versionUpdateIcon({
+          ${showUpdateIndicator
+          ? versionUpdateIcon({
             active,
             title: 'panel_headerNewVersionTitle',
             action: onOpenReleaseNotes
-          }) : null}
+          })
+          : null}
           ${powerIcon({
             active,
             title: 'panel_headerActiveToggleTitle',

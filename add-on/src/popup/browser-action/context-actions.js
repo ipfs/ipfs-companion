@@ -51,10 +51,12 @@ function contextActions ({
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
     return html`<div>
-  ${activeViewOnGateway(currentTab) ? navItem({
+  ${activeViewOnGateway(currentTab)
+  ? navItem({
     text: browser.i18n.getMessage(contextMenuViewOnGateway),
     onClick: () => onViewOnGateway(contextMenuViewOnGateway)
-  }) : null}
+  })
+  : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
