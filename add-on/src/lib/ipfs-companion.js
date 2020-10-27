@@ -21,7 +21,7 @@ const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createInspector = require('./inspector')
 const { createRuntimeChecks } = require('./runtime-checks')
-const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway } = require('./context-menus')
+const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
 const { showPendingLandingPages } = require('./on-installed')
@@ -235,8 +235,10 @@ module.exports = async function init () {
     notification: (message) => notify(message.title, message.message),
     [contextMenuViewOnGateway]: inspector.viewOnGateway,
     [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
+    [contextMenuCopyCidAddress]: copier.copyCidAddress,
     [contextMenuCopyRawCid]: copier.copyRawCid,
-    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
+    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw,
+    [contextMenuCopyPermalink]: copier.copyPermalink
   }
 
   function handleMessageFromBrowserAction (message) {

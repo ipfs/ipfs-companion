@@ -254,6 +254,20 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       return null
     },
 
+    // Resolve URL or path to HTTP URL with CID:
+    // - IPFS paths are attached to HTTP Gateway root
+    // - URL of DNSLinked websties are resolved to CIDs
+    // The purpose of this resolver is to always return a meaningful, publicly
+    // accessible URL that can be accessed without the need of an IPFS client
+    // and that never changes.
+    async resolveToPermalink (urlOrPath, optionalGatewayUrl) {
+      const input = urlOrPath
+      const ipfsPath = await this.resolveToImmutableIpfsPath(input)
+      const gateway = optionalGatewayUrl || getState().pubGwURLString
+      if (ipfsPath) return pathAtHttpGateway(ipfsPath, gateway)
+      return input.startsWith('http') ? input : null
+    },
+
     // Resolve URL or path to IPFS Path:
     // - The path can be /ipfs/ or /ipns/
     // - Keeps pathname + ?search + #hash from original URL

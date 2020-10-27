@@ -6,7 +6,7 @@ const isIPFS = require('is-ipfs')
 const all = require('it-all')
 const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
 const { welcomePage } = require('../../lib/on-installed')
-const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress } = require('../../lib/context-menus')
+const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
 module.exports = (state, emitter) => {
@@ -76,11 +76,17 @@ module.exports = (state, emitter) => {
       case contextMenuCopyCanonicalAddress:
         port.postMessage({ event: contextMenuCopyCanonicalAddress })
         break
+      case contextMenuCopyCidAddress:
+        port.postMessage({ event: contextMenuCopyCidAddress })
+        break
       case contextMenuCopyRawCid:
         port.postMessage({ event: contextMenuCopyRawCid })
         break
       case contextMenuCopyAddressAtPublicGw:
         port.postMessage({ event: contextMenuCopyAddressAtPublicGw })
+        break
+      case contextMenuCopyPermalink:
+        port.postMessage({ event: contextMenuCopyPermalink })
         break
     }
     window.close()

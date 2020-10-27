@@ -9,8 +9,10 @@ const { sameGateway } = require('../../lib/ipfs-path')
 const {
   contextMenuViewOnGateway,
   contextMenuCopyAddressAtPublicGw,
+  contextMenuCopyPermalink,
   contextMenuCopyRawCid,
-  contextMenuCopyCanonicalAddress
+  contextMenuCopyCanonicalAddress,
+  contextMenuCopyCidAddress
 } = require('../../lib/context-menus')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
@@ -68,6 +70,11 @@ function contextActions ({
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
     helperText: currentTabContentPath,
     onClick: () => onCopy(contextMenuCopyCanonicalAddress)
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyPermalink),
+    title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
+    onClick: () => onCopy(contextMenuCopyPermalink)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
