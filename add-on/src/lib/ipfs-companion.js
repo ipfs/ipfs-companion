@@ -281,6 +281,7 @@ module.exports = async function init () {
       if (info.isIpfsContext) {
         info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
+        info.currentTabImmutablePath = ipfsPathValidator.resolveToImmutableIpfsPath(url)
         info.currentTabPermalink = ipfsPathValidator.resolveToPermalink(url)
         if (!url2cidCache.has(url)) {
           // run async resolution in the next event loop
