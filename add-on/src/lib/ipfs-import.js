@@ -9,21 +9,9 @@ const browser = require('webextension-polyfill')
 
 const { redirectOptOutHint } = require('./ipfs-request')
 
-function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime, copier) {
+module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, runtime, copier) => {
   const { resolveToPublicUrl } = ipfsPathValidator
   const ipfsImportHandler = {
-    formatImportDirectory (path) {
-      path = path.replace(/\/$|$/, '/')
-      path = path.replace(/(\/)\/+/g, '$1')
-
-      // needed to handle date symbols in the import directory
-      const now = new Date()
-      const dateSymbols = [/%Y/g, /%M/g, /%D/g, /%h/g, /%m/g, /%s/g]
-      const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2, '0'))
-      dateSymbols.forEach((symbol, i) => { path = path.replace(symbol, symbolReplacements[i]) })
-      return path
-    },
-
     getIpfsPathAndNativeAddress (cid) {
       const state = getState()
       const path = `/ipfs/${cid}`
@@ -99,4 +87,14 @@ function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime,
   return ipfsImportHandler
 }
 
-module.exports = createIpfsImportHandler
+module.exports.formatImportDirectory = (path) => {
+  path = path.replace(/\/$|$/, '/')
+  path = path.replace(/(\/)\/+/g, '$1')
+
+  // needed to handle date symbols in the import directory
+  const now = new Date()
+  const dateSymbols = [/%Y/g, /%M/g, /%D/g, /%h/g, /%m/g, /%s/g]
+  const symbolReplacements = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2, '0'))
+  dateSymbols.forEach((symbol, i) => { path = path.replace(symbol, symbolReplacements[i]) })
+  return path
+}

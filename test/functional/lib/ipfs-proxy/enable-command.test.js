@@ -17,6 +17,7 @@ describe('lib/ipfs-proxy/enable-command', () => {
   before(() => {
     global.URL = URL
     global.browser = browser
+    global.screen = global.screen || { width: 1024, height: 720 }
   })
 
   it('should throw if proxy access is disabled globally', async () => {

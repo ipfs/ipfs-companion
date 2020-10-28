@@ -16,7 +16,7 @@ const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
-const createIpfsImportHandler = require('./ipfs-import')
+const { createIpfsImportHandler, formatImportDirectory } = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createInspector = require('./inspector')
@@ -301,7 +301,6 @@ module.exports = async function init () {
 
   async function onAddFromContext (context, contextType, options) {
     const {
-      formatImportDirectory,
       copyImportResultsToFiles,
       copyShareLink,
       preloadFilesAtPublicGateway,
@@ -451,15 +450,12 @@ module.exports = async function init () {
     // update peer count
     const oldPeerCount = state.peerCount
     state.peerCount = await getSwarmPeerCount()
-    updatePeerCountDependentStates(oldPeerCount, state.peerCount)
-    // trigger pending updates
-    await sendStatusUpdateToBrowserAction()
-  }
-
-  function updatePeerCountDependentStates (oldPeerCount, newPeerCount) {
-    updateAutomaticModeRedirectState(oldPeerCount, newPeerCount)
-    updateBrowserActionBadge()
-    contextMenus.update()
+    await Promise.all([
+      updateAutomaticModeRedirectState(oldPeerCount, state.peerCount),
+      updateBrowserActionBadge(),
+      contextMenus.update(),
+      sendStatusUpdateToBrowserAction()
+    ])
   }
 
   async function getSwarmPeerCount () {
@@ -577,17 +573,15 @@ module.exports = async function init () {
   // OPTIONS
   // ===================================================================
 
-  function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
+  async function updateAutomaticModeRedirectState (oldPeerCount, newPeerCount) {
     // enable/disable gw redirect based on API going online or offline
-    // newPeerCount === -1 currently implies node is offline.
-    // TODO: use `node.isOnline()` if available (js-ipfs)
     if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
-        browser.storage.local.set({ useCustomGateway: true })
-          .then(() => notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg'))
+        await browser.storage.local.set({ useCustomGateway: true })
+        notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg')
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
-        browser.storage.local.set({ useCustomGateway: false })
-          .then(() => notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg'))
+        await browser.storage.local.set({ useCustomGateway: false })
+        notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg')
       }
     }
   }
@@ -760,29 +754,31 @@ module.exports = async function init () {
       return ipfsImportHandler
     },
 
-    destroy () {
-      const destroyTasks = []
-      clearInterval(apiStatusUpdateInterval)
-      apiStatusUpdateInterval = null
-      ipfs = null
-      state = null
-      dnslinkResolver = null
-      modifyRequest = null
-      ipfsPathValidator = null
-      ipfsImportHandler = null
-      notify = null
-      copier = null
-      contextMenus = null
+    async destroy () {
+      if (state) {
+        state.active = false
+        state.peerCount = -1 // api down
+      }
+
+      if (apiStatusUpdateInterval) {
+        clearInterval(apiStatusUpdateInterval)
+        apiStatusUpdateInterval = null
+      }
+
       if (ipfsProxyContentScript) {
         ipfsProxyContentScript.unregister()
         ipfsProxyContentScript = null
       }
+
       if (ipfsProxy) {
-        destroyTasks.push(ipfsProxy.destroy())
+        await ipfsProxy.destroy()
         ipfsProxy = null
       }
-      destroyTasks.push(destroyIpfsClient())
-      return Promise.all(destroyTasks)
+
+      if (ipfs) {
+        await destroyIpfsClient()
+        ipfs = null
+      }
     }
   }
 

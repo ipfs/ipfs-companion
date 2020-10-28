@@ -8,6 +8,7 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 const externalApiClient = require('../lib/ipfs-client/external')
+const { formatImportDirectory } = require('../lib/ipfs-import')
 const all = require('it-all')
 const drop = require('drag-and-drop-files')
 const filesize = require('filesize')
@@ -76,7 +77,6 @@ async function processFiles (state, emitter, files) {
       throw new Error('found no valid sources, try selecting a local file instead')
     }
     const {
-      formatImportDirectory,
       copyImportResultsToFiles,
       copyShareLink,
       preloadFilesAtPublicGateway,
