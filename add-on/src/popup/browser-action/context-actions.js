@@ -60,6 +60,13 @@ function contextActions ({
     text: browser.i18n.getMessage(contextMenuViewOnGateway),
     onClick: () => onViewOnGateway(contextMenuViewOnGateway)
   }) : null}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
+    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
+    disabled: !activePinControls,
+    switchValue: (isPinned || isPinning) && !isUnPinning,
+    onClick: isPinned ? onUnPin : onPin
+  })}
   ${isRedirectContext ? navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
@@ -69,7 +76,7 @@ function contextActions ({
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyPermalink),
     title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
-    helperText: currentTabPermalink,
+    helperText: 'foo ' + currentTabPermalink,
     onClick: () => onCopy(contextMenuCopyPermalink)
   })}
   ${isRedirectContext ? navItem({
@@ -81,7 +88,7 @@ function contextActions ({
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCidAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
-    helperText: currentTabImmutablePath,
+    helperText: 'bar ' + currentTabImmutablePath,
     onClick: () => onCopy(contextMenuCopyCidAddress)
   })}
   ${navItem({
@@ -90,13 +97,6 @@ function contextActions ({
     helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
-  })}
-  ${navItem({
-    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
-    disabled: !activePinControls,
-    switchValue: (isPinned || isPinning) && !isUnPinning,
-    onClick: isPinned ? onUnPin : onPin
   })}
   </div>
     `

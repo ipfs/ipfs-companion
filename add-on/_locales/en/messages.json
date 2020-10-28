@@ -56,7 +56,7 @@
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
-    "message": "Import files to IPFS and copy a publicly shareable link to your clipboard",
+    "message": "Import files to IPFS and copy a publicly shareable link to your clipboard.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
@@ -64,7 +64,7 @@
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
-    "message": "Open your IPFS node's controls in your browser",
+    "message": "Open your IPFS node's controls in your browser.",
     "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
@@ -76,15 +76,15 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Enable on $1",
+    "message": "Enable for $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Enable/disable all IPFS integrations on $1",
+    "message": "Enable/disable all IPFS integrations on $1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource",
+    "message": "Pin IPFS Resources",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
@@ -92,19 +92,19 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "Copy IPNS Content Path",
+  "message": "Copy Content Path",
   "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
-    "message": "A canonical content path that you can use with IPFS tools and gateways",
+    "message": "Use this content path with IPFS tools and gateways to reach the most recently updated version of this page.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Content Path",
+    "message": "Copy Content Path Snapshot",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "A content path that you can use with IPFS tools and gateways",
+    "message": "Use this content path with IPFS tools and gateways to reach this page at this moment in time. It won't change, even if the content changes later.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -112,7 +112,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "The unique IPFS content identifier for this page",
+    "message": "The unique IPFS content identifier for this page at this moment in time.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
   "panelCopy_copyRawCidNotReadyHint": {
@@ -124,15 +124,15 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "This link works for anyone, even if they don't use IPFS",
+    "message": "A shareable link that works for anyone, even if they don't use IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
-    "message": "Copy Permalink",
+    "message": "Copy Shareable Snapshot",
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "An immutable permalink using a content ID and IPFS gateway",
+    "message": "A shareable link to this page at this moment in time that works for anyone, even if they don't use IPFS. It won't change, even if the content changes later.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
