@@ -580,10 +580,10 @@ module.exports = async function init () {
     if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         await browser.storage.local.set({ useCustomGateway: true })
-        notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg')
+        await notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg')
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
         await browser.storage.local.set({ useCustomGateway: false })
-        notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg')
+        await notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg')
       }
     }
   }
