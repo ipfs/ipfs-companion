@@ -7,6 +7,10 @@
     "message": "IPFS Companion",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
+  "panel_headerNewVersionTitle": {
+    "message": "IPFS Companion was updated to a new version! Click for details.",
+    "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
+  },
   "panel_headerActiveToggleTitle": {
     "message": "Attiva tutte le integrazioni IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"

@@ -7,6 +7,10 @@
     "message": "IPFS 伴侣",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
+  "panel_headerNewVersionTitle": {
+    "message": "IPFS 伴侣已经升级到新版本！点击查看详情。",
+    "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
+  },
   "panel_headerActiveToggleTitle": {
     "message": "切换所有 IPFS 集成",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
@@ -340,19 +344,19 @@
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_disabledOn_title": {
-    "message": "Always Disable IPFS Integrations",
+    "message": "永久禁用 IPFS 集成",
     "description": "An option title on the Preferences screen (option_disabledOn_title)"
   },
   "option_disabledOn_description": {
-    "message": "Sites in this list (one hostname per line) will always load with IPFS integrations disabled. Toggling \"Enable on ...\" from your browser's action menu while visiting a site will also add or remove it from this list.",
+    "message": "此列表中的站点（每行一个主机名称）将始终在禁用IPFS集成的情况下加载。在访问站点时，可以通过从浏览器的操作菜单中来回切换“启用…”开关来添加或者移除此列表中的站点。",
     "description": "An option description on the Preferences screen (option_disabledOn_description)"
   },
   "option_enabledOn_title": {
-    "message": "Always Enable IPFS Integrations",
+    "message": "永久启用 IPFS 集成",
     "description": "An option title on the Preferences screen (option_enabledOn_title)"
   },
   "option_enabledOn_description": {
-    "message": "Sites in this list (one hostname per line) will always load with IPFS integrations enabled. Toggling \"Enable on ...\" from your browser's action menu while visiting a site will also add or remove it from this list.",
+    "message": "此列表中的站点（每行一个主机名称）将始终在启用IPFS集成的情况下加载。在访问站点时，可以通过从浏览器的操作菜单中来回切换“启用…”开关来添加或者移除此列表中的站点。",
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
