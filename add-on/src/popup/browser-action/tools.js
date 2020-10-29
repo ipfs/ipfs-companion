@@ -3,7 +3,7 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
-const navItem = require('./nav-item')
+const toolsButton = require('./tools-button')
 
 module.exports = function tools ({
   active,
@@ -17,14 +17,14 @@ module.exports = function tools ({
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`
-    <div class="fade-in pv1">
-  ${navItem({
+    <div class="flex pb2 ph2 justify-between">
+  ${toolsButton({
     text: browser.i18n.getMessage('panel_quickImport'),
     title: browser.i18n.getMessage('panel_quickImportTooltip'),
     disabled: !activeQuickImport,
     onClick: onQuickImport
   })}
-  ${navItem({
+  ${toolsButton({
     text: browser.i18n.getMessage('panel_openWebui'),
     title: browser.i18n.getMessage('panel_openWebuiTooltip'),
     disabled: !activeWebUI,

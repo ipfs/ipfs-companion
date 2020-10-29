@@ -129,7 +129,7 @@ function activeTabActions (state) {
   const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
-      <div class="mv1">
+      <div class="mb1">
       ${navHeader('panel_activeTabSectionHeader')}
       <div class="fade-in pv0">
         ${contextActions(state)}      </div>

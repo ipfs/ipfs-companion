@@ -30,8 +30,10 @@ module.exports = function browserActionPage (state, emit) {
 
   return html`
     <div class="sans-serif" style="text-rendering: optimizeLegibility;">
-      ${header(headerProps)}
-      ${tools(opsProps)}
+      <div class="ba bw1 b--white ipfs-gradient-0">
+        ${header(headerProps)}
+        ${tools(opsProps)}
+      </div>
       ${activeTabActions(activeTabActionsProps)}
     </div>
   `
