@@ -18,8 +18,8 @@ function createEnableCommand (proxyClient) {
       // Additional client-side features
       if (opts && opts.experiments) {
         if (opts.experiments.ipfsx) {
-          // Experiment: wrap API with  https://github.com/alanshaw/ipfsx
-          return freeze(require('ipfsx')(proxyClient))
+          // Old experiment where we wrapped API with  https://github.com/alanshaw/ipfsx
+          throw new Error('ipfsx no longer supported, use modern JS instead: https://blog.ipfs.io/2020-02-01-async-await-refactor/')
         }
       }
       return freeze(proxyClient)

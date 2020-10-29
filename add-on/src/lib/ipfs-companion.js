@@ -42,7 +42,7 @@ module.exports = async function init () {
   var contextMenus
   var apiStatusUpdateInterval
   var ipfsProxy
-  var ipfsProxyContentScript
+  // TODO: window.ipfs var ipfsProxyContentScript
   var ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
@@ -82,7 +82,7 @@ module.exports = async function init () {
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
     ipfsProxy = createIpfsProxy(getIpfs, getState)
-    ipfsProxyContentScript = await registerIpfsProxyContentScript()
+    // TODO(window.ipfs) ipfsProxyContentScript = await registerIpfsProxyContentScript()
     log('register all listeners')
     registerListeners()
     await registerSubdomainProxy(getState, runtime, notify)
@@ -139,6 +139,7 @@ module.exports = async function init () {
   // The key difference between tabs.executeScript and contentScripts API
   // is the latter provides guarantee to execute before anything else.
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/451#issuecomment-382669093
+  /* TODO(window.ipfs)
   async function registerIpfsProxyContentScript (previousHandle) {
     previousHandle = previousHandle || ipfsProxyContentScript
     if (previousHandle) {
@@ -168,6 +169,7 @@ module.exports = async function init () {
     })
     return newHandle
   }
+  */
 
   // HTTP Request Hooks
   // ===================================================================
@@ -600,7 +602,7 @@ module.exports = async function init () {
       switch (key) {
         case 'active':
           state[key] = change.newValue
-          ipfsProxyContentScript = await registerIpfsProxyContentScript()
+          // TODO(window.ipfs) ipfsProxyContentScript = await registerIpfsProxyContentScript()
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
@@ -667,11 +669,12 @@ module.exports = async function init () {
           // Finally, update proxy settings based on the state
           await registerSubdomainProxy(getState, runtime)
           break
+        /* TODO(window.ipfs)
         case 'ipfsProxy':
           state[key] = change.newValue
           // This is window.ipfs proxy, requires update of the content script:
           ipfsProxyContentScript = await registerIpfsProxyContentScript()
-          break
+          break */
         case 'dnslinkPolicy':
           state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
           if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
@@ -765,10 +768,12 @@ module.exports = async function init () {
         apiStatusUpdateInterval = null
       }
 
+      /* TODO(window.ipfs)
       if (ipfsProxyContentScript) {
         ipfsProxyContentScript.unregister()
         ipfsProxyContentScript = null
       }
+      */
 
       if (ipfsProxy) {
         await ipfsProxy.destroy()
