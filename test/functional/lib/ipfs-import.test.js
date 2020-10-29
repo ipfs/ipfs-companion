@@ -5,31 +5,22 @@ const { useFakeTimers } = require('sinon')
 const browser = require('sinon-chrome')
 
 describe('ipfs-import.js', function () {
-  let createIpfsImportHandler
-  let ipfsImportHandler
-  let clock
-
+  let formatImportDirectory
   before(function () {
     global.document = {}
     global.browser = browser
     // ipfs-import depends on webextension/polyfill which can't be imported
     // in a non-browser environment unless global.browser is stubbed
-    // need to force Date to return a particular date
-    createIpfsImportHandler = require('../../../add-on/src/lib/ipfs-import')
 
-    clock = useFakeTimers({
+    // need to force Date to return a particular date
+    global.clock = useFakeTimers({
       now: new Date(2017, 10, 5, 12, 1, 1)
     })
+
+    formatImportDirectory = require('../../../add-on/src/lib/ipfs-import').formatImportDirectory
   })
 
   describe('formatImportDirectory', function () {
-    let formatImportDirectory
-
-    before(function () {
-      ipfsImportHandler = createIpfsImportHandler(() => {}, {}, {}, {})
-      formatImportDirectory = ipfsImportHandler.formatImportDirectory
-    })
-
     it('should change nothing if path is properly formatted and date wildcards are not provided', function () {
       const path = '/ipfs-companion-imports/my-directory/'
       expect(formatImportDirectory(path)).to.equal('/ipfs-companion-imports/my-directory/')
@@ -66,9 +57,9 @@ describe('ipfs-import.js', function () {
   // })
 
   after(function () {
-    clock.restore()
+    global.browser.flush()
+    global.clock.restore()
     delete global.document
     delete global.browser
-    browser.flush()
   })
 })

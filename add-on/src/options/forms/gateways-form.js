@@ -80,8 +80,8 @@ function gatewaysForm ({
               onchange=${onPublicSubdomainGatewayUrlChange}
               value=${publicSubdomainGatewayUrl} />
           </div>
-          ${supportRedirectToCustomGateway && allowChangeOfCustomGateway ? html`
-            <div class="flex-row-ns pb0-ns">
+          ${supportRedirectToCustomGateway && allowChangeOfCustomGateway
+            ? html`<div class="flex-row-ns pb0-ns">
               <label for="customGatewayUrl">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_customGatewayUrl_title')}</dt>
@@ -102,11 +102,10 @@ function gatewaysForm ({
                 onchange=${onCustomGatewayUrlChange}
                 ${allowChangeOfCustomGateway ? '' : 'disabled'}
                 value=${customGatewayUrl} />
-
-            </div>
-          ` : null}
-          ${supportRedirectToCustomGateway ? html`
-            <div class="flex-row-ns pb0-ns">
+            </div>`
+            : null}
+          ${supportRedirectToCustomGateway
+          ? html`<div class="flex-row-ns pb0-ns">
               <label for="useCustomGateway">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_useCustomGateway_title')}</dt>
@@ -114,10 +113,10 @@ function gatewaysForm ({
                 </dl>
               </label>
               <div class="self-center-ns">${switchToggle({ id: 'useCustomGateway', checked: useCustomGateway, onchange: onUseCustomGatewayChange })}</div>
-            </div>
-          ` : null}
-          ${supportRedirectToCustomGateway ? html`
-            <div class="flex-row-ns pb0-ns">
+            </div>`
+          : null}
+          ${supportRedirectToCustomGateway
+          ? html`<div class="flex-row-ns pb0-ns">
               <label for="useSubdomains">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_useSubdomains_title')}</dt>
@@ -130,10 +129,10 @@ function gatewaysForm ({
                 </dl>
               </label>
               <div class="self-center-ns">${switchToggle({ id: 'useSubdomains', checked: useSubdomains, onchange: onUseSubdomainProxyChange })}</div>
-            </div>
-          ` : null}
-          ${supportRedirectToCustomGateway ? html`
-            <div class="flex-row-ns pb0-ns">
+            </div>`
+            : null}
+          ${supportRedirectToCustomGateway
+          ? html`<div class="flex-row-ns pb0-ns">
               <label for="disabledOn">
                 <dl>
                   <dt>${browser.i18n.getMessage('option_disabledOn_title')}</dt>
@@ -162,8 +161,8 @@ function gatewaysForm ({
                 onchange=${onEnabledOnChange}
                 rows="${Math.min(enabledOn.length + 1, 10)}"
                 >${hostArrayToText(enabledOn)}</textarea>
-            </div>
-          ` : null}
+            </div>`
+            : null}
 
       </fieldset>
     </form>

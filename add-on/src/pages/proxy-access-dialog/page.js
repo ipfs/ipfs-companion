@@ -13,7 +13,9 @@ function createProxyAccessDialogPage (i18n) {
     return html`
       <div class="flex flex-column pa3 h-100">
         <div class="flex-auto" style="min-height:auto">
-          ${loading ? null : html`
+          ${loading
+          ? null
+          : html`
             <div>
               <h1 class="sans-serif f5 lh-copy charcoal mt0" style="word-break:break-word">
                 ${i18n.getMessage('page_proxyAccessDialog_title', [scope, permissions.join(', ')])}
@@ -28,21 +30,20 @@ function createProxyAccessDialogPage (i18n) {
           `}
         </div>
         <div class="tr">
-          ${loading ? html`
-            <div>
+          ${loading
+          ? html`
+          <div>
               <span class="mr2">
                 ${button({ text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'), disabled: true })}
               </span>
               ${button({ text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'), disabled: true })}
-            </div>
-          ` : html`
-            <div>
+            </div>`
+            : html`<div>
               <span class="mr2">
                 ${button({ text: i18n.getMessage('page_proxyAccessDialog_denyButton_text'), onClick: onDeny, color: 'red' })}
               </span>
               ${button({ text: i18n.getMessage('page_proxyAccessDialog_allowButton_text'), onClick: onAllow, color: 'aqua' })}
-            </div>
-          `}
+            </div>`}
         </div>
       </div>
     `

@@ -32,23 +32,21 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
               selected=${ipfsNodeType === 'external'}>
               ${browser.i18n.getMessage('option_ipfsNodeType_external')}
             </option>
-            ${withChromeSockets ? html`
-                <option
+            ${withChromeSockets
+            ? html`<option
                   value='embedded:chromesockets'
                   selected=${ipfsNodeType === 'embedded:chromesockets'}>
                   ${browser.i18n.getMessage('option_ipfsNodeType_embedded_chromesockets')} (${browser.i18n.getMessage('option_experimental')})
-                </option>
-              ` : html`
-                <option
+                </option>`
+              : html`<option
                   value='embedded'
                   selected=${ipfsNodeType === 'embedded'}>
                   ${browser.i18n.getMessage('option_ipfsNodeType_embedded')} (${browser.i18n.getMessage('option_experimental')})
-                </option>
-              `}
+                </option>`}
           </select>
         </div>
-        ${ipfsNodeType.startsWith('embedded') ? html`
-          <div class="flex-row-ns pb0-ns">
+        ${ipfsNodeType.startsWith('embedded')
+        ? html`<div class="flex-row-ns pb0-ns">
             <label for="ipfsNodeConfig">
               <dl>
                 <dt>${browser.i18n.getMessage('option_ipfsNodeConfig_title')}</dt>
@@ -61,8 +59,8 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange }) {
               id="ipfsNodeConfig"
               rows="${Math.min((ipfsNodeConfig.match(/\n/g) || []).length + 1, 30)}"
               onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
-          </div>
-        ` : null}
+          </div>`
+          : null}
       </fieldset>
     </form>
   `

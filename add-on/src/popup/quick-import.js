@@ -8,6 +8,7 @@ const choo = require('choo')
 const html = require('choo/html')
 const logo = require('./logo')
 const externalApiClient = require('../lib/ipfs-client/external')
+const { formatImportDirectory } = require('../lib/ipfs-import')
 const all = require('it-all')
 const drop = require('drag-and-drop-files')
 const filesize = require('filesize')
@@ -76,7 +77,6 @@ async function processFiles (state, emitter, files) {
       throw new Error('found no valid sources, try selecting a local file instead')
     }
     const {
-      formatImportDirectory,
       copyImportResultsToFiles,
       copyShareLink,
       preloadFilesAtPublicGateway,
@@ -166,11 +166,13 @@ function quickImportOptions (state, emit) {
   if (state.expandOptions) {
     return html`
       <div id='quickImportOptions' class='sans-serif mt3 f6 lh-copy light-gray no-user-select'>
-        ${displayOpenWebUI ? html`<label for='openViaWebUI' class='flex items-center db relative mt1 pointer'>
+        ${displayOpenWebUI
+        ? html`<label for='openViaWebUI' class='flex items-center db relative mt1 pointer'>
           <input id='openViaWebUI' type='checkbox' onchange=${onOpenViaWebUIChange} checked=${state.openViaWebUI} />
           <span class='mark db flex items-center relative mr2 br2'></span>
           ${browser.i18n.getMessage('quickImport_options_openViaWebUI')}
-        </label>` : null}
+        </label>`
+        : null}
         <label for='importDir' class='flex items-center db relative mt1 pointer'>
           ${browser.i18n.getMessage('quickImport_options_importDir')}
           <span class='mark db flex items-center relative mr2 br2'></span>

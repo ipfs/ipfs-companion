@@ -58,12 +58,14 @@ module.exports = function optionsPage (state, emit) {
     ipfsNodeConfig: state.options.ipfsNodeConfig,
     onOptionChange
   })}
-  ${state.options.ipfsNodeType === 'external' ? apiForm({
+  ${state.options.ipfsNodeType === 'external'
+  ? apiForm({
     ipfsApiUrl: state.options.ipfsApiUrl,
     ipfsApiPollMs: state.options.ipfsApiPollMs,
     automaticMode: state.options.automaticMode,
     onOptionChange
-  }) : null}
+  })
+  : null}
   ${gatewaysForm({
     ipfsNodeType: state.options.ipfsNodeType,
     customGatewayUrl: state.options.customGatewayUrl,

@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
-const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -10,35 +9,31 @@ const commonConfig = {
   target: 'web',
   bail: true,
   output: {
-    path: path.resolve(__dirname, 'add-on/dist/bundles/'),
+    path: path.resolve(__dirname, './add-on/dist/bundles/'),
     publicPath: '/dist/bundles/',
     filename: '[name].bundle.js'
   },
+  cache: process.env.CI
+    ? false // no gain on CI
+    : { type: 'filesystem' },
   optimization: {
+    minimize: true,
     minimizer: [
       new TerserPlugin({
-        terserOptions: {
-          // Speed Up
-          cache: true,
-          parallel: true,
-          // Custom settings to unbreak js-ipfs
-          compress: {
-            unused: false // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
-          },
-          mangle: true // https://github.com/ipfs-shipyard/ipfs-companion/issues/521
-        }
+        parallel: true
       })
     ]
   },
   plugins: [
     // new require('webpack-bundle-analyzer').BundleAnalyzerPlugin(),
+    new webpack.ProgressPlugin({
+      percentBy: 'entries'
+    }),
     new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
-    new SimpleProgressWebpackPlugin({
-      format: process.env.CI ? 'expanded' : 'compact'
-    }),
     new webpack.ProvidePlugin({
+      process: 'process/browser',
       Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
     }),
     new webpack.DefinePlugin({
@@ -122,6 +117,17 @@ const commonConfig = {
       dns: 'http-dns', // chrome.sockets
       dgram: 'chrome-dgram', // chrome.sockets
       net: 'chrome-net' // chrome.sockets
+    },
+    fallback: {
+      util: false,
+      fs: false,
+      https: require.resolve('https-browserify'), // @hapi (Brave)
+      crypto: false, // @hapi (Brave)
+      path: require.resolve('path-browserify'), // libp2p-tcp (Brave)
+      os: require.resolve('os-browserify/browser'), // libp2p-tcp (Brave)
+      timers: require.resolve('timers-browserify'), // chrome-net (Brave)
+      zlib: require.resolve('browserify-zlib'), // @hapi (Brave)
+      assert: require.resolve('assert/') // peer-info
     }
   },
   resolveLoader: {
@@ -130,11 +136,11 @@ const commonConfig = {
     }
   },
   node: {
-    global: false, // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
-    Buffer: false, // we don't want to use old and buggy version bundled node-libs
-    fs: 'empty',
-    tls: 'empty',
-    cluster: 'empty' // expected by js-ipfs dependency: node_modules/prom-client/lib/cluster.js
+    global: false // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
+    // TODO: remove, this is default in webpack v5: Buffer: false, // we don't want to use old and buggy version bundled node-libs
+    // fs: 'empty',
+    // tls: 'empty',
+    // cluster: 'empty' // expected by js-ipfs dependency: node_modules/prom-client/lib/cluster.js
   },
   watchOptions: {
     ignored: ['add-on/dist/**/*', 'node_modules']
@@ -155,7 +161,7 @@ const bgConfig = merge(commonConfig, {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
-        vendors: false,
+        defaultVendors: false,
         default: false,
         ipfs: {
           name: 'ipfs',
@@ -177,15 +183,15 @@ const uiConfig = merge(commonConfig, {
     pageAction: './add-on/src/popup/page-action/index.js',
     importPage: './add-on/src/popup/quick-import.js',
     optionsPage: './add-on/src/options/options.js',
-    proxyAclManagerPage: './add-on/src/pages/proxy-acl/index.js',
-    proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js',
+    //  TODO: remove or fix (window.ipfs) proxyAclManagerPage: './add-on/src/pages/proxy-acl/index.js',
+    // TODO: remove or fix (window.ipfs) proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js',
     welcomePage: './add-on/src/landing-pages/welcome/index.js'
   },
   optimization: {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
-        vendors: false,
+        defaultVendors: false,
         default: false,
         uiCommons: {
           name: 'uiCommons',
@@ -203,13 +209,14 @@ const uiConfig = merge(commonConfig, {
 const contentScriptsConfig = merge(commonConfig, {
   name: 'contentScripts',
   entry: {
-    ipfsProxyContentScriptPayload: './add-on/src/contentScripts/ipfs-proxy/page.js',
+    // TODO: remove or fix (window.ipfs) ipfsProxyContentScriptPayload: './add-on/src/contentScripts/ipfs-proxy/page.js',
     linkifyContentScript: './add-on/src/contentScripts/linkifyDOM.js'
   }
 })
 
 // special content script that injects window.ipfs into REAL window object
 // (by default scripts executed via tabs.executeScript get a sandbox version)
+/* TODO: remove or fix - depending what we do with  window.ipfs
 const proxyContentScriptConfig = merge(commonConfig, {
   name: 'proxyContentScript',
   dependencies: ['contentScripts'],
@@ -232,10 +239,11 @@ const proxyContentScriptConfig = merge(commonConfig, {
     ]
   }
 })
+*/
 
 module.exports = [
   bgConfig,
   uiConfig,
-  contentScriptsConfig,
-  proxyContentScriptConfig
+  contentScriptsConfig
+  //  TODO: remove or fix (window.ipfs) proxyContentScriptConfig
 ]
