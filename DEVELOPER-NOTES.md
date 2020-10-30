@@ -5,7 +5,7 @@
 * [Build from source](#build-from-source)
     * [Clone and install dependencies](#clone-and-install-dependencies)
     * [Build and run in Firefox](#build-and-run-in-firefox)
-    * [Build and manually install in Chromium](#build-and-manually-install-in-chromium)
+    * [Build and run in Chromium](#build-and-run-in-chromium)
     * [Run build on file changes](#run-build-on-file-changes)
 * [Reproducible build in Docker](#reproducible-build-in-docker)
 * [Useful tasks](#useful-tasks)
@@ -22,8 +22,6 @@
 
 If you're looking to develop on IPFS Companion, you should build the project from source. You will need [NodeJS](https://nodejs.org/) and [Firefox](https://www.mozilla.org/en-US/firefox/developer/). Make sure `npm` and `firefox` are in your `PATH`.
 
-You can use `yarn` instead of `npm`. We provide `yarn.lock` if you choose to do so. This guide assumes you are using `npm`.
-
 ### Clone and install dependencies
 
 First, clone the `ipfs-shipyard/ipfs-companion` [repository](https://github.com/ipfs-shipyard/ipfs-companion):
@@ -32,15 +30,15 @@ First, clone the `ipfs-shipyard/ipfs-companion` [repository](https://github.com/
  git clone https://github.com/ipfs-shipyard/ipfs-companion.git
  ```
 
-To install all dependencies into the `node_modules` directory, execute:
+Then, run this all-in-one dev build, which includes installing dependencies into the `node_modules` directory:
 
 ```bash
-npm install
+npm run dev-build
 ```
 
 ### Build and run in Firefox
 
-Use this one-stop command to build, test and deploy the add-on to Firefox:
+Use this one-stop command to build, test and deploy the add-on in Firefox:
 
 ```bash
 npm start        # all-in-one
@@ -54,31 +52,35 @@ npm run test     # test suite
 npm run firefox  # spawn new Firefox
 ```
 
-It is also possible to load the extension manually. Enter `about:debugging` in the URL bar, and then click "Load Temporary Add-on" and point it at `add-on/manifest.json`.
+It is also possible to load the extension manually: 
+1. Enter `about:debugging` in the address bar
+2. Click "This Firefox" in the left nav
+3. Click "Load Temporary Add-on..."
+4. Pick the _file_ `add-on/manifest.json`
 
-### Build and manually install in Chromium
+### Build and run in Chromium
 
-First, clone the repository:
+Use this one-stop command to build, test and deploy the add-on in Chromium:
 
- ```bash
- git clone https://github.com/ipfs-shipyard/ipfs-companion.git
- ```
+```bash
+npm run dev-build chromium        # all-in-one
+```
 
-Then build it manually:
+You can also build it to manually install:
 
 ```bash
 npm run build bundle:chromium # last part is important: it overwrites manifest
 ```
 
-Then open `chrome://extensions` in your Chromium-based browser, enable "Developer mode", click "Load unpacked extension..." and point it at the `add-on` folder within your project folder.
-
-| Chrome "unpacked extension"                                                                                                                                                               | Firefox "temporary add-on"                                                                                                                                                               |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![installing ipfs-companion as an unpacked extension in chrome](https://bafybeih34e3a5sgkh57lwv26c6253fxn2jdvte6ilhyld6l4ghuhybzldi.ipfs.dweb.link/ipfs-companion-install-chrome-dev.gif) | ![installing ipfs-companion as a temporary add on in firefox](https://bafybeih34e3a5sgkh57lwv26c6253fxn2jdvte6ilhyld6l4ghuhybzldi.ipfs.dweb.link/ipfs-companion-install-firefox-dev.gif) |
+Then load the extension manually:
+1. Enter `chrome://extensions` in the address bar
+2. Enable "Developer mode" using the toggle in the top right of the page
+3. Click "Load unpacked"
+4. Pick the _directory_ `add-on`
 
 ### Run build on file changes
 
-Regular build minifies code and strips source maps. It is possible to run build  in the `watch` mode, which will rebuild a debug version of all changed bundles:
+The regular `run build` command minifies code and strips source maps. It is possible to build in `watch` mode, which will rebuild a debug version of all changed bundles:
 
 ```bash
 npm run build # do regular build first
@@ -108,7 +110,14 @@ It is an alias for running `ci:build` script inside of immutable Docker image, w
 
 Each `npm` task can run separately, but most of the time, `dev-build`, `test`, and `fix:lint` are all you need.
 
-- `npm install`: Install all NPM dependencies
+- `npm run dev-build`: Fast dependency install, build with yarn (updates `yarn.lock` if needed)
+- `npm run dev-build firefox`: All-in-one for Firefox: fast dependency install, build with yarn, run as temporary add-on in Firefox
+- `npm run dev-build chromium`: All-in-one for Chromium: fast dependency install, build with yarn, run as temporary add-on in Chromium
+- `npm run firefox`: Run as temporary add-on in Firefox
+- `npm run firefox:nightly`: Run as temporary add-on in Firefox Nightly (uses one in `./firefox/`, see `get-firefox-nightly` below)
+- `npm run chromium`: Run as temporary add-on in Chromium
+- `npm run get-firefox-nightly`: Fetch latest Firefox nightly build to `./firefox/`
+- `npm run firefox:beta:add -- --update-link "https://host/path/to/file.xpi" file.xpi`: Add a manifest entry for new self-hosted beta for Firefox
 - `npm run build`: Build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
 - `npm run watch`: Rebuild JS/CSS on file changes (run regular `build` first to ensure everything else is in place)
 - `npm run bundle:chromium`: Overwrite manifest and package a generic, Chromium-compatible version
@@ -121,15 +130,10 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 - `npm run fix:lint`: Try to fix simple syntax problems (run `standard` with `--fix`, etc.)
 - `npm run lint:standard`: Run [Standard](http://standardjs.com) linter ([IPFS JavaScript projects default to standard code style](https://github.com/ipfs/community/blob/master/CONTRIBUTING_JS.md))
 - `npm run lint:web-ext`: Run [addons-linter](https://github.com/mozilla/addons-linter) shipped with `web-ext` tool
-- `npm run firefox`: Run as temporary add-on in Firefox
-- `npm run firefox:nightly`: Run as temporary add-on in Firefox Nightly (uses one in `./firefox/`, see `get-firefox-nightly` below)
-- `npm run chromium`: Run as temporary add-on in Chromium
-- `npm run get-firefox-nightly`: Fetch latest Firefox nightly build to `./firefox/`
-- `npm run firefox:beta:add -- --update-link "https://host/path/to/file.xpi" file.xpi`: Add a manifest entry for new self-hosted beta for Firefox
 
 Release build shortcuts:
 
-- `npm run dev-build`: All-in-one: fast dependency install, build with yarn (updates yarn.lock if needed)
+- `npm run dev-build`: All-in-one: fast dependency install, build with yarn (updates `yarn.lock` if needed)
 - `npm run beta-build`: Reproducible beta build in docker with frozen `yarn.lock`
 - `npm run release-build`: Reproducible release build in docker with frozen `yarn.lock`
 
