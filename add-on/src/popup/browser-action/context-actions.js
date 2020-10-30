@@ -56,28 +56,33 @@ function contextActions ({
     if (!isIpfsContext) return
     return html`<div>
   ${activeViewOnGateway(currentTab)
-  ? navItem({
-    text: browser.i18n.getMessage(contextMenuViewOnGateway),
-    onClick: () => onViewOnGateway(contextMenuViewOnGateway)
-  }) : null}
-  ${isRedirectContext ? navItem({
-    text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-    title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
-    helperText: currentTabPublicUrl,
-    onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
-  }) : ''}
+    ? navItem({
+      text: browser.i18n.getMessage(contextMenuViewOnGateway),
+      onClick: () => onViewOnGateway(contextMenuViewOnGateway)
+    })
+    : null}
+  ${isRedirectContext
+    ? navItem({
+      text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+      title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
+      helperText: currentTabPublicUrl,
+      onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
+    })
+    : ''}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyPermalink),
     title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
     helperText: currentTabPermalink,
     onClick: () => onCopy(contextMenuCopyPermalink)
   })}
-  ${isRedirectContext ? navItem({
-    text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
-    title: browser.i18n.getMessage('panelCopy_currentIpnsAddressTooltip'),
-    helperText: currentTabContentPath,
-    onClick: () => onCopy(contextMenuCopyCanonicalAddress)
-  }) : ''}
+  ${isRedirectContext
+    ? navItem({
+      text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+      title: browser.i18n.getMessage('panelCopy_currentIpnsAddressTooltip'),
+      helperText: currentTabContentPath,
+      onClick: () => onCopy(contextMenuCopyCanonicalAddress)
+    })
+    : ''}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCidAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
