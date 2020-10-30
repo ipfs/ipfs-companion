@@ -76,7 +76,7 @@ function contextActions ({
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyPermalink),
     title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
-    helperText: 'foo ' + currentTabPermalink,
+    helperText: currentTabPermalink,
     onClick: () => onCopy(contextMenuCopyPermalink)
   })}
   ${isRedirectContext ? navItem({
@@ -88,7 +88,7 @@ function contextActions ({
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyCidAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
-    helperText: 'bar ' + currentTabImmutablePath,
+    helperText: currentTabImmutablePath,
     onClick: () => onCopy(contextMenuCopyCidAddress)
   })}
   ${navItem({
