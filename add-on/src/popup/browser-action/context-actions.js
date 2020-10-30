@@ -46,6 +46,7 @@ function contextActions ({
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
   const activePinControls = active && isIpfsOnline && isApiAvailable
+  const isMutable = currentTabContentPath.startsWith('/ipns/')
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
     const { url } = currentTab
@@ -61,7 +62,7 @@ function contextActions ({
       onClick: () => onViewOnGateway(contextMenuViewOnGateway)
     })
     : null}
-  ${isRedirectContext
+  ${isMutable
     ? navItem({
       text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
       title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
@@ -75,7 +76,7 @@ function contextActions ({
     helperText: currentTabPermalink,
     onClick: () => onCopy(contextMenuCopyPermalink)
   })}
-  ${isRedirectContext
+  ${isMutable
     ? navItem({
       text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
       title: browser.i18n.getMessage('panelCopy_currentIpnsAddressTooltip'),
