@@ -60,13 +60,6 @@ function contextActions ({
     text: browser.i18n.getMessage(contextMenuViewOnGateway),
     onClick: () => onViewOnGateway(contextMenuViewOnGateway)
   }) : null}
-  ${navItem({
-    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
-    disabled: !activePinControls,
-    switchValue: (isPinned || isPinning) && !isUnPinning,
-    onClick: isPinned ? onUnPin : onPin
-  })}
   ${isRedirectContext ? navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
@@ -97,6 +90,13 @@ function contextActions ({
     helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
+  })}
+  ${navItem({
+    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
+    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
+    disabled: !activePinControls,
+    switchValue: (isPinned || isPinning) && !isUnPinning,
+    onClick: isPinned ? onUnPin : onPin
   })}
   </div>
     `

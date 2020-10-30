@@ -84,11 +84,11 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Assets",
+    "message": "Pin IPFS Resource",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pin the IPFS assets on this tab (e.g. files, images, videos) to your node to have local copies that are available offline and never thrown away.",
+    "message": "Pin this page's IPFS resources to your node to have a local copy that's available offline and never thrown away.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
