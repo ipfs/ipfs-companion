@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pin the IPFS assets on this page (files, images, videos, etc.) to your node to have local copies that are available offline and never thrown away.",
+    "message": "Pin the IPFS assets on this tab (e.g. files, images, videos) to your node to have local copies that are available offline and never thrown away.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
@@ -96,7 +96,7 @@
   "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
-    "message": "Use this content path with IPFS tools and gateways to reach the most recently updated version of this page.",
+    "message": "Use this content path with IPFS tools and gateways to reach the most recently updated version of this tab.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -104,7 +104,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "Use this content path with IPFS tools and gateways to reach this page at this moment in time. It won't change, even if the content changes later.",
+    "message": "Use this content path with IPFS tools and gateways to reach this tab at this moment in time. It won't change, even if content changes later.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -112,7 +112,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "The unique IPFS content identifier for this page at this moment in time.",
+    "message": "The unique IPFS content identifier for this tab at this moment in time. If content changes later, the CID will change too.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
   "panelCopy_copyRawCidNotReadyHint": {
@@ -124,15 +124,15 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "A shareable link that works for anyone, even if they don't use IPFS.",
+    "message": "A shareable link to this tab that works for anyone, even if they don't use IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
-    "message": "Copy Shareable Snapshot",
+    "message": "Copy Shareable Snapshot Link",
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "A shareable link to this page at this moment in time that works for anyone, even if they don't use IPFS. It won't change, even if the content changes later.",
+    "message": "A link to a snapshot of this tab at this moment in time; it won't change, even if content changes later. This link works for anyone, even if they don't use IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
