@@ -69,7 +69,7 @@ npm run dev-build chromium        # all-in-one
 You can also build it to manually install:
 
 ```bash
-npm run build bundle:chromium # last part is important: it overwrites manifest
+npm run build bundle:chromium     # last part is important: it overwrites manifest
 ```
 
 Then load the extension manually:
@@ -83,8 +83,8 @@ Then load the extension manually:
 The regular `run build` command minifies code and strips source maps. It is possible to build in `watch` mode, which will rebuild a debug version of all changed bundles:
 
 ```bash
-npm run build # do regular build first
-npm run watch # watch for new changes
+npm run build     # do regular build first
+npm run watch     # watch for new changes
 ```
 
 **Note:** `watch` is a blocking command, so one needs to run it in a different terminal than `firefox` or `chromium`. Press ctrl+c to stop it.
