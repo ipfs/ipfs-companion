@@ -136,28 +136,15 @@ but these builds are not signed, nor will automatically update. `.zip` bundles a
 To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
 1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
-2. Run this all-in-one dev build:
-    ```console
-    $ npm run dev-build
-    ```
-3. Switch `add-on/manifest.json` to the browser of your choice:
-    ```console
-    $ npm run bundle:firefox # for Firefox (build default)
-    OR
-    $ npm run bundle:chromium # for Chromium-based browsers
-    ```
-4. Load it into your browser:
+2. Run this all-in-one dev build to install dependencies, build, and launch in the browser of your choice:
     * Chromium
-        1. Enter `chrome://extensions` in the URL bar
-        2. Enable "Developer mode"
-        3. Click "Load unpacked extension..."
-        4. Pick the _directory_ `add-on`
-
+        ```console
+        $ npm run dev-build chromium
+        ```
     * Firefox
-        1. Enter `about:debugging` in the URL bar
-        2. Check "Enable add-on debugging"
-        3. Click "Load Temporary Add-on"
-        4. Pick the _file_ `add-on/manifest.json`
+        ```console
+        $ npm run dev-build firefox    # firefox:nightly works too!
+        ```
 
 ## Contribute
 
