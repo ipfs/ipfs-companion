@@ -313,7 +313,7 @@ module.exports = (state, emitter) => {
     if (state.isPinning || state.isUnPinning) return
     try {
       const currentPath = await resolveToPinPath(ipfs, status.currentTab.url)
-      const response = await all(ipfs.pin.ls(currentPath, { type: 'recursive', quiet: true }))
+      const response = await all(ipfs.pin.ls({ paths: [currentPath], type: 'recursive' }))
       console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
       state.isPinned = true
     } catch (error) {

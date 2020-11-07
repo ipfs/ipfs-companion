@@ -217,7 +217,7 @@ module.exports = async function init () {
 
   // Cache for async URL2CID resolution used by browser action
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
-  const url2cidCache = new LRU({ max: 10, maxAge: 1000 * 30 })
+  const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
 
   var browserActionPort
 
@@ -281,15 +281,22 @@ module.exports = async function init () {
       if (info.isIpfsContext) {
         info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
-        info.currentTabImmutablePath = await ipfsPathValidator.resolveToImmutableIpfsPath(url)
-        info.currentTabPermalink = await ipfsPathValidator.resolveToPermalink(url)
-        if (!url2cidCache.has(url)) {
-          // run async resolution in the next event loop
+        if (resolveCache.has(url)) {
+          const [immutableIpfsPath, permalink, cid] = resolveCache.get(url)
+          info.currentTabImmutablePath = immutableIpfsPath
+          info.currentTabPermalink = permalink
+          info.currentTabCid = cid
+        } else {
+          // run async resolution in the next event loop so it does not block the UI
           setImmediate(async () => {
-            url2cidCache.set(url, await ipfsPathValidator.resolveToCid(url))
+            resolveCache.set(url, [
+              await ipfsPathValidator.resolveToImmutableIpfsPath(url),
+              await ipfsPathValidator.resolveToPermalink(url),
+              await ipfsPathValidator.resolveToCid(url)
+            ])
+            await sendStatusUpdateToBrowserAction()
           })
         }
-        info.currentTabCid = url2cidCache.get(url)
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname

@@ -6,7 +6,7 @@ const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
 
 // For how long more expensive lookups (DAG traversal etc) should be cached
-const RESULT_TTL_MS = 30 * 1000
+const RESULT_TTL_MS = 300000 // 5 minutes
 
 // Turns URL or URIencoded path into a content path
 function ipfsContentPath (urlOrPath, opts) {

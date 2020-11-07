@@ -15,6 +15,8 @@ const {
   contextMenuCopyCidAddress
 } = require('../../lib/context-menus')
 
+const notReady = browser.i18n.getMessage('panelCopy_notReadyHint')
+
 // Context Actions are displayed in Browser Action and Page Action (FF only)
 function contextActions ({
   active,
@@ -26,11 +28,11 @@ function contextActions ({
   currentFqdn,
   currentDnslinkFqdn,
   currentTabIntegrationsOptOut,
-  currentTabContentPath,
-  currentTabImmutablePath,
-  currentTabCid,
-  currentTabPublicUrl,
-  currentTabPermalink,
+  currentTabContentPath = notReady,
+  currentTabImmutablePath = notReady,
+  currentTabCid = notReady,
+  currentTabPublicUrl = notReady,
+  currentTabPermalink = notReady,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -93,7 +95,7 @@ function contextActions ({
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
     title: browser.i18n.getMessage('panelCopy_copyRawCidTooltip'),
-    helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
+    helperText: currentTabCid,
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}

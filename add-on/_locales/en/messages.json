@@ -92,7 +92,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "Copy Content Path",
+  "message": "Copy IPNS Path",
   "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
@@ -100,7 +100,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy Content Path Snapshot",
+    "message": "Copy IPFS Path",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
@@ -115,9 +115,9 @@
     "message": "The unique IPFS content identifier for this tab at this moment in time. If content changes later, the CID will change too.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
-  "panelCopy_copyRawCidNotReadyHint": {
+  "panelCopy_notReadyHint": {
     "message": "(waiting for DAG data)",
-    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Copy Shareable Link",
