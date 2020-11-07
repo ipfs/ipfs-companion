@@ -64,20 +64,20 @@ function contextActions ({
       onClick: () => onViewOnGateway(contextMenuViewOnGateway)
     })
     : null}
+  ${navItem({
+    text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
+    title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
+    helperText: currentTabPublicUrl,
+    onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
+  })}
   ${isMutable
     ? navItem({
-      text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
-      title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
-      helperText: currentTabPublicUrl,
-      onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
+      text: browser.i18n.getMessage(contextMenuCopyPermalink),
+      title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
+      helperText: currentTabPermalink,
+      onClick: () => onCopy(contextMenuCopyPermalink)
     })
     : ''}
-  ${navItem({
-    text: browser.i18n.getMessage(contextMenuCopyPermalink),
-    title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
-    helperText: currentTabPermalink,
-    onClick: () => onCopy(contextMenuCopyPermalink)
-  })}
   ${isMutable
     ? navItem({
       text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
