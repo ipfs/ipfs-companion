@@ -6,7 +6,7 @@ const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
 
 // For how long more expensive lookups (DAG traversal etc) should be cached
-const RESULT_TTL_MS = 30 * 1000
+const RESULT_TTL_MS = 300000 // 5 minutes
 
 // Turns URL or URIencoded path into a content path
 function ipfsContentPath (urlOrPath, opts) {
@@ -252,6 +252,20 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       const ipfsPath = ipfsContentPath(urlOrPath, { keepURIParams: true })
       if (isIPFS.path(ipfsPath)) return pathAtHttpGateway(ipfsPath, gwURLString)
       return null
+    },
+
+    // Resolve URL or path to HTTP URL with CID:
+    // - IPFS paths are attached to HTTP Gateway root
+    // - URL of DNSLinked websties are resolved to CIDs
+    // The purpose of this resolver is to always return a meaningful, publicly
+    // accessible URL that can be accessed without the need of an IPFS client
+    // and that never changes.
+    async resolveToPermalink (urlOrPath, optionalGatewayUrl) {
+      const input = urlOrPath
+      const ipfsPath = await this.resolveToImmutableIpfsPath(input)
+      const gateway = optionalGatewayUrl || getState().pubGwURLString
+      if (ipfsPath) return pathAtHttpGateway(ipfsPath, gateway)
+      return input.startsWith('http') ? input : null
     },
 
     // Resolve URL or path to IPFS Path:

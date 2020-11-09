@@ -9,7 +9,7 @@
 
 .header-icon:active {
   color: #edf0f4;
-  transform: translateY(4px);
+  transform: translateY(2px);
 }
 .header-icon[disabled],
 .header-icon[disabled]:active {

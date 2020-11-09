@@ -21,7 +21,7 @@ const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createInspector = require('./inspector')
 const { createRuntimeChecks } = require('./runtime-checks')
-const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway } = require('./context-menus')
+const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
 const { showPendingLandingPages } = require('./on-installed')
@@ -217,7 +217,7 @@ module.exports = async function init () {
 
   // Cache for async URL2CID resolution used by browser action
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
-  const url2cidCache = new LRU({ max: 10, maxAge: 1000 * 30 })
+  const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
 
   var browserActionPort
 
@@ -235,8 +235,10 @@ module.exports = async function init () {
     notification: (message) => notify(message.title, message.message),
     [contextMenuViewOnGateway]: inspector.viewOnGateway,
     [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
+    [contextMenuCopyCidAddress]: copier.copyCidAddress,
     [contextMenuCopyRawCid]: copier.copyRawCid,
-    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw
+    [contextMenuCopyAddressAtPublicGw]: copier.copyAddressAtPublicGw,
+    [contextMenuCopyPermalink]: copier.copyPermalink
   }
 
   function handleMessageFromBrowserAction (message) {
@@ -279,13 +281,22 @@ module.exports = async function init () {
       if (info.isIpfsContext) {
         info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
-        if (!url2cidCache.has(url)) {
-          // run async resolution in the next event loop
+        if (resolveCache.has(url)) {
+          const [immutableIpfsPath, permalink, cid] = resolveCache.get(url)
+          info.currentTabImmutablePath = immutableIpfsPath
+          info.currentTabPermalink = permalink
+          info.currentTabCid = cid
+        } else {
+          // run async resolution in the next event loop so it does not block the UI
           setImmediate(async () => {
-            url2cidCache.set(url, await ipfsPathValidator.resolveToCid(url))
+            resolveCache.set(url, [
+              await ipfsPathValidator.resolveToImmutableIpfsPath(url),
+              await ipfsPathValidator.resolveToPermalink(url),
+              await ipfsPathValidator.resolveToCid(url)
+            ])
+            await sendStatusUpdateToBrowserAction()
           })
         }
-        info.currentTabCid = url2cidCache.get(url)
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname

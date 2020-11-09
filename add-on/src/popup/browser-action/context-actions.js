@@ -9,9 +9,13 @@ const { sameGateway } = require('../../lib/ipfs-path')
 const {
   contextMenuViewOnGateway,
   contextMenuCopyAddressAtPublicGw,
+  contextMenuCopyPermalink,
   contextMenuCopyRawCid,
-  contextMenuCopyCanonicalAddress
+  contextMenuCopyCanonicalAddress,
+  contextMenuCopyCidAddress
 } = require('../../lib/context-menus')
+
+const notReady = browser.i18n.getMessage('panelCopy_notReadyHint')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
 function contextActions ({
@@ -24,9 +28,11 @@ function contextActions ({
   currentFqdn,
   currentDnslinkFqdn,
   currentTabIntegrationsOptOut,
-  currentTabContentPath,
-  currentTabCid,
-  currentTabPublicUrl,
+  currentTabContentPath = notReady,
+  currentTabImmutablePath = notReady,
+  currentTabCid = notReady,
+  currentTabPublicUrl = notReady,
+  currentTabPermalink = notReady,
   ipfsNodeType,
   isIpfsContext,
   isPinning,
@@ -42,6 +48,7 @@ function contextActions ({
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
   const activePinControls = active && isIpfsOnline && isApiAvailable
+  const isMutable = currentTabContentPath.startsWith('/ipns/')
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
     const { url } = currentTab
@@ -52,27 +59,43 @@ function contextActions ({
     if (!isIpfsContext) return
     return html`<div>
   ${activeViewOnGateway(currentTab)
-  ? navItem({
-    text: browser.i18n.getMessage(contextMenuViewOnGateway),
-    onClick: () => onViewOnGateway(contextMenuViewOnGateway)
-  })
-  : null}
+    ? navItem({
+      text: browser.i18n.getMessage(contextMenuViewOnGateway),
+      onClick: () => onViewOnGateway(contextMenuViewOnGateway)
+    })
+    : null}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyAddressAtPublicGw),
     title: browser.i18n.getMessage('panel_copyCurrentPublicGwUrlTooltip'),
     helperText: currentTabPublicUrl,
     onClick: () => onCopy(contextMenuCopyAddressAtPublicGw)
   })}
+  ${isMutable
+    ? navItem({
+      text: browser.i18n.getMessage(contextMenuCopyPermalink),
+      title: browser.i18n.getMessage('panel_copyCurrentPermalinkTooltip'),
+      helperText: currentTabPermalink,
+      onClick: () => onCopy(contextMenuCopyPermalink)
+    })
+    : ''}
+  ${isMutable
+    ? navItem({
+      text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+      title: browser.i18n.getMessage('panelCopy_currentIpnsAddressTooltip'),
+      helperText: currentTabContentPath,
+      onClick: () => onCopy(contextMenuCopyCanonicalAddress)
+    })
+    : ''}
   ${navItem({
-    text: browser.i18n.getMessage(contextMenuCopyCanonicalAddress),
+    text: browser.i18n.getMessage(contextMenuCopyCidAddress),
     title: browser.i18n.getMessage('panelCopy_currentIpfsAddressTooltip'),
-    helperText: currentTabContentPath,
-    onClick: () => onCopy(contextMenuCopyCanonicalAddress)
+    helperText: currentTabImmutablePath,
+    onClick: () => onCopy(contextMenuCopyCidAddress)
   })}
   ${navItem({
     text: browser.i18n.getMessage(contextMenuCopyRawCid),
     title: browser.i18n.getMessage('panelCopy_copyRawCidTooltip'),
-    helperText: (currentTabCid || browser.i18n.getMessage('panelCopy_copyRawCidNotReadyHint')),
+    helperText: currentTabCid,
     disabled: !activeCidResolver,
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
@@ -114,7 +137,7 @@ function activeTabActions (state) {
   const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
-      <div class="mv1">
+      <div class="mb1">
       ${navHeader('panel_activeTabSectionHeader')}
       <div class="fade-in pv0">
         ${contextActions(state)}      </div>

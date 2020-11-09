@@ -26,7 +26,7 @@ module.exports = function gatewayStatus ({
 }) {
   const api = ipfsApiUrl && ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
   return html`
-    <ul class="fade-in list mv0 pv2 ph3 white">
+    <ul class="fade-in list mv0 pt2 ph3 white">
     ${statusEntry({
       label: 'panel_statusSwarmPeers',
       labelLegend: 'panel_statusSwarmPeersTitle',

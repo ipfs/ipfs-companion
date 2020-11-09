@@ -55,14 +55,18 @@ const contextMenuImportToIpfs = 'contextMenu_importToIpfs'
 // Add X to IPFS
 const contextMenuImportToIpfsSelection = 'contextMenu_importToIpfsSelection'
 // Copy X
-const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpfsAddress'
+const contextMenuCopyCidAddress = 'panelCopy_currentIpfsAddress'
+const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpnsAddress'
 const contextMenuCopyRawCid = 'panelCopy_copyRawCid'
 const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
 const contextMenuViewOnGateway = 'panel_contextMenuViewOnGateway'
+const contextMenuCopyPermalink = 'panel_copyCurrentPermalink'
+module.exports.contextMenuCopyCidAddress = contextMenuCopyCidAddress
 module.exports.contextMenuCopyCanonicalAddress = contextMenuCopyCanonicalAddress
 module.exports.contextMenuCopyRawCid = contextMenuCopyRawCid
 module.exports.contextMenuCopyAddressAtPublicGw = contextMenuCopyAddressAtPublicGw
 module.exports.contextMenuViewOnGateway = contextMenuViewOnGateway
+module.exports.contextMenuCopyPermalink = contextMenuCopyPermalink
 
 // menu items that are enabled only when API is online
 const apiMenuItems = new Set()
