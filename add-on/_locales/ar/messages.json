@@ -52,7 +52,7 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "استيراد / مشاركة سريعة ...",
+    "message": " استيراد",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
@@ -60,11 +60,11 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
-    "message": "انتقل إلى عقدي ...",
+    "message": "عقدتي",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
-    "message": "افتح عناصر تحكم عقدة IPFS في المستعرض الخاص بك",
+    "message": "افتح عناصر تحكم عقد IPFS في متصفحك.",
     "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
@@ -76,11 +76,11 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "$1 تمكين على ",
+    "message": "تمكين لـ $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "تمكين / تعطيل جميع عمليات تكامل IPFS $1",
+    "message": "تفعيل / تعطيل جميع عمليات تكامل تفعيل / تعطيل جميع عمليات تكامل IPFS$1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -91,12 +91,20 @@
     "message": "قم بتثبيت موارد IPFS لهذه الصفحة في العقدة الخاصة بك للحصول على نسخة محلية متاحة في وضع عدم الاتصال ولا يتم التخلص منها مطلقًا.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
+  "panelCopy_currentIpnsAddress": {
+  "message": "انسخ مسار IPNS",
+  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+  },
+  "panelCopy_currentIpnsAddressTooltip": {
+    "message": "استخدم مسار المحتوى هذا مع أدوات وبوابات IPFS للوصول إلى أحدث إصدار تم تحديثه من محتوى علامة التبويب هذه.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
+  },
   "panelCopy_currentIpfsAddress": {
-    "message": "نسخ مسار محتوى IPFS",
+    "message": "انسخ مسار IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "مسار محتوى أساسي يمكنك استخدامه مع أدوات ومداخل IPFS",
+    "message": "استخدم مسار المحتوى هذا مع أدوات وبوابات IPFS للوصول إلى المحتوى في علامة التبويب هذه في الوقت الحالي. لن تتغير هذه اللقطة ، حتى إذا تغير المحتوى لاحقًا.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -104,20 +112,28 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "معرف محتوى IPFS الفريد لهذه الصفحة",
+    "message": "معرّف محتوى IPFS الفريد لعلامة التبويب هذه في الوقت الحالي. إذا تغير المحتوى لاحقًا ، فسيتغير CID أيضًا.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
-  "panelCopy_copyRawCidNotReadyHint": {
+  "panelCopy_notReadyHint": {
     "message": "(في انتظار بيانات DAG)",
-    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "انسخ الرابط القابل للمشاركة",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "يعمل هذا الرابط لأي شخص ، حتى إذا لم يستخدم IPFS",
+    "message": "رابط قابل للمشاركة إلى علامة التبويب هذه يعمل مع أي شخص ، حتى إذا لم يستخدموا IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
+  },
+  "panel_copyCurrentPermalink": {
+    "message": "انسخ رابط اللقطة",
+    "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
+  },
+  "panel_copyCurrentPermalinkTooltip": {
+    "message": "رابط إلى لقطة من علامة التبويب هذه في الوقت الحالي ؛ لن يتغير ، حتى إذا تغير المحتوى لاحقًا. يعمل هذا الرابط لأي شخص ، حتى لو لم يستخدم IPFS.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
     "message": "عرض على البوابة",

@@ -7,6 +7,10 @@
     "message": "IPFS Refakatçisi",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
+  "panel_headerNewVersionTitle": {
+    "message": "IPFS Refakatçisi yeni bir sürüme güncellendi! Detaylar için tıklayın.",
+    "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
+  },
   "panel_headerActiveToggleTitle": {
     "message": "Tüm IPFS entegrasyonlarını aç / kapat",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
@@ -16,99 +20,139 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusOffline)"
   },
   "panel_statusGatewayAddress": {
-    "message": "Köprü",
+    "message": "Ağ geçidi",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
+  },
+  "panel_statusGatewayAddressTitle": {
+    "message": "İçeriği getirmek için kullandığınız genel veya yerel ağ geçidinin URL'i (bunu Tercihler'den değiştirebilirsin)",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
     "message": "UPA",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
+  "panel_statusApiAddressTitle": {
+    "message": "Yerel düğümünüzün UPA'sının URL'i",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
+  },
   "panel_statusGatewayVersion": {
     "message": "sürüm",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
+  },
+  "panel_statusGatewayVersionTitle": {
+    "message": "Yerel düğümünüzün kullandığı IPFS sürümü",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
   },
   "panel_statusSwarmPeers": {
     "message": "Eşler",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "Bağlanabileceğiniz diğer IPFS düğümü sayısı",
+    "message": "Bağlanabileceğiniz diğer IPFS düğümlerinin sayısı",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "IPFS ile dosyaları paylaş",
+    "message": "İçe aktar",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
+  "panel_quickImportTooltip": {
+    "message": "Dosyaları IPFS'ye aktarın ve genel olarak paylaşılabilir bir bağlantıyı panonuza kopyalayın.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
+  },
   "panel_openWebui": {
-    "message": "Web Arayüzünü aç",
+    "message": "Düğümüm",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
-  "panel_redirectToggle": {
-    "message": "Köprüye Yönlendir",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
-  },
-  "panel_redirectToggleTooltip": {
-    "message": "Tüm köprü yönlendirmelerini değiştirmek için tıklayın",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
-  },
-  "panel_toolsSectionHeader": {
-    "message": "Araçlar",
-    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  "panel_openWebuiTooltip": {
+    "message": "Tarayıcınızda IPFS düğümünüzün kontrollerini açın.",
+    "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
-    "message": "Tarayıcı Uzantısının Açık Tercihleri",
+    "message": "IPFS Refakatçisi tercihlerini aç",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Etkin Sekme",
+    "message": "Geçerli Sekme",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "$1için etkinleştir",
+    "message": "$1 için etkinleştir",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "$1 üzerindeki tüm IPFS entegrasyonlarını değiştirmek için tıklayın",
+    "message": " $1 üzerindeki tüm IPFS entegrasyonlarını etkinleştirin/devre dışı bırakın.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
-    "message": "IPFS kaynağını sabitle",
+    "message": "IPFS Kaynağını Sabitle",
     "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
   },
   "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
+    "message": "Çevrimdışı kullanılabilen ve asla atılmayan yerel bir kopyaya sahip olmak için bu sayfanın IPFS kaynaklarını düğümünüze sabitleyin.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
+  "panelCopy_currentIpnsAddress": {
+  "message": "IPNS Yolunu Kopyala",
+  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+  },
+  "panelCopy_currentIpnsAddressTooltip": {
+    "message": "Bu sekme içeriğinin en son güncellenen sürümüne ulaşmak için bu içerik yolunu IPFS araçları ve ağ geçitleriyle kullanın.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
+  },
   "panelCopy_currentIpfsAddress": {
-    "message": "IPFS içerik yolunu kopyala",
+    "message": "IPFS Yolunu Kopyala",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
+  },
+  "panelCopy_currentIpfsAddressTooltip": {
+    "message": "Bu sekmedeki içeriğe şu anda ulaşmak için bu içerik yolunu IPFS araçları ve ağ geçitleriyle kullanın. Bu anlık görüntü, içerik daha sonra değişse bile değişmeyecek.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
     "message": "CID'yi kopyala",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
+  "panelCopy_copyRawCidTooltip": {
+    "message": "Bu sekme için şu andaki benzersiz IPFS içerik tanımlayıcısı. İçerik daha sonra değişirse, CID de değişecektir.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
+  },
+  "panelCopy_notReadyHint": {
+    "message": "(DAG verilerini bekliyor)",
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
+  },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Paylaşılabilir bağlantıyı kopyala",
+    "message": "Paylaşılabilir Bağlantıyı Kopyala",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_copyCurrentPublicGwUrlTooltip": {
+    "message": "IPFS kullanmasalar bile, herkes için çalışan bu sekmenin paylaşılabilir bir bağlantısı.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
+  },
+  "panel_copyCurrentPermalink": {
+    "message": "Anlık Görüntü Bağlantısını Kopyala",
+    "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
+  },
+  "panel_copyCurrentPermalinkTooltip": {
+    "message": "Şu anda bu sekmenin anlık görüntüsüne bağlantı; içerik daha sonra değişse bile değişmez. Bu bağlantı, IPFS kullanmasalar bile herkes için çalışır.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
+  },
   "panel_contextMenuViewOnGateway": {
-    "message": "Köprüde göster",
+    "message": "Ağ Geçidinde Görüntüle",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
-    "message": "Herkese Açık Köprü üzerinden yüklenen IPFS kaynağı",
+    "message": "Genel Ağ Geçidi aracılığıyla yüklenen IPFS kaynağı",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "Özel Köprü üzerinden yüklenen IPFS kaynağı",
+    "message": "Yerel ağ geçidi aracılığıyla yüklenen IPFS kaynağı",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "IPFS olmayan kaynak",
+    "message": "IPFS Dışı Kaynak",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Seçilen Görsel",
+    "message": "Seçilen Resim",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
@@ -132,7 +176,7 @@
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "IPFS'e aktar",
+    "message": "IPFS'ye aktar",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
@@ -144,7 +188,7 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Daha fazla ayrıntı için Tarayıcı Konsolu'na bakın",
+    "message": "Daha fazla ayrıntı için tarayıcınızın geliştirici konsoluna bakın",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
@@ -152,7 +196,7 @@
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS kaynağı şimdi sabitlendi",
+    "message": "IPFS Kaynağı Sabitlendi",
     "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
   },
   "notify_unpinnedIpfsResourceTitle": {
@@ -160,11 +204,11 @@
     "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
   },
   "notify_pinErrorTitle": {
-    "message": "IPFS Kaynağı sabitlenirken hata oluştu",
+    "message": "IPFS Kaynağını Sabitleme Hatası",
     "description": "A title of system notification (notify_pinErrorTitle)"
   },
   "notify_unpinErrorTitle": {
-    "message": "IPFS Sabitlemesi kaldırılırken hata oluştu",
+    "message": "IPFS Sabitlemesini Çıkarma Hatası",
     "description": "A title of system notification (notify_unpinErrorTitle)"
   },
   "notify_apiOnlineTitle": {
@@ -172,7 +216,7 @@
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Otomatik Mod: Özel Köprü Yönlendirme ",
+    "message": "Otomatik Mod: Özel ağ geçidi yönlendirmesi etkin",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
@@ -180,11 +224,11 @@
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Otomatik Mod: Herkese Açık Köprü yedek olarak kullanılacaktır",
+    "message": "Otomatik Mod: Genel ağ geçidi yedek olarak kullanılacak",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "IPFS UPA üzerinden içe aktarılamıyor",
+    "message": "IPFS UPA ile İçe Aktarılamıyor",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -200,15 +244,19 @@
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "IPFS düğümü başlatılırken başarısız olundu",
+    "message": "IPFS Düğümü Başlatılamadı",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "IPFS düğümü durdurulurken başarısız olundu",
+    "message": "IPFS Düğümü Durdurulamadı",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
+  "option_page_title" : {
+    "message": "Tercihler | IPFS Refakatçisi",
+    "description": "Title of the Preferences page (option_page_title)"
+  },
   "option_page_header" : {
-    "message": "Companion Preferences",
+    "message": "Refakatçi Ayarları",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
@@ -228,23 +276,23 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
+    "message": "HTTP UPA kullanarak yerel bir düğüme bağlanmak için \"Harici\" olarak ayarlayın.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Set to \"Embedded\" to run a js-ipfs node directly in your browser. (Click \"Read more\" to learn about the limitations of this experimental feature.)",
+    "message": "Tarayıcınızda doğrudan bir js-ipfs düğümünü çalıştırmak için \"Gömülü\" olarak ayarlayın. (Bu deneysel özelliğin sınırlamaları hakkında bilgi edinmek için \"Daha fazlasını okuyun\" 'u tıklayın.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Chrome Soketleri ile Gömülmüş: Tarayıcınızda js-ipfs düğümünü chrome.sockets UPA'larına erişerek çalıştırın (ayrıntılar aşağıdaki bağlantının altında)",
+    "message": "Chrome Soketleriyle Gömülü: Chrome.sockets UPA'larına erişerek tarayıcınızda js-ipfs düğümünü çalıştırın (ayrıntılar aşağıdaki bağlantıdadır)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Düğümü Yapılandırması",
+    "message": "IPFS Düğüm Yapılandırması",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Gömülü JS IPFS düğümü için ek yapılandırma. Geçerli bir JSON olmalı.",
+    "message": "Gömülü JS IPFS düğümü için ek yapılandırma. Geçerli JSON olmalıdır.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -260,27 +308,27 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_header_gateways": {
-    "message": "Köprüler",
+    "message": "Ağ geçitleri",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Özel Yerel Köprü",
+    "message": "Yerel Ağ Geçidi",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "Set the URL of your preferred custom local gateway.",
+    "message": "Yerel ağ geçidinizin URL'sini ayarlayın.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "Köprü URL'niz “http://127.0.0.1”, “http://[::1]” veya “https://” ile başlamadığı sürece IPFS içeriğinin HTTPS internet sitelerine yüklenmesi engellenecektir.",
+    "message": "Ağ geçidi URL'niz “http://127.0.0.1”, “http://[::1]” veya “https://” ile başlamadıkça IPFS içeriğinin HTTPS web sitelerine yüklenmesi engellenecektir.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Özel Köprü Kullan",
+    "message": "Yerel Ağ Geçidini Kullan",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Redirect requests for IPFS resources to your custom local gateway.",
+    "message": "IPFS kaynaklarına yönelik istekleri yerel ağ geçidinize yeniden yönlendirin.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -288,51 +336,59 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. Requires go-ipfs 0.5.0 or later on your local node.",
+    "message": "İçerik köklerini alt etki alanları olarak (* .localhost'ta) yükleyerek ve her bir CID, IPNS veya DNSLink kaydı için benzersiz bir kaynak oluşturarak izole ediniz. Yerel düğümünüzde go-ipfs 0.5.0 veya üstünü gerektirir.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Load DNSLink Sites from Custom Gateway",
+    "message": "DNSLink Sitelerini Özel Ağ Geçidinden Yükleme",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "When global gateway redirect is enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths at your custom gateway.",
+    "message": "Genel ağ geçidi yeniden yönlendirmesi etkinleştirildiğinde, DNSLink web sitelerini özel ağ geçidinizdeki ilgili /ipns/{fqdn} yollarına yeniden yönlendirerek dahil edin.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Preload Visited Pages",
+    "message": "Ziyaret Edilmiş Sayfaları Önceden Yükle",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "Preload DNSLink sites to your local IPFS node, enabling offline access and improving your resiliency against network failure.",
+    "message": "DNSLink sitelerini yerel IPFS düğümünüze önceden yükleyin, çevrimdışı erişimi etkinleştirin ve ağ arızasına karşı dayanıklılığınızı artırın.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Do not use if your IPFS node does not support *.ipfs.localhost. Redirecting to a path-based gateway breaks the origin-based security isolation of DNSLink websites, so make sure you understand the related risks.",
+    "message": "IPFS düğümünüz * .ipfs.localhost'u desteklemiyorsa kullanmayın. Yol tabanlı bir ağ geçidine yeniden yönlendirme, DNSLink web sitelerinin kaynak tabanlı güvenlik izolasyonunu bozar, bu nedenle ilgili riskleri anladığınızdan emin olun.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noIntegrationsHostnames_title": {
-    "message": "Site Opt-Out List",
-    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
+  "option_disabledOn_title": {
+    "message": "IPFS Entegrasyonlarını Her Zaman Devre Dışı Bırak",
+    "description": "An option title on the Preferences screen (option_disabledOn_title)"
   },
-  "option_noIntegrationsHostnames_description": {
-    "message": "Sites in this list (one hostname per line) will have all IPFS integrations disabled.",
-    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
+  "option_disabledOn_description": {
+    "message": "Bu listedeki siteler (satır başına bir ana bilgisayar adı) her zaman IPFS entegrasyonları devre dışı bırakılarak yüklenir. Bir siteyi ziyaret ederken tarayıcınızın işlem menüsünden \"Etkinleştir ...\" seçeneğini değiştirmek, onu da bu listeye ekler veya listeden kaldırır.",
+    "description": "An option description on the Preferences screen (option_disabledOn_description)"
+  },
+  "option_enabledOn_title": {
+    "message": "IPFS Entegrasyonlarını Her Zaman Etkinleştir",
+    "description": "An option title on the Preferences screen (option_enabledOn_title)"
+  },
+  "option_enabledOn_description": {
+    "message": "Bu listedeki siteler (satır başına bir ana bilgisayar adı) her zaman IPFS entegrasyonları etkinleştirilmiş olarak yüklenir. Bir siteyi ziyaret ederken tarayıcınızın işlem menüsünden \"Etkinleştir ...\" seçeneğini değiştirmek, onu da bu listeye ekler veya listeden kaldırır.",
+    "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Varsayılan Genel Köprü",
+    "message": "Varsayılan Genel Ağ Geçidi",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Set a default public gateway to use in publicly shareable links and as a fallback URL when your custom gateway is not available.",
+    "message": "Eğer yerel ağ geçidiniz kullanılamıyorsa, herkese açık olarak paylaşılabilir bağlantılarda ve yedek olarak kullanmak için varsayılan bir genel ağ geçidinin URL'sini ayarlayın.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "Varsayılan Genel Alt Etki Alanı Ağ Geçidi",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Set a default public subdomain gateway for the recovery of broken subdomain gateways.",
+    "message": "Bozuk alt alan ağ geçitlerinin kurtarılması için varsayılan bir genel alt alan ağ geçidinin URL'sini ayarlayın.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -340,27 +396,27 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "IPFS UPA URL'si",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
+    "message": "IPFS UPA'nızın URL'sini ayarlayın. (İpucu: Burası /api/v0/config'in bulunduğu yerdir.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Status Poll Interval",
+    "message": "Seçim Aralığı Durumu",
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Specify how frequently (in milliseconds) to refresh your peer count.",
+    "message": "Eş sayınızı ne sıklıkta (milisaniye cinsinden) yenileyeceğinizi belirtin.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Use Automatic Mode",
+    "message": "Otomatik Modu Kullan",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Enable/disable use of your custom gateway as appropriate when IPFS API availability changes.",
+    "message": "IPFS UPA kullanılamıyorsa yerel ağ geçidinizden varsayılan genel ağ geçidinize otomatik olarak geçiş yapın.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -368,27 +424,27 @@
     "description": "A section header on the Preferences screen (option_header_dnslink)"
   },
   "option_header_experiments": {
-    "message": "Experiments",
+    "message": "Deneyler",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_header_reset": {
-    "message": "Reset Preferences",
+    "message": "Tercihleri Sıfırla",
     "description": "A section header on the Preferences screen (option_header_reset)"
   },
   "option_experimental": {
-    "message": "experimental",
+    "message": "deneysel",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_experiments_warning": {
-    "message": "Warning! These experimental features are works in progress and are subject to changes in availability and functionality.",
+    "message": "Uyarı! Bu deneysel özellikler devam eden çalışmalardır ve kullanılabilirlik ve işlevsellik açısından değişikliklere tabidir.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
-    "message": "Use Latest Version of IPFS Web UI",
+    "message": "IPFS Web Kullanıcı Arayüzünün En Son Sürümünü Kullanın",
     "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
   },
   "option_useLatestWebUI_description": {
-    "message": "Use the very latest version of the Status, Files, Explore, Peers, and Settings screens from webui.ipfs.io (via DNSLink) instead of the hard-coded CIDs shipped with the IPFS daemon. (Enable only if you trust your DNS resolver and understand how to set up the required CORS headers.)",
+    "message": "IPFS arka plan programı ile birlikte gönderilen sabit kodlu CID'ler yerine webui.ipfs.io'dan (DNSLink aracılığıyla) Durum, Dosyalar, Keşfet, Eşler ve Ayarlar ekranlarının en son sürümünü kullanın. (Yalnızca DNS çözümleyicinize güveniyorsanız ve gerekli CORS başlıklarını nasıl ayarlayacağınızı anlıyorsanız etkinleştirin.)",
     "description": "An option description on the Preferences screen (option_useLatestWebUI_description)"
   },
   "option_displayNotifications_title": {
@@ -396,111 +452,119 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
+    "message": "Panoya bir bağlantı kopyalandığında, API durumu değiştiğinde vs. işletim seviyesi düzeyinde bildirimleri görüntüleyin.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
+  "option_displayReleaseNotes_title": {
+    "message": "Güncellemede Sürüm Notlarını Göster",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Yeni bir IPFS Refakatçisi sürümü yüklendiğinde sürüm notlarını yeni bir sekmede açın.",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
+  },
   "option_catchUnhandledProtocols_title": {
-    "message": "Catch Unhandled IPFS Protocols",
+    "message": "İşlenmemiş IPFS Protokollerini Yakala",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enable provisional support for ipfs://, ipns://, and dweb: requests by redirecting them to an HTTP gateway.",
+    "message": "ipfs://, ipns://, ve dweb: isteklerini HTTP ağ geçidine yönlendirerek geçici desteği etkinleştirin.",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
-    "message": "Linkify IPFS Addresses",
+    "message": "IPFS Adreslerini Bağlaştır",
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Turn /ipfs/ paths displayed as plaintext on web pages into clickable links.",
+    "message": "Web sayfalarında düz metin olarak görüntülenen /ipfs/ yollarını tıklanabilir bağlantılara dönüştürün.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup Policy",
+    "message": "DNSLink Arama Politikası",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Choose your policy for looking up and displaying contextual actions on DNSLink-enabled sites.",
+    "message": "DNSLink etkin sitelerde içeriksel eylemleri aramak ve görüntülemek için politikanızı seçin.",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Off",
+    "message": "Kapalı",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "HTTP isteğinden sonra kontrol edin",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "HTTP isteğinden önce kontrol edin",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Başarısız HTTP İsteklerini Kurtarın",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Redirect failed HTTP requests for IPFS resources to the public gateway.",
+    "message": "IPFS kaynakları için başarısız HTTP isteklerini genel ağ geçidine yeniden yönlendirin.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detect x-ipfs-path Headers",
+    "message": "x-ipfs-path Başlıklarını Algıla",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
+    "message": "Başlık değeri bir IPFS yolu ise, öğeleri IPFS üzerinden (HTTP yerine) x-ipfs-path üst bilgilerine sahip olarak yükleyin. IPNS yollarını da yeniden yönlendirmek için DNSLink desteğini etkinleştirin.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
-    "message": "Support for window.ipfs",
+    "message": "window.ipfs desteği",
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
+    "message": "IPFS, her sayfada pencere nesnesine eklenir. Ortaya koyduğu işlevlere erişimi etkinleştirin/devre dışı bırakın.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
+    "message": "İzinleri yönetin",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Open Imported Files in the Files Screen",
+    "message": "Dosyalar Ekranında İçe Aktarılan Dosyaları Açın",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "After importing a file, open it in the Files screen instead of opening it or its parent directory in the gateway.",
+    "message": "Bir dosyayı içe aktardıktan sonra, dosyayı veya ağ geçidindeki üst dizinini açmak yerine Dosyalar ekranında açın.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Imported Assets",
+    "message": "İçe Aktarılan Varlıkları Önceden Yükle",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Automatically preload assets imported to IPFS via asynchronous HTTP HEAD requests to a public gateway.",
+    "message": "IPFS'ye içe aktarılan varlıkları, asenkron HTTP HEAD istekleri aracılığıyla bir genel ağ geçidine otomatik olarak önceden yükleyin.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "Ad Alanları Logla",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Namespaces in this comma-separated list will be logged to your browser's console. Changing this list will restart IPFS Companion.",
+    "message": "Bu virgülle ayrılmış listedeki ad alanları, tarayıcınızın konsoluna kaydedilecektir. Bu listenin değiştirilmesi IPFS Refakatçisini yeniden başlatacaktır.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "Dosya İçe Aktarma Dizini",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Set the directory you wish to use for files you import using IPFS Companion.",
+    "message": "IPFS Refakatçisini kullanarak içe aktardığınız dosyalar için kullanmak istediğiniz dizini ayarlayın.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
-    "message": "Reset Everything",
+    "message": "Her Şeyi Sıfırla",
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Reset all IPFS Companion preferences to their default values (warning: cannot be undone!).",
+    "message": "Tüm IPFS Refakatçisi tercihlerini varsayılan değerlerine sıfırlayın. Uyarı: Geri alınamaz!",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -512,107 +576,115 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Harness the power of IPFS in your browser",
+    "message": "Tarayıcınızda IPFS'nin gücünden yararlanın",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
+  "quickImport_page_title": {
+    "message": "Dosyaları İçe Aktarın ve Paylaşın | IPFS Refakatçisi",
+    "description": "Page title (quickImport_page_title)"
+  },
+  "quickImport_head_peers": {
+    "message": "Dosyaları içe aktarın ve paylaşın",
+    "description": "Header on the share files page (quickImport_subhead_peers)"
+  },
   "quickImport_subhead_peers": {
-    "message": "Connected to $1 peers",
+    "message": "$1 eşe bağlandı",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
-    "message": "Pick a file",
+    "message": "Bir dosya seçin",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_or": {
-    "message": "or",
+    "message": "veya",
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "drop it here to share",
-    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
+    "message": "buraya bırakın",
+    "description": "Drop message on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "İçe aktarma devam ediyor ..",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
-    "message": "(buffering, please wait)",
+    "message": "(arabelleğe alınıyor, lütfen bekleyin)",
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "içe aktarma seçenekleri",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "İçe aktarılan dosyaları saklama yolu",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Dosyalar sayfasında aç",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
-    "message": "Manage Permissions",
+    "message": "İzinleri Yönetin",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "View, change and revoke granted access rights to your IPFS instance.",
+    "message": "IPFS örneğinize verilen erişim haklarını görüntüleyin, değiştirin ve iptal edin.",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "No permissions granted.",
+    "message": "Hiçbir izin verilmedi.",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $1 for $2?",
+    "message": "$2 için $1 izni iptal edilsin mi?",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $1?",
+    "message": "$1 için tüm izinler iptal edilsin mi?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Click to allow",
+    "message": "İzin vermek için tıklayın",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Click to deny",
+    "message": "Reddetmek için tıklayın",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Allow",
+    "message": "İzin ver",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Deny",
+    "message": "Reddet",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Revoke $1",
+    "message": "$1'i iptal et",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "IPFS Refakatçisi, bağlı düğümde «$1» değerinin «$2» erişimine izin vermeli mi?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Bu kararı, bu kapsamdaki tüm mevcut ve gelecekteki izinlere uygulayın",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Revoke all permissions",
+    "message": "Tüm izinleri iptal et",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Allow",
+    "message": "İzin ver",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Deny",
+    "message": "Reddet",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "Hoşgeldiniz | IPFS Refakatçisi",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -620,15 +692,15 @@
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Your node is connected to <0>$1</0> peers.",
+    "message": "Düğümünüz <0>$1</0> eşe bağlı.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_statusButton_text": {
-    "message": "Status",
+    "message": "Durum",
     "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
   },
   "page_landingWelcome_welcome_filesButton_text": {
-    "message": "Files",
+    "message": "Dosyalar",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
   },
   "page_landingWelcome_welcome_peersButton_text": {
@@ -636,83 +708,83 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS is not running",
+    "message": "IPFS çalışmıyor",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
-    "message": "IPFS Desktop users",
+    "message": "IPFS Masaüstü kullanıcıları",
     "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Make sure IPFS Desktop is running. Don't have it installed? <0>Download IPFS Desktop now.</0>",
+    "message": "IPFS Masaüstünün çalıştığından emin olun. Yüklemedin mi? <0>IPFS Masaüstü'nü şimdi indirin.</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Command-line users",
+    "message": "Komut satırı kullanıcıları",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Start IPFS by entering <code class=\"yellow\">ipfs daemon</code> in your terminal. If you don't have IPFS installed yet, follow the <0>CLI quick-start guide</0> first.",
+    "message": "Terminalinize <code class=\"yellow\">ipfs daemon</code>girerek IPFS'yi başlatın. Henüz IPFS'yi yüklemediyseniz, önce <0>CLI hızlı başlangıç kılavuzunu</0> izleyin.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Learn about IPFS",
+    "message": "IPFS hakkında bilgi edinin",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "Read about <0>IPFS Companion's features</0>",
+    "message": "<0>IPFS Refakatçisinin özellikleri</0> hakkında bilgi edinin",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_resources_new_ipfs_concepts": {
-    "message": "Learn basic concepts in the <0>How IPFS Works</0> guide",
+    "message": "<0>IPFS Nasıl Çalışır</0> kılavuzundaki temel kavramları öğrenin",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Visit the <0>IPFS documentation site</0> to dig deeper",
+    "message": "Daha derine inmek için <0>IPFS dokümantasyon sitesini</0> ziyaret edin",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
-    "message": "Build on IPFS",
+    "message": "IPFS üzerine inşa edin",
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
   "page_landingWelcome_resources_build_tutorials": {
-    "message": "Find <0>how-tos and tutorials</0> to help get you started",
+    "message": "Başlamanıza yardımcı olacak <0>nasıl yapılırlar ve öğreticiler</0> bulun",
     "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
   },
   "page_landingWelcome_resources_build_examples": {
-    "message": "See what <0>awesome things</0> others are building with IPFS",
+    "message": "Başkalarının IPFS ile ne gibi <0>harika şeyler</0> geliştirdiğini görün ",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
-    "message": "Get help",
+    "message": "Yardım al",
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Ask questions and discuss IPFS in the <0>official forums</0>",
+    "message": "<0>Resmi forumlarda</0> sorular sorun ve IPFS'yi tartışın",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
-    "message": "Join the community",
+    "message": "Topluluğa katıl",
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_contribute": {
-    "message": "<0>Contribute</0> with code, documentation, and more",
+    "message": "Kod, belgeler ve daha fazlasıyla <0>katkıda bulunun</0>",
     "description": "Community copy (page_landingWelcome_resources_community_contribute)"
   },
   "page_landingWelcome_resources_community_translate": {
-    "message": "<0>Translate</0> IPFS into your favorite language",
+    "message": "IPFS'yi favori <0>dilinize</0> çevirin",
     "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {
-    "message": "Explore all <0>IPFS community resources</0>",
+    "message": "Tüm <0>IPFS topluluk kaynaklarını</0> keşfedin",
     "description": "Community copy (page_landingWelcome_resources_community_resources)"
   },
   "page_landingWelcome_videos_why_ipfs": {
-    "message": "Why IPFS?",
+    "message": "Neden IPFS?",
     "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
   "page_landingWelcome_videos_how_ipfs_works": {
-    "message": "How IPFS Works",
+    "message": "IPFS Nasıl Çalışır?",
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {

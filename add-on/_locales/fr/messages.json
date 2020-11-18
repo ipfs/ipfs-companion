@@ -52,19 +52,19 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Import ou partagr rapide...",
+    "message": "Importer",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
-    "message": "Importer des fichiers dans IPFS et copier un lien partageable dans votre presse-papier",
+    "message": "Importer les fichiers dans IPFS et copier un lien partageable dans le presse-papier.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
-    "message": "Aller à mon nœud...",
+    "message": "Mon nœud",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
-    "message": "Ouvrir les commandes de votre nœud IPFS dans votre navigateur",
+    "message": "Ouvrir les contrôles de votre nœud IPFS dans votre navigateur.",
     "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
@@ -76,11 +76,11 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Activer sur $1",
+    "message": "Activer pour $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Activer/désactiver toutes les intégrations d'IPFS sur $1",
+    "message": "Activer/désactiver toutes les intégrations IPFS pour $1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -91,12 +91,20 @@
     "message": "Épingler les ressources IPFS de cette page sur votre nœud IPFS pour en avoir une copie locale disponible même hors ligne et jamais supprimée.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
+  "panelCopy_currentIpnsAddress": {
+  "message": "Copier le chemin IPNS",
+  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+  },
+  "panelCopy_currentIpnsAddressTooltip": {
+    "message": "Utiliser ce chemin de contenu, les outils IPFS et les passerelles pour obtenir la version la plus récemment mise à jour du contenu de cet onglet.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
+  },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copier le chemin IPFS du contenu",
+    "message": "Copier le chemin IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "Un chemin universel vers ce contenu que vous pouvez utiliser avec les outils IPFS et les passerelles",
+    "message": "Utiliser ce chemin de contenu, les outils IPFS et les passerelles pour obtenir une copie du contenu de cet onglet tel qu'il est maintenant. Cette copie ne changera pas, même si le contenu change dans le futur.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -104,20 +112,28 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "L'identifiant IPFS unique du contenu de cette page",
+    "message": "L'identifiant IPFS unique du présent contenu de cet onglet. Si le contenu change plus tard, le CID changera aussi.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
-  "panelCopy_copyRawCidNotReadyHint": {
+  "panelCopy_notReadyHint": {
     "message": "(en attente des données du DAG)",
-    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Copier le lien partageable",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "Ce lien marche pour tout le monde, même s'ils n'utilisent pas IPFS",
+    "message": "Un lien partageable vers le contenu de cet onglet qui marche pour tout le monde, même s'ils n'utilisent pas IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
+  },
+  "panel_copyCurrentPermalink": {
+    "message": "Copier un lien de capture",
+    "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
+  },
+  "panel_copyCurrentPermalinkTooltip": {
+    "message": "Un lien vers une copie du contenu de cet onglet tel qu'il est en ce moment. Il ne changera pas, même si le contenu change dans le futur. Ce lien marche pour tout le monde, même s'ils n'utilisent pas IPFS.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
     "message": "Voir sur la passerelle",

@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerNewVersionTitle": {
-    "message": "IPFS Companion was updated to a new version! Click for details.",
+    "message": "IPFS Companion è stato aggiornato ad una nuova versione! Clicca per ulteriori dettagli.",
     "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
   },
   "panel_headerActiveToggleTitle": {
@@ -52,19 +52,19 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Importazione/Condivisione Veloce...",
+    "message": "Importa",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
-    "message": "Importa i file su IPFS e copia un link condivisibile negli appunti",
+    "message": "Importa file su IPFS e copia un collegamento condivisibile pubblicamente nei tuoi appunti.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
-    "message": "Vai al Mio Nodo...",
+    "message": "Mio nodo",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
-    "message": "Apri i controlli del tuo nodo IPFS nel browser",
+    "message": "Apri i controlli del tuo nodo IPFS nel tuo browser.",
     "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
@@ -76,11 +76,11 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Abilita su $1",
+    "message": "Abilita per $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Abilita/Disabilita tutte le integrazioni IPFS su $1",
+    "message": "Abilita/Disabilita tutte le integrazioni IPFS su $1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_pinCurrentIpfsAddress": {
@@ -91,12 +91,20 @@
     "message": "Fissa le risorse IPFS di questa pagina al tuo nodo per averne una copia locale disponibile offline non gettabile dal Garbage Collector.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
+  "panelCopy_currentIpnsAddress": {
+  "message": "Copia percorso IPNS",
+  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+  },
+  "panelCopy_currentIpnsAddressTooltip": {
+    "message": "Utilizza questo percorso contenuti con gli strumenti ed i gateway IPFS per raggiungere la versione più recente dei contenuti di questa tab.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
+  },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copia Percorso Contenuti IPFS",
+    "message": "Copia il Percorso IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "Un percorso canonico dei contenuti che puoi usare con strumenti e gateway IPFS",
+    "message": "Utilizza questo percorso contenuti con gli strumenti ed i gateway IPFS per raggiungere i contenuti di questa tab di questo esatto momento. Questo snapshot non cambierà, neppure se cambieranno i contenuti.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -104,20 +112,28 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "L'identificatore contenuti IPFS univoco per questa pagina",
+    "message": "L'identificatore univoco contenuti IPFS per questa tab di questo esatto momento. Se i contenuti cambieranno, cambierà anche il CID.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
-  "panelCopy_copyRawCidNotReadyHint": {
+  "panelCopy_notReadyHint": {
     "message": "(In attesa dei dati DAG)",
-    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Copia Collegamento Condivisibile",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "Questo collegamento funziona per chiunque, anche se non utilizzano IPFS",
+    "message": "Un collegamento condivisibile diretto a questa tab che funziona per tutti, anche per chi non utilizza IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
+  },
+  "panel_copyCurrentPermalink": {
+    "message": "Copia collegamento snapshot",
+    "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
+  },
+  "panel_copyCurrentPermalinkTooltip": {
+    "message": "Un collegamento ad uno snapshot, di questa tab, di questo esatto momento; non cambierà, nemmeno se i contenuti cambieranno. Questo collegamento funziona per tutti, anche per chi non utilizza IPFS.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
     "message": "Visualizza su Gateway",
@@ -344,19 +360,19 @@
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_disabledOn_title": {
-    "message": "Always Disable IPFS Integrations",
+    "message": "Disabilita sempre le integrazioni IPFS",
     "description": "An option title on the Preferences screen (option_disabledOn_title)"
   },
   "option_disabledOn_description": {
-    "message": "Sites in this list (one hostname per line) will always load with IPFS integrations disabled. Toggling \"Enable on ...\" from your browser's action menu while visiting a site will also add or remove it from this list.",
+    "message": "I siti di questa lista (un nome host per riga) si caricheranno sempre con le integrazioni IPFS disabilitate. È possibile aggiungere o rimuovere un sito, che si sta visitando, in qualunque momento cliccando su \"Abilita per ...\" dal menu delle azioni del tuo browser.",
     "description": "An option description on the Preferences screen (option_disabledOn_description)"
   },
   "option_enabledOn_title": {
-    "message": "Always Enable IPFS Integrations",
+    "message": "Abilita sempre le integrazioni IPFS",
     "description": "An option title on the Preferences screen (option_enabledOn_title)"
   },
   "option_enabledOn_description": {
-    "message": "Sites in this list (one hostname per line) will always load with IPFS integrations enabled. Toggling \"Enable on ...\" from your browser's action menu while visiting a site will also add or remove it from this list.",
+    "message": "I siti di questa lista (un nome host per riga) si caricheranno sempre con le integrazioni IPFS abilitate. È possibile aggiungere o rimuovere un sito, che si sta visitando, in qualunque momento cliccando su \"Abilita per ...\" dal menu delle azioni del tuo browser.",
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {

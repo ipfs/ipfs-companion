@@ -52,15 +52,15 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "快速 导入/分享",
+    "message": "导入",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
-    "message": "导入文件到IPFS然后拷贝一个分享链接到您的剪贴板",
+    "message": "导入文件到IPFS然后拷贝一个公开的分享链接到您的剪贴板",
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
-    "message": "转至我的节点",
+    "message": "我的节点",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "启用  $1",
+    "message": "启用 $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
@@ -91,12 +91,20 @@
     "message": "固定这个页面的IPFS资源到您的节点以此来获得一个本地的副本，这可使得资源能被离线访问并且永远不会丢失。",
     "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
   },
+  "panelCopy_currentIpnsAddress": {
+  "message": "复制 IPFS 路径",
+  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+  },
+  "panelCopy_currentIpnsAddressTooltip": {
+    "message": "将此内容路径与IPFS工具和网关一起使用，以访问此选项卡中内容的最近更新版本。",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
+  },
   "panelCopy_currentIpfsAddress": {
-    "message": "复制IPFS 内容路径",
+    "message": "复制 IPFS 路径",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "一个可以被IPFS 工具和网关使用的符合IPFS规范的内容路径",
+    "message": "将此内容路径与IPFS工具和网关一起使用，可及时访问此选项卡中当前版本的内容。即使内容再之后更改，此快照也不会更改。",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -104,20 +112,28 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "此页面的唯一IPFS内容标识符",
+    "message": "当前时刻此选项卡的唯一IPFS内容标识符。如果以后内容发生变化，CID也会发生变化。",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
-  "panelCopy_copyRawCidNotReadyHint": {
+  "panelCopy_notReadyHint": {
     "message": "(等待 DAG 数据)",
-    "description": "A hint in menu item in Browser Action pop-up to indicate CID is still being resolved (panelCopy_copyRawCidNotReadyHint)"
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
     "message": "复制分享链接",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "这个链接可以被任何人使用，即便他们没有安装IPFS",
+    "message": "在这个选项卡内的分享链接可以被任何人使用，即使他们根本不使用IPFS。",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
+  },
+  "panel_copyCurrentPermalink": {
+    "message": "复制快照链接",
+    "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
+  },
+  "panel_copyCurrentPermalinkTooltip": {
+    "message": "指向此选项卡当前时刻快照的链接；即使内容之后被更改，它也不会改变。这个链接适用于任何人，即使他们根本不使用IPFS。",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
     "message": "在网关上查看",
@@ -444,7 +460,7 @@
     "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
   },
   "option_displayReleaseNotes_description": {
-    "message": "当一个新版本的IPFS 伴侣安装成功时在新的标签页中显示版本说明",
+    "message": "当一个新版本的IPFS 伴侣安装成功时在新的选项卡中显示版本说明",
     "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
   },
   "option_catchUnhandledProtocols_title": {
