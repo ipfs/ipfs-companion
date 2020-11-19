@@ -89,13 +89,13 @@ IPFS Companion enables you to quickly and easily access common actions from your
 
 You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
-![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmbAWhTk8GjtFqpNQVCRXWyJbh9YFC61nTNcBPZi87e4qo)
+![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmYWXd4TSjk1RSzqzpaUbYp42obYjWtRme1oeYaTUdqkWu)
 
 #### Switch all IPFS Companion features on/off
 
 To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc.), use the on/off button at the top of the IPFS Companion menu.
 
-![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmVWFueChvoxfRpPcB9C7TJFucr2TJx6tPT3udtYd58GSy)
+![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmZqyBnLY1jatj2ppJEbJqyj8oJecZt7chNB62jhhq8f9g)
 
 ### Try out experiments!
 
