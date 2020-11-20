@@ -6,7 +6,7 @@
 [![i18n status](https://img.shields.io/badge/i18n-translated-blue.svg)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/LOCALIZATION-NOTES.md)
 [![#ipfs-in-web-browsers](https://img.shields.io/badge/irc-%23ipfs--in--web--browsers-808080.svg)](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
 
-![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmeF2v4UFFvZ341ZDQh1xLeeyN4u8Cr9XSTUj6krDEwfrr)
+![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmSsGphTN1eWMhkFFNFb23jWTXyhNbo47PF9FbmC6ZaRNg)
 
 
 
@@ -79,7 +79,7 @@ IPFS Companion enables you to quickly and easily access common actions from your
 - See how many peers you're connected with a glance at the cube icon in your browser bar
 - Check your IPFS API and gateway status by clicking the cube icon to reveal the main menu
 - Right-click images and other page assets to easily add them to IPFS (including the option to preserve file names)
-- Choose the _Quick Import/Share..._ option in the main menu for quick drag-and-drop import from a browser tab
+- Choose the _Import_ option in the main menu for quick drag-and-drop import from a browser tab
 - Pin or unpin IPFS resources (via API) directly from the main menu
 - Copy shareable public gateway links, IPFS content paths, or CIDs of IPFS resources directly from the main menu
 - Launch the [IPFS Web UI dashboard](https://github.com/ipfs-shipyard/ipfs-webui) from the main menu with a single click
@@ -89,13 +89,13 @@ IPFS Companion enables you to quickly and easily access common actions from your
 
 You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
-![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmbAWhTk8GjtFqpNQVCRXWyJbh9YFC61nTNcBPZi87e4qo)
+![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmYWXd4TSjk1RSzqzpaUbYp42obYjWtRme1oeYaTUdqkWu)
 
 #### Switch all IPFS Companion features on/off
 
 To temporarily suspend all IPFS integrations (redirects, API status content scripts, protocol handlers, etc.), use the on/off button at the top of the IPFS Companion menu.
 
-![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmVWFueChvoxfRpPcB9C7TJFucr2TJx6tPT3udtYd58GSy)
+![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmZqyBnLY1jatj2ppJEbJqyj8oJecZt7chNB62jhhq8f9g)
 
 ### Try out experiments!
 
