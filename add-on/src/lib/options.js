@@ -1,5 +1,6 @@
 'use strict'
 
+const isIP = require('is-ip')
 const isFQDN = require('is-fqdn')
 const { hasChromeSocketsForTcp } = require('./runtime-checks')
 
@@ -121,7 +122,7 @@ exports.guiURLString = guiURLString
 function hostArrayCleanup (array) {
   array = array.map(host => host.trim().toLowerCase())
   array = [...new Set(array)] // dedup
-  array = array.filter(Boolean).filter(isFQDN)
+  array = array.filter(Boolean).filter(x => isIP(x) || isFQDN(x))
   array.sort()
   return array
 }
