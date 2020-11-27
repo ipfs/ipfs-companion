@@ -119,7 +119,19 @@ exports.safeURL = safeURL
 exports.guiURLString = guiURLString
 
 // ensure value is a valid URL.hostname (FQDN || ipv4 || ipv6 WITH brackets)
-exports.isHostname = x => isFQDN(x) || isIP.v4(x) || (!isIP.v6(x) && isIP.v6(x.replace(/[[\]]+/g, '')))
+exports.isHostname = x => {
+  if (isFQDN(x) || isIP.v4(x)) {
+    return true
+  }
+
+  const match = x.match(/^\[(.*)\]$/)
+
+  if (match == null) {
+    return false
+  }
+
+  return isIP.v6(match[1])
+}
 
 // convert JS array to multiline textarea
 function hostArrayCleanup (array) {
