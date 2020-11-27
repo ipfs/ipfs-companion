@@ -139,6 +139,7 @@
     "ipfs-http-client": "48.0.0",
     "ipfs-postmsg-proxy": "3.1.1",
     "is-fqdn": "2.0.1",
+    "is-ip": "3.1.0",
     "is-ipfs": "2.0.0",
     "it-all": "1.0.4",
     "it-concat": "1.0.2",

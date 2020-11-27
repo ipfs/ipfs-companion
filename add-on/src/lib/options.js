@@ -1,5 +1,6 @@
 'use strict'
 
+const isIP = require('is-ip')
 const isFQDN = require('is-fqdn')
 const { hasChromeSocketsForTcp } = require('./runtime-checks')
 
@@ -117,11 +118,23 @@ function guiURLString (url, opts) {
 exports.safeURL = safeURL
 exports.guiURLString = guiURLString
 
+// ensure value is a valid URL.hostname (FQDN || ipv4 || ipv6 WITH brackets)
+exports.isHostname = x => isFQDN(x) || isIP.v4(x) || (!isIP.v6(x) && isIP.v6(x.replace(/[[\]]+/g, '')))
+
 // convert JS array to multiline textarea
 function hostArrayCleanup (array) {
   array = array.map(host => host.trim().toLowerCase())
+  // normalize/extract hostnames (just domain/ip, drop ports etc), if provided
+  array = array.map(x => {
+    try {
+      if (isIP.v6(x)) x = `[${x}]`
+      return new URL(`http://${x}`).hostname
+    } catch (_) {
+      return undefined
+    }
+  })
+  array = array.filter(Boolean).filter(exports.isHostname)
   array = [...new Set(array)] // dedup
-  array = array.filter(Boolean).filter(isFQDN)
   array.sort()
   return array
 }
