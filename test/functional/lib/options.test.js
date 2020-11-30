@@ -77,6 +77,15 @@ describe('isHostname()', function () {
   it('should return false for invalid URL.hostname (ipv6 without brackets)', () => {
     expect(isHostname('fe80::bb67:770c:8a97:1')).to.equal(false)
   })
+  it('should return false for ipv6 with a missing bracket', () => {
+    expect(
+      isHostname('[fe80::bb67:770c:8a97:1') ||
+      isHostname('fe80::bb67:770c:8a97:1]')
+    ).to.equal(false)
+  })
+  it('should return false for ipv6 with malformed brackets', () => {
+    expect(isHostname('[fe80::bb67:770c:8a97]:1]')).to.equal(false)
+  })
 })
 
 describe('hostTextToArray()', function () {
