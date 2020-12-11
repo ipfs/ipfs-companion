@@ -37,32 +37,32 @@
     {
       "protocol": "web+dweb",
       "name": "IPFS Companion: DWEB Protocol Handler",
-      "uriTemplate": "https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#%s"
+      "uriTemplate": "https://gateway.ipfs.io/ipfs/bafkreihnpo5zt7qt3lvmk4zk2opran7ybbe3gfp5ruqf5iirdyxaxqvwtu#%s"
     },
     {
       "protocol": "web+ipns",
       "name": "IPFS Companion: IPNS Protocol Handler",
-      "uriTemplate": "https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#%s"
+      "uriTemplate": "https://gateway.ipfs.io/ipfs/bafkreihnpo5zt7qt3lvmk4zk2opran7ybbe3gfp5ruqf5iirdyxaxqvwtu#%s"
     },
     {
       "protocol": "web+ipfs",
       "name": "IPFS Companion: IPFS Protocol Handler",
-      "uriTemplate": "https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#%s"
+      "uriTemplate": "https://gateway.ipfs.io/ipfs/bafkreihnpo5zt7qt3lvmk4zk2opran7ybbe3gfp5ruqf5iirdyxaxqvwtu#%s"
     },
     {
       "protocol": "dweb",
       "name": "IPFS Companion: DWEB Protocol Handler",
-      "uriTemplate": "https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#%s"
+      "uriTemplate": "https://gateway.ipfs.io/ipfs/bafkreihnpo5zt7qt3lvmk4zk2opran7ybbe3gfp5ruqf5iirdyxaxqvwtu#%s"
     },
     {
       "protocol": "ipns",
       "name": "IPFS Companion: IPNS Protocol Handler",
-      "uriTemplate": "https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#%s"
+      "uriTemplate": "https://gateway.ipfs.io/ipfs/bafkreihnpo5zt7qt3lvmk4zk2opran7ybbe3gfp5ruqf5iirdyxaxqvwtu#%s"
     },
     {
       "protocol": "ipfs",
       "name": "IPFS Companion: IPFS Protocol Handler",
-      "uriTemplate": "https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#%s"
+      "uriTemplate": "https://gateway.ipfs.io/ipfs/bafkreihnpo5zt7qt3lvmk4zk2opran7ybbe3gfp5ruqf5iirdyxaxqvwtu#%s"
     }
   ]
 }
