@@ -1,8 +1,12 @@
 'use strict'
 
+const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const logo = require('../../popup/logo')
 const { renderTranslatedLinks, renderTranslatedSpans } = require('../../utils/i18n')
+
+// Brave detection
+const { brave } = require('../../../src/lib/ipfs-client/brave')
 
 // Assets
 const libp2pLogo = '../../../images/libp2p.svg'
@@ -95,12 +99,18 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
     </svg>
   `
 
+  const optionsUrl = browser.extension.getURL('dist/options/options.html')
   return html`
     <div class="w-80 mt0 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <div class="mb4 flex flex-column justify-center items-center">
         ${nodeOffSvg()}
         <p class="mt0 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
       </div>
+      ${brave
+        ? html`
+          <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_brave_title')}</p>
+          <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_brave_install', [optionsUrl], `target="_blank" class="${anchorClass}"`)}</p>`
+        : null}
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_desktop_title')}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>

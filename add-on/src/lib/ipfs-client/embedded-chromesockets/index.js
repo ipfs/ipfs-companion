@@ -23,7 +23,7 @@ const { buildConfig, syncConfig } = require('./config')
 let node
 let nodeHttpApi
 
-exports.init = async function init (opts) {
+exports.init = async function init (browser, opts) {
   log('init embedded:chromesockets')
 
   const ipfsOpts = await buildConfig(opts, log)
@@ -40,7 +40,7 @@ exports.init = async function init (opts) {
   return node
 }
 
-exports.destroy = async function () {
+exports.destroy = async function (browser) {
   log('destroy: embedded:chromesockets')
 
   if (nodeHttpApi) {

@@ -16,6 +16,7 @@ const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
+const { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } = require('./ipfs-client/brave')
 const { createIpfsImportHandler, formatImportDirectory } = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
@@ -59,7 +60,7 @@ module.exports = async function init () {
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
-        ipfs = await initIpfsClient(state)
+        ipfs = await initIpfsClient(browser, state)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -619,9 +620,13 @@ module.exports = async function init () {
           shouldStopIpfsClient = !state.active
           break
         case 'ipfsNodeType':
-          // Switching between External and Embeedded HTTP Gateway in Brave is tricky.
-          // For now we remove user confusion by persisting and restoring the External config.
-          // TODO: refactor as a part of https://github.com/ipfs-shipyard/ipfs-companion/issues/491
+          if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
+            useBraveEndpoint(browser)
+          } else if (change.oldValue === braveNodeType && change.newValue !== braveNodeType) {
+            releaseBraveEndpoint(browser)
+          }
+
+          // TODO: remove when go-ipfs in Brave ships
           if (change.oldValue === 'external' && change.newValue === 'embedded:chromesockets') {
             const oldGatewayUrl = (await browser.storage.local.get('customGatewayUrl')).customGatewayUrl
             const oldApiUrl = (await browser.storage.local.get('ipfsApiUrl')).ipfsApiUrl
@@ -705,7 +710,7 @@ module.exports = async function init () {
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {
         log('stoping ipfs client due to config changes', changes)
-        await destroyIpfsClient()
+        await destroyIpfsClient(browser)
       } catch (err) {
         console.error('[ipfs-companion] Failed to destroy IPFS client', err)
         notify('notify_stopIpfsNodeErrorTitle', err.message)
@@ -717,7 +722,7 @@ module.exports = async function init () {
 
       try {
         log('starting ipfs client with the new config')
-        ipfs = await initIpfsClient(state)
+        ipfs = await initIpfsClient(browser, state)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -792,7 +797,7 @@ module.exports = async function init () {
       }
 
       if (ipfs) {
-        await destroyIpfsClient()
+        await destroyIpfsClient(browser)
         ipfs = null
       }
     }
