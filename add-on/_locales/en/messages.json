@@ -284,11 +284,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded + chrome.sockets: deprecated and no longer supported by Chromium. Migrate to a different node type ASAP.",
+    "message": "\"Embedded + chrome.sockets\" is no longer supported by Chromium. If you are using this option, please migrate to a different node type ASAP.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
   },
   "option_ipfsNodeType_brave_description": {
-    "message": "Set to \"Provided by Brave\" to leverage native IPFS support in the Brave browser",
+    "message": "Set to \"Provided by Brave\" to leverage the Brave browser's native IPFS support.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -736,7 +736,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "Open <0>Companion Preferences</0> and set the IPFS Node Type to “Provided by Brave”.",
+    "message": "If you use Brave, you can run IPFS directly in your browser — no need for IPFS Desktop or the command line. Open <0>Companion Preferences</0> and set the IPFS node type to “Provided by Brave”.",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
