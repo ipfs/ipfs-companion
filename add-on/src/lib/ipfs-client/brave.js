@@ -37,9 +37,7 @@ exports.destroy = async function (browser) {
 // ---------------- Brave-specifics -------------------
 
 // ipfs:// URI that will be used for triggering the "Enable IPFS" dropbar in Brave
-// TODO: replace the image with a page that asks user to ' "Enable IPFS" in
-// Brave if you want to use this node type.'
-const braveIpfsUriTrigger = 'ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+const braveIpfsUriTrigger = 'ipfs://bafkreigxbf77se2an2u6hmg2kxxbhmenetc7dzvkd3rl4m2orlobjvqcqq'
 
 // Settings screen in Brave where user can manage IPFS support
 const braveSettingsPage = 'brave://settings/extensions'
@@ -171,15 +169,30 @@ function addrs2url (addr) {
 }
 
 async function initBraveSettings (browser, brave) {
+  let showState = () => {}
+  let tabId
   let method = await brave.getResolveMethodType()
   log(`brave.resolveMethodType is '${method}'`)
 
   if (method === 'ask') {
-    // trigger the dropbar with "Enable IPFS" button by opening ipfs:// URI in a new tab
-    await browser.tabs.create({ url: braveIpfsUriTrigger })
+    // Trigger the dropbar with "Enable IPFS" button by opening ipfs:// URI in a new tab.
+    // The trigger is a HTML page with some text to make onboarding easier.
+    tabId = (await browser.tabs.create({ url: braveIpfsUriTrigger })).id
+
+    // Reuse the tab for state updates (or create a new one if user closes it)
+    // Caveat: we inject JS as we can't use tab.update during the init of local gateway
+    // because Brave will try to use it and fail as it is not ready yet :-))
+    showState = async (s) => {
+      try {
+        await browser.tabs.executeScript(tabId, { code: `window.location.hash = '#${s}';` })
+      } catch (e) { // noop, just log, don't break if user closed the tab etc
+        log.error('error while showState', e)
+      }
+    }
+    showState('ask')
+
     // IPFS Companion is unable to change Brave settings,
     // all we can do is to poll chrome.ipfs.* and detect when user made a decision
-    // TODO: nudge user to click on 'Enable IPFS' ?
     log('waiting for user to make a decision how IPFS resources should be resolved')
     await waitFor(async () => {
       method = await brave.getResolveMethodType()
@@ -188,28 +201,29 @@ async function initBraveSettings (browser, brave) {
     log(`user set resolveMethodType to '${method}'`)
 
     if (method === 'local') {
-      // TODO: tell user what is happening by updating tab with braveIpfsUriTrigger?
       log('waiting while Brave downloads IPFS executable..')
+      showState('download')
       await waitFor(() => brave.getExecutableAvailable())
 
       log('waiting while Brave creates repo and config via ipfs init..')
+      await showState('init')
       await waitFor(async () => typeof (await brave.getConfig()) !== 'undefined')
     }
   }
 
   if (method !== 'local') {
+    await showState('ask')
     await browser.tabs.create({ url: braveSettingsPage })
     throw new Error('"Method to resolve IPFS resources" in Brave settings should be "Local node"')
   }
 
   // ensure local node is started
   log('waiting while brave.launch() starts ipfs daemon..')
+  await showState('start')
   await waitFor(() => brave.launch())
   log('brave.launch() finished')
+  await showState('done')
 
   // ensure Companion uses the endpoint provided by Brave
   await exports.useBraveEndpoint(browser)
-
-  // TODO: close the trigger tab
-  // TODO: switch  to 'welcome' tab is its open
 }

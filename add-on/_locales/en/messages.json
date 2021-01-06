@@ -736,7 +736,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "If you use Brave, you can run IPFS directly in your browser — no need for IPFS Desktop or the command line. Open <0>Companion Preferences</0> and set the IPFS node type to “Provided by Brave”.",
+    "message": "You can run IPFS directly in your browser — no need for IPFS Desktop or the command line. Open <0>Companion Preferences</0> and set the IPFS node type to “Provided by Brave”.",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
