@@ -151,6 +151,7 @@
     "os-browserify": "0.3.0",
     "p-memoize": "4.0.1",
     "p-queue": "6.6.2",
+    "p-wait-for": "3.2.0",
     "path-browserify": "1.0.1",
     "piggybacker": "2.0.0",
     "postmsg-rpc": "2.4.0",

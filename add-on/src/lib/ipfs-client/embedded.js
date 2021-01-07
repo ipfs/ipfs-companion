@@ -10,7 +10,7 @@ const { optionDefaults } = require('../options')
 
 let node = null
 
-exports.init = async function init (opts) {
+exports.init = async function init (browser, opts) {
   log('init')
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
@@ -35,7 +35,7 @@ exports.init = async function init (opts) {
   return node
 }
 
-exports.destroy = async function () {
+exports.destroy = async function (browser) {
   log('destroy')
   if (!node) return
 

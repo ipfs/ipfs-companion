@@ -2,10 +2,9 @@
 
 const isIP = require('is-ip')
 const isFQDN = require('is-fqdn')
-const { hasChromeSocketsForTcp } = require('./runtime-checks')
 
-// TODO: enable by default when embedded node is performant enough
-const DEFAULT_TO_EMBEDDED_GATEWAY = false && hasChromeSocketsForTcp()
+// TODO: remove code related to chrome.sockets
+const DEFAULT_TO_EMBEDDED_GATEWAY = false
 
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
@@ -188,17 +187,6 @@ exports.migrateOptions = async (storage, debug) => {
     await storage.remove('dnslink')
   }
 
-  // ~ v2.8.x + Brave
-  // Upgrade js-ipfs to js-ipfs + chrome.sockets
-  const { ipfsNodeType } = await storage.get('ipfsNodeType')
-  if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
-    // migrating ipfsNodeType to embedded:chromesockets
-    await storage.set({
-      ipfsNodeType: 'embedded:chromesockets',
-      ipfsNodeConfig: buildDefaultIpfsNodeConfig()
-    })
-  }
-
   // ~ v2.9.x: migrating noRedirectHostnames → noIntegrationsHostnames
   // https://github.com/ipfs-shipyard/ipfs-companion/pull/830
   const { noRedirectHostnames } = await storage.get('noRedirectHostnames')
@@ -247,4 +235,6 @@ exports.migrateOptions = async (storage, debug) => {
       await storage.set({ displayReleaseNotes: false })
     }
   }
+
+  // TODO: detect chrome.ipfs and warn chromesockets users about deprecation
 }

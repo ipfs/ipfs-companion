@@ -56,10 +56,12 @@ module.exports = function optionsPage (state, emit) {
   ${ipfsNodeForm({
     ipfsNodeType: state.options.ipfsNodeType,
     ipfsNodeConfig: state.options.ipfsNodeConfig,
+    withNodeFromBrave: state.withNodeFromBrave,
     onOptionChange
   })}
-  ${state.options.ipfsNodeType === 'external'
+  ${state.options.ipfsNodeType.startsWith('external')
   ? apiForm({
+    ipfsNodeType: state.options.ipfsNodeType,
     ipfsApiUrl: state.options.ipfsApiUrl,
     ipfsApiPollMs: state.options.ipfsApiPollMs,
     automaticMode: state.options.automaticMode,

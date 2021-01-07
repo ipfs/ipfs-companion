@@ -5,6 +5,7 @@ const browser = require('webextension-polyfill')
 const html = require('choo/html')
 const switchToggle = require('../../pages/components/switch-toggle')
 const { guiURLString, hostTextToArray, hostArrayToText } = require('../../lib/options')
+const { braveNodeType } = require('../../lib/ipfs-client/brave')
 
 // Warn about mixed content issues when changing the gateway
 // to something other than HTTP or localhost
@@ -31,7 +32,8 @@ function gatewaysForm ({
   const onEnabledOnChange = onOptionChange('enabledOn', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
   const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
-  const allowChangeOfCustomGateway = ipfsNodeType !== 'embedded:chromesockets'
+  const allowChangeOfCustomGateway = ipfsNodeType === 'external'
+  const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
 
   return html`
     <form>
@@ -52,7 +54,7 @@ function gatewaysForm ({
               required
               pattern="^https?://[^/]+/?$"
               spellcheck="false"
-              title="Enter URL without any sub-path"
+              title="${browser.i18n.getMessage('option_hint_url')}"
               onchange=${onPublicGatewayUrlChange}
               value=${publicGatewayUrl} />
           </div>
@@ -76,11 +78,11 @@ function gatewaysForm ({
               required
               pattern="^https?://[^/]+/?$"
               spellcheck="false"
-              title="Enter URL without any sub-path"
+              title="${browser.i18n.getMessage('option_hint_url')}"
               onchange=${onPublicSubdomainGatewayUrlChange}
               value=${publicSubdomainGatewayUrl} />
           </div>
-          ${supportRedirectToCustomGateway && allowChangeOfCustomGateway
+          ${supportRedirectToCustomGateway
             ? html`<div class="flex-row-ns pb0-ns">
               <label for="customGatewayUrl">
                 <dl>
@@ -91,14 +93,14 @@ function gatewaysForm ({
                 </dl>
               </label>
               <input
-                class="bg-white navy self-center-ns"
+                class="bg-white navy self-center-ns ${braveClass}"
                 id="customGatewayUrl"
                 type="url"
                 inputmode="url"
                 required
                 pattern="^https?://[^/]+/?$"
                 spellcheck="false"
-                title="Enter URL without any sub-path"
+                title="${browser.i18n.getMessage(allowChangeOfCustomGateway ? 'option_hint_url' : 'option_hint_readonly')}"
                 onchange=${onCustomGatewayUrlChange}
                 ${allowChangeOfCustomGateway ? '' : 'disabled'}
                 value=${customGatewayUrl} />
