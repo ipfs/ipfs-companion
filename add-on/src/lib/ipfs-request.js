@@ -33,7 +33,24 @@ const onHeadersReceivedRedirect = new Set()
 function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
   const browser = runtime.browser
   const runtimeRoot = browser.runtime.getURL('/')
-  const webExtensionOrigin = runtimeRoot ? new URL(runtimeRoot).origin : 'null'
+  const webExtensionOrigin = runtimeRoot ? new URL(runtimeRoot).origin : 'http://companion-origin' // avoid 'null' because it has special meaning
+  const isCompanionRequest = (request) => {
+    // We inspect webRequest object (WebExtension API) instead of Origin HTTP
+    // header because the value of the latter changed over the years ad
+    // absurdum. It leaks the unique extension ID and no vendor seem to have
+    // coherent  policy around it, Firefox and Chromium flip back and forth:
+    // Firefox  Nightly 65 sets moz-extension://{extension-installation-id}
+    // Chromium        <72 sets null
+    // Chromium Beta    72 sets chrome-extension://{uid}
+    // Firefox  Nightly 85 sets null
+    const { originUrl, initiator } = request
+    // Of course, getting "Origin" is vendor-specific:
+    // FF: originUrl (Referer-like Origin URL with path)
+    // Chromium: initiator (just Origin, no path)
+    // Because of this mess, we normalize Origin by reading it from URL.origin
+    const { origin } = new URL(originUrl || initiator || 'http://missing-origin')
+    return origin === webExtensionOrigin
+  }
 
   // Various types of requests are identified once and cached across all browser.webRequest hooks
   const requestCacheCfg = { max: 128, maxAge: 1000 * 30 }
@@ -192,32 +209,34 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       // Special handling of requests made to API
       if (sameGateway(request.url, state.apiURL)) {
         const { requestHeaders } = request
-        // '403 - Forbidden' fix for Chrome and Firefox
-        // --------------------------------------------
-        // We update "Origin: *-extension://" HTTP headers in requests made to API
-        // by js-ipfs-http-client running in the background page of browser
-        // extension.  Without this, some users would need to do manual CORS
-        // whitelisting by adding "..extension://<UUID>" to
-        // API.HTTPHeaders.Access-Control-Allow-Origin in go-ipfs config.
-        // With this, API calls made by browser extension look like ones made
-        // by webui loaded from the API port.
-        // More info:
-        // Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/622
-        // Chromium 71: https://github.com/ipfs-shipyard/ipfs-companion/pull/616
-        // Chromium 72: https://github.com/ipfs-shipyard/ipfs-companion/issues/630
 
-        // Firefox  Nightly 65 sets moz-extension://{extension-installation-id}
-        // Chromium Beta    72 sets chrome-extension://{uid}
-        const isWebExtensionOrigin = (origin) =>
-          origin &&
-            (origin.startsWith('moz-extension://') ||
-             origin.startsWith('chrome-extension://')) &&
-                new URL(origin).origin === webExtensionOrigin
-
-        // Replace Origin header matching webExtensionOrigin with API one
-        const foundAt = requestHeaders.findIndex(h => h.name === 'Origin' && isWebExtensionOrigin(h.value))
-        if (foundAt > -1) {
-          requestHeaders[foundAt].value = state.apiURL.origin
+        if (isCompanionRequest(request)) {
+          // '403 - Forbidden' fix for Chrome and Firefox
+          // --------------------------------------------
+          // We update "Origin: *-extension://" HTTP headers in requests made to API
+          // by js-ipfs-http-client running in the background page of browser
+          // extension.  Without this, some users would need to do manual CORS
+          // whitelisting by adding "..extension://<UUID>" to
+          // API.HTTPHeaders.Access-Control-Allow-Origin in go-ipfs config.
+          // With this, API calls made by browser extension look like ones made
+          // by webui loaded from the API port.
+          // More info:
+          // Firefox 65: https://github.com/ipfs-shipyard/ipfs-companion/issues/622
+          // Firefox 85: https://github.com/ipfs-shipyard/ipfs-companion/issues/955
+          // Chromium 71: https://github.com/ipfs-shipyard/ipfs-companion/pull/616
+          // Chromium 72: https://github.com/ipfs-shipyard/ipfs-companion/issues/630
+          const foundAt = requestHeaders.findIndex(h => h.name.toLowerCase() === 'origin')
+          const { origin } = state.apiURL
+          if (foundAt > -1) {
+            // Replace existing Origin with the origin of the API itself.
+            // This removes the need for CORS setup in go-ipfs config and
+            // ensures there is no HTTP Error 403 Forbidden.
+            requestHeaders[foundAt].value = origin
+          } else { // future-proofing
+            // Origin is missing, and go-ipfs requires it in browsers:
+            // https://github.com/ipfs/go-ipfs-cmds/pull/193
+            requestHeaders.push({ name: 'Origin', value: origin })
+          }
         }
 
         // Fix "http: invalid Read on closed Body"

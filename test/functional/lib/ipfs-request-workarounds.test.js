@@ -16,20 +16,12 @@ describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
-    // stub URL.origin in test context to return something other than null
-    Object.defineProperty(URL.prototype, 'origin', {
-      get: function () {
-        const fakeOrigin = this.href.split('/')
-        if (fakeOrigin.length >= 3) {
-          return fakeOrigin.slice(0, 3).join('/')
-        }
-      }
-    })
     global.URL = URL
     global.browser = browser
   })
 
   beforeEach(async function () {
+    browser.runtime.getURL.flush()
     state = initState(optionDefaults)
     getState = () => state
     const getIpfs = () => {}
@@ -105,8 +97,16 @@ describe('modifyRequest processing', function () {
     })
   })
 
-  describe('a request to <apiURL>/api/v0/ made with extension:// Origin', function () {
-    it('should have it replaced with API one if Origin: moz-extension://{extension-installation-id}', async function () {
+  // The Origin header set by browser for requests coming from within a browser
+  // extension has been a mess for years, and by now we simply have zero trust
+  // in stability of this header. Instead, we use WebExtension's webRequest API
+  // to tell if a request comes from our browser extension and manually set
+  // Origin to look like a request coming from the same Origin as IPFS API.
+  //
+  // The full context can be found in ipfs-request.js, where isCompanionRequest
+  // check is executed.
+  describe('Origin header in a request to <apiURL>/api/v0/', function () {
+    it('set to API if request comes from Companion in Firefox <85', async function () {
       // Context: Firefox 65 started setting this header
       // set vendor-specific Origin for WebExtension context
       browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
@@ -114,63 +114,159 @@ describe('modifyRequest processing', function () {
       runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
-      const bogusOriginHeader = { name: 'Origin', value: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df' }
+      const originalOriginHeader = { name: 'Origin', value: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df' }
       const apiOriginHeader = { name: 'Origin', value: getState().apiURL.origin }
       const request = {
-        requestHeaders: [bogusOriginHeader],
+        requestHeaders: [originalOriginHeader],
+        originUrl: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/path/to/background.html', // FF specific WebExtension API
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(apiOriginHeader)
-      browser.runtime.getURL.flush()
     })
-  })
 
-  describe('should have it removed if Origin: chrome-extension://{extension-installation-id}', function () {
-    it('should have it swapped with API one if Origin: with chrome-extension://', async function () {
-      // Context: Chromium 72 started setting this header
-      // set vendor-specific Origin for WebExtension context
-      browser.runtime.getURL.withArgs('/').returns('chrome-extension://trolrorlrorlrol/')
+    it('set to API if request comes from Companion in Firefox 85', async function () {
+      // Context: https://github.com/ipfs-shipyard/ipfs-companion/issues/955#issuecomment-753413988
+      browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
       // ensure clean modifyRequest
       runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
-      const bogusOriginHeader = { name: 'Origin', value: 'chrome-extension://trolrorlrorlrol' }
+      const originalOriginHeader = { name: 'Origin', value: 'null' }
       const apiOriginHeader = { name: 'Origin', value: getState().apiURL.origin }
       const request = {
-        requestHeaders: [bogusOriginHeader],
+        requestHeaders: [originalOriginHeader],
+        originUrl: 'moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/path/to/background.html', // FF specific WebExtension API
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(apiOriginHeader)
-      browser.runtime.getURL.flush()
     })
-  })
 
-  describe('a request to <apiURL>/api/v0/ with Origin=null', function () {
-    it('should keep the "Origin: null" header ', async function () {
+    it('set to API if request comes from Companion in Chromium <72', async function () {
+      // set vendor-specific Origin for WebExtension context
+      browser.runtime.getURL.withArgs('/').returns('chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const bogusOriginHeader = { name: 'Origin', value: 'null' }
+      const apiOriginHeader = { name: 'Origin', value: getState().apiURL.origin }
+      const request = {
+        requestHeaders: [bogusOriginHeader],
+        initiator: 'chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch/', // Chromium specific WebExtension API
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(apiOriginHeader)
+    })
+
+    it('set to API if request comes from Companion in Chromium 72', async function () {
+      // Context: Chromium 72 started setting this header to chrome-extension:// URI
+      // set vendor-specific Origin for WebExtension context
+      browser.runtime.getURL.withArgs('/').returns('chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const bogusOriginHeader = { name: 'Origin', value: 'chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch' }
+      const apiOriginHeader = { name: 'Origin', value: getState().apiURL.origin }
+      const request = {
+        requestHeaders: [bogusOriginHeader],
+        initiator: 'chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch/', // Chromium specific WebExtension API
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(apiOriginHeader)
+    })
+
+    it('keep Origin as-is if request does not come from Companion (Chromium)', async function () {
+      browser.runtime.getURL.withArgs('/').returns('chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const originHeader = { name: 'Origin', value: 'https://some.website.example.com' }
+      const expectedOriginHeader = { name: 'Origin', value: 'https://some.website.example.com' }
+      const request = {
+        requestHeaders: [originHeader],
+        initiator: 'https://some.website.example.com', // Chromium specific WebExtension API
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(expectedOriginHeader)
+    })
+
+    it('keep Origin as-is if request does not come from Companion (Firefox)', async function () {
+      browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const originHeader = { name: 'Origin', value: 'https://some.website.example.com' }
+      const expectedOriginHeader = { name: 'Origin', value: 'https://some.website.example.com' }
+      const request = {
+        requestHeaders: [originHeader],
+        originUrl: 'https://some.website.example.com/some/path.html', // Firefox specific WebExtension API
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(expectedOriginHeader)
+    })
+
+    it('keep the "Origin: null" if request does not come from Companion (Chromium)', async function () {
       // Presence of Origin header is important as it protects API from XSS via sandboxed iframe
       // NOTE: Chromium <72 was setting this header in requests sent by browser extension,
-      // but they fixed it since then.
-      browser.runtime.getURL.withArgs('/').returns(undefined)
+      // but they fixed it since then, and we switched to reading origin via webRequest API,
+      // which is independent from the HTTP header.
+      browser.runtime.getURL.withArgs('/').returns('chrome-extension://nibjojkomfdiaoajekhjakgkdhaomnch/')
       // ensure clean modifyRequest
       runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
       const nullOriginHeader = { name: 'Origin', value: 'null' }
+      const expectedOriginHeader = { name: 'Origin', value: 'null' }
       const request = {
         requestHeaders: [nullOriginHeader],
+        initiator: 'https://random.website.example.com', // Chromium specific WebExtension API
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
       modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
-        .to.deep.include(nullOriginHeader)
-      browser.runtime.getURL.flush()
+        .to.deep.include(expectedOriginHeader)
+    })
+
+    it('keep the "Origin: null" if request does not come from Companion (Firefox)', async function () {
+      // Presence of Origin header is important as it protects API from XSS via sandboxed iframe
+      browser.runtime.getURL.withArgs('/').returns('moz-extension://0f334731-19e3-42f8-85e2-03dbf50026df/')
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const nullOriginHeader = { name: 'Origin', value: 'null' }
+      const expectedOriginHeader = { name: 'Origin', value: 'null' }
+      const request = {
+        requestHeaders: [nullOriginHeader],
+        originUrl: 'https://random.website.example.com/some/path.html', // Firefox specific WebExtension API
+        type: 'xmlhttprequest',
+        url: `${state.apiURLString}api/v0/id`
+      }
+      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
+        .to.deep.include(expectedOriginHeader)
     })
   })
 
