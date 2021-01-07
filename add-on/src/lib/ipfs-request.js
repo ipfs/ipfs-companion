@@ -527,7 +527,7 @@ function isSafeToRedirect (request, runtime) {
 
 // This is just a placeholder that we had to provide -- removed in normalizedRedirectingProtocolRequest()
 // It has to match URL from manifest.json/protocol_handlers
-const redirectingProtocolEndpoint = 'https://gateway.ipfs.io/ipfs/QmVGC4uCBDVEhCzsaJmvR5nVDgChM97kcYNehVm7L9jxtc#'
+const redirectingProtocolEndpoint = 'https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#'
 
 function redirectingProtocolRequest (request) {
   return request.url.startsWith(redirectingProtocolEndpoint)
