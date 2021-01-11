@@ -277,15 +277,19 @@
   },
   "option_ipfsNodeType_external_description": {
     "message": "Choisissez \"Externe\" pour vous connecter à un nœud local grâce à l'API HTTP.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_embedded_description": {
     "message": "Choisissez \"Embarqué\" pour lancer un nœud js-ipfs directement dans votre navigateur. (Cliquez sur \"En savoir plus\" pour connaître les limitations de cette fonctionnalité expérimentale.)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embarqué avec des Chrome Sockets: exécute un nœud js-ipfs dans le navigateur avec accès aux API chrome.sockets (détails sous le lien ci-dessous)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "message": "\"Intégré + chrome.sockets\" n'est plus supporté par Chromium. Si vous utilisez cette option, merci de migrer vers un autre type de nœud dès que possible. ",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
+  },
+  "option_ipfsNodeType_brave_description": {
+    "message": "Reglez sur \"Embarqué dans Brave\" to utiliser le support natif d'IPFS par le navigateur Brave.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
     "message": "Configuration du nœud IPFS",
@@ -306,6 +310,18 @@
   "option_ipfsNodeType_embedded_chromesockets": {
     "message": "Intégré + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
+  },
+  "option_ipfsNodeType_brave": {
+    "message": "Embarqué dans Brave",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
+  },
+  "option_hint_url": {
+    "message": "Entrez l'URL sans aucun sous-chemin",
+    "description": "An option description on the Preferences screen (option_hint_url)"
+  },
+  "option_hint_readonly": {
+    "message": "Cette valeur est en lecture seule",
+    "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
     "message": "Passerelles",
@@ -434,6 +450,10 @@
   "option_experimental": {
     "message": "expérimental",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
+  },
+  "option_deprecated": {
+    "message": "obsolète",
+    "description": "Warning label added to deprecated options on the Preferences screen (option_deprecated)"
   },
   "option_experiments_warning": {
     "message": "Attention ! Ces fonctionnalités expérimentales sont en cours de développement et peuvent devenir indisponibles ou changer.",
@@ -710,6 +730,14 @@
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS est à l'arrêt",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
+  },
+  "page_landingWelcome_installSteps_brave_title": {
+    "message": "Utilisateurs de Brave",
+    "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
+  },
+  "page_landingWelcome_installSteps_brave_install": {
+    "message": "Vous pouvez faire marcher IPFS directement dans votre navigateur — pas besoin d'IPFS Desktop ou de ligne de commande. Ouvrez <0>Préferences de Companion</0> et réglez le type de nœud IPFS sur \"Embarqué dans Brave\".",
+    "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
     "message": "Utilisateurs d'IPFS Desktop",

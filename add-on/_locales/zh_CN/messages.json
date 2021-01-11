@@ -277,15 +277,19 @@
   },
   "option_ipfsNodeType_external_description": {
     "message": "设置为“外部”来通过 HTTP API 连接本地节点",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_embedded_description": {
     "message": "设置为“嵌入式的”以在你的浏览器里直接运行 js-ipfs 节点（点击“了解更多”来了解该实验性的特性的局限性）",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "使用Chrome套接字的嵌入模式：在你的浏览器里利用chrome.sockets API运行js-ipfs节点（详情请见以下链接）",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "message": "Chromium已经不再支持Embedded + chrome.sockets特性，如果您正在使用此选项，请尽快迁移到不同的节点类型。",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
+  },
+  "option_ipfsNodeType_brave_description": {
+    "message": "设置为“Brave支持”以利用Brave浏览器的原生支持IPFS的特性。",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
     "message": "IPFS 节点配置",
@@ -306,6 +310,18 @@
   "option_ipfsNodeType_embedded_chromesockets": {
     "message": "嵌入式并使用 chrome.sockets 接口",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
+  },
+  "option_ipfsNodeType_brave": {
+    "message": "Brave支持",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
+  },
+  "option_hint_url": {
+    "message": "请键入不带任何子路径的URL",
+    "description": "An option description on the Preferences screen (option_hint_url)"
+  },
+  "option_hint_readonly": {
+    "message": "此内容是只读的",
+    "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
     "message": "网关",
@@ -434,6 +450,10 @@
   "option_experimental": {
     "message": "实验性",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
+  },
+  "option_deprecated": {
+    "message": "已弃用",
+    "description": "Warning label added to deprecated options on the Preferences screen (option_deprecated)"
   },
   "option_experiments_warning": {
     "message": "警告！这些实验性的功能正在完善中，其可用性和功能可能会随时变化。",
@@ -710,6 +730,14 @@
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS 没有运行",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
+  },
+  "page_landingWelcome_installSteps_brave_title": {
+    "message": "Brave用户",
+    "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
+  },
+  "page_landingWelcome_installSteps_brave_install": {
+    "message": "您可以直接在浏览器中运行IPFS而不需要IPFS Desktop或者命令行。打开<0>伴侣首选项</0>然后设置IPFS节点种类为“Brave支持”。",
+    "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
     "message": "IPFS 桌面用户",

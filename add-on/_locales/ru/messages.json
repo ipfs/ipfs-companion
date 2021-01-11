@@ -277,15 +277,19 @@
   },
   "option_ipfsNodeType_external_description": {
     "message": "Set to \"External\" to connect to a local node using the HTTP API.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_embedded_description": {
     "message": "Set to \"Embedded\" to run a js-ipfs node directly in your browser. (Click \"Read more\" to learn about the limitations of this experimental feature.)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "message": "\"Embedded + chrome.sockets\" is no longer supported by Chromium. If you are using this option, please migrate to a different node type ASAP.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
+  },
+  "option_ipfsNodeType_brave_description": {
+    "message": "Set to \"Provided by Brave\" to leverage the Brave browser's native IPFS support.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
     "message": "Настройки IPFS узла",
@@ -306,6 +310,18 @@
   "option_ipfsNodeType_embedded_chromesockets": {
     "message": "Встроенный + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
+  },
+  "option_ipfsNodeType_brave": {
+    "message": "Provided by Brave",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
+  },
+  "option_hint_url": {
+    "message": "Enter URL without any sub-path",
+    "description": "An option description on the Preferences screen (option_hint_url)"
+  },
+  "option_hint_readonly": {
+    "message": "This value is read-only",
+    "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
     "message": "Шлюзы",
@@ -434,6 +450,10 @@
   "option_experimental": {
     "message": "экспериментальный",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
+  },
+  "option_deprecated": {
+    "message": "deprecated",
+    "description": "Warning label added to deprecated options on the Preferences screen (option_deprecated)"
   },
   "option_experiments_warning": {
     "message": "Warning! These experimental features are works in progress and are subject to changes in availability and functionality.",
@@ -710,6 +730,14 @@
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS не запущен",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
+  },
+  "page_landingWelcome_installSteps_brave_title": {
+    "message": "Brave users",
+    "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
+  },
+  "page_landingWelcome_installSteps_brave_install": {
+    "message": "You can run IPFS directly in your browser — no need for IPFS Desktop or the command line. Open <0>Companion Preferences</0> and set the IPFS node type to “Provided by Brave”.",
+    "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
     "message": "Пользователи IPFS Desktop",
