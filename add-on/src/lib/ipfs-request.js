@@ -8,8 +8,9 @@ log.error = debug('ipfs-companion:request:error')
 const LRU = require('lru-cache')
 const isIPFS = require('is-ipfs')
 const isFQDN = require('is-fqdn')
-const { pathAtHttpGateway, sameGateway } = require('./ipfs-path')
+const { pathAtHttpGateway, sameGateway, ipfsUri } = require('./ipfs-path')
 const { safeURL } = require('./options')
+const { braveNodeType } = require('./ipfs-client/brave')
 
 const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableNetworkErrors = new Set([
@@ -184,10 +185,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         // Detect dnslink using heuristics enabled in Preferences
         if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
           if (state.dnslinkRedirect) {
-            const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url)
-            if (redirectUrl && isSafeToRedirect(request, runtime)) {
-              // console.log('onBeforeRequest.dnslinkRedirect', dnslinkRedirect)
-              return { redirectUrl }
+            const dnslinkAtGw = dnslinkResolver.dnslinkAtGateway(request.url)
+            if (dnslinkAtGw && isSafeToRedirect(request, runtime)) {
+              return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
             }
           } else if (state.dnslinkDataPreload) {
             dnslinkResolver.preloadData(request.url)
@@ -299,9 +299,9 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         if (runtime.requiresXHRCORSfix && onHeadersReceivedRedirect.has(request.requestId)) {
           onHeadersReceivedRedirect.delete(request.requestId)
           if (state.dnslinkPolicy) {
-            const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url)
-            if (redirectUrl) {
-              return { redirectUrl }
+            const dnslinkAtGw = dnslinkResolver.dnslinkAtGateway(request.url)
+            if (dnslinkAtGw) {
+              return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
             }
           }
           return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
@@ -326,12 +326,12 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
                 // in a way that works even when state.dnslinkPolicy !== 'enabled'
                 // All the following requests will be upgraded to IPNS
                 const cachedDnslink = dnslinkResolver.readAndCacheDnslink(new URL(request.url).hostname)
-                const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url, cachedDnslink)
+                const dnslinkAtGw = dnslinkResolver.dnslinkAtGateway(request.url, cachedDnslink)
                 // redirect only if local node is around, as we can't guarantee DNSLink support
                 // at a public subdomain gateway (requires more than 1 level of wildcard TLS certs)
-                if (redirectUrl && state.localGwAvailable) {
-                  log(`onHeadersReceived: dnslinkRedirect from ${request.url} to ${redirectUrl}`)
-                  return { redirectUrl }
+                if (dnslinkAtGw && state.localGwAvailable) {
+                  log(`onHeadersReceived: dnslinkRedirect from ${request.url} to ${dnslinkAtGw}`)
+                  return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
                 }
               }
               // Additional validation of X-Ipfs-Path
@@ -398,6 +398,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
         if (dnslink) {
           const redirectUrl = dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
           log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url} → ${redirectUrl}`, request)
+          // We are unable to redirect in onErrorOccurred, but we can update the tab
           return updateTabWithURL(request, redirectUrl, browser)
         }
       }
@@ -412,6 +413,7 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
       if (isRecoverable(request, state, ipfsPathValidator)) {
         const redirectUrl = ipfsPathValidator.resolveToPublicUrl(request.url)
         log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
+        // We are unable to redirect in onErrorOccurred, but we can update the tab
         return updateTabWithURL(request, redirectUrl, browser)
       }
     },
@@ -483,6 +485,18 @@ function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {
       // at 127.0.0.1, which is marked as Secure Context in all browsers
       const useLocalhostName = false
       redirectUrl = safeURL(redirectUrl, { useLocalhostName }).toString()
+    }
+    // Leverage native URI support in Brave for nice address bar.
+    if (type === 'main_frame' && state.ipfsNodeType === braveNodeType && !sameGateway(request.url, state.gwURL)) {
+      redirectUrl = ipfsUri(redirectUrl)
+      // In Brave 1.20.54 a webRequest redirect pointing at ipfs:// URI
+      // is not reflected in address bar - a http://*.localhost URL is displayed instead.
+      // but tabs.update works, so we do that for the main request.
+      if (redirectUrl !== url) { // futureproofing in case url from request becomes native
+        log('redirectToGateway: upgrading address bar to native URI', redirectUrl)
+        // manually set tab to native URI
+        return runtime.browser.tabs.update(request.tabId, { url: redirectUrl })
+      }
     }
   }
 

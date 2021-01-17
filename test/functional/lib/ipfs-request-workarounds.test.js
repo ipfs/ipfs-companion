@@ -9,6 +9,8 @@ const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request'
 const createDNSLinkResolver = require('../../../add-on/src/lib/dnslink')
 const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
+const { braveNodeType } = require('../../../add-on/src/lib/ipfs-client/brave')
+const { spoofDnsTxtRecord } = require('./dnslink.test.js')
 
 // const nodeTypes = ['external', 'embedded']
 
@@ -282,14 +284,40 @@ describe('modifyRequest processing', function () {
       modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
       // test
       const request = {
+        tabId: 42404,
         statusCode: 404,
         type: 'main_frame',
         url: brokenDNSLinkUrl
       }
       browser.tabs.update.flush()
-      assert.ok(browser.tabs.update.notCalled)
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).notCalled)
       modifyRequest.onCompleted(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).calledOnce)
+      browser.tabs.update.flush()
+    })
+  })
+
+  // Brave seems to ignore redirect to ipfs:// and ipns://, but if we force tab update via tabs API,
+  // then address bar is correct
+  describe('redirect of main_frame request to local gateway when Brave node is used', function () {
+    it('should force native URI in address bar via tabs.update API', async function () {
+      const httpDNSLinkUrl = 'https://example.com/ipns/docs.ipfs.io/some/path?query=val'
+      const nativeDNSLinkUri = 'ipns://docs.ipfs.io/some/path?query=val'
+      spoofDnsTxtRecord('docs.ipfs.io', dnslinkResolver, '/ipfs/bafkqaaa')
+      state.ipfsNodeType = braveNodeType
+      // ensure clean modifyRequest
+      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      // test
+      const request = {
+        tabId: 42,
+        type: 'main_frame',
+        url: httpDNSLinkUrl
+      }
+      browser.tabs.update.flush()
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: nativeDNSLinkUri }).notCalled)
+      await modifyRequest.onBeforeRequest(request)
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: nativeDNSLinkUri }).calledOnce)
       browser.tabs.update.flush()
     })
   })

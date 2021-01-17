@@ -21,7 +21,7 @@ function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
 module.exports.spoofDnsTxtRecord = spoofDnsTxtRecord
 
 function spoofCachedDnslink (fqdn, dnslinkResolver, value) {
-  // spoofs existence of valid DNS TXT record (used on cache miss)
+  // spoofs existence of valid DNS TXT record (used on cache hit)
   dnslinkResolver.setDnslink(fqdn, value)
 }
 module.exports.spoofCachedDnslink = spoofCachedDnslink
