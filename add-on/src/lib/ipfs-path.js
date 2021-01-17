@@ -42,6 +42,14 @@ function ipfsContentPath (urlOrPath, opts) {
 }
 exports.ipfsContentPath = ipfsContentPath
 
+// Turns URL or URIencoded path into a ipfs:// or ipns:// URI
+function ipfsUri (urlOrPath) {
+  const contentPath = ipfsContentPath(urlOrPath, { keepURIParams: true })
+  if (!contentPath) return null
+  return contentPath.replace(/^\/(ip[f|n]s)\//, '$1://')
+}
+exports.ipfsUri = ipfsUri
+
 function subdomainPatternMatch (url) {
   if (typeof url === 'string') {
     url = new URL(url)
@@ -245,8 +253,8 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     },
 
     // Version of resolveToPublicUrl that always resolves to URL representing
-    // path gateway at local machine (This is ok, as subdomain will redirect
-    // to corre
+    // path gateway at local machine (This is ok, as localhost gw will redirect
+    // to correct subdomain)
     resolveToLocalUrl (urlOrPath) {
       const { gwURLString } = getState()
       const ipfsPath = ipfsContentPath(urlOrPath, { keepURIParams: true })
