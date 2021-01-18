@@ -243,6 +243,16 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
       spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
     })
+    it('should match <dns-label-inlined-fqdn>.ipns on public subdomain gateway', function () {
+      // Context: https://github.com/ipfs/in-web-browsers/issues/169
+      const fqdn = 'dnslink-site.com'
+      const fqdnInDNSLabel = 'dnslink--site-com'
+      const url = `https://${fqdnInDNSLabel}.ipns.dweb.link/some/path?ds=sdads#dfsdf`
+      const dnslinkResolver = createDnslinkResolver(getState)
+      spoofCachedDnslink(fqdnInDNSLabel, dnslinkResolver, false)
+      spoofCachedDnslink(fqdn, dnslinkResolver, dnslinkValue)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
+    })
   })
 
   after(() => {

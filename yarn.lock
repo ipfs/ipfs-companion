@@ -8095,10 +8095,22 @@ is-ip@^2.0.0:
   dependencies:
     ip-regex "^2.0.0"
 
-is-ipfs@2.0.0, is-ipfs@^2.0.0:
+is-ipfs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/is-ipfs/-/is-ipfs-2.0.0.tgz#c046622e4daf5435b671aeb9739a832107e06805"
   integrity sha512-X4Cg/JO+h/ygBCrIQSMgicHRLo5QpB+i5tHLhFgGBksKi3zvX6ByFCshDxNBvcq4NFxF3coI2AaLqwzugNzKcw==
+  dependencies:
+    cids "^1.0.0"
+    iso-url "~0.4.7"
+    mafmt "^8.0.0"
+    multiaddr "^8.0.0"
+    multibase "^3.0.0"
+    multihashes "^3.0.1"
+    uint8arrays "^1.1.0"
+
+"is-ipfs@https://github.com/ipfs/is-ipfs/tarball/5d6d1a2aa2fc64b61f374532c1f0766ce38725f3":
+  version "2.0.0"
+  resolved "https://github.com/ipfs/is-ipfs/tarball/5d6d1a2aa2fc64b61f374532c1f0766ce38725f3#91d1f03f4127094aef9e0738c43e67ea7f2c2b72"
   dependencies:
     cids "^1.0.0"
     iso-url "~0.4.7"

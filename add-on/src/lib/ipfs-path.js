@@ -12,6 +12,11 @@ const RESULT_TTL_MS = 300000 // 5 minutes
 function ipfsContentPath (urlOrPath, opts) {
   opts = opts || {}
 
+  // ipfs:// → /ipfs/
+  if (urlOrPath && urlOrPath.toString().startsWith('ip')) {
+    urlOrPath = urlOrPath.replace(/^(ip[n|f]s):\/\//, '/$1/')
+  }
+
   // Fail fast if no content path can be extracted from input
   if (!isIPFS.urlOrPath(urlOrPath)) return null
 
@@ -23,7 +28,8 @@ function ipfsContentPath (urlOrPath, opts) {
 
   if (isIPFS.subdomain(urlOrPath)) {
     // Move CID-in-subdomain to URL pathname
-    const { id, ns } = subdomainPatternMatch(url)
+    let { id, ns } = subdomainPatternMatch(url)
+    id = dnsLabelToFqdn(id)
     url = new URL(`https://localhost/${ns}/${id}${url.pathname}${url.search}${url.hash}`)
   }
 
@@ -59,6 +65,16 @@ function subdomainPatternMatch (url) {
   const id = match[1]
   const ns = match[2]
   return { id, ns }
+}
+
+function dnsLabelToFqdn (label) {
+  if (label && !label.includes('.') && label.includes('-') && !isIPFS.cid(label)) {
+    // no '.' means the subdomain name is most likely an inlined DNSLink into single DNS label
+    // en-wikipedia--on--ipfs-org → en.wikipedia-on-ipfs.org
+    // (https://github.com/ipfs/in-web-browsers/issues/169)
+    label = label.replace(/--/g, '@').replace(/-/g, '.').replace(/@/g, '-')
+  }
+  return label
 }
 
 function pathAtHttpGateway (path, gatewayUrl) {
@@ -155,6 +171,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       if (isIPFS.ipfsPath(path)) {
         return true
       }
+
       // `/ipns/` requires multiple stages/branches (can be FQDN with dnslink or CID)
       if (isIPFS.ipnsPath(path)) {
         // we may have false-positives here, so we do additional checks below
@@ -183,7 +200,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       const { apiURLString } = getState()
       const { hostname } = new URL(url)
       return Boolean(url && !url.startsWith(apiURLString) && (
-        isIPFS.url(url) ||
+        !!ipfsContentPath(url) ||
         dnslinkResolver.cachedDnslink(hostname)
       ))
     },
@@ -193,7 +210,7 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       const { localGwAvailable, gwURL, apiURL } = getState()
       return localGwAvailable && // show only when redirect is possible
       (isIPFS.ipnsUrl(url) || // show on /ipns/<fqdn>
-        (url.startsWith('http') && // hide on non-HTTP pages
+        ((url.startsWith('http') || url.startsWith('ip')) && // hide on non-HTTP/native pages
          !sameGateway(url, gwURL) && // hide on /ipfs/* and *.ipfs.
           !sameGateway(url, apiURL))) // hide on api port
     },
@@ -210,6 +227,16 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       const { pubSubdomainGwURL, pubGwURLString } = getState()
       const input = urlOrPath
 
+      // NATIVE ipns:// with DNSLink requires simple protocol swap
+      if (input.startsWith('ipns://')) {
+        const dnslinkUrl = new URL(input)
+        dnslinkUrl.protocol = 'https:'
+        const dnslink = dnslinkResolver.readAndCacheDnslink(dnslinkUrl.hostname)
+        if (dnslink) {
+          return dnslinkUrl.toString()
+        }
+      }
+
       // SUBDOMAINS
       // Detect *.dweb.link and other subdomain gateways
       if (isIPFS.subdomain(input)) {
@@ -225,10 +252,8 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
         //
         // Remove gateway suffix to get potential FQDN
         const url = new URL(subdomainUrl)
-        // TODO: replace below with regex that match any subdomain gw
         const { id: ipnsId } = subdomainPatternMatch(url)
-        // Ensure it includes .tld (needs at least one dot)
-        if (ipnsId.includes('.')) {
+        if (!isIPFS.cid(ipnsId)) {
           // Confirm DNSLink record is present and its not a false-positive
           const dnslink = dnslinkResolver.readAndCacheDnslink(ipnsId)
           if (dnslink) {
