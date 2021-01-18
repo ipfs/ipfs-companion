@@ -87,6 +87,18 @@ describe('ipfs-path.js', function () {
       const url = 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest'
       expect(ipfsContentPath(url)).to.equal('/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html')
     })
+    it('should resolve CID(libp2p-key)-in-subdomain URL to IPNS path', function () {
+      const url = 'https://k2k4r8ncs1yoluq95unsd7x2vfhgve0ncjoggwqx9vyh3vl8warrcp15.ipns.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsContentPath(url)).to.equal('/ipns/k2k4r8ncs1yoluq95unsd7x2vfhgve0ncjoggwqx9vyh3vl8warrcp15/wiki/Mars.html')
+    })
+    it('should resolve dnslink-in-subdomain URL to IPNS path', function () {
+      const url = 'http://en.wikipedia-on-ipfs.org.ipns.localhost:8080/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsContentPath(url)).to.equal('/ipns/en.wikipedia-on-ipfs.org/wiki/Mars.html')
+    })
+    it('should resolve inlined-dnslink-in-subdomain URL to IPNS path', function () {
+      const url = 'https://en-wikipedia--on--ipfs-org.ipns.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsContentPath(url)).to.equal('/ipns/en.wikipedia-on-ipfs.org/wiki/Mars.html')
+    })
     it('should return null if there is no valid path for input URL', function () {
       const url = 'https://foo.io/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
       expect(ipfsContentPath(url)).to.equal(null)

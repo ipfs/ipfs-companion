@@ -52,7 +52,7 @@ function contextActions ({
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
     const { url } = currentTab
-    return !(sameGateway(url, gwURLString) || sameGateway(url, pubGwURLString))
+    return !(url.startsWith('ip') || sameGateway(url, gwURLString) || sameGateway(url, pubGwURLString))
   }
 
   const renderIpfsContextItems = () => {

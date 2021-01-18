@@ -140,7 +140,7 @@
     "ipfs-postmsg-proxy": "3.1.1",
     "is-fqdn": "2.0.1",
     "is-ip": "3.1.0",
-    "is-ipfs": "2.0.0",
+    "is-ipfs": "https://github.com/ipfs/is-ipfs/tarball/5d6d1a2aa2fc64b61f374532c1f0766ce38725f3",
     "it-all": "1.0.4",
     "it-concat": "1.0.2",
     "it-tar": "1.2.2",

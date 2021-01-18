@@ -218,8 +218,9 @@ module.exports = (state, emitter) => {
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
 
+      const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference
-      if (!currentDnslinkFqdn || !isIPFS.ipnsUrl(currentTab.url)) {
+      if (!currentDnslinkFqdn || !isIPFS.ipnsPath(path)) {
         // No DNSLink, reload URL as-is
         await browser.tabs.reload(currentTab.id)
       } else {
@@ -228,7 +229,6 @@ module.exports = (state, emitter) => {
         // from  http?://{fqdn}.ipns.gateway.tld/some/path
         // to    http://{fqdn}/some/path
         // (defaulting to http: https websites will have HSTS or a redirect)
-        const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
         const originalUrl = path.replace(/^.*\/ipns\//, 'http://')
         await browser.tabs.update(currentTab.id, {
           // FF only: loadReplace: true,
