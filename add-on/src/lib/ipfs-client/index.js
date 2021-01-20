@@ -58,16 +58,24 @@ function _isWebuiTab (url) {
   return bundled || ipns
 }
 
+function _isInternalTab (url, extensionOrigin) {
+  return url.startsWith(extensionOrigin)
+}
+
 async function _reloadIpfsClientDependents (browser, instance, opts) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
+      const extensionOrigin = browser.runtime.getURL('/')
       tabs.forEach((tab) => {
         // detect bundled webui in any of open tabs
         if (_isWebuiTab(tab.url)) {
+          log(`reloading webui at ${tab.url}`)
           browser.tabs.reload(tab.id)
-          log('reloading bundled webui')
+        } else if (_isInternalTab(tab.url, extensionOrigin)) {
+          log(`reloading internal extension page at ${tab.url}`)
+          browser.tabs.reload(tab.id)
         }
       })
     }

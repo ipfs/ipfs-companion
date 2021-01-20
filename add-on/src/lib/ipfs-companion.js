@@ -25,7 +25,7 @@ const { createRuntimeChecks } = require('./runtime-checks')
 const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
-const { showPendingLandingPages } = require('./on-installed')
+const { runPendingOnInstallTasks } = require('./on-installed')
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
@@ -89,7 +89,7 @@ module.exports = async function init () {
     await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
     setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await showPendingLandingPages()
+    await runPendingOnInstallTasks()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
