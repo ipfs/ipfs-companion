@@ -322,6 +322,35 @@ describe('modifyRequest processing', function () {
     })
   })
 
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
+  describe('redirect of IPFS resource to local gateway in Brave', function () {
+    it('should be redirected if not a  subresource (not impacted by Brave Shields)', function () {
+      runtime.isFirefox = false
+      runtime.brave = { thisIsFakeBraveRuntime: true }
+      const request = {
+        method: 'GET',
+        type: 'image',
+        url: 'https://ipfs.io/ipfs/bafkqaaa',
+        initiator: 'https://some-website.example.com' // Brave (built on Chromium)
+      }
+      expect(modifyRequest.onBeforeRequest(request))
+        .to.equal(undefined)
+    })
+    it('should be left untouched if subresource (would be blocked by Brave Shields)', function () {
+      runtime.isFirefox = false
+      runtime.brave = { thisIsFakeBraveRuntime: true }
+      const cid = 'bafkqaaa'
+      const request = {
+        method: 'GET',
+        type: 'main_frame',
+        url: `https://ipfs.io/ipfs/${cid}`,
+        initiator: 'https://some-website.example.com' // Brave (built on Chromium)
+      }
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+    })
+  })
+
   after(function () {
     delete global.URL
     delete global.browser
