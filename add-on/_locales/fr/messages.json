@@ -564,11 +564,11 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Garder l'historique des noms de domaines",
+    "message": "Garder l'historique des espaces de noms",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Les noms dans cette liste séparés par des virgules seront écrits dans la console de votre navigateur. Modifier cette liste redémarrera IPFS Companion.",
+    "message": "Les espaces de noms dans cette liste séparés par des virgules seront écrits dans la console de votre navigateur. Modifier cette liste redémarrera IPFS Companion.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
