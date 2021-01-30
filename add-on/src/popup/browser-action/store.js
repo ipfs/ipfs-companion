@@ -163,9 +163,16 @@ module.exports = (state, emitter) => {
 
   emitter.on('openReleaseNotes', async () => {
     const { version } = browser.runtime.getManifest()
-    const url = `https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v${version}`
+    const stableChannel = version.match(/\./g).length === 2
+    let url
     try {
-      await browser.storage.local.set({ dismissedUpdate: version })
+      if (stableChannel) {
+        url = `https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v${version}`
+        await browser.storage.local.set({ dismissedUpdate: version })
+      } else {
+        // swap URL and do not dismiss
+        url = 'https://github.com/ipfs-shipyard/ipfs-companion/issues/964'
+      }
       // Note: opening tab needs to happen after storage.local.set because in Chromium 86
       // it triggers a premature window.close, which aborts storage update
       await browser.tabs.create({ url })
