@@ -117,7 +117,6 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 - `npm run firefox:nightly`: Run as temporary add-on in Firefox Nightly (uses one in `./firefox/`, see `get-firefox-nightly` below)
 - `npm run chromium`: Run as temporary add-on in Chromium
 - `npm run get-firefox-nightly`: Fetch latest Firefox nightly build to `./firefox/`
-- `npm run firefox:beta:add -- --update-link "https://host/path/to/file.xpi" file.xpi`: Add a manifest entry for new self-hosted beta for Firefox
 - `npm run build`: Build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
 - `npm run watch`: Rebuild JS/CSS on file changes (run regular `build` first to ensure everything else is in place)
 - `npm run bundle:chromium`: Overwrite manifest and package a generic, Chromium-compatible version
@@ -134,7 +133,6 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 Release build shortcuts:
 
 - `npm run dev-build`: All-in-one: fast dependency install, build with yarn (updates `yarn.lock` if needed)
-- `npm run beta-build`: Reproducible beta build in docker with frozen `yarn.lock`
 - `npm run release-build`: Reproducible release build in docker with frozen `yarn.lock`
 
 ## Other tips

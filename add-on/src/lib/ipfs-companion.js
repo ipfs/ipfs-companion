@@ -252,6 +252,7 @@ module.exports = async function init () {
     if (!browserActionPort) return
     const dropSlash = url => url.replace(/\/$/, '')
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+    const { version } = browser.runtime.getManifest()
     const info = {
       active: state.active,
       ipfsNodeType: state.ipfsNodeType,
@@ -265,7 +266,7 @@ module.exports = async function init () {
       redirect: state.redirect,
       enabledOn: state.enabledOn,
       disabledOn: state.disabledOn,
-      showUpdateIndicator: state.dismissedUpdate !== browser.runtime.getManifest().version,
+      newVersion: state.dismissedUpdate !== version ? version : null,
       currentTab
     }
     try {
