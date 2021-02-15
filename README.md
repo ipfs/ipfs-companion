@@ -16,7 +16,7 @@
 
 ## Lead maintainer
 
-[Marcin Rataj](https://github.com/lidel), with help from the [IPFS GUI working group](https://github.com/ipfs/ipfs-gui).
+[Marcin Rataj](https://github.com/lidel)
 
 ## Table of contents
 
