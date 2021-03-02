@@ -59,7 +59,7 @@ module.exports = function createDnslinkResolver (getState) {
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
         const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
-        const gateway = state.localGwAvailable ? state.gwURLString : state.pubGwURLString
+        const gateway = state.redirect && state.localGwAvailable ? state.gwURLString : state.pubGwURLString
         return pathAtHttpGateway(ipnsPath, gateway)
       }
     },
