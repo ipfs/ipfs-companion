@@ -27,6 +27,8 @@ const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
 const { runPendingOnInstallTasks } = require('./on-installed')
 
+let browserActionPort // reuse instance for status updates between on/off toggles
+
 // init happens on addon load in background/background.js
 module.exports = async function init () {
   // INIT
@@ -219,8 +221,6 @@ module.exports = async function init () {
   // Cache for async URL2CID resolution used by browser action
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
   const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
-
-  let browserActionPort
 
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)
