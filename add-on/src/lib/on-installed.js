@@ -4,7 +4,7 @@
 const browser = require('webextension-polyfill')
 const { version } = browser.runtime.getManifest()
 
-exports.welcomePage = '/dist/landing-pages/welcome/index.html'
+const { welcomePage } = require('./constants')
 exports.updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v'
 
 exports.onInstalled = async (details) => {
@@ -23,7 +23,7 @@ exports.runPendingOnInstallTasks = async () => {
     case 'onFirstInstall':
       await useNativeNodeIfFeasible(browser)
       return browser.tabs.create({
-        url: exports.welcomePage
+        url: welcomePage
       })
     case 'onVersionUpdate':
       if (!displayReleaseNotes) return

@@ -8,9 +8,10 @@ log.error = debug('ipfs-companion:client:brave:error')
 const external = require('./external')
 const toUri = require('multiaddr-to-uri')
 const pWaitFor = require('p-wait-for')
+const { welcomePage, optionsPage, tickMs } = require('../constants')
 
 // increased interval to decrease impact of IPFS service process spawns
-const waitFor = (f, t) => pWaitFor(f, { interval: 250, timeout: t || Infinity })
+const waitFor = (f, t) => pWaitFor(f, { interval: tickMs, timeout: t || Infinity })
 
 exports.init = async function (browser, opts) {
   log('ensuring Brave Settings are correct')
@@ -37,13 +38,17 @@ exports.destroy = async function (browser) {
 // ---------------- Brave-specifics -------------------
 
 // ipfs:// URI that will be used for triggering the "Enable IPFS" dropbar in Brave
-const braveIpfsUriTrigger = 'ipfs://bafkreigxbf77se2an2u6hmg2kxxbhmenetc7dzvkd3rl4m2orlobjvqcqq'
+// Here we use inlined empty byte array, which resolves instantly and does not
+// introduce any delay in UI.
+const braveIpfsUriTrigger = 'ipfs://bafkqaaa/'
+const braveGatewayUrlTrigger = 'https://bafkqaaa.ipfs.dweb.link/'
 
 // Settings screen in Brave where user can manage IPFS support
 const braveSettingsPage = 'brave://settings/extensions'
+// TODO: replace with brave://settings/ipfs after https://github.com/brave/brave-browser/issues/13655 lands in Brave Stable
 
 // Diagnostic page for manually starting/stopping Brave's node
-// const braveIpfsDiagnosticPage = 'brave://ipfs'
+// const braveIpfsDiagnosticPage = 'brave://ipfs' // TODO: https://github.com/brave/brave-browser/issues/14500
 
 // ipfsNodeType for this backend
 exports.braveNodeType = 'external:brave'
@@ -169,27 +174,12 @@ function addrs2url (addr) {
 }
 
 async function initBraveSettings (browser, brave) {
-  let showState = () => {}
-  let tabId
   let method = await brave.getResolveMethodType()
   log(`brave.resolveMethodType is '${method}'`)
 
   if (method === 'ask') {
     // Trigger the dropbar with "Enable IPFS" button by opening ipfs:// URI in a new tab.
-    // The trigger is a HTML page with some text to make onboarding easier.
-    tabId = (await browser.tabs.create({ url: braveIpfsUriTrigger })).id
-
-    // Reuse the tab for state updates (or create a new one if user closes it)
-    // Caveat: we inject JS as we can't use tab.update during the init of local gateway
-    // because Brave will try to use it and fail as it is not ready yet :-))
-    showState = async (s) => {
-      try {
-        await browser.tabs.executeScript(tabId, { code: `window.location.hash = '#${s}';` })
-      } catch (e) { // noop, just log, don't break if user closed the tab etc
-        log.error('error while showState', e)
-      }
-    }
-    showState('ask')
+    await browser.tabs.create({ url: braveIpfsUriTrigger })
 
     // IPFS Companion is unable to change Brave settings,
     // all we can do is to poll chrome.ipfs.* and detect when user made a decision
@@ -202,28 +192,96 @@ async function initBraveSettings (browser, brave) {
 
     if (method === 'local') {
       log('waiting while Brave downloads IPFS executable..')
-      showState('download')
       await waitFor(() => brave.getExecutableAvailable())
 
       log('waiting while Brave creates repo and config via ipfs init..')
-      await showState('init')
       await waitFor(async () => typeof (await brave.getConfig()) !== 'undefined')
     }
   }
 
   if (method !== 'local') {
-    await showState('ask')
+    // close tab with temporary trigger URI
+    await closeIpfsTab(browser, braveIpfsUriTrigger)
+    await closeIpfsTab(browser, braveGatewayUrlTrigger)
+    // open settings
     await browser.tabs.create({ url: braveSettingsPage })
     throw new Error('"Method to resolve IPFS resources" in Brave settings should be "Local node"')
   }
 
   // ensure local node is started
   log('waiting while brave.launch() starts ipfs daemon..')
-  await showState('start')
   await waitFor(() => brave.launch())
   log('brave.launch() finished')
-  await showState('done')
 
   // ensure Companion uses the endpoint provided by Brave
   await exports.useBraveEndpoint(browser)
+
+  // async UI cleanup, after other stuff
+  setTimeout(() => activationUiCleanup(browser), tickMs)
+}
+
+// close tab in a way that works with ipfs://
+async function closeIpfsTab (browser, tabUrl) {
+  // fun bug: querying for { url: 'ipfs://..' } does not work,
+  // but if we query for { } ipfs:// tabs are returned just fine,
+  // so we do that and discard unwanted ones  ¯\_(ツ)_/¯
+  // TODO: fix chrome.tabs.query when we care about upstreaming things to Chromium
+  for (const tab of await browser.tabs.query({})) {
+    if (tab.url === tabUrl) {
+      await browser.tabs.remove(tab.id)
+    }
+  }
+}
+
+// Various tedious tasks that need to happen for nice UX:
+// - wait for gateway to be up (indicates node finished booting)
+// - close ephemeral activation tab
+// - re-activate entry point (options or welcome page)
+// - ignore unexpected failures (user could do something weird, close tab before time etc)
+async function activationUiCleanup (browser) {
+  try {
+    // after useBraveEndpoint we can start polling for gateway to become online
+    const { customGatewayUrl: braveGwUrl } = await browser.storage.local.get('customGatewayUrl')
+    // wait 1m for gateway to be online (bafkqaaa)
+    await waitFor(async () => {
+      try {
+        return await fetch(`${braveGwUrl}/ipfs/bafkqaaa`).then(response => response.ok)
+      } catch (_) {
+        return false
+      }
+    })
+    log('[activation ui cleanup] Brave gateway is up, cleaning up')
+
+    const welcomePageUrl = browser.extension.getURL(welcomePage)
+    const optionsPageUrl = browser.extension.getURL(optionsPage)
+    // we are unable to query ipfs:// directly due to reasons mentioned in 'closeIpfsTab'
+    // so we make quick pass over all tabs and check welcome and options while at it.
+    for (const tab of await browser.tabs.query({})) {
+      try {
+        // close tab with temporary trigger
+        if (tab.url === braveIpfsUriTrigger || tab.url === braveGatewayUrlTrigger) {
+          await browser.tabs.remove(tab.id)
+        }
+        // switch to welcome page if present (onboarding via fresh install)
+        if (tab.url === welcomePageUrl) {
+          await browser.tabs.reload(tab.id)
+          await browser.tabs.update(tab.id, { active: true })
+        }
+        // switch to options page if present (onboarding via Preferences)
+        if (tab.url === optionsPageUrl) {
+          await browser.tabs.update(tab.id, { active: true })
+        }
+      } catch (e) {
+        log.error('[activation ui cleanup] unexpected error, but safe to ignore', e)
+        continue
+      }
+    }
+    log('[activation ui cleanup] done')
+
+    // (if ok or not, close temporary tab and switch to welcome page or open it if not existing
+    // if ((await browser.tabs.get(tabId)).url.startsWith(braveIpfsUriTrigger)) {
+  } catch (e) {
+    // most likely tab is gone (closed by user, etc)
+    log.error('[activation ui cleanup] failed to cleanup ephemeral UI tab', e)
+  }
 }

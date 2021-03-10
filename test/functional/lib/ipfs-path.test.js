@@ -3,7 +3,7 @@ const { stub } = require('sinon')
 const { describe, it, beforeEach, afterEach } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
-const { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway } = require('../../../add-on/src/lib/ipfs-path')
+const { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname } = require('../../../add-on/src/lib/ipfs-path')
 const { initState } = require('../../../add-on/src/lib/state')
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
@@ -106,6 +106,17 @@ describe('ipfs-path.js', function () {
     it('should return null if there is no valid path for input path', function () {
       const path = '/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
       expect(ipfsContentPath(path)).to.equal(null)
+    })
+  })
+
+  describe('safeHostname', function () {
+    it('should return URL.hostname on http URL', function () {
+      const url = 'https://example.com:8080/path/file.txt'
+      expect(safeHostname(url)).to.equal('example.com')
+    })
+    it('should return null on error', function () {
+      const url = ''
+      expect(safeHostname(url)).to.equal(null)
     })
   })
 

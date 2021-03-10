@@ -5,7 +5,7 @@ const browser = require('webextension-polyfill')
 const isIPFS = require('is-ipfs')
 const all = require('it-all')
 const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
-const { welcomePage } = require('../../lib/on-installed')
+const { welcomePage, optionsPage } = require('../../lib/constants')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
@@ -188,7 +188,7 @@ module.exports = (state, emitter) => {
       .catch((err) => {
         console.error('runtime.openOptionsPage() failed, opening options page in tab instead.', err)
         // brave: fallback to opening options page as a tab.
-        browser.tabs.create({ url: browser.extension.getURL('dist/options/options.html') })
+        browser.tabs.create({ url: browser.extension.getURL(optionsPage) })
       })
   })
 
