@@ -122,7 +122,6 @@ module.exports = function createDnslinkResolver (getState) {
     readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
-      // TODO: fix DNS resolver for ipfsNodeType='embedded:chromesockets', for now use ipfs.io
       if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
         // Use gw port so it can be a GET:
         // Chromium does not execute onBeforeSendHeaders for synchronous calls

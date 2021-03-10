@@ -3,13 +3,11 @@
 
 const browser = require('webextension-polyfill')
 const html = require('choo/html')
-const { hasChromeSocketsForTcp } = require('../../lib/runtime-checks')
 const { braveNodeType } = require('../../lib/ipfs-client/brave')
 
 function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeFromBrave }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
   const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
-  const withChromeSockets = hasChromeSocketsForTcp() // TODO: remove chrome sockets
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
   return html`
     <form>
@@ -22,7 +20,7 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeF
               <dd>
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
                 ${withNodeFromBrave ? html`<p>${browser.i18n.getMessage('option_ipfsNodeType_brave_description')}</p>` : null}
-                <p>${browser.i18n.getMessage(withChromeSockets ? 'option_ipfsNodeType_embedded_chromesockets_description' : 'option_ipfsNodeType_embedded_description')}</p>
+                <p>${browser.i18n.getMessage('option_ipfsNodeType_embedded_description')}</p>
                 <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/how-to/companion-node-types/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
@@ -39,20 +37,14 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeF
             ? html`<option
                   value='external:brave'
                   selected=${ipfsNodeType === 'external:brave'}>
-                  ${browser.i18n.getMessage('option_ipfsNodeType_brave')} (${browser.i18n.getMessage('option_experimental')})
+                  ${browser.i18n.getMessage('option_ipfsNodeType_brave')}
                 </option>`
               : null}
-            ${withChromeSockets
-            ? html`<option
-                  value='embedded:chromesockets'
-                  selected=${ipfsNodeType === 'embedded:chromesockets'}>
-                  ${browser.i18n.getMessage('option_ipfsNodeType_embedded_chromesockets')} (${browser.i18n.getMessage('option_deprecated')})
-                </option>`
-              : html`<option
-                  value='embedded'
-                  selected=${ipfsNodeType === 'embedded'}>
-                  ${browser.i18n.getMessage('option_ipfsNodeType_embedded')} (${browser.i18n.getMessage('option_experimental')})
-                </option>`}
+            <option
+              value='embedded'
+              selected=${ipfsNodeType === 'embedded'}>
+              ${browser.i18n.getMessage('option_ipfsNodeType_embedded')} (${browser.i18n.getMessage('option_experimental')})
+            </option>
           </select>
         </div>
         ${ipfsNodeType.startsWith('embedded')
