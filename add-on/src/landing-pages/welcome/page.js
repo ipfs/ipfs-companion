@@ -7,6 +7,7 @@ const { renderTranslatedLinks, renderTranslatedSpans } = require('../../utils/i1
 
 // Brave detection
 const { brave } = require('../../../src/lib/ipfs-client/brave')
+const { optionsPage } = require('../../../src/lib/constants')
 
 // Assets
 const libp2pLogo = '../../../images/libp2p.svg'
@@ -99,7 +100,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
     </svg>
   `
 
-  const optionsUrl = browser.extension.getURL('dist/options/options.html')
+  const optionsUrl = browser.extension.getURL(optionsPage)
   return html`
     <div class="w-80 mt0 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <div class="mb4 flex flex-column justify-center items-center">

@@ -12,7 +12,7 @@ const LRU = require('lru-cache')
 const all = require('it-all')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
+const { createIpfsPathValidator, sameGateway, safeHostname } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
@@ -301,7 +301,7 @@ module.exports = async function init () {
         }
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
-      info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
+      info.currentFqdn = info.currentDnslinkFqdn || safeHostname(url)
       info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }

@@ -147,6 +147,18 @@ function sameGateway (url, gwUrl) {
 }
 exports.sameGateway = sameGateway
 
+const safeHostname = (url) => {
+  // In case vendor-specific thing like brave://settings/extensions
+  // cause errors, we don't throw, just return null
+  try {
+    return new URL(url).hostname
+  } catch (e) {
+    console.error(`[ipfs-companion] safeHostname(url) error for url='${url}'`, e)
+  }
+  return null
+}
+exports.safeHostname = safeHostname
+
 function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
   const ipfsPathValidator = {
     // Test if URL is a Public IPFS resource
