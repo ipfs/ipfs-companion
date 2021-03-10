@@ -200,6 +200,9 @@ async function initBraveSettings (browser, brave) {
   }
 
   if (method !== 'local') {
+    // user picked remote gateway mode, turn Companion off for now
+    // (this way clicking power button in browser action menu will re-run activation flow)
+    await browser.storage.local.set({ active: false })
     // close tab with temporary trigger URI
     await closeIpfsTab(browser, braveIpfsUriTrigger)
     await closeIpfsTab(browser, braveGatewayUrlTrigger)

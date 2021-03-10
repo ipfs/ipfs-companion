@@ -4,7 +4,7 @@
 const { describe, it, before, beforeEach, after } = require('mocha')
 const { expect } = require('chai')
 const browser = require('sinon-chrome')
-const { createRuntimeChecks, hasChromeSocketsForTcp } = require('../../../add-on/src/lib/runtime-checks')
+const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
 const promiseStub = (result) => () => Promise.resolve(result)
 
 describe('runtime-checks.js', function () {
@@ -77,31 +77,6 @@ describe('runtime-checks.js', function () {
     })
   })
 
-  describe('isBrave', function () {
-    beforeEach(function () {
-      browser.flush()
-    })
-
-    it('should return true when expected chrome.sockets.tcp* are present', async function () {
-      chrome.runtime = { id: 'fakeid' }
-      chrome.sockets = { tcpServer: {}, tcp: {} }
-      const runtime = await createRuntimeChecks(browser)
-      expect(runtime.isBrave).to.equal(true)
-      /* TODO: right now its just an alias for hasChromeSocketsForTcpm but
-         we need to find a better way to tell Brave from Opera */
-      expect(runtime.isBrave).to.equal(runtime.hasChromeSocketsForTcp)
-    })
-
-    it('should return false when chrome.sockets.tcp* are missing', async function () {
-      delete chrome.sockets
-      const runtime = await createRuntimeChecks(browser)
-      expect(runtime.isBrave).to.equal(false)
-      /* TODO: right now its just an alias for hasChromeSocketsForTcpm but
-         we need to find a better way to tell Brave from Opera */
-      expect(runtime.isBrave).to.equal(runtime.hasChromeSocketsForTcp)
-    })
-  })
-
   describe('hasNativeProtocolHandler', function () {
     beforeEach(function () {
       browser.flush()
@@ -120,29 +95,6 @@ describe('runtime-checks.js', function () {
       browser.protocol = undefined
       const runtime = await createRuntimeChecks(browser)
       expect(runtime.hasNativeProtocolHandler).to.equal(false)
-    })
-  })
-
-  describe('hasChromeSocketsForTcp', function () {
-    beforeEach(function () {
-      browser.flush()
-    })
-
-    it('should return true when expected chrome.sockets.tcp* are present', async function () {
-      chrome.runtime = { id: 'fakeid' }
-      chrome.sockets = { tcpServer: {}, tcp: {} }
-      const runtime = await createRuntimeChecks(browser)
-      expect(runtime.hasChromeSocketsForTcp).to.equal(true)
-      // static version should return the same value
-      expect(runtime.hasChromeSocketsForTcp).to.equal(hasChromeSocketsForTcp())
-    })
-
-    it('should return false when chrome.sockets.tcp* are missing', async function () {
-      delete chrome.sockets
-      const runtime = await createRuntimeChecks(browser)
-      expect(runtime.hasChromeSocketsForTcp).to.equal(false)
-      // static version should return the same value
-      expect(runtime.hasChromeSocketsForTcp).to.equal(hasChromeSocketsForTcp())
     })
   })
 

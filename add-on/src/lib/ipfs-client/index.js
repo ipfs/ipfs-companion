@@ -9,7 +9,6 @@ log.error = debug('ipfs-companion:client:error')
 const external = require('./external')
 const embedded = require('./embedded')
 const brave = require('./brave')
-const embeddedWithChromeSockets = require('./embedded-chromesockets')
 const { precache } = require('../precache')
 
 // ensure single client at all times, and no overlap between init and destroy
@@ -20,11 +19,21 @@ async function initIpfsClient (browser, opts) {
   if (client) return // await destroyIpfsClient()
   let backend
   switch (opts.ipfsNodeType) {
+    case 'embedded:chromesockets':
+      // TODO: remove this one-time migration after in second half of 2021
+      setTimeout(async () => {
+        log('converting embedded:chromesockets to native external:brave')
+        opts.ipfsNodeType = 'external:brave'
+        await browser.storage.local.set({
+          ipfsNodeType: 'external:brave',
+          ipfsNodeConfig: '{}' // remove chrome-apps config
+        })
+        await browser.tabs.create({ url: 'https://docs.ipfs.io/how-to/companion-node-types/#native' })
+      }, 0)
+      // Halt client init
+      throw new Error('Embedded + chrome.sockets is deprecated. Switching to Native IPFS in Brave.')
     case 'embedded':
       backend = embedded
-      break
-    case 'embedded:chromesockets':
-      backend = embeddedWithChromeSockets
       break
     case 'external:brave':
       backend = brave

@@ -49,15 +49,7 @@ const commonConfig = {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === 'development'
-            }
-          },
-          'css-loader'
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
         test: /\.(png|jpe?g|gif|svg|eot|otf|ttf|woff|woff2)$/i,
@@ -75,33 +67,6 @@ const commonConfig = {
         exclude: /node_modules/,
         test: /\.js$/,
         use: ['babel-loader']
-      },
-      {
-        // hapijs is node-centric and needs additional handling
-        include: /node_modules[/\\](@hapi|joi)/,
-        test: /\.js$/,
-        use: [
-          'remove-hashbag-loader',
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: [
-                [
-                  '@babel/preset-env',
-                  {
-                    targets: {
-                      esmodules: true
-                    }
-                  }
-                ]
-              ],
-              plugins: [
-                'syntax-async-generators',
-                '@babel/plugin-proposal-class-properties'
-              ]
-            }
-          }
-        ]
       }
     ]
   },
@@ -110,29 +75,15 @@ const commonConfig = {
     extensions: ['.js', '.json'],
     alias: {
       buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
-      joi: path.resolve(__dirname, 'node_modules/joi/lib/index.js'), // hapijs needs Joi.binary, which is missing in prebuilt bundle
       url: 'iso-url',
-      stream: 'readable-stream', // cure general insanity
-      http: 'http-node', // chrome.sockets
-      dns: 'http-dns', // chrome.sockets
-      dgram: 'chrome-dgram', // chrome.sockets
-      net: 'chrome-net' // chrome.sockets
+      stream: 'readable-stream' // cure general insanity
     },
     fallback: {
       util: false,
       fs: false,
-      https: require.resolve('https-browserify'), // @hapi (Brave)
-      crypto: false, // @hapi (Brave)
-      path: require.resolve('path-browserify'), // libp2p-tcp (Brave)
-      os: require.resolve('os-browserify/browser'), // libp2p-tcp (Brave)
-      timers: require.resolve('timers-browserify'), // chrome-net (Brave)
-      zlib: require.resolve('browserify-zlib'), // @hapi (Brave)
-      assert: require.resolve('assert/') // peer-info
-    }
-  },
-  resolveLoader: {
-    alias: {
-      'remove-hashbag-loader': path.join(__dirname, './scripts/remove-hashbag-loader') // hapijs
+      path: require.resolve('path-browserify'), // legacy in src/lib/ipfs-proxy
+      os: require.resolve('os-browserify/browser'), // some legacy TBD
+      crypto: false // @hapi (Brave)
     }
   },
   node: {

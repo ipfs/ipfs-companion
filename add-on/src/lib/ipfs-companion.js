@@ -27,24 +27,26 @@ const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
 const { runPendingOnInstallTasks } = require('./on-installed')
 
+let browserActionPort // reuse instance for status updates between on/off toggles
+
 // init happens on addon load in background/background.js
 module.exports = async function init () {
   // INIT
   // ===================================================================
-  var ipfs // ipfs-api instance
-  var state // avoid redundant API reads by utilizing local cache of various states
-  var dnslinkResolver
-  var ipfsPathValidator
-  var modifyRequest
-  var notify
-  var copier
-  var inspector
-  var runtime
-  var contextMenus
-  var apiStatusUpdateInterval
-  var ipfsProxy
+  let ipfs // ipfs-api instance
+  let state // avoid redundant API reads by utilizing local cache of various states
+  let dnslinkResolver
+  let ipfsPathValidator
+  let modifyRequest
+  let notify
+  let copier
+  let inspector
+  let runtime
+  let contextMenus
+  let apiStatusUpdateInterval
+  let ipfsProxy
   // TODO: window.ipfs var ipfsProxyContentScript
-  var ipfsImportHandler
+  let ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
 
@@ -220,8 +222,6 @@ module.exports = async function init () {
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
   const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
 
-  var browserActionPort
-
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)
     if (port.name === browserActionPortName) {
@@ -290,14 +290,14 @@ module.exports = async function init () {
           info.currentTabCid = cid
         } else {
           // run async resolution in the next event loop so it does not block the UI
-          setImmediate(async () => {
+          setTimeout(async () => {
             resolveCache.set(url, [
               await ipfsPathValidator.resolveToImmutableIpfsPath(url),
               await ipfsPathValidator.resolveToPermalink(url),
               await ipfsPathValidator.resolveToCid(url)
             ])
             await sendStatusUpdateToBrowserAction()
-          })
+          }, 0)
         }
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
@@ -625,22 +625,6 @@ module.exports = async function init () {
             useBraveEndpoint(browser)
           } else if (change.oldValue === braveNodeType && change.newValue !== braveNodeType) {
             releaseBraveEndpoint(browser)
-          }
-
-          // TODO: remove when go-ipfs in Brave ships
-          if (change.oldValue === 'external' && change.newValue === 'embedded:chromesockets') {
-            const oldGatewayUrl = (await browser.storage.local.get('customGatewayUrl')).customGatewayUrl
-            const oldApiUrl = (await browser.storage.local.get('ipfsApiUrl')).ipfsApiUrl
-            log(`storing externalNodeConfig: ipfsApiUrl=${oldApiUrl}, customGatewayUrl=${oldGatewayUrl}"`)
-            await browser.storage.local.set({ externalNodeConfig: [oldGatewayUrl, oldApiUrl] })
-          } else if (change.oldValue === 'embedded:chromesockets' && change.newValue === 'external') {
-            const [oldGatewayUrl, oldApiUrl] = (await browser.storage.local.get('externalNodeConfig')).externalNodeConfig
-            log(`restoring externalNodeConfig: ipfsApiUrl=${oldApiUrl}, customGatewayUrl=${oldGatewayUrl}"`)
-            await browser.storage.local.set({
-              ipfsApiUrl: oldApiUrl,
-              customGatewayUrl: oldGatewayUrl,
-              externalNodeConfig: null
-            })
           }
           shouldRestartIpfsClient = true
           state[key] = change.newValue
