@@ -68,9 +68,11 @@ module.exports.contextMenuCopyAddressAtPublicGw = contextMenuCopyAddressAtPublic
 module.exports.contextMenuViewOnGateway = contextMenuViewOnGateway
 module.exports.contextMenuCopyPermalink = contextMenuCopyPermalink
 
-// menu items that are enabled only when API is online
+// menu item ids for things that are enabled only when API is online (static)
+const apiMenuItemIds = new Set([contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuImportToIpfs])
+// menu items that are enabled only when API is online (dynamic)
 const apiMenuItems = new Set()
-// menu items enabled only in IPFS context
+// menu items enabled only in IPFS context (dynamic)
 const ipfsContextItems = new Set()
 
 function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromContext, onCopyCanonicalAddress, onCopyRawCid, onCopyAddressAtPublicGw }) {
@@ -104,7 +106,7 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
       const itemId = `${parentId}_${id}`
       ipfsContextItems.add(itemId)
       // some items also require API access
-      if (id === contextMenuCopyRawCid) {
+      if (apiMenuItemIds.has(id)) {
         apiMenuItems.add(itemId)
       }
       return browser.contextMenus.create({
@@ -112,7 +114,11 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
         parentId,
         title: browser.i18n.getMessage(id),
         contexts: [contextType],
-        documentUrlPatterns: ['*://*/ipfs/*', '*://*/ipns/*'],
+        documentUrlPatterns: [
+          '*://*/ipfs/*', '*://*/ipns/*',
+          '*://*.ipfs.dweb.link/*', '*://*.ipns.dweb.link/*', // TODO: add any custom public gateway from Preferences
+          '*://*.ipfs.localhost/*', '*://*.ipns.localhost/*'
+        ],
         /* no support for 'icons' in Chrome
         icons: {
           '48': '/ui-kit/icons/stroke_copy.svg'
@@ -124,7 +130,8 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
       createSubmenu(parentId, contextType)
       createImportToIpfsMenuItem(parentId, contextMenuImportToIpfs, contextType, { wrapWithDirectory: true, pin: false })
       createCopierMenuItem(parentId, contextMenuCopyAddressAtPublicGw, contextType, onCopyAddressAtPublicGw)
-      createCopierMenuItem(parentId, contextMenuCopyCanonicalAddress, contextType, onCopyCanonicalAddress)
+      // TODO: below needs refactor to support for both IPFS and IPNS, like one added to browser action in https://github.com/ipfs-shipyard/ipfs-companion/pull/937
+      // createCopierMenuItem(parentId, contextMenuCopyCanonicalAddress, contextType, onCopyCanonicalAddress)
       createCopierMenuItem(parentId, contextMenuCopyRawCid, contextType, onCopyRawCid)
     }
 
