@@ -284,11 +284,11 @@
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "\"Embedded + chrome.sockets\" is no longer supported by Chromium. If you are using this option, please migrate to a different node type ASAP.",
+    "message": "\"Embedded + chrome.sockets\" non è più supportato da Chromium. Se stai usando questa opzione, per favore migra ad un tipo di nodo diverso il prima possibile.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
   },
   "option_ipfsNodeType_brave_description": {
-    "message": "Imposta \"Fornito da Brave\" per sfruttare il supporto IPFS nativo di Brave browser.",
+    "message": "Imposta \"Offerto da Brave\" per sfruttare il supporto IPFS nativo di Brave browser.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -312,7 +312,7 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_ipfsNodeType_brave": {
-    "message": "Fornito da Brave",
+    "message": "Offerto da Brave",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
   },
   "option_hint_url": {
@@ -736,7 +736,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "You can run IPFS directly in your browser — no need for IPFS Desktop or the command line. Open <0>Companion Preferences</0> and set the IPFS node type to “Provided by Brave”.",
+    "message": "Puoi eseguire IPFS direttamente nel tuo browser - non c'è bisogno di IPFS Desktop o della riga di comando. Apri <0>Preferenze Companion</0> ed imposta il tipo di nodo IPFS su \"Offerto da Brave\".",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {

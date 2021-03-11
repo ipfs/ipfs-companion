@@ -8,11 +8,11 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerNewVersionTitle": {
-    "message": "IPFS Companion was updated to a new version! Click for details.",
+    "message": "Установлена новая версия IPFS Companion! Нажмите для деталей.",
     "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
   },
   "panel_headerActiveToggleTitle": {
-    "message": "Toggle all IPFS integrations",
+    "message": "Переключить все интеграции IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -24,7 +24,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusGatewayAddressTitle": {
-    "message": "The URL of the gateway, either public or local, you are using to fetch content (change this in Preferences)",
+    "message": "URL публичного или локального шлюза, используемый вами для получения содержимого (изменить его в Настройках)",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
@@ -32,7 +32,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusApiAddressTitle": {
-    "message": "The URL of your local node's API",
+    "message": "URL API вашего локального узла",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
@@ -56,11 +56,11 @@
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
-    "message": "Import files to IPFS and copy a publicly shareable link to your clipboard.",
+    "message": "Импортируйте файлы в IPFS и скопируйте публичную ссылку для раздачи в буфер обмена.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
-    "message": "My Node",
+    "message": "Мой узел",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
