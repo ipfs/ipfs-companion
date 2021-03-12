@@ -118,7 +118,7 @@ async function processFiles (state, emitter, files) {
       // (https://bugs.chromium.org/p/chromium/issues/detail?id=112163) when
       // crossing process boundary, which enables streaming upload of big files
       // (4GB+) without buffering entire thing.
-      ipfs = await externalApiClient.init(ipfsCompanion.state)
+      ipfs = await externalApiClient.init(browser, ipfsCompanion.state)
       // Note: at the time of writing this it was possible to use SharedWorker,
       // but it felt brittle given Google's approach to browser extension APIs,
       // and this way seems to be more future-proof.

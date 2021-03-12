@@ -277,15 +277,19 @@
   },
   "option_ipfsNodeType_external_description": {
     "message": "HTTP UPA kullanarak yerel bir düğüme bağlanmak için \"Harici\" olarak ayarlayın.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_embedded_description": {
     "message": "Tarayıcınızda doğrudan bir js-ipfs düğümünü çalıştırmak için \"Gömülü\" olarak ayarlayın. (Bu deneysel özelliğin sınırlamaları hakkında bilgi edinmek için \"Daha fazlasını okuyun\" 'u tıklayın.)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Chrome Soketleriyle Gömülü: Chrome.sockets UPA'larına erişerek tarayıcınızda js-ipfs düğümünü çalıştırın (ayrıntılar aşağıdaki bağlantıdadır)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "message": "\"Embedded + chrome.sockets\" artık Chromium tarafından desteklenmemektedir. Bu seçeneği kullanıyorsanız, lütfen en kısa sürede farklı bir düğüm türüne geçin.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
+  },
+  "option_ipfsNodeType_brave_description": {
+    "message": "Brave tarayıcının yerel IPFS desteğinden yararlanmak için \"Brave tarafından sağlandı\" olarak ayarlayın.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
     "message": "IPFS Düğüm Yapılandırması",
@@ -306,6 +310,18 @@
   "option_ipfsNodeType_embedded_chromesockets": {
     "message": "Gömülü + chrome.sockets",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
+  },
+  "option_ipfsNodeType_brave": {
+    "message": "Brave tarafından sağlandı",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
+  },
+  "option_hint_url": {
+    "message": "Alt-yol olmadan URL girin",
+    "description": "An option description on the Preferences screen (option_hint_url)"
+  },
+  "option_hint_readonly": {
+    "message": "Bu değer salt okunurdur",
+    "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
     "message": "Ağ geçitleri",
@@ -434,6 +450,10 @@
   "option_experimental": {
     "message": "deneysel",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
+  },
+  "option_deprecated": {
+    "message": "kullanımdan kaldırıldı",
+    "description": "Warning label added to deprecated options on the Preferences screen (option_deprecated)"
   },
   "option_experiments_warning": {
     "message": "Uyarı! Bu deneysel özellikler devam eden çalışmalardır ve kullanılabilirlik ve işlevsellik açısından değişikliklere tabidir.",
@@ -710,6 +730,14 @@
   "page_landingWelcome_installSteps_notRunning_title": {
     "message": "IPFS çalışmıyor",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
+  },
+  "page_landingWelcome_installSteps_brave_title": {
+    "message": "Brave kullanıcıları",
+    "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
+  },
+  "page_landingWelcome_installSteps_brave_install": {
+    "message": "IPFS'yi doğrudan tarayıcınızda çalıştırabilirsiniz - IPFS Masaüstü veya komut satırına gerek yoktur. Open <0>Companion Tercihlerini</0> açın ve IPFS düğüm türünü “Brave tarafından sağlandı” olarak ayarlayın.",
+    "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
     "message": "IPFS Masaüstü kullanıcıları",

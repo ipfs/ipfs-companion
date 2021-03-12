@@ -12,10 +12,11 @@ const LRU = require('lru-cache')
 const all = require('it-all')
 const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
 const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator, sameGateway } = require('./ipfs-path')
+const { createIpfsPathValidator, sameGateway, safeHostname } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
+const { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } = require('./ipfs-client/brave')
 const { createIpfsImportHandler, formatImportDirectory } = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
@@ -24,26 +25,28 @@ const { createRuntimeChecks } = require('./runtime-checks')
 const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
 const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
-const { showPendingLandingPages } = require('./on-installed')
+const { runPendingOnInstallTasks } = require('./on-installed')
+
+let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
 module.exports = async function init () {
   // INIT
   // ===================================================================
-  var ipfs // ipfs-api instance
-  var state // avoid redundant API reads by utilizing local cache of various states
-  var dnslinkResolver
-  var ipfsPathValidator
-  var modifyRequest
-  var notify
-  var copier
-  var inspector
-  var runtime
-  var contextMenus
-  var apiStatusUpdateInterval
-  var ipfsProxy
+  let ipfs // ipfs-api instance
+  let state // avoid redundant API reads by utilizing local cache of various states
+  let dnslinkResolver
+  let ipfsPathValidator
+  let modifyRequest
+  let notify
+  let copier
+  let inspector
+  let runtime
+  let contextMenus
+  let apiStatusUpdateInterval
+  let ipfsProxy
   // TODO: window.ipfs var ipfsProxyContentScript
-  var ipfsImportHandler
+  let ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
 
@@ -59,7 +62,7 @@ module.exports = async function init () {
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
-        ipfs = await initIpfsClient(state)
+        ipfs = await initIpfsClient(browser, state)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -88,7 +91,7 @@ module.exports = async function init () {
     await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
     setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await showPendingLandingPages()
+    await runPendingOnInstallTasks()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -219,8 +222,6 @@ module.exports = async function init () {
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
   const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
 
-  var browserActionPort
-
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)
     if (port.name === browserActionPortName) {
@@ -251,6 +252,7 @@ module.exports = async function init () {
     if (!browserActionPort) return
     const dropSlash = url => url.replace(/\/$/, '')
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+    const { version } = browser.runtime.getManifest()
     const info = {
       active: state.active,
       ipfsNodeType: state.ipfsNodeType,
@@ -264,7 +266,7 @@ module.exports = async function init () {
       redirect: state.redirect,
       enabledOn: state.enabledOn,
       disabledOn: state.disabledOn,
-      showUpdateIndicator: state.dismissedUpdate !== browser.runtime.getManifest().version,
+      newVersion: state.dismissedUpdate !== version ? version : null,
       currentTab
     }
     try {
@@ -288,18 +290,18 @@ module.exports = async function init () {
           info.currentTabCid = cid
         } else {
           // run async resolution in the next event loop so it does not block the UI
-          setImmediate(async () => {
+          setTimeout(async () => {
             resolveCache.set(url, [
               await ipfsPathValidator.resolveToImmutableIpfsPath(url),
               await ipfsPathValidator.resolveToPermalink(url),
               await ipfsPathValidator.resolveToCid(url)
             ])
             await sendStatusUpdateToBrowserAction()
-          })
+          }, 0)
         }
       }
       info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
-      info.currentFqdn = info.currentDnslinkFqdn || new URL(url).hostname
+      info.currentFqdn = info.currentDnslinkFqdn || safeHostname(url)
       info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
@@ -619,22 +621,10 @@ module.exports = async function init () {
           shouldStopIpfsClient = !state.active
           break
         case 'ipfsNodeType':
-          // Switching between External and Embeedded HTTP Gateway in Brave is tricky.
-          // For now we remove user confusion by persisting and restoring the External config.
-          // TODO: refactor as a part of https://github.com/ipfs-shipyard/ipfs-companion/issues/491
-          if (change.oldValue === 'external' && change.newValue === 'embedded:chromesockets') {
-            const oldGatewayUrl = (await browser.storage.local.get('customGatewayUrl')).customGatewayUrl
-            const oldApiUrl = (await browser.storage.local.get('ipfsApiUrl')).ipfsApiUrl
-            log(`storing externalNodeConfig: ipfsApiUrl=${oldApiUrl}, customGatewayUrl=${oldGatewayUrl}"`)
-            await browser.storage.local.set({ externalNodeConfig: [oldGatewayUrl, oldApiUrl] })
-          } else if (change.oldValue === 'embedded:chromesockets' && change.newValue === 'external') {
-            const [oldGatewayUrl, oldApiUrl] = (await browser.storage.local.get('externalNodeConfig')).externalNodeConfig
-            log(`restoring externalNodeConfig: ipfsApiUrl=${oldApiUrl}, customGatewayUrl=${oldGatewayUrl}"`)
-            await browser.storage.local.set({
-              ipfsApiUrl: oldApiUrl,
-              customGatewayUrl: oldGatewayUrl,
-              externalNodeConfig: null
-            })
+          if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
+            useBraveEndpoint(browser)
+          } else if (change.oldValue === braveNodeType && change.newValue !== braveNodeType) {
+            releaseBraveEndpoint(browser)
           }
           shouldRestartIpfsClient = true
           state[key] = change.newValue
@@ -705,7 +695,7 @@ module.exports = async function init () {
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {
         log('stoping ipfs client due to config changes', changes)
-        await destroyIpfsClient()
+        await destroyIpfsClient(browser)
       } catch (err) {
         console.error('[ipfs-companion] Failed to destroy IPFS client', err)
         notify('notify_stopIpfsNodeErrorTitle', err.message)
@@ -717,7 +707,7 @@ module.exports = async function init () {
 
       try {
         log('starting ipfs client with the new config')
-        ipfs = await initIpfsClient(state)
+        ipfs = await initIpfsClient(browser, state)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -792,7 +782,7 @@ module.exports = async function init () {
       }
 
       if (ipfs) {
-        await destroyIpfsClient()
+        await destroyIpfsClient(browser)
         ipfs = null
       }
     }

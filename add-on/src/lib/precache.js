@@ -1,29 +1,21 @@
 'use strict'
 /* eslint-env browser, webextensions */
-const CID = require('cids')
+// const CID = require('cids')
 
-const Tar = require('it-tar')
-const pipe = require('it-pipe')
-const all = require('it-all')
-const concat = require('it-concat')
+// const Tar = require('it-tar')
+// const pipe = require('it-pipe')
+// const all = require('it-all')
+// const concat = require('it-concat')
 
 const debug = require('debug')
 const log = debug('ipfs-companion:precache')
 log.error = debug('ipfs-companion:precache:error')
-
-// TODO: can be removed when embedded:chromesockets is gone
-module.exports.braveJsIpfsWebuiCid = 'bafybeigkbbjnltbd4ewfj7elajsbnjwinyk6tiilczkqsibf3o7dcr6nn4' //  v2.9.0 for js-ipfs in Brave (import in newer ones does not work)
 
 /**
  * Adds important assets such as Web UI to the local js-ipfs-repo.
  * This ensures they load instantly, even in offline environments.
  */
 module.exports.precache = async (ipfs, state) => {
-  // simplified prefetch over HTTP when in Brave
-  if (state.ipfsNodeType === 'embedded:chromesockets') {
-    return preloadOverHTTP(log, ipfs, state, module.exports.braveJsIpfsWebuiCid)
-  }
-
   const roots = []
   // find out the content path of webui, and add it to precache list
   try {
@@ -81,6 +73,7 @@ async function inRepo (ipfs, cid) {
 
 // Downloads CID from a public gateway
 // (alternative to ipfs.refs -r)
+/*
 async function preloadOverHTTP (log, ipfs, state, cid) {
   const url = `${state.pubGwURLString}api/v0/get?arg=${cid}&archive=true`
   try {
@@ -138,3 +131,4 @@ async function * streamTar (reader) {
     if (typeof reader.releaseLock === 'function') reader.releaseLock()
   }
 }
+*/

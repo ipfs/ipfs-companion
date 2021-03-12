@@ -1,5 +1,5 @@
 'use strict'
-const { describe, it, before, after } = require('mocha')
+const { describe, it, before, beforeEach, after } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
 const sinon = require('sinon')
@@ -21,7 +21,7 @@ function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
 module.exports.spoofDnsTxtRecord = spoofDnsTxtRecord
 
 function spoofCachedDnslink (fqdn, dnslinkResolver, value) {
-  // spoofs existence of valid DNS TXT record (used on cache miss)
+  // spoofs existence of valid DNS TXT record (used on cache hit)
   dnslinkResolver.setDnslink(fqdn, value)
 }
 module.exports.spoofCachedDnslink = spoofCachedDnslink
@@ -58,10 +58,15 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
     global.URL = URL
   })
 
-  const getState = () => Object.assign(initState(testOptions), {
-    ipfsNodeType: 'external',
-    dnslinkPolicy: 'detectIpfsPathHeader',
-    peerCount: 1
+  let getState
+  beforeEach(() => {
+    // ensure each case uses clean state
+    getState = () => Object.assign(initState(testOptions), {
+      ipfsNodeType: 'external',
+      dnslinkPolicy: 'detectIpfsPathHeader',
+      redirect: true,
+      peerCount: 1
+    })
   })
   const getExternalNodeState = () => Object.assign(getState(), { ipfsNodeType: 'external' })
   const getEmbeddedNodeState = () => Object.assign(getState(), { ipfsNodeType: 'embedded' })
@@ -85,6 +90,18 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
       // so companion does not need to handle that
       expect(dnslinkResolver.dnslinkAtGateway(url.toString()))
         .to.equal('http://localhost:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
+    })
+    it('[external node] should return redirect to public gateway if dnslink is present in cache but redirect to local gw is off', function () {
+      const oldState = getState
+      getState = () => Object.assign(oldState(), { redirect: false })
+      const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
+      const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
+      dnslinkResolver.setDnslink(url.hostname, '/ipfs/bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge')
+      expectNoDnsTxtRecordLookup(url.hostname, dnslinkResolver)
+      // note: locahost will redirect to subdomain if its go-ipfs >0.5,
+      // so companion does not need to handle that
+      expect(dnslinkResolver.dnslinkAtGateway(url.toString()))
+        .to.equal('https://gateway.foobar.io/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
     })
     it('[embedded node] should return redirect to public gateway if dnslink is present in cache', function () {
       const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
@@ -241,6 +258,16 @@ describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
       const url = `https://${fqdn}.ipns.dweb.link/some/path?ds=sdads#dfsdf`
       const dnslinkResolver = createDnslinkResolver(getState)
       spoofDnsTxtRecord(fqdn, dnslinkResolver, dnslinkValue)
+      expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
+    })
+    it('should match <dns-label-inlined-fqdn>.ipns on public subdomain gateway', function () {
+      // Context: https://github.com/ipfs/in-web-browsers/issues/169
+      const fqdn = 'dnslink-site.com'
+      const fqdnInDNSLabel = 'dnslink--site-com'
+      const url = `https://${fqdnInDNSLabel}.ipns.dweb.link/some/path?ds=sdads#dfsdf`
+      const dnslinkResolver = createDnslinkResolver(getState)
+      spoofCachedDnslink(fqdnInDNSLabel, dnslinkResolver, false)
+      spoofCachedDnslink(fqdn, dnslinkResolver, dnslinkValue)
       expect(dnslinkResolver.findDNSLinkHostname(url)).to.equal(fqdn)
     })
   })

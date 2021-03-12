@@ -59,7 +59,7 @@ module.exports = function createDnslinkResolver (getState) {
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
         const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
-        const gateway = state.localGwAvailable ? state.gwURLString : state.pubGwURLString
+        const gateway = state.redirect && state.localGwAvailable ? state.gwURLString : state.pubGwURLString
         return pathAtHttpGateway(ipnsPath, gateway)
       }
     },
@@ -122,7 +122,6 @@ module.exports = function createDnslinkResolver (getState) {
     readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
-      // TODO: fix DNS resolver for ipfsNodeType='embedded:chromesockets', for now use ipfs.io
       if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
         // Use gw port so it can be a GET:
         // Chromium does not execute onBeforeSendHeaders for synchronous calls
@@ -138,7 +137,7 @@ module.exports = function createDnslinkResolver (getState) {
       // js-ipfs-api does not provide method for fetching this
       // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
       // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
-      const apiCall = `${apiProvider}api/v0/dns/${fqdn}?r=true`
+      const apiCall = `${apiProvider}api/v0/name/resolve/${fqdn}?r=false`
       const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
       // synchronous mode with small timeout
       // (it is okay, because we do it only once, then it is cached and read via readAndCacheDnslink)

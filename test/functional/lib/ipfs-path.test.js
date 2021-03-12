@@ -3,7 +3,7 @@ const { stub } = require('sinon')
 const { describe, it, beforeEach, afterEach } = require('mocha')
 const { expect } = require('chai')
 const { URL } = require('url')
-const { ipfsContentPath, createIpfsPathValidator, sameGateway } = require('../../../add-on/src/lib/ipfs-path')
+const { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname } = require('../../../add-on/src/lib/ipfs-path')
 const { initState } = require('../../../add-on/src/lib/state')
 const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
 const { optionDefaults } = require('../../../add-on/src/lib/options')
@@ -41,6 +41,7 @@ describe('ipfs-path.js', function () {
     if (ipfs.resolve.reset) ipfs.resolve.reset()
   })
 
+  // TODO: move to some lib?
   describe('ipfsContentPath', function () {
     it('should detect /ipfs/ path in URL from a public gateway', function () {
       const url = 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
@@ -86,6 +87,18 @@ describe('ipfs-path.js', function () {
       const url = 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest'
       expect(ipfsContentPath(url)).to.equal('/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html')
     })
+    it('should resolve CID(libp2p-key)-in-subdomain URL to IPNS path', function () {
+      const url = 'https://k2k4r8ncs1yoluq95unsd7x2vfhgve0ncjoggwqx9vyh3vl8warrcp15.ipns.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsContentPath(url)).to.equal('/ipns/k2k4r8ncs1yoluq95unsd7x2vfhgve0ncjoggwqx9vyh3vl8warrcp15/wiki/Mars.html')
+    })
+    it('should resolve dnslink-in-subdomain URL to IPNS path', function () {
+      const url = 'http://en.wikipedia-on-ipfs.org.ipns.localhost:8080/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsContentPath(url)).to.equal('/ipns/en.wikipedia-on-ipfs.org/wiki/Mars.html')
+    })
+    it('should resolve inlined-dnslink-in-subdomain URL to IPNS path', function () {
+      const url = 'https://en-wikipedia--on--ipfs-org.ipns.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsContentPath(url)).to.equal('/ipns/en.wikipedia-on-ipfs.org/wiki/Mars.html')
+    })
     it('should return null if there is no valid path for input URL', function () {
       const url = 'https://foo.io/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
       expect(ipfsContentPath(url)).to.equal(null)
@@ -93,6 +106,65 @@ describe('ipfs-path.js', function () {
     it('should return null if there is no valid path for input path', function () {
       const path = '/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
       expect(ipfsContentPath(path)).to.equal(null)
+    })
+  })
+
+  describe('safeHostname', function () {
+    it('should return URL.hostname on http URL', function () {
+      const url = 'https://example.com:8080/path/file.txt'
+      expect(safeHostname(url)).to.equal('example.com')
+    })
+    it('should return null on error', function () {
+      const url = ''
+      expect(safeHostname(url)).to.equal(null)
+    })
+  })
+
+  // TODO: move to some lib?
+  describe('ipfsUri', function () {
+    it('should detect /ipfs/ path in URL from a public gateway', function () {
+      const url = 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      expect(ipfsUri(url)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+    })
+    it('should detect /ipfs/ path in detached IPFS path', function () {
+      const path = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      expect(ipfsUri(path)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+    })
+    it('should detect /ipns/ path in URL from a public gateway', function () {
+      const url = 'https://ipfs.io/ipns/libp2p.io/bundles/'
+      expect(ipfsUri(url)).to.equal('ipns://libp2p.io/bundles/')
+    })
+    it('should detect /ipns/ path in detached IPFS path', function () {
+      const path = '/ipns/libp2p.io/bundles/'
+      expect(ipfsUri(path)).to.equal('ipns://libp2p.io/bundles/')
+    })
+    it('should keep search and hash from original URL', function () {
+      const url = 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
+      expect(ipfsUri(url)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+    })
+    it('should preserve search and hash in detached IPFS path', function () {
+      const path = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
+      expect(ipfsUri(path)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+    })
+    it('should decode special characters in URL', function () {
+      const url = 'https://ipfs.io/ipfs/Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1%20-%20Barrel%20-%20Part%201'
+      expect(ipfsUri(url)).to.equal('ipfs://Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1 - Barrel - Part 1')
+    })
+    it('should decode special characters in path', function () {
+      const path = '/ipfs/Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1%20-%20Barrel%20-%20Part%201'
+      expect(ipfsUri(path)).to.equal('ipfs://Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1 - Barrel - Part 1')
+    })
+    it('should resolve CID-in-subdomain URL to IPFS path', function () {
+      const url = 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(ipfsUri(url)).to.equal('ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('should return null if there is no valid path for input URL', function () {
+      const url = 'https://foo.io/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
+      expect(ipfsUri(url)).to.equal(null)
+    })
+    it('should return null if there is no valid path for input path', function () {
+      const path = '/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+      expect(ipfsUri(path)).to.equal(null)
     })
   })
 

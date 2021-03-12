@@ -64,7 +64,7 @@ async function registerSubdomainProxy (getState, runtime, notify) {
 }
 
 // storing listener for later
-var onRequestProxyListener
+let onRequestProxyListener
 
 // registerSubdomainProxyFirefox sets proxy using API available in Firefox
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/proxy/onRequest

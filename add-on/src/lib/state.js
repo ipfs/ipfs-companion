@@ -2,7 +2,6 @@
 /* eslint-env browser, webextensions */
 
 const { safeURL, isHostname } = require('./options')
-const { braveJsIpfsWebuiCid } = require('./precache')
 const offlinePeerCount = -1
 
 function initState (options, overrides) {
@@ -51,11 +50,6 @@ function initState (options, overrides) {
     get: function () {
       // Did user opt-in for rolling release published on DNSLink?
       if (state.useLatestWebUI) return `${state.gwURLString}ipns/webui.ipfs.io/`
-
-      // Below is needed to make webui work for embedded js-ipfs in Brave
-      if (state.ipfsNodeType === 'embedded:chromesockets' && braveJsIpfsWebuiCid) {
-        return `${state.gwURLString}ipfs/${braveJsIpfsWebuiCid}/`
-      }
       return `${state.apiURLString}webui`
     }
   })

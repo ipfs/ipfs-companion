@@ -5,7 +5,7 @@ const browser = require('webextension-polyfill')
 const isIPFS = require('is-ipfs')
 const all = require('it-all')
 const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
-const { welcomePage } = require('../../lib/on-installed')
+const { welcomePage, optionsPage } = require('../../lib/constants')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } = require('../../lib/context-menus')
 
 // The store contains and mutates the state for the app
@@ -163,9 +163,16 @@ module.exports = (state, emitter) => {
 
   emitter.on('openReleaseNotes', async () => {
     const { version } = browser.runtime.getManifest()
-    const url = `https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v${version}`
+    const stableChannel = version.match(/\./g).length === 2
+    let url
     try {
-      await browser.storage.local.set({ dismissedUpdate: version })
+      if (stableChannel) {
+        url = `https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v${version}`
+        await browser.storage.local.set({ dismissedUpdate: version })
+      } else {
+        // swap URL and do not dismiss
+        url = 'https://github.com/ipfs-shipyard/ipfs-companion/issues/964'
+      }
       // Note: opening tab needs to happen after storage.local.set because in Chromium 86
       // it triggers a premature window.close, which aborts storage update
       await browser.tabs.create({ url })
@@ -181,7 +188,7 @@ module.exports = (state, emitter) => {
       .catch((err) => {
         console.error('runtime.openOptionsPage() failed, opening options page in tab instead.', err)
         // brave: fallback to opening options page as a tab.
-        browser.tabs.create({ url: browser.extension.getURL('dist/options/options.html') })
+        browser.tabs.create({ url: browser.extension.getURL(optionsPage) })
       })
   })
 
@@ -218,8 +225,9 @@ module.exports = (state, emitter) => {
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
 
+      const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference
-      if (!currentDnslinkFqdn || !isIPFS.ipnsUrl(currentTab.url)) {
+      if (!currentDnslinkFqdn || !isIPFS.ipnsPath(path)) {
         // No DNSLink, reload URL as-is
         await browser.tabs.reload(currentTab.id)
       } else {
@@ -228,7 +236,6 @@ module.exports = (state, emitter) => {
         // from  http?://{fqdn}.ipns.gateway.tld/some/path
         // to    http://{fqdn}/some/path
         // (defaulting to http: https websites will have HSTS or a redirect)
-        const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
         const originalUrl = path.replace(/^.*\/ipns\//, 'http://')
         await browser.tabs.update(currentTab.id, {
           // FF only: loadReplace: true,

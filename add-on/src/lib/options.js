@@ -2,14 +2,10 @@
 
 const isIP = require('is-ip')
 const isFQDN = require('is-fqdn')
-const { hasChromeSocketsForTcp } = require('./runtime-checks')
-
-// TODO: enable by default when embedded node is performant enough
-const DEFAULT_TO_EMBEDDED_GATEWAY = false && hasChromeSocketsForTcp()
 
 exports.optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
-  ipfsNodeType: buildDefaultIpfsNodeType(),
+  ipfsNodeType: 'external',
   ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
   publicGatewayUrl: 'https://ipfs.io',
   publicSubdomainGatewayUrl: 'https://dweb.link',
@@ -28,8 +24,8 @@ exports.optionDefaults = Object.freeze({
   catchUnhandledProtocols: true,
   displayNotifications: true,
   displayReleaseNotes: false,
-  customGatewayUrl: buildCustomGatewayUrl(),
-  ipfsApiUrl: buildIpfsApiUrl(),
+  customGatewayUrl: 'http://localhost:8080',
+  ipfsApiUrl: 'http://127.0.0.1:5001',
   ipfsApiPollMs: 3000,
   ipfsProxy: true, // window.ipfs
   logNamespaces: 'jsipfs*,ipfs*,libp2p:mdns*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*,-ipfs:http-api*',
@@ -38,23 +34,6 @@ exports.optionDefaults = Object.freeze({
   dismissedUpdate: null,
   openViaWebUI: true
 })
-
-function buildCustomGatewayUrl () {
-  // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
-  const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 9091 : 8080
-  return `http://localhost:${port}`
-}
-
-function buildIpfsApiUrl () {
-  // TODO: make more robust (sync with buildDefaultIpfsNodeConfig)
-  const port = DEFAULT_TO_EMBEDDED_GATEWAY ? 5003 : 5001
-  return `http://127.0.0.1:${port}`
-}
-
-function buildDefaultIpfsNodeType () {
-  // Right now Brave is the only vendor giving us access to chrome.sockets
-  return DEFAULT_TO_EMBEDDED_GATEWAY ? 'embedded:chromesockets' : 'external'
-}
 
 function buildDefaultIpfsNodeConfig () {
   return JSON.stringify({
@@ -188,17 +167,6 @@ exports.migrateOptions = async (storage, debug) => {
     await storage.remove('dnslink')
   }
 
-  // ~ v2.8.x + Brave
-  // Upgrade js-ipfs to js-ipfs + chrome.sockets
-  const { ipfsNodeType } = await storage.get('ipfsNodeType')
-  if (ipfsNodeType === 'embedded' && hasChromeSocketsForTcp()) {
-    // migrating ipfsNodeType to embedded:chromesockets
-    await storage.set({
-      ipfsNodeType: 'embedded:chromesockets',
-      ipfsNodeConfig: buildDefaultIpfsNodeConfig()
-    })
-  }
-
   // ~ v2.9.x: migrating noRedirectHostnames → noIntegrationsHostnames
   // https://github.com/ipfs-shipyard/ipfs-companion/pull/830
   const { noRedirectHostnames } = await storage.get('noRedirectHostnames')
@@ -247,4 +215,6 @@ exports.migrateOptions = async (storage, debug) => {
       await storage.set({ displayReleaseNotes: false })
     }
   }
+
+  // TODO: refactor this, so migrations only run once (like https://github.com/sindresorhus/electron-store#migrations)
 }
