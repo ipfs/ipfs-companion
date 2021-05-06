@@ -283,10 +283,6 @@
     "message": "Tarayıcınızda doğrudan bir js-ipfs düğümünü çalıştırmak için \"Gömülü\" olarak ayarlayın. (Bu deneysel özelliğin sınırlamaları hakkında bilgi edinmek için \"Daha fazlasını okuyun\" 'u tıklayın.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
-  "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "\"Embedded + chrome.sockets\" artık Chromium tarafından desteklenmemektedir. Bu seçeneği kullanıyorsanız, lütfen en kısa sürede farklı bir düğüm türüne geçin.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "Brave tarayıcının yerel IPFS desteğinden yararlanmak için \"Brave tarafından sağlandı\" olarak ayarlayın.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -306,10 +302,6 @@
   "option_ipfsNodeType_embedded": {
     "message": "Gömülü",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
-  },
-  "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Gömülü + chrome.sockets",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Brave tarafından sağlandı",

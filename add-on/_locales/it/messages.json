@@ -283,10 +283,6 @@
     "message": "Imposta su \"Integrato\" per avviare un nodo js-ipfs direttamente nel tuo browser (Clicca \"Leggi di più\" per imparare le limitazioni di questa funzionalità sperimentale)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
-  "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "\"Embedded + chrome.sockets\" non è più supportato da Chromium. Se stai usando questa opzione, per favore migra ad un tipo di nodo diverso il prima possibile.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "Imposta \"Offerto da Brave\" per sfruttare il supporto IPFS nativo di Brave browser.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -306,10 +302,6 @@
   "option_ipfsNodeType_embedded": {
     "message": "Integrato",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
-  },
-  "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Integrato + chrome.sockets",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Offerto da Brave",

@@ -283,10 +283,6 @@
     "message": "ブラウザで直接 js-ipfs ノードを実行するには、\"Embedded\"に設定してください。（実験的な機能の制限について知るには\"続きを読む\"をクリック）",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
-  "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "\"Embedded + chrome.sockets\" is no longer supported by Chromium. If you are using this option, please migrate to a different node type ASAP.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "Set to \"Provided by Brave\" to leverage the Brave browser's native IPFS support.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -306,10 +302,6 @@
   "option_ipfsNodeType_embedded": {
     "message": "埋め込み",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
-  },
-  "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "埋め込み + chrome.sockets",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Braveによって提供",
@@ -460,7 +452,7 @@
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
-    "message": "Use Latest Version of IPFS Web UI",
+    "message": "最新バージョンの IPFS Web UI を使用",
     "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
   },
   "option_useLatestWebUI_description": {

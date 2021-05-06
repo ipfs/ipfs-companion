@@ -283,10 +283,6 @@
     "message": "设置为“嵌入式的”以在你的浏览器里直接运行 js-ipfs 节点（点击“了解更多”来了解该实验性的特性的局限性）",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
-  "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Chromium已经不再支持Embedded + chrome.sockets特性，如果您正在使用此选项，请尽快迁移到不同的节点类型。",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "设置为“Brave支持”以利用Brave浏览器的原生支持IPFS的特性。",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -306,10 +302,6 @@
   "option_ipfsNodeType_embedded": {
     "message": "嵌入",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
-  },
-  "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "嵌入式并使用 chrome.sockets 接口",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Brave支持",

@@ -283,10 +283,6 @@
     "message": "اضبط على \"Embedded\" لتشغيل عقدة js-ipfs مباشرة في متصفحك. (انقر فوق \"قراءة المزيد\" للتعرف على قيود هذه الميزة التجريبية.)",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
-  "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "لم يعد \"Embedded + chrome.sockets\" مدعومًا من Chromium. إذا كنت تستخدم هذا الخيار ، فيرجى الانتقال إلى نوع عقدة مختلف في أسرع وقت ممكن.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_chromesockets_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "اضبط على \"المقدمة من Brave\" للاستفادة من دعم IPFS الأصلي لمتصفح Brave.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -306,10 +302,6 @@
   "option_ipfsNodeType_embedded": {
     "message": "المضمنة",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
-  },
-  "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "مضمن + chrome.sockets",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
   },
   "option_ipfsNodeType_brave": {
     "message": "مقدمة من Brave",
