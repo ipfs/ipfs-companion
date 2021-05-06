@@ -3,7 +3,7 @@
 
 [![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
 [![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
-[![i18n status](https://img.shields.io/badge/i18n-translated-blue.svg)](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/LOCALIZATION-NOTES.md)
+[![i18n status](https://img.shields.io/badge/i18n-translated-blue.svg)](https://github.com/ipfs-shipyard/ipfs-companion/blob/main/LOCALIZATION-NOTES.md)
 [![#ipfs-in-web-browsers](https://img.shields.io/badge/irc-%23ipfs--in--web--browsers-808080.svg)](https://webchat.freenode.net/?channels=ipfs-in-web-browsers)
 
 ![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmSsGphTN1eWMhkFFNFb23jWTXyhNbo47PF9FbmC6ZaRNg)
@@ -69,7 +69,7 @@ You can disable and re-enable local gateway redirects by several means:
 Your IPFS node is exposed as `window.ipfs` on every web page.
 Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
 It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
-Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
+Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/main/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
 -->
 
 ### Access frequently-used IPFS actions from your browser bar
