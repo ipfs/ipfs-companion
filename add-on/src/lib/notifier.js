@@ -20,7 +20,7 @@ function createNotifier (getState) {
       try {
         return await browser.notifications.create({
           type: 'basic',
-          iconUrl: browser.extension.getURL('icons/ipfs-logo-on.svg'),
+          iconUrl: browser.runtime.getURL('icons/ipfs-logo-on.svg'),
           title: title,
           message: message
         })

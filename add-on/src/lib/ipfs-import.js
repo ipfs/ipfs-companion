@@ -8,9 +8,15 @@ log.error = debug('ipfs-companion:import:error')
 const browser = require('webextension-polyfill')
 
 const { redirectOptOutHint } = require('./ipfs-request')
+const { ipfsContentPath } = require('./ipfs-path')
+
+module.exports.browserActionFilesCpImportCurrentTab = 'browserActionFilesCpImportCurrentTab'
 
 module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, runtime, copier) => {
-  const { resolveToPublicUrl } = ipfsPathValidator
+  const {
+    resolveToPublicUrl,
+    resolveToCid
+  } = ipfsPathValidator
   const ipfsImportHandler = {
     getIpfsPathAndNativeAddress (cid) {
       const state = getState()
@@ -33,9 +39,8 @@ module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, 
 
     async openFilesAtWebUI (mfsPath) {
       const state = getState()
-      await browser.tabs.create({
-        url: `${state.webuiRootUrl}#/files${mfsPath}`
-      })
+      const url = `${state.webuiRootUrl}#/files${mfsPath}`
+      await browser.tabs.create({ url })
     },
 
     async copyImportResultsToFiles (results, importDir) {
@@ -82,7 +87,41 @@ module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, 
           }
         }
       }
+    },
+
+    async filesCpImportCurrentTab (browser) {
+      try {
+        const {
+          copyShareLink,
+          preloadFilesAtPublicGateway,
+          openFilesAtWebUI
+        } = this
+        const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+        const importDir = module.exports.formatImportDirectory(getState().importDir)
+        const ipfs = getIpfs()
+        const contentPath = ipfsContentPath(currentTab.url, { keepURIParams: false })
+        const pathSegments = contentPath.split('/').filter(Boolean)
+        const namedImport = typeof pathSegments[2] !== 'undefined'
+        const resolvedCid = await resolveToCid(contentPath)
+
+        // best-effort name based on last path segment, or IPNS root
+        const name = namedImport
+          ? pathSegments.slice(-1)
+          : `${pathSegments[0] === 'ipns' ? pathSegments[1] : 'unnamed'}_${resolvedCid.slice(-4)}`
+
+        // import to mfs
+        await ipfs.files.mkdir(importDir, { parents: true })
+        await ipfs.files.cp(`/ipfs/${resolvedCid}`, `${importDir}${name}`)
+        await openFilesAtWebUI(importDir)
+
+        // create fake ipfs.add results, so we can reuse code from quick-import feature
+        const { cid } = await ipfs.files.stat(importDir, { hash: true })
+        const results = [{ path: '', cid }, { path: name, cid: resolvedCid }]
+        await copyShareLink(results)
+        await preloadFilesAtPublicGateway(results)
+      } catch (e) { log.error('unexpected error during filesCpImportCurrentTab', e) }
     }
+
   }
   return ipfsImportHandler
 }

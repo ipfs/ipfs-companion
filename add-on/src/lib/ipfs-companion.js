@@ -17,7 +17,7 @@ const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
 const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
 const { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } = require('./ipfs-client/brave')
-const { createIpfsImportHandler, formatImportDirectory } = require('./ipfs-import')
+const { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } = require('./ipfs-import')
 const createNotifier = require('./notifier')
 const createCopier = require('./copier')
 const createInspector = require('./inspector')
@@ -234,6 +234,7 @@ module.exports = async function init () {
 
   const BrowserActionMessageHandlers = {
     notification: (message) => notify(message.title, message.message),
+    [browserActionFilesCpImportCurrentTab]: () => ipfsImportHandler.filesCpImportCurrentTab(browser),
     [contextMenuViewOnGateway]: inspector.viewOnGateway,
     [contextMenuCopyCanonicalAddress]: copier.copyCanonicalAddress,
     [contextMenuCopyCidAddress]: copier.copyCidAddress,

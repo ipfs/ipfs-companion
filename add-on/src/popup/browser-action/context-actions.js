@@ -6,6 +6,7 @@ const html = require('choo/html')
 const navItem = require('./nav-item')
 const navHeader = require('./nav-header')
 const { sameGateway } = require('../../lib/ipfs-path')
+const { formatImportDirectory } = require('../../lib/ipfs-import')
 const {
   contextMenuViewOnGateway,
   contextMenuCopyAddressAtPublicGw,
@@ -35,26 +36,22 @@ function contextActions ({
   currentTabPermalink = notReady,
   ipfsNodeType,
   isIpfsContext,
-  isPinning,
-  isUnPinning,
-  isPinned,
   isIpfsOnline,
   isApiAvailable,
   onToggleSiteIntegrations,
   onViewOnGateway,
   onCopy,
-  onPin,
-  onUnPin
+  importDir,
+  onFilesCpImport
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
-  const activePinControls = active && isIpfsOnline && isApiAvailable
+  const activeFilesCpImport = active && isIpfsOnline && isApiAvailable && !ipfsNodeType.startsWith('embedded')
   const isMutable = currentTabContentPath.startsWith('/ipns/')
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false
     const { url } = currentTab
     return !(url.startsWith('ip') || sameGateway(url, gwURLString) || sameGateway(url, pubGwURLString))
   }
-
   const renderIpfsContextItems = () => {
     if (!isIpfsContext) return
     return html`<div>
@@ -100,11 +97,11 @@ function contextActions ({
     onClick: () => onCopy(contextMenuCopyRawCid)
   })}
   ${navItem({
-    text: browser.i18n.getMessage('panel_pinCurrentIpfsAddress'),
-    title: browser.i18n.getMessage('panel_pinCurrentIpfsAddressTooltip'),
-    disabled: !activePinControls,
-    switchValue: (isPinned || isPinning) && !isUnPinning,
-    onClick: isPinned ? onUnPin : onPin
+    text: browser.i18n.getMessage('panel_importCurrentIpfsAddress'),
+    title: browser.i18n.getMessage('panel_importCurrentIpfsAddressTooltip'),
+    helperText: formatImportDirectory(importDir),
+    disabled: !activeFilesCpImport,
+    onClick: onFilesCpImport
   })}
   </div>
     `

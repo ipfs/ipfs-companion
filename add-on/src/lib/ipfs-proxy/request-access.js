@@ -19,7 +19,7 @@ function createRequestAccess (browser, screen) {
     // TODO: cleanup so below stub is not needed
     permissions = Array.isArray(permissions) ? permissions : [permissions]
 
-    const url = browser.extension.getURL(opts.dialogPath || DIALOG_PATH)
+    const url = browser.runtime.getURL(opts.dialogPath || DIALOG_PATH)
 
     let dialogTabId
 

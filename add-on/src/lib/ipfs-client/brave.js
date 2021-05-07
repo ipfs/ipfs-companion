@@ -255,8 +255,8 @@ async function activationUiCleanup (browser) {
     })
     log('[activation ui cleanup] Brave gateway is up, cleaning up')
 
-    const welcomePageUrl = browser.extension.getURL(welcomePage)
-    const optionsPageUrl = browser.extension.getURL(optionsPage)
+    const welcomePageUrl = browser.runtime.getURL(welcomePage)
+    const optionsPageUrl = browser.runtime.getURL(optionsPage)
     // we are unable to query ipfs:// directly due to reasons mentioned in 'closeIpfsTab'
     // so we make quick pass over all tabs and check welcome and options while at it.
     for (const tab of await browser.tabs.query({})) {
