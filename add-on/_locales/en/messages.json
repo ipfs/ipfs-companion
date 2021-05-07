@@ -84,7 +84,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_importCurrentIpfsAddress": {
-    "message": "Import to Files at My Node",
+    "message": "Import to Files on My Node",
     "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
   "panel_importCurrentIpfsAddressTooltip": {
