@@ -88,7 +88,7 @@
     "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
   "panel_importCurrentIpfsAddressTooltip": {
-    "message": "Import this tab's IPFS resource to your Files to have a persistent local copy that's available offline and never thrown away.",
+    "message": "Import this tab's IPFS resources to your Files to have a persistent local copy that's available offline and never thrown away.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
