@@ -59,81 +59,81 @@ describe('modifyRequest.onBeforeRequest:', function () {
 
         // without web+ prefix (Firefox > 59: https://github.com/ipfs-shipyard/ipfs-companion/issues/164#issuecomment-356301174)
         it('should not be normalized if ipfs:/{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should be normalized if ipfs://{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
         it('should not be normalized if ipns:/{fqdn}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#ipns%3A%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=ipns%3A%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should be normalized if ipns://{fqdn}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#ipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=ipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should be normalized if ipfs://{fqdn}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#ipfs%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=ipfs%3A%2F%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should be normalized if dweb:/ipfs/{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#dweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=dweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
         it('should not be normalized if dweb://ipfs/{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#dweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=dweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should be normalized if dweb:/ipns/{foo}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#dweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=dweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should not be normalized if dweb://ipns/{foo}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#dweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=dweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
 
         // web+ prefixed versions (Firefox < 59 and Chrome)
         it('should not be normalized if web+ipfs:/{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should be normalized if web+ipfs://{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
         it('should not be normalized if web+ipns:/{foo}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should be normalized if web+ipns://{foo}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should be normalized if web+dweb:/ipfs/{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
         })
         it('should not be normalized if web+dweb://ipfs/{CID}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should be normalized if web+dweb:/ipns/{foo}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
         })
         it('should not be normalized if web+dweb://ipns/{foo}', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if web+{foo}:/bar', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bfoo%3A%2Fbar%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
         it('should not be normalized if web+{foo}://bar', function () {
-          const request = url2request('https://gateway.ipfs.io/ipfs/bafkreiacamq42cltx3ussmxb2ey3mmpisthrs3kelwuxnwt7oofvqsjvgm#web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
+          const request = url2request('https://dweb.link/ipfs/?uri=web%2Bfoo%3A%2F%2Fbar%3FargTest%23hashTest')
           expect(modifyRequest.onBeforeRequest(request)).to.equal(undefined)
         })
       })
