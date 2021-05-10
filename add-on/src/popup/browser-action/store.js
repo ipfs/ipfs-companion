@@ -3,8 +3,8 @@
 
 const browser = require('webextension-polyfill')
 const isIPFS = require('is-ipfs')
-const all = require('it-all')
-const { trimHashAndSearch, ipfsContentPath } = require('../../lib/ipfs-path')
+const { browserActionFilesCpImportCurrentTab } = require('../../lib/ipfs-import')
+const { ipfsContentPath } = require('../../lib/ipfs-path')
 const { welcomePage, optionsPage } = require('../../lib/constants')
 const { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } = require('../../lib/context-menus')
 
@@ -17,9 +17,6 @@ module.exports = (state, emitter) => {
     // UI contexts
     isIpfsContext: false, // Active Tab represents IPFS resource
     isRedirectContext: false, // Active Tab or its subresources could be redirected
-    isPinning: false,
-    isUnPinning: false,
-    isPinned: false,
     // IPFS details
     ipfsNodeType: 'external',
     isIpfsOnline: false,
@@ -51,12 +48,6 @@ module.exports = (state, emitter) => {
         console.log('In browser action, received message from background:', message)
         await updateBrowserActionState(status)
         emitter.emit('render')
-        if (status.isIpfsContext) {
-          // calculating pageActions states is expensive (especially pin-related checks)
-          // we update them in separate step to keep UI snappy
-          await updatePageActionsState(status)
-          emitter.emit('render')
-        }
       }
     })
     // fix for https://github.com/ipfs-shipyard/ipfs-companion/issues/318
@@ -92,53 +83,13 @@ module.exports = (state, emitter) => {
     window.close()
   })
 
-  emitter.on('pin', async function pinCurrentResource () {
-    state.isPinning = true
-    emitter.emit('render')
-
-    try {
-      const ipfs = await getIpfsApi()
-      const currentPath = await resolveToPinPath(ipfs, state.currentTab.url)
-      const pinResult = await ipfs.pin.add(currentPath, { recursive: true })
-      console.log('ipfs.pin.add result', pinResult)
-      state.isPinned = true
-      notify('notify_pinnedIpfsResourceTitle', currentPath)
-    } catch (error) {
-      handlePinError('notify_pinErrorTitle', error)
-    }
-    state.isPinning = false
-    emitter.emit('render')
+  emitter.on('filesCpImport', () => {
+    port.postMessage({ event: browserActionFilesCpImportCurrentTab })
+    window.close()
   })
-
-  emitter.on('unPin', async function unPinCurrentResource () {
-    state.isUnPinning = true
-    emitter.emit('render')
-
-    try {
-      const ipfs = await getIpfsApi()
-      const currentPath = await resolveToPinPath(ipfs, state.currentTab.url)
-      const result = await ipfs.pin.rm(currentPath, { recursive: true })
-      state.isPinned = false
-      console.log('ipfs.pin.rm result', result)
-      notify('notify_unpinnedIpfsResourceTitle', currentPath)
-    } catch (error) {
-      handlePinError('notify_unpinErrorTitle', error)
-    }
-    state.isUnPinning = false
-    emitter.emit('render')
-  })
-
-  async function handlePinError (errorMessageKey, error) {
-    console.error(browser.i18n.getMessage(errorMessageKey), error)
-    try {
-      notify(errorMessageKey, error.message)
-    } catch (notifyError) {
-      console.error('Unable to notify user about pin-related error', notifyError)
-    }
-  }
 
   emitter.on('quickImport', () => {
-    browser.tabs.create({ url: browser.extension.getURL('dist/popup/quick-import.html') })
+    browser.tabs.create({ url: browser.runtime.getURL('dist/popup/quick-import.html') })
     window.close()
   })
 
@@ -188,7 +139,7 @@ module.exports = (state, emitter) => {
       .catch((err) => {
         console.error('runtime.openOptionsPage() failed, opening options page in tab instead.', err)
         // brave: fallback to opening options page as a tab.
-        browser.tabs.create({ url: browser.extension.getURL(optionsPage) })
+        browser.tabs.create({ url: browser.runtime.getURL(optionsPage) })
       })
   })
 
@@ -267,28 +218,6 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
   })
 
-  async function updatePageActionsState (status) {
-    // browser.pageAction-specific items that can be rendered earlier (snappy UI)
-    requestAnimationFrame(async () => {
-      const tabId = state.currentTab ? { tabId: state.currentTab.id } : null
-      if (browser.pageAction && tabId && await browser.pageAction.isShown(tabId)) {
-        // Get title stored on page load so that valid transport is displayed
-        // even if user toggles between public/custom gateway after the load
-        state.pageActionTitle = await browser.pageAction.getTitle(tabId)
-        emitter.emit('render')
-      }
-    })
-
-    if (state.isIpfsContext) {
-      // IPFS contexts require access to ipfs API object from background page
-      // Note: access to background page will be denied in Private Browsing mode
-      const ipfs = await getIpfsApi()
-      // There is no point in displaying actions that require API interaction if API is down
-      const apiIsUp = ipfs && status && status.peerCount >= 0
-      if (apiIsUp) await updatePinnedState(ipfs, status)
-    }
-  }
-
   async function updateBrowserActionState (status) {
     if (status) {
       // Copy all attributes
@@ -314,50 +243,8 @@ module.exports = (state, emitter) => {
       state.isRedirectContext = false
     }
   }
-
-  async function updatePinnedState (ipfs, status) {
-    // skip update if there is an ongoing pin or unpin
-    if (state.isPinning || state.isUnPinning) return
-    try {
-      const currentPath = await resolveToPinPath(ipfs, status.currentTab.url)
-      const response = await all(ipfs.pin.ls({ paths: [currentPath], type: 'recursive' }))
-      console.log(`positive ipfs.pin.ls for ${currentPath}: ${JSON.stringify(response)}`)
-      state.isPinned = true
-    } catch (error) {
-      if (/is not pinned/.test(error.message)) {
-        console.log(`negative ipfs.pin.ls: ${error} (${JSON.stringify(error)})`)
-      } else {
-        console.error(`unexpected result of ipfs.pin.ls: ${error} (${JSON.stringify(error)})`)
-      }
-      state.isPinned = false
-    }
-  }
-
-  function notify (title, message) {
-    // console.log('Sending notification (' + title + '): ' + message + ')')
-    return port.postMessage({ event: 'notification', title: title, message: message })
-  }
 }
 
 function getBackgroundPage () {
   return browser.runtime.getBackgroundPage()
-}
-
-async function getIpfsApi () {
-  const bg = await getBackgroundPage()
-  return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfs : null
-}
-
-async function getIpfsPathValidator () {
-  const bg = await getBackgroundPage()
-  return (bg && bg.ipfsCompanion) ? bg.ipfsCompanion.ipfsPathValidator : null
-}
-
-async function resolveToPinPath (ipfs, url) {
-  // Prior issues:
-  // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
-  // https://github.com/ipfs/ipfs-companion/issues/303
-  const pathValidator = await getIpfsPathValidator()
-  const pinPath = trimHashAndSearch(await pathValidator.resolveToImmutableIpfsPath(url))
-  return pinPath
 }

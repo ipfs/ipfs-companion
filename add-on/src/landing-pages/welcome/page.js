@@ -100,7 +100,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
     </svg>
   `
 
-  const optionsUrl = browser.extension.getURL(optionsPage)
+  const optionsUrl = browser.runtime.getURL(optionsPage)
   return html`
     <div class="w-80 mt0 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <div class="mb4 flex flex-column justify-center items-center">

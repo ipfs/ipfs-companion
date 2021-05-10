@@ -12,8 +12,7 @@ const tools = require('./tools')
 module.exports = function browserActionPage (state, emit) {
   const onViewOnGateway = () => emit('viewOnGateway')
   const onCopy = (copyAction) => emit('copy', copyAction)
-  const onPin = () => emit('pin')
-  const onUnPin = () => emit('unPin')
+  const onFilesCpImport = () => emit('filesCpImport')
 
   const onQuickImport = () => emit('quickImport')
   const onOpenWebUi = () => emit('openWebUi', '/')
@@ -25,7 +24,7 @@ module.exports = function browserActionPage (state, emit) {
   const onToggleActive = () => emit('toggleActive')
 
   const headerProps = Object.assign({ onToggleActive, onOpenPrefs, onOpenReleaseNotes, onOpenWelcomePage }, state)
-  const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onPin, onUnPin }, state)
+  const activeTabActionsProps = Object.assign({ onViewOnGateway, onToggleSiteIntegrations, onCopy, onFilesCpImport }, state)
   const opsProps = Object.assign({ onQuickImport, onOpenWebUi, onToggleGlobalRedirect }, state)
 
   return html`
