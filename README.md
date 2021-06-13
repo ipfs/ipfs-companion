@@ -25,7 +25,7 @@
 - [Install](#install-ipfs-companion)
 - [Contribute](#contribute)
 - [Help & Troubleshooting](#help--troubleshooting)
-- [Privacy & Licenses](#privacy--license)
+- [Privacy & Licenses](#privacy--license-info)
 
 ## About IPFS Companion
 
