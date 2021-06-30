@@ -40,8 +40,8 @@ exports.destroy = async function (browser) {
 // ipfs:// URI that will be used for triggering the "Enable IPFS" dropbar in Brave
 // Here we use inlined empty byte array, which resolves instantly and does not
 // introduce any delay in UI.
-const braveIpfsUriTrigger = 'ipfs://bafkqaaa/'
-const braveGatewayUrlTrigger = 'https://bafkqaaa.ipfs.dweb.link/'
+const braveIpfsUriTrigger = 'ipfs://bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss/'
+const braveGatewayUrlTrigger = 'https://bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss.ipfs.dweb.link/'
 
 // Settings screen in Brave where user can manage IPFS support
 const braveSettingsPage = 'brave://settings/extensions'
@@ -245,10 +245,10 @@ async function activationUiCleanup (browser) {
   try {
     // after useBraveEndpoint we can start polling for gateway to become online
     const { customGatewayUrl: braveGwUrl } = await browser.storage.local.get('customGatewayUrl')
-    // wait 1m for gateway to be online (bafkqaaa)
+    // wait 1m for gateway to be online (bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss)
     await waitFor(async () => {
       try {
-        return await fetch(`${braveGwUrl}/ipfs/bafkqaaa`).then(response => response.ok)
+        return await fetch(`${braveGwUrl}/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss`).then(response => response.ok)
       } catch (_) {
         return false
       }

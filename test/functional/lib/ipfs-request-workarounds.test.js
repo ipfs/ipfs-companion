@@ -303,7 +303,7 @@ describe('modifyRequest processing', function () {
     it('should force native URI in address bar via tabs.update API', async function () {
       const httpDNSLinkUrl = 'https://example.com/ipns/docs.ipfs.io/some/path?query=val'
       const nativeDNSLinkUri = 'ipns://docs.ipfs.io/some/path?query=val'
-      spoofDnsTxtRecord('docs.ipfs.io', dnslinkResolver, '/ipfs/bafkqaaa')
+      spoofDnsTxtRecord('docs.ipfs.io', dnslinkResolver, '/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss')
       state.ipfsNodeType = braveNodeType
       // ensure clean modifyRequest
       runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
@@ -330,7 +330,7 @@ describe('modifyRequest processing', function () {
       const request = {
         method: 'GET',
         type: 'image',
-        url: 'https://ipfs.io/ipfs/bafkqaaa',
+        url: 'https://ipfs.io/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss',
         initiator: 'https://some-website.example.com' // Brave (built on Chromium)
       }
       expect(modifyRequest.onBeforeRequest(request))
@@ -339,7 +339,7 @@ describe('modifyRequest processing', function () {
     it('should be left untouched if subresource (would be blocked by Brave Shields)', function () {
       runtime.isFirefox = false
       runtime.brave = { thisIsFakeBraveRuntime: true }
-      const cid = 'bafkqaaa'
+      const cid = 'bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss'
       const request = {
         method: 'GET',
         type: 'main_frame',
