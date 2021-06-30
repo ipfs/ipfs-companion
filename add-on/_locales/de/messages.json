@@ -1,6 +1,6 @@
 {
   "browserAction_title": {
-    "message": "IPFS Kompanien",
+    "message": "IPFS Companion",
     "description": "A pop-up title when user hovers on Browser Action button (browserAction_title)"
   },
   "panel_headerIpfsNodeIconLabel": {
@@ -24,7 +24,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusGatewayAddressTitle": {
-    "message": "Die URL des Gateways, entweder öffentlich oder lokal, die du verwendest, um Inhalte abzurufen (zu ändern in den Einstellungen)",
+    "message": "Die URL des Gateways, entweder öffentlich oder lokal, die Du zum Abrufen von Inhalten verwendest (kann in den Einstellungen geändert werden)",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
@@ -32,7 +32,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusApiAddressTitle": {
-    "message": "Die URL deines lokalen Nodes",
+    "message": "Die URL deines lokalen Knotens",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
@@ -48,7 +48,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
-    "message": "Die Anzahl anderer zur Verbindung bereiter IPFS-Nodes",
+    "message": "Die Anzahl anderer IPFS-Knoten, zu denen Du eine Verbindung herstellen kannst",
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
@@ -83,13 +83,13 @@
     "message": "Aktiviere/deaktiviere alle IPFS-Integrationen für $1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
-  "panel_pinCurrentIpfsAddress": {
-    "message": "IPFS-Ressource anpinnen",
-    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  "panel_importCurrentIpfsAddress": {
+    "message": "In Dateien auf meinem Node importieren",
+    "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
-  "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pin this page's IPFS resources to your node to have a local copy that's available offline and never thrown away.",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
+  "panel_importCurrentIpfsAddressTooltip": {
+    "message": "Import this tab's IPFS resources to your Files to have a persistent local copy that's available offline and never thrown away.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
   "message": "IPNS-Pfad kopieren",
@@ -195,21 +195,9 @@
     "message": "Kopiert",
     "description": "A title of system notification (notify_copiedTitle)"
   },
-  "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS-Ressource angepinnt",
-    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
-  },
-  "notify_unpinnedIpfsResourceTitle": {
-    "message": "Pin der IPFS-Ressource entfernt",
-    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
-  },
-  "notify_pinErrorTitle": {
-    "message": "Fehler beim Anpinnen der IPFS-Ressource",
-    "description": "A title of system notification (notify_pinErrorTitle)"
-  },
-  "notify_unpinErrorTitle": {
-    "message": "Fehler beim Entfernen des IPFS-Pins",
-    "description": "A title of system notification (notify_unpinErrorTitle)"
+  "notify_fileCpImportErrorTitle": {
+    "message": "Fehler beim Importieren der IPFS-Ressource",
+    "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_apiOnlineTitle": {
     "message": "IPFS-API ist online",

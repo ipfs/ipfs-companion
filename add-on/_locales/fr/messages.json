@@ -83,13 +83,13 @@
     "message": "Activer/désactiver toutes les intégrations IPFS pour $1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
-  "panel_pinCurrentIpfsAddress": {
-    "message": "Épingler la ressource IPFS",
-    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  "panel_importCurrentIpfsAddress": {
+    "message": "Importer vers Fichiers sur Mon Nœud",
+    "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
-  "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Épingler les ressources IPFS de cette page sur votre nœud IPFS pour en avoir une copie locale disponible même hors ligne et jamais supprimée.",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
+  "panel_importCurrentIpfsAddressTooltip": {
+    "message": "Importer les ressources IPFS de cet onglet vers vos Fichiers pour en avoir une copie persistante locale qui est disponible hors-ligne et jamais supprimée.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
   "message": "Copier le chemin IPNS",
@@ -195,21 +195,9 @@
     "message": "Copié",
     "description": "A title of system notification (notify_copiedTitle)"
   },
-  "notify_pinnedIpfsResourceTitle": {
-    "message": "Ressources IPFS épinglées",
-    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
-  },
-  "notify_unpinnedIpfsResourceTitle": {
-    "message": "Épingle IPFS supprimée",
-    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
-  },
-  "notify_pinErrorTitle": {
-    "message": "Erreur en épinglant une ressource IPFS",
-    "description": "A title of system notification (notify_pinErrorTitle)"
-  },
-  "notify_unpinErrorTitle": {
-    "message": "Erreur en désépinglant une ressource IPFS",
-    "description": "A title of system notification (notify_unpinErrorTitle)"
+  "notify_fileCpImportErrorTitle": {
+    "message": "Erreur lors de l'importation de la Ressource IPFS",
+    "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_apiOnlineTitle": {
     "message": "L'API IPFS est en ligne",

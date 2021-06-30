@@ -83,13 +83,13 @@
     "message": " $1 üzerindeki tüm IPFS entegrasyonlarını etkinleştirin/devre dışı bırakın.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
-  "panel_pinCurrentIpfsAddress": {
-    "message": "IPFS Kaynağını Sabitle",
-    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  "panel_importCurrentIpfsAddress": {
+    "message": "Düğümümdeki Dosyaların İçine Aktar",
+    "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
-  "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Çevrimdışı kullanılabilen ve asla atılmayan yerel bir kopyaya sahip olmak için bu sayfanın IPFS kaynaklarını düğümünüze sabitleyin.",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
+  "panel_importCurrentIpfsAddressTooltip": {
+    "message": "Çevrimdışı kullanılabilen ve asla atılmayan yerel bir kopyaya sahip olmak için bu sayfanın IPFS kaynaklarını içe aktarın.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
   "message": "IPNS Yolunu Kopyala",
@@ -195,21 +195,9 @@
     "message": "Kopyalandı",
     "description": "A title of system notification (notify_copiedTitle)"
   },
-  "notify_pinnedIpfsResourceTitle": {
-    "message": "IPFS Kaynağı Sabitlendi",
-    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
-  },
-  "notify_unpinnedIpfsResourceTitle": {
-    "message": "IPFS Sabitlemesi Kaldırıldı",
-    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
-  },
-  "notify_pinErrorTitle": {
-    "message": "IPFS Kaynağını Sabitleme Hatası",
-    "description": "A title of system notification (notify_pinErrorTitle)"
-  },
-  "notify_unpinErrorTitle": {
-    "message": "IPFS Sabitlemesini Çıkarma Hatası",
-    "description": "A title of system notification (notify_unpinErrorTitle)"
+  "notify_fileCpImportErrorTitle": {
+    "message": "IPFS Kaynağı içe aktarılırken hata oluştu",
+    "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_apiOnlineTitle": {
     "message": "IPFS UPA Çevrimiçi",

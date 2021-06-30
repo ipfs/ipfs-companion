@@ -83,13 +83,13 @@
     "message": "تفعيل / تعطيل جميع عمليات تكامل تفعيل / تعطيل جميع عمليات تكامل IPFS$1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
-  "panel_pinCurrentIpfsAddress": {
-    "message": "تثبيت موارد IPFS",
-    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  "panel_importCurrentIpfsAddress": {
+    "message": "الاستيراد إلى الملفات الموجودة على عقدي",
+    "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
-  "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "قم بتثبيت موارد IPFS لهذه الصفحة في العقدة الخاصة بك للحصول على نسخة محلية متاحة في وضع عدم الاتصال ولا يتم التخلص منها مطلقًا.",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
+  "panel_importCurrentIpfsAddressTooltip": {
+    "message": "قم باستيراد موارد IPFS الخاصة بعلامة التبويب هذه إلى الملفات الخاصة بك للحصول على نسخة محلية ثابتة متاحة في وضع عدم الاتصال ولا يتم التخلص منها مطلقًا.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
   "message": "انسخ مسار IPNS",
@@ -195,21 +195,9 @@
     "message": "نسخ",
     "description": "A title of system notification (notify_copiedTitle)"
   },
-  "notify_pinnedIpfsResourceTitle": {
-    "message": "تم تثبيت مورد IPFS",
-    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
-  },
-  "notify_unpinnedIpfsResourceTitle": {
-    "message": "إزالة رمز IPFS",
-    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
-  },
-  "notify_pinErrorTitle": {
-    "message": "خطأ في تثبيت مورد IPFS",
-    "description": "A title of system notification (notify_pinErrorTitle)"
-  },
-  "notify_unpinErrorTitle": {
-    "message": "خطأ في إزالة رمز IPFS",
-    "description": "A title of system notification (notify_unpinErrorTitle)"
+  "notify_fileCpImportErrorTitle": {
+    "message": "خطأ أثناء استيراد موارد IPFS",
+    "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_apiOnlineTitle": {
     "message": "IPFS API متصل",
