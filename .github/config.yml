@@ -9,7 +9,7 @@ newIssueWelcomeComment: >
   In the meantime, please double-check that you have provided all the
   necessary information to make this process easy! Any information that can
   help save additional round trips is useful! We currently aim to give
-  initial feedback within **two business days**. If this does not happen, feel
+  initial feedback within **seven business days**. If this does not happen, feel
   free to leave a comment.
 
   Please keep an eye on how this issue will be labeled, as labels give an
@@ -55,7 +55,7 @@ newPRWelcomeComment: >
 
     * The PR is merged by maintainers when it has been approved and comments addressed.
 
-  We currently aim to provide initial feedback/triaging within **two business
+  We currently aim to provide initial feedback/triaging within **seven business
   days**. Please keep an eye on any labelling actions, as these will indicate
   priorities and status of your contribution.
 
