@@ -37,5 +37,5 @@ If you want to downoad translations from Transifex and run them locally, make su
 ## How to Help with Things Beyond Browser Extension?
 
 - https://github.com/ipfs/in-web-browsers
-- https://github.com/ipfs/community/blob/master/contributing.md  
-  [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/contributing.md)
+- https://github.com/ipfs/community/blob/master/CONTRIBUTING.md  
+  [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
