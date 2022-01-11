@@ -1,0 +1,55 @@
+{
+  "name": "ipfs-companion-mv3",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "esbuild": "^0.14.11",
+    "ipfs-http-client": "^53.0.1",
+    "is-fqdn": "^2.0.1",
+    "is-ipfs": "^6.0.2",
+    "lru-cache": "^6.0.0",
+    "rimraf": "^3.0.2",
+    "web-ext": "^6.6.0",
+    "webextension-polyfill": "^0.8.0"
+  },
+  "scripts": {
+    "lint": "eslint --ignore-path .eslintignore --ext .ts .",
+    "prebuild": "rimraf build",
+    "build": "esbuild ./addon/background.ts --bundle --outfile=./build/main.js",
+    "postbuild": "cp -r ./addon/* build/",
+    "build:bak": "webpack --mode development --devtool cheap-module-source-map ./addon/background.js --output-path ./build",
+    "build:firefox": "web-ext build --source-dir ./build/",
+    "format": "prettier --ignore-path ../.gitignore --write \"**/*.+(js|ts|json)\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "env": {
+      "browser": true,
+      "webextensions": true
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/webextension-polyfill": "^0.8.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.4"
+  }
+}

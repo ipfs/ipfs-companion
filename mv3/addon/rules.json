@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": { "scheme": "http", "host": "localhost", "port": "8080" }
+      }
+    },
+    "condition": { "urlFilter": "||ipfs.io", "resourceTypes": ["main_frame"] }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": { "scheme": "http", "host": "localhost", "port": "8080" }
+      }
+    },
+    "condition": { "urlFilter": "||dweb.link", "resourceTypes": ["main_frame"] }
+  }
+]
