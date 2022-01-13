@@ -17,9 +17,14 @@
     "prebuild": "rimraf build",
     "build": "esbuild ./addon/background.ts --bundle --outfile=./build/main.js",
     "postbuild": "cp -r ./addon/* build/",
-    "build:bak": "webpack --mode development --devtool cheap-module-source-map ./addon/background.js --output-path ./build",
     "build:firefox": "web-ext build --source-dir ./build/",
-    "format": "prettier --ignore-path ../.gitignore --write \"**/*.+(js|ts|json)\""
+    "format": "prettier --ignore-path ../.gitignore --write \"**/*.+(js|ts|json)\"",
+    "test": "echo 'testing ipfs companion mv3'",
+    "ci:install": "npx yarn@1.22.10 install --frozen-lockfile --no-progress --non-interactive",
+    "ci:format": "npx yarn@1.22.10 format",
+    "ci:build": "npx yarn@1.22.10 build",
+    "ci:test": "npx yarn@1.22.10 test",
+    "ci:lint": "npx yarn@1.22.10 lint"
   },
   "eslintConfig": {
     "extends": [
