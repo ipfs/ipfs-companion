@@ -1,0 +1,65 @@
+name: ci
+on: [push, pull_request]
+
+env:
+  XDG_CACHE_HOME: ${{ github.workspace }}/.cache
+
+jobs:
+
+  test-mv3:
+    defaults:
+      run:
+        working-directory: ./mv3
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.x
+
+      - name: Restore .cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ github.workspace }}/.cache
+          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
+            ${{ runner.os }}-
+
+      - name: Restore node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: npm run ci:install
+
+      - name: Format
+        run: npm run format
+
+      - name: Build
+        run: npm run build
+
+      - name: Show build/
+        run: du -h build/*
+
+      - name: Test
+        run: npm run test
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Show Cache
+        run: du -h ${{ github.workspace }}/.cache/* || true

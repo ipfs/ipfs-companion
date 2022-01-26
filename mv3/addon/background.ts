@@ -8,6 +8,9 @@ let lifeline: Runtime.Port;
 const client = create({ url: "http://localhost:5001/api/v0" });
 
 browser.runtime.onConnect.addListener((port: Runtime.Port) => {
+  // This keepalive hack is required because wake up of webextension 
+  // worker in MV3 has been broken in Chromium for 2+ years
+  // See: https://bugs.chromium.org/p/chromium/issues/detail?id=1024211
   if (port.name === "keepAlive") {
     lifeline = port;
     setTimeout(keepAliveForced, 295e3); // 5 minutes minus 5 seconds
@@ -44,11 +47,10 @@ function isNewTabURL(url) {
 }
 
 async function resolveDNSAndAddRule(domain) {
-  const cid = await client.dns(domain);
-  if (!cid) return;
+  const contentPath = await client.resolve(`/ipns/${domain}`);
+  if (!contentPath) return;
 
   const id = Math.floor(Math.random() * 29999);
-  // @ts-ignore
   browser.declarativeNetRequest.updateDynamicRules(
     {
       addRules: [
@@ -57,7 +59,7 @@ async function resolveDNSAndAddRule(domain) {
           priority: 1,
           action: {
             type: "redirect",
-            redirect: { url: `https://ipfs.io/${cid}` },
+            redirect: { url: `https://dweb.link${contentPath}` },
           },
           condition: { urlFilter: domain, resourceTypes: ["main_frame"] },
         },
@@ -65,16 +67,14 @@ async function resolveDNSAndAddRule(domain) {
     },
     () => {
       console.log(
-        `Added rule ${id}, cid: ${id}, domain: ${domain}. Will redirect to ipfs gateway on next page load ${check}`
+        `Added rule ${id}, contentPath: ${contentPath}, domain: ${domain}. Will redirect to ipfs gateway on next page load ${check}`
       );
     }
   );
 }
 
 async function clearDynamicRules() {
-  // @ts-ignore
   browser.declarativeNetRequest.getDynamicRules((rules) => {
-    // @ts-ignore
     browser.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: rules.map((r) => r.id),
     });

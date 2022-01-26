@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/chrome": "^0.0.177",
     "esbuild": "^0.14.11",
     "ipfs-http-client": "^53.0.1",
     "is-fqdn": "^2.0.1",
@@ -20,11 +21,7 @@
     "build:firefox": "web-ext build --source-dir ./build/",
     "format": "prettier --ignore-path ../.gitignore --write \"**/*.+(js|ts|json)\"",
     "test": "echo 'testing ipfs companion mv3'",
-    "ci:install": "npx yarn@1.22.10 install --frozen-lockfile --no-progress --non-interactive",
-    "ci:format": "npx yarn@1.22.10 format",
-    "ci:build": "npx yarn@1.22.10 build",
-    "ci:test": "npx yarn@1.22.10 test",
-    "ci:lint": "npx yarn@1.22.10 lint"
+    "ci:install": "npm ci"
   },
   "eslintConfig": {
     "extends": [
@@ -38,14 +35,13 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "Firefox ESR"
     ],
     "development": [
       "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 firefox version"
     ]
   },
   "devDependencies": {
