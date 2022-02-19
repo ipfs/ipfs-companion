@@ -23,7 +23,6 @@ const createCopier = require('./copier')
 const createInspector = require('./inspector')
 const { createRuntimeChecks } = require('./runtime-checks')
 const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
-const createIpfsProxy = require('./ipfs-proxy')
 const { registerSubdomainProxy } = require('./http-proxy')
 const { runPendingOnInstallTasks } = require('./on-installed')
 
@@ -44,8 +43,6 @@ module.exports = async function init () {
   let runtime
   let contextMenus
   let apiStatusUpdateInterval
-  let ipfsProxy
-  // TODO: window.ipfs var ipfsProxyContentScript
   let ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
@@ -84,8 +81,6 @@ module.exports = async function init () {
       onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-    ipfsProxy = createIpfsProxy(getIpfs, getState)
-    // TODO(window.ipfs) ipfsProxyContentScript = await registerIpfsProxyContentScript()
     log('register all listeners')
     registerListeners()
     await registerSubdomainProxy(getState, runtime, notify)
@@ -136,43 +131,6 @@ module.exports = async function init () {
       log('no browser.protocol API, native protocol will not be registered')
     }
   }
-
-  // Register Content Script responsible for loading window.ipfs (ipfsProxy)
-  //
-  // The key difference between tabs.executeScript and contentScripts API
-  // is the latter provides guarantee to execute before anything else.
-  // https://github.com/ipfs-shipyard/ipfs-companion/issues/451#issuecomment-382669093
-  /* TODO(window.ipfs)
-  async function registerIpfsProxyContentScript (previousHandle) {
-    previousHandle = previousHandle || ipfsProxyContentScript
-    if (previousHandle) {
-      previousHandle.unregister()
-    }
-    // TODO:
-    // No window.ipfs for now.
-    // We will restore when Migration to JS API with Async Await and Async Iterables
-    // is done:
-    // https://github.com/ipfs-shipyard/ipfs-companion/pull/777
-    // https://github.com/ipfs-shipyard/ipfs-companion/issues/843
-    // https://github.com/ipfs-shipyard/ipfs-companion/issues/852#issuecomment-594510819
-    const forceOff = true
-    if (forceOff || !state.active || !state.ipfsProxy || !browser.contentScripts) {
-      // no-op if global toggle is off, window.ipfs is disabled in Preferences
-      // or if runtime has no contentScript API
-      // (Chrome loads content script via manifest)
-      return
-    }
-    const newHandle = await browser.contentScripts.register({
-      matches: ['<all_urls>'],
-      js: [
-        { file: '/dist/bundles/ipfsProxyContentScript.bundle.js' }
-      ],
-      allFrames: true,
-      runAt: 'document_start'
-    })
-    return newHandle
-  }
-  */
 
   // HTTP Request Hooks
   // ===================================================================
@@ -617,7 +575,6 @@ module.exports = async function init () {
       switch (key) {
         case 'active':
           state[key] = change.newValue
-          // TODO(window.ipfs) ipfsProxyContentScript = await registerIpfsProxyContentScript()
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
@@ -672,12 +629,6 @@ module.exports = async function init () {
           // Finally, update proxy settings based on the state
           await registerSubdomainProxy(getState, runtime)
           break
-        /* TODO(window.ipfs)
-        case 'ipfsProxy':
-          state[key] = change.newValue
-          // This is window.ipfs proxy, requires update of the content script:
-          ipfsProxyContentScript = await registerIpfsProxyContentScript()
-          break */
         case 'dnslinkPolicy':
           state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
           if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
@@ -769,18 +720,6 @@ module.exports = async function init () {
       if (apiStatusUpdateInterval) {
         clearInterval(apiStatusUpdateInterval)
         apiStatusUpdateInterval = null
-      }
-
-      /* TODO(window.ipfs)
-      if (ipfsProxyContentScript) {
-        ipfsProxyContentScript.unregister()
-        ipfsProxyContentScript = null
-      }
-      */
-
-      if (ipfsProxy) {
-        await ipfsProxy.destroy()
-        ipfsProxy = null
       }
 
       if (ipfs) {

@@ -515,18 +515,6 @@
     "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
-  "option_ipfsProxy_title": {
-    "message": "Support for window.ipfs",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
-  },
-  "option_ipfsProxy_description": {
-    "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
-    "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
-  },
-  "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
-    "description": "Link text for managing permissions"
-  },
   "option_openViaWebUI_title": {
     "message": "Open Imported Files in the Files Screen",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"

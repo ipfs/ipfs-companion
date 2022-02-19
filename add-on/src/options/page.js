@@ -99,7 +99,6 @@ module.exports = function optionsPage (state, emit) {
     linkify: state.options.linkify,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
-    ipfsProxy: state.options.ipfsProxy,
     logNamespaces: state.options.logNamespaces,
     onOptionChange
   })}

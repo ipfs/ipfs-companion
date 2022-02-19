@@ -38,8 +38,9 @@ const commonConfig = {
     }),
     new webpack.DefinePlugin({
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
+      'process.emitWarning': (message, type) => {}, // console.warn(`${type}${type ? ': ' : ''}${message}`),
       'process.env': {
-        NODE_ENV: '"production"',
+        //NODE_ENV: '"production"',
         IPFS_MONITORING: false,
         DEBUG: false // controls verbosity of Hapi HTTP server in js-ipfs
       }
@@ -63,6 +64,14 @@ const commonConfig = {
         test: /\.(otf|eot|ttf|woff)(\?.*$|$)/,
         use: ['raw-loader', 'ignore-loader']
       },
+      /*
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      */
       {
         exclude: /node_modules/,
         test: /\.js$/,
@@ -71,7 +80,7 @@ const commonConfig = {
     ]
   },
   resolve: {
-    /* mainFields: ['browser', 'main'], */
+    mainFields: ['browser', 'main'],
     extensions: ['.js', '.json'],
     alias: {
       buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
@@ -79,6 +88,11 @@ const commonConfig = {
       stream: 'readable-stream' // cure general insanity
     },
     fallback: {
+      // process: 'process/browser',
+      // buffer: "buffer", // path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
+      stream: 'readable-stream',
+      'stream/web': 'readable-stream',
+      worker_threads: false,
       util: false,
       fs: false,
       path: require.resolve('path-browserify'), // legacy in src/lib/ipfs-proxy
@@ -119,7 +133,7 @@ const bgConfig = merge(commonConfig, {
           priority: 10,
           enforce: true,
           // Include js-ipfs and js-ipfs-http-client
-          test: /\/node_modules\/(ipfs|ipfs-http-client|ipfs-postmsg-proxy|peer-info|bcrypto|ipfsx|libp2p*)\//
+          test: /\/node_modules\/(ipfs|ipfs-core|ipfs-http-client|peer-info|bcrypto|ipfsx|libp2p*)\//
         }
       }
     }

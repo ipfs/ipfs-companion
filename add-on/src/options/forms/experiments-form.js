@@ -13,7 +13,6 @@ function experimentsForm ({
   linkify,
   recoverFailedHttpRequests,
   detectIpfsPathHeader,
-  ipfsProxy,
   logNamespaces,
   onOptionChange
 }) {
@@ -24,7 +23,6 @@ function experimentsForm ({
   const onLinkifyChange = onOptionChange('linkify')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
-  const onIpfsProxyChange = onOptionChange('ipfsProxy')
 
   return html`
     <form>
@@ -97,30 +95,6 @@ function experimentsForm ({
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'detectIpfsPathHeader', checked: detectIpfsPathHeader, onchange: onDetectIpfsPathHeaderChange })}</div>
-        </div>
-        <div class="flex-row-ns pb0-ns o-50">
-          <label for="ipfsProxy">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_ipfsProxy_title')}</dt>
-              <dd>
-                Disabled until move to JavaScript API with async await and async iterables
-                <!-- TODO: https://github.com/ipfs-shipyard/ipfs-companion/pull/777
-                ${browser.i18n.getMessage('option_ipfsProxy_description')}
-                <p>${ipfsProxy
-                  ? html`
-                    <a class="link underline hover-aqua" href="${browser.runtime.getURL('dist/pages/proxy-acl/index.html')}" target="_blank">
-                      ${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}
-                    </a>`
-                  : html`<del>${browser.i18n.getMessage('option_ipfsProxy_link_manage_permissions')}</del>`}
-                </p>
-                -->
-                <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/how-to/companion-window-ipfs/" target="_blank">
-                  ${browser.i18n.getMessage('option_legend_readMore')}
-                </a></p>
-              </dd>
-            </dl>
-          </label>
-          <div class="self-center-ns">${switchToggle({ id: 'ipfsProxy', checked: ipfsProxy, disabled: true, onchange: onIpfsProxyChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="logNamespaces">

@@ -27,7 +27,6 @@ exports.optionDefaults = Object.freeze({
   customGatewayUrl: 'http://localhost:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001',
   ipfsApiPollMs: 3000,
-  ipfsProxy: true, // window.ipfs
   logNamespaces: 'jsipfs*,ipfs*,libp2p:mdns*,libp2p-delegated*,-*:ipns*,-ipfs:preload*,-ipfs-http-client:request*,-ipfs:http-api*',
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
   useLatestWebUI: false,

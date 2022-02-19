@@ -5,7 +5,7 @@ const log = debug('ipfs-companion:client:embedded')
 log.error = debug('ipfs-companion:client:embedded:error')
 
 const mergeOptions = require('merge-options')
-const Ipfs = require('ipfs')
+const Ipfs = require('ipfs-core')
 const { optionDefaults } = require('../options')
 
 let node = null
