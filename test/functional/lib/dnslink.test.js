@@ -44,10 +44,10 @@ describe('dnslinkResolver', function () {
 
   describe('convertToIpnsPath(url)', function () {
     it('should return IPNS path', function () {
-      const url = new URL('http://ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+      const url = new URL('http://en.wikipedia-on-ipfs.org/sketches/ipld_intro.html?a=b#c=d')
       const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
       expect(dnslinkResolver.convertToIpnsPath(url))
-        .to.equal('/ipns/ipfs.git.sexy/sketches/ipld_intro.html?a=b#c=d')
+        .to.equal('/ipns/en.wikipedia-on-ipfs.org/sketches/ipld_intro.html?a=b#c=d')
     })
   })
 })
