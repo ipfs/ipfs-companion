@@ -27,6 +27,7 @@ export function ipfsContentPath (urlOrPath, opts) {
 
   if (isIPFS.subdomain(urlOrPath)) {
     // Move CID-in-subdomain to URL pathname
+    // eslint-disable-next-line prefer-const
     let { id, ns } = subdomainPatternMatch(url)
     id = dnsLabelToFqdn(id)
     url = new URL(`https://localhost/${ns}/${id}${url.pathname}${url.search}${url.hash}`)

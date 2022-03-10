@@ -28,7 +28,6 @@ import { ipfsContentPath, sameGateway } from './ipfs-path'
 const log = debug('ipfs-companion:dnslink')
 log.error = debug('ipfs-companion:dnslink:error')
 
-const offlinePeerCount = -1
 const check = String.fromCodePoint(0x2714)
 
 export default function createDnslinkResolver (getState, ipfs) {
