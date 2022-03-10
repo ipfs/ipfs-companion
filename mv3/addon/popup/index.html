@@ -1,9 +1,43 @@
 <html>
 <head>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="tachyon.css">
+  <link rel="stylesheet" href="../../node_modules/ipfs-css/ipfs.css">
+  <style>    
+    .ipfs-gradient-0 { background-image: linear-gradient(0deg, rgba(143,238,240,1) 0%, rgba(255,255,255,1) 100%); }
+
+    .current-tab-button:hover {
+      background: rgb(197, 197, 197);
+      cursor: pointer;
+    }
+
+    .current-tab-heading {
+      color: #8f8b8b;
+      font-weight: 500;
+    }
+
+    .link {
+      color: black;
+      cursor: pointer;
+    }
+
+    .refresh-button {
+      background: white;
+      border: none;
+      width: 100%;
+    }
+
+    .button-icon {
+      margin-bottom: -0.4rem;
+      margin-right: -0.25rem;
+    }
+
+    .cursor-help {
+      cursor: help;
+    }
+  </style>
 </head>
 <body style="width: 400px">
-    THIS IS A POPUP FOR IPFS COMPANION MV3
-  <script src="index.js"></script>
+  <div id="root"></div>
+  <script src="bundle.js"></script>
 </body>
 </html>

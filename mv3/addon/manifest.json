@@ -15,10 +15,14 @@
       }
     ]
   },
-  "permissions": ["scripting", "tabs", "declarativeNetRequest"],
+  "permissions": [
+    "scripting",
+    "tabs",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "clipboardWrite",
+    "notifications"],
   "host_permissions": [
-    "*://*.ipfs.io/*",
-    "*://*.dweb.link/*",
     "https://*/",
     "http://*/"
   ],
@@ -36,6 +40,18 @@
     },
     "default_popup": "popup/index.html"
   },
+  "options_ui": {
+    "open_in_tab": true,
+    "browser_style": false,
+    "page": "options/options.html"
+  },
+  "web_accessible_resources": [{
+    "resources": [
+      "icons/ipfs-logo-on.svg",
+      "icons/ipfs-logo-off.svg"
+    ],
+    "matches": ["<all_urls>"]
+  }],
   "author": "Dave Justice",
   "homepage_url": "https://github.com/ipfs-companion/tree/mv3",
   "short_name": "IPFS mv3"
