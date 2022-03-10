@@ -9,5 +9,21 @@
       }
     },
     "condition": { "urlFilter": "||dweb.link", "resourceTypes": ["main_frame"] }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "https://dweb.link/ipfs/\\1/"
+      }
+    },
+    "condition": {
+      "regexFilter": "^ipfs:\/\/.*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
   }
 ]
