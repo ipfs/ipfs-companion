@@ -15,7 +15,6 @@
     "preact": "^10.6.5",
     "quick-lru": "^6.1.0",
     "rimraf": "^3.0.2",
-    "web-ext": "^6.6.0",
     "webextension-polyfill": "^0.8.0"
   },
   "scripts": {
@@ -24,7 +23,6 @@
     "build": "esbuild ./addon/background.ts --bundle --platform=browser --outfile=./build/main.js && npm run build:popup",
     "build:popup": "esbuild ./addon/popup/index.tsx --bundle --platform=browser --outfile=./addon/popup/bundle.js",
     "postbuild": "cp -r ./addon/* build/",
-    "build:firefox": "web-ext build --source-dir ./build/",
     "format": "prettier --ignore-path ../.gitignore --write \"**/*.+(js|ts|json)\"",
     "test": "echo 'testing ipfs companion mv3'",
     "ci:install": "npm ci"
