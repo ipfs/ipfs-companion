@@ -49,7 +49,7 @@ export default function createDnslinkResolver(getState, ipfs) {
     },
 
     clearCache() {
-      cache.reset();
+      cache.clear();
     },
 
     hasCachedDnslink(fqdn) {

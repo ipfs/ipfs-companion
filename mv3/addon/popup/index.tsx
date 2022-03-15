@@ -1,43 +1,43 @@
 /* eslint quotes: 0 */
 /* eslint jsx-quotes: ["error", "prefer-double"] */
 
-import { h, render } from 'preact'
-import browser from 'webextension-polyfill'
+import { h, render } from "preact";
+import browser from "webextension-polyfill";
 
-import copyTextToClipboard from './utils'
+import copyTextToClipboard from "./utils";
 
 let popupState = {
   peerCount: 0,
   online: false,
   on: false,
-  apiURL: 'localhost:5000',
-  version: 'ALPHA',
+  apiURL: "localhost:5000",
+  version: "ALPHA",
   newVersionAvailable: false,
-  webviewURL: 'WEBVIEW URL NOT PRESENT'
+  webviewURL: "WEBVIEW URL NOT PRESENT",
 };
 
 const port = browser.runtime.connect({
-  name: 'port-2-background'
+  name: "port-2-background",
 });
 port.onMessage.addListener((msg) => {
-  console.log('message received', msg)
+  console.log("message received", msg);
   if (msg.statusUpdate) {
     console.log(msg.statusUpdate);
-    popupState = Object.assign({}, popupState, msg.statusUpdate)
-    App = <NewTab props={popupState} />
-    render(App, document.getElementById('root'))
+    popupState = Object.assign({}, popupState, msg.statusUpdate);
+    App = <NewTab props={popupState} />;
+    render(App, document.getElementById("root"));
   }
-})
+});
 
-function notify (titleKey, messageKey, messageParam) {
+function notify(titleKey, messageKey, messageParam) {
   port.postMessage({
-    title: 'notify',
+    title: "notify",
     data: {
       titleKey,
       messageKey,
-      messageParam
-    }
-  })
+      messageParam,
+    },
+  });
 }
 
 const NewTab = (props) => {
@@ -45,88 +45,88 @@ const NewTab = (props) => {
   const {
     isIpfsContext = false,
     currentTabPublicUrl,
-    currentTabContentPath,
-    currentTabImmutablePath,
+    // currentTabContentPath,
+    // currentTabImmutablePath,
     currentTabCid,
-    currentDnslinkFqdn,
-    currentFqdn,
+    // currentDnslinkFqdn,
+    // currentFqdn,
     peerCount,
     online,
     active,
     apiURLString,
-    version,
-    newVersionAvailable,
-    webviewURL,
-    gatewayUrl
-  } = props.props
-  let { showReloadNotification } = props.props
+    // version,
+    // newVersionAvailable,
+    // webviewURL,
+    gatewayUrl,
+  } = props.props;
+  let { showReloadNotification } = props.props;
   const openOptionPage = () => {
     browser.runtime
       .openOptionsPage()
       .then(() => window.close())
       .catch((err) => {
         console.error(
-          'runtime.openOptionsPage() failed, opening options page in tab instead.',
+          "runtime.openOptionsPage() failed, opening options page in tab instead.",
           err
-        )
+        );
         // brave: fallback to opening options page as a tab.
         browser.tabs.create({
-          url: browser.runtime.getURL('/options/options.html')
-        })
-      })
-  }
+          url: browser.runtime.getURL("/options/options.html"),
+        });
+      });
+  };
 
   const companionPowerBtn = () => {
-    console.log('companionPowerBtn called')
+    console.log("companionPowerBtn called");
     if (!active) {
       port.postMessage({
-        title: 'power:on'
-      })
+        title: "power:on",
+      });
     } else {
       port.postMessage({
-        title: 'power:off'
-      })
+        title: "power:off",
+      });
     }
-  }
+  };
 
   const reloadTab = () => {
-    showReloadNotification = false
+    showReloadNotification = false;
     port.postMessage({
-      title: 'reload'
-    })
-  }
+      title: "reload",
+    });
+  };
 
-  const contextMenuCopyCanonicalAddress = () => {
-    copyTextToClipboard(currentDnslinkFqdn, notify)
-  }
+  // const contextMenuCopyCanonicalAddress = () => {
+  //   copyTextToClipboard(currentDnslinkFqdn, notify);
+  // };
 
-  const contextMenuCopyCidAddress = () => {
-    copyTextToClipboard(currentTabImmutablePath, notify)
-  }
+  // const contextMenuCopyCidAddress = () => {
+  //   copyTextToClipboard(currentTabImmutablePath, notify);
+  // };
 
   const contextMenuCopyRawCid = () => {
-    copyTextToClipboard(currentTabCid, notify)
-  }
+    copyTextToClipboard(currentTabCid, notify);
+  };
 
   const contextMenuCopyAddressAtPublicGw = () => {
-    copyTextToClipboard(currentTabPublicUrl, notify)
-  }
+    copyTextToClipboard(currentTabPublicUrl, notify);
+  };
 
-  const update = () => {
-    console.log('update called')
-  }
-  const openWebview = () => {
-    console.log('openWebview called')
-  }
+  // const update = () => {
+  //   console.log("update called");
+  // };
+  // const openWebview = () => {
+  //   console.log("openWebview called");
+  // };
   const openAboutPage = () => {
-    console.log('openAboutPage called')
-  }
+    console.log("openAboutPage called");
+  };
   const openImportPage = () => {
-    console.log('openImportPage called')
-  }
+    console.log("openImportPage called");
+  };
   const pinToNode = () => {
-    console.log('pinToNode called')
-  }
+    console.log("pinToNode called");
+  };
   return (
     <div>
       {/* <!-- global popup --> */}

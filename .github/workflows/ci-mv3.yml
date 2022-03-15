@@ -9,7 +9,7 @@ jobs:
   test-mv3:
     defaults:
       run:
-        working-directory: ./mv3
+        working-directory: mv3
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -46,8 +46,8 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: npm run ci:install
 
-      # - name: Format
-      #   run: npm run format
+      - name: Format
+        run: npm run format
 
       - name: Build
         run: npm run build
