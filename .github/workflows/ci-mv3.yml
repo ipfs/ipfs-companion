@@ -30,9 +30,9 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
+          key: ${{ runner.os }}-cache-break-2-${{ hashFiles('package*json', 'yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
+            ${{ runner.os }}-cache-break-3-${{ hashFiles('package*json', 'yarn.lock') }}
             ${{ runner.os }}-
 
       - name: Restore node_modules
@@ -40,7 +40,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
+          key: ${{ runner.os }}-cache-break-${{ hashFiles('package*json', 'yarn.lock') }}
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
