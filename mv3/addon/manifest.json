@@ -18,10 +18,13 @@
   "permissions": [
     "scripting",
     "tabs",
+    "storage",
     "declarativeNetRequest",
     "declarativeNetRequestFeedback",
     "clipboardWrite",
-    "notifications"
+    "notifications",
+    "webRequest",
+    "webRequestBlocking"
   ],
   "host_permissions": ["https://*/", "http://*/"],
   "icons": {
