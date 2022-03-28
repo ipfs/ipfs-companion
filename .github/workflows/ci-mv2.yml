@@ -2,10 +2,10 @@ name: ci-mv2
 on:
   push:
     paths-ignore:
-      - '!mv3/**'
+      - 'mv3/**'
   pull_request:
     paths-ignore:
-      - '!mv3/**'
+      - 'mv3/**'
 
 env:
   XDG_CACHE_HOME: ${{ github.workspace }}/.cache
