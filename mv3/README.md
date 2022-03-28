@@ -17,7 +17,7 @@ the CORS safelist in our local ipfs node config (`$IPFS_PATH/config`).
 
 **Note:** you will need to replace the `chrome-extension` id with your own.
 
-This will be [fixed](https://github.com/ipfs/go-ipfs/pull/8690) in an upcoming release of go-ipfs 0.13.0.
+This will be in an upcoming release of go-ipfs
 
 ```
 	"API": {
@@ -29,10 +29,10 @@ This will be [fixed](https://github.com/ipfs/go-ipfs/pull/8690) in an upcoming r
 			],
 			"Access-Control-Allow-Origin": [
 				"chrome-extension://gdiahefjcggefcmjpdbahjpipenonllk",
+				"webui://-",
 				"http://localhost:3000",
 				"http://127.0.0.1:5001",
-				"https://webui.ipfs.io",
-				"http://webui.ipfs.io.ipns.localhost:8080"
+				"https://webui.ipfs.io"
 			]
 		}
 	},

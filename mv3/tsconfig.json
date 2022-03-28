@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
+    "target": "es6",
+    "jsx": "preserve",
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "typeRoots": ["@types", "node_modules/@types"]
+    "typeRoots": ["@types", "node_modules/@types"],
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "jsxImportSource": "preact"
   }
 }

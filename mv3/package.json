@@ -4,24 +4,36 @@
   "private": true,
   "dependencies": {
     "@types/chrome": "^0.0.177",
+    "@types/webextension-polyfill": "^0.8.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
     "esbuild": "^0.14.11",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "ipfs-css": "^1.3.0",
     "ipfs-http-client": "^53.0.1",
     "is-fqdn": "^2.0.1",
+    "is-ip": "^4.0.0",
     "is-ipfs": "^6.0.2",
-    "lru-cache": "^6.0.0",
+    "p-memoize": "^6.0.1",
+    "p-queue": "^7.2.0",
+    "preact": "^10.6.5",
+    "prettier": "^2.5.1",
+    "quick-lru": "^6.1.0",
     "rimraf": "^3.0.2",
-    "web-ext": "^6.6.0",
+    "typescript": "^4.5.4",
     "webextension-polyfill": "^0.8.0"
   },
   "scripts": {
     "lint": "eslint --ignore-path .eslintignore --ext .ts .",
     "prebuild": "rimraf build",
-    "build": "esbuild ./addon/background.ts --bundle --outfile=./build/main.js",
-    "postbuild": "cp -r ./addon/* build/",
-    "build:firefox": "web-ext build --source-dir ./build/",
+    "build": "esbuild ./addon/background.ts --bundle --platform=browser --outfile=./build/main.js && npm run build:popup",
+    "build:popup": "esbuild ./addon/popup/index.tsx --bundle --platform=browser --outfile=./addon/popup/bundle.js",
+    "postbuild": "cp -r ./addon/* build/ && npm run package:addon",
+    "package:addon": "cd build && zip -r -FS ../ipfs-companion-mv3.zip *",
     "format": "prettier --ignore-path ../.gitignore --write \"**/*.+(js|ts|json)\"",
     "test": "echo 'testing ipfs companion mv3'",
-    "ci:install": "npm ci"
+    "ci:install": "yarn install --frozen-lockfile"
   },
   "eslintConfig": {
     "extends": [
@@ -43,14 +55,5 @@
       "last 1 chrome version",
       "last 1 firefox version"
     ]
-  },
-  "devDependencies": {
-    "@types/webextension-polyfill": "^0.8.2",
-    "@typescript-eslint/eslint-plugin": "^5.9.1",
-    "@typescript-eslint/parser": "^5.9.1",
-    "eslint": "^8.6.0",
-    "eslint-config-prettier": "^8.3.0",
-    "prettier": "^2.5.1",
-    "typescript": "^4.5.4"
   }
 }
