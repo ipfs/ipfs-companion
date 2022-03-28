@@ -1,12 +1,18 @@
-name: ci
-on: [push, pull_request]
+name: ci-mv3
+on:
+  push:
+    paths:
+      - 'mv3/**'
+  pull_request:
+    paths:
+      - 'mv3/**'
 
 env:
   XDG_CACHE_HOME: ${{ github.workspace }}/.cache
 
 jobs:
 
-  test-mv3:
+  test:
     defaults:
       run:
         working-directory: ./mv3
@@ -18,15 +24,15 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.x
 
       - name: Restore .cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -37,7 +43,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock') }}
