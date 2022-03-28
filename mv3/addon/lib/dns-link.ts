@@ -198,7 +198,7 @@ export default function createDnslinkResolver(getState, ipfs) {
         {
           addRules: [
             {
-              id: `${id}`,
+              id,
               priority: 1,
               action: {
                 type: "redirect",

@@ -75,12 +75,12 @@ export async function init() {
   });
 
   // firefox specific requests
-  const modifyRequest = createRequestModifier(getState, runtime);
-  browser.webRequest.onBeforeSendHeaders.addListener(
-    modifyRequest.onBeforeSendHeaders,
-    { urls: ["<all_urls>"] },
-    ["blocking", "requestHeaders"]
-  );
+  // const modifyRequest = createRequestModifier(getState, runtime);
+  // browser.webRequest.onBeforeSendHeaders.addListener(
+  //   modifyRequest.onBeforeSendHeaders,
+  //   { urls: ["<all_urls>"] },
+  //   ["blocking", "requestHeaders"]
+  // );
 
   function keepAliveForced() {
     if (lifeline) lifeline.disconnect();
@@ -89,7 +89,6 @@ export async function init() {
   }
 
   async function keepAlive() {
-    console.log('blah blah');
     if (lifeline) return;
     for (const tab of await browser.tabs.query({ url: "*://*/*" })) {
       try {
@@ -175,7 +174,6 @@ export async function init() {
 
   // TODO continue hacking away at this method for current tab info.
   async function sendStatusUpdateToBrowserAction() {
-    console.log('sendStatusUpdateToBrowserAction');
     if (!browserActionPort) return;
     const dropSlash = (url) => url.replace(/\/$/, "");
     const currentTab = await browser.tabs
@@ -277,7 +275,6 @@ export async function init() {
   setApiStatusUpdateInterval(2500);
 
   async function apiStatusUpdate() {
-    console.log('apiStatusUpdate');
     state.peerCount = await getSwarmPeerCount();
     await Promise.all([
       // contextMenus.update(),
