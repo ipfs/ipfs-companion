@@ -23,7 +23,6 @@ import PQueue from "p-queue";
 import IsIpfs from "is-ipfs";
 
 import { ipfsContentPath, sameGateway } from "./ipfs-path";
-import { dynamicRulePrefix } from "./constants";
 
 const log = debug("ipfs-companion:dnslink");
 log.error = debug("ipfs-companion:dnslink:error");
@@ -199,7 +198,7 @@ export default function createDnslinkResolver(getState, ipfs) {
         {
           addRules: [
             {
-              id: `${dynamicRulePrefix}${id}`,
+              id: `${id}`,
               priority: 1,
               action: {
                 type: "redirect",
@@ -212,7 +211,7 @@ export default function createDnslinkResolver(getState, ipfs) {
         () => {
           dnslinkResolver.setDnslink(domain, contentPath);
           console.log(
-            `Added rule ${dynamicRulePrefix}${id}, contentPath: ${contentPath}, domain: ${domain}. Will redirect to ipfs gateway on next page load ${check}`
+            `Added rule ${id}, contentPath: ${contentPath}, domain: ${domain}. Will redirect to ipfs gateway on next page load ${check}`
           );
         }
       );
