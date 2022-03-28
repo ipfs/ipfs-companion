@@ -9,7 +9,7 @@ const RESULT_TTL_MS = 300000; // 5 minutes
 
 export function isNewTabURL(url) {
   if (!url) return true;
-  return url.includes("chrome://");
+  return url.startsWith("chrome:") || url.startsWith("about:");
 }
 
 // Turns URL or URIencoded path into a content path

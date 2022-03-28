@@ -23,6 +23,7 @@ import PQueue from "p-queue";
 import IsIpfs from "is-ipfs";
 
 import { ipfsContentPath, sameGateway } from "./ipfs-path";
+import { dynamicRulePrefix } from "./constants";
 
 const log = debug("ipfs-companion:dnslink");
 log.error = debug("ipfs-companion:dnslink:error");
@@ -193,11 +194,12 @@ export default function createDnslinkResolver(getState, ipfs) {
       if (!contentPath) return;
 
       const id = Math.floor(Math.random() * 29999);
+      // TODO(DJ): need to add error handling for collisions
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           addRules: [
             {
-              id: id,
+              id: `${dynamicRulePrefix}${id}`,
               priority: 1,
               action: {
                 type: "redirect",

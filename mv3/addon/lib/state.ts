@@ -49,7 +49,7 @@ export default function initState(options, overrides?) {
   delete state.publicSubdomainGatewayUrl;
   state.redirect = options.useCustomGateway;
   delete state.useCustomGateway;
-  state.apiURL = safeURL(options.ipfsApiUrl, { useLocalhostName: true }); // go-ipfs returns 403 if IP is beautified to 'localhost'
+  state.apiURL = safeURL(options.ipfsApiUrl, { useLocalhostName: false }); // go-ipfs returns 403 if IP is beautified to 'localhost'
   state.apiURLString = state.apiURL.toString();
   delete state.ipfsApiUrl;
   state.gwURL = safeURL(options.customGatewayUrl, {
