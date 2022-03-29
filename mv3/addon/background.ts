@@ -1,6 +1,25 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+/**
+ *
+              _________________ _____
+             |_   _| ___ \  ___/  ___|
+               | | | |_/ / |_  \ `--.
+               | | |  __/|  _|  `--. \
+              _| |_| |   | |   /\__/ /
+              \___/\_|   \_|   \____/
+ _____                                   _
+/  __ \                                 (_)
+| /  \/ ___  _ __ ___  _ __   __ _ _ __  _  ___  _ __
+| |    / _ \| '_ ` _ \| '_ \ / _` | '_ \| |/ _ \| '_ \
+| \__/\ (_) | | | | | | |_) | (_| | | | | | (_) | | | |
+ \____/\___/|_| |_| |_| .__/ \__,_|_| |_|_|\___/|_| |_|
+                      | |
+                      |_|
+ *      https://github.com/ipfs/ipfs-companion
+ **/
+
 import browser from 'webextension-polyfill';
 import { onInstalled } from './lib/on-installed';
 import { getUninstallURL } from './lib/on-uninstalled';
