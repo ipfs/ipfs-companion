@@ -8,12 +8,12 @@ import IsIpfs from "is-ipfs";
 import QuickLRU from "quick-lru";
 import createDnslinkResolver from "./dns-link";
 import createNotifier from "./notifier";
-import createRuntimeChecks from "./runtime-checks"
+// import createRuntimeChecks from "./runtime-checks"
 import createIpfsPathValidator, {
   safeHostname,
   isNewTabURL,
 } from "./ipfs-path";
-import createRequestModifier from "./request-modifier";
+// import createRequestModifier from "./request-modifier";
 import initState, { PageInfo } from "./state";
 import { optionDefaults, storeMissingOptions } from "./options";
 import { offlinePeerCount } from "./constants";
@@ -44,14 +44,14 @@ export async function init() {
     state = initState(options);
     console.log('initState', state, options);
     client = create({ url: `${state.apiURLString}api/v0` });
+    dnslinkResolver = createDnslinkResolver(getState, client);
     ipfsPathValidator = createIpfsPathValidator(
       getState,
       client,
       dnslinkResolver
     );
     notify = createNotifier(getState);
-    runtime = await createRuntimeChecks(browser);
-    dnslinkResolver = createDnslinkResolver(getState, client);
+    // runtime = await createRuntimeChecks(browser); // used for Firefox request handling
   } catch (error) {
     console.log("Unable to initialize addon due to error", error);
     log.error("Unable to initialize addon due to error", error);
@@ -241,8 +241,12 @@ export async function init() {
             await sendStatusUpdateToBrowserAction();
           }, 0);
         }
-        // TODO: fix the typing on these
-        info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url);
+        if (IsIpfs.url(url)) {
+          info.currentDnslinkFqdn = url;
+        } else {
+          info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url);
+        }
+        // TODO: fix typing here
         info.currentFqdn = info.currentDnslinkFqdn || safeHostname(url);
         // info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
         info.isRedirectContext =

@@ -87,8 +87,8 @@ export default function createDnslinkResolver(getState, ipfs) {
     //   }
     // },
 
-    readAndCacheDnslink(fqdn) {
-      let dnslink = dnslinkResolver.cachedDnslink(fqdn);
+    async readAndCacheDnslink(fqdn) {
+      let dnslink = await dnslinkResolver.cachedDnslink(fqdn);
       if (typeof dnslink === "undefined") {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`);
@@ -116,7 +116,7 @@ export default function createDnslinkResolver(getState, ipfs) {
     async resolve(url) {
       if (!dnslinkResolver.canLookupURL(url)) return;
       const fqdn = new URL(url).hostname;
-      const cachedResult = dnslinkResolver.cachedDnslink(fqdn);
+      const cachedResult = await dnslinkResolver.cachedDnslink(fqdn);
       if (cachedResult) return cachedResult;
       return lookupQueue.add(() => {
         return dnslinkResolver.readAndCacheDnslink(fqdn);
