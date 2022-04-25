@@ -30,7 +30,7 @@ export async function init() {
   let client;
   let dnslinkResolver;
   let ipfsPathValidator;
-  let runtime;
+  // let runtime;
   let state;
 
   try {
@@ -42,7 +42,7 @@ export async function init() {
     );
     const options = await browser.storage.local.get(optionDefaults);
     state = initState(options);
-    console.log('initState', state, options);
+    console.log("initState", state, options);
     client = create({ url: `${state.apiURLString}api/v0` });
     dnslinkResolver = createDnslinkResolver(getState, client);
     ipfsPathValidator = createIpfsPathValidator(
@@ -119,11 +119,17 @@ export async function init() {
       state.showReloadNotification = false;
       return;
     }
+    let xipfspathHeader;
     const currentUrl = new URL(info.url);
     const dnslinkURL = await dnslinkResolver.readAndCacheDnslink(
       currentUrl.host
     );
-    if (dnslinkURL) state.showReloadNotification = true;
+    if (!dnslinkURL) {
+      xipfspathHeader = await dnslinkResolver.getXIPFSPATHHeader(
+        currentUrl.host
+      );
+    }
+    if (dnslinkURL || xipfspathHeader) state.showReloadNotification = true;
   }
 
   // chrome.declarativeNetRequest.onRuleMatchedDebug.addListener(
@@ -172,7 +178,6 @@ export async function init() {
     }
   }
 
-  // TODO continue hacking away at this method for current tab info.
   async function sendStatusUpdateToBrowserAction() {
     if (!browserActionPort) return;
     const dropSlash = (url) => url.replace(/\/$/, "");

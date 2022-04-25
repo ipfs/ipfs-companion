@@ -22,7 +22,7 @@ import QuickLRU from "quick-lru";
 import PQueue from "p-queue";
 import IsIpfs from "is-ipfs";
 
-import { ipfsContentPath, sameGateway } from "./ipfs-path";
+import { ipfsContentPath, pathAtHttpGateway, sameGateway } from "./ipfs-path";
 
 const log = debug("ipfs-companion:dnslink");
 log.error = debug("ipfs-companion:dnslink:error");
@@ -92,7 +92,7 @@ export default function createDnslinkResolver(getState, ipfs) {
       if (typeof dnslink === "undefined") {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`);
-          dnslink = dnslinkResolver.readDnslink(fqdn);
+          dnslink = dnslinkResolver.resolveFqdn(fqdn);
           dnslinkResolver.addRuleToDynamicRuleset(fqdn);
           if (dnslink) {
             // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
@@ -110,6 +110,45 @@ export default function createDnslinkResolver(getState, ipfs) {
         // console.info(`[ipfs-companion] using cached dnslink: '${fqdn}' -> '${dnslink}'`)
       }
       return dnslink;
+    },
+
+    async getXIPFSPATHHeader (fqdn) {
+      let xIpfsPath;
+      // TODO: fix up this url in a safer way
+      await fetch('https://' + fqdn, {
+        method: 'GET',
+      }).then(response => {
+        if (response.headers.has('x-ipfs-path')) {
+          xIpfsPath = response.headers.get('x-ipfs-path')
+        }
+      }).catch(error => console.log('Error:', error));
+
+      if (xIpfsPath) {
+        // Additional validation of X-Ipfs-Path
+        if (IsIPFS.ipnsPath(xIpfsPath)) {
+          // Ignore unhandled IPNS path by this point
+          // (means DNSLink is disabled so we don't want to make a redirect that works like DNSLink)
+          // log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkRedirect=false, dnslinkPolicy=false or missing DNS TXT record)`)
+        } else if (IsIPFS.ipfsPath(xIpfsPath)) {
+          // It is possible that someone exposed /ipfs/<cid>/ under /
+          // and our path-based onBeforeRequest heuristics were unable
+          // to identify request as IPFS one until onHeadersReceived revealed
+          // presence of x-ipfs-path header.
+          // Solution: convert header value to a path at public gateway
+          // (optional redirect to custom one can happen later)
+          const url = new URL('https://' + fqdn);
+          const pathWithArgs = `${xIpfsPath}${url.search}${url.hash}`;
+          const state = getState();
+          const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString);
+          // redirect only if local node is around
+          if (newUrl && state.localGwAvailable) {
+            log(`onHeadersReceived: normalized ${fqdn} to  ${newUrl}`);
+            // return redirectToGateway(request, newUrl, state, ipfsPathValidator, runtime)
+          }
+          return newUrl;
+        }
+      }
+      return xIpfsPath;
     },
 
     // runs async lookup in a queue in the background and returns the record
@@ -142,7 +181,7 @@ export default function createDnslinkResolver(getState, ipfs) {
     //   })
     // },
 
-    async readDnslink(fqdn) {
+    async resolveFqdn(fqdn) {
       const contentPath = await ipfs.resolve(`/ipns/${fqdn}`);
       if (!contentPath) return contentPath;
       if (!IsIpfs.path(contentPath)) {
@@ -189,7 +228,7 @@ export default function createDnslinkResolver(getState, ipfs) {
     },
 
     async addRuleToDynamicRuleset(domain) {
-      const contentPath = await dnslinkResolver.readDnslink(domain);
+      const contentPath = await dnslinkResolver.resolveFqdn(domain);
       if (!contentPath) return;
 
       const id = Math.floor(Math.random() * 29999);
