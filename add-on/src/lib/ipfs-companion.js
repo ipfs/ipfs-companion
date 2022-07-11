@@ -507,6 +507,8 @@ module.exports = async function init () {
     }
 
     let badgeText, badgeColor, badgeIcon
+    
+    badgeText = ''
     if (state.peerCount > 0) {
       // All is good (online with peers)
       badgeColor = '#418B8E'
@@ -520,7 +522,6 @@ module.exports = async function init () {
       badgeIcon = '/icons/ipfs-logo-on.svg'
     } else {
       // API is offline
-      badgeText = ''
       badgeColor = '#8C8C8C'
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
