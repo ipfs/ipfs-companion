@@ -45,7 +45,7 @@ async function initIpfsClient (browser, opts) {
       throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
   const instance = await backend.init(browser, opts)
-  _reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
+  reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
   client = backend
   return instance
 }
@@ -55,7 +55,7 @@ async function destroyIpfsClient (browser) {
   if (!client) return
   try {
     await client.destroy(browser)
-    await _reloadIpfsClientDependents(browser) // sync (API stopped working)
+    await reloadIpfsClientDependents(browser) // sync (API stopped working)
   } finally {
     client = null
   }
@@ -67,16 +67,26 @@ function _isWebuiTab (url) {
   return bundled || ipns
 }
 
+async function _isLocalGatewayUrlCheck(browser) {
+  const { customGatewayUrl } = await browser.storage.local.get('customGatewayUrl');
+  return function ({ url, title }) {
+    // Check if the url is the local gateway url and if url is the same is title, it never got loaded.
+    return url.startsWith(customGatewayUrl) && (url === title);
+  };
+}
+
 function _isInternalTab (url, extensionOrigin) {
   return url.startsWith(extensionOrigin)
 }
 
-async function _reloadIpfsClientDependents (browser, instance, opts) {
+async function reloadIpfsClientDependents (browser, instance, opts) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
+      ;
       const extensionOrigin = browser.runtime.getURL('/')
+      const isLocalGatewayUrlDown = await _isLocalGatewayUrlCheck(browser);
       tabs.forEach((tab) => {
         // detect bundled webui in any of open tabs
         if (_isWebuiTab(tab.url)) {
@@ -85,6 +95,9 @@ async function _reloadIpfsClientDependents (browser, instance, opts) {
         } else if (_isInternalTab(tab.url, extensionOrigin)) {
           log(`reloading internal extension page at ${tab.url}`)
           browser.tabs.reload(tab.id)
+        } else if (isLocalGatewayUrlDown(tab)) {
+          log(`reloading local gateway at ${tab.url}`)
+          browser.tabs.reload(tab.id);
         }
       })
     }
@@ -98,3 +111,4 @@ async function _reloadIpfsClientDependents (browser, instance, opts) {
 
 exports.initIpfsClient = initIpfsClient
 exports.destroyIpfsClient = destroyIpfsClient
+exports.reloadIpfsClientDependents = reloadIpfsClientDependents
