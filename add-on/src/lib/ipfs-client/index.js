@@ -61,13 +61,19 @@ async function destroyIpfsClient (browser) {
   }
 }
 
-function _isWebuiTab (url) {
+function _isWebuiTab({ url }) {
   const bundled = !url.startsWith('http') && url.includes('/webui/index.html#/')
   const ipns = url.includes('/webui.ipfs.io/#/')
   return bundled || ipns
 }
 
-async function _isLocalGatewayUrlCheck(browser) {
+/**
+ * Returns a promise that resolves to function that checks if the tab is a local gateway url.
+ *
+ * @param {browser} browser
+ * @returns Promise<function(tab) => boolean>
+ */
+async function _isLocalGatewayUrlCheck (browser) {
   const { customGatewayUrl } = await browser.storage.local.get('customGatewayUrl');
   return function ({ url, title }) {
     // Check if the url is the local gateway url and if url is the same is title, it never got loaded.
@@ -75,8 +81,16 @@ async function _isLocalGatewayUrlCheck(browser) {
   };
 }
 
-function _isInternalTab (url, extensionOrigin) {
-  return url.startsWith(extensionOrigin)
+/**
+ * Returns a function that checks if the tab is an internal extension tab.
+ *
+ * @param {string} extensionOrigin
+ * @returns function(tab) => boolean
+ */
+function _isInternalTabCheck (extensionOrigin) {
+  return function ({ url }) {
+    url.startsWith(extensionOrigin);
+  };
 }
 
 async function reloadIpfsClientDependents (browser, instance, opts) {
@@ -84,15 +98,15 @@ async function reloadIpfsClientDependents (browser, instance, opts) {
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
-      ;
       const extensionOrigin = browser.runtime.getURL('/')
       const isLocalGatewayUrlDown = await _isLocalGatewayUrlCheck(browser);
+      const isInternalTab = _isInternalTabCheck(extensionOrigin);
       tabs.forEach((tab) => {
         // detect bundled webui in any of open tabs
-        if (_isWebuiTab(tab.url)) {
+        if (_isWebuiTab(tab)) {
           log(`reloading webui at ${tab.url}`)
           browser.tabs.reload(tab.id)
-        } else if (_isInternalTab(tab.url, extensionOrigin)) {
+        } else if (isInternalTab(tab)) {
           log(`reloading internal extension page at ${tab.url}`)
           browser.tabs.reload(tab.id)
         } else if (isLocalGatewayUrlDown(tab)) {
