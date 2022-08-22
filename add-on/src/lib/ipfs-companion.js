@@ -15,7 +15,7 @@ const { initState, offlinePeerCount } = require('./state')
 const { createIpfsPathValidator, sameGateway, safeHostname } = require('./ipfs-path')
 const createDnslinkResolver = require('./dnslink')
 const { createRequestModifier } = require('./ipfs-request')
-const { initIpfsClient, destroyIpfsClient } = require('./ipfs-client')
+const { initIpfsClient, destroyIpfsClient, reloadIpfsClientDependents } = require('./ipfs-client')
 const { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } = require('./ipfs-client/brave')
 const { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } = require('./ipfs-import')
 const createNotifier = require('./notifier')
@@ -595,6 +595,7 @@ module.exports = async function init () {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         await browser.storage.local.set({ useCustomGateway: true })
         await notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg')
+        reloadIpfsClientDependents(browser, ipfs, state);
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
         await browser.storage.local.set({ useCustomGateway: false })
         await notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg')
