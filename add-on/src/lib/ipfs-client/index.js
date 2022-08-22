@@ -10,6 +10,7 @@ const external = require('./external')
 const embedded = require('./embedded')
 const brave = require('./brave')
 const { precache } = require('../precache')
+const { prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader } = require('./reloaders');
 
 // ensure single client at all times, and no overlap between init and destroy
 let client
@@ -61,59 +62,14 @@ async function destroyIpfsClient (browser) {
   }
 }
 
-function _isWebuiTab({ url }) {
-  const bundled = !url.startsWith('http') && url.includes('/webui/index.html#/')
-  const ipns = url.includes('/webui.ipfs.io/#/')
-  return bundled || ipns
-}
-
-/**
- * Returns a promise that resolves to function that checks if the tab is a local gateway url.
- *
- * @param {browser} browser
- * @returns Promise<function(tab) => boolean>
- */
-async function _isLocalGatewayUrlCheck (browser) {
-  const { customGatewayUrl } = await browser.storage.local.get('customGatewayUrl');
-  return function ({ url, title }) {
-    // Check if the url is the local gateway url and if url is the same is title, it never got loaded.
-    return url.startsWith(customGatewayUrl) && (url === title);
-  };
-}
-
-/**
- * Returns a function that checks if the tab is an internal extension tab.
- *
- * @param {string} extensionOrigin
- * @returns function(tab) => boolean
- */
-function _isInternalTabCheck (extensionOrigin) {
-  return function ({ url }) {
-    url.startsWith(extensionOrigin);
-  };
-}
-
-async function reloadIpfsClientDependents (browser, instance, opts) {
+async function reloadIpfsClientDependents(
+  browser, instance, opts, reloadExtensions = [WebUiReloader, LocalGatewayReloader, InternalTabReloader]) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
-      const extensionOrigin = browser.runtime.getURL('/')
-      const isLocalGatewayUrlDown = await _isLocalGatewayUrlCheck(browser);
-      const isInternalTab = _isInternalTabCheck(extensionOrigin);
-      tabs.forEach((tab) => {
-        // detect bundled webui in any of open tabs
-        if (_isWebuiTab(tab)) {
-          log(`reloading webui at ${tab.url}`)
-          browser.tabs.reload(tab.id)
-        } else if (isInternalTab(tab)) {
-          log(`reloading internal extension page at ${tab.url}`)
-          browser.tabs.reload(tab.id)
-        } else if (isLocalGatewayUrlDown(tab)) {
-          log(`reloading local gateway at ${tab.url}`)
-          browser.tabs.reload(tab.id);
-        }
-      })
+      const reloadChecks = await prepareReloadExtensions(reloadExtensions, browser, log);
+      tabs.forEach(tab => reloadChecks.map(check => check.handle(tab)));
     }
   }
   // online only
@@ -123,6 +79,8 @@ async function reloadIpfsClientDependents (browser, instance, opts) {
   }
 }
 
-exports.initIpfsClient = initIpfsClient
-exports.destroyIpfsClient = destroyIpfsClient
-exports.reloadIpfsClientDependents = reloadIpfsClientDependents
+exports = {
+  initIpfsClient,
+  destroyIpfsClient,
+  reloadIpfsClientOfflinePages: (...args) => reloadIpfsClientDependents(...args, [LocalGatewayReloader])
+};
