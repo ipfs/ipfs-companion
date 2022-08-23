@@ -10,7 +10,7 @@ const external = require('./external')
 const embedded = require('./embedded')
 const brave = require('./brave')
 const { precache } = require('../precache')
-const { prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader } = require('./reloaders');
+const { prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader } = require('./reloaders')
 
 // ensure single client at all times, and no overlap between init and destroy
 let client
@@ -62,14 +62,14 @@ async function destroyIpfsClient (browser) {
   }
 }
 
-async function reloadIpfsClientDependents(
+async function reloadIpfsClientDependents (
   browser, instance, opts, reloadExtensions = [WebUiReloader, LocalGatewayReloader, InternalTabReloader]) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
-      const reloadChecks = await prepareReloadExtensions(reloadExtensions, browser, log);
-      reloadChecks.forEach(check => check.reload(tabs));
+      const reloadChecks = await prepareReloadExtensions(reloadExtensions, browser, log)
+      reloadChecks.forEach(check => check.reload(tabs))
     }
   }
 
@@ -84,4 +84,4 @@ module.exports = {
   initIpfsClient,
   destroyIpfsClient,
   reloadIpfsClientOfflinePages: (...args) => reloadIpfsClientDependents(...args, [LocalGatewayReloader])
-};
+}

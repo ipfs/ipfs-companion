@@ -10,15 +10,15 @@ const { WebUiReloader } = require('./webUiReloader')
  * @param {Logger} loggerInstance
  * @returns {Promise<Array<ReloaderBase>>}
  */
-function prepareReloadExtensions(extensions, browserInstance, loggerInstance) {
-  const reloadExtensions = Array.isArray(extensions) ? extensions : [extensions];
+function prepareReloadExtensions (extensions, browserInstance, loggerInstance) {
+  const reloadExtensions = Array.isArray(extensions) ? extensions : [extensions]
   return Promise.all(reloadExtensions
     .map(async Ext => {
-      const ext = new Ext(browserInstance, loggerInstance);
-      await ext.init();
-      return ext;
+      const ext = new Ext(browserInstance, loggerInstance)
+      await ext.init()
+      return ext
     })
-  );
+  )
 }
 
 module.exports = {
@@ -26,4 +26,4 @@ module.exports = {
   LocalGatewayReloader,
   WebUiReloader,
   prepareReloadExtensions
-};
+}

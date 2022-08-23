@@ -595,7 +595,7 @@ module.exports = async function init () {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         await browser.storage.local.set({ useCustomGateway: true })
         await notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg')
-        reloadIpfsClientOfflinePages(browser, ipfs, state);
+        reloadIpfsClientOfflinePages(browser, ipfs, state)
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
         await browser.storage.local.set({ useCustomGateway: false })
         await notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg')
