@@ -1,13 +1,24 @@
 const { ReloaderBase } = require('./reloaderBase');
 
 class InternalTabReloader extends ReloaderBase {
-  constructor(...args) {
-    super(...args);
+
+  /**
+   * Constructor for InternalTabReloader class.
+   *
+   * @param {Browser} browser
+   * @param {Logger} log
+   */
+  constructor(browser, log) {
+    super(browser, log);
     this.extensionOrigin = null;
   }
 
+  /**
+   * Setting up the extension origin.
+   */
   init() {
     this.extensionOrigin = this._browserInstance.runtime.getURL('/');
+    this._log(`InternalTabReloader Reloader Ready for use.`);
   }
 
   validation({ url }) {
@@ -19,6 +30,6 @@ class InternalTabReloader extends ReloaderBase {
   }
 }
 
-exports = {
+module.exports = {
   InternalTabReloader
 };

@@ -1,8 +1,15 @@
 const { ReloaderBase } = require('./reloaderBase');
 
 class WebUiReloader extends ReloaderBase {
-  constructor(...args) {
-    super(...args);
+
+  /**
+   * Constructor for reloader base class.
+   *
+   * @param {Browser} browser
+   * @param {Logger} log
+   */
+  constructor(browser, log) {
+    super(browser, log);
   }
 
   validation({ url }) {
@@ -16,6 +23,6 @@ class WebUiReloader extends ReloaderBase {
   }
 }
 
-exports = {
+module.exports = {
   WebUiReloader
 };

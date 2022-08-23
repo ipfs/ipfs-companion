@@ -69,9 +69,10 @@ async function reloadIpfsClientDependents(
     const tabs = await browser.tabs.query({})
     if (tabs) {
       const reloadChecks = await prepareReloadExtensions(reloadExtensions, browser, log);
-      tabs.forEach(tab => reloadChecks.map(check => check.handle(tab)));
+      reloadChecks.forEach(check => check.reload(tabs));
     }
   }
+
   // online only
   if (client && instance && opts) {
     // add important data to local ipfs repo for instant load
@@ -79,7 +80,7 @@ async function reloadIpfsClientDependents(
   }
 }
 
-exports = {
+module.exports = {
   initIpfsClient,
   destroyIpfsClient,
   reloadIpfsClientOfflinePages: (...args) => reloadIpfsClientDependents(...args, [LocalGatewayReloader])
