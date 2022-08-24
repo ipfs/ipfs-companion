@@ -2,23 +2,12 @@ const { ReloaderBase } = require('./reloaderBase')
 
 class LocalGatewayReloader extends ReloaderBase {
   /**
-   * Constructor for LocalGatewayReloader class.
-   *
-   * @param {Browser} browser
-   * @param {Logger} log
-   */
-  constructor (browser, log) {
-    super(browser, log)
-    this.customGatewayUrl = null
-  }
-
-  /**
    * Fetching the customGatewayUrl from the local storage.
    */
   async init () {
     const { customGatewayUrl } = await this._browserInstance.storage.local.get('customGatewayUrl')
     this.customGatewayUrl = customGatewayUrl
-    this._log('LocalGateway Reloader Ready for use.')
+    this._log('LocalGatewayReloader Ready for use.')
   }
 
   validation ({ url, title }) {
