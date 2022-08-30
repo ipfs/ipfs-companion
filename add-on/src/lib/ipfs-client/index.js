@@ -46,7 +46,7 @@ async function initIpfsClient (browser, opts) {
       throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
   const instance = await backend.init(browser, opts)
-  reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
+  _reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
   client = backend
   return instance
 }
@@ -56,20 +56,35 @@ async function destroyIpfsClient (browser) {
   if (!client) return
   try {
     await client.destroy(browser)
-    await reloadIpfsClientDependents(browser) // sync (API stopped working)
+    await _reloadIpfsClientDependents(browser) // sync (API stopped working)
   } finally {
     client = null
   }
 }
 
-async function reloadIpfsClientDependents (
+/**
+ * Reloads pages dependant on ipfs to be online
+ *
+ * @typedef {embedded|brave|external} Browser
+ * @param {Browser} browser
+ * @param {import('ipfs-http-client').default} instance
+ * @param {Object} opts
+ * @param {Array.[InternalTabReloader|LocalGatewayReloader|WebUiReloader]=} reloadExtensions
+ * @returns {void}
+ */
+async function _reloadIpfsClientDependents(
   browser, instance, opts, reloadExtensions = [WebUiReloader, LocalGatewayReloader, InternalTabReloader]) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
-      const reloadChecks = await prepareReloadExtensions(reloadExtensions, browser, log)
-      reloadChecks.forEach(check => check.reload(tabs))
+      try {
+        const reloadExtensionInstances = await prepareReloadExtensions(reloadExtensions, browser, log)
+        // the reload process is async, fire and forget.
+        reloadExtensionInstances.forEach(ext => ext.reload(tabs))
+      } catch (e) {
+        log('Failed to trigger reloaders')
+      }
     }
   }
 
@@ -80,8 +95,21 @@ async function reloadIpfsClientDependents (
   }
 }
 
+/**
+ * Reloads local gateway pages dependant on ipfs to be online
+ *
+ * @typedef {embedded|brave|external} Browser
+ * @param {Browser} browser
+ * @param {import('ipfs-http-client').default} instance
+ * @param {Object} opts
+ * @returns {void}
+ */
+function reloadIpfsClientOfflinePages(browser, instance, opts) {
+  _reloadIpfsClientDependents(browser, instance, opts, [LocalGatewayReloader])
+}
+
 module.exports = {
   initIpfsClient,
   destroyIpfsClient,
-  reloadIpfsClientOfflinePages: (...args) => reloadIpfsClientDependents(...args, [LocalGatewayReloader])
+  reloadIpfsClientOfflinePages
 }

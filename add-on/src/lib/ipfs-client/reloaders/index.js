@@ -14,9 +14,13 @@ function prepareReloadExtensions (extensions, browserInstance, loggerInstance) {
   const reloadExtensions = Array.isArray(extensions) ? extensions : [extensions]
   return Promise.all(reloadExtensions
     .map(async Ext => {
-      const ext = new Ext(browserInstance, loggerInstance)
-      await ext.init()
-      return ext
+      try {
+        const ext = new Ext(browserInstance, loggerInstance)
+        await ext.init()
+        return ext
+      } catch (e) {
+        loggerInstance(`Extension Instance Failed to Initialize with error: ${e}. Extension: ${Ext}`)
+      }
     })
   )
 }
