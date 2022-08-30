@@ -72,7 +72,7 @@ async function destroyIpfsClient (browser) {
  * @param {Array.[InternalTabReloader|LocalGatewayReloader|WebUiReloader]=} reloadExtensions
  * @returns {void}
  */
-async function _reloadIpfsClientDependents(
+async function _reloadIpfsClientDependents (
   browser, instance, opts, reloadExtensions = [WebUiReloader, LocalGatewayReloader, InternalTabReloader]) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
@@ -104,7 +104,7 @@ async function _reloadIpfsClientDependents(
  * @param {Object} opts
  * @returns {void}
  */
-function reloadIpfsClientOfflinePages(browser, instance, opts) {
+function reloadIpfsClientOfflinePages (browser, instance, opts) {
   _reloadIpfsClientDependents(browser, instance, opts, [LocalGatewayReloader])
 }
 

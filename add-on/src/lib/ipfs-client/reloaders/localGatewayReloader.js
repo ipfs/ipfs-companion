@@ -35,7 +35,7 @@ class LocalGatewayReloader extends ReloaderBase {
 
   /**
    * Returns message when reloading the tab.
-   * 
+   *
    * @param {Object} tab
    * @param {string} tab.url
    * @returns {string} message.
