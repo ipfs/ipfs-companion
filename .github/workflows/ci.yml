@@ -21,6 +21,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
+          
+      - name: patch node gyp on windows to support Visual Studio 2019
+        shell: powershell
+        if: runner.os == 'Windows'
+        run: |
+          npm install --global node-gyp@latest
+          npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
 
       - name: Restore .cache
         uses: actions/cache@v2
@@ -38,10 +45,6 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install Microsoft Build Tools
-        if: runner.os == 'Windows'
-        run: npm install --global --production windows-build-tools --vs2015
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
