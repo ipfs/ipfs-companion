@@ -24,7 +24,7 @@ jobs:
           
       - name: patch node gyp on windows to support Visual Studio 2019
         shell: powershell
-        if: runner.or == 'Windows'
+        if: runner.os == 'Windows'
         run: |
           npm install --global node-gyp@latest
           npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
