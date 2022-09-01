@@ -20,7 +20,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 14
 
       - name: Restore .cache
         uses: actions/cache@v2
@@ -38,6 +38,10 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Microsoft Build Tools
+        if: runner.os == 'Windows'
+        run: npm install --global windows-build-tools
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -74,4 +78,3 @@ jobs:
 
       - name: Show Cache
         run: du -h ${{ github.workspace }}/.cache/* || true
-
