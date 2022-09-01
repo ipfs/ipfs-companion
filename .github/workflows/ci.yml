@@ -41,7 +41,7 @@ jobs:
 
       - name: Install Microsoft Build Tools
         if: runner.os == 'Windows'
-        run: npm install --global windows-build-tools
+        run: npm install --global --production windows-build-tools --vs2015
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
