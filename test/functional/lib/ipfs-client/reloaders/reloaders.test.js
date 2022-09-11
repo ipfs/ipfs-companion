@@ -99,7 +99,7 @@ describe('Reloaders', function () {
     })
 
     it('should initialize', function () {
-      sinon.assert.calledWith(logger, 'LocalGatewayReloader Ready for use.')
+      sinon.assert.calledWith(logger, 'Initialized without additional config.')
     })
 
     it('should handle local gateway tab reloading', function () {

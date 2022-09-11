@@ -1,15 +1,7 @@
 const { ReloaderBase } = require('./reloaderBase')
+const isIPFS = require('is-ipfs')
 
 class LocalGatewayReloader extends ReloaderBase {
-  /**
-   * Fetching the customGatewayUrl from the local storage.
-   */
-  async init () {
-    const { customGatewayUrl } = await this._browserInstance.storage.local.get('customGatewayUrl')
-    this.customGatewayUrl = customGatewayUrl
-    this._log('LocalGatewayReloader Ready for use.')
-  }
-
   /**
    * Performs url validation for the tab. If tab is loaded via local gateway.
    *
@@ -29,7 +21,7 @@ class LocalGatewayReloader extends ReloaderBase {
      *   which reduces the overhead of injecting content scripts to track urls that were loaded after the connection
      *   was offline, it may also need extra permissions to inject code on error pages.
      */
-    return url.startsWith(this.customGatewayUrl) &&
+    return (isIPFS.url(url) || isIPFS.subdomain(url)) &&
       (url.includes(title) || title.toLowerCase() === 'problem loading page')
   }
 
