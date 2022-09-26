@@ -10,6 +10,7 @@ const external = require('./external')
 const embedded = require('./embedded')
 const brave = require('./brave')
 const { precache } = require('../precache')
+const { prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader } = require('./reloaders')
 
 // ensure single client at all times, and no overlap between init and destroy
 let client
@@ -61,34 +62,32 @@ async function destroyIpfsClient (browser) {
   }
 }
 
-function _isWebuiTab (url) {
-  const bundled = !url.startsWith('http') && url.includes('/webui/index.html#/')
-  const ipns = url.includes('/webui.ipfs.io/#/')
-  return bundled || ipns
-}
-
-function _isInternalTab (url, extensionOrigin) {
-  return url.startsWith(extensionOrigin)
-}
-
-async function _reloadIpfsClientDependents (browser, instance, opts) {
+/**
+ * Reloads pages dependant on ipfs to be online
+ *
+ * @typedef {embedded|brave|external} Browser
+ * @param {Browser} browser
+ * @param {import('ipfs-http-client').default} instance
+ * @param {Object} opts
+ * @param {Array.[InternalTabReloader|LocalGatewayReloader|WebUiReloader]=} reloadExtensions
+ * @returns {void}
+ */
+async function _reloadIpfsClientDependents (
+  browser, instance, opts, reloadExtensions = [WebUiReloader, LocalGatewayReloader, InternalTabReloader]) {
   // online || offline
   if (browser.tabs && browser.tabs.query) {
     const tabs = await browser.tabs.query({})
     if (tabs) {
-      const extensionOrigin = browser.runtime.getURL('/')
-      tabs.forEach((tab) => {
-        // detect bundled webui in any of open tabs
-        if (_isWebuiTab(tab.url)) {
-          log(`reloading webui at ${tab.url}`)
-          browser.tabs.reload(tab.id)
-        } else if (_isInternalTab(tab.url, extensionOrigin)) {
-          log(`reloading internal extension page at ${tab.url}`)
-          browser.tabs.reload(tab.id)
-        }
-      })
+      try {
+        const reloadExtensionInstances = await prepareReloadExtensions(reloadExtensions, browser, log)
+        // the reload process is async, fire and forget.
+        reloadExtensionInstances.forEach(ext => ext.reload(tabs))
+      } catch (e) {
+        log('Failed to trigger reloaders')
+      }
     }
   }
+
   // online only
   if (client && instance && opts) {
     // add important data to local ipfs repo for instant load
@@ -96,5 +95,21 @@ async function _reloadIpfsClientDependents (browser, instance, opts) {
   }
 }
 
-exports.initIpfsClient = initIpfsClient
-exports.destroyIpfsClient = destroyIpfsClient
+/**
+ * Reloads local gateway pages dependant on ipfs to be online
+ *
+ * @typedef {embedded|brave|external} Browser
+ * @param {Browser} browser
+ * @param {import('ipfs-http-client').default} instance
+ * @param {Object} opts
+ * @returns {void}
+ */
+function reloadIpfsClientOfflinePages (browser, instance, opts) {
+  _reloadIpfsClientDependents(browser, instance, opts, [LocalGatewayReloader])
+}
+
+module.exports = {
+  initIpfsClient,
+  destroyIpfsClient,
+  reloadIpfsClientOfflinePages
+}
