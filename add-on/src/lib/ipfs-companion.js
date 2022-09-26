@@ -507,18 +507,21 @@ module.exports = async function init () {
     }
 
     let badgeText, badgeColor, badgeIcon
-    badgeText = state.peerCount.toString()
+
+    badgeText = ''
     if (state.peerCount > 0) {
       // All is good (online with peers)
       badgeColor = '#418B8E'
       badgeIcon = '/icons/ipfs-logo-on.svg'
+
+      // prevent text overflow when peer count has more than 3 digits
+      badgeText = (state.peerCount > 999) ? (Math.floor(state.peerCount / 1000).toString() + 'k') : state.peerCount.toString()
     } else if (state.peerCount === 0) {
       // API is online but no peers
       badgeColor = 'red'
       badgeIcon = '/icons/ipfs-logo-on.svg'
     } else {
       // API is offline
-      badgeText = ''
       badgeColor = '#8C8C8C'
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
