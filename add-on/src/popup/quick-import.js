@@ -61,6 +61,11 @@ function quickImportStore (state, emitter) {
 
   emitter.on('fileInputChange', event => processFiles(state, emitter, event.target.files))
 
+  // update companion preference
+  emitter.on('optionChange', ({ key, value }) => {
+    browser.storage.local.set({ [key]: value })
+  })
+
   // drag & drop anywhere
   drop(document.body, files => processFiles(state, emitter, files))
 }
@@ -138,6 +143,10 @@ async function processFiles (state, emitter, files) {
     copyShareLink(results)
     preloadFilesAtPublicGateway(results)
 
+    // update preferred import dir if user specified one while importing
+    if (state.userChangedImportDir) {
+      emitter.emit('optionChange', { key: 'importDir', value: state.importDir })
+    }
     // present result to the user using the beast available way
     if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
       await openFilesAtGateway(importDir)
