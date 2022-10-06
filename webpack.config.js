@@ -132,6 +132,7 @@ const uiConfig = merge(commonConfig, {
   entry: {
     browserAction: './add-on/src/popup/browser-action/index.js',
     importPage: './add-on/src/popup/quick-import.js',
+    offlinePage: './add-on/src/landing-pages/offline/index.js',
     optionsPage: './add-on/src/options/options.js',
     //  TODO: remove or fix (window.ipfs) proxyAclManagerPage: './add-on/src/pages/proxy-acl/index.js',
     // TODO: remove or fix (window.ipfs) proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js',
