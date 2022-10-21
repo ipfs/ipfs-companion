@@ -7,7 +7,7 @@ import { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHos
 import { initState } from '../../../add-on/src/lib/state.js'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
-import { spoofCachedDnslink } from './dnslink.test.js.js'
+import { spoofCachedDnslink } from './dnslink.test.js'
 
 function spoofIpfsResolve (ipfs, path, value) {
   const resolve = stub(ipfs, 'resolve')

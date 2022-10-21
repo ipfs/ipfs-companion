@@ -4,7 +4,7 @@
 import { describe, it, before, beforeEach, after } from 'mocha'
 import { expect } from 'chai'
 import browser from 'sinon-chrome'
-import { createRuntimeChecks } from '../../../add-on/src/lib/runtime-checks.js'
+import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 const promiseStub = (result) => () => Promise.resolve(result)
 
 describe('runtime-checks.js', function () {

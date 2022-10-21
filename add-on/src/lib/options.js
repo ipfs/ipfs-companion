@@ -1,6 +1,6 @@
 'use strict'
 
-const isIP = import('is-ip')
+import { isIP } from 'is-ip'
 import isFQDN from 'is-fqdn'
 
 export const optionDefaults = Object.freeze({

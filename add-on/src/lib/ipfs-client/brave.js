@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
-const pWaitFor = import('p-wait-for')
+import pWaitFor from 'p-wait-for'
 
 import debug from 'debug'
 const log = debug('ipfs-companion:client:brave')

@@ -4,7 +4,7 @@ import { expect, assert } from 'chai'
 import { URL } from 'url' // URL implementation with support for .origin attribute
 import browser from 'sinon-chrome'
 import { initState } from '../../../add-on/src/lib/state.js'
-import { createRuntimeChecks } from '../../../add-on/src/lib/runtime-checks.js'
+import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import createDNSLinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
