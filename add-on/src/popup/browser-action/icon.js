@@ -1,10 +1,12 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const browser = require('webextension-polyfill')
+import html from 'choo/html/index.js'
+import browser from 'webextension-polyfill'
 
-function icon ({ svg, title, active, action, className }) {
+export default function icon({
+  svg, title, active, action, className
+}) {
   return html`
     <button class="header-icon pa0 ma0 dib bn bg-transparent transition-all ${className} ${action ? 'pointer' : null} ${active ? 'aqua' : 'gray'}"
       style="outline:none;"
@@ -14,5 +16,3 @@ function icon ({ svg, title, active, action, className }) {
     </button>
   `
 }
-
-module.exports = icon

@@ -1,11 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const switchToggle = require('../../pages/components/switch-toggle')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import switchToggle from '../../pages/components/switch-toggle.js'
 
-function experimentsForm ({
+export default function experimentsForm({
   useLatestWebUI,
   displayNotifications,
   displayReleaseNotes,
@@ -115,5 +115,3 @@ function experimentsForm ({
     </form>
   `
 }
-
-module.exports = experimentsForm

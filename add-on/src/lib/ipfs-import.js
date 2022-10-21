@@ -1,18 +1,18 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:import')
 log.error = debug('ipfs-companion:import:error')
 
-const browser = require('webextension-polyfill')
+import browser from 'webextension-polyfill'
 
-const { redirectOptOutHint } = require('./ipfs-request')
-const { ipfsContentPath } = require('./ipfs-path')
+import { redirectOptOutHint } from './ipfs-request.js'
+import { ipfsContentPath } from './ipfs-path.js'
 
-module.exports.browserActionFilesCpImportCurrentTab = 'browserActionFilesCpImportCurrentTab'
+export const browserActionFilesCpImportCurrentTab = 'browserActionFilesCpImportCurrentTab'
 
-module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, runtime, copier) => {
+export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime, copier) {
   const {
     resolveToPublicUrl,
     resolveToCid
@@ -97,7 +97,7 @@ module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, 
           openFilesAtWebUI
         } = this
         const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
-        const importDir = module.exports.formatImportDirectory(getState().importDir)
+        const importDir = formatImportDirectory(getState().importDir)
         const ipfs = getIpfs()
         const contentPath = ipfsContentPath(currentTab.url, { keepURIParams: false })
         const pathSegments = contentPath.split('/').filter(Boolean)
@@ -126,7 +126,7 @@ module.exports.createIpfsImportHandler = (getState, getIpfs, ipfsPathValidator, 
   return ipfsImportHandler
 }
 
-module.exports.formatImportDirectory = (path) => {
+export function formatImportDirectory (path) {
   path = path.replace(/\/$|$/, '/')
   path = path.replace(/(\/)\/+/g, '$1')
 

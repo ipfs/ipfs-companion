@@ -1,15 +1,15 @@
 'use strict'
-const { describe, it, before, beforeEach, after } = require('mocha')
-const sinon = require('sinon')
-const { expect } = require('chai')
-const { URL } = require('url')
-const browser = require('sinon-chrome')
-const { initState } = require('../../../add-on/src/lib/state')
-const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
-const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
-const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
-const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
+import { describe, it, before, beforeEach, after } from 'mocha'
+import sinon from 'sinon'
+import { expect } from 'chai'
+import { URL } from 'url'
+import browser from 'sinon-chrome'
+import { initState } from '../../../add-on/src/lib/state.js'
+import { createRuntimeChecks } from '../../../add-on/src/lib/runtime-checks.js'
+import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
+import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
+import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
 
 const url2request = (string) => {
   return { url: string, type: 'main_frame' }
@@ -27,6 +27,7 @@ describe('modifyRequest processing of DNSLinks', function () {
   before(function () {
     global.URL = URL
     global.browser = browser
+    browser.runtime.id = 'testid'
   })
 
   beforeEach(async function () {

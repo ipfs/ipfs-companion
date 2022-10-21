@@ -1,10 +1,10 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const { safeURL } = require('./options')
+import browser from 'webextension-polyfill'
+import { safeURL } from './options.js'
 
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:http-proxy')
 log.error = debug('ipfs-companion:http-proxy:error')
 
@@ -30,7 +30,7 @@ log.error = debug('ipfs-companion:http-proxy:error')
 // - Firefox requires proxy to avoid DNS lookup, but there is an open issue
 //   that will remove that need at some point:
 //   https://bugzilla.mozilla.org/show_bug.cgi?id=1220810
-async function registerSubdomainProxy (getState, runtime, notify) {
+export async function registerSubdomainProxy (getState, runtime, notify) {
   // At the moment only firefox requires proxy registration
   if (!runtime.isFirefox) return
 
@@ -151,5 +151,3 @@ async function registerSubdomainProxyChromium (enable, hostname, port) {
   }
 }
 */
-
-module.exports.registerSubdomainProxy = registerSubdomainProxy

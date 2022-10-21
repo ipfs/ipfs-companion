@@ -1,12 +1,12 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-require('./welcome.css')
+import './welcome.css'
 
-const browser = require('webextension-polyfill')
-const choo = require('choo')
-const createWelcomePageStore = require('./store')
-const createWelcomePage = require('./page')
+import browser from 'webextension-polyfill'
+import choo from 'choo'
+import createWelcomePageStore from './store.js'
+import createWelcomePage from './page.js'
 
 const app = choo()
 

@@ -1,10 +1,17 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const icon = require('./icon')
+import html from 'choo/html/index.js'
+import icon from './icon.js'
 
-function versionUpdateIcon ({ newVersion, active, title, action, className, size = '1.8rem' }) {
+export default function versionUpdateIcon({
+  action,
+  active,
+  className,
+  newVersion,
+  size = '1.8rem',
+  title
+}) {
   let svg = html`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 86"
         class="fill-yellow-muted mr1"
@@ -27,5 +34,3 @@ function versionUpdateIcon ({ newVersion, active, title, action, className, size
   }
   return icon({ svg, title, active, action, className })
 }
-
-module.exports = versionUpdateIcon

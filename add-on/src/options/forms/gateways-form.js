@@ -1,18 +1,18 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const switchToggle = require('../../pages/components/switch-toggle')
-const { guiURLString, hostTextToArray, hostArrayToText } = require('../../lib/options')
-const { braveNodeType } = require('../../lib/ipfs-client/brave')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import switchToggle from '../../pages/components/switch-toggle.js'
+import { guiURLString, hostTextToArray, hostArrayToText } from '../../lib/options.js'
+import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 
 // Warn about mixed content issues when changing the gateway
 // to something other than HTTP or localhost
 // https://github.com/ipfs-shipyard/ipfs-companion/issues/648
 const secureContextUrl = /^https:\/\/|^http:\/\/localhost|^http:\/\/127.0.0.1|^http:\/\/\[::1\]/
 
-function gatewaysForm ({
+export default function gatewaysForm({
   ipfsNodeType,
   customGatewayUrl,
   useCustomGateway,
@@ -170,5 +170,3 @@ function gatewaysForm ({
     </form>
   `
 }
-
-module.exports = gatewaysForm

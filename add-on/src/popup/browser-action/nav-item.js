@@ -1,10 +1,18 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const switchToggle = require('../../pages/components/switch-toggle')
+import html from 'choo/html/index.js'
+import switchToggle from '../../pages/components/switch-toggle.js'
 
-function navItem ({ icon, text, helperText, title, disabled, style, onClick, switchValue }) {
+export default function navItem({
+  disabled,
+  helperText,
+  onClick,
+  style,
+  switchValue,
+  text,
+  title
+}) {
   let buttonStyle = 'black button-reset db w-100 bg-white b--none outline-0--focus pt2 ph3 f6 tl'
   if (disabled) {
     buttonStyle += ' o-40'
@@ -27,5 +35,3 @@ function navItem ({ icon, text, helperText, title, disabled, style, onClick, swi
     </button>
   `
 }
-
-module.exports = navItem

@@ -1,11 +1,11 @@
 'use strict'
 
-require('./proxy-access-dialog.css')
+import './proxy-access-dialog.css'
 
-const browser = require('webextension-polyfill')
-const choo = require('choo')
-const createProxyAccessDialogStore = require('./store')
-const createProxyAccessDialogPage = require('./page')
+import browser from 'webextension-polyfill'
+import choo from 'choo'
+import createProxyAccessDialogStore from './store.js'
+import createProxyAccessDialogPage from './page.js'
 
 const app = choo()
 

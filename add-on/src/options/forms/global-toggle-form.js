@@ -1,11 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const switchToggle = require('../../pages/components/switch-toggle')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import switchToggle from '../../pages/components/switch-toggle.js'
 
-function globalToggleForm ({ active, onOptionChange }) {
+export default function globalToggleForm({ active, onOptionChange }) {
   const toggle = onOptionChange('active')
   return html`
     <form class="db b mb3 bg-aqua-muted charcoal">
@@ -16,5 +16,3 @@ function globalToggleForm ({ active, onOptionChange }) {
     </form>
   `
 }
-
-module.exports = globalToggleForm

@@ -1,13 +1,13 @@
 'use strict'
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const logo = require('../../popup/logo')
-const { renderTranslatedLinks, renderTranslatedSpans } = require('../../utils/i18n')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import logo from '../../popup/logo.js'
+import { renderTranslatedLinks, renderTranslatedSpans } from '../../utils/i18n.js'
 
 // Brave detection
-const { brave } = require('../../../src/lib/ipfs-client/brave')
-const { optionsPage } = require('../../../src/lib/constants')
+import { brave } from '../../../src/lib/ipfs-client/brave.js'
+import { optionsPage } from '../../../src/lib/constants.js'
 
 // Assets
 const libp2pLogo = '../../../images/libp2p.svg'
@@ -19,7 +19,7 @@ const colorIpfsLogo = '#57cbd0'
 const colorWhite = '#ffffff'
 const colorYellow = '#f39021'
 
-function createWelcomePage (i18n) {
+export default function createWelcomePage(i18n) {
   return function welcomePage (state, emit) {
     const { isIpfsOnline, peerCount } = state
     const openWebUi = (page) => () => emit('openWebUi', page)
@@ -227,5 +227,3 @@ const renderProjects = (i18n) => {
     </div>
   `
 }
-
-module.exports = createWelcomePage

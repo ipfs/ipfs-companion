@@ -1,18 +1,18 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
 
-const LRU = require('lru-cache')
-const isIPFS = require('is-ipfs')
-const isFQDN = require('is-fqdn')
-const { pathAtHttpGateway, sameGateway, ipfsUri } = require('./ipfs-path')
-const { safeURL } = require('./options')
-const { braveNodeType } = require('./ipfs-client/brave')
+import LRU from 'lru-cache'
+import isIPFS from 'is-ipfs'
+import isFQDN from 'is-fqdn'
+import { pathAtHttpGateway, sameGateway, ipfsUri } from './ipfs-path.js'
+import { safeURL } from './options.js'
+import { braveNodeType } from './ipfs-client/brave.js'
 
-const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
+export const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableNetworkErrors = new Set([
   // Firefox
   'NS_ERROR_UNKNOWN_HOST', // dns failure
@@ -31,7 +31,7 @@ const onHeadersReceivedRedirect = new Set()
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
-function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
+export function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
   const browser = runtime.browser
   const runtimeRoot = browser.runtime.getURL('/')
   const webExtensionOrigin = runtimeRoot ? new URL(runtimeRoot).origin : 'http://companion-origin' // avoid 'null' because it has special meaning
@@ -449,9 +449,6 @@ function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, ru
     }
   }
 }
-
-exports.redirectOptOutHint = redirectOptOutHint
-exports.createRequestModifier = createRequestModifier
 
 // Returns a string with URL at the active gateway (local or public)
 function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {

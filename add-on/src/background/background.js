@@ -1,10 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const { onInstalled } = require('../lib/on-installed')
-const { getUninstallURL } = require('../lib/on-uninstalled')
-const { optionDefaults } = require('../lib/options')
+import browser from 'webextension-polyfill'
+import { onInstalled } from '../lib/on-installed.js'
+import { getUninstallURL } from '../lib/on-uninstalled.js'
+import { optionDefaults } from '../lib/options.js'
+import createIpfsCompanion from '../lib/ipfs-companion.js'
 
 // register lifecycle hooks early, otherwise we miss first install event
 browser.runtime.onInstalled.addListener(onInstalled)
@@ -15,6 +16,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   // setting debug level early
   localStorage.debug = (await browser.storage.local.get({ logNamespaces: optionDefaults.logNamespaces })).logNamespaces
   // init inlined to read updated localStorage.debug
-  const createIpfsCompanion = require('../lib/ipfs-companion')
   window.ipfsCompanion = await createIpfsCompanion()
 })

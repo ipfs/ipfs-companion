@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-const glob = require('glob')
+import fs from 'fs'
+import glob from 'glob'
 
 const files = glob.sync('build/*/*.zip')
 

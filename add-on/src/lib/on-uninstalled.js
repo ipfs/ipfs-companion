@@ -8,7 +8,7 @@ const stableChannels = new Set([
 
 const stableChannelFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfLF7uzaxRKiF4XpPL9_DvkdaQHoRnDihRTZ1uVL6ceQwIrtg/viewform'
 
-exports.getUninstallURL = (browser) => {
+export function getUninstallURL (browser) {
   // on uninstall feedback form shown only on stable channel
   return stableChannels.has(browser.runtime.id) ? stableChannelFormUrl : ''
 }

@@ -1,8 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const { default: PQueue } = require('p-queue')
+import browser from 'webextension-polyfill'
+import PQueue from 'p-queue'
 
 /*
  * This content script is responsible for performing the logic of replacing

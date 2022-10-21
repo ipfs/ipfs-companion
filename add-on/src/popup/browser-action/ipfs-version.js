@@ -1,8 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
 
 function statusEntry ({ label, labelLegend, title, value, check, valueClass = '' }) {
   const offline = browser.i18n.getMessage('panel_statusOffline')
@@ -16,7 +16,7 @@ function statusEntry ({ label, labelLegend, title, value, check, valueClass = ''
     `
 }
 
-module.exports = function ipfsVersion ({
+export default function ipfsVersion({
   gatewayVersion
 }) {
   return html`

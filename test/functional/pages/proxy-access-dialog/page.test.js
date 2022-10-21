@@ -1,8 +1,8 @@
 'use strict'
-const { describe, it } = require('mocha')
-const { expect } = require('chai')
-const createProxyAccessDialogPage = require('../../../../add-on/src/pages/proxy-access-dialog/page')
-const createMockI18n = require('../../../helpers/mock-i18n')
+import { describe, it } from 'mocha'
+import { expect } from 'chai'
+import createProxyAccessDialogPage from '../../../../add-on/src/pages/proxy-access-dialog/page.js'
+import createMockI18n from '../../../helpers/mock-i18n.js'
 
 describe('pages/proxy-access-dialog/page', () => {
   it('should display title, wildcard checkbox and allow/deny buttons', async () => {

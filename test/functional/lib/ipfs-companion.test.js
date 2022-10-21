@@ -1,13 +1,13 @@
-const { describe, it, before, beforeEach, after } = require('mocha')
-const { expect } = require('chai')
-const browser = require('sinon-chrome')
-const { URL } = require('url')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
-const { AbortController } = require('abort-controller')
+import { describe, it, before, beforeEach, after } from 'mocha'
+import { expect } from 'chai'
+import browser from 'sinon-chrome'
+import { URL } from 'url'
+import { AbortController } from 'abort-controller'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
+import init from '../../../add-on/src/lib/ipfs-companion.js'
 
 describe('lib/ipfs-companion.js', function () {
   describe('init', function () {
-    let init
 
     before(function () {
       global.localStorage = global.localStorage || {}
@@ -15,8 +15,8 @@ describe('lib/ipfs-companion.js', function () {
       global.browser = browser
       global.URL = global.URL || URL
       global.screen = { width: 1024, height: 720 }
+      browser.runtime.id = 'testid'
       browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
-      init = require('../../../add-on/src/lib/ipfs-companion')
     })
 
     beforeEach(function () {
@@ -37,13 +37,11 @@ describe('lib/ipfs-companion.js', function () {
   })
 
   describe.skip('onStorageChange()', function () {
-    let init
 
     before(function () {
       global.window = {}
       global.browser = browser
       global.URL = URL
-      init = require('../../../add-on/src/lib/ipfs-companion')
     })
 
     beforeEach(function () {

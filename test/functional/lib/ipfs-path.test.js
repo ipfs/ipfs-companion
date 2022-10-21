@@ -1,13 +1,13 @@
 'use strict'
-const { stub } = require('sinon')
-const { describe, it, beforeEach, afterEach } = require('mocha')
-const { expect } = require('chai')
-const { URL } = require('url')
-const { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname } = require('../../../add-on/src/lib/ipfs-path')
-const { initState } = require('../../../add-on/src/lib/state')
-const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
-const { spoofCachedDnslink } = require('./dnslink.test.js')
+import { stub } from 'sinon'
+import { describe, it, beforeEach, afterEach } from 'mocha'
+import { expect } from 'chai'
+import { URL } from 'url'
+import { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname } from '../../../add-on/src/lib/ipfs-path.js'
+import { initState } from '../../../add-on/src/lib/state.js'
+import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
+import { spoofCachedDnslink } from './dnslink.test.js.js'
 
 function spoofIpfsResolve (ipfs, path, value) {
   const resolve = stub(ipfs, 'resolve')

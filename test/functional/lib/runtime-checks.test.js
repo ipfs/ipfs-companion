@@ -1,15 +1,16 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const { describe, it, before, beforeEach, after } = require('mocha')
-const { expect } = require('chai')
-const browser = require('sinon-chrome')
-const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
+import { describe, it, before, beforeEach, after } from 'mocha'
+import { expect } from 'chai'
+import browser from 'sinon-chrome'
+import { createRuntimeChecks } from '../../../add-on/src/lib/runtime-checks.js'
 const promiseStub = (result) => () => Promise.resolve(result)
 
 describe('runtime-checks.js', function () {
   before(() => {
     global.browser = browser
+    browser.runtime.id = 'testid'
     global.chrome = {}
   })
 

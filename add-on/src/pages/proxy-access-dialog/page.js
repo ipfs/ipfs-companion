@@ -1,8 +1,8 @@
 'use strict'
 
-const html = require('choo/html')
+import html from 'choo/html/index.js'
 
-function createProxyAccessDialogPage (i18n) {
+export default function createProxyAccessDialogPage(i18n) {
   return function proxyAccessDialogPage (state, emit) {
     const onAllow = () => emit('allow')
     const onDeny = () => emit('deny')
@@ -61,5 +61,3 @@ function button ({ onClick, color, text, disabled }) {
     <button type="button" onclick=${onClick} class="button-reset sans-serif bg-${color} hover-bg-${color}-muted f5 white br2 bw0 ph4 pv2">${text}</button>
   `
 }
-
-module.exports = createProxyAccessDialogPage

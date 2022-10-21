@@ -1,8 +1,8 @@
 'use strict'
 
-const { findValueForContext } = require('./context-menus')
+import { findValueForContext } from './context-menus.js'
 
-async function copyTextToClipboard (text, notify) {
+export default async function copyTextToClipboard(text, notify) {
   try {
     try {
       // Modern API (spotty support, but works in Firefox)
@@ -83,5 +83,3 @@ function createCopier (notify, ipfsPathValidator) {
     }
   }
 }
-
-module.exports = createCopier

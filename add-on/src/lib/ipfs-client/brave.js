@@ -1,60 +1,20 @@
 'use strict'
 /* eslint-env browser, webextensions */
+const pWaitFor = import('p-wait-for')
 
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:client:brave')
 log.error = debug('ipfs-companion:client:brave:error')
 
-const external = require('./external')
-const toUri = require('multiaddr-to-uri')
-const pWaitFor = require('p-wait-for')
-const { welcomePage, optionsPage, tickMs } = require('../constants')
+import * as external from './external.js'
+import toUri from 'multiaddr-to-uri'
+import { welcomePage, optionsPage, tickMs } from '../constants.js'
 
 // increased interval to decrease impact of IPFS service process spawns
 const waitFor = (f, t) => pWaitFor(f, { interval: tickMs, timeout: t || Infinity })
 
-exports.init = async function (browser, opts) {
-  log('ensuring Brave Settings are correct')
-  const { brave } = exports
-  await initBraveSettings(browser, brave)
-  log('delegating API client init to "external" backend pointed at node managed by Brave')
-  return external.init(browser, opts)
-}
-
-exports.destroy = async function (browser) {
-  log('shuting down node managed by Brave')
-  const { brave } = exports
-  const method = await brave.getResolveMethodType()
-  if (method === 'local') {
-    // shut down local node when this backend is not active
-    log('waiting for brave.shutdown() to finish')
-    await waitFor(() => brave.shutdown())
-    log('brave.shutdown() done')
-  }
-  log('delegating API client destroy to "external" backend pointed at node managed by Brave')
-  return external.destroy(browser)
-}
-
-// ---------------- Brave-specifics -------------------
-
-// ipfs:// URI that will be used for triggering the "Enable IPFS" dropbar in Brave
-// Here we use inlined empty byte array, which resolves instantly and does not
-// introduce any delay in UI.
-const braveIpfsUriTrigger = 'ipfs://bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss/'
-const braveGatewayUrlTrigger = 'https://bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss.ipfs.dweb.link/'
-
-// Settings screen in Brave where user can manage IPFS support
-const braveSettingsPage = 'brave://settings/extensions'
-// TODO: replace with brave://settings/ipfs after https://github.com/brave/brave-browser/issues/13655 lands in Brave Stable
-
-// Diagnostic page for manually starting/stopping Brave's node
-// const braveIpfsDiagnosticPage = 'brave://ipfs' // TODO: https://github.com/brave/brave-browser/issues/14500
-
-// ipfsNodeType for this backend
-exports.braveNodeType = 'external:brave'
-
 // wrapper for chrome.ipfs.* that gets us closer to ergonomics of promise-based browser.*
-exports.brave = hasBraveChromeIpfs()
+export const brave = hasBraveChromeIpfs()
   ? Object.freeze({
       // This is the main check - returns true only in Brave and only when
       // feature flag is enabled brave://flags and can be used for high level UI
@@ -91,6 +51,45 @@ exports.brave = hasBraveChromeIpfs()
     })
   : undefined
 
+
+export async function init (browser, opts) {
+  log('ensuring Brave Settings are correct')
+  await initBraveSettings(browser, brave)
+  log('delegating API client init to "external" backend pointed at node managed by Brave')
+  return external.init(browser, opts)
+}
+
+export async function destroy (browser) {
+  log('shuting down node managed by Brave')
+  const method = await brave.getResolveMethodType()
+  if (method === 'local') {
+    // shut down local node when this backend is not active
+    log('waiting for brave.shutdown() to finish')
+    await waitFor(() => brave.shutdown())
+    log('brave.shutdown() done')
+  }
+  log('delegating API client destroy to "external" backend pointed at node managed by Brave')
+  return external.destroy(browser)
+}
+
+// ---------------- Brave-specifics -------------------
+
+// ipfs:// URI that will be used for triggering the "Enable IPFS" dropbar in Brave
+// Here we use inlined empty byte array, which resolves instantly and does not
+// introduce any delay in UI.
+const braveIpfsUriTrigger = 'ipfs://bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss/'
+const braveGatewayUrlTrigger = 'https://bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss.ipfs.dweb.link/'
+
+// Settings screen in Brave where user can manage IPFS support
+const braveSettingsPage = 'brave://settings/extensions'
+// TODO: replace with brave://settings/ipfs after https://github.com/brave/brave-browser/issues/13655 lands in Brave Stable
+
+// Diagnostic page for manually starting/stopping Brave's node
+// const braveIpfsDiagnosticPage = 'brave://ipfs' // TODO: https://github.com/brave/brave-browser/issues/14500
+
+// ipfsNodeType for this backend
+export const braveNodeType = 'external:brave'
+
 // Detect chrome.ipfs.* APIs provided by Brave to IPFS Companion
 function hasBraveChromeIpfs () {
   return typeof chrome === 'object' &&
@@ -126,8 +125,7 @@ const promisifyBraveCheck = (fn) => {
 // nodes provided by Brave and IPFS Desktop without the need for
 // manually editing the address of IPFS API endpoint.
 
-exports.useBraveEndpoint = async function (browser) {
-  const { brave } = exports
+export async function useBraveEndpoint (browser) {
   const braveConfig = await brave.getConfig()
   if (typeof braveConfig === 'undefined') {
     log.error('useBraveEndpoint: IPFS_PATH/config is missing, unable to use endpoint from Brave at this time, will try later')
@@ -155,7 +153,7 @@ exports.useBraveEndpoint = async function (browser) {
   })
 }
 
-exports.releaseBraveEndpoint = async function (browser) {
+export async function releaseBraveEndpoint (browser) {
   const [oldGatewayUrl, oldApiUrl] = (await browser.storage.local.get('externalNodeConfig')).externalNodeConfig
   log(`releaseBraveEndpoint: restoring api=${oldApiUrl}, gw=${oldGatewayUrl}`)
   await browser.storage.local.set({
@@ -217,7 +215,7 @@ async function initBraveSettings (browser, brave) {
   log('brave.launch() finished')
 
   // ensure Companion uses the endpoint provided by Brave
-  await exports.useBraveEndpoint(browser)
+  await useBraveEndpoint(browser)
 
   // async UI cleanup, after other stuff
   setTimeout(() => activationUiCleanup(browser), tickMs)

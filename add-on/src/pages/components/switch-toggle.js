@@ -1,9 +1,15 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
+import html from 'choo/html/index.js'
 
-function switchToggle ({ id, onchange, checked, disabled, style }) {
+export default function switchToggle({
+  checked,
+  disabled,
+  id,
+  onchange,
+  style
+}) {
   if (typeof checked === 'undefined') return
   return html`
     <div class="mdc-switch ${style || ''} ${checked ? 'mdc-switch--checked' : ''} ${disabled ? 'mdc-switch--disabled' : ''}">
@@ -17,5 +23,3 @@ function switchToggle ({ id, onchange, checked, disabled, style }) {
     </div>
   `
 }
-
-module.exports = switchToggle

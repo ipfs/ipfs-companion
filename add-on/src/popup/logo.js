@@ -1,10 +1,23 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const { braveNodeType } = require('../lib/ipfs-client/brave')
+import html from 'choo/html/index.js'
+import { braveNodeType } from '../lib/ipfs-client/brave.js'
 
-function logo ({ path, size = 52, ipfsNodeType = 'external', isIpfsOnline = true, heartbeat = true }) {
+function logoFileName(nodeType, isIpfsOnline) {
+  let prefix
+  if (nodeType.startsWith('embedded')) prefix = 'js-'
+  if (nodeType === braveNodeType) prefix = 'brave-'
+  return `${prefix || ''}ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
+}
+
+export default function logo({
+  heartbeat = true,
+  ipfsNodeType = 'external',
+  isIpfsOnline = true,
+  path,
+  size = 52
+}) {
   return html`
     <img
       alt="IPFS"
@@ -13,12 +26,3 @@ function logo ({ path, size = 52, ipfsNodeType = 'external', isIpfsOnline = true
       style="width:${size}px; height:${size}px" />
   `
 }
-
-function logoFileName (nodeType, isIpfsOnline) {
-  let prefix
-  if (nodeType.startsWith('embedded')) prefix = 'js-'
-  if (nodeType === braveNodeType) prefix = 'brave-'
-  return `${prefix || ''}ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
-}
-
-module.exports = logo

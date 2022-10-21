@@ -1,11 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const { braveNodeType } = require('../../lib/ipfs-client/brave')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 
-function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeFromBrave }) {
+export default function ipfsNodeForm({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeFromBrave }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
   const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
@@ -67,5 +67,3 @@ function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeF
     </form>
   `
 }
-
-module.exports = ipfsNodeForm

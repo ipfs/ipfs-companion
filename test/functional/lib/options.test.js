@@ -1,14 +1,15 @@
 'use strict'
-const { describe, it, beforeEach, after } = require('mocha')
-const { expect } = require('chai')
-const sinon = require('sinon')
-const browser = require('sinon-chrome')
-const { storeMissingOptions, optionDefaults, isHostname, hostTextToArray, hostArrayToText } = require('../../../add-on/src/lib/options')
-const { URL } = require('url')
+import { describe, it, beforeEach, after } from 'mocha'
+import { expect } from 'chai'
+import sinon from 'sinon'
+import browser from 'sinon-chrome'
+import { storeMissingOptions, optionDefaults, isHostname, hostTextToArray, hostArrayToText } from '../../../add-on/src/lib/options.js'
+import { URL } from 'url'
 
 describe('storeMissingOptions()', function () {
   beforeEach(() => {
     global.URL = URL
+    browser.runtime.id = 'testid'
     browser.flush()
   })
 

@@ -1,9 +1,17 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
+import html from 'choo/html/index.js'
 
-function toolsButton ({ iconD, iconSize, text, title, disabled, style, onClick }) {
+export default function toolsButton({
+  disabled,
+  iconD,
+  iconSize,
+  onClick,
+  style,
+  text,
+  title
+}) {
   let buttonStyle = 'header-icon fade-in w-50 ba bw1 snow b--snow bg-transparent f7 ph1 pv0 br4 ma1 flex justify-center items-center truncate'
   if (disabled) {
     buttonStyle += ' o-60'
@@ -25,5 +33,3 @@ function toolsButton ({ iconD, iconSize, text, title, disabled, style, onClick }
     </div>
   `
 }
-
-module.exports = toolsButton

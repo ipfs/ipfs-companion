@@ -1,10 +1,15 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const icon = require('./icon')
+import html from 'choo/html/index.js'
+import icon from './icon.js'
 
-function optionsIcon ({ active, title, action, size = '1.8rem' }) {
+export default function optionsIcon({
+  action,
+  active,
+  size = '1.8rem',
+  title
+}) {
   const svg = html`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 86"
         class="fill-current-color"
@@ -14,5 +19,3 @@ function optionsIcon ({ active, title, action, size = '1.8rem' }) {
     `
   return icon({ svg, title, active, action })
 }
-
-module.exports = optionsIcon

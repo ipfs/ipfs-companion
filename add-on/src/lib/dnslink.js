@@ -1,25 +1,26 @@
 'use strict'
 /* eslint-env browser */
 
-const debug = require('debug')
+import Pqueue from 'p-queue'
+
+import debug from 'debug'
+import IsIpfs from 'is-ipfs'
+import LRU from 'lru-cache'
+import { offlinePeerCount } from './state.js'
+import { ipfsContentPath, sameGateway, pathAtHttpGateway } from './ipfs-path.js'
+
 const log = debug('ipfs-companion:dnslink')
 log.error = debug('ipfs-companion:dnslink:error')
 
-const IsIpfs = require('is-ipfs')
-const LRU = require('lru-cache')
-const { default: PQueue } = require('p-queue')
-const { offlinePeerCount } = require('./state')
-const { ipfsContentPath, sameGateway, pathAtHttpGateway } = require('./ipfs-path')
-
-module.exports = function createDnslinkResolver (getState) {
+export default function createDnslinkResolver(getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, maxAge: 1000 * 60 * 60 * 12 }
   const cache = new LRU(cacheOptions)
   // upper bound for concurrent background lookups done by resolve(url)
-  const lookupQueue = new PQueue({ concurrency: 4 })
+  const lookupQueue = new Pqueue({ concurrency: 4 })
   // preload of DNSLink data
   const preloadUrlCache = new LRU(cacheOptions)
-  const preloadQueue = new PQueue({ concurrency: 4 })
+  const preloadQueue = new Pqueue({ concurrency: 4 })
 
   const dnslinkResolver = {
 

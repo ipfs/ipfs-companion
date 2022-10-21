@@ -1,11 +1,11 @@
 'use strict'
-const { describe, it, before, beforeEach, after } = require('mocha')
-const { expect } = require('chai')
-const { URL } = require('url')
-const sinon = require('sinon')
-const createDnslinkResolver = require('../../../add-on/src/lib/dnslink')
-const { initState } = require('../../../add-on/src/lib/state')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
+import { describe, it, before, beforeEach, after } from 'mocha'
+import { expect } from 'chai'
+import { URL } from 'url'
+import sinon from 'sinon'
+import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
+import { initState } from '../../../add-on/src/lib/state.js'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
 
 const testOptions = Object.assign({}, optionDefaults, {
   customGatewayUrl: 'http://127.0.0.1:8080',
@@ -14,17 +14,15 @@ const testOptions = Object.assign({}, optionDefaults, {
 
 const dnslinkValue = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
 
-function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
+export function spoofDnsTxtRecord (fqdn, dnslinkResolver, value) {
   // spoofs existence of valid DNS TXT record (used on cache miss)
   dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).returns(value)
 }
-module.exports.spoofDnsTxtRecord = spoofDnsTxtRecord
 
-function spoofCachedDnslink (fqdn, dnslinkResolver, value) {
+export function spoofCachedDnslink (fqdn, dnslinkResolver, value) {
   // spoofs existence of valid DNS TXT record (used on cache hit)
   dnslinkResolver.setDnslink(fqdn, value)
 }
-module.exports.spoofCachedDnslink = spoofCachedDnslink
 
 function expectNoDnsTxtRecordLookup (fqdn, dnslinkResolver) {
   dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).throws('unexpected DNS TXT lookup', 'only cache should be used')

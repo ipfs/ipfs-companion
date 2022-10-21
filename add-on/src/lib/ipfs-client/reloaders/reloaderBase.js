@@ -1,4 +1,4 @@
-class ReloaderBase {
+export default class ReloaderBase {
   /**
    * Constructor for reloader base class.
    *
@@ -46,8 +46,4 @@ class ReloaderBase {
         this._browserInstance.tabs.reload(tab.id)
       })
   }
-}
-
-module.exports = {
-  ReloaderBase
 }
