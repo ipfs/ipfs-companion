@@ -67,8 +67,7 @@
     "all": true,
     "reporter": [
       "lcov",
-      "text",
-      "html"
+      "text"
     ],
     "include": [
       "add-on/src/**"
@@ -146,6 +145,19 @@
     "tachyons": "4.12.0",
     "uri-to-multiaddr": "6.0.0",
     "webextension-polyfill": "0.10.0"
+  },
+  "webExt": {
+    "verbose": false,
+    "artifactsDir": "build/",
+    "sourceDir": "add-on/",
+    "ignoreFiles": [
+      "src/",
+      "*.map",
+      "manifest.*.json"
+    ],
+    "build": {
+      "overwriteDest": true
+    }
   },
   "engines": {
     "node": ">=14.15.0 <17",
