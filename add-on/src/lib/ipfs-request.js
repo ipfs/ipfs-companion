@@ -2,8 +2,6 @@
 /* eslint-env browser, webextensions */
 
 import debug from 'debug'
-const log = debug('ipfs-companion:request')
-log.error = debug('ipfs-companion:request:error')
 
 import LRU from 'lru-cache'
 import isIPFS from 'is-ipfs'
@@ -11,6 +9,8 @@ import isFQDN from 'is-fqdn'
 import { pathAtHttpGateway, sameGateway, ipfsUri } from './ipfs-path.js'
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
+const log = debug('ipfs-companion:request')
+log.error = debug('ipfs-companion:request:error')
 
 export const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
 const recoverableNetworkErrors = new Set([

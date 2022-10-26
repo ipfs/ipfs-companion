@@ -3,7 +3,7 @@
 
 import html from 'choo/html/index.js'
 
-export default function toolsButton({
+export default function toolsButton ({
   disabled,
   iconD,
   iconSize,

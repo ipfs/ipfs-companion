@@ -3,12 +3,6 @@ import { describe, it, before, beforeEach } from 'mocha'
 import browser from 'sinon-chrome'
 import sinon from 'sinon'
 
-const CUSTOM_GATEWAY_URL = {
-  customGatewayUrl: 'http://127.0.0.1:8080'
-}
-
-const logger = sinon.spy()
-
 // Units to be tested.
 import {
   prepareReloadExtensions,
@@ -16,6 +10,12 @@ import {
   LocalGatewayReloader,
   WebUiReloader
 } from '../../../../../add-on/src/lib/ipfs-client/reloaders/index.js'
+
+const CUSTOM_GATEWAY_URL = {
+  customGatewayUrl: 'http://127.0.0.1:8080'
+}
+
+const logger = sinon.spy()
 
 describe('Reloader Helper Method: prepareReloadExtensions', function () {
   it('Prepares the reloader extensions', async function () {

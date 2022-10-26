@@ -7,7 +7,7 @@ import { guiURLString } from '../../lib/options.js'
 import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
-export default function apiForm({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
+export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
   const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', (url) => guiURLString(url, { useLocalhostName: false }))
   const onIpfsApiPollMsChange = onOptionChange('ipfsApiPollMs')
   const onAutomaticModeChange = onOptionChange('automaticMode')

@@ -19,7 +19,7 @@ const colorIpfsLogo = '#57cbd0'
 const colorWhite = '#ffffff'
 const colorYellow = '#f39021'
 
-export default function createWelcomePage(i18n) {
+export default function createWelcomePage (i18n) {
   return function welcomePage (state, emit) {
     const { isIpfsOnline, peerCount } = state
     const openWebUi = (page) => () => emit('openWebUi', page)

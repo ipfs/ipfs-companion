@@ -4,7 +4,7 @@
 import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 
-export default function resetForm({
+export default function resetForm ({
   onOptionsReset
 }) {
   return html`

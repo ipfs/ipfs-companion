@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 import browser from 'webextension-polyfill'
 
-export default function icon({
+export default function icon ({
   svg, title, active, action, className
 }) {
   return html`

@@ -16,7 +16,7 @@ function statusEntry ({ label, labelLegend, title, value, check, valueClass = ''
     `
 }
 
-export default function ipfsVersion({
+export default function ipfsVersion ({
   gatewayVersion
 }) {
   return html`

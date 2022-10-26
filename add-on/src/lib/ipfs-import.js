@@ -2,13 +2,13 @@
 /* eslint-env browser, webextensions */
 
 import debug from 'debug'
-const log = debug('ipfs-companion:import')
-log.error = debug('ipfs-companion:import:error')
 
 import browser from 'webextension-polyfill'
 
 import { redirectOptOutHint } from './ipfs-request.js'
 import { ipfsContentPath } from './ipfs-path.js'
+const log = debug('ipfs-companion:import')
+log.error = debug('ipfs-companion:import:error')
 
 export const browserActionFilesCpImportCurrentTab = 'browserActionFilesCpImportCurrentTab'
 

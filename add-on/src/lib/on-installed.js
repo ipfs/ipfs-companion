@@ -3,10 +3,10 @@
 
 import browser from 'webextension-polyfill'
 import debug from 'debug'
-
-const { version } = browser.runtime.getManifest()
 import { welcomePage } from './constants.js'
 import { brave, braveNodeType } from './ipfs-client/brave.js'
+
+const { version } = browser.runtime.getManifest()
 export const updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v'
 
 export async function onInstalled (details) {

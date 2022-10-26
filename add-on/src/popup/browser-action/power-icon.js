@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 import icon from './icon.js'
 
-export default function powerIcon({
+export default function powerIcon ({
   action,
   active,
   size = '1.8rem',

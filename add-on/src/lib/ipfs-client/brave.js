@@ -3,12 +3,12 @@
 import pWaitFor from 'p-wait-for'
 
 import debug from 'debug'
-const log = debug('ipfs-companion:client:brave')
-log.error = debug('ipfs-companion:client:brave:error')
 
 import * as external from './external.js'
 import toUri from 'multiaddr-to-uri'
 import { welcomePage, optionsPage, tickMs } from '../constants.js'
+const log = debug('ipfs-companion:client:brave')
+log.error = debug('ipfs-companion:client:brave:error')
 
 // increased interval to decrease impact of IPFS service process spawns
 const waitFor = (f, t) => pWaitFor(f, { interval: tickMs, timeout: t || Infinity })
@@ -50,7 +50,6 @@ export const brave = hasBraveChromeIpfs()
         Boolean(await promisifyBraveCheck(chrome.ipfs.shutdown))
     })
   : undefined
-
 
 export async function init (browser, opts) {
   log('ensuring Brave Settings are correct')

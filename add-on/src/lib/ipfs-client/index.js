@@ -3,8 +3,6 @@
 /* eslint-env browser, webextensions */
 
 import debug from 'debug'
-const log = debug('ipfs-companion:client')
-log.error = debug('ipfs-companion:client:error')
 
 import * as external from './external.js'
 import * as embedded from './embedded.js'
@@ -13,11 +11,13 @@ import { precache } from '../precache.js'
 import {
   prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader
 } from './reloaders/index.js'
+const log = debug('ipfs-companion:client')
+log.error = debug('ipfs-companion:client:error')
 
 // ensure single client at all times, and no overlap between init and destroy
 let client
 
-export async function initIpfsClient(browser, opts) {
+export async function initIpfsClient (browser, opts) {
   log('init ipfs client')
   if (client) return // await destroyIpfsClient()
   let backend
@@ -53,7 +53,7 @@ export async function initIpfsClient(browser, opts) {
   return instance
 }
 
-export async function destroyIpfsClient(browser) {
+export async function destroyIpfsClient (browser) {
   log('destroy ipfs client')
   if (!client) return
   try {
@@ -106,6 +106,6 @@ async function _reloadIpfsClientDependents (
  * @param {Object} opts
  * @returns {void}
  */
-export function reloadIpfsClientOfflinePages(browser, instance, opts) {
+export function reloadIpfsClientOfflinePages (browser, instance, opts) {
   _reloadIpfsClientDependents(browser, instance, opts, [LocalGatewayReloader])
 }

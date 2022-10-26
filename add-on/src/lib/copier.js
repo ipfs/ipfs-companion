@@ -2,7 +2,7 @@
 
 import { findValueForContext } from './context-menus.js'
 
-async function copyTextToClipboard(text, notify) {
+async function copyTextToClipboard (text, notify) {
   try {
     try {
       // Modern API (spotty support, but works in Firefox)
@@ -15,7 +15,7 @@ async function copyTextToClipboard(text, notify) {
       // :-))
     } catch (e) {
       // Fallback to old API (works only in Chromium)
-      function oncopy(event) { // eslint-disable-line no-inner-declarations
+      function oncopy (event) { // eslint-disable-line no-inner-declarations
         document.removeEventListener('copy', oncopy, true)
         event.stopImmediatePropagation()
         event.preventDefault()

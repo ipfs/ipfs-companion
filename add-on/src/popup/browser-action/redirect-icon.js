@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 import icon from './icon.js'
 
-export default function redirectIcon({
+export default function redirectIcon ({
   action,
   active,
   size = '2rem',

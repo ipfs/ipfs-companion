@@ -17,7 +17,7 @@ function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueC
     `
 }
 
-export default function gatewayStatus({
+export default function gatewayStatus ({
   gatewayAddress,
   gatewayVersion,
   ipfsApiUrl,

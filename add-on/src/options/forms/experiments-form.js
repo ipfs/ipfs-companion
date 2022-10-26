@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
-export default function experimentsForm({
+export default function experimentsForm ({
   useLatestWebUI,
   displayNotifications,
   displayReleaseNotes,

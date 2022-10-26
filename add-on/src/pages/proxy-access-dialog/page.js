@@ -2,7 +2,7 @@
 
 import html from 'choo/html/index.js'
 
-export default function createProxyAccessDialogPage(i18n) {
+export default function createProxyAccessDialogPage (i18n) {
   return function proxyAccessDialogPage (state, emit) {
     const onAllow = () => emit('allow')
     const onDeny = () => emit('deny')

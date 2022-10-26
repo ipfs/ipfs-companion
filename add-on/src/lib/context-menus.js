@@ -67,9 +67,8 @@ const apiMenuItems = new Set()
 // menu items enabled only in IPFS context (dynamic)
 const ipfsContextItems = new Set()
 
-export function createContextMenus(
-  getState, _runtime, ipfsPathValidator, {
-    onAddFromContext, onCopyRawCid, onCopyAddressAtPublicGw }) {
+export function createContextMenus (
+  getState, _runtime, ipfsPathValidator, { onAddFromContext, onCopyRawCid, onCopyAddressAtPublicGw }) {
   try {
     const createSubmenu = (id, contextType, menuBuilder) => {
       browser.contextMenus.create({

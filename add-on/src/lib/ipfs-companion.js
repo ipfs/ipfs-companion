@@ -2,8 +2,6 @@
 /* eslint-env browser, webextensions */
 
 import debug from 'debug'
-const log = debug('ipfs-companion:main')
-log.error = debug('ipfs-companion:main:error')
 
 import browser from 'webextension-polyfill'
 import toMultiaddr from 'uri-to-multiaddr'
@@ -25,11 +23,13 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
+const log = debug('ipfs-companion:main')
+log.error = debug('ipfs-companion:main:error')
 
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-export default async function init() {
+export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance

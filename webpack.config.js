@@ -4,10 +4,10 @@ import { merge } from 'webpack-merge'
 import TerserPlugin from 'terser-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import { fileURLToPath } from 'url'
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // common configuration shared by all targets
 const commonConfig = {
@@ -45,7 +45,7 @@ const commonConfig = {
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.emitWarning': (message, type) => {}, // console.warn(`${type}${type ? ': ' : ''}${message}`),
       'process.env': {
-        //NODE_ENV: '"production"',
+        // NODE_ENV: '"production"',
         IPFS_MONITORING: false,
         DEBUG: false // controls verbosity of Hapi HTTP server in js-ipfs
       }

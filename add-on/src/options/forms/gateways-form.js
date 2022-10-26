@@ -12,7 +12,7 @@ import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 // https://github.com/ipfs-shipyard/ipfs-companion/issues/648
 const secureContextUrl = /^https:\/\/|^http:\/\/localhost|^http:\/\/127.0.0.1|^http:\/\/\[::1\]/
 
-export default function gatewaysForm({
+export default function gatewaysForm ({
   ipfsNodeType,
   customGatewayUrl,
   useCustomGateway,

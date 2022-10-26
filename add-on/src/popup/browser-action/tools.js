@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import toolsButton from './tools-button.js'
 
-export default function tools({
+export default function tools ({
   active,
   ipfsNodeType,
   isApiAvailable,

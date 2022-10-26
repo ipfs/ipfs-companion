@@ -9,7 +9,7 @@ import tools from './tools.js'
 // Render the browser action page:
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
-export default function browserActionPage(state, emit) {
+export default function browserActionPage (state, emit) {
   const onViewOnGateway = () => emit('viewOnGateway')
   const onCopy = (copyAction) => emit('copy', copyAction)
   const onFilesCpImport = () => emit('filesCpImport')

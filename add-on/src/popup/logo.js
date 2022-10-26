@@ -4,14 +4,14 @@
 import html from 'choo/html/index.js'
 import { braveNodeType } from '../lib/ipfs-client/brave.js'
 
-function logoFileName(nodeType, isIpfsOnline) {
+function logoFileName (nodeType, isIpfsOnline) {
   let prefix
   if (nodeType.startsWith('embedded')) prefix = 'js-'
   if (nodeType === braveNodeType) prefix = 'brave-'
   return `${prefix || ''}ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
 }
 
-export default function logo({
+export default function logo ({
   heartbeat = true,
   ipfsNodeType = 'external',
   isIpfsOnline = true,

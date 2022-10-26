@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 
-export default function ipfsNodeForm({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeFromBrave }) {
+export default function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeFromBrave }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
   const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''

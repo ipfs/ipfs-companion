@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
-export default function globalToggleForm({ active, onOptionChange }) {
+export default function globalToggleForm ({ active, onOptionChange }) {
   const toggle = onOptionChange('active')
   return html`
     <form class="db b mb3 bg-aqua-muted charcoal">

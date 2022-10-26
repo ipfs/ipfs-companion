@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 import icon from './icon.js'
 
-export default function versionUpdateIcon({
+export default function versionUpdateIcon ({
   action,
   active,
   className,

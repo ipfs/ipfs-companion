@@ -14,7 +14,7 @@ import resetForm from './forms/reset-form.js'
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
-export default function optionsPage(state, emit) {
+export default function optionsPage (state, emit) {
   const onOptionChange = (key, modifyValue) => (e) => {
     e.preventDefault()
 

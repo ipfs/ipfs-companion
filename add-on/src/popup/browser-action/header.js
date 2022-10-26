@@ -9,7 +9,7 @@ import optionsIcon from './options-icon.js'
 import ipfsVersion from './ipfs-version.js'
 import gatewayStatus from './gateway-status.js'
 
-export default function header(props) {
+export default function header (props) {
   const { ipfsNodeType, active, onToggleActive, onOpenPrefs, onOpenReleaseNotes, isIpfsOnline, onOpenWelcomePage, newVersion } = props
   return html`
     <div>

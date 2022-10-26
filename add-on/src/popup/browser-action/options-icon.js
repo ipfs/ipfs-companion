@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 import icon from './icon.js'
 
-export default function optionsIcon({
+export default function optionsIcon ({
   action,
   active,
   size = '1.8rem',

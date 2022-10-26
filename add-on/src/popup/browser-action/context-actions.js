@@ -19,7 +19,7 @@ import {
 const notReady = browser.i18n.getMessage('panelCopy_notReadyHint')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
-export function contextActions({
+export function contextActions ({
   active,
   redirect,
   isRedirectContext,
@@ -129,7 +129,7 @@ export function contextActions({
 
 // "Active Tab" section is displayed in Browser Action  only
 // if redirect can be toggled or current tab has any IPFS Context Actions
-export function activeTabActions(state) {
+export function activeTabActions (state) {
   const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`

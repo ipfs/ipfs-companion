@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
-export default function navItem({
+export default function navItem ({
   disabled,
   helperText,
   onClick,

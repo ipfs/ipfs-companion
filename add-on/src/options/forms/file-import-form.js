@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
-export default function fileImportForm({
+export default function fileImportForm ({
   importDir, openViaWebUI, preloadAtPublicGateway, onOptionChange
 }) {
   const onImportDirChange = onOptionChange('importDir')

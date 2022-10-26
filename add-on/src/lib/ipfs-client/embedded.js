@@ -1,12 +1,12 @@
 'use strict'
 
 import debug from 'debug'
-const log = debug('ipfs-companion:client:embedded')
-log.error = debug('ipfs-companion:client:embedded:error')
 
 import mergeOptions from 'merge-options'
 import { create } from 'ipfs-core'
 import { optionDefaults } from '../options.js'
+const log = debug('ipfs-companion:client:embedded')
+log.error = debug('ipfs-companion:client:embedded:error')
 
 let node = null
 

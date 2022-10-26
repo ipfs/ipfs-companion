@@ -12,7 +12,7 @@ import { ipfsContentPath, sameGateway, pathAtHttpGateway } from './ipfs-path.js'
 const log = debug('ipfs-companion:dnslink')
 log.error = debug('ipfs-companion:dnslink:error')
 
-export default function createDnslinkResolver(getState) {
+export default function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, maxAge: 1000 * 60 * 60 * 12 }
   const cache = new LRU(cacheOptions)

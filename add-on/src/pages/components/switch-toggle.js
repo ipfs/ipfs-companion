@@ -3,7 +3,7 @@
 
 import html from 'choo/html/index.js'
 
-export default function switchToggle({
+export default function switchToggle ({
   checked,
   disabled,
   id,
