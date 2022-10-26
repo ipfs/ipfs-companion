@@ -1,10 +1,13 @@
 import { describe, it, before, beforeEach, after } from 'mocha'
 import { expect } from 'chai'
 import browser from 'sinon-chrome'
+import AbortController from 'abort-controller'
 import { URL } from 'url'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
 browser.runtime.id = 'testid'
+browser
 global.browser = browser
+global.AbortController = AbortController
 global.chrome = browser
 global.navigator = {
   clipboard: {

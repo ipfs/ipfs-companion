@@ -78,6 +78,7 @@
     "@babel/plugin-proposal-class-properties": "7.16.7",
     "@babel/preset-env": "7.16.11",
     "@istanbuljs/esm-loader-hook": "^0.2.0",
+    "abort-controller": "^3.0.0",
     "babel-loader": "^8.2.5",
     "babel-plugin-syntax-async-generators": "6.13.0",
     "c8": "^7.12.0",
