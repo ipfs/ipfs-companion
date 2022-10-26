@@ -2,7 +2,6 @@ import { describe, it, before, beforeEach, after } from 'mocha'
 import { expect } from 'chai'
 import browser from 'sinon-chrome'
 import { URL } from 'url'
-import { AbortController } from 'abort-controller'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
 browser.runtime.id = 'testid'
 global.browser = browser
@@ -21,7 +20,6 @@ describe('lib/ipfs-companion.js', function () {
 
     before(function () {
       global.localStorage = global.localStorage || {}
-      global.window = { AbortController }
       global.URL = global.URL || URL
       global.screen = { width: 1024, height: 720 }
 
@@ -32,7 +30,7 @@ describe('lib/ipfs-companion.js', function () {
       browser.storage.local.get.resolves(optionDefaults)
       browser.storage.local.set.resolves()
       const ipfsCompanion = await init()
-      browser.storage.local.get.calledWith(optionDefaults)
+      expect(browser.storage.local.get.calledWith(optionDefaults)).to.equal(true)
       return ipfsCompanion.destroy()
     })
 
