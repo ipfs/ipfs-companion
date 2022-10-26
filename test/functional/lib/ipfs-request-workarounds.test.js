@@ -10,7 +10,7 @@ import createDNSLinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
 import { braveNodeType } from '../../../add-on/src/lib/ipfs-client/brave.js'
-import { spoofDnsTxtRecord } from './dnslink.test.js.js'
+import { spoofDnsTxtRecord } from './dnslink.test.js'
 
 describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
