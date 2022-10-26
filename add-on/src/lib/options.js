@@ -1,6 +1,6 @@
 'use strict'
 
-import { isIP } from 'is-ip'
+import { isIPv4, isIPv6 } from 'is-ip'
 import isFQDN from 'is-fqdn'
 
 export const optionDefaults = Object.freeze({
@@ -96,7 +96,7 @@ export function guiURLString (url, opts) {
 
 // ensure value is a valid URL.hostname (FQDN || ipv4 || ipv6 WITH brackets)
 export function isHostname (x) {
-  if (isFQDN(x) || isIP.v4(x)) {
+  if (isFQDN(x) || isIPv4(x)) {
     return true
   }
 
@@ -106,7 +106,7 @@ export function isHostname (x) {
     return false
   }
 
-  return isIP.v6(match[1])
+  return isIPv6(match[1])
 }
 
 // convert JS array to multiline textarea
@@ -115,7 +115,7 @@ function hostArrayCleanup (array) {
   // normalize/extract hostnames (just domain/ip, drop ports etc), if provided
   array = array.map(x => {
     try {
-      if (isIP.v6(x)) x = `[${x}]`
+      if (isIPv6(x)) x = `[${x}]`
       return new URL(`http://${x}`).hostname
     } catch (_) {
       return undefined
