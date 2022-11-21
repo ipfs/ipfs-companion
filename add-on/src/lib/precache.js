@@ -1,11 +1,5 @@
 'use strict'
 /* eslint-env browser, webextensions */
-// import  CID  from 'cids'
-
-// import  Tar  from 'it-tar'
-// import  pipe  from 'it-pipe'
-// import  all  from 'it-all'
-// import  concat  from 'it-concat'
 
 import debug from 'debug'
 const log = debug('ipfs-companion:precache')
@@ -70,65 +64,3 @@ async function inRepo (ipfs, cid) {
     return false
   }
 }
-
-// Downloads CID from a public gateway
-// (alternative to ipfs.refs -r)
-/*
-async function preloadOverHTTP (log, ipfs, state, cid) {
-  const url = `${state.pubGwURLString}api/v0/get?arg=${cid}&archive=true`
-  try {
-    log(`importing ${url} (${cid}) to local ipfs repo`)
-    const { body } = await fetch(url)
-    await importTar(ipfs, body.getReader(), cid)
-    log(`successfully fetched TAR from ${url} and cached under CID ${cid}`)
-  } catch (err) {
-    log.error(`error while processing ${url}`, err)
-  }
-}
-
-async function importTar (ipfs, tarReader, expectedCid) {
-  const files = []
-
-  await pipe(
-    streamTar(tarReader),
-    Tar.extract(),
-    async (source) => {
-      for await (const entry of source) {
-        // we care only about files, directories will be created implicitly
-        if (entry.header.type !== 'file') continue
-        files.push({
-          path: entry.header.name.replace(`${expectedCid}/`, ''),
-          content: (await concat(entry.body)).slice() // conversion: BufferList → Buffer
-        })
-      }
-    }
-  )
-
-  const { version, multibaseName } = new CID(expectedCid)
-  const opts = {
-    cidVersion: version,
-    wrapWithDirectory: true,
-    pin: false,
-    preload: false
-  }
-  const results = await all(ipfs.addAll(files, opts))
-
-  const root = results.find(e => e.cid.toString(multibaseName) === expectedCid)
-  if (!root) {
-    throw new Error(`imported CID (${root}) does not match expected one: ${expectedCid}`)
-  }
-}
-
-async function * streamTar (reader) {
-  try {
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) return
-      yield value
-    }
-  } finally {
-    // Firefox only? https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader/releaseLock
-    if (typeof reader.releaseLock === 'function') reader.releaseLock()
-  }
-}
-*/

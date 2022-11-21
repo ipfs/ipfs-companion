@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2020-06-20</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/PRIVACY-POLICY.md))
+Last Update: 2021-11-21</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/PRIVACY-POLICY.md))
 
 The IPFS Companion browser extension is owned by Protocol Labs Inc. and created
 by the IPFS Project. We know you care about how your personal data is used and
@@ -55,7 +55,7 @@ hosted by Protocol Labs and some of your Personal Information, such as public
 key and IP address of your IPFS node will be stored on the IPFS network publicly
 as well to facilitate p2p exchanges.
 
-If you are using “window.ipfs”, “Linkify IPFS Addresses” or “Catch Unhandled
+If you are using “Linkify IPFS Addresses” or “Catch Unhandled
 IPFS Protocols” experiments, websites will be able to detect you are running
 IPFS Companion. This behavior can be changed on Preferences screen by disabling
 mentioned experiments.
@@ -69,7 +69,7 @@ To disable this behavior set "DNSLink lookup" to "Off" in Preferences.
 
 We’re constantly trying to improve IPFS Companion, so we may need to change this
 Privacy Policy sometimes. When we do, we will update the date at the top of this
-Privacy Policy and will also post an update at https://ipfs.io/companion-privacy/
+Privacy Policy and will also post an update at https://ipfs.tech/companion-privacy/
 We encourage you to periodically review this Privacy Policy to stay informed, which
 is ultimately your responsibility. If you use IPFS Companion after any changes
 to the Privacy Policy have been posted, that means you agree to all of those
