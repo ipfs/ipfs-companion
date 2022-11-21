@@ -152,8 +152,6 @@ const uiConfig = merge(commonConfig, {
     browserAction: './add-on/src/popup/browser-action/index.js',
     importPage: './add-on/src/popup/quick-import.js',
     optionsPage: './add-on/src/options/options.js',
-    //  TODO: remove or fix (window.ipfs) proxyAclManagerPage: './add-on/src/pages/proxy-acl/index.js',
-    // TODO: remove or fix (window.ipfs) proxyAclDialog: './add-on/src/pages/proxy-access-dialog/index.js',
     welcomePage: './add-on/src/landing-pages/welcome/index.js'
   },
   optimization: {
@@ -178,43 +176,14 @@ const uiConfig = merge(commonConfig, {
 const contentScriptsConfig = merge(commonConfig, {
   name: 'contentScripts',
   entry: {
-    // TODO: remove or fix (window.ipfs) ipfsProxyContentScriptPayload: './add-on/src/contentScripts/ipfs-proxy/page.js',
     linkifyContentScript: './add-on/src/contentScripts/linkifyDOM.js'
   }
 })
-
-// special content script that injects window.ipfs into REAL window object
-// (by default scripts executed via tabs.executeScript get a sandbox version)
-/* TODO: remove or fix - depending what we do with  window.ipfs
-const proxyContentScriptConfig = merge(commonConfig, {
-  name: 'proxyContentScript',
-  dependencies: ['contentScripts'],
-  entry: {
-    // below is just a loader for ipfsProxyContentScriptPayload
-    ipfsProxyContentScript: './add-on/src/contentScripts/ipfs-proxy/content.js'
-  },
-  module: {
-    rules: [
-      {
-        exclude: /node_modules/,
-        test: /\.js$/,
-        use: ['babel-loader']
-      },
-      {
-        // payload is already in bundled form, so we load raw code as-is
-        test: /ipfsProxyContentScriptPayload\.bundle\.js$/,
-        loader: 'raw-loader'
-      }
-    ]
-  }
-})
-*/
 
 const config = [
   bgConfig,
   uiConfig,
   contentScriptsConfig
-  //  TODO: remove or fix (window.ipfs) proxyContentScriptConfig
 ]
 
 export default config
