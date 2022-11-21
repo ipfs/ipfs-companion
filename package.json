@@ -20,7 +20,7 @@
     "build:copy:src": "shx mkdir -p add-on/dist && shx cp -R add-on/src/* add-on/dist",
     "build:js": "run-s build:js:*",
     "build:js:webpack": "webpack --mode production",
-    "build:minimize-dist": "shx rm -rf add-on/dist/lib add-on/dist/contentScripts/ add-on/dist/bundles/ipfsProxyContentScriptPayload.bundle.js",
+    "build:minimize-dist": "shx rm -rf add-on/dist/lib add-on/dist/contentScripts",
     "build:update-manifest": "cross-env ci/update-manifest.sh",
     "build:bundle-all": "cross-env run-s bundle:chromium bundle:brave:$RELEASE_CHANNEL bundle:firefox:$RELEASE_CHANNEL",
     "build:rename-artifacts": "node scripts/rename-artifacts.js",
@@ -103,12 +103,12 @@
     "sinon-chrome": "3.0.1",
     "standard": "16.0.4",
     "style-loader": "3.3.1",
-    "tar": "6.1.11",
+    "tar": "6.1.12",
     "terser": "5.15.1",
     "terser-webpack-plugin": "5.3.6",
     "transform-loader": "0.2.4",
     "url": "0.11.0",
-    "web-ext": "6.7.0",
+    "web-ext": "7.3.1",
     "webpack": "5.75.0",
     "webpack-bundle-analyzer": "4.7.0",
     "webpack-cli": "5.0.0",
@@ -159,7 +159,7 @@
     }
   },
   "engines": {
-    "node": ">=14.15.0 <17",
-    "npm": ">=6.14.0"
+    "node": ">=18.12.1",
+    "npm": ">=8.19.2"
   }
 }
