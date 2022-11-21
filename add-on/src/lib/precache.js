@@ -1,13 +1,13 @@
 'use strict'
 /* eslint-env browser, webextensions */
-// const CID = require('cids')
+// import  CID  from 'cids'
 
-// const Tar = require('it-tar')
-// const pipe = require('it-pipe')
-// const all = require('it-all')
-// const concat = require('it-concat')
+// import  Tar  from 'it-tar'
+// import  pipe  from 'it-pipe'
+// import  all  from 'it-all'
+// import  concat  from 'it-concat'
 
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:precache')
 log.error = debug('ipfs-companion:precache:error')
 
@@ -15,7 +15,7 @@ log.error = debug('ipfs-companion:precache:error')
  * Adds important assets such as Web UI to the local js-ipfs-repo.
  * This ensures they load instantly, even in offline environments.
  */
-module.exports.precache = async (ipfs, state) => {
+export async function precache (ipfs, state) {
   const roots = []
   // find out the content path of webui, and add it to precache list
   try {

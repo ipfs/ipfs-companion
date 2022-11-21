@@ -1,12 +1,12 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-require('./options.css')
+import './options.css'
 
-const { i18n } = require('webextension-polyfill')
-const choo = require('choo')
-const optionsPage = require('./page')
-const optionsStore = require('./store')
+import { i18n } from 'webextension-polyfill'
+import choo from 'choo'
+import optionsPage from './page.js'
+import optionsStore from './store.js'
 
 const app = choo()
 

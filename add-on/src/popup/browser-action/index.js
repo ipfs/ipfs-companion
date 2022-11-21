@@ -1,11 +1,11 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-require('./browser-action.css')
+import './browser-action.css'
 
-const choo = require('choo')
-const browserActionPage = require('./page')
-const browserActionStore = require('./store')
+import choo from 'choo'
+import browserActionPage from './page.js'
+import browserActionStore from './store.js'
 
 const app = choo()
 

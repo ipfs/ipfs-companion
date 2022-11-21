@@ -1,9 +1,9 @@
 'use strict'
 
-const isIP = require('is-ip')
-const isFQDN = require('is-fqdn')
+import { isIPv4, isIPv6 } from 'is-ip'
+import isFQDN from 'is-fqdn'
 
-exports.optionDefaults = Object.freeze({
+export const optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external',
   ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
@@ -45,7 +45,7 @@ function buildDefaultIpfsNodeConfig () {
 }
 
 // `storage` should be a browser.storage.local or similar
-exports.storeMissingOptions = async (read, defaults, storage) => {
+export async function storeMissingOptions (read, defaults, storage) {
   const requiredKeys = Object.keys(defaults)
   const changes = {}
   const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key)
@@ -64,7 +64,7 @@ exports.storeMissingOptions = async (read, defaults, storage) => {
 }
 
 // safeURL produces URL object with optional normalizations
-function safeURL (url, opts) {
+export function safeURL (url, opts) {
   opts = opts || { useLocalhostName: true }
   if (typeof url === 'string') {
     url = new URL(url)
@@ -90,15 +90,13 @@ function safeURL (url, opts) {
 }
 
 // Return string without trailing slash
-function guiURLString (url, opts) {
+export function guiURLString (url, opts) {
   return safeURL(url, opts).toString().replace(/\/$/, '')
 }
-exports.safeURL = safeURL
-exports.guiURLString = guiURLString
 
 // ensure value is a valid URL.hostname (FQDN || ipv4 || ipv6 WITH brackets)
-exports.isHostname = x => {
-  if (isFQDN(x) || isIP.v4(x)) {
+export function isHostname (x) {
+  if (isFQDN(x) || isIPv4(x)) {
     return true
   }
 
@@ -108,7 +106,7 @@ exports.isHostname = x => {
     return false
   }
 
-  return isIP.v6(match[1])
+  return isIPv6(match[1])
 }
 
 // convert JS array to multiline textarea
@@ -117,25 +115,23 @@ function hostArrayCleanup (array) {
   // normalize/extract hostnames (just domain/ip, drop ports etc), if provided
   array = array.map(x => {
     try {
-      if (isIP.v6(x)) x = `[${x}]`
+      if (isIPv6(x)) x = `[${x}]`
       return new URL(`http://${x}`).hostname
     } catch (_) {
       return undefined
     }
   })
-  array = array.filter(Boolean).filter(exports.isHostname)
+  array = array.filter(Boolean).filter(isHostname)
   array = [...new Set(array)] // dedup
   array.sort()
   return array
 }
-function hostArrayToText (array) {
+export function hostArrayToText (array) {
   return hostArrayCleanup(array).join('\n')
 }
-function hostTextToArray (text) {
+export function hostTextToArray (text) {
   return hostArrayCleanup(text.split('\n'))
 }
-exports.hostArrayToText = hostArrayToText
-exports.hostTextToArray = hostTextToArray
 
 function localhostIpUrl (url) {
   if (typeof url === 'string') {
@@ -150,7 +146,7 @@ function localhostNameUrl (url) {
   return url.hostname.toLowerCase() === 'localhost'
 }
 
-exports.migrateOptions = async (storage, debug) => {
+export async function migrateOptions (storage, debug) {
   const log = debug('ipfs-companion:migrations')
   log.error = debug('ipfs-companion:migrations:error')
 

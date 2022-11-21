@@ -1,6 +1,6 @@
 'use strict'
 
-function createProxyAccessDialogStore (i18n, runtime) {
+export default function createProxyAccessDialogStore (_i18n, runtime) {
   return function proxyAccessDialogStore (state, emitter) {
     state.scope = null
     state.permissions = null
@@ -31,5 +31,3 @@ function createProxyAccessDialogStore (i18n, runtime) {
     })
   }
 }
-
-module.exports = createProxyAccessDialogStore

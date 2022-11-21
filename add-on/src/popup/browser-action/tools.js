@@ -1,17 +1,17 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const toolsButton = require('./tools-button')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import toolsButton from './tools-button.js'
 
-module.exports = function tools ({
+export default function tools ({
   active,
   ipfsNodeType,
-  isIpfsOnline,
   isApiAvailable,
-  onQuickImport,
-  onOpenWebUi
+  isIpfsOnline,
+  onOpenWebUi,
+  onQuickImport
 }) {
   const activeQuickImport = active && isIpfsOnline && isApiAvailable
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'

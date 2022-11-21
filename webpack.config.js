@@ -1,8 +1,13 @@
-const path = require('path')
-const webpack = require('webpack')
-const { merge } = require('webpack-merge')
-const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+import path from 'path'
+import webpack from 'webpack'
+import { merge } from 'webpack-merge'
+import TerserPlugin from 'terser-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import { fileURLToPath } from 'url'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // common configuration shared by all targets
 const commonConfig = {
@@ -40,7 +45,7 @@ const commonConfig = {
       global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.emitWarning': (message, type) => {}, // console.warn(`${type}${type ? ': ' : ''}${message}`),
       'process.env': {
-        //NODE_ENV: '"production"',
+        // NODE_ENV: '"production"',
         IPFS_MONITORING: false,
         DEBUG: false // controls verbosity of Hapi HTTP server in js-ipfs
       }
@@ -205,9 +210,11 @@ const proxyContentScriptConfig = merge(commonConfig, {
 })
 */
 
-module.exports = [
+const config = [
   bgConfig,
   uiConfig,
   contentScriptsConfig
   //  TODO: remove or fix (window.ipfs) proxyContentScriptConfig
 ]
+
+export default config

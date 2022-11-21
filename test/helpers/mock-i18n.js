@@ -1,4 +1,4 @@
-module.exports = () => ({
+export default () => ({
   getMessage (key, substititions) {
     if (!substititions) return key
     substititions = Array.isArray(substititions) ? substititions : [substititions]

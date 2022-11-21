@@ -1,10 +1,10 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const { safeURL, isHostname } = require('./options')
-const offlinePeerCount = -1
+import { safeURL, isHostname } from './options.js'
 
-function initState (options, overrides) {
+export const offlinePeerCount = -1
+export function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
   const state = Object.assign({}, options)
@@ -57,6 +57,3 @@ function initState (options, overrides) {
   if (overrides) Object.assign(state, overrides)
   return state
 }
-
-exports.initState = initState
-exports.offlinePeerCount = offlinePeerCount

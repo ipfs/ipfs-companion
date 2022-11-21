@@ -1,15 +1,15 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const logo = require('../logo')
-const versionUpdateIcon = require('./version-update-icon')
-const powerIcon = require('./power-icon')
-const optionsIcon = require('./options-icon')
-const ipfsVersion = require('./ipfs-version')
-const gatewayStatus = require('./gateway-status')
+import html from 'choo/html/index.js'
+import logo from '../logo.js'
+import versionUpdateIcon from './version-update-icon.js'
+import powerIcon from './power-icon.js'
+import optionsIcon from './options-icon.js'
+import ipfsVersion from './ipfs-version.js'
+import gatewayStatus from './gateway-status.js'
 
-module.exports = function header (props) {
+export default function header (props) {
   const { ipfsNodeType, active, onToggleActive, onOpenPrefs, onOpenReleaseNotes, isIpfsOnline, onOpenWelcomePage, newVersion } = props
   return html`
     <div>

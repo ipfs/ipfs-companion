@@ -1,13 +1,13 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const { guiURLString } = require('../../lib/options')
-const { braveNodeType } = require('../../lib/ipfs-client/brave')
-const switchToggle = require('../../pages/components/switch-toggle')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import { guiURLString } from '../../lib/options.js'
+import { braveNodeType } from '../../lib/ipfs-client/brave.js'
+import switchToggle from '../../pages/components/switch-toggle.js'
 
-function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
+export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
   const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', (url) => guiURLString(url, { useLocalhostName: false }))
   const onIpfsApiPollMsChange = onOptionChange('ipfsApiPollMs')
   const onAutomaticModeChange = onOptionChange('automaticMode')
@@ -70,5 +70,3 @@ function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOp
     </form>
   `
 }
-
-module.exports = apiForm

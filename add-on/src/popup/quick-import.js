@@ -1,17 +1,17 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-require('./quick-import.css')
+import './quick-import.css'
 
-const browser = require('webextension-polyfill')
-const choo = require('choo')
-const html = require('choo/html')
-const logo = require('./logo')
-const externalApiClient = require('../lib/ipfs-client/external')
-const { formatImportDirectory } = require('../lib/ipfs-import')
-const all = require('it-all')
-const drop = require('drag-and-drop-files')
-const filesize = require('filesize')
+import browser from 'webextension-polyfill'
+import choo from 'choo'
+import html from 'choo/html/index.js'
+import logo from './logo.js'
+import * as externalApiClient from '../lib/ipfs-client/external.js'
+import { formatImportDirectory } from '../lib/ipfs-import.js'
+import all from 'it-all'
+import drop from 'drag-and-drop-files'
+import filesize from 'filesize'
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 

@@ -1,8 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
-const browser = require('webextension-polyfill')
+import browser from 'webextension-polyfill'
 
-function createWelcomePageStore (i18n, runtime) {
+export default function createWelcomePageStore (i18n, runtime) {
   return function welcomePageStore (state, emitter) {
     state.isIpfsOnline = null
     state.peerCount = null
@@ -36,5 +36,3 @@ function createWelcomePageStore (i18n, runtime) {
     })
   }
 }
-
-module.exports = createWelcomePageStore

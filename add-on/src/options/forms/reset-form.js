@@ -1,10 +1,10 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
 
-function resetForm ({
+export default function resetForm ({
   onOptionsReset
 }) {
   return html`
@@ -24,5 +24,3 @@ function resetForm ({
     </form>
   `
 }
-
-module.exports = resetForm

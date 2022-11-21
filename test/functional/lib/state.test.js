@@ -1,9 +1,9 @@
 'use strict'
-const { describe, it, beforeEach } = require('mocha')
-const { expect } = require('chai')
-const { URL } = require('url')
-const { initState } = require('../../../add-on/src/lib/state')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
+import { describe, it, beforeEach } from 'mocha'
+import { expect } from 'chai'
+import { URL } from 'url'
+import { initState } from '../../../add-on/src/lib/state.js'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
 
 describe('state.js', function () {
   let state

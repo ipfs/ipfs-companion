@@ -1,20 +1,20 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const globalToggleForm = require('./forms/global-toggle-form')
-const ipfsNodeForm = require('./forms/ipfs-node-form')
-const fileImportForm = require('./forms/file-import-form')
-const dnslinkForm = require('./forms/dnslink-form')
-const gatewaysForm = require('./forms/gateways-form')
-const apiForm = require('./forms/api-form')
-const experimentsForm = require('./forms/experiments-form')
-const resetForm = require('./forms/reset-form')
+import html from 'choo/html/index.js'
+import globalToggleForm from './forms/global-toggle-form.js'
+import ipfsNodeForm from './forms/ipfs-node-form.js'
+import fileImportForm from './forms/file-import-form.js'
+import dnslinkForm from './forms/dnslink-form.js'
+import gatewaysForm from './forms/gateways-form.js'
+import apiForm from './forms/api-form.js'
+import experimentsForm from './forms/experiments-form.js'
+import resetForm from './forms/reset-form.js'
 
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
 // events, allowing views to signal back to the store that something happened.
-module.exports = function optionsPage (state, emit) {
+export default function optionsPage (state, emit) {
   const onOptionChange = (key, modifyValue) => (e) => {
     e.preventDefault()
 

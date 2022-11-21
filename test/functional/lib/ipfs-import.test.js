@@ -1,12 +1,13 @@
 'use strict'
-const { describe, it, before, after } = require('mocha')
-const { expect } = require('chai')
-const { useFakeTimers } = require('sinon')
-const browser = require('sinon-chrome')
+import { describe, it, before, after } from 'mocha'
+import { expect } from 'chai'
+import { useFakeTimers } from 'sinon'
+import browser from 'sinon-chrome'
+import { formatImportDirectory } from '../../../add-on/src/lib/ipfs-import.js'
 
 describe('ipfs-import.js', function () {
-  let formatImportDirectory
   before(function () {
+    browser.runtime.id = 'testid'
     global.document = {}
     global.browser = browser
     // ipfs-import depends on webextension/polyfill which can't be imported
@@ -16,8 +17,6 @@ describe('ipfs-import.js', function () {
     global.clock = useFakeTimers({
       now: new Date(2017, 10, 5, 12, 1, 1)
     })
-
-    formatImportDirectory = require('../../../add-on/src/lib/ipfs-import').formatImportDirectory
   })
 
   describe('formatImportDirectory', function () {

@@ -1,14 +1,14 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const html = require('choo/html')
-const icon = require('./icon')
+import html from 'choo/html/index.js'
+import icon from './icon.js'
 
-function redirectIcon ({
-  active,
-  title,
+export default function redirectIcon ({
   action,
-  size = '2rem'
+  active,
+  size = '2rem',
+  title
 }) {
   const svg = html`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
@@ -24,4 +24,3 @@ function redirectIcon ({
     action
   })
 }
-module.exports = redirectIcon

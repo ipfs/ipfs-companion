@@ -1,6 +1,6 @@
-const { ReloaderBase } = require('./reloaderBase')
+import ReloaderBase from './reloaderBase.js'
 
-class WebUiReloader extends ReloaderBase {
+export default class WebUiReloader extends ReloaderBase {
   /**
    * Performs url validation for the tab. If tab is a WebUI tab.
    *
@@ -23,8 +23,4 @@ class WebUiReloader extends ReloaderBase {
   message ({ url }) {
     return `reloading webui at ${url}`
   }
-}
-
-module.exports = {
-  WebUiReloader
 }

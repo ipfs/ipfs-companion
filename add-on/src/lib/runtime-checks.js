@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const { brave } = require('./ipfs-client/brave')
+import { brave } from './ipfs-client/brave.js'
 
 // this is our kitchen sink for runtime detection
 
@@ -20,7 +20,7 @@ function getPlatformInfo (browser) {
   return Promise.resolve()
 }
 
-async function createRuntimeChecks (browser) {
+export default async function createRuntimeChecks (browser) {
   // browser
   const { name, version } = await getBrowserInfo(browser)
   const isFirefox = name && (name.includes('Firefox') || name.includes('Fennec'))
@@ -37,5 +37,3 @@ async function createRuntimeChecks (browser) {
     hasNativeProtocolHandler
   })
 }
-
-module.exports.createRuntimeChecks = createRuntimeChecks

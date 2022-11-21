@@ -1,35 +1,35 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const debug = require('debug')
+import debug from 'debug'
+
+import browser from 'webextension-polyfill'
+import toMultiaddr from 'uri-to-multiaddr'
+import pMemoize from 'p-memoize'
+import LRU from 'lru-cache'
+import all from 'it-all'
+import { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } from './options.js'
+import { initState, offlinePeerCount } from './state.js'
+import { createIpfsPathValidator, sameGateway, safeHostname } from './ipfs-path.js'
+import createDnslinkResolver from './dnslink.js'
+import { createRequestModifier } from './ipfs-request.js'
+import { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
+import { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } from './ipfs-client/brave.js'
+import { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } from './ipfs-import.js'
+import createNotifier from './notifier.js'
+import createCopier from './copier.js'
+import createInspector from './inspector.js'
+import createRuntimeChecks from './runtime-checks.js'
+import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
+import { registerSubdomainProxy } from './http-proxy.js'
+import { runPendingOnInstallTasks } from './on-installed.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
-
-const browser = require('webextension-polyfill')
-const toMultiaddr = require('uri-to-multiaddr')
-const pMemoize = require('p-memoize')
-const LRU = require('lru-cache')
-const all = require('it-all')
-const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
-const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator, sameGateway, safeHostname } = require('./ipfs-path')
-const createDnslinkResolver = require('./dnslink')
-const { createRequestModifier } = require('./ipfs-request')
-const { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } = require('./ipfs-client')
-const { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } = require('./ipfs-client/brave')
-const { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } = require('./ipfs-import')
-const createNotifier = require('./notifier')
-const createCopier = require('./copier')
-const createInspector = require('./inspector')
-const { createRuntimeChecks } = require('./runtime-checks')
-const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
-const { registerSubdomainProxy } = require('./http-proxy')
-const { runPendingOnInstallTasks } = require('./on-installed')
 
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-module.exports = async function init () {
+export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance

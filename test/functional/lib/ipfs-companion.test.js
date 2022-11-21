@@ -1,33 +1,37 @@
-const { describe, it, before, beforeEach, after } = require('mocha')
-const { expect } = require('chai')
-const browser = require('sinon-chrome')
-const { URL } = require('url')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
-const { AbortController } = require('abort-controller')
+import { describe, it, before, after } from 'mocha'
+import { expect } from 'chai'
+import browser from 'sinon-chrome'
+import AbortController from 'abort-controller'
+import { URL } from 'url'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
+browser.runtime.id = 'testid'
+global.browser = browser
+global.AbortController = AbortController
+global.chrome = browser
+global.navigator = {
+  clipboard: {
+    writeText: () => {}
+  }
+}
+// We need to do this because global is not mapped otherwise, we need to stub browser and chrome runtime
+// so that the webextension-polyfill does not complain about the test runner not being a browser instance.
+const init = async () => (await import('../../../add-on/src/lib/ipfs-companion.js')).default()
 
 describe('lib/ipfs-companion.js', function () {
   describe('init', function () {
-    let init
-
     before(function () {
       global.localStorage = global.localStorage || {}
-      global.window = { AbortController }
-      global.browser = browser
       global.URL = global.URL || URL
       global.screen = { width: 1024, height: 720 }
-      browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
-      init = require('../../../add-on/src/lib/ipfs-companion')
-    })
 
-    beforeEach(function () {
-      browser.flush()
+      browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
     })
 
     it('should query local storage for options with hardcoded defaults for fallback', async function () {
-      browser.storage.local.get.returns(Promise.resolve(optionDefaults))
-      browser.storage.local.set.returns(Promise.resolve())
+      browser.storage.local.get.resolves(optionDefaults)
+      browser.storage.local.set.resolves()
       const ipfsCompanion = await init()
-      browser.storage.local.get.calledWith(optionDefaults)
+      expect(browser.storage.local.get.calledWith(optionDefaults)).to.equal(true)
       return ipfsCompanion.destroy()
     })
 
@@ -37,28 +41,21 @@ describe('lib/ipfs-companion.js', function () {
   })
 
   describe.skip('onStorageChange()', function () {
-    let init
-
     before(function () {
       global.window = {}
       global.browser = browser
       global.URL = URL
-      init = require('../../../add-on/src/lib/ipfs-companion')
-    })
-
-    beforeEach(function () {
-      browser.flush()
     })
 
     it('should update ipfs API instance on IPFS API URL change', async function () {
-      browser.storage.local.get.returns(Promise.resolve(optionDefaults))
-      browser.storage.local.set.returns(Promise.resolve())
-      browser.browserAction.setBadgeBackgroundColor.returns(Promise.resolve())
-      browser.browserAction.setBadgeText.returns(Promise.resolve())
-      browser.browserAction.setIcon.returns(Promise.resolve())
-      browser.tabs.query.returns(Promise.resolve([{ id: 'TEST' }]))
-      browser.contextMenus.update.returns(Promise.resolve())
-      browser.idle.queryState.returns(Promise.resolve('active'))
+      browser.storage.local.get.resolves(optionDefaults)
+      browser.storage.local.set.resolves()
+      browser.browserAction.setBadgeBackgroundColor.resolves()
+      browser.browserAction.setBadgeText.resolves()
+      browser.browserAction.setIcon.resolves()
+      browser.tabs.query.resolves([{ id: 'TEST' }])
+      browser.contextMenus.update.resolves()
+      browser.idle.queryState.resolves('active')
 
       const ipfsCompanion = await init()
 

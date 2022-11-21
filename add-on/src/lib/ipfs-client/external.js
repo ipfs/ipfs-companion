@@ -1,13 +1,13 @@
 'use strict'
 /* eslint-env browser */
 
-const debug = require('debug')
+import debug from 'debug'
+
+import { create } from 'ipfs-http-client'
 const log = debug('ipfs-companion:client:external')
 log.error = debug('ipfs-companion:client:external:error')
 
-const { create } = require('ipfs-http-client')
-
-exports.init = async function (browser, opts) {
+export async function init (browser, opts) {
   log(`init with IPFS API at ${opts.apiURLString}`)
   const clientConfig = opts.apiURLString
   // https://github.com/ipfs/js-ipfs/tree/master/packages/ipfs-http-client#importing-the-module-and-usage
@@ -15,6 +15,6 @@ exports.init = async function (browser, opts) {
   return api
 }
 
-exports.destroy = async function (browser) {
+export async function destroy (browser) {
   log('destroy')
 }

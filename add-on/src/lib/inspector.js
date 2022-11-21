@@ -1,10 +1,10 @@
 'use strict'
 
-const browser = require('webextension-polyfill')
-const { findValueForContext } = require('./context-menus')
-const { pathAtHttpGateway } = require('./ipfs-path')
+import browser from 'webextension-polyfill'
+import { findValueForContext } from './context-menus.js'
+import { pathAtHttpGateway } from './ipfs-path.js'
 
-function createInspector (notify, ipfsPathValidator, getState) {
+export default function createInspector (notify, ipfsPathValidator, getState) {
   return {
     async viewOnGateway (context, contextType) {
       const url = await findValueForContext(context, contextType)
@@ -17,5 +17,3 @@ function createInspector (notify, ipfsPathValidator, getState) {
     // TODO: view in WebUI's IPLD Explorer
   }
 }
-
-module.exports = createInspector

@@ -1,25 +1,25 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
-const html = require('choo/html')
-const navItem = require('./nav-item')
-const navHeader = require('./nav-header')
-const { sameGateway } = require('../../lib/ipfs-path')
-const { formatImportDirectory } = require('../../lib/ipfs-import')
-const {
+import browser from 'webextension-polyfill'
+import html from 'choo/html/index.js'
+import navItem from './nav-item.js'
+import navHeader from './nav-header.js'
+import { sameGateway } from '../../lib/ipfs-path.js'
+import { formatImportDirectory } from '../../lib/ipfs-import.js'
+import {
   contextMenuViewOnGateway,
   contextMenuCopyAddressAtPublicGw,
   contextMenuCopyPermalink,
   contextMenuCopyRawCid,
   contextMenuCopyCanonicalAddress,
   contextMenuCopyCidAddress
-} = require('../../lib/context-menus')
+} from '../../lib/context-menus.js'
 
 const notReady = browser.i18n.getMessage('panelCopy_notReadyHint')
 
 // Context Actions are displayed in Browser Action and Page Action (FF only)
-function contextActions ({
+export function contextActions ({
   active,
   redirect,
   isRedirectContext,
@@ -126,11 +126,10 @@ function contextActions ({
     </div>
   `
 }
-module.exports.contextActions = contextActions
 
 // "Active Tab" section is displayed in Browser Action  only
 // if redirect can be toggled or current tab has any IPFS Context Actions
-function activeTabActions (state) {
+export function activeTabActions (state) {
   const showActiveTabSection = (state.isRedirectContext) || state.isIpfsContext
   if (!showActiveTabSection) return
   return html`
@@ -141,5 +140,3 @@ function activeTabActions (state) {
       </div>
   `
 }
-
-module.exports.activeTabActions = activeTabActions

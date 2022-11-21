@@ -1,7 +1,15 @@
 'use strict'
-const { describe, it, before, beforeEach } = require('mocha')
-const browser = require('sinon-chrome')
-const sinon = require('sinon')
+import { describe, it, before, beforeEach } from 'mocha'
+import browser from 'sinon-chrome'
+import sinon from 'sinon'
+
+// Units to be tested.
+import {
+  prepareReloadExtensions,
+  InternalTabReloader,
+  LocalGatewayReloader,
+  WebUiReloader
+} from '../../../../../add-on/src/lib/ipfs-client/reloaders/index.js'
 
 const CUSTOM_GATEWAY_URL = {
   customGatewayUrl: 'http://127.0.0.1:8080'
@@ -9,16 +17,9 @@ const CUSTOM_GATEWAY_URL = {
 
 const logger = sinon.spy()
 
-// Units to be tested.
-const {
-  prepareReloadExtensions,
-  InternalTabReloader,
-  LocalGatewayReloader,
-  WebUiReloader
-} = require('../../../../../add-on/src/lib/ipfs-client/reloaders')
-
 describe('Reloader Helper Method: prepareReloadExtensions', function () {
   it('Prepares the reloader extensions', async function () {
+    browser.runtime.id = 'testid'
     browser.storage.local.get.resolves(CUSTOM_GATEWAY_URL)
     browser.runtime.getURL.returns('chrome-extension://<some_id>')
     await prepareReloadExtensions([WebUiReloader, InternalTabReloader, LocalGatewayReloader], browser, logger)
@@ -29,6 +30,7 @@ describe('Reloader Helper Method: prepareReloadExtensions', function () {
 describe('Reloaders', function () {
   before(() => {
     global.browser = browser
+    browser.runtime.id = 'testid'
     global.chrome = {}
   })
 

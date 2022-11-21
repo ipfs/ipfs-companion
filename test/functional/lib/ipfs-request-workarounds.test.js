@@ -1,18 +1,16 @@
 'use strict'
-const { describe, it, before, beforeEach, after } = require('mocha')
-const { expect, assert } = require('chai')
-const { URL } = require('url') // URL implementation with support for .origin attribute
-const browser = require('sinon-chrome')
-const { initState } = require('../../../add-on/src/lib/state')
-const { createRuntimeChecks } = require('../../../add-on/src/lib/runtime-checks')
-const { createRequestModifier } = require('../../../add-on/src/lib/ipfs-request')
-const createDNSLinkResolver = require('../../../add-on/src/lib/dnslink')
-const { createIpfsPathValidator } = require('../../../add-on/src/lib/ipfs-path')
-const { optionDefaults } = require('../../../add-on/src/lib/options')
-const { braveNodeType } = require('../../../add-on/src/lib/ipfs-client/brave')
-const { spoofDnsTxtRecord } = require('./dnslink.test.js')
-
-// const nodeTypes = ['external', 'embedded']
+import { describe, it, before, beforeEach, after } from 'mocha'
+import { expect, assert } from 'chai'
+import { URL } from 'url' // URL implementation with support for .origin attribute
+import browser from 'sinon-chrome'
+import { initState } from '../../../add-on/src/lib/state.js'
+import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
+import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
+import createDNSLinkResolver from '../../../add-on/src/lib/dnslink.js'
+import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
+import { optionDefaults } from '../../../add-on/src/lib/options.js'
+import { braveNodeType } from '../../../add-on/src/lib/ipfs-client/brave.js'
+import { spoofDnsTxtRecord } from './dnslink.test.js'
 
 describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
@@ -20,6 +18,7 @@ describe('modifyRequest processing', function () {
   before(function () {
     global.URL = URL
     global.browser = browser
+    browser.runtime.id = 'testid'
   })
 
   beforeEach(async function () {

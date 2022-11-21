@@ -2,20 +2,22 @@
 
 /* eslint-env browser, webextensions */
 
-const debug = require('debug')
+import debug from 'debug'
+
+import * as external from './external.js'
+import * as embedded from './embedded.js'
+import * as brave from './brave.js'
+import { precache } from '../precache.js'
+import {
+  prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader
+} from './reloaders/index.js'
 const log = debug('ipfs-companion:client')
 log.error = debug('ipfs-companion:client:error')
-
-const external = require('./external')
-const embedded = require('./embedded')
-const brave = require('./brave')
-const { precache } = require('../precache')
-const { prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader } = require('./reloaders')
 
 // ensure single client at all times, and no overlap between init and destroy
 let client
 
-async function initIpfsClient (browser, opts) {
+export async function initIpfsClient (browser, opts) {
   log('init ipfs client')
   if (client) return // await destroyIpfsClient()
   let backend
@@ -51,7 +53,7 @@ async function initIpfsClient (browser, opts) {
   return instance
 }
 
-async function destroyIpfsClient (browser) {
+export async function destroyIpfsClient (browser) {
   log('destroy ipfs client')
   if (!client) return
   try {
@@ -104,12 +106,6 @@ async function _reloadIpfsClientDependents (
  * @param {Object} opts
  * @returns {void}
  */
-function reloadIpfsClientOfflinePages (browser, instance, opts) {
+export function reloadIpfsClientOfflinePages (browser, instance, opts) {
   _reloadIpfsClientDependents(browser, instance, opts, [LocalGatewayReloader])
-}
-
-module.exports = {
-  initIpfsClient,
-  destroyIpfsClient,
-  reloadIpfsClientOfflinePages
 }
