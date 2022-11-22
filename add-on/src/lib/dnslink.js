@@ -14,7 +14,7 @@ log.error = debug('ipfs-companion:dnslink:error')
 
 export default function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
-  const cacheOptions = { max: 1000, maxAge: 1000 * 60 * 60 * 12 }
+  const cacheOptions = { max: 1000, ttl: 1000 * 60 * 60 * 12 }
   const cache = new LRU(cacheOptions)
   // upper bound for concurrent background lookups done by resolve(url)
   const lookupQueue = new Pqueue({ concurrency: 4 })
@@ -33,7 +33,7 @@ export default function createDnslinkResolver (getState) {
     },
 
     clearCache () {
-      cache.reset()
+      cache.clear()
     },
 
     cachedDnslink (fqdn) {

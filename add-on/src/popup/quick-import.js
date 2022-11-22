@@ -11,7 +11,7 @@ import * as externalApiClient from '../lib/ipfs-client/external.js'
 import { formatImportDirectory } from '../lib/ipfs-import.js'
 import all from 'it-all'
 import drop from 'drag-and-drop-files'
-import filesize from 'filesize'
+import { filesize } from 'filesize'
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 

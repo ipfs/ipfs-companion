@@ -178,7 +178,7 @@ export default async function init () {
 
   // Cache for async URL2CID resolution used by browser action
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
-  const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
+  const resolveCache = new LRU({ max: 10, ttl: 1000 * 30 })
 
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)

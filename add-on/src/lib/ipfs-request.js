@@ -54,11 +54,11 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
   }
 
   // Various types of requests are identified once and cached across all browser.webRequest hooks
-  const requestCacheCfg = { max: 128, maxAge: 1000 * 30 }
+  const requestCacheCfg = { max: 128, ttl: 1000 * 30 }
   const ignoredRequests = new LRU(requestCacheCfg)
   const ignore = (id) => ignoredRequests.set(id, true)
   const isIgnored = (id) => ignoredRequests.get(id) !== undefined
-  const errorInFlight = new LRU({ max: 3, maxAge: 1000 })
+  const errorInFlight = new LRU({ max: 3, ttl: 1000 })
 
   // Returns a canonical hostname representing the site from url
   // Main reason for this is unwrapping DNSLink from local subdomain
