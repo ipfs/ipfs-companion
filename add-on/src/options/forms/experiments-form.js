@@ -88,7 +88,7 @@ export default function experimentsForm ({
             <dl>
               <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
               <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
-                <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/how-to/companion-x-ipfs-path-header/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/companion-x-ipfs-path-header/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>

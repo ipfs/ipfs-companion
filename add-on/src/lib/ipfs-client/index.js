@@ -31,7 +31,7 @@ export async function initIpfsClient (browser, opts) {
           ipfsNodeType: 'external:brave',
           ipfsNodeConfig: '{}' // remove chrome-apps config
         })
-        await browser.tabs.create({ url: 'https://docs.ipfs.io/how-to/companion-node-types/#native' })
+        await browser.tabs.create({ url: 'https://docs.ipfs.tech/how-to/companion-node-types/#native' })
       }, 0)
       // Halt client init
       throw new Error('Embedded + chrome.sockets is deprecated. Switching to Native IPFS in Brave.')

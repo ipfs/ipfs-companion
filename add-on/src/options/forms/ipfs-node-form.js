@@ -21,7 +21,7 @@ export default function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionCh
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
                 ${withNodeFromBrave ? html`<p>${browser.i18n.getMessage('option_ipfsNodeType_brave_description')}</p>` : null}
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_embedded_description')}</p>
-                <p><a class="link underline hover-aqua" href="https://docs.ipfs.io/how-to/companion-node-types/" target="_blank">
+                <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/companion-node-types/" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
