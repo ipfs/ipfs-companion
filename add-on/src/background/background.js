@@ -13,8 +13,12 @@ browser.runtime.setUninstallURL(getUninstallURL(browser))
 
 // init add-on after all libs are loaded
 document.addEventListener('DOMContentLoaded', async () => {
-  // setting debug level early
-  localStorage.debug = (await browser.storage.local.get({ logNamespaces: optionDefaults.logNamespaces })).logNamespaces
+  // setting debug namespaces require page reload to get applied
+  const debugNs = (await browser.storage.local.get({ logNamespaces: optionDefaults.logNamespaces })).logNamespaces
+  if (debugNs !== localStorage.debug) {
+    localStorage.debug = debugNs
+    window.location.reload()
+  }
   // init inlined to read updated localStorage.debug
   window.ipfsCompanion = await createIpfsCompanion()
 })
