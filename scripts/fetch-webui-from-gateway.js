@@ -2,9 +2,9 @@
  * More details: https://github.com/ipfs-shipyard/ipfs-webui/issues/843
  * See also why this is not used anymore: https://github.com/ipfs-shipyard/ipfs-companion/issues/679
  */
-const tar = require('tar')
-const request = require('request')
-const progress = require('request-progress')
+import tar from 'tar'
+import request from 'request'
+import progress from 'request-progress'
 
 const cid = process.argv[2]
 const destination = process.argv[3]

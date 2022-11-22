@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const browser = require('webextension-polyfill')
+import browser from 'webextension-polyfill'
 
 /**
  * Renders a translated string with html anchors.
@@ -10,7 +10,7 @@ const browser = require('webextension-polyfill')
  * @param {Object} attributes HTML attributes to put in the anchor.
  * @return {html} An HTML node with the translated string with anchors.
  */
-const renderTranslatedLinks = (message, links, attributes) => {
+export const renderTranslatedLinks = (message, links, attributes) => {
   const regexLink = /<\d+>(.+?)<\/\d+>/mg
   const regexIndex = /<(\d+)>/mg
   const str = browser.i18n.getMessage(message)
@@ -39,7 +39,7 @@ const renderTranslatedLinks = (message, links, attributes) => {
  * @param {Object} attributes - HTML attributes to put in the span around each of them.
  * @return {html} An HTML node with the translated string with spans.
  */
-const renderTranslatedSpans = (message, values, attributes) => {
+export const renderTranslatedSpans = (message, values, attributes) => {
   const regexSpan = /<\d+>(.+?)<\/\d+>/mg
   const regexIndex = /<(\d+)>/mg
   const str = browser.i18n.getMessage(message, values)
@@ -59,9 +59,4 @@ const renderTranslatedSpans = (message, values, attributes) => {
   template.innerHTML = output
 
   return template.content
-}
-
-module.exports = {
-  renderTranslatedLinks,
-  renderTranslatedSpans
 }

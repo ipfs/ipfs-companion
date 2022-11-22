@@ -1,7 +1,7 @@
-const { ReloaderBase } = require('./reloaderBase')
-const isIPFS = require('is-ipfs')
+import ReloaderBase from './reloaderBase.js'
+import isIPFS from 'is-ipfs'
 
-class LocalGatewayReloader extends ReloaderBase {
+export default class LocalGatewayReloader extends ReloaderBase {
   /**
    * Performs url validation for the tab. If tab is loaded via local gateway.
    *
@@ -35,8 +35,4 @@ class LocalGatewayReloader extends ReloaderBase {
   message ({ url }) {
     return `reloading local gateway at ${url}`
   }
-}
-
-module.exports = {
-  LocalGatewayReloader
 }

@@ -1,36 +1,35 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-const debug = require('debug')
+import debug from 'debug'
+
+import browser from 'webextension-polyfill'
+import toMultiaddr from 'uri-to-multiaddr'
+import pMemoize from 'p-memoize'
+import LRU from 'lru-cache'
+import all from 'it-all'
+import { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } from './options.js'
+import { initState, offlinePeerCount } from './state.js'
+import { createIpfsPathValidator, sameGateway, safeHostname } from './ipfs-path.js'
+import createDnslinkResolver from './dnslink.js'
+import { createRequestModifier } from './ipfs-request.js'
+import { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
+import { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } from './ipfs-client/brave.js'
+import { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } from './ipfs-import.js'
+import createNotifier from './notifier.js'
+import createCopier from './copier.js'
+import createInspector from './inspector.js'
+import createRuntimeChecks from './runtime-checks.js'
+import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
+import { registerSubdomainProxy } from './http-proxy.js'
+import { runPendingOnInstallTasks } from './on-installed.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
-
-const browser = require('webextension-polyfill')
-const toMultiaddr = require('uri-to-multiaddr')
-const pMemoize = require('p-memoize')
-const LRU = require('lru-cache')
-const all = require('it-all')
-const { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } = require('./options')
-const { initState, offlinePeerCount } = require('./state')
-const { createIpfsPathValidator, sameGateway, safeHostname } = require('./ipfs-path')
-const createDnslinkResolver = require('./dnslink')
-const { createRequestModifier } = require('./ipfs-request')
-const { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } = require('./ipfs-client')
-const { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } = require('./ipfs-client/brave')
-const { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } = require('./ipfs-import')
-const createNotifier = require('./notifier')
-const createCopier = require('./copier')
-const createInspector = require('./inspector')
-const { createRuntimeChecks } = require('./runtime-checks')
-const { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } = require('./context-menus')
-const createIpfsProxy = require('./ipfs-proxy')
-const { registerSubdomainProxy } = require('./http-proxy')
-const { runPendingOnInstallTasks } = require('./on-installed')
 
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-module.exports = async function init () {
+export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
@@ -44,8 +43,6 @@ module.exports = async function init () {
   let runtime
   let contextMenus
   let apiStatusUpdateInterval
-  let ipfsProxy
-  // TODO: window.ipfs var ipfsProxyContentScript
   let ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
@@ -84,8 +81,6 @@ module.exports = async function init () {
       onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
     })
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-    ipfsProxy = createIpfsProxy(getIpfs, getState)
-    // TODO(window.ipfs) ipfsProxyContentScript = await registerIpfsProxyContentScript()
     log('register all listeners')
     registerListeners()
     await registerSubdomainProxy(getState, runtime, notify)
@@ -137,43 +132,6 @@ module.exports = async function init () {
     }
   }
 
-  // Register Content Script responsible for loading window.ipfs (ipfsProxy)
-  //
-  // The key difference between tabs.executeScript and contentScripts API
-  // is the latter provides guarantee to execute before anything else.
-  // https://github.com/ipfs-shipyard/ipfs-companion/issues/451#issuecomment-382669093
-  /* TODO(window.ipfs)
-  async function registerIpfsProxyContentScript (previousHandle) {
-    previousHandle = previousHandle || ipfsProxyContentScript
-    if (previousHandle) {
-      previousHandle.unregister()
-    }
-    // TODO:
-    // No window.ipfs for now.
-    // We will restore when Migration to JS API with Async Await and Async Iterables
-    // is done:
-    // https://github.com/ipfs-shipyard/ipfs-companion/pull/777
-    // https://github.com/ipfs-shipyard/ipfs-companion/issues/843
-    // https://github.com/ipfs-shipyard/ipfs-companion/issues/852#issuecomment-594510819
-    const forceOff = true
-    if (forceOff || !state.active || !state.ipfsProxy || !browser.contentScripts) {
-      // no-op if global toggle is off, window.ipfs is disabled in Preferences
-      // or if runtime has no contentScript API
-      // (Chrome loads content script via manifest)
-      return
-    }
-    const newHandle = await browser.contentScripts.register({
-      matches: ['<all_urls>'],
-      js: [
-        { file: '/dist/bundles/ipfsProxyContentScript.bundle.js' }
-      ],
-      allFrames: true,
-      runAt: 'document_start'
-    })
-    return newHandle
-  }
-  */
-
   // HTTP Request Hooks
   // ===================================================================
 
@@ -220,7 +178,7 @@ module.exports = async function init () {
 
   // Cache for async URL2CID resolution used by browser action
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
-  const resolveCache = new LRU({ max: 10, maxAge: 1000 * 30 })
+  const resolveCache = new LRU({ max: 10, ttl: 1000 * 30 })
 
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)
@@ -549,33 +507,8 @@ module.exports = async function init () {
     return ('#' + r + g + b).toUpperCase()
   }
 
-  /* Alternative: raster images generated on the fly
-  const rasterIconDefinition = pMemoize((svgPath) => {
-    const rasterData = (size) => {
-      const icon = new Image()
-      icon.src = svgPath
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      context.clearRect(0, 0, size, size)
-      context.drawImage(icon, 0, 0, size, size)
-      return context.getImageData(0, 0, size, size)
-    }
-    // icon sizes to cover ranges from:
-    // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
-    // - https://developer.chrome.com/extensions/manifest/icons
-    const r19 = rasterData(19)
-    const r38 = rasterData(38)
-    const r128 = rasterData(128)
-    // return computed values to be cached by p-memoize
-    return { imageData: { 19: r19, 38: r38, 128: r128 } }
-  })
-  */
-
   async function setBrowserActionIcon (iconPath) {
-    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    /* Below fallback does not work since Chromium 80
-     * (it fails in a way that does not produce error we can catch)
-    const iconDefinition = { path: iconPath }
+    let iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.browserAction.setIcon(iconDefinition)
@@ -584,9 +517,9 @@ module.exports = async function init () {
       // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
       // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
       // Still, we want icon, so we precompute rasters of popular sizes and use them instead
-      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+      iconDefinition = await rasterIconDefinition(iconPath)
+      await browser.browserAction.setIcon(iconDefinition)
     }
-    */
   }
 
   // OPTIONS
@@ -620,7 +553,6 @@ module.exports = async function init () {
       switch (key) {
         case 'active':
           state[key] = change.newValue
-          // TODO(window.ipfs) ipfsProxyContentScript = await registerIpfsProxyContentScript()
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
@@ -675,12 +607,6 @@ module.exports = async function init () {
           // Finally, update proxy settings based on the state
           await registerSubdomainProxy(getState, runtime)
           break
-        /* TODO(window.ipfs)
-        case 'ipfsProxy':
-          state[key] = change.newValue
-          // This is window.ipfs proxy, requires update of the content script:
-          ipfsProxyContentScript = await registerIpfsProxyContentScript()
-          break */
         case 'dnslinkPolicy':
           state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
           if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
@@ -772,18 +698,6 @@ module.exports = async function init () {
       if (apiStatusUpdateInterval) {
         clearInterval(apiStatusUpdateInterval)
         apiStatusUpdateInterval = null
-      }
-
-      /* TODO(window.ipfs)
-      if (ipfsProxyContentScript) {
-        ipfsProxyContentScript.unregister()
-        ipfsProxyContentScript = null
-      }
-      */
-
-      if (ipfsProxy) {
-        await ipfsProxy.destroy()
-        ipfsProxy = null
       }
 
       if (ipfs) {

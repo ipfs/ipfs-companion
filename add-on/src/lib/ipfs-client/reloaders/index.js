@@ -1,6 +1,6 @@
-const { InternalTabReloader } = require('./internalTabReloader')
-const { LocalGatewayReloader } = require('./localGatewayReloader')
-const { WebUiReloader } = require('./webUiReloader')
+import InternalTabReloader from './internalTabReloader.js'
+import LocalGatewayReloader from './localGatewayReloader.js'
+import WebUiReloader from './webUiReloader.js'
 
 /**
  * Prepares extension by creating an instance and awaiting for init.
@@ -25,7 +25,7 @@ function prepareReloadExtensions (extensions, browserInstance, loggerInstance) {
   )
 }
 
-module.exports = {
+export {
   InternalTabReloader,
   LocalGatewayReloader,
   WebUiReloader,

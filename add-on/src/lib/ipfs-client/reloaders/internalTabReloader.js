@@ -1,6 +1,6 @@
-const { ReloaderBase } = require('./reloaderBase')
+import ReloaderBase from './reloaderBase.js'
 
-class InternalTabReloader extends ReloaderBase {
+export default class InternalTabReloader extends ReloaderBase {
   /**
    * Setting up the extension origin.
    */
@@ -30,8 +30,4 @@ class InternalTabReloader extends ReloaderBase {
   message ({ url }) {
     return `reloading internal extension page at ${url}`
   }
-}
-
-module.exports = {
-  InternalTabReloader
 }

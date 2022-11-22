@@ -1,15 +1,15 @@
 'use strict'
 /* eslint-env browser */
 
-const pMemoize = require('p-memoize')
-const isIPFS = require('is-ipfs')
-const isFQDN = require('is-fqdn')
+import pMemoize from 'p-memoize'
+import isIPFS from 'is-ipfs'
+import isFQDN from 'is-fqdn'
 
 // For how long more expensive lookups (DAG traversal etc) should be cached
 const RESULT_TTL_MS = 300000 // 5 minutes
 
 // Turns URL or URIencoded path into a content path
-function ipfsContentPath (urlOrPath, opts) {
+export function ipfsContentPath (urlOrPath, opts) {
   opts = opts || {}
 
   // ipfs:// → /ipfs/
@@ -46,15 +46,13 @@ function ipfsContentPath (urlOrPath, opts) {
   // Else, return content path as-is
   return contentPath
 }
-exports.ipfsContentPath = ipfsContentPath
 
 // Turns URL or URIencoded path into a ipfs:// or ipns:// URI
-function ipfsUri (urlOrPath) {
+export function ipfsUri (urlOrPath) {
   const contentPath = ipfsContentPath(urlOrPath, { keepURIParams: true })
   if (!contentPath) return null
   return contentPath.replace(/^\/(ip[f|n]s)\//, '$1://')
 }
-exports.ipfsUri = ipfsUri
 
 function subdomainPatternMatch (url) {
   if (typeof url === 'string') {
@@ -77,11 +75,10 @@ function dnsLabelToFqdn (label) {
   return label
 }
 
-function pathAtHttpGateway (path, gatewayUrl) {
+export function pathAtHttpGateway (path, gatewayUrl) {
   // return URL without duplicated slashes
   return trimDoubleSlashes(new URL(`${gatewayUrl}${path}`).toString())
 }
-exports.pathAtHttpGateway = pathAtHttpGateway
 
 function swapSubdomainGateway (url, subdomainGwURL) {
   if (typeof url === 'string') {
@@ -94,20 +91,18 @@ function swapSubdomainGateway (url, subdomainGwURL) {
   )).toString()
 }
 
-function trimDoubleSlashes (urlString) {
+export function trimDoubleSlashes (urlString) {
   return urlString.replace(/([^:]\/)\/+/g, '$1')
 }
-exports.trimDoubleSlashes = trimDoubleSlashes
 
-function trimHashAndSearch (urlString) {
+export function trimHashAndSearch (urlString) {
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/567
   return urlString.split('#')[0].split('?')[0]
 }
-exports.trimHashAndSearch = trimHashAndSearch
 
 // Returns true if URL belongs to the gateway.
 // The check includes subdomain gateways and quirks of ipfs.io
-function sameGateway (url, gwUrl) {
+export function sameGateway (url, gwUrl) {
   if (typeof url === 'string') {
     url = new URL(url)
   }
@@ -145,9 +140,8 @@ function sameGateway (url, gwUrl) {
   }
   return false
 }
-exports.sameGateway = sameGateway
 
-const safeHostname = (url) => {
+export const safeHostname = (url) => {
   // In case vendor-specific thing like brave://settings/extensions
   // cause errors, we don't throw, just return null
   try {
@@ -157,9 +151,8 @@ const safeHostname = (url) => {
   }
   return null
 }
-exports.safeHostname = safeHostname
 
-function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
+export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
   const ipfsPathValidator = {
     // Test if URL is a Public IPFS resource
     // (pass validIpfsOrIpns(url) and not at the local gateway or API)
@@ -408,4 +401,3 @@ function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
   return ipfsPathValidator
 }
-exports.createIpfsPathValidator = createIpfsPathValidator

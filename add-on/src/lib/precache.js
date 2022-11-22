@@ -1,13 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
-// const CID = require('cids')
 
-// const Tar = require('it-tar')
-// const pipe = require('it-pipe')
-// const all = require('it-all')
-// const concat = require('it-concat')
-
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:precache')
 log.error = debug('ipfs-companion:precache:error')
 
@@ -15,7 +9,7 @@ log.error = debug('ipfs-companion:precache:error')
  * Adds important assets such as Web UI to the local js-ipfs-repo.
  * This ensures they load instantly, even in offline environments.
  */
-module.exports.precache = async (ipfs, state) => {
+export async function precache (ipfs, state) {
   const roots = []
   // find out the content path of webui, and add it to precache list
   try {
@@ -70,65 +64,3 @@ async function inRepo (ipfs, cid) {
     return false
   }
 }
-
-// Downloads CID from a public gateway
-// (alternative to ipfs.refs -r)
-/*
-async function preloadOverHTTP (log, ipfs, state, cid) {
-  const url = `${state.pubGwURLString}api/v0/get?arg=${cid}&archive=true`
-  try {
-    log(`importing ${url} (${cid}) to local ipfs repo`)
-    const { body } = await fetch(url)
-    await importTar(ipfs, body.getReader(), cid)
-    log(`successfully fetched TAR from ${url} and cached under CID ${cid}`)
-  } catch (err) {
-    log.error(`error while processing ${url}`, err)
-  }
-}
-
-async function importTar (ipfs, tarReader, expectedCid) {
-  const files = []
-
-  await pipe(
-    streamTar(tarReader),
-    Tar.extract(),
-    async (source) => {
-      for await (const entry of source) {
-        // we care only about files, directories will be created implicitly
-        if (entry.header.type !== 'file') continue
-        files.push({
-          path: entry.header.name.replace(`${expectedCid}/`, ''),
-          content: (await concat(entry.body)).slice() // conversion: BufferList → Buffer
-        })
-      }
-    }
-  )
-
-  const { version, multibaseName } = new CID(expectedCid)
-  const opts = {
-    cidVersion: version,
-    wrapWithDirectory: true,
-    pin: false,
-    preload: false
-  }
-  const results = await all(ipfs.addAll(files, opts))
-
-  const root = results.find(e => e.cid.toString(multibaseName) === expectedCid)
-  if (!root) {
-    throw new Error(`imported CID (${root}) does not match expected one: ${expectedCid}`)
-  }
-}
-
-async function * streamTar (reader) {
-  try {
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) return
-      yield value
-    }
-  } finally {
-    // Firefox only? https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader/releaseLock
-    if (typeof reader.releaseLock === 'function') reader.releaseLock()
-  }
-}
-*/

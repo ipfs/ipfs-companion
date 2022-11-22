@@ -20,8 +20,8 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14
-          
+          node-version: 18
+
       - name: patch node gyp on windows to support Visual Studio 2019
         shell: powershell
         if: runner.os == 'Windows'
@@ -34,9 +34,9 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
+          key: ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('package*json', 'yarn.lock', '*config.js') }}
+            ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js') }}
             ${{ runner.os }}-
 
       - name: Restore node_modules
@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'

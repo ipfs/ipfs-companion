@@ -1,13 +1,15 @@
 'use strict'
 /* eslint-env browser */
 
-const browser = require('webextension-polyfill')
+import browser from 'webextension-polyfill'
+import debug from 'debug'
+import { welcomePage } from './constants.js'
+import { brave, braveNodeType } from './ipfs-client/brave.js'
+
 const { version } = browser.runtime.getManifest()
+export const updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v'
 
-const { welcomePage } = require('./constants')
-exports.updatePage = 'https://github.com/ipfs-shipyard/ipfs-companion/releases/tag/v'
-
-exports.onInstalled = async (details) => {
+export async function onInstalled (details) {
   // details.temporary === run via `npm run firefox`
   if (details.reason === 'install' || details.temporary) {
     await browser.storage.local.set({ onInstallTasks: 'onFirstInstall' })
@@ -16,7 +18,7 @@ exports.onInstalled = async (details) => {
   }
 }
 
-exports.runPendingOnInstallTasks = async () => {
+export async function runPendingOnInstallTasks () {
   const { onInstallTasks, displayReleaseNotes } = await browser.storage.local.get(['onInstallTasks', 'displayReleaseNotes'])
   await browser.storage.local.remove('onInstallTasks')
   switch (onInstallTasks) {
@@ -28,17 +30,15 @@ exports.runPendingOnInstallTasks = async () => {
     case 'onVersionUpdate':
       if (!displayReleaseNotes) return
       await browser.storage.local.set({ dismissedUpdate: version })
-      return browser.tabs.create({ url: exports.updatePage + version })
+      return browser.tabs.create({ url: updatePage + version })
   }
 }
 
 async function useNativeNodeIfFeasible (browser) {
   // lazy-loaded dependencies due to debug package
   // depending on the value of localStorage.debug, which is set later
-  const debug = require('debug')
   const log = debug('ipfs-companion:on-installed')
   log.error = debug('ipfs-companion:on-installed:error')
-  const { brave, braveNodeType } = require('./ipfs-client/brave')
   const { ipfsNodeType, ipfsApiUrl } = await browser.storage.local.get(['ipfsNodeType', 'ipfsApiUrl'])
 
   // Brave >= v1.19 (https://brave.com/ipfs-support/)

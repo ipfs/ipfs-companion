@@ -1,6 +1,6 @@
 'use strict'
 
-const { findValueForContext } = require('./context-menus')
+import { findValueForContext } from './context-menus.js'
 
 async function copyTextToClipboard (text, notify) {
   try {
@@ -31,7 +31,7 @@ async function copyTextToClipboard (text, notify) {
   }
 }
 
-function createCopier (notify, ipfsPathValidator) {
+export default function createCopier (notify, ipfsPathValidator) {
   return {
     async copyTextToClipboard (text) {
       await copyTextToClipboard(text, notify)
@@ -83,5 +83,3 @@ function createCopier (notify, ipfsPathValidator) {
     }
   }
 }
-
-module.exports = createCopier

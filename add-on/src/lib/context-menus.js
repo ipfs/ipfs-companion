@@ -1,8 +1,8 @@
 'use strict'
 
-const browser = require('webextension-polyfill')
+import browser from 'webextension-polyfill'
 
-const debug = require('debug')
+import debug from 'debug'
 const log = debug('ipfs-companion:context-menus')
 log.error = debug('ipfs-companion:context-menus:error')
 
@@ -17,7 +17,7 @@ const contextSources = {
   page: 'pageUrl'
 }
 
-async function findValueForContext (context, contextType) {
+export async function findValueForContext (context, contextType) {
   if (context) {
     if (contextType) {
       const field = contextSources[contextType]
@@ -41,8 +41,6 @@ async function findValueForContext (context, contextType) {
   return currentTab.url
 }
 
-module.exports.findValueForContext = findValueForContext
-
 // Context Roots
 const menuParentImage = 'contextMenu_parentImage'
 const menuParentVideo = 'contextMenu_parentVideo'
@@ -55,18 +53,12 @@ const contextMenuImportToIpfs = 'contextMenu_importToIpfs'
 // Add X to IPFS
 const contextMenuImportToIpfsSelection = 'contextMenu_importToIpfsSelection'
 // Copy X
-const contextMenuCopyCidAddress = 'panelCopy_currentIpfsAddress'
-const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpnsAddress'
-const contextMenuCopyRawCid = 'panelCopy_copyRawCid'
-const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
-const contextMenuViewOnGateway = 'panel_contextMenuViewOnGateway'
-const contextMenuCopyPermalink = 'panel_copyCurrentPermalink'
-module.exports.contextMenuCopyCidAddress = contextMenuCopyCidAddress
-module.exports.contextMenuCopyCanonicalAddress = contextMenuCopyCanonicalAddress
-module.exports.contextMenuCopyRawCid = contextMenuCopyRawCid
-module.exports.contextMenuCopyAddressAtPublicGw = contextMenuCopyAddressAtPublicGw
-module.exports.contextMenuViewOnGateway = contextMenuViewOnGateway
-module.exports.contextMenuCopyPermalink = contextMenuCopyPermalink
+export const contextMenuCopyCidAddress = 'panelCopy_currentIpfsAddress'
+export const contextMenuCopyCanonicalAddress = 'panelCopy_currentIpnsAddress'
+export const contextMenuCopyRawCid = 'panelCopy_copyRawCid'
+export const contextMenuCopyAddressAtPublicGw = 'panel_copyCurrentPublicGwUrl'
+export const contextMenuViewOnGateway = 'panel_contextMenuViewOnGateway'
+export const contextMenuCopyPermalink = 'panel_copyCurrentPermalink'
 
 // menu item ids for things that are enabled only when API is online (static)
 const apiMenuItemIds = new Set([contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuImportToIpfs])
@@ -75,7 +67,8 @@ const apiMenuItems = new Set()
 // menu items enabled only in IPFS context (dynamic)
 const ipfsContextItems = new Set()
 
-function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromContext, onCopyCanonicalAddress, onCopyRawCid, onCopyAddressAtPublicGw }) {
+export function createContextMenus (
+  getState, _runtime, ipfsPathValidator, { onAddFromContext, onCopyRawCid, onCopyAddressAtPublicGw }) {
   try {
     const createSubmenu = (id, contextType, menuBuilder) => {
       browser.contextMenus.create({
@@ -192,5 +185,3 @@ function createContextMenus (getState, runtime, ipfsPathValidator, { onAddFromCo
     // TODO: destroy?
   }
 }
-
-module.exports.createContextMenus = createContextMenus

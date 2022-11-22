@@ -1,16 +1,16 @@
 'use strict'
 
-const debug = require('debug')
+import debug from 'debug'
+
+import mergeOptions from 'merge-options'
+import { create } from 'ipfs-core'
+import { optionDefaults } from '../options.js'
 const log = debug('ipfs-companion:client:embedded')
 log.error = debug('ipfs-companion:client:embedded:error')
 
-const mergeOptions = require('merge-options')
-const Ipfs = require('ipfs')
-const { optionDefaults } = require('../options')
-
 let node = null
 
-exports.init = async function init (browser, opts) {
+export async function init (browser, opts) {
   log('init')
   const defaultOpts = JSON.parse(optionDefaults.ipfsNodeConfig)
   const userOpts = JSON.parse(opts.ipfsNodeConfig)
@@ -31,11 +31,11 @@ exports.init = async function init (browser, opts) {
       '/dns4/node3.delegate.ipfs.io/tcp/443/https'
     ]
   }
-  node = await Ipfs.create(ipfsOpts)
+  node = await create(ipfsOpts)
   return node
 }
 
-exports.destroy = async function (browser) {
+export async function destroy (browser) {
   log('destroy')
   if (!node) return
 
