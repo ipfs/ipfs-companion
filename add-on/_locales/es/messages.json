@@ -8,7 +8,7 @@
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
   "panel_headerNewVersionTitle": {
-    "message": "IPFS Companion was updated to a new version! Click for details.",
+    "message": "IPFS compañero se actualizó a un nuevo",
     "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
   },
   "panel_headerActiveToggleTitle": {
@@ -24,7 +24,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
   "panel_statusGatewayAddressTitle": {
-    "message": "The URL of the gateway, either public or local, you are using to fetch content (change this in Preferences)",
+    "message": "La puerta del enlace del URL, ya sea pública o local, que estas usando para obtener contenidos (cambie esto en Preferencias). ",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
@@ -32,7 +32,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusApiAddressTitle": {
-    "message": "The URL of your local node's API",
+    "message": "La URL de su API nodo local",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
@@ -40,7 +40,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
   "panel_statusGatewayVersionTitle": {
-    "message": "The version of IPFS your local node is using",
+    "message": "La versión de IPFS de su nodo local está usando",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
   },
   "panel_statusSwarmPeers": {
@@ -56,47 +56,47 @@
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
   "panel_quickImportTooltip": {
-    "message": "Import files to IPFS and copy a publicly shareable link to your clipboard.",
+    "message": "Importe las carpetas a IPFS y copie un enlace compartible públicamente a su portapapeles. ",
     "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
   },
   "panel_openWebui": {
-    "message": "My Node",
+    "message": "Mi nodo",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
-    "message": "Open your IPFS node's controls in your browser.",
+    "message": "Abre Los controles de su nodo IPFS en su navegador.",
     "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
-    "message": "Open IPFS Companion preferences",
+    "message": "Abre las preferencias de su compañero del IPFS",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Current Tab",
+    "message": "pestaña actual ",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Enable for $1",
+    "message": "Habilitar por 1$1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Enable/disable all IPFS integrations on $1.",
+    "message": "habilitar/ deshabilitar todas las integraciones de IPFS por$1",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_importCurrentIpfsAddress": {
-    "message": "Import to Files on My Node",
+    "message": "Importe archivos a mi nodo",
     "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
   "panel_importCurrentIpfsAddressTooltip": {
-    "message": "Import this tab's IPFS resources to your Files to have a persistent local copy that's available offline and never thrown away.",
+    "message": "Importe los recursos IPFS de esta pestaña a sus Archivos para tener una copia local persistente que esté disponible sin conexión por internet y que nunca se deseche.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "Copy IPNS Path",
+  "message": "copie el sendero del IPNS",
   "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
-    "message": "Use this content path with IPFS tools and gateways to reach the most recently updated version of this tab's content.",
+    "message": "Utilice esta ruta de contenido con las herramientas y las puertas de enlaces del IPFS para llegar a la versión actualizada más reciente del contenido de esta pestaña.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
@@ -104,7 +104,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
   "panelCopy_currentIpfsAddressTooltip": {
-    "message": "Use this content path with IPFS tools and gateways to reach the content in this tab at this moment in time. This snapshot won't change, even if content changes later.",
+    "message": "Utilice esta ruta de contenido con las herramientas y las puertas de enlace de IPFS para acceder al contenido de esta pestaña en este momento. Esta instantánea no cambiará, incluso si el contenido cambia más tarde.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
   },
   "panelCopy_copyRawCid": {
@@ -112,27 +112,27 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
   "panelCopy_copyRawCidTooltip": {
-    "message": "The unique IPFS content identifier for this tab at this moment in time. If content changes later, the CID will change too.",
+    "message": "El identificador de contenido IPFS único para esta pestaña en este momento. Si el contenido cambia más tarde, el CID también cambiará.",
     "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
   },
   "panelCopy_notReadyHint": {
-    "message": "(waiting for DAG data)",
+    "message": "(Esperando Datos DAG)",
     "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "copie enlace compartible ",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "A shareable link to this tab that works for anyone, even if they don't use IPFS.",
+    "message": "Un enlace para compartir a esta pestaña que funciona para cualquier persona, incluso si no usa IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
-    "message": "Copy Snapshot Link",
+    "message": "Copie el enlace de la instantánea",
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "A link to a snapshot of this tab at this moment in time; it won't change, even if content changes later. This link works for anyone, even if they don't use IPFS.",
+    "message": "Un enlace a una instantánea de esta pestaña en este momento; no cambiará, incluso si el contenido cambia más tarde. Este enlace funciona para cualquier persona, incluso si no usa IPFS.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -144,11 +144,11 @@
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS resource loaded via local gateway",
+    "message": "Recurso IPFS cargado a través de la puerta de enlace local",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Non-IPFS Resource",
+    "message": "Recurso no IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
@@ -188,7 +188,7 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "See your browser's developer console for more details",
+    "message": "Vea la consola de desarrollador de su navegador para más detalles",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
@@ -196,7 +196,7 @@
     "description": "A title of system notification (notify_copiedTitle)"
   },
   "notify_fileCpImportErrorTitle": {
-    "message": "Error while importing IPFS Resource",
+    "message": "Error mientras se importaba el recurso IPFS",
     "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_apiOnlineTitle": {
@@ -204,7 +204,7 @@
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatic Mode: Custom gateway redirect is active",
+    "message": "Modo automático: La redirección a Gateway personalizado está activo",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
@@ -212,11 +212,11 @@
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatic Mode: Public gateway will be used as a fallback",
+    "message": "Modo automático: Se usará un Gateway público como respaldo",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to Import via IPFS API",
+    "message": "No se puede importar a través de la API IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -232,19 +232,19 @@
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Failed to Start IPFS Node",
+    "message": "Error al iniciar nodo IPFS",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Failed to Stop IPFS Node",
+    "message": "Error al detener nodo IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
   "option_page_title" : {
-    "message": "Preferences | IPFS Companion",
+    "message": "Preferencias | IPFS adjunto",
     "description": "Title of the Preferences page (option_page_title)"
   },
   "option_page_header" : {
-    "message": "Preferencias de Compañía",
+    "message": "Preferencias adjuntas",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
@@ -264,15 +264,15 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
+    "message": "Configurar como \"Externo\" para conectar a nodo local usando la API HTTP",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Set to \"Embedded\" to run a js-ipfs node directly in your browser. (Click \"Read more\" to learn about the limitations of this experimental feature.)",
+    "message": "Configurar como \"Embebido\" para correr un nodo js-ipfs directamente en el navegador. (Presione en \"Leer más\" para aprender acerca de las limitaciones de esta característica experimental.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
   "option_ipfsNodeType_brave_description": {
-    "message": "Set to \"Provided by Brave\" to leverage the Brave browser's native IPFS support.",
+    "message": "Configurar como \"Provisto por Brave\" para aprovechar el soporte IPFS nativo del navegador Brave.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
@@ -292,15 +292,15 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_brave": {
-    "message": "Provided by Brave",
+    "message": "Provisto por Brave",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
   },
   "option_hint_url": {
-    "message": "Enter URL without any sub-path",
+    "message": "Ingrese la URL sin incluir sub-rutas",
     "description": "An option description on the Preferences screen (option_hint_url)"
   },
   "option_hint_readonly": {
-    "message": "This value is read-only",
+    "message": "Este valor es de sólo lectura",
     "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
@@ -308,7 +308,7 @@
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Local Gateway",
+    "message": "Gateway local",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
@@ -320,11 +320,11 @@
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Use Local Gateway",
+    "message": "Usar Gateway local",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Redirect requests for IPFS resources to your local gateway.",
+    "message": "Redifirgir solicitudes de recursos IPFS a su Gateway local",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
@@ -332,7 +332,7 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. Requires go-ipfs 0.5.0 or later on your local node.",
+    "message": "Aísle las raíces de contenido entre sí cargándolas desde subdominios en * .localhost y creando un origen único para cada registro CID, IPNS o DNSLink. Requiere un local go-ipfs 0.5.0 o posterior.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
@@ -344,11 +344,11 @@
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Preload Visited Pages",
+    "message": "Precargar páginas visitadas",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "Preload DNSLink sites to your local IPFS node, enabling offline access and improving your resiliency against network failure.",
+    "message": "Los sitios web de DNSLink se cargarán previamente en el nodo IPFS local para permitir el acceso sin conexión y mejorar la resistencia frente a fallas de red",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
@@ -684,7 +684,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "Welcome | IPFS Companion",
+    "message": "Bienvenido | IPFS Adjunto",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -712,11 +712,11 @@
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
-    "message": "Brave users",
+    "message": "Usuarios de Brave",
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "You can run IPFS directly in your browser — no need for IPFS Desktop or the command line. Open <0>Companion Preferences</0> and set the IPFS node type to “Provided by Brave”.",
+    "message": "Puede utilizar IPFS directamente en su navegador - no se requiere IPFS de escritorio o la línea de comandos. Abra <0> preferencias adjuntas </0> y configure el tipo de nodo IPFS a \"Provisto por Brave\"",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {

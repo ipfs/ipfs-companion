@@ -64,7 +64,7 @@
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
   "panel_openWebuiTooltip": {
-    "message": "Open your IPFS node's controls in your browser.",
+    "message": "Открыть настройки вашего IPFS узла",
     "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
@@ -76,7 +76,7 @@
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Enable for $1",
+    "message": "Включить для $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
@@ -120,7 +120,7 @@
     "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "Скопировать Shared ссылку",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
@@ -128,7 +128,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
-    "message": "Copy Snapshot Link",
+    "message": "Скопировать снапшот ссылку",
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
@@ -136,7 +136,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
-    "message": "View on Gateway",
+    "message": "Посмотреть через Шлюз",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
@@ -300,7 +300,7 @@
     "description": "An option description on the Preferences screen (option_hint_url)"
   },
   "option_hint_readonly": {
-    "message": "This value is read-only",
+    "message": "Значение только для чтения",
     "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
@@ -432,7 +432,7 @@
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
   "option_deprecated": {
-    "message": "deprecated",
+    "message": "устаревшее",
     "description": "Warning label added to deprecated options on the Preferences screen (option_deprecated)"
   },
   "option_experiments_warning": {
@@ -684,7 +684,7 @@
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "Welcome | IPFS Companion",
+    "message": "Привет | IPFS Companion",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -692,7 +692,7 @@
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Your node is connected to <0>$1</0> peers.",
+    "message": "Ваш узел подключен к <0>$1</0> пирам.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_statusButton_text": {
@@ -712,7 +712,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
-    "message": "Brave users",
+    "message": "Пользователи Brave",
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
@@ -728,7 +728,7 @@
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Command-line users",
+    "message": "Пользователи CLI",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {

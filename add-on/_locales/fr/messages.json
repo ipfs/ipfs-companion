@@ -740,7 +740,7 @@
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "En lire plus sur les <0>fonctionnalités d'IPFS Companion</0>",
+    "message": "En apprendre plus sur les <0>fonctionnalités d'IPFS Companion</0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_resources_new_ipfs_concepts": {
@@ -748,7 +748,7 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Visiter le <0>site de documentation d'IPFS</0>pour aller plus loin",
+    "message": "Visiter le <0>site de documentation d'IPFS</0> pour aller plus loin",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
@@ -756,11 +756,11 @@
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
   "page_landingWelcome_resources_build_tutorials": {
-    "message": "Trouver<0>des recettes et tutoriaux</0>pour vous aider à commencer",
+    "message": "Trouver <0>des recettes et tutoriaux</0> pour vous aider à commencer",
     "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
   },
   "page_landingWelcome_resources_build_examples": {
-    "message": "Découvrir les <0>projets géniaux</0>qu'on construit d'autres personnes avec IPFS",
+    "message": "Découvrir les <0>projets géniaux</0> qu'ont construit d'autres personnes avec IPFS",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
@@ -776,11 +776,11 @@
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_contribute": {
-    "message": "<0>Contribuer</0>au code, la documentation, et autre",
+    "message": "<0>Contribuer</0> au code, la documentation, et plus encore",
     "description": "Community copy (page_landingWelcome_resources_community_contribute)"
   },
   "page_landingWelcome_resources_community_translate": {
-    "message": "<0>Traduire</0>IPFS dans votre langue",
+    "message": "<0>Traduire</0> IPFS dans votre langue",
     "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {

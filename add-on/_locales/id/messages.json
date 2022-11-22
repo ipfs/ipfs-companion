@@ -7,8 +7,12 @@
     "message": "Sahabat IPFS",
     "description": "A label for IPFS icon (panel_headerIpfsNodeIconLabel)"
   },
+  "panel_headerNewVersionTitle": {
+    "message": "Sahabat IPFS telah diperbarui ke versi baru! Klik untuk detailnya.",
+    "description": "A label in the Browser Action pop-up for icon appearing on first load of new version (panel_headerNewVersionTitle)"
+  },
   "panel_headerActiveToggleTitle": {
-    "message": "Toggle all IPFS integrations",
+    "message": "Alihkan semua integrasi IPFS",
     "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
@@ -19,16 +23,28 @@
     "message": "Gerbang",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddress)"
   },
+  "panel_statusGatewayAddressTitle": {
+    "message": "Gerbang URL, baik publik atau lokal, yang Anda gunakan untuk mengambil konten (ubah ini di Preferensi)",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
+  },
   "panel_statusApiAddress": {
     "message": "API",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
+  },
+  "panel_statusApiAddressTitle": {
+    "message": "URL node lokal API anda",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
     "message": "versi",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
   },
+  "panel_statusGatewayVersionTitle": {
+    "message": "Versi IPFS yang digunakan node lokal Anda",
+    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
+  },
   "panel_statusSwarmPeers": {
-    "message": "Sesama",
+    "message": "Rekan",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
@@ -36,63 +52,91 @@
     "description": "A label tooltip in Node status section of Browser Action pop-up (panel_statusSwarmPeersTitle)"
   },
   "panel_quickImport": {
-    "message": "Berbagi file melalui IPFS",
+    "message": "Impor",
     "description": "A menu item in Browser Action pop-up (panel_quickImport)"
   },
+  "panel_quickImportTooltip": {
+    "message": "Impor berkas ke IPFS dan salin tautan yang dapat dibagikan secara publik ke papan klip Anda.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_quickImportTooltip)"
+  },
   "panel_openWebui": {
-    "message": "Buka Web UI",
+    "message": "Node Saya",
     "description": "A menu item in Browser Action pop-up (panel_openWebui)"
   },
-  "panel_redirectToggle": {
-    "message": "Redirect to Gateway",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggle)"
-  },
-  "panel_redirectToggleTooltip": {
-    "message": "Click to toggle all gateway redirects",
-    "description": "A menu item in Browser Action pop-up (panel_redirectToggleTooltip)"
-  },
-  "panel_toolsSectionHeader": {
-    "message": "Tools",
-    "description": "A menu item in Browser Action pop-up (panel_toolsSectionHeader)"
+  "panel_openWebuiTooltip": {
+    "message": "Buka kontrol node IPFS Anda di peramban Anda.",
+    "description": "A menu item in Browser Action pop-up (panel_openWebuiTooltip)"
   },
   "panel_openPreferences": {
-    "message": "Buka Preferensi",
+    "message": "Buka preferensi Sahabat IPFS",
     "description": "A menu item in Browser Action pop-up (panel_openPreferences)"
   },
   "panel_activeTabSectionHeader": {
-    "message": "Active Tab",
+    "message": "Tab saat ini",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteRedirectEnable)"
   },
   "panel_activeTabSiteIntegrationsToggle": {
-    "message": "Enable on $1",
+    "message": "Aktifkan untuk $1",
     "description": "A menu item in Browser Action pop-up (panel_activeTabSiteIntegrationsToggle)"
   },
   "panel_activeTabSiteIntegrationsToggleTooltip": {
-    "message": "Click to toggle all IPFS integrations on $1",
+    "message": "Aktifkan/nonaktifkan semua integrasi IPFS pada $1.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
-  "panel_pinCurrentIpfsAddress": {
-    "message": "Pin IPFS Resource",
-    "description": "A menu item in Browser Action pop-up (panel_pinCurrentIpfsAddress)"
+  "panel_importCurrentIpfsAddress": {
+    "message": "Impor ke Berkas di Node Saya",
+    "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
-  "panel_pinCurrentIpfsAddressTooltip": {
-    "message": "Pinning a CID tells your IPFS node that this data is important and mustn’t be thrown away.",
-    "description": "A menu item tooltip in Browser Action pop-up (panel_pinCurrentIpfsAddressTooltip)"
+  "panel_importCurrentIpfsAddressTooltip": {
+    "message": "Impor sumber daya IPFS tab ini ke Berkas Anda untuk memiliki salin lokal tetap yang tersedia secara offline dan tidak pernah dibuang.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
+  },
+  "panelCopy_currentIpnsAddress": {
+  "message": "Salin Jalur IPNS",
+  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+  },
+  "panelCopy_currentIpnsAddressTooltip": {
+    "message": "Gunakan jalur konten ini dengan alat dan gerbang IPFS untuk mencapai versi terbaru dari konten tab ini.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpnsAddressTooltip)"
   },
   "panelCopy_currentIpfsAddress": {
-    "message": "Copy IPFS Content Path",
+    "message": "Salin Jalur IPFS",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpfsAddress)"
   },
+  "panelCopy_currentIpfsAddressTooltip": {
+    "message": "Gunakan jalur konten ini dengan alat dan gateway IPFS untuk menjangkau konten di tab ini pada saat ini. Cuplikan ini tidak akan berubah, meskipun konten berubah nanti.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_currentIpfsAddressTooltip)"
+  },
   "panelCopy_copyRawCid": {
-    "message": "Copy CID",
+    "message": "Salin CID",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_copyRawCid)"
   },
+  "panelCopy_copyRawCidTooltip": {
+    "message": "Pengidentifikasi konten IPFS unik untuk tab ini saat ini. Jika konten berubah nanti, CID juga akan berubah.",
+    "description": "A menu item tooltip in Browser Action pop-up (panelCopy_copyRawCidTooltip)"
+  },
+  "panelCopy_notReadyHint": {
+    "message": "(menunggu data DAG)",
+    "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
+  },
   "panel_copyCurrentPublicGwUrl": {
-    "message": "Copy Shareable Link",
+    "message": "Salin Tautan yang Dapat Dibagikan",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
+  "panel_copyCurrentPublicGwUrlTooltip": {
+    "message": "Tautan yang dapat dibagikan ke tab ini yang berfungsi untuk siapa saja, meskipun mereka tidak menggunakan IPFS.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
+  },
+  "panel_copyCurrentPermalink": {
+    "message": "Salin Tautan Cuplikan",
+    "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
+  },
+  "panel_copyCurrentPermalinkTooltip": {
+    "message": "Tautan ke cuplikan tab ini saat ini; itu tidak akan berubah, bahkan jika konten berubah nanti. Tautan ini berfungsi untuk siapa saja, bahkan jika mereka tidak menggunakan IPFS.",
+    "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
+  },
   "panel_contextMenuViewOnGateway": {
-    "message": "View on Gateway",
+    "message": "Lihat di Gerbang",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_contextMenuViewOnGateway)"
   },
   "pageAction_titleIpfsAtPublicGateway": {
@@ -100,43 +144,43 @@
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtPublicGateway)"
   },
   "pageAction_titleIpfsAtCustomGateway": {
-    "message": "IPFS resource loaded via Custom Gateway",
+    "message": "Sumber daya IPFS dimuat melalui gerbang lokal",
     "description": "A tooltip displayed over Page Action in location bar (pageAction_titleIpfsAtCustomGateway)"
   },
   "pageAction_titleNonIpfs": {
-    "message": "Non-IPFS resource",
+    "message": "Sumber Daya Non-IPFS",
     "description": "Default label for icon hidden in Page Action menu (pageAction_titleNonIpfs)"
   },
   "contextMenu_parentImage": {
-    "message": "Selected Image",
+    "message": "Gambar yang Dipilih",
     "description": "An item in right-click context menu (contextMenu_parentImage)"
   },
   "contextMenu_parentVideo": {
-    "message": "Selected Video",
+    "message": "Video yang Dipilih",
     "description": "An item in right-click context menu (contextMenu_parentVideo)"
   },
   "contextMenu_parentAudio": {
-    "message": "Selected Audio",
+    "message": "Audio yang Dipilih",
     "description": "An item in right-click context menu (contextMenu_parentAudio)"
   },
   "contextMenu_parentLink": {
-    "message": "Linked Content",
+    "message": "Konten Tertaut",
     "description": "An item in right-click context menu (contextMenu_parentLink)"
   },
   "contextMenu_parentText": {
-    "message": "Selected Text",
+    "message": "Teks yang Dipilih",
     "description": "An item in right-click context menu (contextMenu_parentText)"
   },
   "contextMenu_parentPage": {
-    "message": "This Page",
+    "message": "Halaman ini",
     "description": "An item in right-click context menu (contextMenu_parentPage)"
   },
   "contextMenu_importToIpfs": {
-    "message": "Import to IPFS",
+    "message": "Impor ke IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfs)"
   },
   "contextMenu_importToIpfsSelection": {
-    "message": "Import Selected Text to IPFS",
+    "message": "Impor Teks yang Dipilih ke IPFS",
     "description": "An item in right-click context menu (contextMenu_importToIpfsSelection)"
   },
   "notify_addonIssueTitle": {
@@ -144,51 +188,39 @@
     "description": "A title of system notification (notify_addonIssueTitle)"
   },
   "notify_addonIssueMsg": {
-    "message": "Lihat Konsul Peramban untuk rincian lainnya",
+    "message": "Lihat konsol pengembang peramban Anda untuk detail selengkapnya",
     "description": "A message in system notification (notify_addonIssueMsg)"
   },
   "notify_copiedTitle": {
-    "message": "Copied",
+    "message": "Disalin",
     "description": "A title of system notification (notify_copiedTitle)"
   },
-  "notify_pinnedIpfsResourceTitle": {
-    "message": "Sumber Daya sekarang Disematkan",
-    "description": "A title of system notification (notify_pinnedIpfsResourceTitle)"
-  },
-  "notify_unpinnedIpfsResourceTitle": {
-    "message": "Menghapus semat IPFS",
-    "description": "A title of system notification (notify_unpinnedIpfsResourceTitle)"
-  },
-  "notify_pinErrorTitle": {
-    "message": "Kesalahan saat menyematkan sumber daya IPFS",
-    "description": "A title of system notification (notify_pinErrorTitle)"
-  },
-  "notify_unpinErrorTitle": {
-    "message": "Kesalahan saat menghapus semat IPFS",
-    "description": "A title of system notification (notify_unpinErrorTitle)"
+  "notify_fileCpImportErrorTitle": {
+    "message": "Kesalahan saat mengimpor Sumber Daya IPFS",
+    "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_apiOnlineTitle": {
     "message": "API IPFS sedang online",
     "description": "A title of system notification (notify_apiOnlineTitle)"
   },
   "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Mode Otomatis: Pengalihan Gateway Custom aktif",
+    "message": "Mode Otomatis: Pengalihan gerbang kustom aktif",
     "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
   },
   "notify_apiOfflineTitle": {
-    "message": "API IPFS offline",
+    "message": "API IPFS Offline",
     "description": "A title of system notification (notify_apiOfflineTitle)"
   },
   "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Mode Otomatis: Gateway Umum akan digunakan sebagai posisi mundur",
+    "message": "Mode Otomatis: Gerbang publik akan digunakan sebagai cadangan",
     "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to import via IPFS API",
+    "message": "Tidak Dapat Mengimpor melalui API IPFS",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
-    "message": "Coba nonaktifkan Pelacakan Perlindungan (tekan ctrl+shift+j untuk rincian lainnya)",
+    "message": "Coba nonaktifkan Perlindungan Pelacakan (tekan ctrl+shift+j untuk detail selengkapnya)",
     "description": "(notify_importTrackingProtectionErrorMsg)"
   },
   "notify_inlineMsg": {
@@ -196,23 +228,27 @@
     "description": "A generic placeholder for notification message, leave as-is (notify_inlineMsg)"
   },
   "notify_inlineErrorMsg": {
-    "message": "$1 (press ctrl+shift+j for more details)",
+    "message": "$1(tekan ctrl + shift + j untuk detail selengkapnya)",
     "description": "A generic placeholder for error notification (notify_inlineErrorMsg)"
   },
   "notify_startIpfsNodeErrorTitle": {
-    "message": "Failed to start IPFS node",
+    "message": "Gagal Memulai Node IPFS",
     "description": "System notification title displayed when starting an IPFS node fails (notify_startIpfsNodeErrorTitle)"
   },
   "notify_stopIpfsNodeErrorTitle": {
-    "message": "Failed to stop IPFS node",
+    "message": "Gagal Menghentikan Node IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
+  "option_page_title" : {
+    "message": "Preferensi | Sahabat IPFS",
+    "description": "Title of the Preferences page (option_page_title)"
+  },
   "option_page_header" : {
-    "message": "Companion Preferences",
+    "message": "Preferensi Sahabat",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
   "option_legend_readMore" : {
-    "message": "Read more",
+    "message": "Baca lebih lanjut",
     "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
   },
   "option_header_nodeType" : {
@@ -220,7 +256,7 @@
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
   "option_header_fileImport": {
-    "message": "File Import",
+    "message": "Impor Berkas",
     "description": "A section header on the Preferences screen (option_header_fileImport)"
   },
   "option_ipfsNodeType_title": {
@@ -228,23 +264,23 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Set to \"External\" to connect to a local node using the HTTP API.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "message": "Setel ke \"Eksternal\" untuk terhubung ke node lokal menggunakan API HTTP.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_embedded_description": {
-    "message": "Set to \"Embedded\" to run a js-ipfs node directly in your browser. (Click \"Read more\" to learn about the limitations of this experimental feature.)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+    "message": "Setel ke \"Tertanam\" untuk menjalankan node ipfs js-ipfs langsung di peramban Anda. (Klik \"Baca selengkapnya\" untuk mempelajari tentang batasan fitur eksperimental ini.)",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
   },
-  "option_ipfsNodeType_embedded_chromesockets_description": {
-    "message": "Embedded with Chrome Sockets: run js-ipfs node in your browser with access to chrome.sockets APIs (details under the link below)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_description)"
+  "option_ipfsNodeType_brave_description": {
+    "message": "Setel ke \"Disediakan oleh Brave\" untuk memanfaatkan dukungan IPFS asli peramban Brave.",
+    "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
   },
   "option_ipfsNodeConfig_title": {
-    "message": "IPFS Node Config",
+    "message": "Konfigurasi Node IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeConfig_description": {
-    "message": "Additional configuration for the embedded JS IPFS node. Must be valid JSON.",
+    "message": "Konfigurasi tambahan untuk node IPFS JS yang tertanam. Harus JSON yang valid.",
     "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
   },
   "option_ipfsNodeType_external": {
@@ -255,84 +291,100 @@
     "message": "Tertancap",
     "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
-  "option_ipfsNodeType_embedded_chromesockets": {
-    "message": "Embedded + chrome.sockets",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded_chromesockets)"
+  "option_ipfsNodeType_brave": {
+    "message": "Disediakan oleh Brave",
+    "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
+  },
+  "option_hint_url": {
+    "message": "Masukkan URL tanpa sub-jalur apa pun",
+    "description": "An option description on the Preferences screen (option_hint_url)"
+  },
+  "option_hint_readonly": {
+    "message": "Nilai ini hanya-baca",
+    "description": "An option description on the Preferences screen (option_hint_readonly)"
   },
   "option_header_gateways": {
-    "message": "Gateways",
+    "message": "Gerbang",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_customGatewayUrl_title": {
-    "message": "Kustom Lokal Gateway",
+    "message": "Gerbang Lokal",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
   },
   "option_customGatewayUrl_description": {
-    "message": "URL pilihan yang diinginkan HTTP2IPFS",
+    "message": "Tetapkan URL gerbang lokal Anda.",
     "description": "An option description on the Preferences screen (option_customGatewayUrl_description)"
   },
   "option_customGatewayUrl_warning": {
-    "message": "IPFS content will be blocked from loading on HTTPS websites unless your gateway URL starts with “http://127.0.0.1”, “http://[::1]” or “https://”",
+    "message": "Konten IPFS akan diblokir agar tidak dimuat di situs web HTTPS kecuali jika URL gerbang Anda dimulai dengan “http://127.0.0.1”, “http://[::1]” atau “https://”",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
   "option_useCustomGateway_title": {
-    "message": "Gunakan Kustom Gateway",
+    "message": "Gunakan Gerbang Lokal",
     "description": "An option title on the Preferences screen (option_useCustomGateway_title)"
   },
   "option_useCustomGateway_description": {
-    "message": "Permintaan pengalihan sumber daya IPFS ke Kustom Gateway",
+    "message": "Arahkan ulang permintaan untuk sumber daya IPFS ke gerbang lokal Anda.",
     "description": "An option description on the Preferences screen (option_useCustomGateway_description)"
   },
   "option_useSubdomains_title": {
-    "message": "Use Subdomains",
+    "message": "Gunakan Subdomain",
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. Requires go-ipfs 0.5.0 or later on your local node.",
+    "message": "Pisahkan akar konten satu sama lain dengan memuatnya sebagai subdomain (di *.localhost) dan buat asal unik untuk setiap data CID, IPNS, atau DNSLink. Membutuhkan go-ipfs 0.5.0 atau lebih baru pada node lokal Anda.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Load DNSLink Sites from Custom Gateway",
+    "message": "Muat Situs DNSLink dari Gerbang Kustom",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "When global gateway redirect is enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths at your custom gateway.",
+    "message": "Saat pengalihan gerbang global diaktifkan, sertakan situs web DNSLink dengan mengalihkannya ke jalur /ipns/{fqdn} masing-masing di gerbang kustom Anda.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
-    "message": "Preload Visited Pages",
+    "message": "Pramuat Halaman yang Dikunjungi",
     "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
   },
   "option_dnslinkDataPreload_description": {
-    "message": "Preload DNSLink sites to your local IPFS node, enabling offline access and improving your resiliency against network failure.",
+    "message": "Pramuat situs DNSLink ke node IPFS lokal Anda, memungkinkan akses offline dan meningkatkan ketahanan Anda terhadap kegagalan jaringan.",
     "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
-    "message": "Do not use if your IPFS node does not support *.ipfs.localhost. Redirecting to a path-based gateway breaks the origin-based security isolation of DNSLink websites, so make sure you understand the related risks.",
+    "message": "Jangan gunakan jika node IPFS Anda tidak mendukung *.ipfs.localhost. Pengalihan ke gerbang berbasis-jalur merusak isolasi keamanan berbasis-asal situs web DNSLink, jadi pastikan Anda memahami risiko terkait.",
     "description": "A warning on the Preferences screen, displayed when URL does not belong to Secure Context (option_customGatewayUrl_warning)"
   },
-  "option_noIntegrationsHostnames_title": {
-    "message": "Site Opt-Out List",
-    "description": "An option title on the Preferences screen (option_noIntegrationsHostnames_title)"
+  "option_disabledOn_title": {
+    "message": "Selalu Nonaktifkan Integrasi IPFS",
+    "description": "An option title on the Preferences screen (option_disabledOn_title)"
   },
-  "option_noIntegrationsHostnames_description": {
-    "message": "Sites in this list (one hostname per line) will have all IPFS integrations disabled.",
-    "description": "An option description on the Preferences screen (option_noRedirectHostnames_description)"
+  "option_disabledOn_description": {
+    "message": "Situs dalam daftar ini (satu nama host per baris) akan selalu dimuat dengan integrasi IPFS yang dinonaktifkan. Mengalihkan \"Aktifkan pada ...\" dari menu tindakan peramban Anda saat mengunjungi situs juga akan menambah atau menghapusnya dari daftar ini.",
+    "description": "An option description on the Preferences screen (option_disabledOn_description)"
+  },
+  "option_enabledOn_title": {
+    "message": "Selalu Aktifkan Integrasi IPFS",
+    "description": "An option title on the Preferences screen (option_enabledOn_title)"
+  },
+  "option_enabledOn_description": {
+    "message": "Situs dalam daftar ini (satu nama host per baris) akan selalu dimuat dengan integrasi IPFS diaktifkan. Mengalihkan \"Aktifkan pada ...\" dari menu tindakan peramban Anda saat mengunjungi situs juga akan menambah atau menghapusnya dari daftar ini.",
+    "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
     "message": "Gateway Publik Bawaan",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "URL mundur yang digunakan saat Gateway Kustom tidak tersedia dan untuk menyalin tautan yang dapat dibagikan",
+    "message": "Setel URL gerbang publik bawaan untuk digunakan dalam tautan yang dapat dibagikan secara publik dan sebagai cadangan jika gerbang lokal Anda tidak tersedia.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "Gerbang Subdomain Publik Bawaan",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Set a default public subdomain gateway for the recovery of broken subdomain gateways.",
+    "message": "Tetapkan URL gateway subdomain publik bawaant untuk pemulihan gerbang subdomain yang rusak.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
@@ -344,23 +396,23 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
+    "message": "Setel URL API IPFS Anda. (Petunjuk: di sinilah /api/v0/config tinggal.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
-    "message": "Status Poll Interval",
+    "message": "Interval Jajak Pendapat Status",
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Seberapa sering jumlah rekan disegarkan (dalam milidetik)",
+    "message": "Tentukan seberapa sering (dalam milidetik) untuk menyegarkan jumlah rekan Anda.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
-    "message": "Mode Otomatis",
+    "message": "Gunakan Mode Otomatis",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Beralih menggunakan Gateway Kustom saat ketersediaan API IPFS berubah",
+    "message": "Beralih secara otomatis dari gerbang lokal Anda ke gerbang bawaan publik Anda jika IPFS API tidak tersedia.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
@@ -371,20 +423,28 @@
     "message": "Percobaan",
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
+  "option_header_reset": {
+    "message": "Atur Ulang Preferensi",
+    "description": "A section header on the Preferences screen (option_header_reset)"
+  },
   "option_experimental": {
-    "message": "experimental",
+    "message": "eksperimental",
     "description": "Warning label added to experimental options on the Preferences screen (option_experimental)"
   },
+  "option_deprecated": {
+    "message": "usang",
+    "description": "Warning label added to deprecated options on the Preferences screen (option_deprecated)"
+  },
   "option_experiments_warning": {
-    "message": "Berhati-hatilah: fitur ini baru atau karya dalam proses. YMMV.",
+    "message": "Peringatan! Fitur eksperimental ini sedang dalam proses dan dapat berubah dalam ketersediaan dan fungsionalitas.",
     "description": "Warning about Experiments section on the Preferences screen (option_experiments_warning)"
   },
   "option_useLatestWebUI_title": {
-    "message": "Use Latest Version of IPFS Web UI",
+    "message": "Gunakan UI Web IPFS Versi Terbaru",
     "description": "An option title on the Preferences screen (option_useLatestWebUI_title)"
   },
   "option_useLatestWebUI_description": {
-    "message": "Use the very latest version of the Status, Files, Explore, Peers, and Settings screens from webui.ipfs.io (via DNSLink) instead of the hard-coded CIDs shipped with the IPFS daemon. (Enable only if you trust your DNS resolver and understand how to set up the required CORS headers.)",
+    "message": "Gunakan versi terbaru dari layar Status, Berkas, Jelajahi, Rekan, dan Pengaturan dari webui.ipfs.io (melalui DNSLink) alih-alih hard-coded CID yang dikirimkan bersama daemon IPFS. (Aktifkan hanya jika Anda memercayai resolver DNS Anda dan memahami cara menyiapkan header CORS yang diperlukan.)",
     "description": "An option description on the Preferences screen (option_useLatestWebUI_description)"
   },
   "option_displayNotifications_title": {
@@ -392,15 +452,23 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Menampilkan sistem pemberitahuan ketika perubahan negara API, tautan akan disalin dll",
+    "message": "Tampilkan pemberitahuan tingkat OS saat tautan disalin ke papan klip, status API berubah, dll.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
+  },
+  "option_displayReleaseNotes_title": {
+    "message": "Tampilkan Catatan Rilis pada Pembaruan",
+    "description": "An option title on the Preferences screen (option_displayReleaseNotes_title)"
+  },
+  "option_displayReleaseNotes_description": {
+    "message": "Buka catatan rilis di tab baru saat versi baru Sahabat IPFS diinstal.",
+    "description": "An option description on the Preferences screen (option_displayReleaseNotes_description)"
   },
   "option_catchUnhandledProtocols_title": {
     "message": "Menangkap protokol IPFS yang tidak tertangani",
     "description": "An option title on the Preferences screen (option_catchUnhandledProtocols_title)"
   },
   "option_catchUnhandledProtocols_description": {
-    "message": "Enable provisional support for ipfs://, ipns://, and dweb: requests by redirecting them to an HTTP gateway.",
+    "message": "Aktifkan dukungan sementara untuk ipfs://, ipns://, dan dweb: permintaan dengan mengarahkannya ke gerbang HTTP.",
     "description": "An option description on the Preferences screen (option_catchUnhandledProtocols_description)"
   },
   "option_linkify_title": {
@@ -408,87 +476,87 @@
     "description": "An option title on the Preferences screen (option_linkify_title)"
   },
   "option_linkify_description": {
-    "message": "Mengubah plaintext /ipfs/ jalan ke tautan diklik",
+    "message": "Ubah jalur /ipfs/ yang ditampilkan sebagai teks biasa di halaman web menjadi tautan yang dapat diklik.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
   "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup Policy",
+    "message": "Kebijakan Pencarian DNSLink",
     "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
   },
   "option_dnslinkPolicy_description": {
-    "message": "Choose your policy for looking up and displaying contextual actions on DNSLink-enabled sites.",
+    "message": "Pilih kebijakan Anda untuk mencari dan menampilkan tindakan kontekstual di situs yang mendukung DNSLink.",
     "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
   },
   "option_dnslinkPolicy_disabled": {
-    "message": "Off",
+    "message": "Mati",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
   },
   "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
+    "message": "Periksa setelah permintaan HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
   },
   "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
+    "message": "Periksa sebelum permintaan HTTP",
     "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
   },
   "option_recoverFailedHttpRequests_title": {
-    "message": "Recover Failed HTTP Requests",
+    "message": "Pulihkan Permintaan HTTP yang Gagal",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Redirect failed HTTP requests for IPFS resources to the public gateway.",
+    "message": "Arahkan ulang permintaan HTTP yang gagal untuk sumber daya IPFS ke gerbang publik.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detect x-ipfs-path Headers",
+    "message": "Deteksi Header jalur x-ipfs-path",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
+    "message": "Muat item dengan header x-ipfs-path melalui IPFS (alih-alih HTTP) jika nilai header adalah jalur IPFS. Untuk mengarahkan ulang jalur IPNS juga, aktifkan dukungan DNSLink.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_ipfsProxy_title": {
-    "message": "Support for window.ipfs",
+    "message": "Dukungan untuk window.ipfs",
     "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
   },
   "option_ipfsProxy_description": {
-    "message": "IPFS is added to the window object on every page. Enable/disable access to the functions it exposes.",
+    "message": "IPFS ditambahkan ke objek jendela di setiap halaman. Mengaktifkan/menonaktifkan akses ke fungsi yang ditampilkannya.",
     "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
   },
   "option_ipfsProxy_link_manage_permissions": {
-    "message": "Manage permissions",
+    "message": "Kelola izin",
     "description": "Link text for managing permissions"
   },
   "option_openViaWebUI_title": {
-    "message": "Open Imported Files in the Files Screen",
+    "message": "Buka Berkas yang Diimpor di Layar Berkas",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
   },
   "option_openViaWebUI_description": {
-    "message": "After importing a file, open it in the Files screen instead of opening it or its parent directory in the gateway.",
+    "message": "Setelah mengimpor berkas, buka di layar Berkas alih-alih membukanya atau direktori induknya di gerbang.",
     "description": "An option description on the Preferences screen (option_openViaWebUI_description)"
   },
   "option_preloadAtPublicGateway_title": {
-    "message": "Preload Imported Assets",
+    "message": "Pramuat Aset yang Diimpor",
     "description": "An option title on the Preferences screen (option_preloadAtPublicGateway_title)"
   },
   "option_preloadAtPublicGateway_description": {
-    "message": "Automatically preload assets imported to IPFS via asynchronous HTTP HEAD requests to a public gateway.",
+    "message": "Secara otomatis memuat aset yang diimpor ke IPFS melalui permintaan HTTP HEAD asinkron ke gerbang publik.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_logNamespaces_title": {
-    "message": "Log Namespaces",
+    "message": "Catatan Ruang Nama",
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Namespaces in this comma-separated list will be logged to your browser's console. Changing this list will restart IPFS Companion.",
+    "message": "Ruang nama dalam daftar yang dipisahkan koma ini akan dicatat ke konsol peramban Anda. Mengubah daftar ini akan memulai ulang Sahabat IPFS.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
-    "message": "File Import Directory",
+    "message": "Direktori Impor Berkas",
     "description": "An option title on the Preferences screen (option_importDir_title)"
   },
   "option_importDir_description": {
-    "message": "Set the directory you wish to use for files you import using IPFS Companion.",
+    "message": "Atur direktori yang ingin Anda gunakan untuk berkas yang Anda impor menggunakan Sahabat IPFS.",
     "description": "An option description on the Preferences screen (option_importDir_description)"
   },
   "option_resetAllOptions_title": {
@@ -496,7 +564,7 @@
     "description": "An option title and button label on the Preferences screen (option_resetAllOptions_title)"
   },
   "option_resetAllOptions_description": {
-    "message": "Menggantikan preferensi pengguna dengan yang standar (tidak dapat dibatalkan!)",
+    "message": "Setel ulang semua preferensi Sahabat IPFS ke nilai defaultnya. Peringatan: Tidak dapat dibatalkan!",
     "description": "An option description on the Preferences screen (option_resetAllOptions_description)"
   },
   "manifest_extensionName": {
@@ -508,11 +576,19 @@
     "description": "Short extension name in the Manifest file (manifest_shortExtensionName)"
   },
   "manifest_extensionDescription": {
-    "message": "Ekstensi peramban yang menyederhanakan akses ke sumber daya IPFS",
+    "message": "Manfaatkan kekuatan IPFS di peramban Anda",
     "description": "Extension description in the Manifest file (manifest_extensionDescription)"
   },
+  "quickImport_page_title": {
+    "message": "Impor & Bagikan Berkas | Sahabat IPFS",
+    "description": "Page title (quickImport_page_title)"
+  },
+  "quickImport_head_peers": {
+    "message": "Impor & bagikan berkas",
+    "description": "Header on the share files page (quickImport_subhead_peers)"
+  },
   "quickImport_subhead_peers": {
-    "message": "Connected to $1 peers",
+    "message": "Terhubung dengan $1 rekan",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
@@ -524,91 +600,91 @@
     "description": "seperates the pick a file button from the drop message (quickImport_or)"
   },
   "quickImport_drop_it_here": {
-    "message": "jatuhkan di sini untuk berbagi",
-    "description": "Partial info stats beneath the header on the share files page (quickImport_drop_it_here)"
+    "message": "jatuhkan disini",
+    "description": "Drop message on the share files page (quickImport_drop_it_here)"
   },
   "quickImport_state_importing": {
-    "message": "Import in progress..",
+    "message": "Impor sedang berlangsung..",
     "description": "Status label on the share files page (quickImport_state_importing)"
   },
   "quickImport_state_buffering": {
-    "message": "(buffering, please wait)",
+    "message": "(penyangga, harap tunggu)",
     "description": "Status label on the share files page (quickImport_state_buffering)"
   },
   "quickImport_options_show": {
-    "message": "import options",
+    "message": "opsi impor",
     "description": "Button on the share files page (quickImport_options_show)"
   },
   "quickImport_options_importDir": {
-    "message": "Path to store imported files",
+    "message": "Jalur untuk menyimpan berkas yang diimpor",
     "description": "Textbox label on the share files page (quickImport_options_importDir)"
   },
   "quickImport_options_openViaWebUI": {
-    "message": "Open in Web UI",
+    "message": "Buka di halaman Berkas",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
   "page_proxyAcl_title": {
-    "message": "Manage Permissions",
+    "message": "Kelola Izin",
     "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
   },
   "page_proxyAcl_subtitle": {
-    "message": "View, change and revoke granted access rights to your IPFS instance.",
+    "message": "Lihat, ubah, dan cabut hak akses yang diberikan ke instans IPFS Anda.",
     "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
   },
   "page_proxyAcl_no_perms": {
-    "message": "No permissions granted.",
+    "message": "Tidak ada izin yang diberikan.",
     "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
   },
   "page_proxyAcl_confirm_revoke": {
-    "message": "Revoke permission $1 for $2?",
+    "message": "Cabut izin $1 untuk $2?",
     "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
   },
   "page_proxyAcl_confirm_revoke_all": {
-    "message": "Revoke all permissions for $1?",
+    "message": "Cabut semua izin untuk $1?",
     "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
   },
   "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Click to allow",
+    "message": "Klik untuk mengizinkan",
     "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
   },
   "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Click to deny",
+    "message": "Klik untuk menolak",
     "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
   },
   "page_proxyAcl_allow_button_value": {
-    "message": "Allow",
+    "message": "Izinkan",
     "description": "Button value for allow (page_proxyAcl_allow_button_value)"
   },
   "page_proxyAcl_deny_button_value": {
-    "message": "Deny",
+    "message": "Tolak",
     "description": "Button value for deny"
   },
   "page_proxyAcl_revoke_button_title": {
-    "message": "Revoke $1",
+    "message": "Menarik kembali$1",
     "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
   },
   "page_proxyAccessDialog_title": {
-    "message": "Should IPFS Companion allow «$1» to access «$2» at the connected node?",
+    "message": "Haruskah Sahabat IPFS mengizinkan «$1» untuk mengakses «$2» di node yang terhubung?",
     "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
   },
   "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Apply this decision to all current and future permissions in this scope",
+    "message": "Terapkan keputusan ini ke semua izin saat ini dan di masa mendatang dalam cakupan ini",
     "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
   },
   "page_proxyAcl_revoke_all_button_title": {
-    "message": "Revoke all permissions",
+    "message": "Cabut semua izin",
     "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
   },
   "page_proxyAccessDialog_allowButton_text": {
-    "message": "Allow",
+    "message": "Izinkan",
     "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_proxyAccessDialog_denyButton_text": {
-    "message": "Deny",
+    "message": "Tolak",
     "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
-    "message": "IPFS Companion - Welcome!",
+    "message": "Selamat datang | Sahabat IPFS",
     "description": "Page title (page_landingWelcome_title)"
   },
   "page_landingWelcome_logo_title": {
@@ -616,7 +692,7 @@
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Your node is connected to <0>$1</0> peers.",
+    "message": "Node Anda terhubung ke <0>$1</0> rekan.",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_statusButton_text": {
@@ -624,7 +700,7 @@
     "description": "Ready message button text for opening Web UI status page (page_landingWelcome_welcome_statusButton_text)"
   },
   "page_landingWelcome_welcome_filesButton_text": {
-    "message": "Files",
+    "message": "Berkas",
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_filesButton_text)"
   },
   "page_landingWelcome_welcome_peersButton_text": {
@@ -632,87 +708,95 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS is not running",
+    "message": "IPFS tidak berjalan",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
+  "page_landingWelcome_installSteps_brave_title": {
+    "message": "Pengguna Brave",
+    "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
+  },
+  "page_landingWelcome_installSteps_brave_install": {
+    "message": "Anda dapat menjalankan IPFS langsung di peramban Anda — tidak perlu Desktop IPFS atau baris perintah. Buka <0>Preferensi Sahabat</0> dan atur jenis node IPFS ke \"Disediakan oleh Brave\".",
+    "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
+  },
   "page_landingWelcome_installSteps_desktop_title": {
-    "message": "IPFS Desktop users",
+    "message": "Pengguna Desktop IPFS",
     "description": "Install steps title (page_landingWelcome_installSteps_desktop_title)"
   },
   "page_landingWelcome_installSteps_desktop_install": {
-    "message": "Make sure IPFS Desktop is running. Don't have it installed? <0>Download IPFS Desktop now.</0>",
+    "message": "Pastikan Desktop IPFS berjalan. Belum terpasang? <0>Unduh Desktop IPFS sekarang.</0>",
     "description": "Install steps copy (page_landingWelcome_installSteps_desktop_install)"
   },
   "page_landingWelcome_installSteps_cli_title": {
-    "message": "Command-line users",
+    "message": "Pengguna baris perintah",
     "description": "Install steps title (page_landingWelcome_installSteps_cli_title)"
   },
   "page_landingWelcome_installSteps_cli_install": {
-    "message": "Start IPFS by entering <code class=\"yellow\">ipfs daemon</code> in your terminal. If you don't have IPFS installed yet, follow the <0>CLI quick-start guide</0> first.",
+    "message": "Mulai IPFS dengan memasukkan <code class=\"yellow\">daemon ipfs</code> di terminal Anda. Jika Anda belum menginstal IPFS, ikuti <0>panduan memulai cepat CLI</0> terlebih dahulu.",
     "description": "Install steps copy (page_landingWelcome_installSteps_cli_install)"
   },
   "page_landingWelcome_resources_title_new_ipfs": {
-    "message": "Learn about IPFS",
+    "message": "Pelajari tentang IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_new_ipfs)"
   },
   "page_landingWelcome_resources_new_ipfs_companion_features": {
-    "message": "Read about <0>IPFS Companion's features</0>",
+    "message": "Baca tentang <0>fitur Sahabat IPFS</0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_companion_features)"
   },
   "page_landingWelcome_resources_new_ipfs_concepts": {
-    "message": "Learn basic concepts in the <0>How IPFS Works</0> guide",
+    "message": "Pelajari konsep dasar dalam panduan <0>Cara Kerja IPFS</0>",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Visit the <0>IPFS documentation site</0> to dig deeper",
+    "message": "Kunjungi <0>situs dokumentasi IPFS</0> untuk menggali lebih dalam",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_title_build": {
-    "message": "Build on IPFS",
+    "message": "Bangun di atas IPFS",
     "description": "Resources title (page_landingWelcome_resources_title_build)"
   },
   "page_landingWelcome_resources_build_tutorials": {
-    "message": "Find <0>how-tos and tutorials</0> to help get you started",
+    "message": "Temukan <0>cara dan tutorial</0> untuk membantu Anda memulai",
     "description": "Resources copy (page_landingWelcome_resources_build_tutorials)"
   },
   "page_landingWelcome_resources_build_examples": {
-    "message": "See what <0>awesome things</0> others are building with IPFS",
+    "message": "Lihat <0>hal-hal luar biasa</0> apa yang sedang dibangun orang lain dengan IPFS",
     "description": "Resources copy (page_landingWelcome_resources_build_examples)"
   },
   "page_landingWelcome_resources_title_get_help": {
-    "message": "Get help",
+    "message": "Mendapatkan bantuan",
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Ask questions and discuss IPFS in the <0>official forums</0>",
+    "message": "Ajukan pertanyaan dan diskusikan IPFS di <0>forum resmi</0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
-    "message": "Join the community",
+    "message": "Bergabunglah dengan komunitas",
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_contribute": {
-    "message": "<0>Contribute</0> with code, documentation, and more",
+    "message": "<0>Kontribusi</0> dengan kode, dokumentasi, dan lainnya",
     "description": "Community copy (page_landingWelcome_resources_community_contribute)"
   },
   "page_landingWelcome_resources_community_translate": {
-    "message": "<0>Translate</0> IPFS into your favorite language",
+    "message": "<0>Terjemah</0>IPFS ke dalam bahasa favorit Anda",
     "description": "Community copy (page_landingWelcome_resources_community_translate)"
   },
   "page_landingWelcome_resources_community_resources": {
-    "message": "Explore all <0>IPFS community resources</0>",
+    "message": "Jelajahi semua <0>Sumber daya komunitas IPFS</0>",
     "description": "Community copy (page_landingWelcome_resources_community_resources)"
   },
   "page_landingWelcome_videos_why_ipfs": {
-    "message": "Why IPFS?",
+    "message": "Mengapa IPFS?",
     "description": "Videos section title (page_landingWelcome_videos_why_ipfs)"
   },
   "page_landingWelcome_videos_how_ipfs_works": {
-    "message": "How IPFS Works",
+    "message": "Bagaimana IPFS Bekerja",
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Related Projects",
+    "message": "Proyek Terkait",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   }
 }
