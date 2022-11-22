@@ -504,33 +504,8 @@ export default async function init () {
     return ('#' + r + g + b).toUpperCase()
   }
 
-  /* Alternative: raster images generated on the fly
-  const rasterIconDefinition = pMemoize((svgPath) => {
-    const rasterData = (size) => {
-      const icon = new Image()
-      icon.src = svgPath
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      context.clearRect(0, 0, size, size)
-      context.drawImage(icon, 0, 0, size, size)
-      return context.getImageData(0, 0, size, size)
-    }
-    // icon sizes to cover ranges from:
-    // - https://bugs.chromium.org/p/chromium/issues/detail?id=647182
-    // - https://developer.chrome.com/extensions/manifest/icons
-    const r19 = rasterData(19)
-    const r38 = rasterData(38)
-    const r128 = rasterData(128)
-    // return computed values to be cached by p-memoize
-    return { imageData: { 19: r19, 38: r38, 128: r128 } }
-  })
-  */
-
   async function setBrowserActionIcon (iconPath) {
-    return browser.browserAction.setIcon(rasterIconDefinition(iconPath))
-    /* Below fallback does not work since Chromium 80
-     * (it fails in a way that does not produce error we can catch)
-    const iconDefinition = { path: iconPath }
+    let iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.browserAction.setIcon(iconDefinition)
@@ -539,9 +514,9 @@ export default async function init () {
       // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
       // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
       // Still, we want icon, so we precompute rasters of popular sizes and use them instead
-      await browser.browserAction.setIcon(rasterIconDefinition(iconPath))
+      iconDefinition = await rasterIconDefinition(iconPath)
+      await browser.browserAction.setIcon(iconDefinition)
     }
-    */
   }
 
   // OPTIONS

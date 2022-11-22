@@ -29,6 +29,9 @@
     "page": "dist/options/options.html"
   },
   "web_accessible_resources": [
+    "icons/png/ipfs-logo-off_19.png",
+    "icons/png/ipfs-logo-off_38.png",
+    "icons/png/ipfs-logo-off_128.png",
     "icons/ipfs-logo-on.svg",
     "icons/ipfs-logo-off.svg"
   ],

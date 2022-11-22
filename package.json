@@ -135,7 +135,7 @@
     "multiaddr-to-uri": "8.0.0",
     "node-fetch": "2.6.7",
     "os-browserify": "0.3.0",
-    "p-memoize": "4.0.2",
+    "p-memoize": "7.1.1",
     "p-queue": "7.2.0",
     "p-wait-for": "4.1.0",
     "path-browserify": "1.0.1",
