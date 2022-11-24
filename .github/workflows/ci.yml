@@ -62,7 +62,7 @@ jobs:
       - name: Test
         run: npm run ci:test
         # tests should finish <30s, if it takes longer its a bug - fail fast
-        timeout-minutes: 1
+        timeout-minutes: 5
 
       - name: Lint
         # bundles are too big on Windows and fail addon-lint
