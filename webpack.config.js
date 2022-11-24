@@ -60,8 +60,8 @@ const commonConfig = {
         test: /\.(png|jpe?g|gif|svg|eot|otf|ttf|woff|woff2)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'assets/[name][ext]',
-        },
+          filename: 'assets/[name][ext]'
+        }
       },
       {
         // Ignore legacy fonts (both Firefox and Chromium talk WOFF2)
