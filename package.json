@@ -65,6 +65,9 @@
   "preferGlobal": false,
   "c8": {
     "all": true,
+    "src": [
+      "add-on/src/"
+    ],
     "reporter": [
       "text"
     ],
@@ -93,7 +96,7 @@
     "json": "11.0.0",
     "mem-storage-area": "1.0.3",
     "mini-css-extract-plugin": "2.7.0",
-    "mocha": "9.2.2",
+    "mocha": "10.1.0",
     "npm-run-all": "4.1.5",
     "path": "0.12.7",
     "raw-loader": "4.0.2",
