@@ -6,7 +6,7 @@ set -e
 MANIFEST=add-on/manifest.common.json
 
 # restore original in case it was modified manually
-test -d .git && git checkout -- $MANIFEST
+# test -d .git && git checkout -- $MANIFEST
 
 # skip all manifest mutations when building for stable channel
 if [ "$RELEASE_CHANNEL" = "stable" ]; then

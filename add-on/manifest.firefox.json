@@ -25,6 +25,7 @@
     "webRequest",
     "webRequestBlocking"
   ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; frame-src 'self';",
   "content_scripts": [ ],
   "protocol_handlers": [
     {
