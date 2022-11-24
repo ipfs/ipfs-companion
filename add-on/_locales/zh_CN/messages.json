@@ -515,18 +515,6 @@
     "message": "如果请求头中x-ipfs-path的值是一个 IPFS 路径，就代替 HTTP 传输，转而使用 IPFS 加载。 当然，IPFS 路径的重定向也需要启用 DNSLink 支持。",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
-  "option_ipfsProxy_title": {
-    "message": "window.ipfs支持",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
-  },
-  "option_ipfsProxy_description": {
-    "message": "IPFS被添加到每一个页面的窗口对象。启用/禁用它对其暴露函数的访问。",
-    "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
-  },
-  "option_ipfsProxy_link_manage_permissions": {
-    "message": "管理权限",
-    "description": "Link text for managing permissions"
-  },
   "option_openViaWebUI_title": {
     "message": "在Web用户界面中打开导入后的文件",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
@@ -622,66 +610,6 @@
   "quickImport_options_openViaWebUI": {
     "message": "在文件页面打开",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
-  },
-  "page_proxyAcl_title": {
-    "message": "管理权限",
-    "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
-  },
-  "page_proxyAcl_subtitle": {
-    "message": "查看，修改和撤销对你的 IPFS 实例授予的访问权限。",
-    "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
-  },
-  "page_proxyAcl_no_perms": {
-    "message": "没有授予权限。",
-    "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
-  },
-  "page_proxyAcl_confirm_revoke": {
-    "message": "是否撤销$2对$1的权限？",
-    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
-  },
-  "page_proxyAcl_confirm_revoke_all": {
-    "message": "是否撤销对$1的所有权限？",
-    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
-  },
-  "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "点击允许",
-    "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
-  },
-  "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "点击拒绝",
-    "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
-  },
-  "page_proxyAcl_allow_button_value": {
-    "message": "允许",
-    "description": "Button value for allow (page_proxyAcl_allow_button_value)"
-  },
-  "page_proxyAcl_deny_button_value": {
-    "message": "拒绝",
-    "description": "Button value for deny"
-  },
-  "page_proxyAcl_revoke_button_title": {
-    "message": "撤销$1",
-    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
-  },
-  "page_proxyAccessDialog_title": {
-    "message": "IPFS伴侣是否允许$1在连接的节点上访问$2",
-    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
-  },
-  "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "在此域中为当前和未来的所有权限应用此决定",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
-  },
-  "page_proxyAcl_revoke_all_button_title": {
-    "message": "撤回所有许可",
-    "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
-  },
-  "page_proxyAccessDialog_allowButton_text": {
-    "message": "允许",
-    "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
-  },
-  "page_proxyAccessDialog_denyButton_text": {
-    "message": "拒绝",
-    "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
     "message": "欢迎使用 | IPFS 伴侣",

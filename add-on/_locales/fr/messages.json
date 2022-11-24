@@ -515,18 +515,6 @@
     "message": "Charger les éléments des headers x-ipfs-path via IPFS (au lieu de HTTP) si la valeur du header est un chemin IPFS. Pour également rediriger les chemins IPNS, activez le support des DNSLink.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
-  "option_ipfsProxy_title": {
-    "message": "Support pour window.ipfs",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
-  },
-  "option_ipfsProxy_description": {
-    "message": "IPFS est ajouté à l'objet fenêtre sur toutes les pages. Activer/Désactiver l'accès aux fonctions qu'il expose.",
-    "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
-  },
-  "option_ipfsProxy_link_manage_permissions": {
-    "message": "Gérer les permissions",
-    "description": "Link text for managing permissions"
-  },
   "option_openViaWebUI_title": {
     "message": "Ouvrir les Fichiers Importés dans l'écran Fichiers",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
@@ -588,7 +576,7 @@
     "description": "Header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_subhead_peers": {
-    "message": "Connecté à $1 noeuds",
+    "message": "Connecté à $1 pairs",
     "description": "Partial info stats beneath the header on the share files page (quickImport_subhead_peers)"
   },
   "quickImport_pick_file_button": {
@@ -623,66 +611,6 @@
     "message": "Ouvrir dans la page Fichiers",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
   },
-  "page_proxyAcl_title": {
-    "message": "Gérer les permissions",
-    "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
-  },
-  "page_proxyAcl_subtitle": {
-    "message": "Voir, modifier ou révoquer les autorisations d'accès à votre nœud IPFS.",
-    "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
-  },
-  "page_proxyAcl_no_perms": {
-    "message": "Aucune autorisation accordée.",
-    "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
-  },
-  "page_proxyAcl_confirm_revoke": {
-    "message": "Révoquer la permission $1 pour $2 ?",
-    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
-  },
-  "page_proxyAcl_confirm_revoke_all": {
-    "message": "Révoquer toutes les permissions pour $1 ?",
-    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
-  },
-  "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Cliquez pour autoriser",
-    "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
-  },
-  "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Cliquez pour refuser",
-    "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
-  },
-  "page_proxyAcl_allow_button_value": {
-    "message": "Autoriser",
-    "description": "Button value for allow (page_proxyAcl_allow_button_value)"
-  },
-  "page_proxyAcl_deny_button_value": {
-    "message": "Refuser",
-    "description": "Button value for deny"
-  },
-  "page_proxyAcl_revoke_button_title": {
-    "message": "Révoquer $1",
-    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
-  },
-  "page_proxyAccessDialog_title": {
-    "message": "IPFS Companion doit-il autoriser «$1» à accéder à «$2» au nœud connecté?",
-    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
-  },
-  "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Appliquer ce choix à toutes les permissions courantes et futures de ce périmètre",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
-  },
-  "page_proxyAcl_revoke_all_button_title": {
-    "message": "Révoquer toutes les autorisations",
-    "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
-  },
-  "page_proxyAccessDialog_allowButton_text": {
-    "message": "Autoriser",
-    "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
-  },
-  "page_proxyAccessDialog_denyButton_text": {
-    "message": "Refuser",
-    "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
-  },
   "page_landingWelcome_title": {
     "message": "Bienvenue | IPFS Companion",
     "description": "Page title (page_landingWelcome_title)"
@@ -708,7 +636,7 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS est à l'arrêt",
+    "message": "IPFS est arrêté",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {

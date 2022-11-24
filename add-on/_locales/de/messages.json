@@ -515,18 +515,6 @@
     "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
-  "option_ipfsProxy_title": {
-    "message": "Unterstützung für Window.IPFS",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
-  },
-  "option_ipfsProxy_description": {
-    "message": "IPFS wird zum Fensterobjekt auf jeder Seite hinzugefügt. Erlauben oder verbieten Sie den Zugriff auf die verfügbaren Funktionen.",
-    "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
-  },
-  "option_ipfsProxy_link_manage_permissions": {
-    "message": "Berechtigungen verwalten",
-    "description": "Link text for managing permissions"
-  },
   "option_openViaWebUI_title": {
     "message": "Öffne importierte Dateien im Dateibildschirm",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
@@ -622,66 +610,6 @@
   "quickImport_options_openViaWebUI": {
     "message": "In Dateiansicht öffnen",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
-  },
-  "page_proxyAcl_title": {
-    "message": "Berechtigungen verwalten",
-    "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
-  },
-  "page_proxyAcl_subtitle": {
-    "message": "Zeige, ändere oder widerrufe erteilte Zugriffsrechte für Deine IPFS-Instanz.",
-    "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
-  },
-  "page_proxyAcl_no_perms": {
-    "message": "Keine Berechtigungen erteilt.",
-    "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
-  },
-  "page_proxyAcl_confirm_revoke": {
-    "message": "Berechtigung $1 für $2 widerrufen?",
-    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
-  },
-  "page_proxyAcl_confirm_revoke_all": {
-    "message": "$1 alle Berechtigungen widerrufen?",
-    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
-  },
-  "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Klicken zum Erlauben",
-    "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
-  },
-  "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Klicken zum Verbieten",
-    "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
-  },
-  "page_proxyAcl_allow_button_value": {
-    "message": "Erlauben",
-    "description": "Button value for allow (page_proxyAcl_allow_button_value)"
-  },
-  "page_proxyAcl_deny_button_value": {
-    "message": "Verbieten",
-    "description": "Button value for deny"
-  },
-  "page_proxyAcl_revoke_button_title": {
-    "message": "Widerrufe $1",
-    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
-  },
-  "page_proxyAccessDialog_title": {
-    "message": "Soll IPFS Companion den Zugriff auf $1 am verbundenen Node $2 erlauben?",
-    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
-  },
-  "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Wende diese Entscheidung für alle aktuellen und zukünftigen Genehmigungen inherhalb von diesem Gültigkeitsbereich an.",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
-  },
-  "page_proxyAcl_revoke_all_button_title": {
-    "message": "Widerrufe alle Berechtigungen",
-    "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
-  },
-  "page_proxyAccessDialog_allowButton_text": {
-    "message": "Erlauben",
-    "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
-  },
-  "page_proxyAccessDialog_denyButton_text": {
-    "message": "Verbieten",
-    "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
     "message": "Willkommen | IPFS Companion",

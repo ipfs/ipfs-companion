@@ -515,18 +515,6 @@
     "message": "Načtení položek s hlavičkami x-ipfs-path přes IPFS (místo HTTP), pokud je hodnotou hlavičky cesta IPFS. Chcete-li přesměrovat i cesty IPNS, povolte podporu DNSLink.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
-  "option_ipfsProxy_title": {
-    "message": "Podpora pro window.ipfs",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
-  },
-  "option_ipfsProxy_description": {
-    "message": "IPFS je vloženo do objektu window na každé stránce. Povolit/zakázat přístup k funkcionalitě kterou zpřístupňuje.",
-    "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
-  },
-  "option_ipfsProxy_link_manage_permissions": {
-    "message": "Spravovat oprávnění",
-    "description": "Link text for managing permissions"
-  },
   "option_openViaWebUI_title": {
     "message": "Otevření importovaných souborů na obrazovce Soubory",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
@@ -622,66 +610,6 @@
   "quickImport_options_openViaWebUI": {
     "message": "Otevřít na stránce Soubory",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
-  },
-  "page_proxyAcl_title": {
-    "message": "Spravovat oprávnění",
-    "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
-  },
-  "page_proxyAcl_subtitle": {
-    "message": "Zobrazit, změnit či odebrat přístup k vaší IPFS instanci.",
-    "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
-  },
-  "page_proxyAcl_no_perms": {
-    "message": "Žádné udělené oprávnění.",
-    "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
-  },
-  "page_proxyAcl_confirm_revoke": {
-    "message": "Odebrat oprávnění $1 od $2?",
-    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
-  },
-  "page_proxyAcl_confirm_revoke_all": {
-    "message": "Odebrat všechna oprávnění od $1?",
-    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
-  },
-  "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "Pro povolení klikněte",
-    "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
-  },
-  "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "Pro zakázání klikněte",
-    "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
-  },
-  "page_proxyAcl_allow_button_value": {
-    "message": "Povolit",
-    "description": "Button value for allow (page_proxyAcl_allow_button_value)"
-  },
-  "page_proxyAcl_deny_button_value": {
-    "message": "Zakázat",
-    "description": "Button value for deny"
-  },
-  "page_proxyAcl_revoke_button_title": {
-    "message": "Odebrat $1",
-    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
-  },
-  "page_proxyAccessDialog_title": {
-    "message": "Měl by IPFS Companion povolit «$1» přístup «$2» v připojeném uzlu?",
-    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
-  },
-  "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "Použijte toto rozhodnutí na všechna současná a budoucí oprávnění v tomto rozsahu",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
-  },
-  "page_proxyAcl_revoke_all_button_title": {
-    "message": "Odebrat všechna oprávnění",
-    "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
-  },
-  "page_proxyAccessDialog_allowButton_text": {
-    "message": "Povolit",
-    "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
-  },
-  "page_proxyAccessDialog_denyButton_text": {
-    "message": "Zakázat",
-    "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
     "message": "Vítejte | IPFS Companion",

@@ -515,18 +515,6 @@
     "message": "ヘッダの値が IPFS パスである場合、HTTP の代わりにIPFS 経由で x-ipfs-pathヘッダを持つアイテムをロードします。IPNS パスをリダイレクトするには、DNSLink のサポートを有効にします。",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
-  "option_ipfsProxy_title": {
-    "message": "window.ipfsのサポート",
-    "description": "An option title for enabling/disabling the IPFS proxy (option_ipfsProxy_title)"
-  },
-  "option_ipfsProxy_description": {
-    "message": "IPFSは、すべてのページのウィンドウオブジェクトに追加されます。公開する機能へのアクセスを有効/無効にします。",
-    "description": "An option description for the IPFS proxy (option_ipfsProxy_description)"
-  },
-  "option_ipfsProxy_link_manage_permissions": {
-    "message": "権限を管理する",
-    "description": "Link text for managing permissions"
-  },
   "option_openViaWebUI_title": {
     "message": "インポートしたファイルをファイル画面で開く",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"
@@ -622,66 +610,6 @@
   "quickImport_options_openViaWebUI": {
     "message": "Files ページで開く",
     "description": "Checkbox label on the share files page (quickImport_options_openViaWebUI)"
-  },
-  "page_proxyAcl_title": {
-    "message": "権限を管理する",
-    "description": "Page title for the IPFS proxy ACL page (page_proxyAcl_title)"
-  },
-  "page_proxyAcl_subtitle": {
-    "message": "IPFSインスタンスに付与されたアクセス権を表示、変更、および取り消します。",
-    "description": "Page sub title for the IPFS proxy ACL page (page_proxyAcl_subtitle)"
-  },
-  "page_proxyAcl_no_perms": {
-    "message": "権限が付与されていません。",
-    "description": "Message displayed when no permissions have been granted (page_proxyAcl_no_perms)"
-  },
-  "page_proxyAcl_confirm_revoke": {
-    "message": "$2のための許可$1を取り消しますか？",
-    "description": "Confirmation message for revoking a permission for a scope (page_proxyAcl_confirm_revoke)"
-  },
-  "page_proxyAcl_confirm_revoke_all": {
-    "message": "$1のためのすべての許可を取り消しますか？",
-    "description": "Confirmation message for revoking all permissions for an scope (page_proxyAcl_confirm_revoke_all)"
-  },
-  "page_proxyAcl_toggle_to_allow_button_title": {
-    "message": "クリックして許可する",
-    "description": "Button title for toggling permission from deny to allow (page_proxyAcl_toggle_to_allow_button_title)"
-  },
-  "page_proxyAcl_toggle_to_deny_button_title": {
-    "message": "クリックして拒否する",
-    "description": "Button title for toggling permission from allow to deny (page_proxyAcl_toggle_to_deny_button_title)"
-  },
-  "page_proxyAcl_allow_button_value": {
-    "message": "許可",
-    "description": "Button value for allow (page_proxyAcl_allow_button_value)"
-  },
-  "page_proxyAcl_deny_button_value": {
-    "message": "拒否",
-    "description": "Button value for deny"
-  },
-  "page_proxyAcl_revoke_button_title": {
-    "message": "$1を取り消す",
-    "description": "Button title for revoking a permission (page_proxyAcl_revoke_button_title)"
-  },
-  "page_proxyAccessDialog_title": {
-    "message": "IPFSコンパニオンは、接続されたノードで«$1»が«$2»にアクセスすることを許可する必要がありますか？",
-    "description": "Main title of the access permission dialog (page_proxyAccessDialog_title)"
-  },
-  "page_proxyAccessDialog_wildcardCheckbox_label": {
-    "message": "この決定を、このスコープ内の現在および将来のすべての権限に適用します",
-    "description": "Label for the apply permissions to all checkbox (page_proxyAccessDialog_wildcardCheckbox_label)"
-  },
-  "page_proxyAcl_revoke_all_button_title": {
-    "message": "すべての許可を取り消す",
-    "description": "Button title for revoking all permissions (page_proxyAcl_revoke_all_button_title)"
-  },
-  "page_proxyAccessDialog_allowButton_text": {
-    "message": "許可",
-    "description": "Button text for allowing a permission (page_proxyAccessDialog_allowButton_text)"
-  },
-  "page_proxyAccessDialog_denyButton_text": {
-    "message": "拒否",
-    "description": "Button text for denying a permission (page_proxyAccessDialog_allowButton_text)"
   },
   "page_landingWelcome_title": {
     "message": "ようこそ | IPFS Companion",
