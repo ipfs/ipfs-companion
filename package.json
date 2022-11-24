@@ -38,7 +38,7 @@
     "watch:js": "run-p watch:js:*",
     "watch:js:webpack": "webpack --watch --mode development --devtool inline-source-map  --config ./webpack.config.js",
     "test": "run-s test:*",
-    "test:functional": "c8 mocha --timeout 5000 --require ignore-styles \"test/functional/**/*.test.js\"",
+    "test:functional": "c8 mocha --timeout 5000 --exit --require ignore-styles \"test/functional/**/*.test.js\"",
     "lint": "run-s lint:*",
     "lint:standard": "standard -v \"*.js\" \"add-on/src/**/*.js\" \"test/**/*.js\" \"scripts/**/*.js\"",
     "lint:web-ext": "web-ext lint",
