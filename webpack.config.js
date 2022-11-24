@@ -30,7 +30,6 @@ const commonConfig = {
     ]
   },
   plugins: [
-    // new require('webpack-bundle-analyzer').BundleAnalyzerPlugin(),
     new webpack.ProgressPlugin({
       percentBy: 'entries'
     }),
@@ -59,9 +58,9 @@ const commonConfig = {
       },
       {
         test: /\.(png|jpe?g|gif|svg|eot|otf|ttf|woff|woff2)$/i,
-        loader: 'file-loader',
-        options: {
-          name: 'assets/[name].[ext]'
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name][ext]'
         }
       },
       {
@@ -69,14 +68,6 @@ const commonConfig = {
         test: /\.(otf|eot|ttf|woff)(\?.*$|$)/,
         use: ['raw-loader', 'ignore-loader']
       },
-      /*
-      {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false
-        }
-      },
-      */
       {
         exclude: /node_modules/,
         test: /\.js$/,
@@ -93,8 +84,6 @@ const commonConfig = {
       stream: 'readable-stream' // cure general insanity
     },
     fallback: {
-      // process: 'process/browser',
-      // buffer: "buffer", // path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
       stream: 'readable-stream',
       'stream/web': 'readable-stream',
       worker_threads: false,
