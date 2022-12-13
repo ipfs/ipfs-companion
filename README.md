@@ -141,10 +141,10 @@ To work on IPFS Companion's code, you'll need to install it from source. Quick s
 
 ## Contribute
 
-[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](CONTRIBUTING.md)
+[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](/docs/CONTRIBUTING.md)
 
 All are welcome to help make IPFS Companion even better!
-- Check out the [contribution guide](CONTRIBUTING.md) for how to get started as a developer
+- Check out the [contribution guide](/docs/CONTRIBUTING.md) for how to get started as a developer
 - Open an [issue](https://github.com/ipfs/ipfs-companion/issues)
 - Make sure you read and abide by the [IPFS Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md)
 
