@@ -126,7 +126,7 @@ but these builds are not signed, nor will automatically update. `.zip` bundles a
 
 ### Development
 
-To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](DEVELOPER-NOTES.md) for more detailed instructions and tips.
+To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](/docs/DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
 1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
 2. Run this all-in-one dev build to install dependencies, build, and launch in the browser of your choice:
