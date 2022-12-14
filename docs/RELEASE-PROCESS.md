@@ -59,7 +59,7 @@ Brave, Opera, and Edge do not require  additional publishing step.
 - Select the asset generated [earlier](#build-release-artifacts).
 - For `Compatibility` select both :
     - Firefox
-    - Firefox for android
+    - Firefox for Android
 - Optionally quickly check the validation report to see there are no blocking validations.
 - Click continue.
 - When asked: `Do you need to submit source code`  select `yes`
