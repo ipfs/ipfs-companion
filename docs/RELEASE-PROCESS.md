@@ -37,7 +37,7 @@ All Chromium-based browsers support install from Chrome Web Store.
 Brave, Opera, and Edge do not require  additional publishing step.
 
 - IPFS Companion Chrome Webstore: https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch
-- Make sure you are added to the IPFS companion maintainers google group.
+- Publishing requires your Google Account to belong to the IPFS Companion Maintainers Google Group (ask IPFS Stewards to be added).
 - Go to Developer Dashboard and select publisher: `IPFS Shipyard`.
 - Select `Package` from the left sub-menu.
 - Upload the newly built package for chromium [earlier](#build-release-artifacts).
