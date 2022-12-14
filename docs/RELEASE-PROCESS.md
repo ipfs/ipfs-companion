@@ -44,7 +44,7 @@ Brave, Opera, and Edge do not require  additional publishing step.
 - The new package goes to draft state automatically.
 - Go to `Store listing` section from the left sub-menu.
 - Click `Save Draft` and then `Submit for Review`.
-- Google sends no email informing when new version is approved.
+- "Review" may take from a few hours to a few days. Google sends no email informing when new version is approved.
 - Only way to check it is to inspect the version number on the store listing or Dev Dashboard.
 
 ## Publish on [Firefox Add-Ons Store](https://addons.mozilla.org/)
