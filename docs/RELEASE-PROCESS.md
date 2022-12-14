@@ -60,7 +60,7 @@ This process can be used to push a manual release to the [firefox add-ons](https
 - Optionally quickly check the validation report to see there are no blocking validations.
 - Click continue.
 - When asked: `Do you need to submit source code`  select `yes`
-    - Go go github release and download .zip with Source Code for the release tag.
+    - Go to Github Release and download .zip with Source Code for the release tag.
     - Upload it to Mozilla.
 - Link to the release notes from github
 - Add Instructions/Notes for the reviewer (*Warning: if you forget, the release will be rejected*):
