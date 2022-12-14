@@ -56,7 +56,7 @@ Brave, Opera, and Edge do not require  additional publishing step.
 - On the left menu select `Manage Status & Versions`
 - Open the latest one in a new tab because you'll need this for reference for copying listing details.
 - Click `Upload a New Version`.
-- Select the asset generated [earlier](#build-release-artifacts).
+- Select the Firefox-specific asset generated [earlier](#build-release-artifacts).
 - For `Compatibility` select both :
     - Firefox
     - Firefox for Android
