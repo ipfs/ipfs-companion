@@ -62,7 +62,7 @@ This process can be used to push a manual release to the [firefox add-ons](https
 - When asked: `Do you need to submit source code`  select `yes`
     - Go to Github Release and download .zip with Source Code for the release tag.
     - Upload it to Mozilla.
-- Link to the release notes from github
+- In the field asking for release notes just link to the release at Github
 - Add Instructions/Notes for the reviewer (*Warning: if you forget, the release will be rejected*):
     - Use the explanation from the previous release
     - Ask them to run the `npm run release-build` so they can run the process in a docker container.
