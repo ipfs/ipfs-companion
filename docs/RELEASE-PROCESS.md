@@ -1,7 +1,7 @@
 # Release Process
 ---
 
-This process can be used to push a manual release to the [firefox add-ons](https://addons.mozilla.org/) and [chrome webstore](https://chrome.google.com/webstore/category/extensions). Before you can do that you need to:
+This process can be used to push a manual release to the [Firefox Add-Ons](https://addons.mozilla.org/) and [Chrome Web Store](https://chrome.google.com/webstore/category/extensions). Before you can do that you need to:
 
 - [Release Process](#release-process)
   - [Tag a Release](#tag-a-release)
