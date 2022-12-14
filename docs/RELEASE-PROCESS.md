@@ -66,7 +66,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 - Add Instructions/Notes for the reviewer (*Warning: if you forget, the release will be rejected*):
     - Use the explanation from the previous release
     - Ask them to run the `npm run release-build` so they can run the process in a docker container.
-- The new build is published immediately, but it will be reviewed in a week and can be taken down if it doesn’t meet the guidelines.
+- The new build is published immediately, but it will be reviewed in a week by a real human (unlike Chrome Web Store),  and can be taken down if it doesn’t meet the guidelines around privacy and reproducibility.
 
 ## Release on Github.
 
