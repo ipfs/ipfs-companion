@@ -13,7 +13,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 
 ## Tag a Release
 
-- Bump `<semver>` version in `manifest.common.js`
+- Bump `<semver>` version in `add-on/manifest.common.json`
 - Create a PR for Release
     - Generate and push the tag to github
     ```sh
