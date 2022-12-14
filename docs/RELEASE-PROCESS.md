@@ -19,7 +19,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
     ```sh
         git tag v<semver> && git push && git push origin v<semver> # Don't forget the 'v' prefix
     ```
-    - Create draft release from https://github.com/ipfs/ipfs-companion/releases using the `<semver>`
+    - Create draft release from https://github.com/ipfs/ipfs-companion/releases using the `v<semver>` tag
     - Use github's auto release notes feature to fill release notes.
 
 ## Build Release Artifacts
