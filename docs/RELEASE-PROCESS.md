@@ -17,7 +17,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 - Create a PR for Release
     - Generate and push the tag to github
     ```sh
-        git tag <semver> && git push && git push origin v<semver> # Don't forget the 'v'
+        git tag v<semver> && git push && git push origin v<semver> # Don't forget the 'v' prefix
     ```
     - Create draft release from https://github.com/ipfs/ipfs-companion/releases using the `<semver>`
     - Use github's auto release notes feature to fill release notes.
