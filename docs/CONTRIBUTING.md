@@ -38,4 +38,4 @@ If you want to download translations from Transifex and run them locally, make s
 
 - https://github.com/ipfs/in-web-browsers
 - https://github.com/ipfs/community/blob/master/docs/CONTRIBUTING.md
-  [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/docs/CONTRIBUTING.md)
+  [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
