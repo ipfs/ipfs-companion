@@ -31,7 +31,10 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
     - firefox
 - Attach these assets to the draft release.
 
-## Publish on Chrome Webstore (this also applies to brave as brave uses the chrome webstore)
+## Publish on Chrome Web Store
+
+All Chromium-based browsers support install from Chrome Web Store.
+Brave, Opera, and Edge do not require  additional publishing step.
 
 - IPFS Companion Chrome Webstore: https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch
 - Make sure you are added to the IPFS companion maintainers google group.
