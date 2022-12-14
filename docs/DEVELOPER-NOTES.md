@@ -2,21 +2,23 @@
 
 ### Table of contents
 
-* [Build from source](#build-from-source)
-    * [Clone and install dependencies](#clone-and-install-dependencies)
-    * [Build and run in Firefox](#build-and-run-in-firefox)
-    * [Build and run in Chromium](#build-and-run-in-chromium)
-    * [Run build on file changes](#run-build-on-file-changes)
-* [Reproducible build in Docker](#reproducible-build-in-docker)
-* [Useful tasks](#useful-tasks)
-* [Other tips](#other-tips)
-* [Legacy Firefox (< 53) and XUL-compatible browsers](#legacy-firefox--53-and-xul-compatible-browsers)
-* [Using IPFS Companion on Firefox for Android](#using-ipfs-companion-on-firefox-for-android)
-    * [Install Firefox for Android](#install-firefox-for-android)
-    * [Install IPFS Companion](#install-ipfs-companion)
-    * [Hot-deploy over USB](#hot-deploy-over-usb)
-    * [Debugging in Firefox for Android](#debugging-in-firefox-for-android)
-    * [Further resources](#further-resources)
+- [Developer notes for IPFS Companion](#developer-notes-for-ipfs-companion)
+    - [Table of contents](#table-of-contents)
+  - [Build from source](#build-from-source)
+    - [Clone and install dependencies](#clone-and-install-dependencies)
+    - [Build and run in Firefox](#build-and-run-in-firefox)
+    - [Build and run in Chromium](#build-and-run-in-chromium)
+    - [Run build on file changes](#run-build-on-file-changes)
+  - [Reproducible build in Docker](#reproducible-build-in-docker)
+  - [Useful tasks](#useful-tasks)
+  - [Other tips](#other-tips)
+  - [Legacy Firefox (\< 53) and XUL-compatible browsers](#legacy-firefox--53-and-xul-compatible-browsers)
+  - [Using IPFS Companion on Firefox for Android](#using-ipfs-companion-on-firefox-for-android)
+    - [Install Firefox for Android](#install-firefox-for-android)
+    - [Install IPFS Companion](#install-ipfs-companion)
+    - [Hot-deploy over USB](#hot-deploy-over-usb)
+    - [Debugging in Firefox for Android](#debugging-in-firefox-for-android)
+    - [Further resources](#further-resources)
 
 ## Build from source
 
@@ -52,7 +54,7 @@ npm run test     # test suite
 npm run firefox  # spawn new Firefox
 ```
 
-It is also possible to load the extension manually: 
+It is also possible to load the extension manually:
 1. Enter `about:debugging` in the address bar
 2. Click "This Firefox" in the left nav
 3. Click "Load Temporary Add-on..."
@@ -92,8 +94,8 @@ npm run watch     # watch for new changes
 
 ## Reproducible build in Docker
 
-Want to ensure prebuilt bundle does not include any additional code?  
-Don't want to install JS dependencies such as NodeJS and yarn?  
+Want to ensure prebuilt bundle does not include any additional code?
+Don't want to install JS dependencies such as NodeJS and yarn?
 
 Do an isolated build inside of Docker!
 
@@ -143,12 +145,12 @@ Release build shortcuts:
   export PATH="/path/to/alternative/version/of/firefox/:${PATH}"
   ```
 
-- [Using localization in IPFS Companion](LOCALIZATION-NOTES.md) (running browsers with specific locale, etc)
+- [Using localization in IPFS Companion](./LOCALIZATION-NOTES.md) (running browsers with specific locale, etc)
 - [Testing persistent and restart features (Mozilla)](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
 
 ## Legacy Firefox (< 53) and XUL-compatible browsers
 
-Legacy versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).   
+Legacy versions `1.x.x` were based on currently deprecated Add-On SDK (Firefox-only).
 While it is not maintained any more, one can inspect, build, and install it using codebase from [legacy-sdk](https://github.com/ipfs/ipfs-companion/tree/legacy-sdk) branch. For historical background on the rewrite, see [Issue #20: Move to WebExtensions](https://github.com/ipfs/ipfs-companion/issues/20).
 
 ## Using IPFS Companion on Firefox for Android

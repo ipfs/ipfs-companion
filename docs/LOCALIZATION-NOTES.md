@@ -2,9 +2,13 @@
 
 ### Table of contents
 
-* [Running Chrome with a specific locale](#running-chrome-with-a-specific-locale)
-* [Running Firefox with a specific locale](#running-firefox-with-a-specific-locale)
-* [Contributing translations](#contributing-translations)
+- [Localization in IPFS Companion](#localization-in-ipfs-companion)
+    - [Table of contents](#table-of-contents)
+  - [Running Chrome with a specific locale](#running-chrome-with-a-specific-locale)
+    - [Further resources](#further-resources)
+  - [Running Firefox with a specific locale](#running-firefox-with-a-specific-locale)
+    - [Further resources](#further-resources-1)
+  - [Contributing translations](#contributing-translations)
 
 IPFS Companion supports running in specific locales, with translations provided by the community via Transifex.
 

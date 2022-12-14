@@ -14,7 +14,7 @@ Do not hesitate and [create a new Issue](https://github.com/ipfs/ipfs-companion/
 
 ### Working on existing Issues
 
-Feel free to work on issues that are [not assigned yet](https://github.com/ipfs/ipfs-companion/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee), especially ones marked with [help wanted](https://github.com/ipfs/ipfs-companion/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee) tag.  
+Feel free to work on issues that are [not assigned yet](https://github.com/ipfs/ipfs-companion/issues?utf8=✓&q=is%3Aissue+is%3Aopen+no%3Aassignee), especially ones marked with [help wanted](https://github.com/ipfs/ipfs-companion/issues?q=is%3Aopen+label%3A%22help+wanted%22+no%3Aassignee) tag.
 As a courtesy, please add a comment informing  about your intent. That way we will not duplicate effort.
 
 ### Submitting Pull Requests
@@ -28,14 +28,14 @@ See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for de
 
 Go to Transifex and join [IPFS Companion Translation Project](https://www.transifex.com/ipfs/ipfs-companion/) :sparkles:
 
-If you want to download translations from Transifex and run them locally, make sure to read [Localization Notes](LOCALIZATION-NOTES.md) first.
+If you want to download translations from Transifex and run them locally, make sure to read [Localization Notes](./LOCALIZATION-NOTES.md) first.
 
 ## Writing Code
 
-**If you plan to write code make sure to read [Developer Notes](DEVELOPER-NOTES.md) to get familiar with tools and commands that will make your work easier.**
+**If you plan to write code make sure to read [Developer Notes](./docs/DEVELOPER-NOTES.md) to get familiar with tools and commands that will make your work easier.**
 
 ## How to Help with Things Beyond Browser Extension?
 
 - https://github.com/ipfs/in-web-browsers
-- https://github.com/ipfs/community/blob/master/CONTRIBUTING.md  
+- https://github.com/ipfs/community/blob/master/CONTRIBUTING.md
   [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
