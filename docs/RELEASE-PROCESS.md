@@ -50,7 +50,7 @@ Brave, Opera, and Edge do not require  additional publishing step.
 ## Publish on [Firefox Add-Ons Store](https://addons.mozilla.org/)
 
 - IPFS Companion Firefox Add-On: https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/
-- Create a developer account with firefox store and send [@lidel](https://github.com/lidel) an email to get added to the extension management group.
+- Publishing requires logging into a [Developer Account](https://addons.mozilla.org/developers/) at Firefox Add-Ons site. The account needs to be marked as one of developers of IPFS Companion (ask IPFS Stewards to be added).
 - Goto `Manage My Submissions` from the drop-down menu from your username.
 - Select `IPFS Companion` item.
 - On the left menu select `Manage Status & Versions`
