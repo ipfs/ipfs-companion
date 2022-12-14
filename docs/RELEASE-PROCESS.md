@@ -6,7 +6,7 @@ This process can be used to push a manual release to the [firefox add-ons](https
 - [Release Process](#release-process)
   - [Tag a Release](#tag-a-release)
   - [Build Release Artifacts](#build-release-artifacts)
-  - [Publish on Chrome Webstore (this also applies to brave as brave uses the chrome webstore)](#publish-on-chrome-webstore-this-also-applies-to-brave-as-brave-uses-the-chrome-webstore)
+  - [Publish on Chrome Web Store)](#publish-on-chrome-web-store)
   - [Publish on Firefox Add-Ons Store](#publish-on-firefox-add-ons-store)
   - [Release on Github.](#release-on-github)
 
