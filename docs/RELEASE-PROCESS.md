@@ -40,7 +40,7 @@ Brave, Opera, and Edge do not require  additional publishing step.
 - Publishing requires your Google Account to belong to the IPFS Companion Maintainers Google Group (ask IPFS Stewards to be added).
 - Go to Developer Dashboard and select publisher: `IPFS Shipyard`.
 - Select `Package` from the left sub-menu.
-- Upload the newly built package for chromium [earlier](#build-release-artifacts).
+- Upload the newly built package for Chromium [earlier](#build-release-artifacts).
 - The new package goes to draft state automatically.
 - Go to `Store listing` section from the left sub-menu.
 - Click `Save Draft` and then `Submit for Review`.
