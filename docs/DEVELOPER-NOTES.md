@@ -145,7 +145,7 @@ Release build shortcuts:
   export PATH="/path/to/alternative/version/of/firefox/:${PATH}"
   ```
 
-- [Using localization in IPFS Companion](/LOCALIZATION-NOTES.md) (running browsers with specific locale, etc)
+- [Using localization in IPFS Companion](./LOCALIZATION-NOTES.md) (running browsers with specific locale, etc)
 - [Testing persistent and restart features (Mozilla)](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
 
 ## Legacy Firefox (< 53) and XUL-compatible browsers

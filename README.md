@@ -126,7 +126,7 @@ but these builds are not signed, nor will automatically update. `.zip` bundles a
 
 ### Development
 
-To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](/docs/DEVELOPER-NOTES.md) for more detailed instructions and tips.
+To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](./docs/DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
 1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
 2. Run this all-in-one dev build to install dependencies, build, and launch in the browser of your choice:
@@ -141,16 +141,16 @@ To work on IPFS Companion's code, you'll need to install it from source. Quick s
 
 ## Contribute
 
-[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](/docs/CONTRIBUTING.md)
+[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](./docs/CONTRIBUTING.md)
 
 All are welcome to help make IPFS Companion even better!
-- Check out the [contribution guide](/docs/CONTRIBUTING.md) for how to get started as a developer
+- Check out the [contribution guide](./docs/CONTRIBUTING.md) for how to get started as a developer
 - Open an [issue](https://github.com/ipfs/ipfs-companion/issues)
 - Make sure you read and abide by the [IPFS Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md)
 
 ## Release Process
 
-The release process has been [documented here](/docs/RELEASE-PROCESS.md).
+The release process has been [documented here](./docs/RELEASE-PROCESS.md).
 
 ## Help & troubleshooting
 
@@ -175,7 +175,7 @@ Deny
 
 ## Privacy & license info
 
-- IPFS Companion [Privacy policy](/docs/PRIVACY-POLICY.md)
+- IPFS Companion [Privacy policy](./PRIVACY-POLICY.md)
 - The IPFS logo belongs to the [IPFS Project](https://github.com/ipfs) and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">CC-BY-SA 3.0</a> license
 - [is-ipfs](https://github.com/ipfs-shipyard/is-ipfs), [js-multihash](https://github.com/multiformats/js-multihash), and other npm dependencies are under MIT license, unless stated otherwise
 - IPFS Companion itself is released under [CC0](LICENSE); to the extent possible under law, the author has waived all copyright and related or neighboring rights to this work, effectively placing it in the public domain
