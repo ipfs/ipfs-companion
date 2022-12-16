@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
-
+// @ts-check
 import { safeURL, isHostname } from './options.js'
 
 /**
@@ -17,6 +17,9 @@ import { safeURL, isHostname } from './options.js'
  * @property {string} gwURLString
  * @property {boolean|string} dnslinkPolicy
  * @property {(url: string|URL) => boolean} activeIntegrations
+ * @property {boolean} localGwAvailable
+ * @property {string} webuiRootUrl
+ * @property {typeof import('./options').optionDefaults} options
  */
 
 export const offlinePeerCount = -1

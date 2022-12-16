@@ -23,6 +23,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
+import { initializeTelemetry } from './telemetry.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
@@ -33,6 +34,7 @@ export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
+  /** @type {ReturnType<initState>} */
   let state // avoid redundant API reads by utilizing local cache of various states
   let dnslinkResolver
   let ipfsPathValidator
@@ -67,6 +69,11 @@ export default async function init () {
           err.name === 'ValidationError' ? err.details[0].message : err.message
         )
       }
+    }
+    try {
+      await initializeTelemetry(getState)
+    } catch (err) {
+      log.error('Failed to initialize telemetry', err)
     }
 
     dnslinkResolver = createDnslinkResolver(getState)
