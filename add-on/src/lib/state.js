@@ -3,7 +3,29 @@
 
 import { safeURL, isHostname } from './options.js'
 
+/**
+ * @typedef {object} CompanionState
+ * @property {number} peerCount
+ * @property {URL} pubGwURL
+ * @property {string} pubGwURLString
+ * @property {URL} pubSubdomainGwURL
+ * @property {string} pubSubdomainGwURLString
+ * @property {boolean} redirect
+ * @property {URL} apiURL
+ * @property {string} apiURLString
+ * @property {URL} gwURL
+ * @property {string} gwURLString
+ * @property {boolean|string} dnslinkPolicy
+ * @property {(url: string|URL) => boolean} activeIntegrations
+ */
+
 export const offlinePeerCount = -1
+/**
+ *
+ * @param {typeof import('./options').optionDefaults} options
+ * @param {Partial<typeof import('./options').optionDefaults>} overrides
+ * @returns {CompanionState}
+ */
 export function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
