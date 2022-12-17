@@ -4,7 +4,7 @@
 import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
 import createRuntimeChecks from '../lib/runtime-checks.js'
-import { handleConsentFromState } from '../lib/telemetry.js'
+import { trackView } from '../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
 export default function optionStore (state, emitter) {
@@ -13,12 +13,15 @@ export default function optionStore (state, emitter) {
   const updateStateOptions = async () => {
     const runtime = await createRuntimeChecks(browser)
     state.withNodeFromBrave = runtime.brave && await runtime.brave.getIPFSEnabled()
+    /**
+     * FIXME: Why are we setting `state.options` when state is supposed to extend options?
+     */
     state.options = await getOptions()
-    handleConsentFromState(state)
     emitter.emit('render')
   }
 
   emitter.on('DOMContentLoaded', async () => {
+    trackView('options')
     updateStateOptions()
     browser.storage.onChanged.addListener(updateStateOptions)
   })

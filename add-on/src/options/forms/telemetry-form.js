@@ -7,8 +7,11 @@ import switchToggle from '../../pages/components/switch-toggle.js'
 
 export default function telemetryForm ({
   onOptionChange,
-  stateOptions
+  ...stateOptions
 }) {
+  // const onTelemetryChange = (key) => {
+
+  // }
   return html`
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
@@ -25,37 +28,14 @@ export default function telemetryForm ({
           <label for="telemetryGroupMinimal">
             <dl>
               <dt>${browser.i18n.getMessage('option_telemetryGroupMinimal_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_telemetryGroupMinimal_description')}</dd>
+              <dd>
+                <p>${browser.i18n.getMessage('option_telemetryGroupMinimal_description')}</p>
+                <p>${browser.i18n.getMessage('option_telemetryGroupMinimal_session_description')}</p>
+                <p>${browser.i18n.getMessage('option_telemetryGroupMinimal_view_description')}</p>
+              </dd>
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'telemetryGroupMinimal', checked: stateOptions.telemetryGroupMinimal, onchange: onOptionChange('telemetryGroupMinimal') })}</div>
-        </div>
-        <div class="flex-row-ns pb0-ns">
-          <label for="telemetryGroupMarketing">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_telemetryGroupMarketing_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_telemetryGroupMarketing_description')}</dd>
-            </dl>
-          </label>
-          <div class="self-center-ns">${switchToggle({ id: 'telemetryGroupMarketing', checked: stateOptions.telemetryGroupMarketing, onchange: onOptionChange('telemetryGroupMarketing') })}</div>
-        </div>
-        <div class="flex-row-ns pb0-ns">
-          <label for="telemetryGroupPerformance">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_telemetryGroupPerformance_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_telemetryGroupPerformance_description')}</dd>
-            </dl>
-          </label>
-          <div class="self-center-ns">${switchToggle({ id: 'telemetryGroupPerformance', checked: stateOptions.telemetryGroupPerformance, onchange: onOptionChange('telemetryGroupPerformance') })}</div>
-        </div>
-        <div class="flex-row-ns pb0-ns">
-          <label for="telemetryGroupTracking">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_telemetryGroupTracking_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_telemetryGroupTracking_description')}</dd>
-            </dl>
-          </label>
-          <div class="self-center-ns">${switchToggle({ id: 'telemetryGroupTracking', checked: stateOptions.telemetryGroupTracking, onchange: onOptionChange('telemetryGroupTracking') })}</div>
         </div>
       </fieldset>
     </form>

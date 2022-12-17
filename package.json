@@ -118,7 +118,7 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
-    "@ipfs-shipyard/ignite-metrics": "file:ipfs-shipyard-ignite-metrics-1.0.0.tgz",
+    "@ipfs-shipyard/ignite-metrics": "github:ipfs-shipyard/ignite-metrics#2546b8a7de9114f3e6903894d29f251276cef035",
     "@material/switch": "10.0.0",
     "assert": "2.0.0",
     "buffer": "6.0.3",

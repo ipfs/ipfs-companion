@@ -736,12 +736,20 @@
     "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
   },
   "option_telemetryGroupMinimal_title": {
-    "message": "Minimal title",
+    "message": "Minimal metrics: session & companion views",
     "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
   },
   "option_telemetryGroupMinimal_description": {
-    "message": "Minimal description",
+    "message": "We send `session` and `view` events only if ipfs-companion is enabled and your browser is not idle.",
     "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
+  },
+  "option_telemetryGroupMinimal_session_description": {
+    "message": "A `session` event - every 60 seconds.",
+    "description": "An explanation of the `session` telemetry we collect (option_telemetryGroupMinimal_session_description)"
+  },
+  "option_telemetryGroupMinimal_view_description": {
+    "message": "A `view` event - only for ipfs-companion pages.",
+    "description": "An explanation of the `session` telemetry we collect (option_telemetryGroupMinimal_session_description)"
   },
   "option_telemetryGroupMarketing_title": {
     "message": "Marketing title",

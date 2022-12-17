@@ -5,6 +5,7 @@ import { safeURL, isHostname } from './options.js'
 
 /**
  * @typedef {object} CompanionState
+ * @extends {typeof import('./options').optionDefaults}
  * @property {number} peerCount
  * @property {URL} pubGwURL
  * @property {string} pubGwURLString
@@ -19,7 +20,6 @@ import { safeURL, isHostname } from './options.js'
  * @property {(url: string|URL) => boolean} activeIntegrations
  * @property {boolean} localGwAvailable
  * @property {string} webuiRootUrl
- * @property {typeof import('./options').optionDefaults} options
  */
 
 export const offlinePeerCount = -1

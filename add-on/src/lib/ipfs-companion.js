@@ -23,7 +23,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
-import { initializeTelemetry } from './telemetry.js'
+import { handleConsentFromState, startSession, endSession } from './telemetry.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
@@ -59,6 +59,7 @@ export default async function init () {
     notify = createNotifier(getState)
 
     if (state.active) {
+      startSession()
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
         ipfs = await initIpfsClient(browser, state)
@@ -69,11 +70,6 @@ export default async function init () {
           err.name === 'ValidationError' ? err.details[0].message : err.message
         )
       }
-    }
-    try {
-      await initializeTelemetry(getState)
-    } catch (err) {
-      log.error('Failed to initialize telemetry', err)
     }
 
     dnslinkResolver = createDnslinkResolver(getState)
@@ -563,6 +559,7 @@ export default async function init () {
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
+          state.active ? startSession() : endSession()
           break
         case 'ipfsNodeType':
           if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
@@ -629,6 +626,7 @@ export default async function init () {
           break
       }
     }
+    handleConsentFromState(state)
 
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {
