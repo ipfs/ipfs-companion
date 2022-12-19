@@ -38,6 +38,7 @@
     "watch:js": "run-p watch:js:*",
     "watch:js:webpack": "webpack --watch --mode development --devtool inline-source-map  --config ./webpack.config.js",
     "test": "run-s test:*",
+    "test:e2e": "mocha --timeout 300000 --exit --require ignore-styles \"test/e2e/**/*.test.js\"",
     "test:functional": "c8 mocha --timeout 5000 --exit --require ignore-styles \"test/functional/**/*.test.js\"",
     "lint": "run-s lint:*",
     "lint:standard": "standard -v \"*.js\" \"add-on/src/**/*.js\" \"test/**/*.js\" \"scripts/**/*.js\"",
@@ -59,7 +60,11 @@
     "beta-build": "docker rmi -f ipfs-companion-beta-build && docker build -t ipfs-companion-beta-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=beta -v $(pwd)/build:/home/node/app/build ipfs-companion-beta-build npm run ci:build",
     "release-build": "docker rmi -f ipfs-companion-release-build && docker build -t ipfs-companion-release-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm -it --net=host -e RELEASE_CHANNEL=stable -v $(pwd)/build:/home/node/app/build ipfs-companion-release-build npm run ci:build",
     "dev-build": "npm ci && npm run build",
-    "yarn-build": "npm run dev-build"
+    "yarn-build": "npm run dev-build",
+    "compose:e2e:build": "docker compose --file docker-compose.e2e.yml build",
+    "compose:e2e:up": "docker compose --file docker-compose.e2e.yml up --remove-orphans --detach kubo chromium firefox",
+    "compose:e2e:test": "docker compose --file docker-compose.e2e.yml run e2e npm run test:e2e",
+    "compose:e2e:stop": "docker compose --file docker-compose.e2e.yml stop"
   },
   "private": true,
   "preferGlobal": false,
@@ -101,6 +106,7 @@
     "path": "0.12.7",
     "raw-loader": "4.0.2",
     "request-progress": "3.0.0",
+    "selenium-webdriver": "^4.7.1",
     "shx": "0.3.4",
     "sinon": "13.0.1",
     "sinon-chrome": "3.0.1",

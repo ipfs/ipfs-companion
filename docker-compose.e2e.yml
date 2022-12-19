@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  firefox:
+    image: selenium/standalone-firefox:${FIREFOX_VERSION:-latest}
+    shm_size: 2g
+    ports:
+      - 4444
+      - 7900
+  chromium:
+    # WARN: `standalone-chrome` does NOT work on ARM-based machines;
+    #  see https://github.com/SeleniumHQ/docker-selenium#experimental-mult-arch-aarch64armhfamd64-images;
+    #  try using `seleniarm/standalone-chromium` instead
+    # export CHROMIUM_IMAGE=seleniarm/standalone-chromium
+    image: ${CHROMIUM_IMAGE:-selenium/standalone-chrome}:${CHROMIUM_VERSION:-latest}
+    shm_size: 2g
+    ports:
+      - 4444
+      - 7900
+  kubo:
+    image: ipfs/kubo:${KUBO_VERSION:-latest}
+    ports:
+      - 4001
+      - 5001
+      - 8080
+    volumes:
+      - ./ci/access-control-allow-all.sh:/container-init.d/001-access-control-allow-all.sh
+  e2e:
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+      - SELENIUM_REMOTE_CHROMIUM_URL=http://chromium:4444
+      - SELENIUM_REMOTE_FIREFOX_URL=http://firefox:4444
+      - IPFS_API_URL=http://kubo:5001
+      - CUSTOM_GATEWAY_URL=http://kubo:8080
+      - TEST_E2E=1
+      - TEST_HEADLESS=${TEST_HEADLESS}
+      - IPFS_COMPANION_VERSION=${IPFS_COMPANION_VERSION}
+    volumes:
+      - ./build:/home/node/app/build
