@@ -34,6 +34,7 @@ services:
       - CUSTOM_GATEWAY_URL=http://kubo:8080
       - TEST_E2E=1
       - TEST_HEADLESS=${TEST_HEADLESS}
+      - TEST_DEBUG=${TEST_DEBUG}
       - IPFS_COMPANION_VERSION=${IPFS_COMPANION_VERSION}
     volumes:
       - ./build:/home/node/app/build

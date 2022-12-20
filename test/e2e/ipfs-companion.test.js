@@ -111,8 +111,10 @@ async function getNumberOfConnectedPeers (browser, url) {
   console.info(`Going to: ${url}/dist/landing-pages/welcome/index.html`)
   await browser.get(`${url}/dist/landing-pages/welcome/index.html`)
   await delay(5000) // waiting for the connection number to appear
-  const html = await browser.getPageSource()
-  console.debug(html)
+  if (process.env.TEST_DEBUG === '1') {
+    const html = await browser.getPageSource()
+    console.debug(html)
+  }
   console.info('Looking for an element with text: \'Your node is connected to ...\'')
   const p = browser.findElement(By.xpath("//p[text()='Your node is connected to ']"))
   const span = p.findElement(By.css('span'))
