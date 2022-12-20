@@ -131,7 +131,7 @@ async function runTest (browser) {
 }
 
 describe('ipfs-companion', function () {
-  before(() => {
+  before(function () {
     if (process.env.TEST_E2E !== '1') {
       this.skip()
     }
