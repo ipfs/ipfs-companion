@@ -4,24 +4,25 @@ import { expect } from 'chai'
 import fs from 'fs'
 import chrome from 'selenium-webdriver/chrome.js'
 import firefox from 'selenium-webdriver/firefox.js'
+import { fail } from 'assert'
 
-async function delay (ms) {
+function delay (ms) {
   return new Promise(res => setTimeout(res, ms), _ => {})
 }
 
-function getVersion () {
-  return process.env.IPFS_COMPANION_VERSION || JSON.parse(fs.readFileSync('add-on/manifest.common.json')).version
+function getExtension (browserName) {
+  const version = process.env.IPFS_COMPANION_VERSION || JSON.parse(fs.readFileSync('add-on/manifest.common.json')).version
+  return `build/ipfs_companion-${version}_${browserName}.zip`
 }
 
-async function openChromiumBrowser () {
+async function openChromium (extension) {
   console.info('Opening Chromium browser')
-  const extension = `build/ipfs_companion-${getVersion()}_chromium.zip`
-  console.info(`Checking if ${extension} exists`)
-  expect(fs.existsSync(extension)).to.be.true // eslint-disable-line no-unused-expressions
   const options = new chrome.Options()
-  options.addExtensions(extension)
+  if (extension !== undefined) {
+    options.addExtensions(extension)
+  }
   options.addArguments('--lang=en-GB,en-US')
-  if (process.env.TEST_HEADLESS === '1') {
+  if (process.env.TEST_HEADLESS === 'true') {
     options.addArguments('--headless=chrome')
   }
   const builder = new Builder()
@@ -33,20 +34,17 @@ async function openChromiumBrowser () {
   }
   console.info('Starting Chromium')
   const browser = await builder.build()
-  await delay(5000) // waiting for the browser/extension to load
+  await delay(5000) // waiting for the extension to load
   console.info('Chromium is ready')
   return browser
 }
 
-async function openFirefoxBrowser () {
+async function openFirefox (extension) {
   console.info('Opening Firefox browser')
-  const extension = `build/ipfs_companion-${getVersion()}_firefox.zip`
-  console.info(`Checking if ${extension} exists`)
-  expect(fs.existsSync(extension)).to.be.true // eslint-disable-line no-unused-expressions
   const options = new firefox.Options()
   options.setPreference('intl.accept_languages', 'en-gb,en-us')
   options.setPreference('intl.locale.requested', 'en-GB,en-US')
-  if (process.env.TEST_HEADLESS === '1') {
+  if (process.env.TEST_HEADLESS === 'true') {
     options.addArguments('--headless')
   }
   const builder = new Builder()
@@ -57,10 +55,12 @@ async function openFirefoxBrowser () {
     builder.usingServer(process.env.SELENIUM_REMOTE_FIREFOX_URL)
   }
   console.info('Starting Firefox')
-  const browser = builder.build()
-  console.info('Installing the extension')
-  await browser.installAddon(extension, true)
-  await delay(5000) // waiting for the browser/extension to load
+  const browser = await builder.build()
+  if (extension !== undefined) {
+    console.info('Installing the extension')
+    await browser.installAddon(extension, true)
+    await delay(5000) // waiting for the extension to load
+  }
   console.info('Firefox is ready')
   return browser
 }
@@ -82,7 +82,7 @@ async function findExtensionUrl (browser) {
       return extensionURL
     }
   }
-  console.error('No extension URL found')
+  console.warn('No extension URL found')
 }
 
 async function updateExtensionSettings (browser, url, id, value) {
@@ -102,8 +102,8 @@ async function updateExtensionSettings (browser, url, id, value) {
   console.info('Checking if the update worked')
   element = browser.findElement(By.id(id))
   const v = await element.getAttribute('value')
-  expect(v).to.equal(value)
   console.info('The setting update is complete')
+  return v
 }
 
 async function getNumberOfConnectedPeers (browser, url) {
@@ -111,7 +111,7 @@ async function getNumberOfConnectedPeers (browser, url) {
   console.info(`Going to: ${url}/dist/landing-pages/welcome/index.html`)
   await browser.get(`${url}/dist/landing-pages/welcome/index.html`)
   await delay(5000) // waiting for the connection number to appear
-  if (process.env.TEST_DEBUG === '1') {
+  if (process.env.TEST_DEBUG === 'true') {
     const html = await browser.getPageSource()
     console.debug(html)
   }
@@ -123,35 +123,54 @@ async function getNumberOfConnectedPeers (browser, url) {
   return parseInt(peers)
 }
 
-async function runTest (browser) {
-  const url = await findExtensionUrl(browser)
-  expect(url).not.to.be.undefined // eslint-disable-line no-unused-expressions
-  await updateExtensionSettings(browser, url, 'ipfsApiUrl', process.env.IPFS_API_URL || 'http://127.0.0.1:5001')
-  await updateExtensionSettings(browser, url, 'customGatewayUrl', process.env.CUSTOM_GATEWAY_URL || 'http://localhost:8080')
-  const peers = await getNumberOfConnectedPeers(browser, url)
-  expect(peers).not.to.equal(0)
+async function runTest (browserName) {
+  const extension = getExtension(browserName)
+
+  console.info(`Checking if ${extension} exists`)
+  expect(fs.existsSync(extension)).to.be.true // eslint-disable-line no-unused-expressions
+
+  let browser
+  if (browserName === 'chromium') {
+    browser = await openChromium(extension)
+  } else if (browserName === 'firefox') {
+    browser = await openFirefox(extension)
+  } else {
+    fail(`unknown browser name: ${browserName}`)
+  }
+
+  try {
+    const url = await findExtensionUrl(browser)
+
+    expect(url).not.to.be.undefined // eslint-disable-line no-unused-expressions
+
+    const ipfsApiUrl = process.env.IPFS_API_URL || 'http://127.0.0.1:5001'
+    const updatedIpfsApiUrl = await updateExtensionSettings(browser, url, 'ipfsApiUrl', ipfsApiUrl)
+
+    expect(updatedIpfsApiUrl).to.equal(ipfsApiUrl)
+
+    const customGatewayUrl = process.env.CUSTOM_GATEWAY_URL || 'http://localhost:8080'
+    const updatedCustomGatewayUrl = await updateExtensionSettings(browser, url, 'customGatewayUrl', customGatewayUrl)
+
+    expect(updatedCustomGatewayUrl).to.equal(customGatewayUrl)
+
+    const peers = await getNumberOfConnectedPeers(browser, url)
+
+    expect(peers).not.to.equal(0)
+  } finally {
+    await browser.quit()
+  }
 }
 
 describe('ipfs-companion', function () {
   before(function () {
-    if (process.env.TEST_E2E !== '1') {
+    if (process.env.TEST_E2E !== 'true') {
       this.skip()
     }
   })
   it('should be able to discover peers in Chromium', async function () {
-    const browser = await openChromiumBrowser()
-    try {
-      await runTest(browser)
-    } finally {
-      await browser.quit()
-    }
+    await runTest('chromium')
   })
   it('should be able to discover peers in Firefox', async function () {
-    const browser = await openFirefoxBrowser()
-    try {
-      await runTest(browser)
-    } finally {
-      await browser.quit()
-    }
+    await runTest('firefox')
   })
 })

@@ -32,7 +32,7 @@ services:
       - SELENIUM_REMOTE_FIREFOX_URL=http://firefox:4444
       - IPFS_API_URL=http://kubo:5001
       - CUSTOM_GATEWAY_URL=http://kubo:8080
-      - TEST_E2E=1
+      - TEST_E2E=true
       - TEST_HEADLESS=${TEST_HEADLESS}
       - TEST_DEBUG=${TEST_DEBUG}
       - IPFS_COMPANION_VERSION=${IPFS_COMPANION_VERSION}
