@@ -48,7 +48,7 @@ export default function createWelcomePage (i18n) {
    Render functions for the left side
    ======================================================== */
 
-const renderCompanionLogo = (i18n, isIpfsOnline) => {
+export const renderCompanionLogo = (i18n, isIpfsOnline) => {
   const logoPath = '../../../icons'
   const logoSize = 128
   const stateUnknown = isIpfsOnline === null

@@ -451,7 +451,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
 }
 
 // Returns a string with URL at the active gateway (local or public)
-function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {
+function redirectToGateway(request, url, state, ipfsPathValidator, runtime) {
+  log({ request, url, state, ipfsPathValidator, runtime });
   const { resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
   let redirectUrl = state.localGwAvailable ? resolveToLocalUrl(url) : resolveToPublicUrl(url)
 
