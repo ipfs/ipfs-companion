@@ -1,0 +1,16 @@
+@import url('~tachyons/css/tachyons.css');
+@import url('~ipfs-css/ipfs.css');
+
+header {
+  border-color: #69c4cd;
+  text-transform: uppercase;
+}
+
+#header-logo {
+  height: 50px;
+  width: 117.5px;
+}
+
+.recovery-root {
+  text-align: center;
+}
