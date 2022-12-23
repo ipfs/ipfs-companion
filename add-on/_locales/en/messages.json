@@ -726,5 +726,21 @@
   "page_landingWelcome_projects_title": {
     "message": "Related Projects",
     "description": "Projects section title (page_landingWelcome_projects_title)"
+  },
+  "recovery_page_title" : {
+    "message": "Node Offline | IPFS Companion",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "recovery_page_header" : {
+    "message": "Node is Offline",
+    "description": "Main header on the recovery screen (recovery_page_header)"
+  },
+  "recovery_page_message": {
+    "message": "IPFS Companion is unable to connect to the IPFS node. Would you like to connect to a public gateway instead?",
+    "description": "Message on the recovery screen (recovery_page_message)"
+  },
+  "recovery_page_button": {
+    "message": "Continue to a public gateway",
+    "description": "Button on the recovery screen (recovery_page_button)"
   }
 }

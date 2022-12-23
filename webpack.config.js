@@ -141,6 +141,7 @@ const uiConfig = merge(commonConfig, {
     browserAction: './add-on/src/popup/browser-action/index.js',
     importPage: './add-on/src/popup/quick-import.js',
     optionsPage: './add-on/src/options/options.js',
+    recoveryPage: './add-on/src/recovery/recovery.js',
     welcomePage: './add-on/src/landing-pages/welcome/index.js'
   },
   optimization: {
