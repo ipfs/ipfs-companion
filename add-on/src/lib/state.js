@@ -4,6 +4,7 @@
 import { safeURL, isHostname } from './options.js'
 
 export const offlinePeerCount = -1
+
 export function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
@@ -40,8 +41,15 @@ export function initState (options, overrides) {
       return false
     }
   }
-  // TODO state.connected ~= state.peerCount > 0
-  // TODO state.nodeActive ~= API is online,eg. state.peerCount > offlinePeerCount
+  // TODO refactor this into a class. It's getting too big and messy.
+  Object.defineProperty(state, 'connected', {
+    // TODO: make quick fetch to confirm it works?
+    get: function () { return this.peerCount > offlinePeerCount + 1 }
+  })
+  Object.defineProperty(state, 'nodeActive', {
+    // TODO: make quick fetch to confirm it works?
+    get: function () { return this.peerCount !== offlinePeerCount }
+  })
   Object.defineProperty(state, 'localGwAvailable', {
     // TODO: make quick fetch to confirm it works?
     get: function () { return this.ipfsNodeType !== 'embedded' }
