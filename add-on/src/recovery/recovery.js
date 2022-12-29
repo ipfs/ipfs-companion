@@ -11,18 +11,18 @@ import './recovery.css'
 const app = choo()
 
 // TODO (whizzzkid): refactor base store to be more generic.
-app.use(createWelcomePageStore(i18n, runtime));
+app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
 app.route('*', (state) => {
   console.log(state)
   const openURLFromHash = () => {
-    const { hash } = window.location;
+    const { hash } = window.location
     try {
-      const url = new URL(decodeURI(hash.slice(1)));
-      console.log('Opening URL from hash:', url.href);
-      window.location.href = url.href;
+      const url = new URL(decodeURI(hash.slice(1)))
+      console.log('Opening URL from hash:', url.href)
+      window.location.href = url.href
     } catch (err) {
-      console.error('Failed to open URL from hash:', err);
+      console.error('Failed to open URL from hash:', err)
     }
   }
 
