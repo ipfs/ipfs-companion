@@ -33,7 +33,10 @@
     "icons/png/ipfs-logo-off_38.png",
     "icons/png/ipfs-logo-off_128.png",
     "icons/ipfs-logo-on.svg",
-    "icons/ipfs-logo-off.svg"
+    "icons/ipfs-logo-off.svg",
+    "dist/recovery/recovery.css",
+    "dist/recovery/recovery.html",
+    "dist/recovery/recovery.js"
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'; frame-src 'self';",
   "default_locale": "en"
