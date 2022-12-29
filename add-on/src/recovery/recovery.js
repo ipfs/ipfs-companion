@@ -3,9 +3,9 @@
 
 import choo from 'choo'
 import html from 'choo/html/index.js'
+import { i18n, runtime } from 'webextension-polyfill'
 import { renderCompanionLogo } from '../landing-pages/welcome/page.js'
 import createWelcomePageStore from '../landing-pages/welcome/store.js'
-import { i18n, runtime } from 'webextension-polyfill'
 import './recovery.css'
 
 const app = choo()
@@ -13,14 +13,17 @@ const app = choo()
 // TODO (whizzzkid): refactor base store to be more generic.
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
-app.route('*', (state) => {
-  console.log(state)
+app.route('*', () => {
+  const { hash } = window.location
+  const { href: publicURI } = new URL(decodeURIComponent(hash.slice(1)))
+  if (!publicURI) {
+    return
+  }
+
   const openURLFromHash = () => {
-    const { hash } = window.location
     try {
-      const url = new URL(decodeURI(hash.slice(1)))
-      console.log('Opening URL from hash:', url.href)
-      window.location.href = url.href
+      console.log('Opening URL from hash:', publicURI)
+      window.location.href = publicURI
     } catch (err) {
       console.error('Failed to open URL from hash:', err)
     }
@@ -29,7 +32,13 @@ app.route('*', (state) => {
   return html`<div class="recovery-root">
     ${renderCompanionLogo(i18n, false)}
     <p class="f6 fw4">${i18n.getMessage('recovery_page_message')}</p>
-    <button class="fade-in w-40 ba bw1 b--navy bg-navy snow f7 ph2 pv3 br4 ma1 pointer" onclick=${openURLFromHash}>
+    <p></p>
+    <p class="f6 fw4"><b>Public URI:</b> <a href="${publicURI}">${publicURI}</a></p>
+    <button
+      class="fade-in w-40 ba bw1 b--navy bg-navy snow f7 ph2 pv3 br4 ma1 pointer"
+      onclick=${openURLFromHash}
+      href="${publicURI}"
+    >
       <span class="f6 fw4">${i18n.getMessage('recovery_page_button')}</span>
     </button>
   </div>`

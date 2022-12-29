@@ -147,7 +147,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // to public gateway.
       if (!state.connected && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const publicUri = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
-        return { redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${publicUri}` }
+        return { redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}` }
       }
 
       // When Subdomain Proxy is enabled we normalize address bar requests made
