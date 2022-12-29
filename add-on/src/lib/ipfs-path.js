@@ -4,15 +4,12 @@
 import pMemoize from 'p-memoize'
 import isIPFS from 'is-ipfs'
 import isFQDN from 'is-fqdn'
-import ipfsStatus from './ipfsStatus.js'
-import { runtime } from 'webextension-polyfill'
-import { recoveryPagePath } from './constants.js'
 
 // For how long more expensive lookups (DAG traversal etc) should be cached
 const RESULT_TTL_MS = 300000 // 5 minutes
 
 // Turns URL or URIencoded path into a content path
-export function ipfsContentPath(urlOrPath, opts) {
+export function ipfsContentPath (urlOrPath, opts) {
   opts = opts || {}
 
   // ipfs:// → /ipfs/
@@ -43,14 +40,6 @@ export function ipfsContentPath(urlOrPath, opts) {
   // End if not a content path
   if (!isIPFS.path(contentPath)) return null
 
-  const { isIpfsOnline } = ipfsStatus;
-
-  if (!isIpfsOnline) {
-    const newPath = runtime.getURL(recoveryPagePath) + '#' + 'ipfs.io';
-    console.log(newPath);
-    return newPath;
-  }
-
   // Attach suffix with query parameters or hash if explicitly asked to do so
   if (opts.keepURIParams) return `${contentPath}${url.search}${url.hash}`
 
@@ -59,7 +48,7 @@ export function ipfsContentPath(urlOrPath, opts) {
 }
 
 // Turns URL or URIencoded path into a ipfs:// or ipns:// URI
-export function ipfsUri(urlOrPath) {
+export function ipfsUri (urlOrPath) {
   const contentPath = ipfsContentPath(urlOrPath, { keepURIParams: true })
   if (!contentPath) return null
   return contentPath.replace(/^\/(ip[f|n]s)\//, '$1://')
