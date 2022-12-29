@@ -23,6 +23,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
+import { dropSlash } from './helpers.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
@@ -209,7 +210,6 @@ export default async function init () {
 
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
-    const dropSlash = url => url.replace(/\/$/, '')
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     const { version } = browser.runtime.getManifest()
     const info = {

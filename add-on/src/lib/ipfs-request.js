@@ -10,6 +10,8 @@ import { pathAtHttpGateway, sameGateway, ipfsUri } from './ipfs-path.js'
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
+import { dropSlash } from './helpers.js'
+
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
 
@@ -145,7 +147,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // to public gateway.
       if (!state.connected && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const publicUri = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
-        return { redirectUrl: `${runtimeRoot}${recoveryPagePath}#${publicUri}` }
+        return { redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${publicUri}` }
       }
 
       // When Subdomain Proxy is enabled we normalize address bar requests made
