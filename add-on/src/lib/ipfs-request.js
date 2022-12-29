@@ -462,7 +462,6 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
 
 // Returns a string with URL at the active gateway (local or public)
 function redirectToGateway(request, url, state, ipfsPathValidator, runtime) {
-  log({ request, url, state, ipfsPathValidator, runtime });
   const { resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
   let redirectUrl = state.localGwAvailable ? resolveToLocalUrl(url) : resolveToPublicUrl(url)
 
@@ -615,7 +614,6 @@ function unhandledIpfsPath (requestUrl) {
 function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
   let path = unhandledIpfsPath(request.url)
   path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
-  console.log('^^^^^$', path, request, pubGwUrl)
   if (isIPFS.path(path)) {
     // replace search query with a request to a public gateway
     // (will be redirected later, if needed)
