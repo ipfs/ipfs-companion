@@ -13,7 +13,7 @@ const app = choo()
 // TODO (whizzzkid): refactor base store to be more generic.
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
-app.route('*', () => {
+app.route('*', (state) => {
   const { hash } = window.location
   const { href: publicURI } = new URL(decodeURIComponent(hash.slice(1)))
   if (!publicURI) {
@@ -27,6 +27,12 @@ app.route('*', () => {
     } catch (err) {
       console.error('Failed to open URL from hash:', err)
     }
+  }
+
+  // if the IPFS node is online, open the URL from the hash, this will redirect to the local node.
+  if (state.isIpfsOnline) {
+    openURLFromHash()
+    return
   }
 
   return html`<div class="recovery-root">
