@@ -69,7 +69,7 @@ export async function destroyIpfsClient (browser) {
  *
  * @typedef {embedded|brave|external} Browser
  * @param {Browser} browser
- * @param {import('ipfs-http-client').default} instance
+ * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts
  * @param {Array.[InternalTabReloader|LocalGatewayReloader|WebUiReloader]=} reloadExtensions
  * @returns {void}
@@ -102,7 +102,7 @@ async function _reloadIpfsClientDependents (
  *
  * @typedef {embedded|brave|external} Browser
  * @param {Browser} browser
- * @param {import('ipfs-http-client').default} instance
+ * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts
  * @returns {void}
  */
