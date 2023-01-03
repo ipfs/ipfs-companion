@@ -108,7 +108,7 @@ export default async function init () {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
-      // Note: we need this for code ensuring ipfs-http-client can talk to API without setting CORS
+      // Note: we need this for code ensuring kubo-rpc-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
