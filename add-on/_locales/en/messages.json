@@ -735,12 +735,20 @@
     "message": "Node is Offline",
     "description": "Main header on the recovery screen (recovery_page_header)"
   },
+  "recovery_page_sub_header": {
+    "message": "IPFS Companion is unable to connect to this IPFS node.",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
   "recovery_page_message": {
-    "message": "IPFS Companion is unable to connect to the IPFS node. Would you like to connect to a public gateway instead?",
+    "message": "Your configured node seems to be offline. Would you like to connect to a public gateway instead?",
     "description": "Message on the recovery screen (recovery_page_message)"
   },
   "recovery_page_button": {
     "message": "Continue to a public gateway",
     "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "recovery_page_learn_more": {
+    "message": "Learn more about public gateways",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }

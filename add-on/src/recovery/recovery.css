@@ -12,5 +12,7 @@ header {
 }
 
 .recovery-root {
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  text-align: left;
 }

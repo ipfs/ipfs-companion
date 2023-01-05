@@ -47,16 +47,21 @@ export default function createWelcomePage (i18n) {
 /* ========================================================
    Render functions for the left side
    ======================================================== */
-
-export const renderCompanionLogo = (i18n, isIpfsOnline) => {
+export const renderLogo = (isIpfsOnline, logoSize = 128) => {
   const logoPath = '../../../icons'
-  const logoSize = 128
+
+  return html`
+    ${logo({ path: logoPath, size: logoSize, isIpfsOnline })}
+  `
+}
+
+export const renderCompanionLogo = (i18n, isIpfsOnline, showTitle = true) => {
   const stateUnknown = isIpfsOnline === null
 
   return html`
     <div class="mt4 mb2 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
-      ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
-      <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
+      ${renderLogo(isIpfsOnline)}
+      ${showTitle ? `<p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>` : ''}
     </div>
   `
 }

@@ -4,7 +4,7 @@
 import choo from 'choo'
 import html from 'choo/html/index.js'
 import { i18n, runtime } from 'webextension-polyfill'
-import { renderCompanionLogo } from '../landing-pages/welcome/page.js'
+import { renderLogo } from '../landing-pages/welcome/page.js'
 import createWelcomePageStore from '../landing-pages/welcome/store.js'
 import './recovery.css'
 
@@ -35,18 +35,24 @@ app.route('*', (state) => {
     return
   }
 
-  return html`<div class="recovery-root">
-    ${renderCompanionLogo(i18n, false)}
-    <p class="f6 fw4">${i18n.getMessage('recovery_page_message')}</p>
-    <p></p>
-    <p class="f6 fw4"><b>Public URI:</b> <a href="${publicURI}">${publicURI}</a></p>
-    <button
-      class="fade-in w-40 ba bw1 b--navy bg-navy snow f7 ph2 pv3 br4 ma1 pointer"
-      onclick=${openURLFromHash}
-      href="${publicURI}"
-    >
-      <span class="f6 fw4">${i18n.getMessage('recovery_page_button')}</span>
-    </button>
+  return html`<div class="recovery-root flex justify-center items-center">
+    <div class="flex w-70">
+      <div class="ma2 flex w-third flex-column transition-all">
+        ${renderLogo(false, 256)}
+      </div>
+      <div class="ma2 flex flex-column transition-all">
+        <h1 class="f3 fw6">${i18n.getMessage('recovery_page_sub_header')}</h1>
+        <p class="f5 fw4">${i18n.getMessage('recovery_page_message')}</p>
+        <p class="f5 fw4"><span class="b-ns">Public URI:</span> <a href="${publicURI}">${publicURI}</a></p>
+        <button
+          class="fade-in w-50 ba bw1 b--aqua bg-aqua snow f7 ph2 pv3 br4 ma1 pointer"
+          onclick=${openURLFromHash}
+          href="${publicURI}"
+        >
+          <span class="f5 fw6">${i18n.getMessage('recovery_page_button')}</span>
+        </button>
+      </div>
+    </div>
   </div>`
 })
 
@@ -55,4 +61,6 @@ app.mount('#root')
 
 // Set page title and header translation
 document.getElementById('header-text').innerText = i18n.getMessage('recovery_page_header')
+console.log(document.getElementById('learn-more'))
+document.getElementById('learn-more').innerText = i18n.getMessage('recovery_page_learn_more')
 document.title = i18n.getMessage('recovery_page_title')
