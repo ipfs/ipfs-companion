@@ -34,6 +34,7 @@ function logConsent () {
   console.log('checkConsent(\'performance\'): ', getMetricsProviderInstance().checkConsent('performance'))
   console.log('checkConsent(\'tracking\'): ', getMetricsProviderInstance().checkConsent('tracking'))
 }
+
 /**
  *
  * @param {ReturnType<import('./state')['initState']>} state
