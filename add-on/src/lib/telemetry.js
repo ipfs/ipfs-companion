@@ -3,10 +3,10 @@ import { MetricsProvider } from '@ipfs-shipyard/ignite-metrics/vanilla'
 
 let metricsProvider = null
 export function getMetricsProviderInstance () {
-  if (metricsProvider != null) {
-    return metricsProvider
-  }
-  metricsProvider = new MetricsProvider({ appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a', autoTrack: false })
+  metricsProvider = metricsProvider ?? new MetricsProvider({
+    appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
+    autoTrack: false
+  })
 
   return metricsProvider
 }
