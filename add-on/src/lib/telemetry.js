@@ -15,7 +15,7 @@ export function getMetricsProviderInstance () {
 }
 
 /**
- * @param {ReturnType<import('./state').initState>['options']} stateOptions
+ * @param {import('../types.js').CompanionState} stateOptions
  * @returns {string[]}
  */
 function mapStateToConsent (stateOptions) {
@@ -41,7 +41,7 @@ function logConsent () {
 
 /**
  *
- * @param {ReturnType<import('./state')['initState']>} state
+ * @param {import('../types.js').CompanionState} state
  * @returns {void}
  */
 export function handleConsentFromState (state) {
