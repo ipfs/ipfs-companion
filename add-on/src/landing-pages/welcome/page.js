@@ -55,7 +55,7 @@ const renderCompanionLogo = (i18n, isIpfsOnline) => {
 
   return html`
     <div class="mt4 mb2 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
-      ${logo({ path: logoPath, size: logoSize, isIpfsOnline: isIpfsOnline })}
+      ${logo({ path: logoPath, size: logoSize, isIpfsOnline })}
       <p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>
     </div>
   `

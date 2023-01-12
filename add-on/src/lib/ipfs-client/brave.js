@@ -16,39 +16,39 @@ const waitFor = (f, t) => pWaitFor(f, { interval: tickMs, timeout: t || Infinity
 // wrapper for chrome.ipfs.* that gets us closer to ergonomics of promise-based browser.*
 export const brave = hasBraveChromeIpfs()
   ? Object.freeze({
-      // This is the main check - returns true only in Brave and only when
-      // feature flag is enabled brave://flags and can be used for high level UI
-      // decisions such as showing custom node type on Preferences
-      getIPFSEnabled: async () =>
-        Boolean(await promisifyBraveCheck(chrome.ipfs.getIPFSEnabled)),
+    // This is the main check - returns true only in Brave and only when
+    // feature flag is enabled brave://flags and can be used for high level UI
+    // decisions such as showing custom node type on Preferences
+    getIPFSEnabled: async () =>
+      Boolean(await promisifyBraveCheck(chrome.ipfs.getIPFSEnabled)),
 
-      // Obtains a string representation of the resolve method
-      // method is one of the following strings:
-      // "ask" uses a gateway but also prompts them to install a local node
-      // "gateway" uses a gateway but also prompts them to install a local node
-      // "local" uses a gateway but also prompts them to install a local node
-      // "disabled" disabled by the user
-      // "undefined" everything else (IPFS feature flag is not enabled, error etc)
-      getResolveMethodType: async () =>
-        String(await promisifyBraveCheck(chrome.ipfs.getResolveMethodType)),
+    // Obtains a string representation of the resolve method
+    // method is one of the following strings:
+    // "ask" uses a gateway but also prompts them to install a local node
+    // "gateway" uses a gateway but also prompts them to install a local node
+    // "local" uses a gateway but also prompts them to install a local node
+    // "disabled" disabled by the user
+    // "undefined" everything else (IPFS feature flag is not enabled, error etc)
+    getResolveMethodType: async () =>
+      String(await promisifyBraveCheck(chrome.ipfs.getResolveMethodType)),
 
-      // Obtains the config contents of the local IPFS node
-      // Returns undefined if missing for any reason
-      getConfig: async () =>
-        await promisifyBraveCheck(chrome.ipfs.getConfig),
+    // Obtains the config contents of the local IPFS node
+    // Returns undefined if missing for any reason
+    getConfig: async () =>
+      await promisifyBraveCheck(chrome.ipfs.getConfig),
 
-      // Returns true if binary is present
-      getExecutableAvailable: async () =>
-        Boolean(await promisifyBraveCheck(chrome.ipfs.getExecutableAvailable)),
+    // Returns true if binary is present
+    getExecutableAvailable: async () =>
+      Boolean(await promisifyBraveCheck(chrome.ipfs.getExecutableAvailable)),
 
-      // Attempts to start the daemon and returns true if finished
-      launch: async () =>
-        Boolean(await promisifyBraveCheck(chrome.ipfs.launch)),
+    // Attempts to start the daemon and returns true if finished
+    launch: async () =>
+      Boolean(await promisifyBraveCheck(chrome.ipfs.launch)),
 
-      // Attempts to stop the daemon and returns true if finished
-      shutdown: async () =>
-        Boolean(await promisifyBraveCheck(chrome.ipfs.shutdown))
-    })
+    // Attempts to stop the daemon and returns true if finished
+    shutdown: async () =>
+      Boolean(await promisifyBraveCheck(chrome.ipfs.shutdown))
+  })
   : undefined
 
 export async function init (browser, opts) {

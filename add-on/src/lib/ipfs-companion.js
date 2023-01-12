@@ -369,11 +369,11 @@ export default async function init () {
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
     if (runtime.isFirefox && ipfsPathValidator.isIpfsPageActionsContext(url)) {
       if (sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL)) {
-        await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-on.svg' })
-        await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
+        await browser.pageAction.setIcon({ tabId, path: '/icons/ipfs-logo-on.svg' })
+        await browser.pageAction.setTitle({ tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
       } else {
-        await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-off.svg' })
-        await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtPublicGateway') })
+        await browser.pageAction.setIcon({ tabId, path: '/icons/ipfs-logo-off.svg' })
+        await browser.pageAction.setTitle({ tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtPublicGateway') })
       }
       await browser.pageAction.show(tabId)
     }
