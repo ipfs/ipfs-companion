@@ -740,7 +740,7 @@
     "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
   },
   "option_telemetryGroupMinimal_description": {
-    "message": "We send `session` and `view` events only if ipfs-companion is enabled and your browser is not idle.",
+    "message": "Collect basic feature and usage metrics to help maintainers to prioritize work on the most useful features.",
     "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
   },
   "option_telemetryGroupMinimal_session_description": {
