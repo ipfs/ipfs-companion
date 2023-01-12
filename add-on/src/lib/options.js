@@ -1,10 +1,11 @@
 'use strict'
 
-import { isIPv4, isIPv6 } from 'is-ip'
 import isFQDN from 'is-fqdn'
+import { isIPv4, isIPv6 } from 'is-ip'
 
-// console.log('igniteMetrics: ', igniteMetrics)
-
+/**
+ * @type {Readonly<import('../types.js').CompanionOptions>}
+ */
 export const optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external',
@@ -35,9 +36,10 @@ export const optionDefaults = Object.freeze({
   dismissedUpdate: null,
   openViaWebUI: true,
   telemetryGroupMinimal: true,
-  telemetryGroupMarketing: false,
   telemetryGroupPerformance: false,
-  telemetryGroupTracking: false
+  telemetryGroupUx: false,
+  telemetryGroupFeedback: false,
+  telemetryGroupLocation: false
 })
 
 function buildDefaultIpfsNodeConfig () {
