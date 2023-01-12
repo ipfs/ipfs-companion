@@ -8,7 +8,7 @@ export const offlinePeerCount = -1
 /**
  *
  * @param {import('../types.js').CompanionOptions} options
- * @param {Partial<import('../types.js').CompanionOptions>} overrides
+ * @param {Partial<import('../types.js').CompanionOptions>} [overrides]
  * @returns {import('../types.js').CompanionState}
  */
 export function initState (options, overrides) {

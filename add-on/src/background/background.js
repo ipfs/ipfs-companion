@@ -22,5 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.reload()
   }
   // init inlined to read updated localStorage.debug
+  // @ts-expect-error - TS does not know about window.ipfsCompanion
   window.ipfsCompanion = await createIpfsCompanion()
 })

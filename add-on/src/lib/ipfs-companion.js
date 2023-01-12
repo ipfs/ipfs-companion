@@ -34,7 +34,7 @@ export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
-  /** @type {ReturnType<initState>} */
+  /** @type {import('../types.js').CompanionState} */
   let state // avoid redundant API reads by utilizing local cache of various states
   let dnslinkResolver
   let ipfsPathValidator
