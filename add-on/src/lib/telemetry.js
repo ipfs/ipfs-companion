@@ -27,6 +27,7 @@ function mapStateToConsent (stateOptions) {
   console.log('enabledConsentGroups: ', enabledConsentGroups)
   return enabledConsentGroups
 }
+
 function logConsent () {
   console.log('checkConsent(\'minimal\'): ', getMetricsProviderInstance().checkConsent('minimal'))
   console.log('checkConsent(\'marketing\'): ', getMetricsProviderInstance().checkConsent('marketing'))
