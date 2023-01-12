@@ -35,8 +35,9 @@ function mapStateToConsent (stateOptions) {
 function logConsent () {
   log('checkConsent(\'minimal\'): ', getMetricsProviderInstance().checkConsent('minimal'))
   log('checkConsent(\'performance\'): ', getMetricsProviderInstance().checkConsent('performance'))
-  log('checkConsent(\'marketing\'): ', getMetricsProviderInstance().checkConsent('marketing'))
-  log('checkConsent(\'tracking\'): ', getMetricsProviderInstance().checkConsent('tracking'))
+  log('checkConsent(\'ux\'): ', getMetricsProviderInstance().checkConsent('ux'))
+  log('checkConsent(\'feedback\'): ', getMetricsProviderInstance().checkConsent('feedback'))
+  log('checkConsent(\'location\'): ', getMetricsProviderInstance().checkConsent('location'))
 }
 
 /**
