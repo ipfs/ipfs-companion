@@ -736,7 +736,7 @@
     "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
   },
   "option_telemetryGroupMinimal_title": {
-    "message": "Minimal metrics: session & companion views",
+    "message": "Feature Telemetry",
     "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
   },
   "option_telemetryGroupMinimal_description": {
