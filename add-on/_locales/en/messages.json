@@ -744,7 +744,7 @@
     "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
   },
   "option_telemetryGroupMinimal_session_description": {
-    "message": "A `session` event - every 60 seconds.",
+    "message": "A `session` event  for every minute the extension was active.",
     "description": "An explanation of the `session` telemetry we collect (option_telemetryGroupMinimal_session_description)"
   },
   "option_telemetryGroupMinimal_view_description": {
