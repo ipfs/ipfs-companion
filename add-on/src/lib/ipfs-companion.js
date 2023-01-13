@@ -107,7 +107,7 @@ export default async function init () {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
-      // Note: we need this for code ensuring ipfs-http-client can talk to API without setting CORS
+      // Note: we need this for code ensuring kubo-rpc-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
@@ -530,11 +530,9 @@ export default async function init () {
     if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         await browser.storage.local.set({ useCustomGateway: true })
-        await notify('notify_apiOnlineTitle', 'notify_apiOnlineAutomaticModeMsg')
         reloadIpfsClientOfflinePages(browser, ipfs, state)
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
         await browser.storage.local.set({ useCustomGateway: false })
-        await notify('notify_apiOfflineTitle', 'notify_apiOfflineAutomaticModeMsg')
       }
     }
   }
