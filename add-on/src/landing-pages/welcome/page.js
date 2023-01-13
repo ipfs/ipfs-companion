@@ -61,7 +61,10 @@ export const renderCompanionLogo = (i18n, isIpfsOnline, showTitle = true) => {
   return html`
     <div class="mt4 mb2 flex flex-column justify-center items-center transition-all ${stateUnknown && 'state-unknown'}">
       ${renderLogo(isIpfsOnline)}
-      ${showTitle ? `<p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>` : ''}
+      ${showTitle
+        ? html`<p class="montserrat mt3 mb0 f2">${i18n.getMessage('page_landingWelcome_logo_title')}</p>`
+        : ''
+      }
     </div>
   `
 }
