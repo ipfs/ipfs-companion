@@ -23,7 +23,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
-import { dropSlash } from './helpers.js'
+import { dropSlash } from './ipfs-path.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 

@@ -10,7 +10,7 @@ import { pathAtHttpGateway, sameGateway, ipfsUri } from './ipfs-path.js'
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
-import { dropSlash } from './helpers.js'
+import { dropSlash } from './ipfs-path.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
