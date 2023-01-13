@@ -45,7 +45,7 @@ app.route('*', (state) => {
         <p class="f5 fw4">${i18n.getMessage('recovery_page_message')}</p>
         <p class="f5 fw4"><span class="b-ns">Public URI:</span> <a href="${publicURI}">${publicURI}</a></p>
         <button
-          class="fade-in w-50 ba bw1 b--aqua bg-aqua snow f7 ph2 pv3 br4 ma1 pointer"
+          class="fade-in w-50 ba bw1 b--teal bg-teal snow f7 ph2 pv3 br4 ma1 pointer"
           onclick=${openURLFromHash}
           href="${publicURI}"
         >
