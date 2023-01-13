@@ -728,7 +728,7 @@
     "description": "Message on the recovery screen (recovery_page_message)"
   },
   "recovery_page_button": {
-    "message": "Continue to a public gateway",
+    "message": "Continue to the public gateway",
     "description": "Button on the recovery screen (recovery_page_button)"
   },
   "recovery_page_learn_more": {
