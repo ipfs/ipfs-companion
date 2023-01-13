@@ -44,7 +44,7 @@ export function initState (options, overrides) {
   // TODO refactor this into a class. It's getting too big and messy.
   Object.defineProperty(state, 'connected', {
     // TODO: make quick fetch to confirm it works?
-    get: function () { return this.peerCount > offlinePeerCount + 1 }
+    get: function () { return this.peerCount === offlinePeerCount }
   })
   Object.defineProperty(state, 'nodeActive', {
     // TODO: make quick fetch to confirm it works?
