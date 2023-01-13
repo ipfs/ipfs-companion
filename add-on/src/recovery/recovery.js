@@ -61,6 +61,5 @@ app.mount('#root')
 
 // Set page title and header translation
 document.getElementById('header-text').innerText = i18n.getMessage('recovery_page_header')
-console.log(document.getElementById('learn-more'))
 document.getElementById('learn-more').innerText = i18n.getMessage('recovery_page_learn_more')
 document.title = i18n.getMessage('recovery_page_title')
