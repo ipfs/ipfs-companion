@@ -23,7 +23,7 @@ app.route('*', (state) => {
   const openURLFromHash = () => {
     try {
       console.log('Opening URL from hash:', publicURI)
-      window.location.href = publicURI
+      window.location.replace(publicURI)
     } catch (err) {
       console.error('Failed to open URL from hash:', err)
     }
