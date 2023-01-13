@@ -143,7 +143,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       const state = getState()
       if (!state.active) return
 
-      // When local IPFS node is disabled, show recovery page where user can redirect
+      // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
       if (!state.connected && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const publicUri = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
