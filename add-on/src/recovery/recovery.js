@@ -43,7 +43,7 @@ app.route('*', (state) => {
       <div class="ma2 flex flex-column transition-all">
         <h1 class="f3 fw6">${i18n.getMessage('recovery_page_sub_header')}</h1>
         <p class="f5 fw4">${i18n.getMessage('recovery_page_message')}</p>
-        <p class="f5 fw4"><span class="b-ns">Public URI:</span> <a href="${publicURI}">${publicURI}</a></p>
+        <p class="f5 fw4"><span class="b-ns">Public URL:</span> <a href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
         <button
           class="fade-in w-50 ba bw1 b--teal bg-teal snow f7 ph2 pv3 br4 ma1 pointer"
           onclick=${openURLFromHash}
