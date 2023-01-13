@@ -720,7 +720,7 @@
     "description": "Main header on the recovery screen (recovery_page_header)"
   },
   "recovery_page_sub_header": {
-    "message": "IPFS Companion is unable to connect to this IPFS node.",
+    "message": "Unable to reach the IPFS node :(",
     "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
   },
   "recovery_page_message": {
