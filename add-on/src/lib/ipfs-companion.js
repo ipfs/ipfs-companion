@@ -10,7 +10,7 @@ import LRU from 'lru-cache'
 import all from 'it-all'
 import { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } from './options.js'
 import { initState, offlinePeerCount } from './state.js'
-import { createIpfsPathValidator, sameGateway, safeHostname } from './ipfs-path.js'
+import { createIpfsPathValidator, dropSlash, sameGateway, safeHostname } from './ipfs-path.js'
 import createDnslinkResolver from './dnslink.js'
 import { createRequestModifier } from './ipfs-request.js'
 import { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
@@ -23,7 +23,6 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
-import { dropSlash } from './ipfs-path.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
