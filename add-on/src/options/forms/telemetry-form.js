@@ -1,17 +1,14 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
+import browser from 'webextension-polyfill'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
 export default function telemetryForm ({
   onOptionChange,
   ...stateOptions
 }) {
-  // const onTelemetryChange = (key) => {
-
-  // }
   return html`
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
@@ -19,7 +16,7 @@ export default function telemetryForm ({
         <div class="mb2">
           <p>${browser.i18n.getMessage('option_telemetry_disclaimer')}</p>
           <p>
-            <a class="link underline hover-aqua" href="https://github.com/ipfs/ipfs-gui/issues/125" target="_blank">
+            <a class="link underline hover-aqua" href="https://github.com/ipfs-shipyard/ignite-metrics/blob/main/docs/telemetry/COLLECTION_POLICY.md" target="_blank">
               ${browser.i18n.getMessage('option_legend_readMore')}
             </a>
           </p>
@@ -30,8 +27,6 @@ export default function telemetryForm ({
               <dt>${browser.i18n.getMessage('option_telemetryGroupMinimal_title')}</dt>
               <dd>
                 <p>${browser.i18n.getMessage('option_telemetryGroupMinimal_description')}</p>
-                <p>${browser.i18n.getMessage('option_telemetryGroupMinimal_session_description')}</p>
-                <p>${browser.i18n.getMessage('option_telemetryGroupMinimal_view_description')}</p>
               </dd>
             </dl>
           </label>
