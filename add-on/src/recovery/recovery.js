@@ -3,12 +3,18 @@
 
 import choo from 'choo'
 import html from 'choo/html/index.js'
-import { i18n, runtime } from 'webextension-polyfill'
-import { renderLogo } from '../landing-pages/welcome/page.js'
+import icon from 'ipfs-css/icons/stroke_attention.svg'
+import browser, { i18n, runtime } from 'webextension-polyfill'
+import { renderCompanionLogo } from '../landing-pages/welcome/page.js'
 import createWelcomePageStore from '../landing-pages/welcome/store.js'
+import { optionsPage } from '../lib/constants.js'
 import './recovery.css'
 
 const app = choo()
+
+const learnMoreLink = html`<a class="no-underline" href="https://docs.ipfs.tech/how-to/companion-node-types/" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_learn_more')}</a>`
+
+const optionsPageLink = html`<a class="no-underline" id="learn-more" href="${optionsPage}" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_update_preferences')}</a>`
 
 // TODO (whizzzkid): refactor base store to be more generic.
 app.use(createWelcomePageStore(i18n, runtime))
@@ -16,6 +22,8 @@ app.use(createWelcomePageStore(i18n, runtime))
 app.route('*', (state) => {
   const { hash } = window.location
   const { href: publicURI } = new URL(decodeURIComponent(hash.slice(1)))
+  const { version } = browser.runtime.getManifest()
+
   if (!publicURI) {
     return
   }
@@ -35,23 +43,28 @@ app.route('*', (state) => {
     return
   }
 
-  return html`<div class="recovery-root flex justify-center items-center">
-    <div class="flex w-70">
-      <div class="ma2 flex w-third flex-column transition-all">
-        ${renderLogo(false, 256)}
-      </div>
-      <div class="ma2 flex flex-column transition-all">
-        <h1 class="f3 fw6">${i18n.getMessage('recovery_page_sub_header')}</h1>
-        <p class="f5 fw4">${i18n.getMessage('recovery_page_message')}</p>
-        <p class="f5 fw4"><span class="b-ns">Public URL:</span> <a href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
-        <button
-          class="fade-in w-50 ba bw1 b--teal bg-teal snow f7 ph2 pv3 br4 ma1 pointer"
-          onclick=${openURLFromHash}
-          href="${publicURI}"
-        >
-          <span class="f5 fw6">${i18n.getMessage('recovery_page_button')}</span>
-        </button>
-      </div>
+  return html`<div class="flex flex-column flex-row-l">
+    <div id="left-col" class="min-vh-100 flex flex-column justify-center items-center bg-navy white">
+      ${renderCompanionLogo(i18n, false)}
+      <p class="montserrat mt3 mb0 f3">${version}</p>
+    </div>
+
+    <div id="right-col" class="pt4 w-100 flex flex-column justify-around items-center">
+      <img src="${icon}" class="w4 h4" />
+      <h1 class="f3 fw6">${i18n.getMessage('recovery_page_sub_header')}</h1>
+      <p class="f3 fw5">${i18n.getMessage('recovery_page_message_p1')}</p>
+      <p class="f4 fw4">${i18n.getMessage('recovery_page_message_p2')}</p>
+      <p class="f4 fw4 w-100"><span class="b-ns">Public URL:</span> <a href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
+      <button
+        class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br4 ma1 pointer"
+        onclick=${openURLFromHash}
+        href="${publicURI}"
+      >
+        <span class="f5 fw6">${i18n.getMessage('recovery_page_button')}</span>
+      </button>
+      <p class="f5 fw2 pt6">
+        ${learnMoreLink} | ${optionsPageLink}
+      </span>
     </div>
   </div>`
 })
@@ -61,5 +74,4 @@ app.mount('#root')
 
 // Set page title and header translation
 document.getElementById('header-text').innerText = i18n.getMessage('recovery_page_header')
-document.getElementById('learn-more').innerText = i18n.getMessage('recovery_page_learn_more')
 document.title = i18n.getMessage('recovery_page_title')
