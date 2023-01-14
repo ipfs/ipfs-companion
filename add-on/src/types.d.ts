@@ -50,3 +50,12 @@ export interface CompanionState extends Omit<CompanionOptions, 'publicGatewayUrl
   localGwAvailable: boolean
   webuiRootUrl: string
 }
+
+interface SwitchToggleArguments {
+  id: string
+  onchange: () => void
+  checked?: boolean
+  disabled?: boolean
+  style?: string
+}
+export function SwitchToggle (args: SwitchToggleArguments): undefined | HTMLElement

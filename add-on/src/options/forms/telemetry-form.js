@@ -9,6 +9,7 @@ export default function telemetryForm ({
   onOptionChange,
   ...stateOptions
 }) {
+  // @ts-expect-error - TS doesn't like the `html` template tag
   return html`
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
@@ -30,7 +31,11 @@ export default function telemetryForm ({
               </dd>
             </dl>
           </label>
-          <div class="self-center-ns">${switchToggle({ id: 'telemetryGroupMinimal', checked: stateOptions.telemetryGroupMinimal, onchange: onOptionChange('telemetryGroupMinimal') })}</div>
+          <div class="self-center-ns">${switchToggle({
+            id: 'telemetryGroupMinimal',
+            checked: stateOptions.telemetryGroupMinimal,
+            onchange: onOptionChange('telemetryGroupMinimal')
+          })}</div>
         </div>
       </fieldset>
     </form>
