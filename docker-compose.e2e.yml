@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   firefox:
-    image: selenium/standalone-firefox:${FIREFOX_VERSION:-latest}
+    image: ${FIREFOX_IMAGE:-selenium/standalone-firefox}:${FIREFOX_VERSION:-latest}
     shm_size: 2g
     ports:
       - 4444
