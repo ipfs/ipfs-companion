@@ -4,11 +4,8 @@ import { expect } from 'chai'
 import fs from 'fs'
 import chrome from 'selenium-webdriver/chrome.js'
 import firefox from 'selenium-webdriver/firefox.js'
-import { fail } from 'assert'
-
-function delay (ms) {
-  return new Promise(res => setTimeout(res, ms), _ => {})
-}
+import { fail, equal, notEqual } from 'assert'
+import { backOff } from 'exponential-backoff'
 
 function getExtension (browserName) {
   const version = process.env.IPFS_COMPANION_VERSION || JSON.parse(fs.readFileSync('add-on/manifest.common.json')).version
@@ -34,7 +31,6 @@ async function openChromium (extension) {
   }
   console.info('Starting Chromium')
   const browser = await builder.build()
-  await delay(5000) // waiting for the extension to load
   console.info('Chromium is ready')
   return browser
 }
@@ -59,7 +55,6 @@ async function openFirefox (extension) {
   if (extension !== undefined) {
     console.info('Installing the extension')
     await browser.installAddon(extension, true)
-    await delay(5000) // waiting for the extension to load
   }
   console.info('Firefox is ready')
   return browser
@@ -90,40 +85,59 @@ async function updateExtensionSettings (browser, url, id, value) {
   console.info(`Going to: ${url}/dist/options/options.html`)
   await browser.get(`${url}/dist/options/options.html`)
   console.info(`Looking for an element: ${id}`)
-  let element = browser.findElement(By.id(id))
+  const element = browser.findElement(By.id(id))
   console.info(`Setting new value to: ${value}`)
   await element.sendKeys('')
-  await delay(1000) // waiting for focus to be acquired
+  await backOff(async () => {
+    const activeElement = await browser.switchTo().activeElement()
+    const activeElementID = await activeElement.getAttribute('id')
+    equal(activeElementID, id, 'The element is not focused yet')
+  }, {
+    numOfAttempts: 5,
+    startingDelay: 500
+  })
   await element.clear()
-  await delay(1000) // waiting for input to be cleared
+  await backOff(async () => {
+    const v = await element.getAttribute('value')
+    equal(v, '', 'The element is not cleared yet')
+  }, {
+    numOfAttempts: 5,
+    startingDelay: 500
+  })
   await element.sendKeys(value)
   await element.sendKeys(Key.TAB)
-  await delay(5000) // waiting for the setting to be applied
   console.info('Checking if the update worked')
-  element = browser.findElement(By.id(id))
-  const v = await element.getAttribute('value')
+  backOff(async () => {
+    const e = browser.findElement(By.id(id))
+    const v = await e.getAttribute('value')
+    equal(v, value, 'The element is not updated yet')
+  }, {
+    delayFirstAttempt: true,
+    numOfAttempts: 5,
+    startingDelay: 500
+  })
   console.info('The setting update is complete')
-  return v
 }
 
 async function getNumberOfConnectedPeers (browser, url) {
   console.info('Checking the number of connected peers')
   console.info(`Going to: ${url}/dist/landing-pages/welcome/index.html`)
   await browser.get(`${url}/dist/landing-pages/welcome/index.html`)
-  await delay(5000) // waiting for the connection number to appear
-  if (process.env.TEST_DEBUG === 'true') {
-    const html = await browser.getPageSource()
-    console.debug(html)
-  }
   console.info('Looking for an element with text: \'Your node is connected to ...\'')
-  const p = browser.findElement(By.xpath("//p[text()='Your node is connected to ']"))
-  const span = p.findElement(By.css('span'))
-  const peers = await span.getText()
+  const peers = await backOff(async () => {
+    const p = browser.findElement(By.xpath("//p[text()='Your node is connected to ']"))
+    const span = p.findElement(By.css('span'))
+    return span.getText()
+  }, {
+    delayFirstAttempt: true,
+    numOfAttempts: 5,
+    startingDelay: 500
+  })
   console.info(`There are ${peers} connected peers`)
   return parseInt(peers)
 }
 
-async function runTest (browserName) {
+async function runBrowserTest (browserName, testFunc) {
   const extension = getExtension(browserName)
 
   console.info(`Checking if ${extension} exists`)
@@ -139,26 +153,31 @@ async function runTest (browserName) {
   }
 
   try {
-    const url = await findExtensionUrl(browser)
-
-    expect(url).not.to.be.undefined // eslint-disable-line no-unused-expressions
+    const url = await backOff(async () => {
+      const u = await findExtensionUrl(browser)
+      notEqual(u, undefined, 'Extension URL not found yet')
+      return u
+    }, {
+      delayFirstAttempt: true,
+      numOfAttempts: 5,
+      startingDelay: 500
+    })
 
     const ipfsApiUrl = process.env.IPFS_API_URL || 'http://127.0.0.1:5001'
-    const updatedIpfsApiUrl = await updateExtensionSettings(browser, url, 'ipfsApiUrl', ipfsApiUrl)
-
-    expect(updatedIpfsApiUrl).to.equal(ipfsApiUrl)
+    await updateExtensionSettings(browser, url, 'ipfsApiUrl', ipfsApiUrl)
 
     const customGatewayUrl = process.env.CUSTOM_GATEWAY_URL || 'http://localhost:8080'
-    const updatedCustomGatewayUrl = await updateExtensionSettings(browser, url, 'customGatewayUrl', customGatewayUrl)
+    await updateExtensionSettings(browser, url, 'customGatewayUrl', customGatewayUrl)
 
-    expect(updatedCustomGatewayUrl).to.equal(customGatewayUrl)
-
-    const peers = await getNumberOfConnectedPeers(browser, url)
-
-    expect(peers).not.to.equal(0)
+    return await testFunc(browser, url)
   } finally {
     await browser.quit()
   }
+}
+
+async function checkNumberOfConnectedPeers (browser, url) {
+  const peers = await getNumberOfConnectedPeers(browser, url)
+  expect(peers).not.to.equal(0)
 }
 
 describe('ipfs-companion', function () {
@@ -168,9 +187,9 @@ describe('ipfs-companion', function () {
     }
   })
   it('should be able to discover peers in Chromium', async function () {
-    await runTest('chromium')
+    await runBrowserTest('chromium', checkNumberOfConnectedPeers)
   })
   it('should be able to discover peers in Firefox', async function () {
-    await runTest('firefox')
+    await runBrowserTest('firefox', checkNumberOfConnectedPeers)
   })
 })

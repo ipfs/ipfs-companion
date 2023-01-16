@@ -137,6 +137,93 @@ Release build shortcuts:
 - `npm run dev-build`: All-in-one: fast dependency install, build with yarn (updates `yarn.lock` if needed)
 - `npm run release-build`: Reproducible release build in docker with frozen `yarn.lock`
 
+E2E tests:
+
+- `npm run compose:e2e:prepare`: Pull and build docker images for e2e tests
+- `npm run compose:e2e:up`: Start e2e test docker environment
+- `npm run compose:e2e:test`: Run e2e tests in the docker environment
+- `npm run compose:e2e:down`: Stop e2e test docker environment
+
+## Running E2E tests
+
+E2E tests are run in a docker environment, so you need to have docker installed.
+
+### Preparing extension builds
+
+You can run the tests against either release or dev builds of the extension.
+
+To download release builds of the extension, run:
+
+```sh
+./ci/e2e/download-release-builds.sh
+```
+
+_NOTE_: When using release builds, you can control the version of the extension by setting the `IPFS_COMPANION_VERSION` environment variable:
+
+```sh
+export IPFS_COMPANION_VERSION=x.y.z
+```
+
+To build dev versions of the extension, run:
+
+```sh
+npm run build
+```
+
+or (to perform the build inside a docker container):
+
+```sh
+npm run release-build
+```
+
+### Preparing the docker environment
+
+You need to pull docker images for [Kubo](https://github.com/ipfs/kubo), [Chromium](https://hub.docker.com/r/selenium/standalone-chrome/) and [Firefox](https://hub.docker.com/r/selenium/standalone-firefox/) before running the tests.
+
+You also need to build the docker image containing the e2e tests.
+
+To do all of this, run:
+
+```sh
+npm run compose:e2e:prepare
+```
+
+_NOTE_: You can control the versions of Kubo, Chromium and Firefox by setting the following environment variables:
+
+```sh
+export KUBO_VERSION=x.y.z
+export CHROMIUM_VERSION=x.y.z
+export FIREFOX_VERSION=x.y.z
+```
+
+**IMPORTANT**: If you are running the tests on a ARM machine, you need to use a different Chromium image. To do this, run:
+
+```sh
+export CHROMIUM_IMAGE=seleniarm/standalone-chromium
+```
+
+### Running the tests
+
+To run the tests, run:
+
+```sh
+npm run compose:e2e:test
+```
+
+_NOTE_: You can control whether the browsers operate in headless mode as follows:
+
+```sh
+export TEST_HEADLESS=true
+```
+
+### Stopping the docker environment
+
+To stop the docker environment, run:
+
+```sh
+npm run compose:e2e:down
+```
+
 ## Other tips
 
 - You can switch to an alternative Firefox version by overriding your `PATH`:

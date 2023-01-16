@@ -9,10 +9,11 @@ RUN mkdir -p /home/node/app
 RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
     userdel -f node && \
     if getent group node ; then groupdel node; fi && \
+    if getent passwd ${USER_ID} ; then userdel -f $(getent passwd ${USER_ID} | cut -d: -f1); fi && \
+    if getent group ${GROUP_ID} ; then groupdel $(getent group ${GROUP_ID} | cut -d: -f1); fi && \
     groupadd -g ${GROUP_ID} node && \
-    useradd -l -u ${USER_ID} -g node node && \
-    chown -fhR ${USER_ID}:${GROUP_ID} /home/node; fi
-RUN chown node:node /home/node/app
+    useradd -l -u ${USER_ID} -g node node; fi
+RUN chown -fhR node:node /home/node
 
 WORKDIR /home/node/app
 

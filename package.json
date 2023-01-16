@@ -94,6 +94,7 @@
     "cross-env": "7.0.3",
     "css-loader": "6.7.2",
     "download-cli": "1.1.1",
+    "exponential-backoff": "^3.1.0",
     "file-loader": "6.2.0",
     "fs-promise": "2.0.3",
     "get-firefox": "5.0.0",
