@@ -31,9 +31,10 @@ jobs:
           node-version: 18
       - name: Download ipfs-companion
         if: inputs.ipfs-companion-version != ''
-        run: ./ci/download-release-artifacts.sh
         env:
           IPFS_COMPANION_VERSION: ${{ inputs.ipfs-companion-version }}
+        run: ./ci/download-release-artifacts.sh
+        shell: bash
       - name: Build ipfs-companion
         if: inputs.ipfs-companion-version == ''
         run: npm run release-build
