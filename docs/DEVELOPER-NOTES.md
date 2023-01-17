@@ -200,6 +200,7 @@ export FIREFOX_VERSION=x.y.z
 
 ```sh
 export CHROMIUM_IMAGE=seleniarm/standalone-chromium
+export FIREFOX_IMAGE=seleniarm/standalone-firefox
 ```
 
 ### Running the tests
