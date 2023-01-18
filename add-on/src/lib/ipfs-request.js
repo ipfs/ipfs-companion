@@ -214,7 +214,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
           // '403 - Forbidden' fix for Chrome and Firefox
           // --------------------------------------------
           // We update "Origin: *-extension://" HTTP headers in requests made to API
-          // by js-ipfs-http-client running in the background page of browser
+          // by js-kubo-rpc-client running in the background page of browser
           // extension.  Without this, some users would need to do manual CORS
           // whitelisting by adding "..extension://<UUID>" to
           // API.HTTPHeaders.Access-Control-Allow-Origin in go-ipfs config.

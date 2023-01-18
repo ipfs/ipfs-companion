@@ -127,8 +127,8 @@ const bgConfig = merge(commonConfig, {
           name: 'ipfs',
           priority: 10,
           enforce: true,
-          // Include js-ipfs and js-ipfs-http-client
-          test: /\/node_modules\/(ipfs|ipfs-core|ipfs-http-client|peer-info|bcrypto|ipfsx|libp2p*)\//
+          // Include js-ipfs and js-kubo-rpc-client
+          test: /\/node_modules\/(ipfs-core|kubo-rpc-client)\//
         }
       }
     }

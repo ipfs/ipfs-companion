@@ -199,22 +199,6 @@
     "message": "Error while importing IPFS Resource",
     "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
-  "notify_apiOnlineTitle": {
-    "message": "IPFS API is Online",
-    "description": "A title of system notification (notify_apiOnlineTitle)"
-  },
-  "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Automatic Mode: Custom gateway redirect is active",
-    "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
-  },
-  "notify_apiOfflineTitle": {
-    "message": "IPFS API is Offline",
-    "description": "A title of system notification (notify_apiOfflineTitle)"
-  },
-  "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Automatic Mode: Public gateway will be used as a fallback",
-    "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
-  },
   "notify_importErrorTitle": {
     "message": "Unable to Import via IPFS API",
     "description": "A title of system notification (notify_importErrorTitle)"
