@@ -120,7 +120,7 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
-    "@ipfs-shipyard/ignite-metrics": "1.0.3",
+    "@ipfs-shipyard/ignite-metrics": "github:ipfs-shipyard/ignite-metrics#fix-dep-import-with-dist",
     "@material/switch": "10.0.0",
     "assert": "2.0.0",
     "buffer": "6.0.3",

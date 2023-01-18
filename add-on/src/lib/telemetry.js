@@ -1,5 +1,5 @@
 
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/vanilla'
+import MetricsProvider from '@ipfs-shipyard/ignite-metrics/NodeMetrics'
 import debug from 'debug'
 
 const log = debug('ipfs-companion:telemetry')
