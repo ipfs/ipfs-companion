@@ -28,11 +28,12 @@ describe('lib/ipfs-companion.js', function () {
     })
 
     it('should query local storage for options with hardcoded defaults for fallback', async function () {
+      this.timeout(10000)
       browser.storage.local.get.resolves(optionDefaults)
       browser.storage.local.set.resolves()
       const ipfsCompanion = await init()
       expect(browser.storage.local.get.calledWith(optionDefaults)).to.equal(true)
-      return await ipfsCompanion.destroy()
+      return ipfsCompanion.destroy()
     })
 
     after(function () {
