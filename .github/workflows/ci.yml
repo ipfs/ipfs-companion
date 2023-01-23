@@ -110,18 +110,42 @@ jobs:
     needs: [test]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out Git repository
+        uses: actions/checkout@v1
 
-      - uses: actions/download-artifact@v3
-        id: download
+      - name: Install Node.js
+        uses: actions/setup-node@v1
         with:
-          name: built-on-ubuntu-latest
-          path: ~/downloads/
+          node-version: 18
+
+      - name: Restore .cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ github.workspace }}/.cache
+          key: ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js') }}
+            ${{ runner.os }}-
+
+      - name: Restore node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: npm run ci:install
+
+      - name: Build Stable Release
+        run: npm run ci:build:stable
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ steps.download.outputs.download-path }}/*.zip
+          files: build/*.zip
           fail_on_unmatched_files: true
           generate_release_notes: true
           draft: true
