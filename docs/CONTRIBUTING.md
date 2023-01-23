@@ -32,7 +32,7 @@ If you want to download translations from Transifex and run them locally, make s
 
 ## Writing Code
 
-**If you plan to write code make sure to read [Developer Notes](./docs/DEVELOPER-NOTES.md) to get familiar with tools and commands that will make your work easier.**
+**If you plan to write code make sure to read [Developer Notes](DEVELOPER-NOTES.md) to get familiar with tools and commands that will make your work easier.**
 
 ## How to Help with Things Beyond Browser Extension?
 
