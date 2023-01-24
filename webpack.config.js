@@ -9,7 +9,12 @@ const require = createRequire(import.meta.url)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// common configuration shared by all targets
+const devBuild = process.env.NODE_ENV === 'development'
+
+/**
+ * common configuration shared by all targets
+ * @type {import('webpack').Configuration}
+ */
 const commonConfig = {
   target: 'web',
   bail: true,
@@ -110,7 +115,14 @@ const commonConfig = {
   }
 }
 
-// background page bundle (with heavy dependencies)
+if (devBuild) {
+  commonConfig.devtool = 'source-map'
+}
+
+/**
+ * background page bundle (with heavy dependencies)
+ * @type {import('webpack').Configuration}
+ */
 const bgConfig = merge(commonConfig, {
   name: 'background',
   entry: {
@@ -134,7 +146,10 @@ const bgConfig = merge(commonConfig, {
   }
 })
 
-// user interface pages with shared common libraries
+/**
+ * user interface pages with shared common libraries
+ * @type {import('webpack').Configuration}
+ */
 const uiConfig = merge(commonConfig, {
   name: 'ui',
   entry: {
@@ -162,7 +177,10 @@ const uiConfig = merge(commonConfig, {
   }
 })
 
-// content scripts injected into tabs
+/**
+ * content scripts injected into tabs
+ * @type {import('webpack').Configuration}
+ */
 const contentScriptsConfig = merge(commonConfig, {
   name: 'contentScripts',
   entry: {
