@@ -33,7 +33,7 @@ describe('lib/ipfs-companion.js', function () {
       browser.storage.local.set.resolves()
       const ipfsCompanion = await init()
       expect(browser.storage.local.get.calledWith(optionDefaults)).to.equal(true)
-      return ipfsCompanion.destroy()
+      return await ipfsCompanion.destroy()
     })
 
     after(function () {
