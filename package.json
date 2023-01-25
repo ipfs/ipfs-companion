@@ -60,7 +60,7 @@
     "ci:lint": "npm run lint",
     "beta-build": "docker rmi -f ipfs-companion-beta-build && docker build -t ipfs-companion-beta-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm --net=host -e RELEASE_CHANNEL=beta -v $(pwd)/build:/home/node/app/build ipfs-companion-beta-build npm run ci:build",
     "release-build": "docker rmi -f ipfs-companion-release-build && docker build -t ipfs-companion-release-build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id -g ${USER}) . && mkdir -p build && docker run --rm --net=host -e RELEASE_CHANNEL=stable -v $(pwd)/build:/home/node/app/build ipfs-companion-release-build npm run ci:build",
-    "dev-build": "npm ci && npm run build",
+    "dev-build": "npm ci && cross-env NODE_ENV='development' npm run build",
     "yarn-build": "npm run dev-build",
     "compose:e2e:prepare": "docker compose --file docker-compose.e2e.yml pull && docker compose --file docker-compose.e2e.yml build",
     "compose:e2e:up": "docker compose --file docker-compose.e2e.yml up --remove-orphans --detach kubo chromium firefox",
