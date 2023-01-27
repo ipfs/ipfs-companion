@@ -42,10 +42,10 @@
     "test:e2e": "mocha --timeout 300000 --exit --require ignore-styles \"test/e2e/**/*.test.js\"",
     "test:functional": "c8 mocha --timeout 5000 --exit --require ignore-styles \"test/functional/**/*.test.js\"",
     "lint": "run-s lint:*",
-    "lint:standard": "standard -v \"*.js\" \"add-on/src/**/*.js\" \"test/**/*.js\" \"scripts/**/*.js\"",
+    "lint:standard": "ts-standard -v \"*.js\" \"add-on/src/**/*.js\" \"add-on/src/**/*.ts\" \"test/**/*.js\" \"scripts/**/*.js\"",
     "lint:web-ext": "web-ext lint",
     "fix:lint": "run-s fix:lint:*",
-    "fix:lint:standard": "standard -v --fix \"*.js\" \"add-on/src/**/*.js\" \"test/**/*.js\" \"scripts/**/*.js\"",
+    "fix:lint:standard": "ts-standard -v --fix \"*.js\" \"add-on/src/**/*.js\" \"add-on/src/**/*.ts\" \"test/**/*.js\" \"scripts/**/*.js\"",
     "precommit": "run-s lint:standard",
     "prepush": "run-s clean build lint test",
     "chromium": "run-s bundle:chromium && web-ext run --no-reload --target chromium",
@@ -121,6 +121,8 @@
     "terser": "5.15.1",
     "terser-webpack-plugin": "5.3.6",
     "transform-loader": "0.2.4",
+    "ts-standard": "^12.0.2",
+    "typescript": "^4.9.4",
     "url": "0.11.0",
     "web-ext": "7.3.1",
     "webpack": "5.75.0",
@@ -129,6 +131,7 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
+    "@ipfs-shipyard/ignite-metrics": "1.3.0",
     "@material/switch": "10.0.0",
     "assert": "2.0.0",
     "buffer": "6.0.3",
@@ -172,5 +175,8 @@
   "engines": {
     "node": ">=18.12.1",
     "npm": ">=8.19.2"
+  },
+  "ts-standard": {
+    "project": "./tsconfig.json"
   }
 }

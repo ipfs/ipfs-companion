@@ -21,8 +21,8 @@ export default function createNotifier (getState) {
         return await browser.notifications.create({
           type: 'basic',
           iconUrl: browser.runtime.getURL('icons/ipfs-logo-on.svg'),
-          title: title,
-          message: message
+          title,
+          message
         })
       } catch (err) {
         log.error('failed to create a notification', err)

@@ -13,6 +13,7 @@ browser.runtime.setUninstallURL(getUninstallURL(browser))
 
 // init add-on after all libs are loaded
 document.addEventListener('DOMContentLoaded', async () => {
+  browser.runtime.sendMessage({ telemetry: { trackView: 'background' } })
   // setting debug namespaces require page reload to get applied
   const debugNs = (await browser.storage.local.get({ logNamespaces: optionDefaults.logNamespaces })).logNamespaces
   if (debugNs !== localStorage.debug) {
@@ -20,5 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.reload()
   }
   // init inlined to read updated localStorage.debug
+  // @ts-expect-error - TS does not know about window.ipfsCompanion
   window.ipfsCompanion = await createIpfsCompanion()
 })

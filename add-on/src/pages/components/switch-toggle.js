@@ -3,6 +3,9 @@
 
 import html from 'choo/html/index.js'
 
+/**
+ * @type {import('../../types.js').SwitchToggle}
+ */
 export default function switchToggle ({
   checked,
   disabled,
@@ -11,6 +14,7 @@ export default function switchToggle ({
   style
 }) {
   if (typeof checked === 'undefined') return
+  // @ts-expect-error - TS doesn't like the `html` template tag
   return html`
     <div class="mdc-switch ${style || ''} ${checked ? 'mdc-switch--checked' : ''} ${disabled ? 'mdc-switch--disabled' : ''}">
       <div class="mdc-switch__track"></div>
