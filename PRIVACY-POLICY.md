@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2023-01-27</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/master/PRIVACY-POLICY.md))
+Last Update: 2023-01-27</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/main/PRIVACY-POLICY.md))
 
 This Privacy Policy governs the use of the IPFS Companion browser extension
 offered by Protocol Labs, Inc. (“**IPFS Companion**” or the “**Service**”).
