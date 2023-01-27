@@ -12,11 +12,15 @@ export default function optionStore (state, emitter) {
   const updateStateOptions = async () => {
     const runtime = await createRuntimeChecks(browser)
     state.withNodeFromBrave = runtime.brave && await runtime.brave.getIPFSEnabled()
+    /**
+     * FIXME: Why are we setting `state.options` when state is supposed to extend options?
+     */
     state.options = await getOptions()
     emitter.emit('render')
   }
 
   emitter.on('DOMContentLoaded', async () => {
+    browser.runtime.sendMessage({ telemetry: { trackView: 'options' } })
     updateStateOptions()
     browser.storage.onChanged.addListener(updateStateOptions)
   })

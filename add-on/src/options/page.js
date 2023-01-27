@@ -9,6 +9,7 @@ import dnslinkForm from './forms/dnslink-form.js'
 import gatewaysForm from './forms/gateways-form.js'
 import apiForm from './forms/api-form.js'
 import experimentsForm from './forms/experiments-form.js'
+import telemetryForm from './forms/telemetry-form.js'
 import resetForm from './forms/reset-form.js'
 
 // Render the options page:
@@ -100,6 +101,13 @@ export default function optionsPage (state, emit) {
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     logNamespaces: state.options.logNamespaces,
+    onOptionChange
+  })}
+  ${telemetryForm({
+    telemetryGroupMinimal: state.options.telemetryGroupMinimal,
+    telemetryGroupMarketing: state.options.telemetryGroupMarketing,
+    telemetryGroupPerformance: state.options.telemetryGroupPerformance,
+    telemetryGroupTracking: state.options.telemetryGroupTracking,
     onOptionChange
   })}
   ${resetForm({

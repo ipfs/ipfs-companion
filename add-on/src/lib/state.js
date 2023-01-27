@@ -1,28 +1,38 @@
 'use strict'
 /* eslint-env browser, webextensions */
-
-import { safeURL, isHostname } from './options.js'
+// @ts-check
+import { isHostname, safeURL } from './options.js'
 
 export const offlinePeerCount = -1
+
+/**
+ *
+ * @param {import('../types.js').CompanionOptions} options
+ * @param {Partial<import('../types.js').CompanionOptions>} [overrides]
+ * @returns {import('../types.js').CompanionState}
+ */
 export function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
+  /**
+   * @type {Partial<import('../types.js').CompanionState & import('../types.js').CompanionOptions>}
+   */
   const state = Object.assign({}, options)
   // generate some additional values
   state.peerCount = offlinePeerCount
   state.pubGwURL = safeURL(options.publicGatewayUrl)
-  state.pubGwURLString = state.pubGwURL.toString()
+  state.pubGwURLString = state.pubGwURL?.toString()
   delete state.publicGatewayUrl
   state.pubSubdomainGwURL = safeURL(options.publicSubdomainGatewayUrl)
-  state.pubSubdomainGwURLString = state.pubSubdomainGwURL.toString()
+  state.pubSubdomainGwURLString = state.pubSubdomainGwURL?.toString()
   delete state.publicSubdomainGatewayUrl
   state.redirect = options.useCustomGateway
   delete state.useCustomGateway
   state.apiURL = safeURL(options.ipfsApiUrl, { useLocalhostName: false }) // go-ipfs returns 403 if IP is beautified to 'localhost'
-  state.apiURLString = state.apiURL.toString()
+  state.apiURLString = state.apiURL?.toString()
   delete state.ipfsApiUrl
   state.gwURL = safeURL(options.customGatewayUrl, { useLocalhostName: state.useSubdomains })
-  state.gwURLString = state.gwURL.toString()
+  state.gwURLString = state.gwURL?.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
 
@@ -32,9 +42,9 @@ export function initState (options, overrides) {
     try {
       const hostname = isHostname(url) ? url : new URL(url).hostname
       // opt-out has more weight, we also match parent domains
-      const disabledDirectlyOrIndirectly = state.disabledOn.some(optout => hostname.endsWith(optout))
+      const disabledDirectlyOrIndirectly = state.disabledOn?.some(optout => hostname.endsWith(optout))
       // ..however direct opt-in should overwrite parent's opt-out
-      const enabledDirectly = state.enabledOn.some(optin => optin === hostname)
+      const enabledDirectly = state.enabledOn?.some(optin => optin === hostname)
       return !(disabledDirectlyOrIndirectly && !enabledDirectly)
     } catch (_) {
       return false
@@ -55,5 +65,5 @@ export function initState (options, overrides) {
   })
   // apply optional overrides
   if (overrides) Object.assign(state, overrides)
-  return state
+  return /** @type {import('../types.js').CompanionState} */(state)
 }
