@@ -1,12 +1,12 @@
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/vanilla';
-import debug from 'debug';
+import MetricsProvider from '@ipfs-shipyard/ignite-metrics/vanilla'
+import debug from 'debug'
 
 const log = debug('ipfs-companion:telemetry')
 
 const metricsProvider = new MetricsProvider({
   appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
   autoTrack: false,
-  storageProvider: null,
+  storageProvider: null
 })
 
 /**
