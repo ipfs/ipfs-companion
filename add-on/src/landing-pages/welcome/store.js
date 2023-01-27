@@ -1,7 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
 import browser from 'webextension-polyfill'
-import { trackView } from '../../lib/telemetry.js'
 
 export default function createWelcomePageStore (i18n, runtime) {
   return function welcomePageStore (state, emitter) {
@@ -10,7 +9,7 @@ export default function createWelcomePageStore (i18n, runtime) {
     state.webuiRootUrl = null
     let port
     emitter.on('DOMContentLoaded', async () => {
-      trackView('welcome')
+      browser.runtime.sendMessage({ telemetry: { trackView: 'welcome' } })
       emitter.emit('render')
       port = runtime.connect({ name: 'browser-action-port' })
       port.onMessage.addListener(async (message) => {

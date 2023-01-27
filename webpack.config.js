@@ -81,7 +81,6 @@ const commonConfig = {
     ]
   },
   resolve: {
-    conditionNames: ['browser', 'import'],
     mainFields: ['browser', 'main'],
     extensions: ['.js', '.json'],
     alias: {

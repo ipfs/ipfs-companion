@@ -10,50 +10,33 @@ const metricsProvider = new MetricsProvider({
 })
 
 /**
- * @param {import('../types.js').CompanionState} stateOptions
- * @returns {string[]}
- */
-function mapStateToConsent (stateOptions) {
-  const obj = {
-    minimal: stateOptions?.telemetryGroupMinimal || false,
-    performance: stateOptions?.telemetryGroupPerformance || false,
-    ux: stateOptions?.telemetryGroupUx || false,
-    feedback: stateOptions?.telemetryGroupFeedback || false,
-    location: stateOptions?.telemetryGroupLocation || false
-  }
-
-  const enabledConsentGroups = Object.keys(obj).filter(key => obj[key] === true)
-  log('enabledConsentGroups: ', enabledConsentGroups)
-  return enabledConsentGroups
-}
-
-function logConsent () {
-  log('checkConsent(\'minimal\'): ', metricsProvider.checkConsent('minimal'))
-  log('checkConsent(\'performance\'): ', metricsProvider.checkConsent('performance'))
-  log('checkConsent(\'ux\'): ', metricsProvider.checkConsent('ux'))
-  log('checkConsent(\'feedback\'): ', metricsProvider.checkConsent('feedback'))
-  log('checkConsent(\'location\'): ', metricsProvider.checkConsent('location'))
-}
-
-/**
  *
  * @param {import('../types.js').CompanionState} state
  * @returns {void}
  */
 export function handleConsentFromState (state) {
-  metricsProvider.updateConsent(mapStateToConsent(state))
-  logConsent()
-}
-
-export function handleConsentUpdate (consent) {
-  log('handleConsentUpdate', consent)
-  metricsProvider.updateConsent(consent)
+  const telemetryGroups = {
+    minimal: state?.telemetryGroupMinimal || false,
+    performance: state?.telemetryGroupPerformance || false,
+    ux: state?.telemetryGroupUx || false,
+    feedback: state?.telemetryGroupFeedback || false,
+    location: state?.telemetryGroupLocation || false
+  }
+  for (const [groupName, isEnabled] of Object.entries(telemetryGroups)) {
+    if (isEnabled) {
+      log(`Adding consent for '${groupName}'`)
+      metricsProvider.addConsent(groupName)
+    } else {
+      log(`Removing consent for '${groupName}'`)
+      metricsProvider.removeConsent(groupName)
+    }
+  }
 }
 
 const ignoredViewsRegex = []
 export function trackView (view) {
   log('trackView called for view: ', view)
-  metricsProvider.metricsService.track_view(view, ignoredViewsRegex)
+  metricsProvider.trackView(view, ignoredViewsRegex)
 }
 
 export const startSession = (...args) => metricsProvider.startSession(...args)

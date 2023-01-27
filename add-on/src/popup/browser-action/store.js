@@ -7,7 +7,6 @@ import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
 import { welcomePage, optionsPage } from '../../lib/constants.js'
 import { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } from '../../lib/context-menus.js'
-import { trackView } from '../../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
 export default (state, emitter) => {
@@ -39,7 +38,8 @@ export default (state, emitter) => {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
-    trackView('browser-action')
+    browser.runtime.sendMessage({ telemetry: { trackView: 'browser-action' } })
+
     // initial render with status stub
     emitter.emit('render')
     // initialize connection to the background script which will trigger UI updates

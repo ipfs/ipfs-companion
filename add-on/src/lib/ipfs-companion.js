@@ -23,7 +23,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
-import { handleConsentFromState, startSession, endSession } from './telemetry.js'
+import { handleConsentFromState, startSession, endSession, trackView } from './telemetry.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
@@ -171,6 +171,15 @@ export default async function init () {
       const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
       const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
+    }
+    if (request.telemetry) {
+      return Promise.resolve(onTelemetryMessage(request.telemetry, sender))
+    }
+  }
+
+  function onTelemetryMessage (request, sender) {
+    if (request.trackView) {
+      return trackView(request.trackView)
     }
   }
 
