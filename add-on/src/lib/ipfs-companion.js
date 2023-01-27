@@ -57,6 +57,8 @@ export default async function init () {
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
     notify = createNotifier(getState)
+    // ensure consent is set properly on app init
+    handleConsentFromState(state)
 
     if (state.active) {
       startSession()
@@ -557,6 +559,7 @@ export default async function init () {
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
+          // Any time the extension switches active state, start or stop the current session.
           state.active ? startSession() : endSession()
           break
         case 'ipfsNodeType':
@@ -624,6 +627,7 @@ export default async function init () {
           break
       }
     }
+    // ensure consent is set properly on state changes
     handleConsentFromState(state)
 
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {

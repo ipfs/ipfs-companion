@@ -1,17 +1,13 @@
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/vanilla'
-import debug from 'debug'
+import MetricsProvider from '@ipfs-shipyard/ignite-metrics/vanilla';
+import debug from 'debug';
 
 const log = debug('ipfs-companion:telemetry')
 
-let metricsProvider = null
-export function getMetricsProviderInstance () {
-  metricsProvider = metricsProvider ?? new MetricsProvider({
-    appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
-    autoTrack: false
-  })
-
-  return metricsProvider
-}
+const metricsProvider = new MetricsProvider({
+  appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
+  autoTrack: false,
+  storageProvider: null,
+})
 
 /**
  * @param {import('../types.js').CompanionState} stateOptions
@@ -32,11 +28,11 @@ function mapStateToConsent (stateOptions) {
 }
 
 function logConsent () {
-  log('checkConsent(\'minimal\'): ', getMetricsProviderInstance().checkConsent('minimal'))
-  log('checkConsent(\'performance\'): ', getMetricsProviderInstance().checkConsent('performance'))
-  log('checkConsent(\'ux\'): ', getMetricsProviderInstance().checkConsent('ux'))
-  log('checkConsent(\'feedback\'): ', getMetricsProviderInstance().checkConsent('feedback'))
-  log('checkConsent(\'location\'): ', getMetricsProviderInstance().checkConsent('location'))
+  log('checkConsent(\'minimal\'): ', metricsProvider.checkConsent('minimal'))
+  log('checkConsent(\'performance\'): ', metricsProvider.checkConsent('performance'))
+  log('checkConsent(\'ux\'): ', metricsProvider.checkConsent('ux'))
+  log('checkConsent(\'feedback\'): ', metricsProvider.checkConsent('feedback'))
+  log('checkConsent(\'location\'): ', metricsProvider.checkConsent('location'))
 }
 
 /**
@@ -45,22 +41,20 @@ function logConsent () {
  * @returns {void}
  */
 export function handleConsentFromState (state) {
-  log('handleConsentFromState', state)
-  getMetricsProviderInstance().updateConsent(mapStateToConsent(state))
+  metricsProvider.updateConsent(mapStateToConsent(state))
   logConsent()
 }
 
 export function handleConsentUpdate (consent) {
   log('handleConsentUpdate', consent)
-  getMetricsProviderInstance().updateConsent(consent)
+  metricsProvider.updateConsent(consent)
 }
 
-// const ignoredViewsRegex = [/^ipfs:\/\/.*/]
 const ignoredViewsRegex = []
 export function trackView (view) {
   log('trackView called for view: ', view)
-  getMetricsProviderInstance().metricsService.track_pageview(view, ignoredViewsRegex)
+  metricsProvider.metricsService.track_view(view, ignoredViewsRegex)
 }
 
-export const startSession = (...args) => getMetricsProviderInstance().startSession(...args)
-export const endSession = (...args) => getMetricsProviderInstance().endSession(...args)
+export const startSession = (...args) => metricsProvider.startSession(...args)
+export const endSession = (...args) => metricsProvider.endSession(...args)
