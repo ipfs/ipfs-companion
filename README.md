@@ -173,6 +173,11 @@ Accept from LOCAL
 Deny
 ```
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ipfs/ipfs-desktop,ipfs/awesome-ipfs,ipfs/ipfs-companion&type=Date)](https://star-history.com/#ipfs/ipfs-desktop&ipfs/awesome-ipfs&ipfs/ipfs-companion&Date)
+
+
 ## Privacy & license info
 
 - IPFS Companion [Privacy policy](./PRIVACY-POLICY.md)
