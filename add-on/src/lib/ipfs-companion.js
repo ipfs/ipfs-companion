@@ -23,6 +23,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
+import { handleConsentFromState, startSession, endSession, trackView } from './telemetry.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
@@ -33,6 +34,7 @@ export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
+  /** @type {import('../types.js').CompanionState} */
   let state // avoid redundant API reads by utilizing local cache of various states
   let dnslinkResolver
   let ipfsPathValidator
@@ -55,8 +57,11 @@ export default async function init () {
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
     notify = createNotifier(getState)
+    // ensure consent is set properly on app init
+    handleConsentFromState(state)
 
     if (state.active) {
+      startSession()
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
         ipfs = await initIpfsClient(browser, state)
@@ -166,6 +171,15 @@ export default async function init () {
       const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
       const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
       return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
+    }
+    if (request.telemetry) {
+      return Promise.resolve(onTelemetryMessage(request.telemetry, sender))
+    }
+  }
+
+  function onTelemetryMessage (request, sender) {
+    if (request.trackView) {
+      return trackView(request.trackView)
     }
   }
 
@@ -365,11 +379,11 @@ export default async function init () {
     // https://github.com/ipfs-shipyard/ipfs-companion/issues/398
     if (runtime.isFirefox && ipfsPathValidator.isIpfsPageActionsContext(url)) {
       if (sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL)) {
-        await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-on.svg' })
-        await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
+        await browser.pageAction.setIcon({ tabId, path: '/icons/ipfs-logo-on.svg' })
+        await browser.pageAction.setTitle({ tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtCustomGateway') })
       } else {
-        await browser.pageAction.setIcon({ tabId: tabId, path: '/icons/ipfs-logo-off.svg' })
-        await browser.pageAction.setTitle({ tabId: tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtPublicGateway') })
+        await browser.pageAction.setIcon({ tabId, path: '/icons/ipfs-logo-off.svg' })
+        await browser.pageAction.setTitle({ tabId, title: browser.i18n.getMessage('pageAction_titleIpfsAtPublicGateway') })
       }
       await browser.pageAction.show(tabId)
     }
@@ -553,6 +567,8 @@ export default async function init () {
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
+          // Any time the extension switches active state, start or stop the current session.
+          state.active ? startSession() : endSession()
           break
         case 'ipfsNodeType':
           if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
@@ -619,6 +635,8 @@ export default async function init () {
           break
       }
     }
+    // ensure consent is set properly on state changes
+    handleConsentFromState(state)
 
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {

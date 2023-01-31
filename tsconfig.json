@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    // "preserveSymlinks": true,                         /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
+    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
+
+    /* Type Checking */
+    "strict": true,
+    "skipLibCheck": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "moduleResolution": "nodenext",
+    "noImplicitAny": false
+  },
+  "include": ["add-on/src/**/*.js", "add-on/src/**/*.ts"]
+}

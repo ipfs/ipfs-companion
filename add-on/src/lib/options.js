@@ -1,8 +1,11 @@
 'use strict'
 
-import { isIPv4, isIPv6 } from 'is-ip'
 import isFQDN from 'is-fqdn'
+import { isIPv4, isIPv6 } from 'is-ip'
 
+/**
+ * @type {Readonly<import('../types.js').CompanionOptions>}
+ */
 export const optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external',
@@ -31,7 +34,12 @@ export const optionDefaults = Object.freeze({
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
   useLatestWebUI: false,
   dismissedUpdate: null,
-  openViaWebUI: true
+  openViaWebUI: true,
+  telemetryGroupMinimal: true,
+  telemetryGroupPerformance: false,
+  telemetryGroupUx: false,
+  telemetryGroupFeedback: false,
+  telemetryGroupLocation: false
 })
 
 function buildDefaultIpfsNodeConfig () {

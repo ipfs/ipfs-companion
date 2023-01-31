@@ -48,6 +48,7 @@ function quickImportStore (state, emitter) {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
+    browser.runtime.sendMessage({ telemetry: { trackView: 'quick-import' } })
     // initialize connection to the background script which will trigger UI updates
     port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {
