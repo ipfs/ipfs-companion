@@ -20,6 +20,7 @@ const optionsPageLink = html`<a class="no-underline" id="learn-more" href="${opt
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
 app.route('*', (state) => {
+  browser.runtime.sendMessage({ telemetry: { trackView: 'recovery' } })
   const { hash } = window.location
   const { href: publicURI } = new URL(decodeURIComponent(hash.slice(1)))
   const { version } = browser.runtime.getManifest()
