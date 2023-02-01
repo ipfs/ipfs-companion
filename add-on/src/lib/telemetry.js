@@ -34,9 +34,9 @@ export function handleConsentFromState (state) {
 }
 
 const ignoredViewsRegex = []
-export function trackView (view) {
+export function trackView (view, segments) {
   log('trackView called for view: ', view)
-  metricsProvider.trackView(view, ignoredViewsRegex)
+  metricsProvider.trackView(view, ignoredViewsRegex, segments)
 }
 
 export const startSession = (...args) => metricsProvider.startSession(...args)
