@@ -24,10 +24,10 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3.3.0
 
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: 18
 
@@ -39,7 +39,7 @@ jobs:
           npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
 
       - name: Restore .cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.2.4
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -50,7 +50,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.2.4
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -84,7 +84,7 @@ jobs:
       # - action artifacts can be downloaded for 90 days, then are removed by github
       # - binaries in PRs from forks won't be signed
       - name: Attach produced packages to Github Action
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: built-on-${{ matrix.os }}
           path: build/ipfs_companion*.*
@@ -98,7 +98,7 @@ jobs:
     needs: [test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - uses: google-github-actions/release-please-action@v3.7.3
         with:
           release-type: node
           package-name: ipfs-companion
@@ -111,15 +111,15 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3.3.0
 
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: 18
 
       - name: Restore .cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.2.4
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -130,7 +130,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.2.4
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -143,7 +143,7 @@ jobs:
         run: npm run ci:build:stable
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         with:
           files: build/*.zip
           fail_on_unmatched_files: true
