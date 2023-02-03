@@ -96,17 +96,16 @@ const renderWelcome = (i18n, peerCount, openWebUi) => {
   `
 }
 
+export const nodeOffSvg = (svgWidth = 130) => html`
+<svg x="0px" y="0px" viewBox="0 0 100 100" width="${svgWidth}">
+  <path fill="${colorYellow}" d="M82.84 71.14L55.06 23a5.84 5.84 0 00-10.12 0L17.16 71.14a5.85 5.85 0 005.06 8.77h55.56a5.85 5.85 0 005.06-8.77zm-30.1-.66h-5.48V65h5.48zm0-10.26h-5.48V38.46h5.48z"/>
+</svg>
+`
+
 const renderInstallSteps = (i18n, isIpfsOnline) => {
   const copyClass = 'mv0 white f5 lh-copy'
   const anchorClass = 'aqua hover-white'
   const stateUnknown = isIpfsOnline === null
-  const svgWidth = 130
-
-  const nodeOffSvg = () => html`
-    <svg x="0px" y="0px" viewBox="0 0 100 100" width="${svgWidth}">
-      <path fill="${colorYellow}" d="M82.84 71.14L55.06 23a5.84 5.84 0 00-10.12 0L17.16 71.14a5.85 5.85 0 005.06 8.77h55.56a5.85 5.85 0 005.06-8.77zm-30.1-.66h-5.48V65h5.48zm0-10.26h-5.48V38.46h5.48z"/>
-    </svg>
-  `
 
   const optionsUrl = browser.runtime.getURL(optionsPage)
   return html`

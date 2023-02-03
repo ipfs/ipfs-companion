@@ -5,7 +5,7 @@ import choo from 'choo'
 import html from 'choo/html/index.js'
 import icon from 'ipfs-css/icons/stroke_attention.svg'
 import browser, { i18n, runtime } from 'webextension-polyfill'
-import { renderCompanionLogo } from '../landing-pages/welcome/page.js'
+import { nodeOffSvg } from '../landing-pages/welcome/page.js'
 import createWelcomePageStore from '../landing-pages/welcome/store.js'
 import { optionsPage } from '../lib/constants.js'
 import './recovery.css'
@@ -46,13 +46,13 @@ app.route('*', (state) => {
 
   return html`<div class="flex flex-column flex-row-l">
     <div id="left-col" class="min-vh-100 flex flex-column justify-center items-center bg-navy white">
-      ${renderCompanionLogo(i18n, false)}
-      <p class="montserrat mt3 mb0 f3">${version}</p>
+      <div class="mb4 flex flex-column justify-center items-center">
+        ${nodeOffSvg(200)}
+        <p class="mt0 mb0 f3 tc">${i18n.getMessage('recovery_page_sub_header')}</p>
+      </div>
     </div>
 
     <div id="right-col" class="pt4 w-100 flex flex-column justify-around items-center">
-      <img src="${icon}" class="w4 h4" />
-      <h1 class="f3 fw6">${i18n.getMessage('recovery_page_sub_header')}</h1>
       <p class="f3 fw5">${i18n.getMessage('recovery_page_message_p1')}</p>
       <p class="f4 fw4">${i18n.getMessage('recovery_page_message_p2')}</p>
       <p class="f4 fw4 w-100"><span class="b-ns">Public URL:</span> <a href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
@@ -74,5 +74,4 @@ app.route('*', (state) => {
 app.mount('#root')
 
 // Set page title and header translation
-document.getElementById('header-text').innerText = i18n.getMessage('recovery_page_header')
 document.title = i18n.getMessage('recovery_page_title')

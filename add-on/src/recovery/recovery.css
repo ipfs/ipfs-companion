@@ -43,17 +43,6 @@ a:hover {
   }
 }
 
-header {
-  z-index: 1;
-  border-color: #69c4cd;
-  text-transform: uppercase;
-}
-
-#header-logo {
-  height: 50px;
-  width: 117.5px;
-}
-
 .recovery-root {
   width: 100%;
   height: 100%;
