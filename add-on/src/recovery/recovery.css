@@ -8,7 +8,11 @@
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
 }
 
 /*
@@ -27,8 +31,8 @@ a:hover {
   }
 
   #right-col {
-    margin-left: 57%;
-    margin-right: 7%;
+    margin-left: 54%;
+    margin-right: 6%;
   }
 }
 

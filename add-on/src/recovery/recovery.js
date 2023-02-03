@@ -52,18 +52,18 @@ app.route('*', (state) => {
       </div>
     </div>
 
-    <div id="right-col" class="pt4 w-100 flex flex-column justify-around items-center">
+    <div id="right-col" class="pt7 mt5 w-100 flex flex-column justify-around items-center">
       <p class="f3 fw5">${i18n.getMessage('recovery_page_message_p1')}</p>
       <p class="f4 fw4">${i18n.getMessage('recovery_page_message_p2')}</p>
-      <p class="f4 fw4 w-100"><span class="b-ns">Public URL:</span> <a href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
+      <p class="f4 fw4 w-100"><span class="b-ns">Public URL:</span> <a class="no-underline teal" href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
       <button
-        class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br4 ma1 pointer"
+        class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br2 ma4 pointer"
         onclick=${openURLFromHash}
         href="${publicURI}"
       >
         <span class="f5 fw6">${i18n.getMessage('recovery_page_button')}</span>
       </button>
-      <p class="f5 fw2 pt6">
+      <p class="f5 fw2 pt5">
         ${learnMoreLink} | ${optionsPageLink}
       </span>
     </div>
