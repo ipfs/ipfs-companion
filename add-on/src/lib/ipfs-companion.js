@@ -179,7 +179,8 @@ export default async function init () {
 
   function onTelemetryMessage (request, sender) {
     if (request.trackView) {
-      return trackView(request.trackView)
+      const { version } = browser.runtime.getManifest()
+      return trackView(request.trackView, { version })
     }
   }
 
