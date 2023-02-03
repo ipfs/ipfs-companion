@@ -104,6 +104,8 @@ jobs:
           package-name: ipfs-companion
           changelog-notes-type: github
           command: release-pr
+          extra-files: |
+            add-on/manifest.common.json
 
   release-assets:
     runs-on: ubuntu-latest
