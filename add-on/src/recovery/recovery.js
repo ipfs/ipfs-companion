@@ -11,9 +11,9 @@ import './recovery.css'
 
 const app = choo()
 
-const learnMoreLink = html`<a class="no-underline" href="https://docs.ipfs.tech/how-to/companion-node-types/" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_learn_more')}</a>`
+const learnMoreLink = html`<a class="navy link underline-under hover-aqua" href="https://docs.ipfs.tech/how-to/companion-node-types/" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_learn_more')}</a>`
 
-const optionsPageLink = html`<a class="no-underline" id="learn-more" href="${optionsPage}" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_update_preferences')}</a>`
+const optionsPageLink = html`<a class="navy link underline-under hover-aqua" id="learn-more" href="${optionsPage}" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_update_preferences')}</a>`
 
 // TODO (whizzzkid): refactor base store to be more generic.
 app.use(createWelcomePageStore(i18n, runtime))
@@ -53,7 +53,7 @@ app.route('*', (state) => {
     <div id="right-col" class="pt7 mt5 w-100 flex flex-column justify-around items-center">
       <p class="f3 fw5">${i18n.getMessage('recovery_page_message_p1')}</p>
       <p class="f4 fw4">${i18n.getMessage('recovery_page_message_p2')}</p>
-      <p class="f4 fw4 w-100"><span class="b-ns">Public URL:</span> <a class="no-underline teal" href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
+      <p class="f4 fw4 w-100"><span class="b-ns">Public URL:</span> <a class="no-underline no-underline navy link hover-aqua" href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
       <button
         class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br2 ma4 pointer"
         onclick=${openURLFromHash}

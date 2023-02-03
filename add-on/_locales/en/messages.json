@@ -752,23 +752,19 @@
     "description": "A description for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_description)"
   },
   "recovery_page_title" : {
-    "message": "Node Offline | IPFS Companion",
+    "message": "Problem with your IPFS node | IPFS Companion",
     "description": "Title of the recovery page (recovery_page_title)"
   },
-  "recovery_page_header" : {
-    "message": "Companion",
-    "description": "Main header on the recovery screen (recovery_page_header)"
-  },
   "recovery_page_sub_header": {
-    "message": "Unable to reach the IPFS node :(",
+    "message": "Unable to reach your IPFS node :(",
     "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
   },
   "recovery_page_message_p1": {
-    "message": "Make sure IPFS Desktop is running and provides the HTTP Gateway Functionality.",
+    "message": "Ensure your IPFS node runs and provides HTTP Gateway.",
     "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
   },
   "recovery_page_message_p2": {
-    "message": "Alternatively, you can try to open the requested resource using the Public Gateway configured in IPFS Companion. In doing so you will be delegating trust to that HTTP server and the hash verification will no longer occur on your machine.",
+    "message": "You can also access deserialized version of the requested resource through the preferred public gateway set up in IPFS Companion. This delegates trust to a third-party address below, and skips local hash validation.",
     "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
   },
   "recovery_page_button": {
