@@ -6,7 +6,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 - [Release Process](#release-process)
   - [Tag a Release](#tag-a-release)
   - [Build Release Artifacts](#build-release-artifacts)
-  - [Publish on Chrome Web Store)](#publish-on-chrome-web-store)
+  - [Publish on Chrome Web Store](#publish-on-chrome-web-store)
   - [Publish on Firefox Add-Ons Store](#publish-on-firefox-add-ons-store)
   - [Release on Github.](#release-on-github)
 
@@ -14,6 +14,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 ## Tag a Release
 
 - Bump `<semver>` version in `add-on/manifest.common.json`
+- Create a `chore(main): Release v<semver>` PR.
 - Create a PR for Release
     - Generate and push the tag to github
     ```sh
