@@ -33,6 +33,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
     global.URL = URL
     global.browser = browser
     browser.runtime.id = 'testid'
+    browser.runtime.getURL.returns('chrome-extension://testid/')
   })
 
   beforeEach(async function () {
@@ -422,6 +423,24 @@ describe('modifyRequest.onBeforeRequest:', function () {
       state.gwURL = new URL(state.gwURLString)
       const request = url2request('https://bar.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
       expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('https://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+    })
+  })
+
+  describe('Recovers Page if node is unreachable', function () {
+    beforeEach(function () {
+      global.browser = browser
+      state.ipfsNodeType = 'external'
+      state.redirect = true
+      state.peerCount = -1
+      state.gwURLString = 'http://localhost:8080'
+      state.gwURL = new URL('http://localhost:8080')
+      state.pubGwURLString = 'https://ipfs.io'
+      state.pubGwURL = new URL('https://ipfs.io')
+    })
+    it('should present recovery page if node is offline', function () {
+      expect(state.nodeActive).to.be.equal(false)
+      const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2Fbar')
     })
   })
 

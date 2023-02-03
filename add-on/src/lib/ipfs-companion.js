@@ -10,7 +10,7 @@ import LRU from 'lru-cache'
 import all from 'it-all'
 import { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } from './options.js'
 import { initState, offlinePeerCount } from './state.js'
-import { createIpfsPathValidator, sameGateway, safeHostname } from './ipfs-path.js'
+import { createIpfsPathValidator, dropSlash, sameGateway, safeHostname } from './ipfs-path.js'
 import createDnslinkResolver from './dnslink.js'
 import { createRequestModifier } from './ipfs-request.js'
 import { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
@@ -224,7 +224,6 @@ export default async function init () {
 
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
-    const dropSlash = url => url.replace(/\/$/, '')
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     const { version } = browser.runtime.getManifest()
     const info = {

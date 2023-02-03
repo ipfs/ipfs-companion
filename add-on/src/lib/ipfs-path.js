@@ -8,6 +8,8 @@ import isFQDN from 'is-fqdn'
 // For how long more expensive lookups (DAG traversal etc) should be cached
 const RESULT_TTL_MS = 300000 // 5 minutes
 
+export const dropSlash = url => url.replace(/\/$/, '')
+
 // Turns URL or URIencoded path into a content path
 export function ipfsContentPath (urlOrPath, opts) {
   opts = opts || {}
