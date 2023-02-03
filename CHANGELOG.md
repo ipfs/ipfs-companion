@@ -9,6 +9,21 @@
 
 
 
+## What's Changed
+* feat: Moving from ipfs-http-client -> kubo-rpc-client by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1124
+* fix: removed state change notifications by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1123
+* feat: add E2E tests for chromium and firefox by @galargh in https://github.com/ipfs/ipfs-companion/pull/1121
+* chore: CODEOWNER meandavejustice->whizzzkid by @SgtPooki in https://github.com/ipfs/ipfs-companion/pull/1135
+* fix: :bug: waiting for test to finish for longer by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1136
+* chore: add sourceMaps to dev-builds by @SgtPooki in https://github.com/ipfs/ipfs-companion/pull/1134
+* chore: update PRIVACY-POLICY.md by @SgtPooki in https://github.com/ipfs/ipfs-companion/pull/1137
+* feat: add telemetry to companion by @SgtPooki in https://github.com/ipfs/ipfs-companion/pull/1117
+
+## New Contributors
+* @galargh made their first contribution in https://github.com/ipfs/ipfs-companion/pull/1121
+
+**Full Changelog**: https://github.com/ipfs/ipfs-companion/compare/v2.20.1...v2.21.0
+
 ## [2.6.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.1...v2.6.2) (2018-11-22)
 
 
@@ -558,6 +573,3 @@
 
 
 # 0.1.0 (2015-03-22)
-
-
-
