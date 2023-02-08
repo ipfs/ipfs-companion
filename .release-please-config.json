@@ -1,20 +1,3 @@
 {
-  ".": "2.21.1",
-  "last-release-sha": "7td2b9838885b3adf52e78ddd23ac01cb819e631",
-  "group-pull-request-title-pattern": "chore${scope}: release${component} v${version}",
-  "packages": {
-    ".": {
-      "release-type": "node",
-      "plugins": ["node-workspace"],
-      "package-name": "ipfs-companion",
-      "release-as": "2.22.0",
-      "extra-files": [
-        {
-          "type": "json",
-          "path": "add-on/manifest.common.json",
-          "jsonpath": "$.json.version"
-        }
-      ]
-    }
-  }
+  ".": "2.21.1"
 }
