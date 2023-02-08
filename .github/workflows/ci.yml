@@ -106,8 +106,10 @@ jobs:
           command: release-pr
           last-release-sha: 50dcfb1f2a304323699cf2320d228f5e641ab068
           release-as: v2.22.0
-          extra-files: |
-            add-on/manifest.common.json
+          extra-files:
+            - type: json
+              path: add-on/manifest-common.json
+              jsonpath: "$.version"
 
   release-assets:
     runs-on: ubuntu-latest
