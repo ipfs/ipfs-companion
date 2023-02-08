@@ -104,6 +104,8 @@ jobs:
           package-name: ipfs-companion
           changelog-notes-type: github
           command: release-pr
+          last-release-sha: 50dcfb1f2a304323699cf2320d228f5e641ab068
+          release-as: v2.22.0
           extra-files: |
             add-on/manifest.common.json
 
