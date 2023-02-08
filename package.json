@@ -180,5 +180,6 @@
   },
   "ts-standard": {
     "project": "./tsconfig.json"
-  }
+  },
+  "version": "2.22.0"
 }
