@@ -9,6 +9,22 @@
 
 
 
+## [2.22.0](https://github.com/ipfs/ipfs-companion/compare/ipfs-companion-v2.21.0...ipfs-companion-v2.22.0) (2023-02-08)
+
+
+### Features
+
+* Adding Release Automation ([#1122](https://github.com/ipfs/ipfs-companion/issues/1122)) ([1ed411e](https://github.com/ipfs/ipfs-companion/commit/1ed411e5006a5a477c8002765977f16e1ff755a5))
+* recovery page when local gateway is unreachable ([#1125](https://github.com/ipfs/ipfs-companion/issues/1125)) ([a74fbb3](https://github.com/ipfs/ipfs-companion/commit/a74fbb3736e6f29d337b6046b088f25a2d86e5b0))
+
+
+### Bug Fixes
+
+* :fire: Allow automation to run from manual triggers. ([#1143](https://github.com/ipfs/ipfs-companion/issues/1143)) ([a61e081](https://github.com/ipfs/ipfs-companion/commit/a61e081a75cee6d2a6c66d1c58819e9d63656a51))
+* **release-automation:** :bug: Semver Path ([7036f6d](https://github.com/ipfs/ipfs-companion/commit/7036f6de0c9876e35d1ea0a9b1a5a25e6364d894))
+* **release-automation:** :pushpin: pinning last release sha and future release number. ([2ad8769](https://github.com/ipfs/ipfs-companion/commit/2ad8769df3e37884ce10184626c593867f7a97ac))
+* **release-automation:** :wrench: updating manifest.common.js ([a0ec44c](https://github.com/ipfs/ipfs-companion/commit/a0ec44cf039cdb212c00c44fee82fa7a12c71319))
+
 ## [2.6.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.1...v2.6.2) (2018-11-22)
 
 
@@ -558,6 +574,3 @@
 
 
 # 0.1.0 (2015-03-22)
-
-
-
