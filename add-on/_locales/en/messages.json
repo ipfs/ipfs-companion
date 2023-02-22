@@ -316,7 +316,7 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. Requires go-ipfs 0.5.0 or later on your local node.",
+    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
