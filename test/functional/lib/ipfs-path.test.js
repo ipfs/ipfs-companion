@@ -184,8 +184,20 @@ describe('ipfs-path.js', function () {
       const gw = 'http://localhost:8080'
       expect(sameGateway(url, gw)).to.equal(true)
     })
-    it('should return true on 127.0.0.1/0.0.0.0 host match', function () {
+    it('should return true on localhost subdomain host match', function () {
+      const url = 'http://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.localhost:8080/foo/bar'
+      const gw = 'http://localhost:8080'
+      expect(sameGateway(url, gw)).to.equal(true)
+    })
+    it('should return true on RPC webui path 127.0.0.1/0.0.0.0 host match', function () {
+      // this is misconfiguration, but handling it in sameGateway ensures users who do this dont waste our time debugging
       const url = 'http://0.0.0.0:5001/webui'
+      const api = 'http://127.0.0.1:5001'
+      expect(sameGateway(url, api)).to.equal(true)
+    })
+    it('should return true on RPC /api/v0 path 127.0.0.1/0.0.0.0 host match', function () {
+      // this is misconfiguration, but handling it in sameGateway ensures users who do this dont waste our time debugging
+      const url = 'http://0.0.0.0:5001/api/v0/id'
       const api = 'http://127.0.0.1:5001'
       expect(sameGateway(url, api)).to.equal(true)
     })
@@ -289,7 +301,7 @@ describe('ipfs-path.js', function () {
       expect(ipfsPathValidator.isRedirectPageActionsContext(url)).to.equal(true)
     })
     it('should return false for /ipfs/ URL at Local Gateway', function () {
-      const url = `${state.gwURL}/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest`
+      const url = `${state.gwURL}ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest`
       expect(ipfsPathValidator.isRedirectPageActionsContext(url)).to.equal(false)
     })
     it('should return false for IPFS content loaded from IPFS API port', function () {
