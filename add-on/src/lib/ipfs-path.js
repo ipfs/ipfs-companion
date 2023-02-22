@@ -126,6 +126,11 @@ export function sameGateway (url, gwUrl) {
     url.hostname = '127.0.0.1'
   }
 
+  // Additional check to avoid false-positives when user has some unrelated HTTP server running on localhost:8080
+  // It is not "sameGateway" if "localhost" URL does not look like Gateway or RPC URL.
+  // This removes surface for bugs like https://github.com/ipfs/ipfs-companion/issues/1162
+  if (!(isIPFS.url(url.toString()) || isIPFS.subdomain(url.toString()) || url.pathname.startsWith('/api/v0/') || url.pathname.startsWith('/webui'))) return false
+
   const gws = [gwUrl.host]
 
   // localhost gateway has more than one hostname
