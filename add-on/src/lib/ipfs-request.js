@@ -144,7 +144,11 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
 
       // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
-      if (!state.nodeActive && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
+      if (!state.nodeActive &&
+        !state.redirect &&
+        request.type === 'main_frame' &&
+        sameGateway(request.url, state.gwURL)
+      ) {
         const publicUri = ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         return { redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}` }
       }
