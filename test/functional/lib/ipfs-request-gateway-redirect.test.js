@@ -437,8 +437,15 @@ describe('modifyRequest.onBeforeRequest:', function () {
       state.pubGwURLString = 'https://ipfs.io'
       state.pubGwURL = new URL('https://ipfs.io')
     })
-    it('should present recovery page if node is offline', function () {
+    it('should present recovery page if node is offline and redirect is enabled', function () {
       expect(state.nodeActive).to.be.equal(false)
+      state.redirect = true
+      const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2Fbar')
+    })
+    it('should present recovery page if node is offline and redirect is disabled', function () {
+      expect(state.nodeActive).to.be.equal(false)
+      state.redirect = false
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
       expect(modifyRequest.onBeforeRequest(request).redirectUrl).to.equal('chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2Fbar')
     })
