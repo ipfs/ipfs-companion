@@ -28,11 +28,11 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
-    "message": "API",
+    "message": "RPC",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusApiAddressTitle": {
-    "message": "The URL of your local node's API",
+    "message": "The URL of your local Kubo RPC",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
