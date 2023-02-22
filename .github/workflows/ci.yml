@@ -99,13 +99,9 @@ jobs:
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
       - uses: google-github-actions/release-please-action@v3.7.3
-        id: release
         with:
           command: manifest-pr
           changelog-notes-type: github
-      - name: Tag Release
-        if: ${{ steps.release.outputs.release_created }} != 'true'
-        run: 'git tag -a v${{ steps.release.outputs.ipfs-companion--tag_name }} -m "chore(main): release ipfs-companion ${{ steps.release.outputs.ipfs-companion--tag_name }}" && git push origin v${{ steps.release.outputs.ipfs-companion--tag_name }}'
 
   release-assets:
     runs-on: ubuntu-latest
