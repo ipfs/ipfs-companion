@@ -9,6 +9,16 @@
 
 
 
+## [2.22.1](https://github.com/ipfs/ipfs-companion/compare/v2.22.0...v2.22.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* **recovery:** :bug: false-positive for non-gateway URLs ([#1163](https://github.com/ipfs/ipfs-companion/issues/1163)) ([0ee35d2](https://github.com/ipfs/ipfs-companion/commit/0ee35d26f2002ccef84ead30cf6cc2a851ca1c60))
+* **release-automation:** :construction_worker: should no longer be needed ([#1158](https://github.com/ipfs/ipfs-companion/issues/1158)) ([7651e9e](https://github.com/ipfs/ipfs-companion/commit/7651e9e1a3a92b819bf76eb1e7b1c319f247f60f))
+* **release-automation:** :green_heart: stupid hack to add tag in CI ([#1161](https://github.com/ipfs/ipfs-companion/issues/1161)) ([9ea9897](https://github.com/ipfs/ipfs-companion/commit/9ea9897477ae6e6f59a2edefd1c4bf9d881d72a8))
+* replace IPFS API with Kubo RPC ([#1164](https://github.com/ipfs/ipfs-companion/issues/1164)) ([1a6495d](https://github.com/ipfs/ipfs-companion/commit/1a6495de5e1017b533cac4cbf869577f64541770))
+
 ## [2.22.0](https://github.com/ipfs/ipfs-companion/compare/ipfs-companion-v2.21.0...ipfs-companion-v2.22.0) (2023-02-15)
 
 
