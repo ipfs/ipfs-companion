@@ -200,7 +200,7 @@
     "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
   "notify_importErrorTitle": {
-    "message": "Unable to Import via IPFS API",
+    "message": "Unable to Import via Kubo RPC",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -376,11 +376,11 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API URL",
+    "message": "Kubo RPC URL",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Set the URL of your IPFS API. (Hint: this is where /api/v0/config lives.)",
+    "message": "Set the URL of your Kubo RPC. (Hint: this is where https://docs.ipfs.tech/reference/kubo/rpc/ lives.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -396,7 +396,7 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Automatically switch from your local gateway to your default public gateway if the IPFS API is unavailable.",
+    "message": "Automatically switch from your local gateway to your default public gateway if the Kubo RPC is unavailable.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_header_dnslink": {
