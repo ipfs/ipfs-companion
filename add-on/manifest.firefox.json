@@ -1,5 +1,5 @@
 {
-  "browser_action": {
+  "action": {
     "browser_style": false
   },
   "options_ui": {
