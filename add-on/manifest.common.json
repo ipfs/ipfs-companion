@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_manifest_extensionName__",
   "short_name": "__MSG_manifest_shortExtensionName__",
   "version": "2.22.1",
@@ -12,9 +12,10 @@
     "128": "icons/png/ipfs-logo-on_128.png"
   },
   "background": {
-    "page": "dist/background/background.html"
+    "service_worker": "dist/bundles/backgroundPage.bundle.js",
+    "type": "module"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "19": "icons/png/ipfs-logo-off_19.png",
       "38": "icons/png/ipfs-logo-off_38.png",
@@ -29,15 +30,24 @@
     "page": "dist/options/options.html"
   },
   "web_accessible_resources": [
-    "icons/png/ipfs-logo-off_19.png",
-    "icons/png/ipfs-logo-off_38.png",
-    "icons/png/ipfs-logo-off_128.png",
-    "icons/ipfs-logo-on.svg",
-    "icons/ipfs-logo-off.svg",
-    "dist/recovery/recovery.css",
-    "dist/recovery/recovery.html",
-    "dist/recovery/recovery.js"
+    {
+      "resources": [
+        "icons/png/ipfs-logo-off_19.png",
+        "icons/png/ipfs-logo-off_38.png",
+        "icons/png/ipfs-logo-off_128.png",
+        "icons/ipfs-logo-on.svg",
+        "icons/ipfs-logo-off.svg",
+        "dist/recovery/recovery.css",
+        "dist/recovery/recovery.html",
+        "dist/recovery/recovery.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ],
-  "content_security_policy": "script-src 'self'; object-src 'self'; frame-src 'self';",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src 'self';"
+  },
   "default_locale": "en"
 }
