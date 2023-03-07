@@ -7,6 +7,7 @@ import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
 import { welcomePage, optionsPage } from '../../lib/constants.js'
 import { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } from '../../lib/context-menus.js'
+import { endSession, handleConsentFromState, startSession, trackView } from '../../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
 export default (state, emitter) => {
@@ -38,7 +39,8 @@ export default (state, emitter) => {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
-    browser.runtime.sendMessage({ telemetry: { trackView: 'browser-action' } })
+    handleConsentFromState(state)
+    trackView('browser-action')
 
     // initial render with status stub
     emitter.emit('render')
@@ -205,6 +207,7 @@ export default (state, emitter) => {
     const prev = state.active
     state.active = !prev
     if (!state.active) {
+      endSession()
       state.gatewayAddress = state.pubGwURLString
       state.ipfsApiUrl = null
       state.gatewayVersion = null
@@ -213,6 +216,8 @@ export default (state, emitter) => {
     }
     try {
       await browser.storage.local.set({ active: state.active })
+      startSession()
+      handleConsentFromState(state)
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)
       state.active = prev
