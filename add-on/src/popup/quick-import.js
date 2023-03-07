@@ -12,6 +12,7 @@ import { formatImportDirectory } from '../lib/ipfs-import.js'
 import all from 'it-all'
 import drop from 'drag-and-drop-files'
 import { filesize } from 'filesize'
+import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 
@@ -48,7 +49,8 @@ function quickImportStore (state, emitter) {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
-    browser.runtime.sendMessage({ telemetry: { trackView: 'quick-import' } })
+    handleConsentFromState(state)
+    trackView('quick-import')
     // initialize connection to the background script which will trigger UI updates
     port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {

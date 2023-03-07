@@ -4,6 +4,7 @@
 import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
 import createRuntimeChecks from '../lib/runtime-checks.js'
+import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
 export default function optionStore (state, emitter) {
@@ -20,7 +21,8 @@ export default function optionStore (state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', async () => {
-    browser.runtime.sendMessage({ telemetry: { trackView: 'options' } })
+    handleConsentFromState(state)
+    trackView('options')
     updateStateOptions()
     browser.storage.onChanged.addListener(updateStateOptions)
   })
