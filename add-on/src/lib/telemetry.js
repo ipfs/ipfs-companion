@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill'
 import MetricsProvider from '@ipfs-shipyard/ignite-metrics/vanilla'
 import debug from 'debug'
 
@@ -36,7 +37,8 @@ export function handleConsentFromState (state) {
 const ignoredViewsRegex = []
 export function trackView (view, segments) {
   log('trackView called for view: ', view)
-  metricsProvider.trackView(view, ignoredViewsRegex, segments)
+  const { version } = browser.runtime.getManifest()
+  metricsProvider.trackView(view, ignoredViewsRegex, { ...segments, version })
 }
 
 export const startSession = (...args) => metricsProvider.startSession(...args)
