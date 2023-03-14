@@ -1,0 +1,14 @@
+diff --git a/node_modules/kubo-rpc-client/src/swarm/peers.js b/node_modules/kubo-rpc-client/src/swarm/peers.js
+index d60881c..ed94fb1 100644
+--- a/node_modules/kubo-rpc-client/src/swarm/peers.js
++++ b/node_modules/kubo-rpc-client/src/swarm/peers.js
+@@ -11,7 +11,8 @@ export const createPeers = configure(api => {
+     const res = await api.post('swarm/peers', {
+       signal: options.signal,
+       searchParams: toUrlSearchParams(options),
+-      headers: options.headers
++      headers: options.headers,
++      mode: 'no-cors'
+     })
+ 
+     /** @type {{ Peers: { Peer: string, Addr: string, Muxer?: string, Latency?: string, Streams?: string[], Direction?: 0 | 1 }[] }} */
