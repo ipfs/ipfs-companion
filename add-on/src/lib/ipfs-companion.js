@@ -104,7 +104,7 @@ export default async function init () {
     throw new Error('IPFS Companion: API client is disabled')
   }
 
-  function registerListeners () {
+  function registerListeners() {
     const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
@@ -459,7 +459,7 @@ export default async function init () {
   // -------------------------------------------------------------------
 
   async function updateBrowserActionBadge () {
-    if (typeof browser.browserAction.setBadgeBackgroundColor === 'undefined') {
+    if (typeof browser.action.setBadgeBackgroundColor === 'undefined') {
       // Firefox for Android does not have this UI, so we just skip it
       return
     }
@@ -484,13 +484,13 @@ export default async function init () {
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
     try {
-      const oldColor = colorArraytoHex(await browser.browserAction.getBadgeBackgroundColor({}))
+      const oldColor = colorArraytoHex(await browser.action.getBadgeBackgroundColor({}))
       if (badgeColor !== oldColor) {
-        await browser.browserAction.setBadgeBackgroundColor({ color: badgeColor })
+        await browser.action.setBadgeBackgroundColor({ color: badgeColor })
         await setBrowserActionIcon(badgeIcon)
       }
-      const oldText = await browser.browserAction.getBadgeText({})
-      if (oldText !== badgeText) await browser.browserAction.setBadgeText({ text: badgeText })
+      const oldText = await browser.action.getBadgeText({})
+      if (oldText !== badgeText) await browser.action.setBadgeText({ text: badgeText })
     } catch (error) {
       console.error('Unable to update browserAction badge due to error', error)
     }
@@ -511,14 +511,17 @@ export default async function init () {
     let iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
-      await browser.browserAction.setIcon(iconDefinition)
+      await browser.action.setIcon(iconDefinition)
+      if (browser.runtime.lastError.message === 'Icon invalid.') {
+        throw new Error('Icon invalid.')
+      }
     } catch (error) {
       // Fallback!
       // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
       // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
       // Still, we want icon, so we precompute rasters of popular sizes and use them instead
       iconDefinition = await rasterIconDefinition(iconPath)
-      await browser.browserAction.setIcon(iconDefinition)
+      await browser.action.setIcon(iconDefinition)
     }
   }
 
