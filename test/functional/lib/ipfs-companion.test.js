@@ -51,9 +51,9 @@ describe('lib/ipfs-companion.js', function () {
     it('should update ipfs API instance on IPFS API URL change', async function () {
       browser.storage.local.get.resolves(optionDefaults)
       browser.storage.local.set.resolves()
-      browser.browserAction.setBadgeBackgroundColor.resolves()
-      browser.browserAction.setBadgeText.resolves()
-      browser.browserAction.setIcon.resolves()
+      browser.action.setBadgeBackgroundColor.resolves()
+      browser.action.setBadgeText.resolves()
+      browser.action.setIcon.resolves()
       browser.tabs.query.resolves([{ id: 'TEST' }])
       browser.contextMenus.update.resolves()
       browser.idle.queryState.resolves('active')
