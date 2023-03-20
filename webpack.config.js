@@ -125,8 +125,12 @@ if (devBuild) {
  */
 const bgConfig = merge(commonConfig, {
   name: 'background',
+  target: 'webworker',
   entry: {
     backgroundPage: './add-on/src/background/background.js'
+  },
+  output: {
+    globalObject: 'globalThis'
   },
   optimization: {
     splitChunks: {

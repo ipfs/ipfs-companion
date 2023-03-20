@@ -12,8 +12,7 @@
     "128": "icons/png/ipfs-logo-on_128.png"
   },
   "background": {
-    "service_worker": "dist/bundles/backgroundPage.bundle.js",
-    "type": "module"
+    "service_worker": "dist/bundles/backgroundPage.bundle.js"
   },
   "action": {
     "default_icon": {

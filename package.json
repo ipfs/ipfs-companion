@@ -8,6 +8,9 @@
     "url": "https://github.com/ipfs-shipyard/ipfs-companion.git"
   },
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "start": "run-s clean build test firefox",
     "clean": "run-p clean:*",
