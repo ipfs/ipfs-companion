@@ -163,7 +163,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
   const ipfsPathValidator = {
     // Test if URL is a Public IPFS resource
     // (pass validIpfsOrIpns(url) and not at the local gateway or API)
-    publicIpfsOrIpnsResource (url) {
+    async publicIpfsOrIpnsResource (url) {
       // exclude custom gateway and api, otherwise we have infinite loops
       const { gwURL, apiURL } = getState()
       if (!sameGateway(url, gwURL) && !sameGateway(url, apiURL)) {
@@ -174,7 +174,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
     // Test if URL or a path is a valid IPFS resource
     // (IPFS needs to be a CID, IPNS can be PeerId or have dnslink entry)
-    validIpfsOrIpns (urlOrPath) {
+    async validIpfsOrIpns (urlOrPath) {
       // normalize input to a content path
       const path = ipfsContentPath(urlOrPath)
       if (!path) return false
@@ -197,7 +197,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
         }
         // then see if there is an DNSLink entry for 'ipnsRoot' hostname
         // TODO: use dnslink cache only
-        if (dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
+        if (await dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
           // console.log('==> IPNS for FQDN with valid dnslink: ', ipnsRoot)
           return true
         }
@@ -235,7 +235,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // The purpose of this resolver is to always return a meaningful, publicly
     // accessible URL that can be accessed without the need of IPFS client.
     // TODO: add Local version
-    resolveToPublicUrl (urlOrPath) {
+    async resolveToPublicUrl (urlOrPath) {
       const { pubSubdomainGwURL, pubGwURLString } = getState()
       const input = urlOrPath
 
@@ -243,7 +243,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       if (input.startsWith('ipns://')) {
         const dnslinkUrl = new URL(input)
         dnslinkUrl.protocol = 'https:'
-        const dnslink = dnslinkResolver.readAndCacheDnslink(dnslinkUrl.hostname)
+        const dnslink = await dnslinkResolver.readAndCacheDnslink(dnslinkUrl.hostname)
         if (dnslink) {
           return dnslinkUrl.toString()
         }
@@ -267,7 +267,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
         const { id: ipnsId } = subdomainPatternMatch(url)
         if (!isIPFS.cid(ipnsId)) {
           // Confirm DNSLink record is present and its not a false-positive
-          const dnslink = dnslinkResolver.readAndCacheDnslink(ipnsId)
+          const dnslink = await dnslinkResolver.readAndCacheDnslink(ipnsId)
           if (dnslink) {
             // return URL to DNSLink hostname (FQDN without any suffix)
             url.hostname = ipnsId
@@ -382,7 +382,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
           const fqdn = rawPath.replace(/^.*\/ipns\/([^/]+).*/, '$1')
           if (err.message === 'resolve non-IPFS names is not implemented' && isFQDN(fqdn)) {
             // js-ipfs without dnslink support, fallback to the value read from DNSLink
-            const dnslink = dnslinkResolver.readAndCacheDnslink(fqdn)
+            const dnslink = await dnslinkResolver.readAndCacheDnslink(fqdn)
             if (dnslink) {
               // swap problematic /ipns/{fqdn} with /ipfs/{cid} and retry lookup
               const safePath = trimDoubleSlashes(rawPath.replace(/^.*(\/ipns\/[^/]+)/, dnslink))
