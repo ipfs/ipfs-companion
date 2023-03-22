@@ -235,8 +235,7 @@ export default (state, emitter) => {
       } else {
         state.gatewayAddress = status.pubGwURLString
       }
-      // Import requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.isApiAvailable = state.active && !!(await getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
+      state.isApiAvailable = state.active && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
@@ -250,8 +249,4 @@ export default (state, emitter) => {
       state.isRedirectContext = false
     }
   }
-}
-
-function getBackgroundPage () {
-  return browser.runtime.getBackgroundPage()
 }
