@@ -68,7 +68,7 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
         // share wrapping dir
         path = `/ipfs/${root.cid}/`
       }
-      const url = resolveToPublicUrl(path)
+      const url = await resolveToPublicUrl(path)
       await copier.copyTextToClipboard(url)
     },
 
@@ -78,7 +78,7 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
       for (const file of files) {
         if (file && file.cid) {
           const { path } = ipfsImportHandler.getIpfsPathAndNativeAddress(file.cid)
-          const preloadUrl = resolveToPublicUrl(`${path}#${redirectOptOutHint}`)
+          const preloadUrl = await resolveToPublicUrl(`${path}#${redirectOptOutHint}`)
           try {
             await fetch(preloadUrl, { method: 'HEAD' })
             log('successfully preloaded', file)

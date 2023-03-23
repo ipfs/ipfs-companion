@@ -50,11 +50,11 @@ export default function createDnslinkResolver (getState) {
         !sameGateway(requestUrl, state.gwURL)
     },
 
-    dnslinkAtGateway (url, dnslink) {
+    async dnslinkAtGateway (url, dnslink) {
       if (typeof url === 'string') {
         url = new URL(url)
       }
-      if (dnslinkResolver.canRedirectToIpns(url, dnslink)) {
+      if (await dnslinkResolver.canRedirectToIpns(url, dnslink)) {
         const state = getState()
         // redirect to IPNS and leave it up to the gateway
         // to load the correct path from IPFS
@@ -65,12 +65,12 @@ export default function createDnslinkResolver (getState) {
       }
     },
 
-    readAndCacheDnslink (fqdn) {
+    async readAndCacheDnslink (fqdn) {
       let dnslink = dnslinkResolver.cachedDnslink(fqdn)
       if (typeof dnslink === 'undefined') {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
-          dnslink = dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
+          dnslink = await dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
           if (dnslink) {
             // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
             dnslinkResolver.setDnslink(fqdn, dnslink)
@@ -96,6 +96,7 @@ export default function createDnslinkResolver (getState) {
       const cachedResult = dnslinkResolver.cachedDnslink(fqdn)
       if (cachedResult) return cachedResult
       return lookupQueue.add(() => {
+        // this will resolve eventually.
         return dnslinkResolver.readAndCacheDnslink(fqdn)
       })
     },
@@ -120,7 +121,7 @@ export default function createDnslinkResolver (getState) {
     },
 
     // low level lookup without cache
-    readDnslinkFromTxtRecord (fqdn) {
+    async readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
       if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
@@ -139,29 +140,29 @@ export default function createDnslinkResolver (getState) {
       // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
       // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
       const apiCall = `${apiProvider}api/v0/name/resolve/${fqdn}?r=false`
-      const xhr = new XMLHttpRequest() // older XHR API us used because window.fetch appends Origin which causes error 403 in go-ipfs
-      // synchronous mode with small timeout
-      // (it is okay, because we do it only once, then it is cached and read via readAndCacheDnslink)
-      xhr.open('GET', apiCall, false)
-      xhr.setRequestHeader('Accept', 'application/json')
-      xhr.send(null)
-      if (xhr.status === 200) {
-        const dnslink = JSON.parse(xhr.responseText).Path
-        // console.log('readDnslinkFromTxtRecord', readDnslinkFromTxtRecord)
+      const response = await fetch(apiCall, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json'
+        }
+      })
+
+      if (response.ok) {
+        const { Path: dnslink } = await response.json()
         if (!IsIpfs.path(dnslink)) {
           throw new Error(`dnslink for '${fqdn}' is not a valid IPFS path: '${dnslink}'`)
         }
         return dnslink
-      } else if (xhr.status === 500) {
+      } else if (response.status === 500) {
         // go-ipfs returns 500 if host has no dnslink or an error occurred
         // TODO: find/fill an upstream bug to make this more intuitive
         return false
       } else {
-        throw new Error(xhr.statusText)
+        throw new Error(response.statusText)
       }
     },
 
-    canRedirectToIpns (url, dnslink) {
+    async canRedirectToIpns (url, dnslink) {
       if (typeof url === 'string') {
         url = new URL(url)
       }
@@ -185,7 +186,7 @@ export default function createDnslinkResolver (getState) {
         // is found in initial response.
         // More: https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md
         const foundDnslink = dnslink ||
-          (getState().dnslinkPolicy === 'enabled'
+          await (getState().dnslinkPolicy === 'enabled'
             ? dnslinkResolver.readAndCacheDnslink(fqdn)
             : dnslinkResolver.cachedDnslink(fqdn))
         if (foundDnslink) {
@@ -205,7 +206,7 @@ export default function createDnslinkResolver (getState) {
     // Test if URL contains a valid DNSLink FQDN
     // in url.hostname OR in url.pathname (/ipns/<fqdn>)
     // and return matching FQDN if present
-    findDNSLinkHostname (url) {
+    async findDNSLinkHostname (url) {
       if (!url) return
       // Normalize subdomain and path gateways to to /ipns/<fqdn>
       const contentPath = ipfsContentPath(url)
@@ -214,14 +215,14 @@ export default function createDnslinkResolver (getState) {
         const ipnsRoot = contentPath.match(/^\/ipns\/([^/]+)/)[1]
         // console.log('findDNSLinkHostname ==> inspecting IPNS root', ipnsRoot)
         // Ignore PeerIDs, match DNSLink only
-        if (!IsIpfs.cid(ipnsRoot) && dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
+        if (!IsIpfs.cid(ipnsRoot) && await dnslinkResolver.readAndCacheDnslink(ipnsRoot)) {
           // console.log('findDNSLinkHostname ==> found DNSLink for FQDN in url.pathname: ', ipnsRoot)
           return ipnsRoot
         }
       }
       // Check main hostname
       const { hostname } = new URL(url)
-      if (dnslinkResolver.readAndCacheDnslink(hostname)) {
+      if (await dnslinkResolver.readAndCacheDnslink(hostname)) {
         // console.log('findDNSLinkHostname ==> found DNSLink for url.hostname', hostname)
         return hostname
       }

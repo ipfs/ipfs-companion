@@ -160,13 +160,13 @@ export default async function init () {
   // ===================================================================
   // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
 
-  function onRuntimeMessage (request, sender) {
+  async function onRuntimeMessage (request, sender) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
       const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
-      const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
-      return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
+      const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
+      return { pubGwUrlForIpfsOrIpnsPath: result }
     }
   }
 
@@ -240,7 +240,7 @@ export default async function init () {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
       if (info.isIpfsContext) {
-        info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+        info.currentTabPublicUrl = await ipfsPathValidator.resolveToPublicUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
         if (resolveCache.has(url)) {
           const [immutableIpfsPath, permalink, cid] = resolveCache.get(url)
@@ -259,7 +259,7 @@ export default async function init () {
           }, 0)
         }
       }
-      info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
+      info.currentDnslinkFqdn =await dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || safeHostname(url)
       info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
