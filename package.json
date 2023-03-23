@@ -1,5 +1,6 @@
 {
   "name": "ipfs-companion",
+  "version": "2.22.1",
   "homepage": "https://github.com/ipfs-shipyard/ipfs-companion",
   "license": "CC0-1.0",
   "leadMaintainer": "Marcin Rataj <lidel@lidel.org>",
@@ -91,6 +92,7 @@
     "@babel/plugin-proposal-class-properties": "7.18.6",
     "@babel/preset-env": "7.20.2",
     "@istanbuljs/esm-loader-hook": "0.2.0",
+    "@types/webextension-polyfill": "^0.10.0",
     "abort-controller": "3.0.0",
     "babel-loader": "9.1.0",
     "babel-plugin-syntax-async-generators": "6.13.0",
@@ -131,8 +133,9 @@
     "terser": "5.15.1",
     "terser-webpack-plugin": "5.3.6",
     "transform-loader": "0.2.4",
+    "ts-loader": "^9.4.2",
     "ts-standard": "^12.0.2",
-    "typescript": "^4.9.4",
+    "typescript": "^4.9.5",
     "url": "0.11.0",
     "utf-8-validate": "^5.0.10",
     "web-ext": "7.3.1",
@@ -189,6 +192,5 @@
   },
   "ts-standard": {
     "project": "./tsconfig.json"
-  },
-  "version": "2.22.1"
+  }
 }

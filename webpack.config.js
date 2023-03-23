@@ -77,12 +77,27 @@ const commonConfig = {
         exclude: /node_modules/,
         test: /\.js$/,
         use: ['babel-loader']
+      },
+      {
+        exclude: /node_modules/,
+        test: /\.ts?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          }
+        ]
       }
     ]
   },
   resolve: {
     mainFields: ['browser', 'main'],
-    extensions: ['.js', '.json'],
+    extensions: ['.js', '.json', '.ts'],
+    extensionAlias: {
+      '.js': ['.js', '.json', '.ts']
+    },
     alias: {
       buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
       url: 'iso-url',

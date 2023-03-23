@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "ESNext",
     "allowJs": true,
     "checkJs": true,
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
@@ -13,7 +13,10 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "moduleResolution": "nodenext",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "importHelpers": true,
   },
   "include": ["add-on/src/**/*.js", "add-on/src/**/*.ts"]
 }
