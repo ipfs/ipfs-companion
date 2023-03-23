@@ -517,7 +517,7 @@ export default async function init (windowedContext = false) {
       // Try SVG first -- Firefox supports it natively
       await browser.action.setIcon(iconDefinition)
       if (browser.runtime.lastError.message === 'Icon invalid.') {
-        throw new Error('Icon invalid.')
+        throw browser.runtime.lastError 
       }
     } catch (error) {
       // Fallback!
