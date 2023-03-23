@@ -41,7 +41,7 @@
         "dist/recovery/recovery.js"
       ],
       "matches": [
-        "<all_urls>"
+        "chrome-extension://*/*"
       ]
     }
   ],
