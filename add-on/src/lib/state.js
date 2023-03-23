@@ -7,15 +7,15 @@ export const offlinePeerCount = -1
 
 /**
  *
- * @param {import('../types.js').CompanionOptions} options
- * @param {Partial<import('../types.js').CompanionOptions>} [overrides]
- * @returns {import('../types.js').CompanionState}
+ * @param {import('../types/companion.js').CompanionOptions} options
+ * @param {Partial<import('../types/companion.js').CompanionOptions>} [overrides]
+ * @returns {import('../types/companion.js').CompanionState}
  */
 export function initState (options, overrides) {
   // we store options and some pregenerated values to avoid async storage
   // reads and minimize performance impact on overall browsing experience
   /**
-   * @type {Partial<import('../types.js').CompanionState & import('../types.js').CompanionOptions>}
+   * @type {Partial<import('../types/companion.js').CompanionState & import('../types/companion.js').CompanionOptions>}
    */
   const state = Object.assign({}, options)
   // generate some additional values
@@ -68,5 +68,5 @@ export function initState (options, overrides) {
   })
   // apply optional overrides
   if (overrides) Object.assign(state, overrides)
-  return /** @type {import('../types.js').CompanionState} */(state)
+  return /** @type {import('../types/companion.js').CompanionState} */(state)
 }
