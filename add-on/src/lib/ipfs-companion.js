@@ -29,7 +29,7 @@ log.error = debug('ipfs-companion:main:error')
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-export default async function init () {
+export default async function init (windowedContext = false) {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
@@ -75,19 +75,23 @@ export default async function init () {
     copier = createCopier(notify, ipfsPathValidator)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
     inspector = createInspector(notify, ipfsPathValidator, getState)
-    contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-      onAddFromContext,
-      onCopyCanonicalAddress: copier.copyCanonicalAddress,
-      onCopyRawCid: copier.copyRawCid,
-      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
-    })
-    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-    log('register all listeners')
-    registerListeners()
-    await registerSubdomainProxy(getState, runtime, notify)
-    log('init done')
-    setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await runPendingOnInstallTasks()
+    if (!windowedContext) {
+      contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
+        onAddFromContext,
+        onCopyCanonicalAddress: copier.copyCanonicalAddress,
+        onCopyRawCid: copier.copyRawCid,
+        onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
+      })
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      log('register all listeners')
+      registerListeners()
+      await registerSubdomainProxy(getState, runtime, notify)
+      log('init done')
+      setApiStatusUpdateInterval(options.ipfsApiPollMs)
+      await runPendingOnInstallTasks()
+    } else {
+      log('init done (windowed context)')
+    }
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -105,15 +109,15 @@ export default async function init () {
   }
 
   function registerListeners() {
-    const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
+    const onBeforeSendInfoSpec = ['requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
       // Note: we need this for code ensuring kubo-rpc-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
-    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
+    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] })
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.webRequest.onCompleted.addListener(onCompleted, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.storage.onChanged.addListener(onStorageChange)
