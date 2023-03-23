@@ -1,6 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
+// @ts-ignore
 import debug from 'debug'
 
 import browser from 'webextension-polyfill'
@@ -23,6 +24,8 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
+import blockOrObserve from './redirect-handler/blockOrObserve.js'
+
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
@@ -33,7 +36,7 @@ export default async function init (windowedContext = false) {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
-  /** @type {import('../types.js').CompanionState} */
+  /** @type {import('../types/companion.js').CompanionState} */
   let state // avoid redundant API reads by utilizing local cache of various states
   let dnslinkResolver
   let ipfsPathValidator
@@ -54,6 +57,7 @@ export default async function init (windowedContext = false) {
     await migrateOptions(browser.storage.local, debug)
     const options = await browser.storage.local.get(optionDefaults)
     runtime = await createRuntimeChecks(browser)
+    // @ts-ignore
     state = initState(options)
     notify = createNotifier(getState)
 
@@ -65,6 +69,7 @@ export default async function init (windowedContext = false) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
           'notify_startIpfsNodeErrorTitle',
+          // @ts-ignore
           err.name === 'ValidationError' ? err.details[0].message : err.message
         )
       }
@@ -78,6 +83,7 @@ export default async function init (windowedContext = false) {
     if (!windowedContext) {
       contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
         onAddFromContext,
+        // @ts-ignore
         onCopyCanonicalAddress: copier.copyCanonicalAddress,
         onCopyRawCid: copier.copyRawCid,
         onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
@@ -110,14 +116,17 @@ export default async function init (windowedContext = false) {
 
   function registerListeners() {
     const onBeforeSendInfoSpec = ['requestHeaders']
+    // @ts-ignore
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
       // Note: we need this for code ensuring kubo-rpc-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
-    browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
-    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] })
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['responseHeaders'])
+    browser.webRequest.onBeforeSendHeaders.addListener(
+      // @ts-ignore
+      onBeforeSendHeaders, { urls: ['<all_urls>'] }, blockOrObserve.getExtraInfoSpec(onBeforeSendInfoSpec))
+    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, blockOrObserve.getExtraInfoSpec())
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, blockOrObserve.getExtraInfoSpec(['responseHeaders']))
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.webRequest.onCompleted.addListener(onCompleted, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.storage.onChanged.addListener(onStorageChange)
@@ -140,7 +149,7 @@ export default async function init (windowedContext = false) {
   // HTTP Request Hooks
   // ===================================================================
 
-  function onBeforeSendHeaders (request) {
+  function onBeforeSendHeaders(request) {
     return modifyRequest.onBeforeSendHeaders(request)
   }
 
@@ -164,6 +173,7 @@ export default async function init (windowedContext = false) {
   // ===================================================================
   // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
 
+  // @ts-ignore
   async function onRuntimeMessage (request, sender) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
@@ -307,6 +317,7 @@ export default async function init (windowedContext = false) {
         }
         // console.log('onAddFromContext.context', context)
         // console.log('onAddFromContext.fetchOptions', fetchOptions)
+        // @ts-ignore
         const response = await fetch(dataSrc, fetchOptions)
         const blob = await response.blob()
         const url = new URL(response.url)
@@ -315,6 +326,7 @@ export default async function init (windowedContext = false) {
           ? url.hostname
           : url.pathname.replace(/[\\/]+$/, '').split('/').pop()
         data = {
+          // @ts-ignore
           path: decodeURIComponent(filename),
           content: blob
         }
@@ -332,6 +344,7 @@ export default async function init (windowedContext = false) {
       }
     } catch (error) {
       console.error('Error in import to IPFS context menu', error)
+      // @ts-ignore
       if (error.message === 'NetworkError when attempting to fetch resource.') {
         notify('notify_importErrorTitle', 'notify_importTrackingProtectionErrorMsg')
         console.warn('IPFS import often fails because remote file can not be downloaded due to Tracking Protection. See details at: https://github.com/ipfs/ipfs-companion/issues/227')
@@ -339,6 +352,7 @@ export default async function init (windowedContext = false) {
           url: 'https://github.com/ipfs/ipfs-companion/issues/227'
         })
       } else {
+        // @ts-ignore
         notify('notify_importErrorTitle', 'notify_inlineErrorMsg', `${error.message}`)
       }
     }
@@ -516,14 +530,16 @@ export default async function init (windowedContext = false) {
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.action.setIcon(iconDefinition)
+      // @ts-ignore
       if (browser.runtime.lastError.message === 'Icon invalid.') {
-        throw browser.runtime.lastError 
+        throw browser.runtime.lastError
       }
     } catch (error) {
       // Fallback!
       // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
       // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
       // Still, we want icon, so we precompute rasters of popular sizes and use them instead
+      // @ts-ignore
       iconDefinition = await rasterIconDefinition(iconPath)
       await browser.action.setIcon(iconDefinition)
     }
@@ -537,6 +553,7 @@ export default async function init (windowedContext = false) {
     if (state.automaticMode && state.localGwAvailable) {
       if (oldPeerCount === offlinePeerCount && newPeerCount > offlinePeerCount && !state.redirect) {
         await browser.storage.local.set({ useCustomGateway: true })
+        // @ts-ignore
         reloadIpfsClientOfflinePages(browser, ipfs, state)
       } else if (newPeerCount === offlinePeerCount && state.redirect) {
         await browser.storage.local.set({ useCustomGateway: false })
@@ -544,6 +561,7 @@ export default async function init (windowedContext = false) {
     }
   }
 
+  // @ts-ignore
   async function onStorageChange (changes, area) {
     let shouldReloadExtension = false
     let shouldRestartIpfsClient = false
@@ -634,6 +652,7 @@ export default async function init (windowedContext = false) {
         await destroyIpfsClient(browser)
       } catch (err) {
         console.error('[ipfs-companion] Failed to destroy IPFS client', err)
+        // @ts-ignore
         notify('notify_stopIpfsNodeErrorTitle', err.message)
       } finally {
         ipfs = null
@@ -648,6 +667,7 @@ export default async function init (windowedContext = false) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
           'notify_startIpfsNodeErrorTitle',
+          // @ts-ignore
           err.name === 'ValidationError' ? err.details[0].message : err.message
         )
       }
@@ -715,9 +735,11 @@ export default async function init (windowedContext = false) {
   return api
 }
 
+// @ts-ignore
 const rasterIconDefinition = pMemoize((svgPath) => {
   const pngPath = (size) => {
     // point at precomputed PNG file
+    // @ts-ignore
     const baseName = /\/icons\/(.+)\.svg/.exec(svgPath)[1]
     return `/icons/png/${baseName}_${size}.png`
   }
