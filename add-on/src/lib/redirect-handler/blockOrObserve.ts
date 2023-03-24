@@ -7,14 +7,14 @@ log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 class BlockOrObserve {
   private _supportsBlock: boolean
 
-  constructor() {
+  constructor () {
     this._supportsBlock = false
     this._test()
   }
 
-  private _test() {
+  private _test (): void {
     log('Testing if browser supports blocking requests')
-    const listenerRef = () => { }
+    const listenerRef = (): void => { }
     try {
       browser.webRequest.onBeforeRequest.addListener(listenerRef, { urls: ['https://ipfs.io'] }, ['blocking'])
       this._supportsBlock = true
@@ -33,4 +33,4 @@ class BlockOrObserve {
 }
 
 const blockOrObserve = new BlockOrObserve()
-export default blockOrObserve;
+export default blockOrObserve
