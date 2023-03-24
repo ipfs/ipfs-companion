@@ -36,7 +36,7 @@ describe('modifyRequest processing', function () {
   // (eg. image embedded from public gateway on HTTPS website)
   describe('a subresource request on HTTPS website', function () {
     const cid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
-    it('should be routed to "127.0.0.1" gw in Chromium if type is image', function () {
+    it('should be routed to "127.0.0.1" gw in Chromium if type is image', async function () {
       runtime.isFirefox = false
       const request = {
         method: 'GET',
@@ -44,10 +44,10 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         initiator: 'https://some-website.example.com' // Chromium
       }
-      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
         .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
     })
-    it('should be routed to "localhost" gw in Chromium if not a subresource', function () {
+    it('should be routed to "localhost" gw in Chromium if not a subresource', async function () {
       runtime.isFirefox = false
       const request = {
         method: 'GET',
@@ -55,10 +55,10 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         initiator: 'https://some-website.example.com' // Chromium
       }
-      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
         .to.equal(`http://localhost:8080/ipfs/${cid}`)
     })
-    it('should be routed to "127.0.0.1" gw to avoid mixed content warning in Firefox', function () {
+    it('should be routed to "127.0.0.1" gw to avoid mixed content warning in Firefox', async function () {
       runtime.isFirefox = true
       const request = {
         method: 'GET',
@@ -66,10 +66,10 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         originUrl: 'https://some-website.example.com/some/page.html' // FF only
       }
-      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
         .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
     })
-    it('should be routed to "localhost" gw in Firefox if not a subresource', function () {
+    it('should be routed to "localhost" gw in Firefox if not a subresource', async function () {
       runtime.isFirefox = true
       const request = {
         method: 'GET',
@@ -77,14 +77,14 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         originUrl: 'https://some-website.example.com/some/page.html' // FF only
       }
-      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
         .to.equal(`http://localhost:8080/ipfs/${cid}`)
     })
   })
 
   describe('a request to <apiURL>/api/v0/add with stream-channels=true', function () {
     const expectHeader = { name: 'Expect', value: '100-continue' }
-    it('should apply the "Expect: 100-continue" fix for https://github.com/ipfs/go-ipfs/issues/5168 ', function () {
+    it('should apply the "Expect: 100-continue" fix for https://github.com/ipfs/go-ipfs/issues/5168 ', async function () {
       const request = {
         method: 'POST',
         requestHeaders: [
@@ -93,7 +93,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/add?progress=true&wrapWithDirectory=true&pin=true&wrap-with-directory=true&stream-channels=true`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders).to.deep.include(expectHeader)
     })
   })
@@ -123,7 +123,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(apiOriginHeader)
     })
@@ -143,7 +143,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(apiOriginHeader)
     })
@@ -163,7 +163,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(apiOriginHeader)
     })
@@ -184,7 +184,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(apiOriginHeader)
     })
@@ -203,7 +203,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(expectedOriginHeader)
     })
@@ -222,7 +222,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(expectedOriginHeader)
     })
@@ -245,7 +245,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(expectedOriginHeader)
     })
@@ -265,7 +265,7 @@ describe('modifyRequest processing', function () {
         type: 'xmlhttprequest',
         url: `${state.apiURLString}api/v0/id`
       }
-      modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
+      await modifyRequest.onBeforeRequest(request) // executes before onBeforeSendHeaders, may mutate state
       expect(modifyRequest.onBeforeSendHeaders(request).requestHeaders)
         .to.deep.include(expectedOriginHeader)
     })
@@ -290,7 +290,7 @@ describe('modifyRequest processing', function () {
       }
       browser.tabs.update.flush()
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).notCalled)
-      modifyRequest.onCompleted(request)
+      await modifyRequest.onCompleted(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).calledOnce)
       browser.tabs.update.flush()
     })
@@ -323,7 +323,7 @@ describe('modifyRequest processing', function () {
 
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
   describe('redirect of IPFS resource to local gateway in Brave', function () {
-    it('should be redirected if not a  subresource (not impacted by Brave Shields)', function () {
+    it('should be redirected if not a subresource (not impacted by Brave Shields)', async function () {
       runtime.isFirefox = false
       runtime.brave = { thisIsFakeBraveRuntime: true }
       const request = {
@@ -332,10 +332,10 @@ describe('modifyRequest processing', function () {
         url: 'https://ipfs.io/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss',
         initiator: 'https://some-website.example.com' // Brave (built on Chromium)
       }
-      expect(modifyRequest.onBeforeRequest(request))
+      expect(await modifyRequest.onBeforeRequest(request))
         .to.equal(undefined)
     })
-    it('should be left untouched if subresource (would be blocked by Brave Shields)', function () {
+    it('should be left untouched if subresource (would be blocked by Brave Shields)', async function () {
       runtime.isFirefox = false
       runtime.brave = { thisIsFakeBraveRuntime: true }
       const cid = 'bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss'
@@ -345,7 +345,7 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         initiator: 'https://some-website.example.com' // Brave (built on Chromium)
       }
-      expect(modifyRequest.onBeforeRequest(request).redirectUrl)
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
         .to.equal(`http://localhost:8080/ipfs/${cid}`)
     })
   })

@@ -8,6 +8,9 @@
     "url": "https://github.com/ipfs-shipyard/ipfs-companion.git"
   },
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "start": "run-s clean build test firefox",
     "clean": "run-p clean:*",
@@ -91,6 +94,7 @@
     "abort-controller": "3.0.0",
     "babel-loader": "9.1.0",
     "babel-plugin-syntax-async-generators": "6.13.0",
+    "bufferutil": "^4.0.7",
     "c8": "7.12.0",
     "chai": "4.3.7",
     "cross-env": "7.0.3",
@@ -100,6 +104,9 @@
     "file-loader": "6.2.0",
     "fs-promise": "2.0.3",
     "get-firefox": "5.0.0",
+    "global": "^4.4.0",
+    "http-browserify": "^1.7.0",
+    "https-browserify": "^1.0.0",
     "ignore-loader": "0.1.2",
     "ignore-styles": "5.0.1",
     "ipfs-core": "0.17.0",
@@ -111,6 +118,7 @@
     "npm-run-all": "4.1.5",
     "patch-package": "6.5.0",
     "path": "0.12.7",
+    "process": "^0.11.10",
     "raw-loader": "4.0.2",
     "request-progress": "3.0.0",
     "selenium-webdriver": "^4.7.1",
@@ -126,6 +134,7 @@
     "ts-standard": "^12.0.2",
     "typescript": "^4.9.4",
     "url": "0.11.0",
+    "utf-8-validate": "^5.0.10",
     "web-ext": "7.3.1",
     "webpack": "5.75.0",
     "webpack-bundle-analyzer": "4.7.0",

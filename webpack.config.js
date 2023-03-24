@@ -46,7 +46,7 @@ const commonConfig = {
       Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
     }),
     new webpack.DefinePlugin({
-      global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
+      global: 'globalThis', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.emitWarning': (message, type) => {}, // console.warn(`${type}${type ? ': ' : ''}${message}`),
       'process.env': {
         // NODE_ENV: '"production"',
@@ -125,8 +125,12 @@ if (devBuild) {
  */
 const bgConfig = merge(commonConfig, {
   name: 'background',
+  target: 'webworker',
   entry: {
     backgroundPage: './add-on/src/background/background.js'
+  },
+  output: {
+    globalObject: 'globalThis'
   },
   optimization: {
     splitChunks: {

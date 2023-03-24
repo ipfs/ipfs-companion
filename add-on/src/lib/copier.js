@@ -72,7 +72,7 @@ export default function createCopier (notify, ipfsPathValidator) {
 
     async copyAddressAtPublicGw (context, contextType) {
       const url = await findValueForContext(context, contextType)
-      const publicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+      const publicUrl = await ipfsPathValidator.resolveToPublicUrl(url)
       await copyTextToClipboard(publicUrl, notify)
     },
 

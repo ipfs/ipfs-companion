@@ -23,14 +23,13 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
-import { handleConsentFromState, startSession, endSession, trackView } from './telemetry.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-export default async function init () {
+export default async function init (windowedContext = false) {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
@@ -57,11 +56,8 @@ export default async function init () {
     runtime = await createRuntimeChecks(browser)
     state = initState(options)
     notify = createNotifier(getState)
-    // ensure consent is set properly on app init
-    handleConsentFromState(state)
 
     if (state.active) {
-      startSession()
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
         ipfs = await initIpfsClient(browser, state)
@@ -79,19 +75,23 @@ export default async function init () {
     copier = createCopier(notify, ipfsPathValidator)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
     inspector = createInspector(notify, ipfsPathValidator, getState)
-    contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-      onAddFromContext,
-      onCopyCanonicalAddress: copier.copyCanonicalAddress,
-      onCopyRawCid: copier.copyRawCid,
-      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
-    })
-    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-    log('register all listeners')
-    registerListeners()
-    await registerSubdomainProxy(getState, runtime, notify)
-    log('init done')
-    setApiStatusUpdateInterval(options.ipfsApiPollMs)
-    await runPendingOnInstallTasks()
+    if (!windowedContext) {
+      contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
+        onAddFromContext,
+        onCopyCanonicalAddress: copier.copyCanonicalAddress,
+        onCopyRawCid: copier.copyRawCid,
+        onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
+      })
+      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+      log('register all listeners')
+      registerListeners()
+      await registerSubdomainProxy(getState, runtime, notify)
+      log('init done')
+      setApiStatusUpdateInterval(options.ipfsApiPollMs)
+      await runPendingOnInstallTasks()
+    } else {
+      log('init done (windowed context)')
+    }
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -108,16 +108,16 @@ export default async function init () {
     throw new Error('IPFS Companion: API client is disabled')
   }
 
-  function registerListeners () {
-    const onBeforeSendInfoSpec = ['blocking', 'requestHeaders']
+  function registerListeners() {
+    const onBeforeSendInfoSpec = ['requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
       // Note: we need this for code ensuring kubo-rpc-client can talk to API without setting CORS
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders, { urls: ['<all_urls>'] }, onBeforeSendInfoSpec)
-    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, ['blocking'])
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['blocking', 'responseHeaders'])
+    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] })
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, ['responseHeaders'])
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.webRequest.onCompleted.addListener(onCompleted, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.storage.onChanged.addListener(onStorageChange)
@@ -164,23 +164,13 @@ export default async function init () {
   // ===================================================================
   // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
 
-  function onRuntimeMessage (request, sender) {
+  async function onRuntimeMessage (request, sender) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
       const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
-      const result = validIpfsOrIpns(path) ? resolveToPublicUrl(path) : null
-      return Promise.resolve({ pubGwUrlForIpfsOrIpnsPath: result })
-    }
-    if (request.telemetry) {
-      return Promise.resolve(onTelemetryMessage(request.telemetry, sender))
-    }
-  }
-
-  function onTelemetryMessage (request, sender) {
-    if (request.trackView) {
-      const { version } = browser.runtime.getManifest()
-      return trackView(request.trackView, { version })
+      const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
+      return { pubGwUrlForIpfsOrIpnsPath: result }
     }
   }
 
@@ -254,7 +244,7 @@ export default async function init () {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
       if (info.isIpfsContext) {
-        info.currentTabPublicUrl = ipfsPathValidator.resolveToPublicUrl(url)
+        info.currentTabPublicUrl = await ipfsPathValidator.resolveToPublicUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
         if (resolveCache.has(url)) {
           const [immutableIpfsPath, permalink, cid] = resolveCache.get(url)
@@ -273,7 +263,7 @@ export default async function init () {
           }, 0)
         }
       }
-      info.currentDnslinkFqdn = dnslinkResolver.findDNSLinkHostname(url)
+      info.currentDnslinkFqdn =await dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || safeHostname(url)
       info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
@@ -473,7 +463,7 @@ export default async function init () {
   // -------------------------------------------------------------------
 
   async function updateBrowserActionBadge () {
-    if (typeof browser.browserAction.setBadgeBackgroundColor === 'undefined') {
+    if (typeof browser.action.setBadgeBackgroundColor === 'undefined') {
       // Firefox for Android does not have this UI, so we just skip it
       return
     }
@@ -498,13 +488,13 @@ export default async function init () {
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
     try {
-      const oldColor = colorArraytoHex(await browser.browserAction.getBadgeBackgroundColor({}))
+      const oldColor = colorArraytoHex(await browser.action.getBadgeBackgroundColor({}))
       if (badgeColor !== oldColor) {
-        await browser.browserAction.setBadgeBackgroundColor({ color: badgeColor })
+        await browser.action.setBadgeBackgroundColor({ color: badgeColor })
         await setBrowserActionIcon(badgeIcon)
       }
-      const oldText = await browser.browserAction.getBadgeText({})
-      if (oldText !== badgeText) await browser.browserAction.setBadgeText({ text: badgeText })
+      const oldText = await browser.action.getBadgeText({})
+      if (oldText !== badgeText) await browser.action.setBadgeText({ text: badgeText })
     } catch (error) {
       console.error('Unable to update browserAction badge due to error', error)
     }
@@ -525,14 +515,17 @@ export default async function init () {
     let iconDefinition = { path: iconPath }
     try {
       // Try SVG first -- Firefox supports it natively
-      await browser.browserAction.setIcon(iconDefinition)
+      await browser.action.setIcon(iconDefinition)
+      if (browser.runtime.lastError.message === 'Icon invalid.') {
+        throw browser.runtime.lastError 
+      }
     } catch (error) {
       // Fallback!
       // Chromium does not support SVG [ticket below is 8 years old, I can't even..]
       // https://bugs.chromium.org/p/chromium/issues/detail?id=29683
       // Still, we want icon, so we precompute rasters of popular sizes and use them instead
       iconDefinition = await rasterIconDefinition(iconPath)
-      await browser.browserAction.setIcon(iconDefinition)
+      await browser.action.setIcon(iconDefinition)
     }
   }
 
@@ -568,8 +561,6 @@ export default async function init () {
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
-          // Any time the extension switches active state, start or stop the current session.
-          state.active ? startSession() : endSession()
           break
         case 'ipfsNodeType':
           if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
@@ -636,8 +627,6 @@ export default async function init () {
           break
       }
     }
-    // ensure consent is set properly on state changes
-    handleConsentFromState(state)
 
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {

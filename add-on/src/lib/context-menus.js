@@ -71,29 +71,13 @@ export function createContextMenus (
   getState, _runtime, ipfsPathValidator, { onAddFromContext, onCopyRawCid, onCopyAddressAtPublicGw }) {
   try {
     const createSubmenu = (id, contextType, menuBuilder) => {
-      browser.contextMenus.create({
-        id,
-        title: browser.i18n.getMessage(id),
-        documentUrlPatterns: ['<all_urls>'],
-        contexts: [contextType]
-      })
+      browser.contextMenus.onClicked.addListener((...args) => console.log(args))
     }
     const createImportToIpfsMenuItem = (parentId, id, contextType, ipfsAddOptions) => {
       const itemId = `${parentId}_${id}`
       apiMenuItems.add(itemId)
-      return browser.contextMenus.create({
-        id: itemId,
-        parentId,
-        title: browser.i18n.getMessage(id),
-        contexts: [contextType],
-        documentUrlPatterns: ['<all_urls>'],
-        enabled: false,
-        /* no support for 'icons' in Chrome
-        icons: {
-          '48': '/ui-kit/icons/stroke_cube.svg'
-        }, */
-        onclick: (context) => onAddFromContext(context, contextType, ipfsAddOptions)
-      })
+      return browser.contextMenus.onClicked.addListener((context) => onAddFromContext(context, contextType, ipfsAddOptions)
+      )
     }
     const createCopierMenuItem = (parentId, id, contextType, handler) => {
       const itemId = `${parentId}_${id}`
@@ -102,22 +86,9 @@ export function createContextMenus (
       if (apiMenuItemIds.has(id)) {
         apiMenuItems.add(itemId)
       }
-      return browser.contextMenus.create({
-        id: itemId,
-        parentId,
-        title: browser.i18n.getMessage(id),
-        contexts: [contextType],
-        documentUrlPatterns: [
-          '*://*/ipfs/*', '*://*/ipns/*',
-          '*://*.ipfs.dweb.link/*', '*://*.ipns.dweb.link/*', // TODO: add any custom public gateway from Preferences
-          '*://*.ipfs.localhost/*', '*://*.ipns.localhost/*'
-        ],
-        /* no support for 'icons' in Chrome
-        icons: {
-          '48': '/ui-kit/icons/stroke_copy.svg'
-        }, */
-        onclick: (context) => handler(context, contextType)
-      })
+      return browser.contextMenus.onClicked.addListener(
+        (context) => handler(context, contextType)
+      )
     }
     const buildSubmenu = (parentId, contextType) => {
       createSubmenu(parentId, contextType)
