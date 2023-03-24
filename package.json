@@ -47,7 +47,7 @@
     "test:functional": "c8 mocha --timeout 5000 --exit --require ignore-styles \"test/functional/**/*.test.js\"",
     "lint": "run-s lint:*",
     "lint:standard": "ts-standard -v \"*.js\" \"add-on/src/**/*.js\" \"add-on/src/**/*.ts\" \"test/**/*.js\" \"scripts/**/*.js\"",
-    "lint:web-ext": "web-ext lint",
+    "lint:web-ext": "web-ext lint --firefox-preview",
     "fix:lint": "run-s fix:lint:*",
     "fix:lint:standard": "ts-standard -v --fix \"*.js\" \"add-on/src/**/*.js\" \"add-on/src/**/*.ts\" \"test/**/*.js\" \"scripts/**/*.js\"",
     "precommit": "run-s lint:standard",
