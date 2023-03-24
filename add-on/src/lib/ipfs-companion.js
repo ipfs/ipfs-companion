@@ -83,7 +83,6 @@ export default async function init (windowedContext = false) {
     if (!windowedContext) {
       contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
         onAddFromContext,
-        // @ts-ignore
         onCopyCanonicalAddress: copier.copyCanonicalAddress,
         onCopyRawCid: copier.copyRawCid,
         onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
@@ -116,7 +115,6 @@ export default async function init (windowedContext = false) {
 
   function registerListeners() {
     const onBeforeSendInfoSpec = ['requestHeaders']
-    // @ts-ignore
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
       // Note: we need this for code ensuring kubo-rpc-client can talk to API without setting CORS
@@ -173,7 +171,6 @@ export default async function init (windowedContext = false) {
   // ===================================================================
   // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
 
-  // @ts-ignore
   async function onRuntimeMessage (request, sender) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
@@ -530,9 +527,8 @@ export default async function init (windowedContext = false) {
     try {
       // Try SVG first -- Firefox supports it natively
       await browser.action.setIcon(iconDefinition)
-      // @ts-ignore
       if (browser.runtime.lastError.message === 'Icon invalid.') {
-        throw browser.runtime.lastError
+        throw browser.runtime.lastError 
       }
     } catch (error) {
       // Fallback!
