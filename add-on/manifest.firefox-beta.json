@@ -1,5 +1,5 @@
 {
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "ipfs-companion-dev-build@ci.ipfs.team",
       "update_url": "https://ipfs-shipyard.github.io/ipfs-companion/ci/firefox/update.json"
