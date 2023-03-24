@@ -113,7 +113,7 @@ export default async function init (windowedContext = false) {
     throw new Error('IPFS Companion: API client is disabled')
   }
 
-  function registerListeners() {
+  function registerListeners () {
     const onBeforeSendInfoSpec = ['requestHeaders']
     if (browser.webRequest.OnBeforeSendHeadersOptions && 'EXTRA_HEADERS' in browser.webRequest.OnBeforeSendHeadersOptions) {
       // Chrome 72+  requires 'extraHeaders' for accessing all headers
@@ -270,7 +270,7 @@ export default async function init (windowedContext = false) {
           }, 0)
         }
       }
-      info.currentDnslinkFqdn =await dnslinkResolver.findDNSLinkHostname(url)
+      info.currentDnslinkFqdn = await dnslinkResolver.findDNSLinkHostname(url)
       info.currentFqdn = info.currentDnslinkFqdn || safeHostname(url)
       info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
@@ -528,7 +528,7 @@ export default async function init (windowedContext = false) {
       // Try SVG first -- Firefox supports it natively
       await browser.action.setIcon(iconDefinition)
       if (browser.runtime.lastError.message === 'Icon invalid.') {
-        throw browser.runtime.lastError 
+        throw browser.runtime.lastError
       }
     } catch (error) {
       // Fallback!
