@@ -3,7 +3,7 @@
 
 import choo from 'choo'
 import html from 'choo/html/index.js'
-import browser, { i18n, runtime } from 'webextension-polyfill'
+import { i18n, runtime } from 'webextension-polyfill'
 import { nodeOffSvg } from '../landing-pages/welcome/page.js'
 import createWelcomePageStore from '../landing-pages/welcome/store.js'
 import { optionsPage } from '../lib/constants.js'

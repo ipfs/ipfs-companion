@@ -13,4 +13,5 @@ browser.runtime.setUninstallURL(getUninstallURL(browser))
 const init = async () => {
   await createIpfsCompanion()
 }
-init();
+
+init()

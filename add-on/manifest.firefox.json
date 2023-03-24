@@ -5,10 +5,10 @@
   "options_ui": {
     "browser_style": false
   },
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "ipfs-firefox-addon@lidel.org",
-      "strict_min_version": "91.1.0"
+      "strict_min_version": "109.0.0"
     }
   },
   "permissions": [
