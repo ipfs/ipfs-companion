@@ -24,7 +24,7 @@ import createRuntimeChecks from './runtime-checks.js'
 import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
-import blockOrObserve from './redirect-handler/blockOrObserve.js'
+import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
@@ -122,9 +122,9 @@ export default async function init (windowedContext = false) {
     }
     browser.webRequest.onBeforeSendHeaders.addListener(
       // @ts-ignore
-      onBeforeSendHeaders, { urls: ['<all_urls>'] }, blockOrObserve.getExtraInfoSpec(onBeforeSendInfoSpec))
-    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, blockOrObserve.getExtraInfoSpec())
-    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, blockOrObserve.getExtraInfoSpec(['responseHeaders']))
+      onBeforeSendHeaders, { urls: ['<all_urls>'] }, getExtraInfoSpec(onBeforeSendInfoSpec))
+    browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, getExtraInfoSpec())
+    browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, getExtraInfoSpec(['responseHeaders']))
     browser.webRequest.onErrorOccurred.addListener(onErrorOccurred, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.webRequest.onCompleted.addListener(onCompleted, { urls: ['<all_urls>'], types: ['main_frame'] })
     browser.storage.onChanged.addListener(onStorageChange)
@@ -147,7 +147,7 @@ export default async function init (windowedContext = false) {
   // HTTP Request Hooks
   // ===================================================================
 
-  function onBeforeSendHeaders(request) {
+  function onBeforeSendHeaders (request) {
     return modifyRequest.onBeforeSendHeaders(request)
   }
 

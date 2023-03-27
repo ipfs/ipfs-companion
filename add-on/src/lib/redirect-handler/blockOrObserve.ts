@@ -3,34 +3,41 @@ import debug from 'debug'
 
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
+debug.enable('ipfs-companion:redirect-handler:blockOrObserve')
 
-class BlockOrObserve {
-  private _supportsBlock: boolean
+export const supportsBlock: boolean = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
 
-  constructor () {
-    this._supportsBlock = false
-    this._test()
+export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
+  if (supportsBlock) {
+    return ['blocking' as T, ...additionalParams]
   }
-
-  private _test (): void {
-    log('Testing if browser supports blocking requests')
-    const listenerRef = (): void => { }
-    try {
-      browser.webRequest.onBeforeRequest.addListener(listenerRef, { urls: ['https://ipfs.io'] }, ['blocking'])
-      this._supportsBlock = true
-      browser.webRequest.onBeforeRequest.removeListener(listenerRef)
-    } catch (e) {
-      log.error('Browser does not support blocking requests')
-    }
-  }
-
-  public getExtraInfoSpec<T>(additionalParams: T[] = []): T[] {
-    if (this._supportsBlock) {
-      return ['blocking' as T, ...additionalParams]
-    }
-    return additionalParams
-  }
+  return additionalParams
 }
 
-const blockOrObserve = new BlockOrObserve()
-export default blockOrObserve
+export async function addRuleToDynamicRuleset ({
+  originUrl,
+  redirectUrl
+}: {
+  originUrl: string
+  redirectUrl: string
+}): Promise<void> {
+  const id = Math.floor(Math.random() * 29999)
+  const domain = new URL(originUrl).hostname
+  debug(`addRuleToDynamicRuleset ${JSON.stringify({ id, domain, redirectUrl })}`)
+  // TODO(DJ): need to add error handling for collisions
+  await browser.declarativeNetRequest.updateDynamicRules(
+    {
+      addRules: [
+        {
+          id,
+          priority: 1,
+          action: {
+            type: 'redirect',
+            redirect: { url: redirectUrl }
+          },
+          condition: { urlFilter: originUrl, resourceTypes: ['main_frame'] }
+        }
+      ]
+    }
+  )
+}

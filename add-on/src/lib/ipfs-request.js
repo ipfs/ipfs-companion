@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict'
 /* eslint-env browser, webextensions */
 
@@ -10,6 +11,7 @@ import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
+import { addRuleToDynamicRuleset, supportsBlock } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -146,7 +148,10 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // to public gateway.
       if (!state.nodeActive && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const publicUri = await ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
-        return { redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}` }
+        return handleRedirection({
+          originUrl: request.url,
+          redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}`
+        })
       }
 
       // When Subdomain Proxy is enabled we normalize address bar requests made
@@ -154,12 +159,23 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // take advantage of subdomain redirect provided by go-ipfs >= 0.5
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
-        if (redirectUrl !== request.url) return { redirectUrl }
+        if (redirectUrl !== request.url) {
+          return handleRedirection({
+            originUrl: request.url,
+            redirectUrl
+          })
+        }
       }
+
       // For now normalize API to the IP to comply with go-ipfs checks
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.apiURL)) {
         const redirectUrl = safeURL(request.url, { useLocalhostName: false }).toString()
-        if (redirectUrl !== request.url) return { redirectUrl }
+        if (redirectUrl !== request.url) {
+          return handleRedirection({
+            originUrl: request.url,
+            redirectUrl
+          })
+        }
       }
 
       // early sanity checks
@@ -459,6 +475,15 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
   }
 }
 
+function handleRedirection ({ originUrl, redirectUrl }) {
+  if (supportsBlock) {
+    return { redirectUrl }
+  }
+
+  // Let browser handle redirection MV3 style.
+  addRuleToDynamicRuleset({ originUrl, redirectUrl })
+}
+
 // Returns a string with URL at the active gateway (local or public)
 async function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {
   const { resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
@@ -507,7 +532,12 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
   }
 
   // return a redirect only if URL changed
-  if (redirectUrl && request.url !== redirectUrl) return { redirectUrl }
+  if (redirectUrl && request.url !== redirectUrl) {
+    return handleRedirection({
+      originUrl: request.url,
+      redirectUrl
+    })
+  }
 }
 
 function isSafeToRedirect (request, runtime) {
@@ -574,7 +604,10 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   // additional fixups of the final path
   path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
   if (oldPath !== path && isIPFS.path(path)) {
-    return { redirectUrl: pathAtHttpGateway(path, pubGwUrl) }
+    return handleRedirection({
+      originUrl: request.url,
+      redirectUrl: pathAtHttpGateway(path, pubGwUrl)
+    })
   }
   return null
 }
@@ -616,7 +649,10 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
   if (isIPFS.path(path)) {
     // replace search query with a request to a public gateway
     // (will be redirected later, if needed)
-    return { redirectUrl: pathAtHttpGateway(path, pubGwUrl) }
+    return handleRedirection({
+      originUrl: request.url,
+      redirectUrl: pathAtHttpGateway(path, pubGwUrl)
+    })
   }
 }
 
