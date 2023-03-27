@@ -1,4 +1,7 @@
 {
+  "background": {
+    "scripts": ["dist/bundles/backgroundPage.bundle.js"]
+  },
   "action": {
     "browser_style": false
   },
