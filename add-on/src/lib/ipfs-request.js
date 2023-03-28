@@ -11,7 +11,7 @@ import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
-import { addRuleToDynamicRuleset, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { addRuleToDynamicRuleSet, supportsBlock } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -481,7 +481,7 @@ function handleRedirection ({ originUrl, redirectUrl }) {
   }
 
   // Let browser handle redirection MV3 style.
-  addRuleToDynamicRuleset({ originUrl, redirectUrl })
+  addRuleToDynamicRuleSet({ originUrl, redirectUrl })
 }
 
 // Returns a string with URL at the active gateway (local or public)
