@@ -6,7 +6,7 @@ log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
 const savedRegexFilters = new Map<string, string>()
 
-type redirectHandlerInput = {
+interface redirectHandlerInput {
   originUrl: string
   redirectUrl: string
 }
@@ -18,17 +18,18 @@ type redirectHandlerInput = {
  * @param redirectUrl
  * @returns
  */
-function constructRegexFilter({ originUrl, redirectUrl }: redirectHandlerInput): {
-  regexSubstitution: string,
+function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput): {
+  regexSubstitution: string
   regexFilter: string
 } {
   // these characters are allowed in the URL, but not in the regex.
-  const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\)\*\+,;=-_\.~])/g
+  // eslint-disable-next-line no-useless-escape
+  const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=-_\.~])/g
   // We can traverse the URL from the end, and find the first character that is different.
-  let commonIdx = 1;
+  let commonIdx = 1
   while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
     if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
-      break;
+      break
     }
     commonIdx += 1
   }
@@ -47,7 +48,7 @@ function constructRegexFilter({ originUrl, redirectUrl }: redirectHandlerInput):
 export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
 
 // If the browser supports the declarativeNetRequest API, we can block the request.
-export function getExtraInfoSpec<T>(additionalParams: T[] = []): T[] {
+export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
   if (supportsBlock) {
     return ['blocking' as T, ...additionalParams]
   }
@@ -60,7 +61,7 @@ export function getExtraInfoSpec<T>(additionalParams: T[] = []): T[] {
  * @param {redirectHandlerInput} input
  * @returns {Promise<void>}
  */
-export async function addRuleToDynamicRuleSet({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
+export async function addRuleToDynamicRuleSet ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
   const id = Math.floor(Math.random() * 29999)
   const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
 
@@ -77,6 +78,7 @@ export async function addRuleToDynamicRuleSet({ originUrl, redirectUrl }: redire
             },
             condition: {
               regexFilter,
+              excludedInitiatorDomains: ['127.0.0.1', 'localhost'],
               resourceTypes: [
                 'csp_report',
                 'font',
