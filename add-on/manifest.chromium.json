@@ -1,7 +1,4 @@
 {
-  "background": {
-    "service_worker": "dist/bundles/backgroundPage.bundle.js"
-  },
   "minimum_chrome_version": "101",
   "permissions": [
     "clipboardWrite",
