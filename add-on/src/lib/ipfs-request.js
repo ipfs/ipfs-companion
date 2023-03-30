@@ -11,7 +11,7 @@ import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
-import { addRuleToDynamicRuleSet, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { addRuleToDynamicRuleSetGenerator, supportsBlock } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -32,6 +32,7 @@ const recoverableHttpError = (code) => code && code >= 400
 
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
+let addRuleToDynamicRuleSet = null
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
@@ -39,6 +40,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
   const browser = runtime.browser
   const runtimeRoot = browser.runtime.getURL('/')
   const webExtensionOrigin = runtimeRoot ? new URL(runtimeRoot).origin : 'http://companion-origin' // avoid 'null' because it has special meaning
+  addRuleToDynamicRuleSet = addRuleToDynamicRuleSetGenerator(getState)
   const isCompanionRequest = (request) => {
     // We inspect webRequest object (WebExtension API) instead of Origin HTTP
     // header because the value of the latter changed over the years ad

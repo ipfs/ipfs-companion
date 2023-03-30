@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill'
 import debug from 'debug'
+import { CompanionState } from '../../types/companion.js'
 
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
@@ -61,47 +62,62 @@ export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
  * @param {redirectHandlerInput} input
  * @returns {Promise<void>}
  */
-export async function addRuleToDynamicRuleSet ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
-  const id = Math.floor(Math.random() * 29999)
-  const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
+export function addRuleToDynamicRuleSetGenerator (
+  getState: () => CompanionState): (input: redirectHandlerInput) => Promise<void> {
+  // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
+  return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
+    const state = getState()
+    // We don't want to redirect to the same URL. Or to the gateway.
+    if (originUrl === redirectUrl || originUrl.includes(state.gwURL.host)) {
+      return
+    }
 
-  if (!savedRegexFilters.has(regexFilter)) {
-    await browser.declarativeNetRequest.updateDynamicRules(
-      {
-        addRules: [
-          {
-            id,
-            priority: 1,
-            action: {
-              type: 'redirect',
-              redirect: { regexSubstitution }
-            },
-            condition: {
-              regexFilter,
-              excludedInitiatorDomains: ['127.0.0.1', 'localhost'],
-              resourceTypes: [
-                'csp_report',
-                'font',
-                'image',
-                'main_frame',
-                'media',
-                'object',
-                'other',
-                'ping',
-                'script',
-                'stylesheet',
-                'sub_frame',
-                'webbundle',
-                'websocket',
-                'webtransport',
-                'xmlhttprequest'
-              ]
+    // We need to generate a random ID for the rule.
+    const id = Math.floor(Math.random() * 29999)
+    // We need to construct the regex filter and substitution.
+    const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
+    // We need to check if the rule already exists.
+    if (!savedRegexFilters.has(regexFilter)) {
+      await browser.declarativeNetRequest.updateDynamicRules(
+        {
+          // We need to add the new rule.
+          addRules: [
+            {
+              id,
+              priority: 1,
+              action: {
+                type: 'redirect',
+                redirect: { regexSubstitution }
+              },
+              condition: {
+                regexFilter,
+                excludedInitiatorDomains: [state.gwURL.host],
+                resourceTypes: [
+                  'csp_report',
+                  'font',
+                  'image',
+                  'main_frame',
+                  'media',
+                  'object',
+                  'other',
+                  'ping',
+                  'script',
+                  'stylesheet',
+                  'sub_frame',
+                  'webbundle',
+                  'websocket',
+                  'webtransport',
+                  'xmlhttprequest'
+                ]
+              }
             }
-          }
-        ],
-        removeRuleIds: await browser.declarativeNetRequest.getDynamicRules().then((rules) => rules.map((rule) => rule.id))
-      }
-    )
-    savedRegexFilters.set(regexFilter, `${id}`)
+          ],
+          // We need to remove the old rules.
+          removeRuleIds: await browser.declarativeNetRequest.getDynamicRules().then((rules) => rules.map((rule) => rule.id))
+        }
+      )
+      // We need to save the regex filter and ID to check if the rule already exists later.
+      savedRegexFilters.set(regexFilter, `${id}`)
+    }
   }
 }
