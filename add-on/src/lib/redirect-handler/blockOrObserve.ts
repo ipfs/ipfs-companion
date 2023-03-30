@@ -68,7 +68,8 @@ export function addRuleToDynamicRuleSetGenerator (
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
     const state = getState()
     // We don't want to redirect to the same URL. Or to the gateway.
-    if (originUrl === redirectUrl || originUrl.includes(state.gwURL.host)) {
+    if (originUrl === redirectUrl ||
+      (originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery'))) {
       return
     }
 
