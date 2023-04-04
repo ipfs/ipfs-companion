@@ -120,7 +120,7 @@ export function addRuleToDynamicRuleSetGenerator (
         }
       )
       // We need to save the regex filter and ID to check if the rule already exists later.
-      savedRegexFilters.set(regexFilter, `${id}`)
+      savedRegexFilters.set(regexFilter, id.toString())
     }
   }
 }
