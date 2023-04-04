@@ -12,7 +12,7 @@ const metricsProvider = new MetricsProvider({
 
 /**
  *
- * @param {import('../types.js').CompanionState} state
+ * @param {import('../types/companion.js').CompanionState} state
  * @returns {void}
  */
 export function handleConsentFromState (state) {

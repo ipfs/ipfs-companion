@@ -4,7 +4,7 @@ import isFQDN from 'is-fqdn'
 import { isIPv4, isIPv6 } from 'is-ip'
 
 /**
- * @type {Readonly<import('../types.js').CompanionOptions>}
+ * @type {Readonly<import('../types/companion.js').CompanionOptions>}
  */
 export const optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else

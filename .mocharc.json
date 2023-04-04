@@ -1,0 +1,17 @@
+{
+  "diff": true,
+  "extensions": [".js", ".ts"],
+  "package": "./package.json",
+  "require": [
+    "ignore-styles",
+    "ts-node/register",
+    "tsconfig-paths/register"
+  ],
+  "exit": true,
+  "recursive": true,
+  "node-option": [
+    "es-module-specifier-resolution=node",
+    "experimental-specifier-resolution=node",
+    "loader=ts-node/esm"
+  ]
+}

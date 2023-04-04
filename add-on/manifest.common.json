@@ -6,13 +6,13 @@
   "description": "__MSG_manifest_extensionDescription__",
   "homepage_url": "https://github.com/ipfs-shipyard/ipfs-companion",
   "author": "IPFS Community",
+  "background": {
+    "service_worker": "dist/bundles/backgroundPage.bundle.js"
+  },
   "icons": {
     "19": "icons/png/ipfs-logo-on_19.png",
     "38": "icons/png/ipfs-logo-on_38.png",
     "128": "icons/png/ipfs-logo-on_128.png"
-  },
-  "background": {
-    "service_worker": "dist/bundles/backgroundPage.bundle.js"
   },
   "action": {
     "default_icon": {

@@ -1,5 +1,5 @@
 {
-  "minimum_chrome_version": "72",
+  "minimum_chrome_version": "101",
   "permissions": [
     "clipboardWrite",
     "contextMenus",
@@ -9,7 +9,9 @@
     "tabs",
     "unlimitedStorage",
     "webNavigation",
-    "webRequest"
+    "webRequest",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
   ],
   "host_permissions": ["<all_urls>"],
   "incognito": "not_allowed"
