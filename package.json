@@ -44,7 +44,7 @@
     "watch:js:webpack": "webpack --watch --mode development --devtool inline-source-map  --config ./webpack.config.js",
     "test": "run-s test:*",
     "test:e2e": "mocha --timeout 300000 \"test/e2e/**/*.test.js\"",
-    "test:functional": "c8 mocha  --timeout 5000 \"test/functional/**/*.test.js\"",
+    "test:functional": "c8 mocha --timeout 5000 \"test/functional/**/*.test.js\"",
     "lint": "run-s lint:*",
     "lint:standard": "ts-standard -v \"*.js\" \"add-on/src/**/*.js\" \"add-on/src/**/*.ts\" \"test/**/*.js\" \"scripts/**/*.js\"",
     "lint:web-ext": "web-ext lint --firefox-preview",
