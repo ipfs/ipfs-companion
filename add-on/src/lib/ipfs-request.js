@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use strict'
 /* eslint-env browser, webextensions */
 
