@@ -31,7 +31,7 @@ log.error = debug('ipfs-companion:main:error')
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-export default async function init (windowedContext = false) {
+export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
@@ -79,23 +79,19 @@ export default async function init (windowedContext = false) {
     copier = createCopier(notify, ipfsPathValidator)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
     inspector = createInspector(notify, ipfsPathValidator, getState)
-    if (!windowedContext) {
-      contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-        onAddFromContext,
-        onCopyCanonicalAddress: copier.copyCanonicalAddress,
-        onCopyRawCid: copier.copyRawCid,
-        onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
-      })
-      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-      log('register all listeners')
-      registerListeners()
-      await registerSubdomainProxy(getState, runtime, notify)
-      log('init done')
-      setApiStatusUpdateInterval(options.ipfsApiPollMs)
-      await runPendingOnInstallTasks()
-    } else {
-      log('init done (windowed context)')
-    }
+    contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
+      onAddFromContext,
+      onCopyCanonicalAddress: copier.copyCanonicalAddress,
+      onCopyRawCid: copier.copyRawCid,
+      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
+    })
+    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+    log('register all listeners')
+    registerListeners()
+    await registerSubdomainProxy(getState, runtime, notify)
+    log('init done')
+    setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await runPendingOnInstallTasks()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
