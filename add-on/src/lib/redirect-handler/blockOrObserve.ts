@@ -46,6 +46,8 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
 }
 
 // We need to check if the browser supports the declarativeNetRequest API.
+// TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
+// which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
 export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
 
 // If the browser supports the declarativeNetRequest API, we can block the request.
