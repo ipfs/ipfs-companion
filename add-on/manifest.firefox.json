@@ -5,14 +5,17 @@
   "options_ui": {
     "browser_style": false
   },
+  "background": {
+    "service_worker": "",
+    "scripts": ["dist/bundles/backgroundPage.firefox.bundle.js"]
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "ipfs-firefox-addon@lidel.org",
-      "strict_min_version": "109.0.0"
+      "strict_min_version": "111.0.0"
     }
   },
   "permissions": [
-    "<all_urls>",
     "idle",
     "tabs",
     "notifications",
