@@ -6,7 +6,6 @@
     "browser_style": false
   },
   "background": {
-    "service_worker": "",
     "scripts": ["dist/bundles/backgroundPage.firefox.bundle.js"]
   },
   "browser_specific_settings": {
