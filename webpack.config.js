@@ -169,11 +169,13 @@ const bgConfig = merge(commonConfig, {
  * background page bundle (with heavy dependencies)
  * @type {import('webpack').Configuration}
  */
-const bgFirefoxConfig = merge(bgConfig, {
-  target: 'web',
+const bgFirefoxConfig = merge(commonConfig, {
+  name: 'background-firefox',
+  entry: {
+    backgroundPage: './add-on/src/background/background.js'
+  },
   output: {
     filename: '[name].firefox.bundle.js',
-    globalObject: 'window'
   }
 })
 
