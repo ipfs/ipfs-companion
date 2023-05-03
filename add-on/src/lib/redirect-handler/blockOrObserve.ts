@@ -105,6 +105,12 @@ export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
   return additionalParams
 }
 
+/**
+ * Validates if the rule has changed.
+ *
+ * @param rule
+ * @returns {boolean}
+ */
 function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boolean {
   const savedRule = savedRegexFilters.get(rule.condition.regexFilter as string)
   if (savedRule != null) {
@@ -113,6 +119,11 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
   return false
 }
 
+/**
+ * Reconciles the rules on fresh start.
+ *
+ * @param {CompanionState} state
+ */
 async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void> {
   const rules = await browser.declarativeNetRequest.getDynamicRules()
   const addRules: browser.DeclarativeNetRequest.Rule[] = []
