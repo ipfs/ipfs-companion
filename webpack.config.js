@@ -175,7 +175,7 @@ const bgFirefoxConfig = merge(commonConfig, {
     backgroundPage: './add-on/src/background/background.js'
   },
   output: {
-    filename: '[name].firefox.bundle.js',
+    filename: '[name].firefox.bundle.js'
   }
 })
 

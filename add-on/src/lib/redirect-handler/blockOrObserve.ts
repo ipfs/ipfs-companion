@@ -16,7 +16,7 @@ interface redirectHandlerInput {
   redirectUrl: string
 }
 
-const savedRegexFilters: Record<string, regexFilterMap> = {}
+const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
     originUrl: 'http://127.0.0.1',
@@ -28,13 +28,12 @@ const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   }
 ]
 
-
 /**
  *
  * @param url
  * @returns
  */
-export function isLocalHost(url: string): boolean {
+export function isLocalHost (url: string): boolean {
   return url.startsWith('http://127.0.0.1') ||
     url.startsWith('http://localhost') ||
     url.startsWith('http://[::1]')
@@ -106,24 +105,33 @@ export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
   return additionalParams
 }
 
-async function reconcileRulesAndRemoveOld(state: CompanionState): Promise<void> {
+function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boolean {
+  const savedRule = savedRegexFilters.get(rule.condition.regexFilter as string)
+  if (savedRule != null) {
+    return savedRule.id !== rule.id || savedRule.regexSubstitution !== rule.action.redirect?.regexSubstitution
+  }
+  return false
+}
+
+async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void> {
   const rules = await browser.declarativeNetRequest.getDynamicRules()
-  let addRules: browser.DeclarativeNetRequest.Rule[] = []
-  let removeRuleIds: number[] = []
+  const addRules: browser.DeclarativeNetRequest.Rule[] = []
+  const removeRuleIds: number[] = []
   for (const rule of rules) {
-    if (rule.action.type === 'redirect') {
-      if (!rule.action.redirect?.regexSubstitution?.includes(dropSlash(state.gwURLString)) ||
-        savedRegexFilters[rule.condition.regexFilter as string]?.regexSubstitution !== rule.action.redirect?.regexSubstitution ||
-        savedRegexFilters[rule.condition.regexFilter as string]?.id !== rule.id
+    if (rule.action.type === 'redirect' &&
+      rule.condition.regexFilter !== undefined &&
+      rule.action.redirect?.regexSubstitution !== undefined) {
+      if (!rule.action.redirect?.regexSubstitution.includes(dropSlash(state.gwURLString)) ||
+        validateIfRuleChanged(rule)
       ) {
         // We need to remove the old rule.
         removeRuleIds.push(rule.id)
-        delete savedRegexFilters[rule.condition.regexFilter as string]
+        savedRegexFilters.delete(rule.condition.regexFilter)
       } else {
-        savedRegexFilters[rule.condition.regexFilter as string] = {
+        savedRegexFilters.set(rule.condition.regexFilter, {
           id: rule.id,
-          regexSubstitution: rule.action.redirect?.regexSubstitution as string
-        }
+          regexSubstitution: rule.action.redirect?.regexSubstitution
+        })
       }
     }
   }
@@ -148,7 +156,7 @@ async function reconcileRulesAndRemoveOld(state: CompanionState): Promise<void> 
  * @param excludedInitiatorDomains - The domains that are excluded from the rule.
  * @returns
  */
-function generateRule(
+function generateRule (
   regexFilter: string,
   regexSubstitution: string,
   excludedInitiatorDomains: string[] = []
@@ -156,7 +164,7 @@ function generateRule(
   // We need to generate a random ID for the rule.
   const id = Math.floor(Math.random() * 29999)
   // We need to save the regex filter and ID to check if the rule already exists later.
-  savedRegexFilters[regexFilter] = { id, regexSubstitution }
+  savedRegexFilters.set(regexFilter, { id, regexSubstitution })
 
   return {
     id,
@@ -202,8 +210,8 @@ export function addRuleToDynamicRuleSetGenerator (
     const state = getState()
     // We don't want to redirect to the same URL. Or to the gateway.
     if (originUrl === redirectUrl ||
-      (originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery') ||
-      (isLocalHost(redirectUrl) && isLocalHost(originUrl)))) {
+      (originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery')) ||
+      (isLocalHost(redirectUrl) && isLocalHost(originUrl))) {
       return
     }
 
@@ -211,13 +219,13 @@ export function addRuleToDynamicRuleSetGenerator (
     const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
 
     // We need to check if the rule already exists.
-    if (!(regexFilter in savedRegexFilters) ||
-      savedRegexFilters[regexFilter].regexSubstitution !== regexSubstitution) {
-      let removeRuleIds: number[] = []
+    const savedRule = savedRegexFilters.get(regexFilter)
+    if ((savedRule != null) && savedRule.regexSubstitution !== regexSubstitution) {
+      const removeRuleIds: number[] = []
       if (regexFilter in savedRegexFilters) {
         // We need to remove the old rule.
-        removeRuleIds.push(savedRegexFilters[regexFilter].id)
-        delete savedRegexFilters[regexFilter]
+        removeRuleIds.push(savedRule.id)
+        savedRegexFilters.delete(regexFilter)
       }
 
       await browser.declarativeNetRequest.updateDynamicRules(

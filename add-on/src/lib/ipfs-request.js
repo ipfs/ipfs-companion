@@ -478,7 +478,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  * @param {object} input contains originUrl and redirectUrl.
  * @returns
  */
-function handleRedirection({ originUrl, redirectUrl }) {
+function handleRedirection ({ originUrl, redirectUrl }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
     if (supportsBlock) {
       return { redirectUrl }
