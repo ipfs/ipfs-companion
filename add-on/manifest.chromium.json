@@ -16,6 +16,5 @@
     "declarativeNetRequest",
     "declarativeNetRequestFeedback"
   ],
-  "host_permissions": ["<all_urls>"],
   "incognito": "not_allowed"
 }

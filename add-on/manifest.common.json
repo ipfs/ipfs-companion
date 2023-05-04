@@ -25,6 +25,7 @@
     "browser_style": false,
     "page": "dist/options/options.html"
   },
+  "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {
       "resources": [
@@ -37,9 +38,7 @@
         "dist/recovery/recovery.html",
         "dist/recovery/recovery.js"
       ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {
