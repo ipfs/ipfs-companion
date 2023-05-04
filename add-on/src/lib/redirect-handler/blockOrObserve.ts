@@ -113,7 +113,7 @@ export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
  * @param rule
  * @returns {boolean}
  */
-function validateIfRuleChanged(rule: browser.DeclarativeNetRequest.Rule): boolean {
+function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boolean {
   if (rule.condition.regexFilter !== undefined) {
     const savedRule = savedRegexFilters.get(rule.condition.regexFilter)
     if (savedRule !== undefined) {
@@ -226,12 +226,9 @@ export function addRuleToDynamicRuleSetGenerator (
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
     const state = getState()
     // We don't want to redirect to the same URL. Or to the gateway.
-    if (originUrl === redirectUrl || (
-      originUrl.includes(state.gwURL.host) && (
-        !redirectUrl.includes('recovery')) || (
-          isLocalHost(redirectUrl) && isLocalHost(originUrl)
-        )
-      )
+    if (originUrl === redirectUrl ||
+      (originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery')) ||
+      (isLocalHost(redirectUrl) && isLocalHost(originUrl))
     ) {
       return
     }
