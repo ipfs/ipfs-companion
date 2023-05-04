@@ -2,6 +2,8 @@ import browser from 'webextension-polyfill'
 import debug from 'debug'
 import { CompanionState } from '../../types/companion.js'
 
+// this won't work in webworker context. Needs to be enabled manually
+// https://github.com/debug-js/debug/issues/916
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 

@@ -25,6 +25,8 @@ import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 
+// this won't work in webworker context. Needs to be enabled manually
+// https://github.com/debug-js/debug/issues/916
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
