@@ -7,6 +7,7 @@ import sinon from 'sinon'
 import { optionDefaults } from '../../../../add-on/src/lib/options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
 import { initState } from '../../../../add-on/src/lib/state.js'
+import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
 
 const dynamicRulesConditions = (regexFilter) => ({
   regexFilter,
@@ -47,28 +48,17 @@ describe('lib/redirect-handler/blockOrObserve', () => {
   describe('addRuleToDynamicRuleSetGenerator', () => {
     let addRuleToDynamicRuleSet
     let state
-    let rulesSavedInMemory: browser.DeclarativeNetRequest.Rule[] = []
     let sinonSandbox
 
     before(() => {
       sinonSandbox = sinon.createSandbox()
       state = Object.assign(initState(optionDefaults), { peerCount: 1 })
       addRuleToDynamicRuleSet = addRuleToDynamicRuleSetGenerator(() => state)
-      // https://github.com/acvetkov/sinon-chrome/issues/110
-      browserMock.declarativeNetRequest = {
-        updateDynamicRules: sinonSandbox.stub().resolves(),
-        getDynamicRules: sinonSandbox.stub().resolves(new Proxy([], {
-            get: (_target, prop) => {
-              return rulesSavedInMemory[prop]
-            }
-          })
-        )
-      }
     })
 
-    afterEach(() => {
+    beforeEach(() => {
       sinonSandbox.restore()
-      rulesSavedInMemory = []
+      browserMock.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
     })
 
     it('Should not redirect requests from localhost', () => {
@@ -98,7 +88,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
       const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
       // this is needed for the reconciliation logic to work. This is tested separately.
-      rulesSavedInMemory = addRules
       expect(removeRuleIds).to.deep.equal([])
       expect(addRules).to.have.lengthOf(1)
       const [{ id, priority, action, condition }] = addRules
