@@ -30,6 +30,7 @@ const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
 ]
 
 /**
+ * This function determines if the request is headed to a local IPFS gateway.
  *
  * @param url
  * @returns

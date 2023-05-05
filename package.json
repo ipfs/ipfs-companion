@@ -81,7 +81,7 @@
       "add-on/src/"
     ],
     "reporter": [
-      "text", "html"
+      "text"
     ],
     "include": [
       "add-on/src/**"
