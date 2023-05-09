@@ -1,8 +1,7 @@
 import { expect } from 'chai'
 import { before, describe, it } from 'mocha'
-import browserMock from 'sinon-chrome'
-import browser from 'webextension-polyfill'
 import sinon from 'sinon'
+import browserMock from 'sinon-chrome'
 
 import { optionDefaults } from '../../../../add-on/src/lib/options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
@@ -38,10 +37,20 @@ describe('lib/redirect-handler/blockOrObserve', () => {
 
   describe('isLocalHost', () => {
     it('should return true for localhost', () => {
+      expect(isLocalHost('http://[::1]:8080/ipfs/QmHash')).to.be.true
+      expect(isLocalHost('http://[::1]:8080/ipfs/QmHash')).to.be.true
+      expect(isLocalHost('http://127.0.0.1:8080/ipns/QmHash')).to.be.true
+      expect(isLocalHost('http://127.0.0.1:8080/ipns/QmHash')).to.be.true
+      expect(isLocalHost('http://ipfs.tech')).to.be.false
+      expect(isLocalHost('http://localhost:8080')).to.be.true
+      expect(isLocalHost('http://localhost:8080')).to.be.true
       expect(isLocalHost('http://localhost:8080')).to.be.true
       expect(isLocalHost('http://localhost:8080/ipfs/QmHash')).to.be.true
-      expect(isLocalHost('http://127.0.0.1:8080/ipns/QmHash')).to.be.true
-      expect(isLocalHost('http://[::1]:8080/ipfs/QmHash')).to.be.true
+      expect(isLocalHost('http://localhost:8080/ipfs/QmHash')).to.be.true
+      expect(isLocalHost('http://localhost')).to.be.true
+      expect(isLocalHost('https://google.com')).to.be.false
+      expect(isLocalHost('https://ipfs.io')).to.be.false
+      expect(isLocalHost('ipfs://QmHash')).to.be.false
     })
   })
 
