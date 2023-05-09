@@ -96,7 +96,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
       const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
-      // this is needed for the reconciliation logic to work. This is tested separately.
       expect(removeRuleIds).to.deep.equal([])
       expect(addRules).to.have.lengthOf(1)
       const [{ id, priority, action, condition }] = addRules
