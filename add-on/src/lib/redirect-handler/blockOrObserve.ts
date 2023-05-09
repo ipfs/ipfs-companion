@@ -226,10 +226,11 @@ export function addRuleToDynamicRuleSetGenerator (
   // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
     const state = getState()
+    const redirectIsOrigin = originUrl === redirectUrl
+    const redirectIsLocal = isLocalHost(originUrl) && isLocalHost(redirectUrl)
+    const badOriginRedirect = originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery')
     // We don't want to redirect to the same URL. Or to the gateway.
-    if (originUrl === redirectUrl ||
-      (originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery')) ||
-      (isLocalHost(redirectUrl) && isLocalHost(originUrl))
+    if (redirectIsOrigin || badOriginRedirect || redirectIsLocal
     ) {
       return
     }
