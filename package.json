@@ -1,6 +1,6 @@
 {
   "name": "ipfs-companion",
-  "version": "2.22.1",
+  "version": "3.0.0",
   "homepage": "https://github.com/ipfs-shipyard/ipfs-companion",
   "license": "CC0-1.0",
   "leadMaintainer": "Marcin Rataj <lidel@lidel.org>",
