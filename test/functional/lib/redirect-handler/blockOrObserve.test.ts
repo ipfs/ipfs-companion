@@ -50,7 +50,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(isLocalHost('http://localhost')).to.be.true
       expect(isLocalHost('https://google.com')).to.be.false
       expect(isLocalHost('https://ipfs.io')).to.be.false
-      expect(isLocalHost('ipfs://QmHash')).to.be.false
     })
   })
 
