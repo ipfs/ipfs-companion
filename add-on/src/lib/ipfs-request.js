@@ -10,7 +10,7 @@ import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.
 import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
-import { addRuleToDynamicRuleSetGenerator, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -100,7 +100,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       ignore(request.requestId)
     }
     // skip all local requests
-    if (request.url.startsWith('http://127.0.0.1') || request.url.startsWith('http://localhost') || request.url.startsWith('http://[::1]')) {
+    if (isLocalHost(request.url)) {
       ignore(request.requestId)
     }
 
@@ -160,23 +160,19 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // take advantage of subdomain redirect provided by go-ipfs >= 0.5
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.gwURL)) {
         const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
-        if (redirectUrl !== request.url) {
-          return handleRedirection({
-            originUrl: request.url,
-            redirectUrl
-          })
-        }
+        return handleRedirection({
+          originUrl: request.url,
+          redirectUrl
+        })
       }
 
       // For now normalize API to the IP to comply with go-ipfs checks
       if (state.redirect && request.type === 'main_frame' && sameGateway(request.url, state.apiURL)) {
         const redirectUrl = safeURL(request.url, { useLocalhostName: false }).toString()
-        if (redirectUrl !== request.url) {
-          return handleRedirection({
-            originUrl: request.url,
-            redirectUrl
-          })
-        }
+        return handleRedirection({
+          originUrl: request.url,
+          redirectUrl
+        })
       }
 
       // early sanity checks
@@ -476,13 +472,21 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
   }
 }
 
+/**
+ * Handles redirection in MV2 and MV3.
+ *
+ * @param {object} input contains originUrl and redirectUrl.
+ * @returns
+ */
 function handleRedirection ({ originUrl, redirectUrl }) {
-  if (supportsBlock) {
-    return { redirectUrl }
-  }
+  if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
+    if (supportsBlock) {
+      return { redirectUrl }
+    }
 
-  // Let browser handle redirection MV3 style.
-  addRuleToDynamicRuleSet({ originUrl, redirectUrl })
+    // Let browser handle redirection MV3 style.
+    addRuleToDynamicRuleSet({ originUrl, redirectUrl })
+  }
 }
 
 // Returns a string with URL at the active gateway (local or public)
@@ -532,13 +536,10 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
     }
   }
 
-  // return a redirect only if URL changed
-  if (redirectUrl && request.url !== redirectUrl) {
-    return handleRedirection({
-      originUrl: request.url,
-      redirectUrl
-    })
-  }
+  return handleRedirection({
+    originUrl: request.url,
+    redirectUrl
+  })
 }
 
 function isSafeToRedirect (request, runtime) {

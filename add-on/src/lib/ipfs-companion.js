@@ -25,13 +25,15 @@ import { registerSubdomainProxy } from './http-proxy.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 
+// this won't work in webworker context. Needs to be enabled manually
+// https://github.com/debug-js/debug/issues/916
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-export default async function init (windowedContext = false) {
+export default async function init () {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
@@ -79,23 +81,19 @@ export default async function init (windowedContext = false) {
     copier = createCopier(notify, ipfsPathValidator)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
     inspector = createInspector(notify, ipfsPathValidator, getState)
-    if (!windowedContext) {
-      contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-        onAddFromContext,
-        onCopyCanonicalAddress: copier.copyCanonicalAddress,
-        onCopyRawCid: copier.copyRawCid,
-        onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
-      })
-      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-      log('register all listeners')
-      registerListeners()
-      await registerSubdomainProxy(getState, runtime, notify)
-      log('init done')
-      setApiStatusUpdateInterval(options.ipfsApiPollMs)
-      await runPendingOnInstallTasks()
-    } else {
-      log('init done (windowed context)')
-    }
+    contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
+      onAddFromContext,
+      onCopyCanonicalAddress: copier.copyCanonicalAddress,
+      onCopyRawCid: copier.copyRawCid,
+      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
+    })
+    modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
+    log('register all listeners')
+    registerListeners()
+    await registerSubdomainProxy(getState, runtime, notify)
+    log('init done')
+    setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await runPendingOnInstallTasks()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
     if (notify) notify('notify_addonIssueTitle', 'notify_addonIssueMsg')
@@ -120,7 +118,6 @@ export default async function init (windowedContext = false) {
       onBeforeSendInfoSpec.push('extraHeaders')
     }
     browser.webRequest.onBeforeSendHeaders.addListener(
-
       onBeforeSendHeaders, { urls: ['<all_urls>'] }, getExtraInfoSpec(onBeforeSendInfoSpec))
     browser.webRequest.onBeforeRequest.addListener(onBeforeRequest, { urls: ['<all_urls>'] }, getExtraInfoSpec())
     browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, { urls: ['<all_urls>'] }, getExtraInfoSpec(['responseHeaders']))

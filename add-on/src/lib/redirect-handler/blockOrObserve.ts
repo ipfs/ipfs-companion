@@ -2,14 +2,56 @@ import browser from 'webextension-polyfill'
 import debug from 'debug'
 import { CompanionState } from '../../types/companion.js'
 
+// this won't work in webworker context. Needs to be enabled manually
+// https://github.com/debug-js/debug/issues/916
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
-const savedRegexFilters = new Map<string, string>()
+interface regexFilterMap {
+  id: number
+  regexSubstitution: string
+}
 
 interface redirectHandlerInput {
   originUrl: string
   redirectUrl: string
+}
+
+const savedRegexFilters: Map<string, regexFilterMap> = new Map()
+const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
+  {
+    originUrl: 'http://127.0.0.1',
+    redirectUrl: 'http://localhost'
+  },
+  {
+    originUrl: 'http://[::1]',
+    redirectUrl: 'http://localhost'
+  }
+]
+
+/**
+ * This function determines if the request is headed to a local IPFS gateway.
+ *
+ * @param url
+ * @returns
+ */
+export function isLocalHost (url: string): boolean {
+  return url.startsWith('http://127.0.0.1') ||
+    url.startsWith('http://localhost') ||
+    url.startsWith('http://[::1]')
+}
+
+/**
+ * Escape the characters that are allowed in the URL, but not in the regex.
+ *
+ * @param str URL string to escape
+ * @returns
+ */
+function escapeURLRegex (str: string): string {
+  // these characters are allowed in the URL, but not in the regex.
+  // eslint-disable-next-line no-useless-escape
+  const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=-_\.~])/g
+  return str.replace(ALLOWED_CHARS_URL_REGEX, '\\$1')
 }
 
 /**
@@ -23,9 +65,6 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   regexSubstitution: string
   regexFilter: string
 } {
-  // these characters are allowed in the URL, but not in the regex.
-  // eslint-disable-next-line no-useless-escape
-  const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=-_\.~])/g
   // We can traverse the URL from the end, and find the first character that is different.
   let commonIdx = 1
   while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
@@ -36,11 +75,22 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   }
 
   // We can now construct the regex filter and substitution.
-  const regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
+  let regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
   // We need to escape the characters that are allowed in the URL, but not in the regex.
-  const regexFilterFirst = `${originUrl.slice(0, originUrl.length - commonIdx + 1).replace(ALLOWED_CHARS_URL_REGEX, '\\$1')}`
+  const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
   // We need to match the rest of the URL, so we can use a wildcard.
-  const regexFilter = `^${regexFilterFirst}(.*)$`
+  const regexEnding = '((?:[^\\.]|$).*)$'
+  let regexFilter = `^${regexFilterFirst}${regexEnding}`.replace('https', 'https?')
+
+  // This method does not parse:
+  // originUrl: "https://awesome.ipfs.io/"
+  // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
+  // that ends up with capturing all urls which we do not want.
+  if (regexFilter === `^https?\\:\\/${regexEnding}`) {
+    const subdomain = new URL(originUrl).hostname
+    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${regexEnding}}`
+    regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
+  }
 
   return { regexSubstitution, regexFilter }
 }
@@ -59,6 +109,113 @@ export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
 }
 
 /**
+ * Validates if the rule has changed.
+ *
+ * @param rule
+ * @returns {boolean}
+ */
+function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boolean {
+  if (rule.condition.regexFilter !== undefined) {
+    const savedRule = savedRegexFilters.get(rule.condition.regexFilter)
+    if (savedRule !== undefined) {
+      return savedRule.id !== rule.id || savedRule.regexSubstitution !== rule.action.redirect?.regexSubstitution
+    }
+  }
+  return true
+}
+
+/**
+ * Reconciles the rules on fresh start.
+ *
+ * @param {CompanionState} state
+ */
+async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void> {
+  const rules = await browser.declarativeNetRequest.getDynamicRules()
+  const addRules: browser.DeclarativeNetRequest.Rule[] = []
+  const removeRuleIds: number[] = []
+
+  // parse the existing rules and remove the ones that are not needed.
+  for (const rule of rules) {
+    if (rule.action.type === 'redirect' &&
+      rule.condition.regexFilter !== undefined &&
+      rule.action.redirect?.regexSubstitution !== undefined) {
+      if (validateIfRuleChanged(rule)) {
+        // We need to remove the old rule.
+        removeRuleIds.push(rule.id)
+        savedRegexFilters.delete(rule.condition.regexFilter)
+      } else {
+        savedRegexFilters.set(rule.condition.regexFilter, {
+          id: rule.id,
+          regexSubstitution: rule.action.redirect?.regexSubstitution
+        })
+      }
+    }
+  }
+
+  // add the new rules.
+  for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
+    const { port } = new URL(state.gwURLString)
+    const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
+    const regexSubstitution = `${redirectUrl}:${port}\\1`
+
+    if (!savedRegexFilters.has(regexFilter)) {
+      // We need to add the new rule.
+      addRules.push(generateRule(regexFilter, regexSubstitution))
+    }
+  }
+  await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
+}
+
+/**
+ * Generates a rule for the declarativeNetRequest API.
+ *
+ * @param regexFilter - The regex filter for the rule.
+ * @param regexSubstitution  - The regex substitution for the rule.
+ * @param excludedInitiatorDomains - The domains that are excluded from the rule.
+ * @returns
+ */
+function generateRule (
+  regexFilter: string,
+  regexSubstitution: string,
+  excludedInitiatorDomains: string[] = []
+): browser.DeclarativeNetRequest.Rule {
+  // We need to generate a random ID for the rule.
+  const id = Math.floor(Math.random() * 29999)
+  // We need to save the regex filter and ID to check if the rule already exists later.
+  savedRegexFilters.set(regexFilter, { id, regexSubstitution })
+
+  return {
+    id,
+    priority: 1,
+    action: {
+      type: 'redirect',
+      redirect: { regexSubstitution }
+    },
+    condition: {
+      regexFilter,
+      excludedInitiatorDomains,
+      resourceTypes: [
+        'csp_report',
+        'font',
+        'image',
+        'main_frame',
+        'media',
+        'object',
+        'other',
+        'ping',
+        'script',
+        'stylesheet',
+        'sub_frame',
+        'webbundle',
+        'websocket',
+        'webtransport',
+        'xmlhttprequest'
+      ]
+    }
+  }
+}
+
+/**
  * Register a redirect rule in the dynamic rule set.
  *
  * @param {redirectHandlerInput} input
@@ -69,58 +226,38 @@ export function addRuleToDynamicRuleSetGenerator (
   // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
     const state = getState()
+    const redirectIsOrigin = originUrl === redirectUrl
+    const redirectIsLocal = isLocalHost(originUrl) && isLocalHost(redirectUrl)
+    const badOriginRedirect = originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery')
     // We don't want to redirect to the same URL. Or to the gateway.
-    if (originUrl === redirectUrl ||
-      (originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery'))) {
+    if (redirectIsOrigin || badOriginRedirect || redirectIsLocal
+    ) {
       return
     }
 
-    // We need to generate a random ID for the rule.
-    const id = Math.floor(Math.random() * 29999)
     // We need to construct the regex filter and substitution.
     const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
-    // We need to check if the rule already exists.
-    if (!savedRegexFilters.has(regexFilter)) {
+
+    const savedRule = savedRegexFilters.get(regexFilter)
+    if (savedRule === undefined || savedRule.regexSubstitution !== regexSubstitution) {
+      const removeRuleIds: number[] = []
+      if (savedRule !== undefined) {
+        // We need to remove the old rule because the substitution has changed.
+        removeRuleIds.push(savedRule.id)
+        savedRegexFilters.delete(regexFilter)
+      }
+
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           // We need to add the new rule.
-          addRules: [
-            {
-              id,
-              priority: 1,
-              action: {
-                type: 'redirect',
-                redirect: { regexSubstitution }
-              },
-              condition: {
-                regexFilter,
-                excludedInitiatorDomains: [state.gwURL.host],
-                resourceTypes: [
-                  'csp_report',
-                  'font',
-                  'image',
-                  'main_frame',
-                  'media',
-                  'object',
-                  'other',
-                  'ping',
-                  'script',
-                  'stylesheet',
-                  'sub_frame',
-                  'webbundle',
-                  'websocket',
-                  'webtransport',
-                  'xmlhttprequest'
-                ]
-              }
-            }
-          ],
+          addRules: [generateRule(regexFilter, regexSubstitution)],
           // We need to remove the old rules.
-          removeRuleIds: await browser.declarativeNetRequest.getDynamicRules().then((rules) => rules.map((rule) => rule.id))
+          removeRuleIds
         }
       )
-      // We need to save the regex filter and ID to check if the rule already exists later.
-      savedRegexFilters.set(regexFilter, id.toString())
     }
+
+    // async call to reconcile rules and remove old ones.
+    await reconcileRulesAndRemoveOld(state)
   }
 }

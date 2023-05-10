@@ -166,6 +166,20 @@ const bgConfig = merge(commonConfig, {
 })
 
 /**
+ * background page bundle (with heavy dependencies)
+ * @type {import('webpack').Configuration}
+ */
+const bgFirefoxConfig = merge(commonConfig, {
+  name: 'background-firefox',
+  entry: {
+    backgroundPage: './add-on/src/background/background.js'
+  },
+  output: {
+    filename: '[name].firefox.bundle.js'
+  }
+})
+
+/**
  * user interface pages with shared common libraries
  * @type {import('webpack').Configuration}
  */
@@ -209,6 +223,7 @@ const contentScriptsConfig = merge(commonConfig, {
 
 const config = [
   bgConfig,
+  bgFirefoxConfig,
   uiConfig,
   contentScriptsConfig
 ]

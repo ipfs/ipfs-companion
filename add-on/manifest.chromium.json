@@ -1,5 +1,8 @@
 {
-  "minimum_chrome_version": "101",
+  "minimum_chrome_version": "111",
+  "background": {
+    "service_worker": "dist/bundles/backgroundPage.bundle.js"
+  },
   "permissions": [
     "clipboardWrite",
     "contextMenus",
@@ -13,6 +16,5 @@
     "declarativeNetRequest",
     "declarativeNetRequestFeedback"
   ],
-  "host_permissions": ["<all_urls>"],
   "incognito": "not_allowed"
 }
