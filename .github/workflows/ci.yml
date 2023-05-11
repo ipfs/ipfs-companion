@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     if: |
-      (contains(github.ref, 'refs/tags/') || contains(github.ref, 'rc/3.0-mv3')) &&
+      (contains(github.ref, 'refs/tags/') || github.ref_name == 'rc/3.0-mv3') &&
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
       - name: Check out Git repository
