@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "__MSG_manifest_extensionName__-RC-MV3",
+  "name": "__MSG_manifest_extensionName__",
   "short_name": "__MSG_manifest_shortExtensionName__",
   "version": "3.0.0",
   "description": "__MSG_manifest_extensionDescription__",
