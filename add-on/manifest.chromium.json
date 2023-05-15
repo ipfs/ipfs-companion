@@ -4,17 +4,19 @@
     "service_worker": "dist/bundles/backgroundPage.bundle.js"
   },
   "permissions": [
+    "activeTab",
     "clipboardWrite",
     "contextMenus",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
     "idle",
     "notifications",
+    "scripting",
     "storage",
     "tabs",
     "unlimitedStorage",
     "webNavigation",
-    "webRequest",
-    "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "webRequest"
   ],
   "incognito": "not_allowed"
 }
