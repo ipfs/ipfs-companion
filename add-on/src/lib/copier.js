@@ -8,7 +8,7 @@ import { findValueForContext } from './context-menus.js'
  *
  * @param {string} text
  */
-async function writeToClipboard(text) {
+async function writeToClipboard (text) {
   try {
     await navigator.clipboard.writeText(text)
     return true
@@ -25,11 +25,11 @@ async function writeToClipboard(text) {
  *
  * @returns {Promise<tabs.Tab>}
  */
-async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
+async function getCurrentTab () {
+  const queryOptions = { active: true, lastFocusedWindow: true }
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
-  let [tab] = await browser.tabs.query(queryOptions);
-  return tab;
+  const [tab] = await browser.tabs.query(queryOptions)
+  return tab
 }
 
 /**
@@ -43,16 +43,16 @@ async function getCurrentTab() {
  *
  * @param {string} text
  */
-async function copyTextToClipboardFromCurrentTab(text) {
+async function copyTextToClipboardFromCurrentTab (text) {
   const tab = await getCurrentTab()
   if (!tab) {
     throw new Error('Unable to get current tab')
   }
 
-  const [{result}] = await browser.scripting.executeScript({
+  const [{ result }] = await browser.scripting.executeScript({
     target: { tabId: tab.id },
     func: writeToClipboard,
-    args: [text],
+    args: [text]
   })
 
   if (!result) {
@@ -60,7 +60,7 @@ async function copyTextToClipboardFromCurrentTab(text) {
   }
 }
 
-async function copyTextToClipboard(text, notify) {
+async function copyTextToClipboard (text, notify) {
   try {
     if (typeof navigator.clipboard !== 'undefined') { // Firefox
       await writeToClipboard(text)
