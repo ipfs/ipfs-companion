@@ -39,7 +39,11 @@ async function getCurrentTab () {
  *
  * Manifest Perms: "scripting", "activeTab"
  *
- * See: https://developer.chrome.com/docs/extensions/reference/scripting/
+ * See:
+ *   - https://developer.chrome.com/docs/extensions/reference/scripting/
+ *   - https://developer.chrome.com/blog/Offscreen-Documents-in-Manifest-v3/
+ *
+ * ServiceWorkers will most likely have access to the clipboard in the future.
  *
  * @param {string} text
  */
