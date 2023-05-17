@@ -1,5 +1,5 @@
-import browser from 'webextension-polyfill'
 import debug from 'debug'
+import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
 
 // this won't work in webworker context. Needs to be enabled manually
@@ -17,6 +17,7 @@ interface redirectHandlerInput {
   redirectUrl: string
 }
 
+export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
@@ -125,6 +126,27 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
 }
 
 /**
+ * Clean up all the rules, when extension is disabled.
+ */
+async function cleanupRules (): Promise<void> {
+  const existingRules = await browser.declarativeNetRequest.getDynamicRules()
+  const existingRulesIds = existingRules.map(({ id }): number => id)
+  await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: existingRulesIds })
+}
+
+/**
+ * This function sets up the listeners for the extension.
+ * @param {function} handlerFn
+ */
+function setupListeners (handlerFn: () => Promise<void>): void {
+  browser.runtime.onMessage.addListener(async ({ type }): Promise<void> => {
+    if (type === GLOBAL_STATE_CHANGE) {
+      await handlerFn()
+    }
+  })
+}
+
+/**
  * Reconciles the rules on fresh start.
  *
  * @param {CompanionState} state
@@ -152,18 +174,23 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
     }
   }
 
-  // add the new rules.
-  for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
-    const { port } = new URL(state.gwURLString)
-    const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
-    const regexSubstitution = `${redirectUrl}:${port}\\1`
+  if (!state.active) {
+    await cleanupRules()
+  } else {
+    // add the new rules if state is active.
+    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
+      const { port } = new URL(state.gwURLString)
+      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
+      const regexSubstitution = `${redirectUrl}:${port}\\1`
 
-    if (!savedRegexFilters.has(regexFilter)) {
-      // We need to add the new rule.
-      addRules.push(generateRule(regexFilter, regexSubstitution))
+      if (!savedRegexFilters.has(regexFilter)) {
+        // We need to add the new rule.
+        addRules.push(generateRule(regexFilter, regexSubstitution))
+      }
     }
+
+    await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
   }
-  await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
 }
 
 /**
@@ -257,7 +284,8 @@ export function addRuleToDynamicRuleSetGenerator (
       )
     }
 
-    // async call to reconcile rules and remove old ones.
+    setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
+    // call to reconcile rules and remove old ones.
     await reconcileRulesAndRemoveOld(state)
   }
 }

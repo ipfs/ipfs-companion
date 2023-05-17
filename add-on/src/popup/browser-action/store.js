@@ -1,12 +1,13 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import browser from 'webextension-polyfill'
 import isIPFS from 'is-ipfs'
+import browser from 'webextension-polyfill'
+import { optionsPage, welcomePage } from '../../lib/constants.js'
+import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway } from '../../lib/context-menus.js'
 import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
-import { welcomePage, optionsPage } from '../../lib/constants.js'
-import { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } from '../../lib/context-menus.js'
+import { GLOBAL_STATE_CHANGE } from '../../lib/redirect-handler/blockOrObserve.js'
 import { endSession, handleConsentFromState, startSession, trackView } from '../../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
@@ -206,17 +207,21 @@ export default (state, emitter) => {
   emitter.on('toggleActive', async () => {
     const prev = state.active
     state.active = !prev
-    if (!state.active) {
-      endSession()
-      state.gatewayAddress = state.pubGwURLString
-      state.ipfsApiUrl = null
-      state.gatewayVersion = null
-      state.swarmPeers = null
-      state.isIpfsOnline = false
-    }
     try {
       await browser.storage.local.set({ active: state.active })
-      startSession()
+      if (!state.active) {
+        endSession()
+        await browser.runtime.sendMessage({ type: GLOBAL_STATE_CHANGE })
+        state.gatewayAddress = state.pubGwURLString
+        state.ipfsApiUrl = null
+        state.gatewayVersion = null
+        state.swarmPeers = null
+        state.isIpfsOnline = false
+      } else {
+        startSession()
+        await browser.runtime.sendMessage({ type: GLOBAL_STATE_CHANGE })
+      }
+      await browser.storage.local.set({ active: state.active })
       handleConsentFromState(state)
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)
