@@ -1,5 +1,5 @@
-import browser from 'webextension-polyfill'
 import debug from 'debug'
+import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
 
 // this won't work in webworker context. Needs to be enabled manually
@@ -15,6 +15,46 @@ interface regexFilterMap {
 interface redirectHandlerInput {
   originUrl: string
   redirectUrl: string
+}
+
+interface messageToSelf {
+  type: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE
+}
+
+// We need to check if the browser supports the declarativeNetRequest API.
+// TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
+// which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
+export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
+export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
+export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+
+/**
+ * Notify self about state change.
+ * @returns void
+ */
+export async function notifyStateChange (): Promise<void> {
+  return await sendMessageToSelf(GLOBAL_STATE_CHANGE)
+}
+
+/**
+ * Notify self about option change.
+ * @returns void
+ */
+export async function notifyOptionChange (): Promise<void> {
+  return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
+}
+
+/**
+ * Sends message to self to notify about change.
+ *
+ * @param msg
+ */
+async function sendMessageToSelf (msg: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE): Promise<void> {
+  // this check ensures we don't send messages to ourselves if blocking mode is enabled.
+  if (!supportsBlock) {
+    const message: messageToSelf = { type: msg }
+    await browser.runtime.sendMessage(message)
+  }
 }
 
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
@@ -95,11 +135,6 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   return { regexSubstitution, regexFilter }
 }
 
-// We need to check if the browser supports the declarativeNetRequest API.
-// TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
-// which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
-export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
-
 // If the browser supports the declarativeNetRequest API, we can block the request.
 export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
   if (supportsBlock) {
@@ -122,6 +157,34 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
     }
   }
   return true
+}
+
+/**
+ * Clean up all the rules, when extension is disabled.
+ */
+async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
+  const existingRules = await browser.declarativeNetRequest.getDynamicRules()
+  const existingRulesIds = existingRules.map(({ id }): number => id)
+  await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: existingRulesIds })
+  if (resetInMemory) {
+    savedRegexFilters.clear()
+  }
+}
+
+/**
+ * This function sets up the listeners for the extension.
+ * @param {function} handlerFn
+ */
+function setupListeners (handlerFn: () => Promise<void>): void {
+  browser.runtime.onMessage.addListener(async ({ type }: messageToSelf): Promise<void> => {
+    if (type === GLOBAL_STATE_CHANGE) {
+      await handlerFn()
+    }
+    if (type === GLOBAL_STATE_OPTION_CHANGE) {
+      await cleanupRules(true)
+      await handlerFn()
+    }
+  })
 }
 
 /**
@@ -152,18 +215,51 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
     }
   }
 
-  // add the new rules.
-  for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
-    const { port } = new URL(state.gwURLString)
-    const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
-    const regexSubstitution = `${redirectUrl}:${port}\\1`
-
-    if (!savedRegexFilters.has(regexFilter)) {
-      // We need to add the new rule.
-      addRules.push(generateRule(regexFilter, regexSubstitution))
+  if (!state.active) {
+    await cleanupRules()
+  } else {
+    // add the old rules from memory if state is active.
+    if (rules.length === 0) {
+      // we need to populate old rules.
+      for (const [regexFilter, { regexSubstitution, id }] of savedRegexFilters.entries()) {
+        addRules.push(generateRule(id, regexFilter, regexSubstitution))
+      }
     }
+
+    // make sure that the default rules are added.
+    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
+      const { port } = new URL(state.gwURLString)
+      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
+      const regexSubstitution = `${redirectUrl}:${port}\\1`
+
+      if (!savedRegexFilters.has(regexFilter)) {
+        // We need to add the new rule.
+        addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
+      }
+    }
+
+    await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
   }
-  await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
+}
+
+/**
+ * Saves and Generates a rule for the declarativeNetRequest API.
+ *
+ * @param regexFilter - The regex filter for the rule.
+ * @param regexSubstitution  - The regex substitution for the rule.
+ * @param excludedInitiatorDomains - The domains that are excluded from the rule.
+ * @returns
+ */
+function saveAndGenerateRule (
+  regexFilter: string,
+  regexSubstitution: string,
+  excludedInitiatorDomains: string[] = []
+): browser.DeclarativeNetRequest.Rule {
+  // We need to generate a random ID for the rule.
+  const id = Math.floor(Math.random() * 29999)
+  // We need to save the regex filter and ID to check if the rule already exists later.
+  savedRegexFilters.set(regexFilter, { id, regexSubstitution })
+  return generateRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
 }
 
 /**
@@ -175,15 +271,11 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
  * @returns
  */
 function generateRule (
+  id: number,
   regexFilter: string,
   regexSubstitution: string,
   excludedInitiatorDomains: string[] = []
 ): browser.DeclarativeNetRequest.Rule {
-  // We need to generate a random ID for the rule.
-  const id = Math.floor(Math.random() * 29999)
-  // We need to save the regex filter and ID to check if the rule already exists later.
-  savedRegexFilters.set(regexFilter, { id, regexSubstitution })
-
   return {
     id,
     priority: 1,
@@ -250,14 +342,15 @@ export function addRuleToDynamicRuleSetGenerator (
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           // We need to add the new rule.
-          addRules: [generateRule(regexFilter, regexSubstitution)],
+          addRules: [saveAndGenerateRule(regexFilter, regexSubstitution)],
           // We need to remove the old rules.
           removeRuleIds
         }
       )
     }
 
-    // async call to reconcile rules and remove old ones.
+    setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
+    // call to reconcile rules and remove old ones.
     await reconcileRulesAndRemoveOld(state)
   }
 }
