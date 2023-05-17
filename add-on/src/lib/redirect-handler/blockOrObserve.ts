@@ -18,6 +18,7 @@ interface redirectHandlerInput {
 }
 
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
+export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
@@ -128,10 +129,13 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
 /**
  * Clean up all the rules, when extension is disabled.
  */
-async function cleanupRules (): Promise<void> {
+async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
   const existingRules = await browser.declarativeNetRequest.getDynamicRules()
   const existingRulesIds = existingRules.map(({ id }): number => id)
   await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: existingRulesIds })
+  if (resetInMemory) {
+    savedRegexFilters.clear()
+  }
 }
 
 /**
@@ -141,6 +145,10 @@ async function cleanupRules (): Promise<void> {
 function setupListeners (handlerFn: () => Promise<void>): void {
   browser.runtime.onMessage.addListener(async ({ type }): Promise<void> => {
     if (type === GLOBAL_STATE_CHANGE) {
+      await handlerFn()
+    }
+    if (type === GLOBAL_STATE_OPTION_CHANGE) {
+      await cleanupRules(true)
       await handlerFn()
     }
   })
@@ -177,7 +185,15 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
   if (!state.active) {
     await cleanupRules()
   } else {
-    // add the new rules if state is active.
+    // add the old rules from memory if state is active.
+    if (rules.length === 0) {
+      // we need to populate old rules.
+      for (const [regexFilter, { regexSubstitution, id }] of savedRegexFilters.entries()) {
+        addRules.push(generateRule(id, regexFilter, regexSubstitution))
+      }
+    }
+
+    // make sure that the default rules are added.
     for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
       const { port } = new URL(state.gwURLString)
       const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
@@ -185,12 +201,32 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
 
       if (!savedRegexFilters.has(regexFilter)) {
         // We need to add the new rule.
-        addRules.push(generateRule(regexFilter, regexSubstitution))
+        addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
       }
     }
 
     await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
   }
+}
+
+/**
+ * Saves and Generates a rule for the declarativeNetRequest API.
+ *
+ * @param regexFilter - The regex filter for the rule.
+ * @param regexSubstitution  - The regex substitution for the rule.
+ * @param excludedInitiatorDomains - The domains that are excluded from the rule.
+ * @returns
+ */
+function saveAndGenerateRule (
+  regexFilter: string,
+  regexSubstitution: string,
+  excludedInitiatorDomains: string[] = []
+): browser.DeclarativeNetRequest.Rule {
+  // We need to generate a random ID for the rule.
+  const id = Math.floor(Math.random() * 29999)
+  // We need to save the regex filter and ID to check if the rule already exists later.
+  savedRegexFilters.set(regexFilter, { id, regexSubstitution })
+  return generateRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
 }
 
 /**
@@ -202,15 +238,11 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
  * @returns
  */
 function generateRule (
+  id: number,
   regexFilter: string,
   regexSubstitution: string,
   excludedInitiatorDomains: string[] = []
 ): browser.DeclarativeNetRequest.Rule {
-  // We need to generate a random ID for the rule.
-  const id = Math.floor(Math.random() * 29999)
-  // We need to save the regex filter and ID to check if the rule already exists later.
-  savedRegexFilters.set(regexFilter, { id, regexSubstitution })
-
   return {
     id,
     priority: 1,
@@ -277,7 +309,7 @@ export function addRuleToDynamicRuleSetGenerator (
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           // We need to add the new rule.
-          addRules: [generateRule(regexFilter, regexSubstitution)],
+          addRules: [saveAndGenerateRule(regexFilter, regexSubstitution)],
           // We need to remove the old rules.
           removeRuleIds
         }

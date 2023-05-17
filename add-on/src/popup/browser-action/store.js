@@ -180,6 +180,7 @@ export default (state, emitter) => {
       }
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
+      await browser.runtime.sendMessage({ type: GLOBAL_STATE_CHANGE })
 
       const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference
