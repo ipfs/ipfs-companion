@@ -1,28 +1,75 @@
 'use strict'
 
+import browser from 'webextension-polyfill'
 import { findValueForContext } from './context-menus.js'
+
+/**
+ * Writes text to the clipboard.
+ *
+ * @param {string} text
+ */
+async function writeToClipboard (text) {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch (error) {
+    // This can happen if the user denies clipboard permissions.
+    // or the current page is not allowed to access the clipboard.
+    // no need to log this error, as it is expected in some cases.
+    return false
+  }
+}
+
+/**
+ * Gets the current active tab.
+ *
+ * @returns {Promise<tabs.Tab>}
+ */
+async function getCurrentTab () {
+  const queryOptions = { active: true, lastFocusedWindow: true }
+  // `tab` will either be a `tabs.Tab` instance or `undefined`.
+  const [tab] = await browser.tabs.query(queryOptions)
+  return tab
+}
+
+/**
+ * This is the MV3 version of copyTextToClipboard. It uses executeScript to run a function
+ * in the context of the current tab. This is necessary because the clipboard API is not
+ * available in the background script.
+ *
+ * Manifest Perms: "scripting", "activeTab"
+ *
+ * See:
+ *   - https://developer.chrome.com/docs/extensions/reference/scripting/
+ *   - https://developer.chrome.com/blog/Offscreen-Documents-in-Manifest-v3/
+ *
+ * ServiceWorkers will most likely have access to the clipboard in the future.
+ *
+ * @param {string} text
+ */
+async function copyTextToClipboardFromCurrentTab (text) {
+  const tab = await getCurrentTab()
+  if (!tab) {
+    throw new Error('Unable to get current tab')
+  }
+
+  const [{ result }] = await browser.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: writeToClipboard,
+    args: [text]
+  })
+
+  if (!result) {
+    throw new Error('Unable to write to clipboard')
+  }
+}
 
 async function copyTextToClipboard (text, notify) {
   try {
-    try {
-      // Modern API (spotty support, but works in Firefox)
-      await navigator.clipboard.writeText(text)
-      // FUN FACT:
-      // Before this API existed we had no access to cliboard from
-      // the background page in Firefox and had to inject content script
-      // into current page to copy there:
-      // https://github.com/ipfs-shipyard/ipfs-companion/blob/b4a168880df95718e15e57dace6d5006d58e7f30/add-on/src/lib/copier.js#L10-L35
-      // :-))
-    } catch (e) {
-      // Fallback to old API (works only in Chromium)
-      function oncopy (event) { // eslint-disable-line no-inner-declarations
-        document.removeEventListener('copy', oncopy, true)
-        event.stopImmediatePropagation()
-        event.preventDefault()
-        event.clipboardData.setData('text/plain', text)
-      }
-      document.addEventListener('copy', oncopy, true)
-      document.execCommand('copy')
+    if (typeof navigator.clipboard !== 'undefined') { // Firefox
+      await writeToClipboard(text)
+    } else {
+      await copyTextToClipboardFromCurrentTab(text)
     }
     notify('notify_copiedTitle', text)
   } catch (error) {
