@@ -103,5 +103,25 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(action).to.deep.equal({ type: 'redirect', redirect: { "regexSubstitution": "http://localhost:8080\\1" } })
       expect(condition).to.deep.equal(dynamicRulesConditions('^https?\\:\\/\\/ipfs\\.io((?:[^\\.]|$).*)$'))
     })
+
+    it('Should add redirect for local gateway where originUrl is similar to redirectUrl', () => {
+      addRuleToDynamicRuleSet({
+        originUrl: 'https://docs.ipfs.tech',
+        redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
+      })
+      expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
+      const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
+      expect(removeRuleIds).to.deep.equal([])
+      expect(addRules).to.have.lengthOf(1)
+      const [{ id, priority, action, condition }] = addRules
+      expect(id).to.be.a('number')
+      expect(priority).to.equal(1)
+      expect(action).to.deep.equal({
+        type: 'redirect', redirect: {
+          "regexSubstitution": "http://localhost:8080/ipns/docs.ipfs.tech\\1"
+        }
+      })
+      expect(condition).to.deep.equal(dynamicRulesConditions('^https?\\:\\/\\/docs\\.ipfs\\.tech((?:[^\\.]|$).*)$'))
+    })
   })
 })

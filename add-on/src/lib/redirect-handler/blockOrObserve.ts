@@ -90,7 +90,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   // that ends up with capturing all urls which we do not want.
   if (regexFilter === `^https?\\:\\/${regexEnding}`) {
     const subdomain = new URL(originUrl).hostname
-    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${regexEnding}}`
+    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${regexEnding}`
     regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
   }
 
