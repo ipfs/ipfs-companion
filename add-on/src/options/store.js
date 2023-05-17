@@ -3,7 +3,7 @@
 
 import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
-import { GLOBAL_STATE_OPTION_CHANGE } from '../lib/redirect-handler/blockOrObserve.js'
+import { notifyOptionChange, notifyStateChange } from '../lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../lib/runtime-checks.js'
 import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
@@ -30,12 +30,15 @@ export default function optionStore (state, emitter) {
 
   emitter.on('optionChange', async ({ key, value }) => {
     browser.storage.local.set({ [key]: value })
-    await browser.runtime.sendMessage({ type: GLOBAL_STATE_OPTION_CHANGE })
+    if (key === 'active') {
+      await notifyStateChange()
+    }
+    await notifyOptionChange()
   })
 
   emitter.on('optionsReset', async () => {
     browser.storage.local.set(optionDefaults)
-    await browser.runtime.sendMessage({ type: GLOBAL_STATE_OPTION_CHANGE })
+    await notifyOptionChange()
   })
 }
 

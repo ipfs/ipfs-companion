@@ -17,8 +17,46 @@ interface redirectHandlerInput {
   redirectUrl: string
 }
 
+interface messageToSelf {
+  type: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE
+}
+
+// We need to check if the browser supports the declarativeNetRequest API.
+// TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
+// which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
+export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+
+/**
+ * Notify self about state change.
+ * @returns void
+ */
+export async function notifyStateChange (): Promise<void> {
+  return await sendMessageToSelf(GLOBAL_STATE_CHANGE)
+}
+
+/**
+ * Notify self about option change.
+ * @returns void
+ */
+export async function notifyOptionChange (): Promise<void> {
+  return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
+}
+
+/**
+ * Sends message to self to notify about change.
+ *
+ * @param msg
+ */
+async function sendMessageToSelf (msg: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE): Promise<void> {
+  // this check ensures we don't send messages to ourselves if blocking mode is enabled.
+  if (!supportsBlock) {
+    const message: messageToSelf = { type: msg }
+    await browser.runtime.sendMessage(message)
+  }
+}
+
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
@@ -97,11 +135,6 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   return { regexSubstitution, regexFilter }
 }
 
-// We need to check if the browser supports the declarativeNetRequest API.
-// TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
-// which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
-export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
-
 // If the browser supports the declarativeNetRequest API, we can block the request.
 export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
   if (supportsBlock) {
@@ -143,7 +176,7 @@ async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
  * @param {function} handlerFn
  */
 function setupListeners (handlerFn: () => Promise<void>): void {
-  browser.runtime.onMessage.addListener(async ({ type }): Promise<void> => {
+  browser.runtime.onMessage.addListener(async ({ type }: messageToSelf): Promise<void> => {
     if (type === GLOBAL_STATE_CHANGE) {
       await handlerFn()
     }

@@ -7,7 +7,7 @@ import { optionsPage, welcomePage } from '../../lib/constants.js'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway } from '../../lib/context-menus.js'
 import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
-import { GLOBAL_STATE_CHANGE } from '../../lib/redirect-handler/blockOrObserve.js'
+import { notifyStateChange } from '../../lib/redirect-handler/blockOrObserve.js'
 import { endSession, handleConsentFromState, startSession, trackView } from '../../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
@@ -180,7 +180,7 @@ export default (state, emitter) => {
       }
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
-      await browser.runtime.sendMessage({ type: GLOBAL_STATE_CHANGE })
+      await notifyStateChange()
 
       const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference
@@ -210,18 +210,17 @@ export default (state, emitter) => {
     state.active = !prev
     try {
       await browser.storage.local.set({ active: state.active })
-      if (!state.active) {
+      if (state.active) {
+        startSession()
+      } else {
         endSession()
-        await browser.runtime.sendMessage({ type: GLOBAL_STATE_CHANGE })
         state.gatewayAddress = state.pubGwURLString
         state.ipfsApiUrl = null
         state.gatewayVersion = null
         state.swarmPeers = null
         state.isIpfsOnline = false
-      } else {
-        startSession()
-        await browser.runtime.sendMessage({ type: GLOBAL_STATE_CHANGE })
       }
+      await notifyStateChange()
       await browser.storage.local.set({ active: state.active })
       handleConsentFromState(state)
     } catch (error) {
