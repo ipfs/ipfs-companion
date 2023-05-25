@@ -66,30 +66,32 @@ describe('lib/redirect-handler/blockOrObserve', () => {
 
     beforeEach(() => {
       sinonSandbox.restore()
+      browserMock.flush()
+      browserMock.tabs.query.resolves([{ id: 1234 }])
       browserMock.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
     })
 
-    it('Should not redirect requests from localhost', () => {
+    it('Should not redirect requests from localhost', async () => {
       // when both redirectUrl and originUrl are same.
-      addRuleToDynamicRuleSet({ originUrl: 'http://localhost:8080', redirectUrl: 'http://localhost:8080' })
+      await addRuleToDynamicRuleSet({ originUrl: 'http://localhost:8080', redirectUrl: 'http://localhost:8080' })
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.false
 
       // when redirectUrl is different from originUrl, but both are localhost.
-      addRuleToDynamicRuleSet({ originUrl: 'http://localhost:9001/foo', redirectUrl: 'http://localhost:9001/bar' })
+      await addRuleToDynamicRuleSet({ originUrl: 'http://localhost:9001/foo', redirectUrl: 'http://localhost:9001/bar' })
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.false
     })
 
-    it('Should allow pages to be recovered', () => {
+    it('Should allow pages to be recovered', async () => {
       // when redirecting to recovery page
-      addRuleToDynamicRuleSet({
+      await addRuleToDynamicRuleSet({
         originUrl: 'http://localhost:8080',
         redirectUrl: 'chrome-extension://some-path/dist/recover/recovery.html'
       })
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
     })
 
-    it('Should add redirect rules for local gateway', () => {
-      addRuleToDynamicRuleSet({
+    it('Should add redirect rules for local gateway', async () => {
+      await addRuleToDynamicRuleSet({
         originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
@@ -104,8 +106,8 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(condition).to.deep.equal(dynamicRulesConditions('^https?\\:\\/\\/ipfs\\.io((?:[^\\.]|$).*)$'))
     })
 
-    it('Should add redirect for local gateway where originUrl is similar to redirectUrl', () => {
-      addRuleToDynamicRuleSet({
+    it('Should add redirect for local gateway where originUrl is similar to redirectUrl', async () => {
+      await addRuleToDynamicRuleSet({
         originUrl: 'https://docs.ipfs.tech',
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
@@ -122,6 +124,15 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         }
       })
       expect(condition).to.deep.equal(dynamicRulesConditions('^https?\\:\\/\\/docs\\.ipfs\\.tech((?:[^\\.]|$).*)$'))
+    })
+
+    it('Should refresh the tab when redirect URL is added', async () => {
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+      expect(browserMock.tabs.query.calledWith({ url: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org' })).to.be.true
+      expect(browserMock.tabs.reload.calledWith(1234)).to.be.true
     })
   })
 })
