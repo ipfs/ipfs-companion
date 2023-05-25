@@ -347,6 +347,10 @@ export function addRuleToDynamicRuleSetGenerator (
           removeRuleIds
         }
       )
+
+      // refresh the tab to apply the new rule.
+      const tabs = await browser.tabs.query({ url: originUrl })
+      await Promise.all(tabs.map(async tab => await browser.tabs.reload(tab.id)))
     }
 
     setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
