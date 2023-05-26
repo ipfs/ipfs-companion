@@ -6,26 +6,63 @@ import browser from 'webextension-polyfill'
  * Since this is not implemented in sinon-chrome, this is a bare-bones mock implementation.
  * This still needs to be instrumented in sinon, to be able to assert on calls.
  */
-class DeclarativeNetRequestMock {
-  private rules: Map<number, browser.DeclarativeNetRequest.Rule>;
+class DeclarativeNetRequestMock implements browser.DeclarativeNetRequest.Static {
+  private dynamicRules: Map<number, browser.DeclarativeNetRequest.Rule>;
+  private sessionRules: Map<number, browser.DeclarativeNetRequest.Rule>;
 
   constructor() {
-    this.rules = new Map()
+    this.dynamicRules = new Map()
   }
 
   async getDynamicRules(): Promise<browser.DeclarativeNetRequest.Rule[]> {
-    return [...this.rules.values()]
+    return [...this.dynamicRules.values()]
   }
 
   async updateDynamicRules({
     addRules,
     removeRuleIds
-  }: {
-    addRules: browser.DeclarativeNetRequest.Rule[],
-    removeRuleIds: number[]
-  }): Promise<void> {
-    removeRuleIds.forEach(id => this.rules.delete(id))
-    addRules.forEach(rule => this.rules.set(rule.id, rule))
+  }: browser.DeclarativeNetRequest.UpdateDynamicRulesOptionsType): Promise<void> {
+    if (removeRuleIds && addRules) {
+      removeRuleIds.forEach(id => this.dynamicRules.delete(id))
+      addRules.forEach(rule => this.dynamicRules.set(rule.id, rule))
+    }
+  }
+
+  async updateSessionRules({
+    addRules,
+    removeRuleIds
+  }: browser.DeclarativeNetRequest.UpdateSessionRulesOptionsType): Promise<void> {
+    if (removeRuleIds && addRules) {
+      removeRuleIds.forEach(id => this.sessionRules.delete(id))
+      addRules.forEach(rule => this.sessionRules.set(rule.id, rule))
+    }
+  }
+
+  async getSessionRules (): Promise<browser.DeclarativeNetRequest.Rule[]> {
+    return [...this.sessionRules.values()]
+  }
+
+  async getEnabledRulesets(): Promise<browser.DeclarativeNetRequest.MatchedRule["rulesetId"][]> {
+    throw new Error('Method not implemented.')
+  }
+
+  async getDisabledRulesets (): Promise<browser.DeclarativeNetRequest.MatchedRule["rulesetId"][]> {
+    throw new Error('Method not implemented.')
+  }
+
+  async updateEnabledRulesets (options: browser.DeclarativeNetRequest.UpdateEnabledRulesetsUpdateRulesetOptionsType): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+
+  async getAvailableStaticRuleCount (): Promise<number> {
+    throw new Error('Method not implemented.')
+  }
+
+  async testMatchOutcome (
+    request: browser.DeclarativeNetRequest.TestMatchOutcomeRequestType,
+    options: browser.DeclarativeNetRequest.TestMatchOutcomeOptionsType
+  ): Promise<browser.DeclarativeNetRequest.TestMatchOutcomeCallbackResultType> {
+    throw new Error('Method not implemented.')
   }
 }
 
