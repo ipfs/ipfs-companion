@@ -120,7 +120,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
   // We need to match the rest of the URL, so we can use a wildcard.
   const regexEnding = '((?:[^\\.]|$).*)$'
-  let regexFilter = `^${regexFilterFirst}${regexEnding}`.replace('https', 'https?')
+  let regexFilter = `^${regexFilterFirst}${regexEnding}`.replace(/https?/ig, 'https?')
 
   // This method does not parse:
   // originUrl: "https://awesome.ipfs.io/"
@@ -162,7 +162,7 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
 /**
  * Clean up all the rules, when extension is disabled.
  */
-async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
+export async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
   const existingRules = await browser.declarativeNetRequest.getDynamicRules()
   const existingRulesIds = existingRules.map(({ id }): number => id)
   await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: existingRulesIds })
@@ -349,7 +349,7 @@ export function addRuleToDynamicRuleSetGenerator (
       )
 
       // refresh the tab to apply the new rule.
-      const tabs = await browser.tabs.query({ url: originUrl })
+      const tabs = await browser.tabs.query({ url: `${originUrl}*` })
       await Promise.all(tabs.map(async tab => await browser.tabs.reload(tab.id)))
     }
 
