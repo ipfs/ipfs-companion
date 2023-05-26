@@ -1,11 +1,11 @@
-import { expect } from 'chai'
-import { before, describe, it } from 'mocha'
+import {expect} from 'chai'
+import {before, describe, it} from 'mocha'
 import sinon from 'sinon'
 import browserMock from 'sinon-chrome'
 
-import { optionDefaults } from '../../../../add-on/src/lib/options.js'
-import { addRuleToDynamicRuleSetGenerator, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
-import { initState } from '../../../../add-on/src/lib/state.js'
+import {optionDefaults} from '../../../../add-on/src/lib/options.js'
+import {addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost} from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
+import {initState} from '../../../../add-on/src/lib/state.js'
 import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
 
 const dynamicRulesConditions = (regexFilter) => ({
@@ -64,10 +64,14 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       addRuleToDynamicRuleSet = addRuleToDynamicRuleSetGenerator(() => state)
     })
 
-    beforeEach(() => {
+    beforeEach(async () => {
       sinonSandbox.restore()
-      browserMock.flush()
-      browserMock.tabs.query.resolves([{ id: 1234 }])
+      browserMock.tabs.query.resetHistory()
+      browserMock.tabs.reload.resetHistory()
+      browserMock.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
+      // this cleans up the rules from the previous test stored in memory.
+      await cleanupRules(true)
+      // this is just to reset the call count.
       browserMock.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
     })
 
@@ -126,13 +130,34 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(condition).to.deep.equal(dynamicRulesConditions('^https?\\:\\/\\/docs\\.ipfs\\.tech((?:[^\\.]|$).*)$'))
     })
 
+    it('Should add redirect for local gateway where originUrl is similar to redirectUrl and is not https', async () => {
+      await addRuleToDynamicRuleSet({
+        originUrl: 'http://docs.ipfs.tech',
+        redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
+      })
+      expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
+      const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
+      expect(removeRuleIds).to.deep.equal([])
+      expect(addRules).to.have.lengthOf(1)
+      const [{ id, priority, action, condition }] = addRules
+      expect(id).to.be.a('number')
+      expect(priority).to.equal(1)
+      expect(action).to.deep.equal({
+        type: 'redirect', redirect: {
+          "regexSubstitution": "http://localhost:8080/ipns/docs.ipfs.tech\\1"
+        }
+      })
+      expect(condition).to.deep.equal(dynamicRulesConditions('^https?\\:\\/\\/docs\\.ipfs\\.tech((?:[^\\.]|$).*)$'))
+    })
+
     it('Should refresh the tab when redirect URL is added', async () => {
+      browserMock.tabs.query.resolves([{id: 1234}])
       await addRuleToDynamicRuleSet({
         originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
-      expect(browserMock.tabs.query.calledWith({ url: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org' })).to.be.true
-      expect(browserMock.tabs.reload.calledWith(1234)).to.be.true
+      sinon.assert.calledWith(browserMock.tabs.query, { url: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org*' })
+      sinon.assert.calledWith(browserMock.tabs.reload, 1234)
     })
   })
 })
