@@ -4,12 +4,15 @@
 
 import debug from 'debug'
 
-import * as external from './external.js'
-import * as embedded from './embedded.js'
-import * as brave from './brave.js'
 import { precache } from '../precache.js'
+import * as brave from './brave.js'
+import * as embedded from './embedded.js'
+import * as external from './external.js'
 import {
-  prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader
+  InternalTabReloader,
+  LocalGatewayReloader,
+  WebUiReloader,
+  prepareReloadExtensions
 } from './reloaders/index.js'
 const log = debug('ipfs-companion:client')
 log.error = debug('ipfs-companion:client:error')
@@ -17,7 +20,7 @@ log.error = debug('ipfs-companion:client:error')
 // ensure single client at all times, and no overlap between init and destroy
 let client
 
-export async function initIpfsClient (browser, opts) {
+export async function initIpfsClient (browser, opts, inQuickImport) {
   log('init ipfs client')
   if (client) return // await destroyIpfsClient()
   let backend
@@ -48,7 +51,9 @@ export async function initIpfsClient (browser, opts) {
       throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
   const instance = await backend.init(browser, opts)
-  _reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
+  if (!inQuickImport) {
+    _reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
+  }
   client = backend
   return instance
 }
