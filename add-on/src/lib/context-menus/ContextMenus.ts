@@ -52,7 +52,11 @@ export class ContextMenus {
    * @param cb
    */
   create (options: browser.Menus.CreateCreatePropertiesType, cb?: listenerCb): void {
-    browser.contextMenus.create(options)
+    try {
+      browser.contextMenus.create(options)
+    } catch (err) {
+      this.log.error?.('ContextMenus.create failed', err)
+    }
     if (cb != null) {
       if (options?.id != null) {
         this.queueListener(options.id, cb)

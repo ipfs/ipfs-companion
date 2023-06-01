@@ -75,7 +75,7 @@ describe('lib/context-menus/ContextMenus', () => {
     expect(listenerSpy.called).to.be.true
   })
 
-  it('should create and queue multiple listeners for same menuItemId', () => {
+  it('should not create multiple context menu items for the same menuItemId', () => {
     const contextMenus = new ContextMenus()
     const globalListener = browserMock.contextMenus.onClicked.addListener.firstCall.args[0]
     const listenerSpyOne = sinonSandbox.spy()
