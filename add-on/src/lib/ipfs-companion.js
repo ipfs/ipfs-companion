@@ -3,27 +3,27 @@
 
 import debug from 'debug'
 
-import browser from 'webextension-polyfill'
-import toMultiaddr from 'uri-to-multiaddr'
-import pMemoize from 'p-memoize'
-import LRU from 'lru-cache'
 import all from 'it-all'
-import { optionDefaults, storeMissingOptions, migrateOptions, guiURLString, safeURL } from './options.js'
-import { initState, offlinePeerCount } from './state.js'
-import { createIpfsPathValidator, dropSlash, sameGateway, safeHostname } from './ipfs-path.js'
-import createDnslinkResolver from './dnslink.js'
-import { createRequestModifier } from './ipfs-request.js'
-import { initIpfsClient, destroyIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
-import { braveNodeType, useBraveEndpoint, releaseBraveEndpoint } from './ipfs-client/brave.js'
-import { createIpfsImportHandler, formatImportDirectory, browserActionFilesCpImportCurrentTab } from './ipfs-import.js'
-import createNotifier from './notifier.js'
+import LRU from 'lru-cache'
+import pMemoize from 'p-memoize'
+import toMultiaddr from 'uri-to-multiaddr'
+import browser from 'webextension-polyfill'
+import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway, createContextMenus, findValueForContext } from './context-menus.js'
 import createCopier from './copier.js'
-import createInspector from './inspector.js'
-import createRuntimeChecks from './runtime-checks.js'
-import { createContextMenus, findValueForContext, contextMenuCopyAddressAtPublicGw, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuViewOnGateway, contextMenuCopyPermalink, contextMenuCopyCidAddress } from './context-menus.js'
+import createDnslinkResolver from './dnslink.js'
 import { registerSubdomainProxy } from './http-proxy.js'
+import createInspector from './inspector.js'
+import { braveNodeType, releaseBraveEndpoint, useBraveEndpoint } from './ipfs-client/brave.js'
+import { destroyIpfsClient, initIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
+import { browserActionFilesCpImportCurrentTab, createIpfsImportHandler, formatImportDirectory } from './ipfs-import.js'
+import { createIpfsPathValidator, dropSlash, safeHostname, sameGateway } from './ipfs-path.js'
+import { createRequestModifier } from './ipfs-request.js'
+import createNotifier from './notifier.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
+import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOptions } from './options.js'
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
+import createRuntimeChecks from './runtime-checks.js'
+import { initState, offlinePeerCount } from './state.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -33,7 +33,7 @@ log.error = debug('ipfs-companion:main:error')
 let browserActionPort // reuse instance for status updates between on/off toggles
 
 // init happens on addon load in background/background.js
-export default async function init () {
+export default async function init (inQuickImport = false) {
   // INIT
   // ===================================================================
   let ipfs // ipfs-api instance
@@ -65,7 +65,7 @@ export default async function init () {
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
-        ipfs = await initIpfsClient(browser, state)
+        ipfs = await initIpfsClient(browser, state, inQuickImport)
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -81,12 +81,14 @@ export default async function init () {
     copier = createCopier(notify, ipfsPathValidator)
     ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
     inspector = createInspector(notify, ipfsPathValidator, getState)
-    contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
-      onAddFromContext,
-      onCopyCanonicalAddress: copier.copyCanonicalAddress,
-      onCopyRawCid: copier.copyRawCid,
-      onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
-    })
+    if (!inQuickImport) {
+      contextMenus = createContextMenus(getState, runtime, ipfsPathValidator, {
+        onAddFromContext,
+        onCopyCanonicalAddress: copier.copyCanonicalAddress,
+        onCopyRawCid: copier.copyRawCid,
+        onCopyAddressAtPublicGw: copier.copyAddressAtPublicGw
+      })
+    }
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
     log('register all listeners')
     registerListeners()
@@ -358,16 +360,22 @@ export default async function init () {
     // immediately preceding a switch from one browser window to another.
     if (windowId !== browser.windows.WINDOW_ID_NONE) {
       const currentTab = await browser.tabs.query({ active: true, windowId }).then(tabs => tabs[0])
-      await contextMenus.update(currentTab.id)
+      if (!inQuickImport) {
+        await contextMenus.update(currentTab.id)
+      }
     }
   }
 
   async function onActivatedTab (activeInfo) {
-    await contextMenus.update(activeInfo.tabId)
+    if (!inQuickImport) {
+      await contextMenus.update(activeInfo.tabId)
+    }
   }
 
   async function onNavigationCommitted (details) {
-    await contextMenus.update(details.tabId)
+    if (!inQuickImport) {
+      await contextMenus.update(details.tabId)
+    }
     await updatePageActionIndicator(details.tabId, details.url)
   }
 
@@ -437,8 +445,12 @@ export default async function init () {
     await Promise.all([
       updateAutomaticModeRedirectState(oldPeerCount, state.peerCount),
       updateBrowserActionBadge(),
-      contextMenus.update(),
-      sendStatusUpdateToBrowserAction()
+      sendStatusUpdateToBrowserAction(),
+      () => {
+        if (!inQuickImport) {
+          contextMenus.update()
+        }
+      }
     ])
   }
 

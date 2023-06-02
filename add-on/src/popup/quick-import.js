@@ -122,7 +122,7 @@ async function processFiles (state, emitter, files) {
 
     let ipfs
     if (httpStreaming) {
-      // We create separate instance of http client running in thie same page to
+      // We create separate instance of http client running in the same page to
       // avoid serialization issues in Chromium
       // (https://bugs.chromium.org/p/chromium/issues/detail?id=112163) when
       // crossing process boundary, which enables streaming upload of big files
@@ -151,7 +151,7 @@ async function processFiles (state, emitter, files) {
     if (state.userChangedImportDir) {
       emitter.emit('optionChange', { key: 'importDir', value: state.importDir })
     }
-    // present result to the user using the beast available way
+    // present result to the user using the best available way
     if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
       await openFilesAtGateway(importDir)
     } else {
