@@ -3,6 +3,7 @@
 import browser from 'webextension-polyfill'
 
 import debug from 'debug'
+import { ContextMenus } from './context-menus/ContextMenus.js'
 const log = debug('ipfs-companion:context-menus')
 log.error = debug('ipfs-companion:context-menus:error')
 
@@ -66,19 +67,34 @@ const apiMenuItemIds = new Set([contextMenuCopyRawCid, contextMenuCopyCanonicalA
 const apiMenuItems = new Set()
 // menu items enabled only in IPFS context (dynamic)
 const ipfsContextItems = new Set()
+// listeners for context menu items
+const contextMenus = new ContextMenus()
 
 export function createContextMenus (
   getState, _runtime, ipfsPathValidator, { onAddFromContext, onCopyRawCid, onCopyAddressAtPublicGw }) {
   try {
-    const createSubmenu = (id, contextType, menuBuilder) => {
-      browser.contextMenus.onClicked.addListener((...args) => console.log(args))
-    }
+    const createSubmenu = (id, contextType) => contextMenus.create({
+      id,
+      title: browser.i18n.getMessage(id),
+      documentUrlPatterns: ['<all_urls>'],
+      contexts: [contextType]
+    })
+
     const createImportToIpfsMenuItem = (parentId, id, contextType, ipfsAddOptions) => {
       const itemId = `${parentId}_${id}`
       apiMenuItems.add(itemId)
+      contextMenus.create({
+        id: itemId,
+        parentId,
+        title: browser.i18n.getMessage(id),
+        contexts: [contextType],
+        documentUrlPatterns: ['<all_urls>'],
+        enabled: false
+      }, (context) => onAddFromContext(context, contextType, ipfsAddOptions))
       return browser.contextMenus.onClicked.addListener((context) => onAddFromContext(context, contextType, ipfsAddOptions)
       )
     }
+
     const createCopierMenuItem = (parentId, id, contextType, handler) => {
       const itemId = `${parentId}_${id}`
       ipfsContextItems.add(itemId)
@@ -86,10 +102,19 @@ export function createContextMenus (
       if (apiMenuItemIds.has(id)) {
         apiMenuItems.add(itemId)
       }
-      return browser.contextMenus.onClicked.addListener(
-        (context) => handler(context, contextType)
-      )
+      contextMenus.create({
+        id: itemId,
+        parentId,
+        title: browser.i18n.getMessage(id),
+        contexts: [contextType],
+        documentUrlPatterns: [
+          '*://*/ipfs/*', '*://*/ipns/*',
+          '*://*.ipfs.dweb.link/*', '*://*.ipns.dweb.link/*', // TODO: add any custom public gateway from Preferences
+          '*://*.ipfs.localhost/*', '*://*.ipns.localhost/*'
+        ]
+      }, (context) => handler(context, contextType))
     }
+
     const buildSubmenu = (parentId, contextType) => {
       createSubmenu(parentId, contextType)
       createImportToIpfsMenuItem(parentId, contextMenuImportToIpfs, contextType, { wrapWithDirectory: true, pin: false })
