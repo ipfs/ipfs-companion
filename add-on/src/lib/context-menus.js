@@ -91,8 +91,6 @@ export function createContextMenus (
         documentUrlPatterns: ['<all_urls>'],
         enabled: false
       }, (context) => onAddFromContext(context, contextType, ipfsAddOptions))
-      return browser.contextMenus.onClicked.addListener((context) => onAddFromContext(context, contextType, ipfsAddOptions)
-      )
     }
 
     const createCopierMenuItem = (parentId, id, contextType, handler) => {
