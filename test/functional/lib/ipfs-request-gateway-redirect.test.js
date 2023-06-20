@@ -426,7 +426,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
     })
   })
 
-  describe('Recovers Page if node is unreachable', function () {
+  describe('Recovers Page if node is unreachable and automatic mode is off', function () {
     beforeEach(function () {
       global.browser = browser
       state.ipfsNodeType = 'external'
@@ -436,6 +436,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
       state.gwURL = new URL('http://localhost:8080')
       state.pubGwURLString = 'https://ipfs.io'
       state.pubGwURL = new URL('https://ipfs.io')
+      state.automaticMode = false
     })
     it('should present recovery page if node is offline and redirect is enabled', async function () {
       expect(state.nodeActive).to.be.equal(false)
@@ -448,6 +449,46 @@ describe('modifyRequest.onBeforeRequest:', function () {
       state.redirect = false
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
       expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2Fbar')
+    })
+    it('should not show recovery page if node is offline, redirect is enabled, but non-gateway URL failed to load from the same port', async function () {
+      // this covers https://github.com/ipfs/ipfs-companion/issues/1162 and https://twitter.com/unicomp21/status/1626244123102679041
+      state.redirect = true
+      expect(state.nodeActive).to.be.equal(false)
+      const request = url2request('https://localhost:8080/')
+      expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+    })
+    it('should not show recovery page if extension is disabled', async function () {
+      // allows user to quickly avoid anything similar to https://github.com/ipfs/ipfs-companion/issues/1162
+      state.active = false
+      expect(state.nodeActive).to.be.equal(false)
+      const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+    })
+  })
+
+  describe('Redirects the Page if node is unreachable and automatic mode is on', function () {
+    beforeEach(function () {
+      global.browser = browser
+      state.ipfsNodeType = 'external'
+      state.redirect = true
+      state.peerCount = -1 // this simulates Kubo RPC being offline
+      state.gwURLString = 'http://localhost:8080'
+      state.gwURL = new URL('http://localhost:8080')
+      state.pubGwURLString = 'https://ipfs.io'
+      state.pubGwURL = new URL('https://ipfs.io')
+      state.automaticMode = true
+    })
+    it('should present recovery page if node is offline and redirect is enabled', async function () {
+      expect(state.nodeActive).to.be.equal(false)
+      state.redirect = true
+      const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+    })
+    it('should present recovery page if node is offline and redirect is disabled', async function () {
+      expect(state.nodeActive).to.be.equal(false)
+      state.redirect = false
+      const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
     })
     it('should not show recovery page if node is offline, redirect is enabled, but non-gateway URL failed to load from the same port', async function () {
       // this covers https://github.com/ipfs/ipfs-companion/issues/1162 and https://twitter.com/unicomp21/status/1626244123102679041

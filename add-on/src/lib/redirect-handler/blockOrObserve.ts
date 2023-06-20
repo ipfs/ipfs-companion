@@ -320,10 +320,13 @@ export function addRuleToDynamicRuleSetGenerator (
     const state = getState()
     const redirectIsOrigin = originUrl === redirectUrl
     const redirectIsLocal = isLocalHost(originUrl) && isLocalHost(redirectUrl)
-    const badOriginRedirect = originUrl.includes(state.gwURL.host) && !redirectUrl.includes('recovery')
+    const localOriginRedirect = isLocalHost(originUrl) && !isLocalHost(redirectUrl)
+    // if the redirect is to the gateway and the automatic mode is off, we would like to present the recovery page.
+    // in case automatic mode is on, we would like to redirect to the public gateway.
+    // This rule is added temporarily otherwise it messes up the local redirects.
+    const badOriginRedirect = localOriginRedirect && !state.automaticMode
     // We don't want to redirect to the same URL. Or to the gateway.
-    if (redirectIsOrigin || badOriginRedirect || redirectIsLocal
-    ) {
+    if (redirectIsOrigin || badOriginRedirect || redirectIsLocal) {
       return
     }
 
@@ -339,10 +342,11 @@ export function addRuleToDynamicRuleSetGenerator (
         savedRegexFilters.delete(regexFilter)
       }
 
+      const rule = saveAndGenerateRule(regexFilter, regexSubstitution)
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           // We need to add the new rule.
-          addRules: [saveAndGenerateRule(regexFilter, regexSubstitution)],
+          addRules: [rule],
           // We need to remove the old rules.
           removeRuleIds
         }
@@ -351,6 +355,11 @@ export function addRuleToDynamicRuleSetGenerator (
       // refresh the tab to apply the new rule.
       const tabs = await browser.tabs.query({ url: `${originUrl}*` })
       await Promise.all(tabs.map(async tab => await browser.tabs.reload(tab.id)))
+      if (state.automaticMode && localOriginRedirect) {
+        // Removing the recently added rule as this will mess up the local browsing.
+        await browser.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [rule.id] })
+        savedRegexFilters.delete(regexFilter)
+      }
     }
 
     setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
