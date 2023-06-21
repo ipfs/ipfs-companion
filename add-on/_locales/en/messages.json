@@ -400,7 +400,7 @@
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "Disabling this still triggers redirects even if the Kubo RPC endpoint is unavailable. The automatic mode only validates the availability of a local gateway and automatically redirects to the local gateway when available.",
+    "message": "Disabling this still triggers redirects even if the Kubo RPC endpoint is unavailable. The automatic mode only validates the availability of a local gateway based on Kubo RPC endpoint availability and automatically redirects to the local gateway when available.",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
