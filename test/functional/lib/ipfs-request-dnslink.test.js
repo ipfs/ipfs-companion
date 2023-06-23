@@ -19,8 +19,6 @@ const fakeRequestId = () => {
   return Math.floor(Math.random() * 100000).toString()
 }
 
-// const nodeTypes = ['external', 'embedded']
-
 describe('modifyRequest processing of DNSLinks', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
@@ -54,8 +52,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       state.dnslinkPolicy = false
       // API is online and has one peer
       state.peerCount = 1
-      // embedded node (js-ipfs) defaults to public gw
-      activeGateway = (state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString)
+      activeGateway = state.gwURLString
       // clear dnslink cache to ensure DNS TXT record lookup is triggered
       dnslinkResolver.clearCache()
     })
@@ -151,8 +148,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       state.detectIpfsPathHeader = false
       // API is online and has one peer
       state.peerCount = 1
-      // embedded node (js-ipfs) defaults to public gw
-      activeGateway = (state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString)
+      activeGateway = state.gwURLString
       // clear dnslink cache to ensure DNS TXT record lookup is triggered
       dnslinkResolver.clearCache()
     })
@@ -223,8 +219,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       state.detectIpfsPathHeader = true
       // API is online and has one peer
       state.peerCount = 1
-      // embedded node (js-ipfs) defaults to public gw
-      activeGateway = (state.ipfsNodeType === 'embedded' ? state.pubGwURLString : state.gwURLString)
+      activeGateway = state.gwURLString
     })
     describe('and dnslink cache miss', function () {
       beforeEach(function () {
