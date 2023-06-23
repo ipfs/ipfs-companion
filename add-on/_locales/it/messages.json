@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "Attiva tutte le integrazioni IPFS",
-    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "offline",
@@ -92,8 +92,8 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "Copia percorso IPNS",
-  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+    "message": "Copia percorso IPNS",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
     "message": "Utilizza questo percorso contenuti con gli strumenti ed i gateway IPFS per raggiungere la versione più recente dei contenuti di questa tab.",
@@ -239,19 +239,15 @@
     "message": "Arresto del nodo IPFS fallito",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_page_title" : {
+  "option_page_title": {
     "message": "Preferenze | IPFS Companion",
     "description": "Title of the Preferences page (option_page_title)"
   },
-  "option_page_header" : {
+  "option_page_header": {
     "message": "Preferenze Companion",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
-  "option_legend_readMore" : {
-    "message": "Leggi di più",
-    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
-  },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "Nodo IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -267,10 +263,6 @@
     "message": "Imposta su \"Esterno\" per connetterti ad un nodo locale utilizzando le API HTTP.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
-  "option_ipfsNodeType_embedded_description": {
-    "message": "Imposta su \"Integrato\" per avviare un nodo js-ipfs direttamente nel tuo browser (Clicca \"Leggi di più\" per imparare le limitazioni di questa funzionalità sperimentale)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "Imposta \"Offerto da Brave\" per sfruttare il supporto IPFS nativo di Brave browser.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -279,17 +271,9 @@
     "message": "Configurazione del Nodo IPFS",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
-  "option_ipfsNodeConfig_description": {
-    "message": "Configurazione aggiuntiva per il nodo JS IPFS integrato. Deve essere JSON valido.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
-  },
   "option_ipfsNodeType_external": {
     "message": "Esterno",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
-  },
-  "option_ipfsNodeType_embedded": {
-    "message": "Integrato",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Offerto da Brave",

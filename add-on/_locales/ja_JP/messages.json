@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "すべてのIPFS統合を切り替えます",
-    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "オフライン",
@@ -92,8 +92,8 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "IPNSパスをコピー",
-  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+    "message": "IPNSパスをコピー",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
     "message": "IPFSツールとゲートウェイでこのコンテンツパスを使用して、このタブのコンテンツの最新版をアクセスできます。",
@@ -239,19 +239,15 @@
     "message": "IPFSノードの停止に失敗しました",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_page_title" : {
+  "option_page_title": {
     "message": "設定 | IPFS Companion",
     "description": "Title of the Preferences page (option_page_title)"
   },
-  "option_page_header" : {
+  "option_page_header": {
     "message": "Companionの設定",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
-  "option_legend_readMore" : {
-    "message": "続きを読む",
-    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
-  },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "IPFSノード",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -267,10 +263,6 @@
     "message": "HTTP APIを使用してローカルノードに接続する場合は、\"External\"に設定します。",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
-  "option_ipfsNodeType_embedded_description": {
-    "message": "ブラウザで直接 js-ipfs ノードを実行するには、\"Embedded\"に設定してください。（実験的な機能の制限について知るには\"続きを読む\"をクリック）",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "BraveブラウザでのネイティブIPFS対応を活用するのに、「Braveによって提供された」に設定する。",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -279,17 +271,9 @@
     "message": "IPFSノード構成",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
-  "option_ipfsNodeConfig_description": {
-    "message": "組み込みJS IPFSノードの追加構成。有効なJSONである必要があります。",
-    "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
-  },
   "option_ipfsNodeType_external": {
     "message": "外部",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
-  },
-  "option_ipfsNodeType_embedded": {
-    "message": "埋め込み",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Braveによって提供",
