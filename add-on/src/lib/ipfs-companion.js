@@ -227,7 +227,7 @@ export default async function init (inQuickImport = false) {
       peerCount: state.peerCount,
       gwURLString: dropSlash(state.gwURLString),
       pubGwURLString: dropSlash(state.pubGwURLString),
-      webuiRootUrl: dropSlash(state.webuiRootUrl), // TODO: fix js-ipfs - it fails with trailing slash
+      webuiRootUrl: dropSlash(state.webuiRootUrl),
       importDir: state.importDir,
       openViaWebUI: state.openViaWebUI,
       apiURLString: dropSlash(state.apiURLString),

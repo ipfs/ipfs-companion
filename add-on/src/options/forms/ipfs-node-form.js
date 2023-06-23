@@ -19,9 +19,6 @@ export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange, withNodeFr
               <dd>
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
                 ${withNodeFromBrave ? html`<p>${browser.i18n.getMessage('option_ipfsNodeType_brave_description')}</p>` : null}
-                <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/companion-node-types/" target="_blank">
-                  ${browser.i18n.getMessage('')}
-                </a></p>
               </dd>
             </dl>
           </label>

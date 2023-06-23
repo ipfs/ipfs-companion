@@ -157,7 +157,7 @@ const bgConfig = merge(commonConfig, {
           name: 'ipfs',
           priority: 10,
           enforce: true,
-          // Include js-ipfs and js-kubo-rpc-client
+          // Include js-kubo-rpc-client
           test: /\/node_modules\/kubo-rpc-client\//
         }
       }
