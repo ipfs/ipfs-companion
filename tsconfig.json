@@ -2,7 +2,7 @@
   "transpileOnly": true,
   "compilerOptions": {
     "typeRoots" : ["./src/types"],
-    "lib": ["ESNext"],
+    "lib": ["DOM", "ESNext"],
     "target": "ESNext",
     "allowJs": true,
     "checkJs": true,
