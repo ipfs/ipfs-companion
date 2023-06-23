@@ -152,7 +152,7 @@ async function processFiles (state, emitter, files) {
       emitter.emit('optionChange', { key: 'importDir', value: state.importDir })
     }
     // present result to the user using the best available way
-    if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+    if (!state.openViaWebUI) {
       await openFilesAtGateway(importDir)
     } else {
       await openFilesAtWebUI(importDir)
@@ -174,6 +174,7 @@ function quickImportOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.userChangedOpenViaWebUI = true; state.openViaWebUI = e.target.checked }
+  // TODO(whizzzkid): Remove this once we have a better way to handle this.
   const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
 
   if (state.expandOptions) {

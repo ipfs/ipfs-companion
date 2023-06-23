@@ -514,7 +514,7 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
   //
   if (state.localGwAvailable) {
     const { type, originUrl, initiator } = request
-    // match request types for embedded subdresources, but skip ones coming from local gateway
+    // match request types for embedded subresources, but skip ones coming from local gateway
     const parentUrl = originUrl || initiator // FF || Chromium
     if (type !== 'main_frame' && (parentUrl && !sameGateway(parentUrl, state.gwURL))) {
       // use raw IP to ensure subresource will be loaded from the path gateway

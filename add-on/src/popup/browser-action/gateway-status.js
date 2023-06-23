@@ -21,10 +21,9 @@ export default function gatewayStatus ({
   gatewayAddress,
   gatewayVersion,
   ipfsApiUrl,
-  ipfsNodeType,
   swarmPeers
 }) {
-  const api = ipfsApiUrl && ipfsNodeType === 'embedded' ? 'js-ipfs' : ipfsApiUrl
+  const api = ipfsApiUrl
   return html`
     <ul class="fade-in list mv0 pt2 ph3 white">
     ${statusEntry({

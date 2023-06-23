@@ -31,6 +31,7 @@ export default function gatewaysForm ({
   const onDisabledOnChange = onOptionChange('disabledOn', hostTextToArray)
   const onEnabledOnChange = onOptionChange('enabledOn', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
+  // TODO(whizzzkid): remove this once we have a better solution
   const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
   const allowChangeOfCustomGateway = ipfsNodeType === 'external'
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''

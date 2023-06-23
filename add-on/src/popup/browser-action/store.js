@@ -235,6 +235,7 @@ export default (state, emitter) => {
       // Copy all attributes
       Object.assign(state, status)
 
+      // TODO(whizzzkid): Remove this once we have a better way to handle this.
       if (state.active && status.redirect && (status.ipfsNodeType !== 'embedded')) {
         state.gatewayAddress = status.gwURLString
       } else {

@@ -332,7 +332,7 @@ export default async function init (inQuickImport = false) {
       preloadFilesAtPublicGateway(results)
 
       await copyImportResultsToFiles(results, importDir)
-      if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+      if (!state.openViaWebUI) {
         await openFilesAtGateway(importDir)
       } else {
         await openFilesAtWebUI(importDir)
@@ -412,7 +412,7 @@ export default async function init (inQuickImport = false) {
         log.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
     }
-    // Ensure embedded js-ipfs in Brave uses correct API
+    // Ensure Brave uses correct API
     if (details.url.startsWith(state.webuiRootUrl)) {
       const apiMultiaddr = toMultiaddr(state.apiURLString)
       await browser.tabs.executeScript(details.tabId, {

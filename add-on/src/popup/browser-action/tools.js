@@ -14,6 +14,7 @@ export default function tools ({
   onQuickImport
 }) {
   const activeQuickImport = active && isIpfsOnline && isApiAvailable
+  // TODO(whizzzkid): Remove this once we have a better way to handle this.
   const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
 
   return html`

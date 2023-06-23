@@ -45,6 +45,7 @@ export function contextActions ({
   onFilesCpImport
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
+  // TODO(whizzzkid): Remove this once we have a better way to handle this.
   const activeFilesCpImport = active && isIpfsOnline && isApiAvailable && !ipfsNodeType.startsWith('embedded')
   const isMutable = currentTabContentPath.startsWith('/ipns/')
   const activeViewOnGateway = (currentTab) => {
