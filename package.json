@@ -117,7 +117,6 @@
     "https-browserify": "^1.0.0",
     "ignore-loader": "0.1.2",
     "ignore-styles": "5.0.1",
-    "ipfs-core": "0.17.0",
     "json": "11.0.0",
     "kubo-rpc-client": "2.0.0",
     "mem-storage-area": "1.0.3",

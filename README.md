@@ -108,9 +108,6 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
 
-- Switch between the external HTTP API of your local IPFS node (default setting) and a js-ipfs node embedded in your browser (note that this has some [functionality limitations](https://docs.ipfs.io/how-to/companion-node-types/))
-[![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmPDxawBTEmH5Dk1anaqpryRyyaNwmqVPt5DsCf21eFWQz)](http://docs.ipfs.io/how-to/companion-node-types/)
-
 ## Install IPFS Companion
 
 ### Latest stable release
