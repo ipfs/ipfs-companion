@@ -7,7 +7,6 @@ import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 
 export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange, withNodeFromBrave }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
-  const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
   return html`
     <form>
