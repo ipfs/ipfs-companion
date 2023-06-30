@@ -6,6 +6,7 @@ import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 import { guiURLString, hostTextToArray, hostArrayToText } from '../../lib/options.js'
 import { braveNodeType } from '../../lib/ipfs-client/brave.js'
+import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 // Warn about mixed content issues when changing the gateway
 // to something other than HTTP or localhost
@@ -31,8 +32,7 @@ export default function gatewaysForm ({
   const onDisabledOnChange = onOptionChange('disabledOn', hostTextToArray)
   const onEnabledOnChange = onOptionChange('enabledOn', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
-  // TODO(whizzzkid): remove this once we have a better solution
-  const supportRedirectToCustomGateway = ipfsNodeType !== 'embedded'
+  const supportRedirectToCustomGateway = POSSIBLE_NODE_TYPES.includes(ipfsNodeType)
   const allowChangeOfCustomGateway = ipfsNodeType === 'external'
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
 
