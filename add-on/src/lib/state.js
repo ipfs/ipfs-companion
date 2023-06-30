@@ -58,8 +58,7 @@ export function initState (options, overrides) {
   })
   Object.defineProperty(state, 'localGwAvailable', {
     // TODO: make quick fetch to confirm it works?
-    // TODO(whizzzkid): remove this once we have a better way to detect local gw.
-    get: function () { return this.webuiRootUrl !== 'embedded' }
+    get: function () { return this.webuiRootUrl != null }
   })
   Object.defineProperty(state, 'webuiRootUrl', {
     get: function () {
