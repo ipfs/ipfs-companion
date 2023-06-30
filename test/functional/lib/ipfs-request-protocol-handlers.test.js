@@ -14,7 +14,7 @@ const url2request = (string) => {
   return { url: string, type: 'main_frame' }
 }
 
-const nodeTypes = ['external', 'embedded']
+const nodeTypes = ['external']
 
 describe('modifyRequest.onBeforeRequest:', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime

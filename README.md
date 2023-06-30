@@ -63,15 +63,6 @@ You can disable and re-enable local gateway redirects by several means:
 - Suspend redirects **per site** using the toggle under "Current tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
 - Add `x-ipfs-companion-no-redirect` to the URL itself as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect))
 
-<!-- TODO: restore after https://github.com/ipfs-shipyard/ipfs-companion/issues/843 is closed
-### IPFS API as `window.ipfs`
-
-Your IPFS node is exposed as `window.ipfs` on every web page.
-Websites can detect if `window.ipfs` exists and opt-in to use it instead of creating their own `js-ipfs` node.
-It saves system resources and battery (on mobile), avoids the overhead of peer discovery/connection, enables shared repository access and more!
-Make sure to read our [notes on `window.ipfs`](https://github.com/ipfs-shipyard/ipfs-companion/blob/main/docs/window.ipfs.md), where we explain it in-depth and provide examples on how to use it your own dapp.
--->
-
 ### Access frequently-used IPFS actions from your browser bar
 
 IPFS Companion enables you to quickly and easily access common actions from your browser bar with just a few clicks:
@@ -107,9 +98,6 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
     - `ipns://$cid_or_fqdn`
     - `dweb:/ipfs/$cid`
     - `dweb:/ipns/$cid_or_fqdn`
-
-- Switch between the external HTTP API of your local IPFS node (default setting) and a js-ipfs node embedded in your browser (note that this has some [functionality limitations](https://docs.ipfs.io/how-to/companion-node-types/))
-[![screenshot of node type switch](https://gateway.ipfs.io/ipfs/QmPDxawBTEmH5Dk1anaqpryRyyaNwmqVPt5DsCf21eFWQz)](http://docs.ipfs.io/how-to/companion-node-types/)
 
 ## Install IPFS Companion
 

@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "切换所有 IPFS 集成",
-    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "离线",
@@ -92,8 +92,8 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "复制 IPFS 路径",
-  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+    "message": "复制 IPFS 路径",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
     "message": "将此内容路径与IPFS工具和网关一起使用，以访问此选项卡中内容的最近更新版本。",
@@ -239,19 +239,15 @@
     "message": "停止IPFS 节点失败",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_page_title" : {
+  "option_page_title": {
     "message": "首选项 | IPFS 伴侣",
     "description": "Title of the Preferences page (option_page_title)"
   },
-  "option_page_header" : {
+  "option_page_header": {
     "message": "伴侣首选项",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
-  "option_legend_readMore" : {
-    "message": "阅读更多",
-    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
-  },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "IPFS 节点",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -267,10 +263,6 @@
     "message": "设置为“外部”来通过 HTTP API 连接本地节点",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
-  "option_ipfsNodeType_embedded_description": {
-    "message": "设置为“嵌入式的”以在你的浏览器里直接运行 js-ipfs 节点（点击“了解更多”来了解该实验性的特性的局限性）",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "设置为“Brave支持”以利用Brave浏览器的原生支持IPFS的特性。",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -279,17 +271,9 @@
     "message": "IPFS 节点配置",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
-  "option_ipfsNodeConfig_description": {
-    "message": "嵌入式JS IPFS节点的额外配置。必须是有效的JSON。",
-    "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
-  },
   "option_ipfsNodeType_external": {
     "message": "外部",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
-  },
-  "option_ipfsNodeType_embedded": {
-    "message": "嵌入",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Brave支持",

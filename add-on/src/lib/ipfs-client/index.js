@@ -6,7 +6,6 @@ import debug from 'debug'
 
 import { precache } from '../precache.js'
 import * as brave from './brave.js'
-import * as embedded from './embedded.js'
 import * as external from './external.js'
 import {
   InternalTabReloader,
@@ -25,22 +24,6 @@ export async function initIpfsClient (browser, opts, inQuickImport) {
   if (client) return // await destroyIpfsClient()
   let backend
   switch (opts.ipfsNodeType) {
-    case 'embedded:chromesockets':
-      // TODO: remove this one-time migration after in second half of 2021
-      setTimeout(async () => {
-        log('converting embedded:chromesockets to native external:brave')
-        opts.ipfsNodeType = 'external:brave'
-        await browser.storage.local.set({
-          ipfsNodeType: 'external:brave',
-          ipfsNodeConfig: '{}' // remove chrome-apps config
-        })
-        await browser.tabs.create({ url: 'https://docs.ipfs.tech/how-to/companion-node-types/#native' })
-      }, 0)
-      // Halt client init
-      throw new Error('Embedded + chrome.sockets is deprecated. Switching to Native IPFS in Brave.')
-    case 'embedded':
-      backend = embedded
-      break
     case 'external:brave':
       backend = brave
       break
@@ -72,7 +55,7 @@ export async function destroyIpfsClient (browser) {
 /**
  * Reloads pages dependant on ipfs to be online
  *
- * @typedef {embedded|brave|external} Browser
+ * @typedef {brave|external} Browser
  * @param {Browser} browser
  * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts
@@ -105,7 +88,7 @@ async function _reloadIpfsClientDependents (
 /**
  * Reloads local gateway pages dependant on ipfs to be online
  *
- * @typedef {embedded|brave|external} Browser
+ * @typedef {brave|external} Browser
  * @param {Browser} browser
  * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts

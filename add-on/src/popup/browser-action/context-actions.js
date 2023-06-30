@@ -15,6 +15,7 @@ import {
   contextMenuCopyCanonicalAddress,
   contextMenuCopyCidAddress
 } from '../../lib/context-menus.js'
+import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 const notReady = browser.i18n.getMessage('panelCopy_notReadyHint')
 
@@ -45,7 +46,7 @@ export function contextActions ({
   onFilesCpImport
 }) {
   const activeCidResolver = active && isIpfsOnline && isApiAvailable && currentTabCid
-  const activeFilesCpImport = active && isIpfsOnline && isApiAvailable && !ipfsNodeType.startsWith('embedded')
+  const activeFilesCpImport = active && isIpfsOnline && isApiAvailable && POSSIBLE_NODE_TYPES.includes(ipfsNodeType) && importDir
   const isMutable = currentTabContentPath.startsWith('/ipns/')
   const activeViewOnGateway = (currentTab) => {
     if (!currentTab) return false

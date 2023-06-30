@@ -124,7 +124,7 @@ export default function createDnslinkResolver (getState) {
     async readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
       let apiProvider
-      if (!state.ipfsNodeType.startsWith('embedded') && state.peerCount !== offlinePeerCount) {
+      if (state.peerCount !== offlinePeerCount) {
         // Use gw port so it can be a GET:
         // Chromium does not execute onBeforeSendHeaders for synchronous calls
         // made from the same extension context as onBeforeSendHeaders

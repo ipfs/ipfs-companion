@@ -4,6 +4,7 @@
 import { isHostname, safeURL } from './options.js'
 
 export const offlinePeerCount = -1
+export const POSSIBLE_NODE_TYPES = ['external', 'brave']
 
 /**
  *
@@ -57,7 +58,7 @@ export function initState (options, overrides) {
   })
   Object.defineProperty(state, 'localGwAvailable', {
     // TODO: make quick fetch to confirm it works?
-    get: function () { return this.ipfsNodeType !== 'embedded' }
+    get: function () { return this.webuiRootUrl != null }
   })
   Object.defineProperty(state, 'webuiRootUrl', {
     get: function () {

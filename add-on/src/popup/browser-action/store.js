@@ -9,6 +9,7 @@ import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
 import { notifyStateChange } from '../../lib/redirect-handler/blockOrObserve.js'
 import { endSession, handleConsentFromState, startSession, trackView } from '../../lib/telemetry.js'
+import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 // The store contains and mutates the state for the app
 export default (state, emitter) => {
@@ -235,7 +236,7 @@ export default (state, emitter) => {
       // Copy all attributes
       Object.assign(state, status)
 
-      if (state.active && status.redirect && (status.ipfsNodeType !== 'embedded')) {
+      if (state.active && status.redirect && POSSIBLE_NODE_TYPES.includes(status.ipfsNodeType)) {
         state.gatewayAddress = status.gwURLString
       } else {
         state.gatewayAddress = status.pubGwURLString

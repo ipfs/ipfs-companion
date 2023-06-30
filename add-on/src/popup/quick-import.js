@@ -14,6 +14,7 @@ import createIpfsCompanion from '../lib/ipfs-companion.js'
 import { formatImportDirectory } from '../lib/ipfs-import.js'
 import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 import logo from './logo.js'
+import { POSSIBLE_NODE_TYPES } from '../lib/state.js'
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 
@@ -152,7 +153,7 @@ async function processFiles (state, emitter, files) {
       emitter.emit('optionChange', { key: 'importDir', value: state.importDir })
     }
     // present result to the user using the best available way
-    if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+    if (!state.openViaWebUI) {
       await openFilesAtGateway(importDir)
     } else {
       await openFilesAtWebUI(importDir)
@@ -174,7 +175,7 @@ function quickImportOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.userChangedOpenViaWebUI = true; state.openViaWebUI = e.target.checked }
-  const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
+  const displayOpenWebUI = POSSIBLE_NODE_TYPES.includes(state.ipfsNodeType)
 
   if (state.expandOptions) {
     return html`

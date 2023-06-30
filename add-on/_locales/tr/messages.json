@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "Tüm IPFS entegrasyonlarını aç / kapat",
-    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "çevrimdışı",
@@ -92,8 +92,8 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "IPNS Yolunu Kopyala",
-  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+    "message": "IPNS Yolunu Kopyala",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
     "message": "Bu sekme içeriğinin en son güncellenen sürümüne ulaşmak için bu içerik yolunu IPFS araçları ve ağ geçitleriyle kullanın.",
@@ -239,19 +239,15 @@
     "message": "IPFS Düğümü Durdurulamadı",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_page_title" : {
+  "option_page_title": {
     "message": "Tercihler | IPFS Refakatçisi",
     "description": "Title of the Preferences page (option_page_title)"
   },
-  "option_page_header" : {
+  "option_page_header": {
     "message": "Refakatçi Ayarları",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
-  "option_legend_readMore" : {
-    "message": "Daha fazla oku",
-    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
-  },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "IPFS Düğümü",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -267,10 +263,6 @@
     "message": "HTTP UPA kullanarak yerel bir düğüme bağlanmak için \"Harici\" olarak ayarlayın.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
-  "option_ipfsNodeType_embedded_description": {
-    "message": "Tarayıcınızda doğrudan bir js-ipfs düğümünü çalıştırmak için \"Gömülü\" olarak ayarlayın. (Bu deneysel özelliğin sınırlamaları hakkında bilgi edinmek için \"Daha fazlasını okuyun\" 'u tıklayın.)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "Brave tarayıcının yerel IPFS desteğinden yararlanmak için \"Brave tarafından sağlandı\" olarak ayarlayın.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -279,17 +271,9 @@
     "message": "IPFS Düğüm Yapılandırması",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
-  "option_ipfsNodeConfig_description": {
-    "message": "Gömülü JS IPFS düğümü için ek yapılandırma. Geçerli JSON olmalıdır.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
-  },
   "option_ipfsNodeType_external": {
     "message": "Harici",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
-  },
-  "option_ipfsNodeType_embedded": {
-    "message": "Gömülü",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Brave tarafından sağlandı",

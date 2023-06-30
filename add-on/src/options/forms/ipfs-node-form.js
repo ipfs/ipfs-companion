@@ -5,9 +5,8 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 
-export default function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionChange, withNodeFromBrave }) {
+export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange, withNodeFromBrave }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
-  const onIpfsNodeConfigChange = onOptionChange('ipfsNodeConfig')
   const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
   return html`
     <form>
@@ -20,10 +19,6 @@ export default function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionCh
               <dd>
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
                 ${withNodeFromBrave ? html`<p>${browser.i18n.getMessage('option_ipfsNodeType_brave_description')}</p>` : null}
-                <p>${browser.i18n.getMessage('option_ipfsNodeType_embedded_description')}</p>
-                <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/companion-node-types/" target="_blank">
-                  ${browser.i18n.getMessage('option_legend_readMore')}
-                </a></p>
               </dd>
             </dl>
           </label>
@@ -40,29 +35,8 @@ export default function ipfsNodeForm ({ ipfsNodeType, ipfsNodeConfig, onOptionCh
                   ${browser.i18n.getMessage('option_ipfsNodeType_brave')}
                 </option>`
               : null}
-            <option
-              value='embedded'
-              selected=${ipfsNodeType === 'embedded'}>
-              ${browser.i18n.getMessage('option_ipfsNodeType_embedded')} (${browser.i18n.getMessage('option_experimental')})
-            </option>
           </select>
         </div>
-        ${ipfsNodeType.startsWith('embedded')
-        ? html`<div class="flex-row-ns pb0-ns">
-            <label for="ipfsNodeConfig">
-              <dl>
-                <dt>${browser.i18n.getMessage('option_ipfsNodeConfig_title')}</dt>
-                <dd>${browser.i18n.getMessage('option_ipfsNodeConfig_description')}</dd>
-              </dl>
-            </label>
-            <textarea
-              class="bg-white navy self-center-ns"
-              spellcheck="false"
-              id="ipfsNodeConfig"
-              rows="${Math.min((ipfsNodeConfig.match(/\n/g) || []).length + 1, 30)}"
-              onchange=${onIpfsNodeConfigChange}>${ipfsNodeConfig}</textarea>
-          </div>`
-          : null}
       </fieldset>
     </form>
   `
