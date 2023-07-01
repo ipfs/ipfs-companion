@@ -3,7 +3,7 @@
 
 import browser from 'webextension-polyfill'
 import debug from 'debug'
-import { welcomePage } from './constants.js'
+import { welcomePage, mv3updatePage } from './constants.js'
 import { brave, braveNodeType } from './ipfs-client/brave.js'
 
 const { version } = browser.runtime.getManifest()
@@ -28,9 +28,23 @@ export async function runPendingOnInstallTasks () {
         url: welcomePage
       })
     case 'onVersionUpdate':
-      if (!displayReleaseNotes) return
+      // temporary disabled due to upgrade to MV3.
+      // TODO(whizzzkid): revert this logic to it's previous state once v3.0.0 is released.
+      // if (!displayReleaseNotes) return
       await browser.storage.local.set({ dismissedUpdate: version })
-      return browser.tabs.create({ url: updatePage + version })
+      //return browser.tabs.create({ url: updatePage + version })
+      browser.runtime.onMessage.addListener((message) => {
+        if (message.type === 'ipfs-companion-migrate') {
+          browser.runtime.onMessage.removeListener(this)
+
+          browser.storage.local.set({
+            logNamespaces: message.payload.localStorage.logNamespaces,
+            countly: message.payload.localStorage.countly,
+          })
+          browser.tabs.remove(message.sender.tab.id)
+        }
+      })
+      return browser.tabs.create({ url: mv3updatePage })
   }
 }
 
