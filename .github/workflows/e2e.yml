@@ -43,6 +43,7 @@ jobs:
           FIREFOX_VERSION: ${{ inputs.firefox-version }}
           CHROMIUM_VERSION: ${{ inputs.chromium-version }}
           KUBO_VERSION: ${{ inputs.kubo-version }}
+          IPFS_COMPANION_VERSION: ${{ inputs.ipfs-companion-version }}
       - name: Start E2E env
         run: npm run compose:e2e:up
         env:
