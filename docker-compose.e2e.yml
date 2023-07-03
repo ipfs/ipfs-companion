@@ -27,6 +27,7 @@ services:
   e2e:
     build:
       dockerfile: ./Dockerfile
+      context: .
     environment:
       - SELENIUM_REMOTE_CHROMIUM_URL=http://chromium:4444
       - SELENIUM_REMOTE_FIREFOX_URL=http://firefox:4444
