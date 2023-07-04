@@ -3,13 +3,14 @@ import debug from 'debug'
 import { optionDefaults } from '../options.js'
 
 export async function debuggerInit (): Promise<void> {
-  enableDebugger()
-  setupListeners()
+  await enableDebugger()
+  await setupListeners()
 }
 
 function setupListeners (): void {
-  browser.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === 'local' && changes.logNamespaces) {
+  browser.storage.onChanged.addListener((changes, areaName): void => {
+    if (areaName === 'local' && ('logNamespaces' in changes)) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       enableDebugger()
     }
   })

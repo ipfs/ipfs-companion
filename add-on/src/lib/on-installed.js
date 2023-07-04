@@ -19,7 +19,7 @@ export async function onInstalled (details) {
 }
 
 export async function runPendingOnInstallTasks () {
-  const { onInstallTasks, displayReleaseNotes } = await browser.storage.local.get(['onInstallTasks', 'displayReleaseNotes'])
+  const { onInstallTasks } = await browser.storage.local.get(['onInstallTasks', 'displayReleaseNotes'])
   await browser.storage.local.remove('onInstallTasks')
   switch (onInstallTasks) {
     case 'onFirstInstall':
@@ -32,14 +32,14 @@ export async function runPendingOnInstallTasks () {
       // TODO(whizzzkid): revert this logic to it's previous state once v3.0.0 is released.
       // if (!displayReleaseNotes) return
       await browser.storage.local.set({ dismissedUpdate: version })
-      //return browser.tabs.create({ url: updatePage + version })
+      // return browser.tabs.create({ url: updatePage + version })
       browser.runtime.onMessage.addListener((message) => {
         if (message.type === 'ipfs-companion-migrate') {
           browser.runtime.onMessage.removeListener(this)
 
           browser.storage.local.set({
             logNamespaces: message.payload.localStorage.logNamespaces,
-            countly: message.payload.localStorage.countly,
+            countly: message.payload.localStorage.countly
           })
           browser.tabs.remove(message.sender.tab.id)
         }
