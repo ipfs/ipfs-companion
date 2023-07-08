@@ -14,7 +14,7 @@ The process was simple and synchronous, the request is intercepted and handed ov
 
 ![MV3 Working Diagram](assets/mv3-working.png)
 
-The process is asynchronous, the browser allows "observation" of requests to companion, which asynchronously determines if the given request is serviceable by IPFS and then dynamically introduces a rule for the browser to perform redirects to the local gateway. A sammple rule looks something like:
+The process is asynchronous, the browser allows "observation" of requests to companion, which asynchronously determines if the given request is serviceable by IPFS and then dynamically introduces a rule for the browser to perform redirects to the local gateway. A sample rule looks something like:
 
 ```js
 {
