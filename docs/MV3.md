@@ -48,7 +48,7 @@ The process is asynchronous, the browser allows "observation" of requests to com
 }
 ```
 
-The API only allows for 5000 such rules to exist at the time of writing this, so that value can be exhausted pretty quickly. To save the rules and gain more coverage of such serviceable URLs, we make use of the fact that rules allow for regex substitutions. So instead of adding one rule per redirect, we can dynamically generate a regex pattern to suffice redirection.
+The API only allows for 5000 such rules to exist at the time of writing this, so that value can be exhausted pretty quickly. So instead of adding one rule per redirect, we can dynamically generate a single regex pattern to handle multiple redirections.
 
 For example
 
