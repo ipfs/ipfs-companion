@@ -19,7 +19,7 @@ export class WebExtensionStorageProvider implements StorageProviderInterface {
 
   async getStore (): Promise<consentTypes[]> {
     try {
-      let jsonString;
+      let jsonString
       if ('localStorage' in globalThis) {
         jsonString = globalThis.localStorage.getItem('@ipfs-shipyard/ignite-metrics:consent')
       } else {
