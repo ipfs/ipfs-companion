@@ -153,7 +153,7 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
-    "@ipfs-shipyard/ignite-metrics": "https://github.com/ipfs-shipyard/ignite-metrics/tarball/b2086f0b07062873d55b874d2721ab0b0ed3b9b8",
+    "@ipfs-shipyard/ignite-metrics": "^2.0.0",
     "@material/switch": "10.0.0",
     "assert": "2.0.0",
     "buffer": "6.0.3",

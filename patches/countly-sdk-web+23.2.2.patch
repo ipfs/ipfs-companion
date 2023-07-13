@@ -1,27 +1,21 @@
 diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
-index da26eb6..2a5e1c0 100644
+index da26eb6..0d82fd1 100644
 --- a/node_modules/countly-sdk-web/lib/countly.js
 +++ b/node_modules/countly-sdk-web/lib/countly.js
-@@ -52,10 +52,26 @@
+@@ -52,10 +52,20 @@
      else {
          root.Countly = factory(root.Countly);
      }
 -}(typeof window !== "undefined" ? window : this, function(Countly) {
 +}(typeof globalThis !== "undefined" ? globalThis : this, function (Countly) {
++    const blackHoleProxy = handler => (target, ...args) => {
++        console.debug('Countly:Debug', handler, target, ...args);
++        return stubbedDocumentImpl;
++    };
 +    const stubbedDocumentImpl = new Proxy({}, {
-+        get: (target, prop) => {
-+            const domPropsFunctions = new Set([
-+                "setAttribute",
-+            ]);
-+            console.debug("stubbedDocumentImpl.get", prop, target, domPropsFunctions, domPropsFunctions.has(prop));
-+            if (domPropsFunctions.has(prop)) {
-+                return (...args) => {
-+                    console.debug("stubbedDocumentImpl.get function", prop, target, args)
-+                    return stubbedDocumentImpl;
-+                }
-+            }
-+            return stubbedDocumentImpl;
-+        }
++        get: blackHoleProxy("stubbedDocumentImpl.get"),
++        apply: blackHoleProxy("stubbedDocumentImpl.apply"),
++        set: blackHoleProxy("stubbedDocumentImpl.set"),
 +    });
 +    document = stubbedDocumentImpl;
      // Make sure the code is being run in a browser
@@ -31,7 +25,7 @@ index da26eb6..2a5e1c0 100644
          // TODO: check if logging can be added here, like:
          // console.error("Not running in browser");
          return;
-@@ -347,12 +363,12 @@
+@@ -347,12 +357,12 @@
  
              checkIgnore();
  
@@ -47,7 +41,7 @@ index da26eb6..2a5e1c0 100644
                  }
              }
              else if (location.hash && location.hash.indexOf("#cly:") === 0) {
-@@ -1028,7 +1044,7 @@
+@@ -1028,7 +1038,7 @@
                      if (this.enableOrientationTracking) {
                          // report orientation
                          this.report_orientation();
@@ -56,7 +50,7 @@ index da26eb6..2a5e1c0 100644
                              self.report_orientation();
                          });
                      }
-@@ -1618,11 +1634,11 @@
+@@ -1618,11 +1628,11 @@
              log(logLevelEnums.INFO, "track_errors, Started tracking errors");
              // Indicated that for this instance of the countly error tracking is enabled
              Countly.i[this.app_key].tracking_crashes = true;
@@ -71,7 +65,7 @@ index da26eb6..2a5e1c0 100644
                      // old browsers like IE 10 and Safari 9 won't give this value 'err' to us, but if it is provided we can trigger error recording immediately
                      if (err !== undefined && err !== null) {
                          // false indicates fatal error (as in non_fatal:false)
-@@ -1630,7 +1646,7 @@
+@@ -1630,7 +1640,7 @@
                      }
                      // fallback if no error object is present for older browsers, we create it instead
                      else {
@@ -80,7 +74,7 @@ index da26eb6..2a5e1c0 100644
                          var error = "";
                          if (typeof msg !== "undefined") {
                              error += msg + "\n";
-@@ -1666,7 +1682,7 @@
+@@ -1666,7 +1676,7 @@
                  };
  
                  // error handling for 'uncaught rejections'
@@ -89,7 +83,7 @@ index da26eb6..2a5e1c0 100644
                      // true indicates non fatal error (as in non_fatal: true)
                      dispatchErrors(new Error("Unhandled rejection (reason: " + (event.reason && event.reason.stack ? event.reason.stack : event.reason) + ")."), true);
                  });
-@@ -1909,13 +1925,13 @@
+@@ -1909,13 +1919,13 @@
              this.begin_session();
              this.start_time();
              // end session on unload
@@ -105,7 +99,7 @@ index da26eb6..2a5e1c0 100644
              var hidden = "hidden";
  
              /**
-@@ -1931,17 +1947,17 @@
+@@ -1931,17 +1941,17 @@
              }
  
              // add focus handling eventListeners
@@ -129,7 +123,7 @@ index da26eb6..2a5e1c0 100644
              }
  
              // Page Visibility API for changing tabs and minimizing browser
-@@ -1971,10 +1987,10 @@
+@@ -1971,10 +1981,10 @@
                  inactivityCounter = 0;
              }
  
@@ -144,7 +138,7 @@ index da26eb6..2a5e1c0 100644
  
              // track user inactivity
              setInterval(function() {
-@@ -2048,7 +2064,7 @@
+@@ -2048,7 +2058,7 @@
              // truncate new segment
              segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "track_pageview", log);
              if (this.track_domains) {
@@ -153,7 +147,7 @@ index da26eb6..2a5e1c0 100644
              }
  
              if (useSessionCookie) {
-@@ -2071,7 +2087,7 @@
+@@ -2071,7 +2081,7 @@
              else if (typeof document.referrer !== "undefined" && document.referrer.length) {
                  var matches = urlParseRE.exec(document.referrer);
                  // do not report referrers of current website
@@ -162,7 +156,7 @@ index da26eb6..2a5e1c0 100644
                      segments.start = 1;
                  }
              }
-@@ -2147,7 +2163,7 @@
+@@ -2147,7 +2157,7 @@
                              // truncate new segment
                              segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processClick", log);
                              if (self.track_domains) {
@@ -171,7 +165,7 @@ index da26eb6..2a5e1c0 100644
                              }
                              add_cly_events({
                                  key: internalEventKeyEnums.ACTION,
-@@ -2173,7 +2189,7 @@
+@@ -2173,7 +2183,7 @@
              if (parent) {
                  log(logLevelEnums.INFO, "track_scrolls, Tracking the specified children");
              }
@@ -180,7 +174,7 @@ index da26eb6..2a5e1c0 100644
              isScrollRegistryOpen = true;
              trackingScrolls = true;
  
-@@ -2813,8 +2829,8 @@
+@@ -2813,8 +2823,8 @@
                                  else {
                                      var pages = widgets[i].target_pages;
                                      for (var k = 0; k < pages.length; k++) {
@@ -191,7 +185,7 @@ index da26eb6..2a5e1c0 100644
                                          var isContainAsterisk = pages[k].includes("*");
                                          if (((isContainAsterisk && isWildcardMatched) || isFullPathMatched) && !widgets[i].hide_sticker) {
                                              processWidget(widgets[i], true);
-@@ -3048,7 +3064,7 @@
+@@ -3048,7 +3058,7 @@
                      return;
                  }
  
@@ -200,7 +194,7 @@ index da26eb6..2a5e1c0 100644
                  var feedbackWidgetFamily;
  
                  // set feedback widget family as ratings and load related style file when type is ratings
-@@ -3170,7 +3186,7 @@
+@@ -3170,7 +3180,7 @@
                  wrapper.appendChild(iframe);
                  log(logLevelEnums.DEBUG, "present_feedback_widget, Appended the iframe");
  
@@ -209,7 +203,7 @@ index da26eb6..2a5e1c0 100644
                      var data = {};
                      try {
                          data = JSON.parse(e.data);
-@@ -3249,9 +3265,9 @@
+@@ -3249,9 +3259,9 @@
                          break;
  
                      case "onScrollHalfwayDown":
@@ -221,7 +215,7 @@ index da26eb6..2a5e1c0 100644
                                  var documentHeight = getDocHeight();
                                  if (scrollY >= (documentHeight / 2)) {
                                      surveyShown = true;
-@@ -3841,13 +3857,13 @@
+@@ -3841,13 +3851,13 @@
                  var height = (screen.height) ? parseInt(screen.height) : 0;
                  if (width !== 0 && height !== 0) {
                      var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
@@ -239,7 +233,7 @@ index da26eb6..2a5e1c0 100644
                              // we have landscape orientation
                              // switch values for all except ios
                              var temp = width;
-@@ -3860,8 +3876,8 @@
+@@ -3860,8 +3870,8 @@
              }
  
              // getting density ratio
@@ -250,7 +244,7 @@ index da26eb6..2a5e1c0 100644
              }
  
              // getting locale
-@@ -3873,7 +3889,7 @@
+@@ -3873,7 +3883,7 @@
              if (typeof document.referrer !== "undefined" && document.referrer.length) {
                  var matches = urlParseRE.exec(document.referrer);
                  // do not report referrers of current website
@@ -259,7 +253,7 @@ index da26eb6..2a5e1c0 100644
                      var ignoring = false;
                      if (ignoreReferrers && ignoreReferrers.length) {
                          for (var k = 0; k < ignoreReferrers.length; k++) {
-@@ -3963,72 +3979,62 @@
+@@ -3963,72 +3973,62 @@
           */
          function sendXmlHttpRequest(functionName, url, params, callback, useBroadResponseValidator) {
              useBroadResponseValidator = useBroadResponseValidator || false;
@@ -283,7 +277,7 @@ index da26eb6..2a5e1c0 100644
 +                method: method,
 +                headers: {
 +                  ...self.headers,
-+                  ...(method !== "" ? {} : {
++                  ...(method !== "POST" ? {} : {
 +                    "Content-type": "application/x-www-form-urlencoded",
 +                  })
                  }
@@ -378,7 +372,7 @@ index da26eb6..2a5e1c0 100644
          }
  
          /**
-@@ -4105,7 +4111,7 @@
+@@ -4105,7 +4105,7 @@
           *
           */
          function processScroll() {
@@ -387,7 +381,7 @@ index da26eb6..2a5e1c0 100644
          }
  
          /**
-@@ -4131,7 +4137,7 @@
+@@ -4131,7 +4131,7 @@
                          // truncate new segment
                      segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processScrollView", log);
                      if (self.track_domains) {
@@ -396,7 +390,7 @@ index da26eb6..2a5e1c0 100644
                      }
                      add_cly_events({
                          key: internalEventKeyEnums.ACTION,
-@@ -4862,7 +4868,7 @@
+@@ -4862,7 +4862,7 @@
       */
      var get_event_target = function(event) {
          if (!event) {
@@ -405,7 +399,7 @@ index da26eb6..2a5e1c0 100644
          }
          if (typeof event.target !== "undefined") {
              return event.target;
-@@ -4924,7 +4930,7 @@
+@@ -4924,7 +4924,7 @@
          var device = "desktop";
  
          // regexps corresponding to tablets or phones that can be found in userAgent string
@@ -414,7 +408,7 @@ index da26eb6..2a5e1c0 100644
          var phoneCheck = /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/;
  
          // check whether the regexp values corresponds to something in the user agent string
-@@ -5009,7 +5015,7 @@
+@@ -5009,7 +5009,7 @@
          return Math.min(
              Math.min(D.body.clientHeight, D.documentElement.clientHeight),
              Math.min(D.body.offsetHeight, D.documentElement.offsetHeight),
@@ -423,7 +417,7 @@ index da26eb6..2a5e1c0 100644
          );
      }
  
-@@ -5018,13 +5024,13 @@
+@@ -5018,13 +5018,13 @@
       *  @returns {String} device orientation
       */
      function getOrientation() {
@@ -439,7 +433,7 @@ index da26eb6..2a5e1c0 100644
          var parts = (e.key + "").split("/");
          var key = parts.pop();
          var appKey = parts.pop();
-@@ -5171,7 +5177,7 @@
+@@ -5171,7 +5171,7 @@
      * @return {string} view name
      * */
      Countly.getViewName = function() {
@@ -448,7 +442,7 @@ index da26eb6..2a5e1c0 100644
      };
  
      /**
-@@ -5179,7 +5185,7 @@
+@@ -5179,7 +5179,7 @@
      * @return {string} view url
      * */
      Countly.getViewUrl = function() {
@@ -457,7 +451,7 @@ index da26eb6..2a5e1c0 100644
      };
  
      /**
-@@ -5187,7 +5193,7 @@
+@@ -5187,7 +5187,7 @@
      * @return {string} view url
      * */
      Countly.getSearchQuery = function() {
