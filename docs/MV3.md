@@ -8,11 +8,34 @@ This document describes the migration process from MV2 to MV3. MV3 is a new vers
 
 The most important change that lead to this migration was how url request interception model was changed. In MV2, we used `webRequest.onBeforeRequest` to intercept requests and redirect them to the local gateway. That process looked something like:
 
-![MV2 Working Diagram](assets/mv2-working.png)
+```mermaid
+flowchart TD
+    A[Web Request] --> B[Companion Blocks]
+    B --> C[Check if request\ncan be served\nover IPFS?]
+    C --> D[Address Contains CID?]
+    D --> |yes| F
+    D --> |no| E[Address Resolves\nOver IPNS?]
+    E --> |yes| F[Redirect to Local\nIPFS Node]
+    E --> |no| G[Continue Request\nNormally]
+```
 
 The process was simple and synchronous, the request is intercepted and handed over to companion, which then redirects it to the local gateway as needed. MV3 changes this process by introducing a new API called `declarativeNetRequest`. MV3 does not allow synchronous request interception (also called blocking request), which is not secure and can lead to performance issues. Instead, it uses a declarative approach where the extension declares a set of rules that are then used by the browser to intercept requests. This process looks something like:
 
-![MV3 Working Diagram](assets/mv3-working.png)
+```mermaid
+flowchart TD
+    A[Web Request] --> B[Companion Observes]
+    A --> C{Check if any\nredirect rule applies\nto the current request}
+    B --> D[Check if request can\nbe served over IPFS?]
+    D --> E[Address Contains CID?]
+    E --> |no| F[Address Resolves\nOver IPNS?]
+    F --> |no| I[Ignore Request]
+    F --> |yes| H
+    E --> |yes| H[Insert Redirect Rules]
+    H --> K(Declrative NetRequest Store)
+    C <--> |check| K
+    C --> |redirect| G[To Local IPFS Node]
+    C --> |no-redirect| J[Continue Request Normally]
+```
 
 The process is asynchronous, the browser allows "observation" of requests to companion, which asynchronously determines if the given request is serviceable by IPFS and then dynamically introduces a rule for the browser to perform redirects to the local gateway. A sample rule looks something like:
 
