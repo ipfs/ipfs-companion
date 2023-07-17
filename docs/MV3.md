@@ -10,13 +10,15 @@ The most important change that lead to this migration was how url request interc
 
 ```mermaid
 flowchart TD
-    A[Web Request] --> B[Companion Blocks]
-    B --> C[Check if request\ncan be served\nover IPFS?]
-    C --> D[Address Contains CID?]
-    D --> |yes| F
-    D --> |no| E[Address Resolves\nOver IPNS?]
-    E --> |yes| F[Redirect to Local\nIPFS Node]
+    A[Web Request] --> B[Companion Blocks]:::companion
+    B --> C[Check if request\ncan be served\nover IPFS?]:::companion
+    C --> D[Address Contains CID?]:::companion
+    D --> |yes| F:::companion
+    D --> |no| E[Address Resolves\nOver IPNS?]:::companion
+    E --> |yes| F[Redirect to Local\nIPFS Node]:::companion
     E --> |no| G[Continue Request\nNormally]
+    classDef companion fill:#0aca9f,stroke:#7f8491,stroke-width:2px;
+    classDef browser fill:#d9dbe2,stroke:#7f8491,stroke-width:1px;
 ```
 
 The process was simple and synchronous, the request is intercepted and handed over to companion, which then redirects it to the local gateway as needed. MV3 changes this process by introducing a new API called `declarativeNetRequest`. MV3 does not allow synchronous request interception (also called blocking request), which is not secure and can lead to performance issues. Instead, it uses a declarative approach where the extension declares a set of rules that are then used by the browser to intercept requests. This process looks something like:
