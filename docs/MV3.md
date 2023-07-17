@@ -25,16 +25,18 @@ The process was simple and synchronous, the request is intercepted and handed ov
 flowchart TD
     A[Web Request] --> B[Companion Observes Request]
     A --> C{Check if any\nredirect rule applies\nto the current request}
-    B --> D[Check if request can\nbe served over IPFS?]
-    D --> E[Address Contains CID?]
-    E --> |no| F[Address Resolves\nOver IPNS?]
-    F --> |no| I[Ignore Request]
-    F --> |yes| H
-    E --> |yes| H[Insert Redirect Rules]
-    H --> K(Declarative NetRequest Store)
-    C <--> |check| K
+    B:::companion --> D[Check if request can\nbe served over IPFS?]
+    D:::companion --> E[Address Contains CID?]:::companion
+    E --> |no| F[Address Resolves\nOver IPNS?]:::companion
+    F --> |no| I[Ignore Request]:::companion
+    F --> |yes| H:::companion
+    E --> |yes| H[Insert Redirect Rules]:::companion
+    H:::companion --> K(Declarative NetRequest Store):::browser
+    C:::browser <--> |check| K
     C --> |redirect| G[To Local IPFS Node]
     C --> |no-redirect| J[Continue Request Normally]
+    classDef companion fill:#0aca9f,stroke:#7f8491,stroke-width:2px;
+    classDef browser fill:#d9dbe2,stroke:#7f8491,stroke-width:1px;
 ```
 
 The process is asynchronous, the browser allows "observation" of requests to companion, which asynchronously determines if the given request is serviceable by IPFS and then dynamically introduces a rule for the browser to perform redirects to the local gateway. A sample rule looks something like:
