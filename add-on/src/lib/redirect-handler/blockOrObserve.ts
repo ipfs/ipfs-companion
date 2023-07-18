@@ -91,10 +91,10 @@ export function isLocalHost (url: string): boolean {
  * @param str URL string to escape
  * @returns
  */
-export function escapeURLRegex (str: string): string {
+function escapeURLRegex (str: string): string {
   // these characters are allowed in the URL, but not in the regex.
   // eslint-disable-next-line no-useless-escape
-  const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=-_\.~])/g
+  const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=\-_\.~])/g
   return str.replace(ALLOWED_CHARS_URL_REGEX, '\\$1')
 }
 
