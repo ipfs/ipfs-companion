@@ -24,7 +24,11 @@ interface messageToSelf {
 // We need to check if the browser supports the declarativeNetRequest API.
 // TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
 // which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
-export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
+// this needs to be a function call, because in tests we mock browser.declarativeNetRequest
+// the way sinon ends up stubbing it, it's not directly available in the global scope on import
+// rather it gets replaced dynamically when the module is imported. Which means, we can't
+// just check for the existence of the property, we need to call the browser instance at that point.
+export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 
@@ -51,7 +55,7 @@ export async function notifyOptionChange (): Promise<void> {
  */
 async function sendMessageToSelf (msg: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE): Promise<void> {
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
-  if (!supportsBlock) {
+  if (!supportsBlock()) {
     const message: messageToSelf = { type: msg }
     await browser.runtime.sendMessage(message)
   }
@@ -87,7 +91,7 @@ export function isLocalHost (url: string): boolean {
  * @param str URL string to escape
  * @returns
  */
-function escapeURLRegex (str: string): string {
+export function escapeURLRegex (str: string): string {
   // these characters are allowed in the URL, but not in the regex.
   // eslint-disable-next-line no-useless-escape
   const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=-_\.~])/g
@@ -137,7 +141,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
 
 // If the browser supports the declarativeNetRequest API, we can block the request.
 export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
-  if (supportsBlock) {
+  if (supportsBlock()) {
     return ['blocking' as T, ...additionalParams]
   }
   return additionalParams
@@ -222,7 +226,7 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
     if (rules.length === 0) {
       // we need to populate old rules.
       for (const [regexFilter, { regexSubstitution, id }] of savedRegexFilters.entries()) {
-        addRules.push(generateRule(id, regexFilter, regexSubstitution))
+        addRules.push(generateAddRule(id, regexFilter, regexSubstitution))
       }
     }
 
@@ -259,7 +263,7 @@ function saveAndGenerateRule (
   const id = Math.floor(Math.random() * 29999)
   // We need to save the regex filter and ID to check if the rule already exists later.
   savedRegexFilters.set(regexFilter, { id, regexSubstitution })
-  return generateRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
+  return generateAddRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
 }
 
 /**
@@ -270,7 +274,7 @@ function saveAndGenerateRule (
  * @param excludedInitiatorDomains - The domains that are excluded from the rule.
  * @returns
  */
-function generateRule (
+export function generateAddRule (
   id: number,
   regexFilter: string,
   regexSubstitution: string,

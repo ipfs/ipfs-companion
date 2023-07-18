@@ -480,7 +480,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  */
 function handleRedirection ({ originUrl, redirectUrl }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
-    if (supportsBlock) {
+    if (supportsBlock()) {
       return { redirectUrl }
     }
 

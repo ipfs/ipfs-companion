@@ -1,11 +1,11 @@
-import {expect} from 'chai'
-import {before, describe, it} from 'mocha'
+import { expect } from 'chai'
+import { before, describe, it } from 'mocha'
 import sinon from 'sinon'
 import browserMock from 'sinon-chrome'
 
-import {optionDefaults} from '../../../../add-on/src/lib/options.js'
-import {addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost} from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
-import {initState} from '../../../../add-on/src/lib/state.js'
+import { optionDefaults } from '../../../../add-on/src/lib/options.js'
+import { addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost, supportsBlock } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
+import { initState } from '../../../../add-on/src/lib/state.js'
 import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
 
 const dynamicRulesConditions = (regexFilter) => ({
@@ -50,6 +50,12 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(isLocalHost('http://localhost')).to.be.true
       expect(isLocalHost('https://google.com')).to.be.false
       expect(isLocalHost('https://ipfs.io')).to.be.false
+    })
+  })
+
+  describe('supportsBlock', () => {
+    it('should return false for chrome', () => {
+      expect(supportsBlock()).to.be.false
     })
   })
 

@@ -12,6 +12,7 @@ class DeclarativeNetRequestMock implements browser.DeclarativeNetRequest.Static 
 
   constructor() {
     this.dynamicRules = new Map()
+    this.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES = 5000
   }
 
   async getDynamicRules(): Promise<browser.DeclarativeNetRequest.Rule[]> {
