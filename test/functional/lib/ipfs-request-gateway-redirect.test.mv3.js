@@ -6,12 +6,11 @@ import browser from 'sinon-chrome'
 import { URL } from 'url'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
-import { createRequestModifier, redirectOptOutHint } from '../../../add-on/src/lib/ipfs-request.js'
+import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
-import { generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
-import DeclarativeNetRequestMock from './redirect-handler/declarativeNetRequest.mock.js'
+import { generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 
 const url2request = (string) => {
   return { url: string, type: 'main_frame' }
@@ -35,12 +34,9 @@ const sinonSandbox = sinon.createSandbox()
 describe('[MV3] modifyRequest.onBeforeRequest:', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
-  before(function () {
+  before(async function () {
     global.URL = URL
-    browser.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
-    browser.runtime.id = 'testid'
     browser.runtime.getURL.returns('chrome-extension://testid/')
-    global.browser = browser
   })
 
   beforeEach(async function () {
@@ -163,9 +159,6 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'external'
       })
-      afterEach(function () {
-        sinonSandbox.restore()
-      })
 
       it('should be served from custom gateway if {path} points to a FQDN with existing dnslink', async function () {
         const request = url2request('https://google.com/ipns/en.wikipedia-on-ipfs.org/index.html?argTest#hashTest')
@@ -261,7 +254,7 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
         expect(args).to.deep.equal({
           addRules: [generateAddRule(
             args.addRules[0].id,
-            `^https?\\:\\/\\/${cid}\\.ipfs\\.cf-ipfs\\.com${regexRuleEnding}`,
+            `^https?\\:\\/\\/${cid}\\.ipfs\\.cf\\-ipfs\\.com${regexRuleEnding}`,
             `http://localhost:8080/ipfs/${cid}\\1`
           )],
           removeRuleIds: []

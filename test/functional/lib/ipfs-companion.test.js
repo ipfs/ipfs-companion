@@ -4,20 +4,23 @@ import browser from 'sinon-chrome'
 import AbortController from 'abort-controller'
 import { URL } from 'url'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
-browser.runtime.id = 'testid'
-global.browser = browser
-global.AbortController = AbortController
-global.chrome = browser
-global.navigator = {
-  clipboard: {
-    writeText: () => {}
-  }
-}
+
 // We need to do this because global is not mapped otherwise, we need to stub browser and chrome runtime
 // so that the webextension-polyfill does not complain about the test runner not being a browser instance.
 const init = async () => (await import('../../../add-on/src/lib/ipfs-companion.js')).default()
 
 describe('lib/ipfs-companion.js', function () {
+  before(function () {
+    browser.runtime.id = 'testid'
+    global.browser = browser
+    global.AbortController = AbortController
+    global.chrome = browser
+    global.navigator = {
+      clipboard: {
+        writeText: () => {}
+      }
+    }
+  })
   describe('init', function () {
     before(function () {
       global.localStorage = global.localStorage || {}

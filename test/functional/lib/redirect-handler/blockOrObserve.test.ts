@@ -54,8 +54,8 @@ describe('lib/redirect-handler/blockOrObserve', () => {
   })
 
   describe('supportsBlock', () => {
-    it('should return false for chrome', () => {
-      expect(supportsBlock()).to.be.false
+    it('should return true for MV2', () => {
+      expect(supportsBlock()).to.be.true
     })
   })
 
