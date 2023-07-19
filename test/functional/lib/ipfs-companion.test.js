@@ -23,6 +23,8 @@ describe('lib/ipfs-companion.js', function () {
       global.localStorage = global.localStorage || {}
       global.URL = global.URL || URL
       global.screen = { width: 1024, height: 720 }
+      global.addEventListener = () => { }
+      global.location = { hostname: 'test' }
 
       browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
     })

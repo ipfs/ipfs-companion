@@ -24,6 +24,7 @@ import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOpti
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
+import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -65,7 +66,9 @@ export default async function init (inQuickImport = false) {
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
+        handleConsentFromState(state)
         ipfs = await initIpfsClient(browser, state, inQuickImport)
+        trackView('init')
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
