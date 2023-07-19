@@ -317,6 +317,7 @@ export function addRuleToDynamicRuleSetGenerator (
   getState: () => CompanionState): (input: redirectHandlerInput) => Promise<void> {
   // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
+    // update the rules so that the next request is handled correctly.
     const state = getState()
     const redirectIsOrigin = originUrl === redirectUrl
     const redirectIsLocal = isLocalHost(originUrl) && isLocalHost(redirectUrl)
@@ -327,7 +328,11 @@ export function addRuleToDynamicRuleSetGenerator (
       return
     }
 
-    // We need to construct the regex filter and substitution.
+    // first update the tab to apply the new rule.
+    const tabs = await browser.tabs.query({ url: `${originUrl}*` })
+    await Promise.all(tabs.map(async tab => await browser.tabs.update(tab.id, { url: redirectUrl })))
+
+    // Then update the rule set for future, we need to construct the regex filter and substitution.
     const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
 
     const savedRule = savedRegexFilters.get(regexFilter)
@@ -347,10 +352,6 @@ export function addRuleToDynamicRuleSetGenerator (
           removeRuleIds
         }
       )
-
-      // refresh the tab to apply the new rule.
-      const tabs = await browser.tabs.query({ url: `${originUrl}*` })
-      await Promise.all(tabs.map(async tab => await browser.tabs.reload(tab.id)))
     }
 
     setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
