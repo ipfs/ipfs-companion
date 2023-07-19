@@ -61,7 +61,7 @@ function ensureDeclrativeNetRequetRuleIsAdded ({ expectedCondition, regexSubstit
   expect(condition).to.deep.equal(dynamicRulesConditions(expectedCondition))
 }
 
-describe.only('lib/redirect-handler/blockOrObserve', () => {
+describe('lib/redirect-handler/blockOrObserve', () => {
   before(function () {
     browserMock.runtime.id = 'testid'
     browserMock.tabs.query.resolves([{id: TEST_TAB_ID}])
