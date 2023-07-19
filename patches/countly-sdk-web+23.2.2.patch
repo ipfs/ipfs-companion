@@ -1,5 +1,5 @@
 diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
-index da26eb6..a715a3b 100644
+index da26eb6..620cb3e 100644
 --- a/node_modules/countly-sdk-web/lib/countly.js
 +++ b/node_modules/countly-sdk-web/lib/countly.js
 @@ -52,10 +52,22 @@
@@ -28,9 +28,9 @@ index da26eb6..a715a3b 100644
          // console.error("Not running in browser");
          return;
 @@ -347,12 +359,12 @@
-
+ 
              checkIgnore();
-
+ 
 -            if (window.name && window.name.indexOf("cly:") === 0) {
 +            if (globalThis.name && globalThis.name.indexOf("cly:") === 0) {
                  try {
@@ -78,7 +78,7 @@ index da26eb6..a715a3b 100644
                              error += msg + "\n";
 @@ -1666,7 +1678,7 @@
                  };
-
+ 
                  // error handling for 'uncaught rejections'
 -                window.addEventListener("unhandledrejection", function(event) {
 +                globalThis.addEventListener("unhandledrejection", function(event) {
@@ -95,27 +95,27 @@ index da26eb6..a715a3b 100644
                  sendEventsForced();
                  self.end_session();
              });
-
+ 
 -            // manage sessions on window visibility events
 +            // manage sessions on globalThis visibility events
              var hidden = "hidden";
-
+ 
              /**
 @@ -1931,17 +1943,17 @@
              }
-
+ 
              // add focus handling eventListeners
 -            add_event(window, "focus", onchange);
 -            add_event(window, "blur", onchange);
 +            add_event(globalThis, "focus", onchange);
 +            add_event(globalThis, "blur", onchange);
-
+ 
              // newer mobile compatible way
 -            add_event(window, "pageshow", onchange);
 -            add_event(window, "pagehide", onchange);
 +            add_event(globalThis, "pageshow", onchange);
 +            add_event(globalThis, "pagehide", onchange);
-
+ 
              // IE 9 and lower:
              if ("onfocusin" in document) {
 -                add_event(window, "focusin", onchange);
@@ -123,12 +123,12 @@ index da26eb6..a715a3b 100644
 +                add_event(globalThis, "focusin", onchange);
 +                add_event(globalThis, "focusout", onchange);
              }
-
+ 
              // Page Visibility API for changing tabs and minimizing browser
 @@ -1971,10 +1983,10 @@
                  inactivityCounter = 0;
              }
-
+ 
 -            add_event(window, "mousemove", resetInactivity);
 -            add_event(window, "click", resetInactivity);
 -            add_event(window, "keydown", resetInactivity);
@@ -137,7 +137,7 @@ index da26eb6..a715a3b 100644
 +            add_event(globalThis, "click", resetInactivity);
 +            add_event(globalThis, "keydown", resetInactivity);
 +            add_event(globalThis, "scroll", resetInactivity);
-
+ 
              // track user inactivity
              setInterval(function() {
 @@ -2048,7 +2060,7 @@
@@ -147,7 +147,7 @@ index da26eb6..a715a3b 100644
 -                segments.domain = window.location.hostname;
 +                segments.domain = globalThis.location.hostname;
              }
-
+ 
              if (useSessionCookie) {
 @@ -2071,7 +2083,7 @@
              else if (typeof document.referrer !== "undefined" && document.referrer.length) {
@@ -175,7 +175,7 @@ index da26eb6..a715a3b 100644
 +            parent = parent || globalThis;
              isScrollRegistryOpen = true;
              trackingScrolls = true;
-
+ 
 @@ -2813,8 +2825,8 @@
                                  else {
                                      var pages = widgets[i].target_pages;
@@ -190,16 +190,16 @@ index da26eb6..a715a3b 100644
 @@ -3048,7 +3060,7 @@
                      return;
                  }
-
+ 
 -                var passedOrigin = window.origin || window.location.origin;
 +                var passedOrigin = globalThis.origin || globalThis.location.origin;
                  var feedbackWidgetFamily;
-
+ 
                  // set feedback widget family as ratings and load related style file when type is ratings
 @@ -3170,7 +3182,7 @@
                  wrapper.appendChild(iframe);
                  log(logLevelEnums.DEBUG, "present_feedback_widget, Appended the iframe");
-
+ 
 -                add_event(window, "message", function(e) {
 +                add_event(globalThis, "message", function(e) {
                      var data = {};
@@ -207,7 +207,7 @@ index da26eb6..a715a3b 100644
                          data = JSON.parse(e.data);
 @@ -3249,9 +3261,9 @@
                          break;
-
+ 
                      case "onScrollHalfwayDown":
 -                        add_event(window, "scroll", function() {
 +                        add_event(globalThis, "scroll", function() {
@@ -237,14 +237,14 @@ index da26eb6..a715a3b 100644
                              var temp = width;
 @@ -3860,8 +3872,8 @@
              }
-
+ 
              // getting density ratio
 -            if (window.devicePixelRatio) {
 -                metrics._density = metrics._density || window.devicePixelRatio;
 +            if (globalThis.devicePixelRatio) {
 +                metrics._density = metrics._density || globalThis.devicePixelRatio;
              }
-
+ 
              // getting locale
 @@ -3873,7 +3885,7 @@
              if (typeof document.referrer !== "undefined" && document.referrer.length) {
@@ -347,7 +347,7 @@ index da26eb6..a715a3b 100644
 -                            }
 +                    }
 +                    else {
-+                        log(logLevelEnums.ERROR, functionName + " Failed Server XML HTTP request, ", this.status);
++                        log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed, ", this.status);
 +                        if (typeof callback === "function") {
 +                            callback(true, params);
                          }
@@ -365,14 +365,15 @@ index da26eb6..a715a3b 100644
 -            catch (e) {
 +            }).catch(function (e) {
                  // fallback
-                 log(logLevelEnums.ERROR, functionName + " Failed XML HTTP request: " + e);
+-                log(logLevelEnums.ERROR, functionName + " Failed XML HTTP request: " + e);
++                log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed: " + e);
                  if (typeof callback === "function") {
                      callback(true, params);
                  }
 -            }
 +            });
          }
-
+ 
          /**
 @@ -4105,7 +4107,7 @@
           *
@@ -381,7 +382,7 @@ index da26eb6..a715a3b 100644
 -            scrollRegistryTopPosition = Math.max(scrollRegistryTopPosition, window.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
 +            scrollRegistryTopPosition = Math.max(scrollRegistryTopPosition, globalThis.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
          }
-
+ 
          /**
 @@ -4131,7 +4133,7 @@
                          // truncate new segment
@@ -403,12 +404,12 @@ index da26eb6..a715a3b 100644
              return event.target;
 @@ -4924,7 +4926,7 @@
          var device = "desktop";
-
+ 
          // regexps corresponding to tablets or phones that can be found in userAgent string
 -        var tabletCheck = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/;
 +        var tabletCheck = /(ipad|tablet|(android(?!.*mobile))|(globalThiss(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/;
          var phoneCheck = /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/;
-
+ 
          // check whether the regexp values corresponds to something in the user agent string
 @@ -5009,7 +5011,7 @@
          return Math.min(
@@ -418,7 +419,7 @@ index da26eb6..a715a3b 100644
 +            globalThis.innerHeight
          );
      }
-
+ 
 @@ -5018,13 +5020,13 @@
       *  @returns {String} device orientation
       */
@@ -426,7 +427,7 @@ index da26eb6..a715a3b 100644
 -        return window.innerWidth > window.innerHeight ? "landscape" : "portrait";
 +        return globalThis.innerWidth > globalThis.innerHeight ? "landscape" : "portrait";
      }
-
+ 
      /**
       *  Monitor parallel storage changes like other opened tabs
       */
@@ -442,7 +443,7 @@ index da26eb6..a715a3b 100644
 -        return window.location.pathname;
 +        return globalThis.location.pathname;
      };
-
+ 
      /**
 @@ -5179,7 +5181,7 @@
      * @return {string} view url
@@ -451,7 +452,7 @@ index da26eb6..a715a3b 100644
 -        return window.location.pathname;
 +        return globalThis.location.pathname;
      };
-
+ 
      /**
 @@ -5187,7 +5189,7 @@
      * @return {string} view url
@@ -460,5 +461,5 @@ index da26eb6..a715a3b 100644
 -        return window.location.search;
 +        return globalThis.location.search;
      };
-
+ 
      /**
