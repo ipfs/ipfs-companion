@@ -1,7 +1,8 @@
-import browser from 'sinon-chrome'
 import AbortController from 'abort-controller'
-import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
+import { afterEach } from 'mocha'
 import sinon from 'sinon'
+import browser from 'sinon-chrome'
+import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
 
 browser.runtime.id = 'testid'
 global.browser = browser

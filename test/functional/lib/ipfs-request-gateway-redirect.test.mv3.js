@@ -1,6 +1,6 @@
 'use strict'
 import { expect } from 'chai'
-import { after, before, beforeEach, describe, it } from 'mocha'
+import { after, afterEach, before, beforeEach, describe, it } from 'mocha'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { URL } from 'url'
@@ -8,14 +8,13 @@ import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
 import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
+import { cleanupRules, generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
-import { cleanupRules, generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 
 const url2request = (string) => {
   return { url: string, type: 'main_frame' }
 }
-
 
 const expectNoRedirect = async (modifyRequest, request, browser) => {
   await modifyRequest.onBeforeRequest(request)
@@ -68,7 +67,6 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
 
   describe('request for a path matching /ipfs/{CIDv0}', function () {
     describe('with external node', function () {
-      let sinonSandbox
       beforeEach(function () {
         state.ipfsNodeType = 'external'
       })
@@ -215,10 +213,6 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
     const cid = 'bafybeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
     const peerid = 'bafzbeigxjv2o4jse2lajbd5c7xxl5rluhyqg5yupln42252e5tcao7hbge'
 
-    // Tests use different CID in X-Ipfs-Path header just to ensure it does not
-    // override the one from path
-    const fakeXIpfsPathHdrVal = '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ'
-
     describe('with external node', function () {
       beforeEach(function () {
         state.ipfsNodeType = 'external'
@@ -273,7 +267,7 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
           addRules: [generateAddRule(
             args.addRules[0].id,
             `^https?\\:\\/\\/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy\\.ipfs\\.dweb\\.link${regexRuleEnding}`,
-            `http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy\\1`
+            'http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy\\1'
           )],
           removeRuleIds: []
         })
@@ -321,7 +315,7 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
       expect(args.addRules[0]).to.deep.equal(generateAddRule(
         args.addRules[0].id,
         `^https?\\:\\/\\/localhost\\:8080\\/ipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR\\/foo\\/${regexRuleEnding}`,
-        `chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1`
+        'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1'
       ))
     })
     it('should present recovery page if node is offline and redirect is disabled', async function () {
@@ -336,7 +330,7 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
       expect(args.addRules[0]).to.deep.equal(generateAddRule(
         args.addRules[0].id,
         `^https?\\:\\/\\/localhost\\:8080\\/ipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR\\/foo\\/${regexRuleEnding}`,
-        `chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1`
+        'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1'
       ))
     })
     it('should not show recovery page if node is offline, redirect is enabled, but non-gateway URL failed to load from the same port', async function () {
