@@ -8,6 +8,7 @@ import IsIpfs from 'is-ipfs'
 import LRU from 'lru-cache'
 import { offlinePeerCount } from './state.js'
 import { ipfsContentPath, sameGateway, pathAtHttpGateway } from './ipfs-path.js'
+import { notifyDnslinkResolved } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:dnslink')
 log.error = debug('ipfs-companion:dnslink:error')
@@ -74,6 +75,7 @@ export default function createDnslinkResolver (getState) {
           if (dnslink) {
             // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
             dnslinkResolver.setDnslink(fqdn, dnslink)
+            notifyDnslinkResolved(fqdn)
             log(`found dnslink: '${fqdn}' -> '${dnslink}'`)
           } else {
             dnslinkResolver.setDnslink(fqdn, false)
