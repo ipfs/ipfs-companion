@@ -8,11 +8,38 @@ This document describes the migration process from MV2 to MV3. MV3 is a new vers
 
 The most important change that lead to this migration was how url request interception model was changed. In MV2, we used `webRequest.onBeforeRequest` to intercept requests and redirect them to the local gateway. That process looked something like:
 
-![MV2 Working Diagram](assets/mv2-working.png)
+```mermaid
+flowchart TD
+    A[Web Request] --> B[Companion Blocks]:::companion
+    B --> C[Check if request\ncan be served\nover IPFS?]:::companion
+    C --> D[Address Contains CID?]:::companion
+    D --> |yes| F:::companion
+    D --> |no| E[Address Resolves\nOver IPNS?]:::companion
+    E --> |yes| F[Redirect to Local\nIPFS Node]:::companion
+    E --> |no| G[Continue Request\nNormally]
+    classDef companion fill:#0aca9f,stroke:#7f8491,stroke-width:2px;
+    classDef browser fill:#d9dbe2,stroke:#7f8491,stroke-width:1px;
+```
 
 The process was simple and synchronous, the request is intercepted and handed over to companion, which then redirects it to the local gateway as needed. MV3 changes this process by introducing a new API called `declarativeNetRequest`. MV3 does not allow synchronous request interception (also called blocking request), which is not secure and can lead to performance issues. Instead, it uses a declarative approach where the extension declares a set of rules that are then used by the browser to intercept requests. This process looks something like:
 
-![MV3 Working Diagram](assets/mv3-working.png)
+```mermaid
+flowchart TD
+    A[Web Request] --> B[Companion Observes Request]
+    A --> C{Check if any\nredirect rule applies\nto the current request}
+    B:::companion --> D[Check if request can\nbe served over IPFS?]
+    D:::companion --> E[Address Contains CID?]:::companion
+    E --> |no| F[Address Resolves\nOver IPNS?]:::companion
+    F --> |no| I[Ignore Request]:::companion
+    F --> |yes| H:::companion
+    E --> |yes| H[Insert Redirect Rules]:::companion
+    H:::companion --> K(Declarative NetRequest Store):::browser
+    C:::browser <--> |check| K
+    C --> |redirect| G[To Local IPFS Node]
+    C --> |no-redirect| J[Continue Request Normally]
+    classDef companion fill:#0aca9f,stroke:#7f8491,stroke-width:2px;
+    classDef browser fill:#d9dbe2,stroke:#7f8491,stroke-width:1px;
+```
 
 The process is asynchronous, the browser allows "observation" of requests to companion, which asynchronously determines if the given request is serviceable by IPFS and then dynamically introduces a rule for the browser to perform redirects to the local gateway. A sample rule looks something like:
 
@@ -104,11 +131,11 @@ This is a single rule that covers all the redirects from `ipfs.io` to `localhost
 
 Since the process is asynchronous, there are a few things that we need to keep in mind:
 
-- There will always be scenarios, where the redirection to public URL happens before companion determines if the URL is serviceable (consider ipns/fqdn resolutions.) To tackle this a refresh mechanism has been put in place that refreshes the page after a few seconds if the URL is serviceable. This is not ideal, but it is the best we can do for now.
+- There will always be scenarios, where the servicing of the public URL happens before companion determines if the URL is serviceable over IPFS (consider ipns/fqdn resolutions.) To tackle this a refresh mechanism has been put in place that refreshes the page after a few milliseconds if the URL is serviceable. This is not ideal, but it is the best we can do for now.
 - Similarly there are scenarios around page recovery, where the page starts redirection, but the kubo node goes offline, in which case companion needs to remove offending rule and replace it with the recovery URL.
-- If the kubo rpc api url changes for some reason, companion needs to update the rules to reflect the new URL. We can preemptively generate new rules based on the new url, but the new node might not be servicing the old content, so we need to be careful about that. Hence, we remove all such rules as offending and begin the process of generating new rules dynamically.
-- Metrics collection becomes harder, as we can no longer reliably determine if the requested resource was serviced by declarative rule introduced by companion. We can only determine if the request was serviceable and we had a rule. We can probably introduce a content script to every page and redirect with a hash value in the URL. That content script can then invoke a companion API to notify what rule id was used to redirect the request. This is a future improvement.
+- If the kubo rpc api url changes for some reason, companion needs to update the rules to reflect the new URL. We can preemptively generate new rules based on the new url, but the new node might not be servicing content over the old URL structure (e.g. https://ipfs.io/ipns/en.wikipedia-on-ipfs.org resolves to http://en.wikipedia-on-ipfs.org.ipns.localhost:8080/ with kubo but http://en-wikipedia--on--ipfs-org.ipns.localhost:48084/wiki/ on brave's node, similarly the node can have its own URL structure,) which we need to account for. Hence, we remove all such rules as offending and begin the process of generating new rules on the fly.
+- Metrics collection becomes harder, as we can no longer reliably determine if the requested resource was serviced by declarative rule introduced by companion. We can only determine if the request was serviceable and we had a rule.
 
 ## Other Thoughts
 
-Not intercepting requests synchronously has it's quirks, but implementing a dynamic ruleset of possible redirects is even more complicated. Personally we're noticing improvements in second load times as the browser no longer relies on companion to intercept requests and redirect them. Instead declarative rule set allows for redirection to happen at the browser level, which is much faster. This also means that companion is no longer a bottleneck for the browser, which is a good thing.
+Not intercepting requests synchronously has its quirks, but implementing a dynamic ruleset of possible redirects is even more complicated. We're expecting drastic improvements in load times from the second request (to the same host) onwards as the browser no longer relies on companion to intercept requests and redirect those. Instead declarative rule set allows for redirection to happen at the browser level, which is much faster in-theory. This also means that companion is no longer a bottleneck for the browser, which is a good thing.
