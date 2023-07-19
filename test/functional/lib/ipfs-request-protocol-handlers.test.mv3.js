@@ -286,7 +286,19 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if ipfs://{CID}', async function () {
           const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+                generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest\\&foo\\=bar${groupAtEndRegex}`,
+                'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest\\1')
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if ipns:/{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=ipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
@@ -297,15 +309,53 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if ipns://{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=ipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+                generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipns%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1')
+            ],
+            removeRuleIds: []
+          })
         })
         it('should be normalized if ipfs://{fqdn}', async function () {
           const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should be normalized if dweb:/ipfs/{CID}', async function () {
           const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=dweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=software${groupAtEndRegex}`,
+                'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if dweb://ipfs/{CID}', async function () {
           const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
@@ -316,7 +366,20 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if dweb:/ipns/{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=dweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=dweb%3A%2Fipns%2Fipfs\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=web${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if dweb://ipns/{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=dweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
@@ -335,7 +398,20 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if web+ipfs://{CID}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest\\&foo\\=bar${groupAtEndRegex}`,
+                'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if web+ipns:/{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
@@ -346,11 +422,37 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if web+ipns://{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bipns%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bipns%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should be normalized if web+dweb:/ipfs/{CID}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bdweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=software${groupAtEndRegex}`,
+                'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if web+dweb://ipfs/{CID}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=software')
@@ -361,7 +463,20 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if web+dweb:/ipns/{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+              generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bdweb%3A%2Fipns%2Fipfs\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=web${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash\\1'
+              )
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if web+dweb://ipns/{foo}', async function () {
           const request = url2request('https://duckduckgo.com/?q=web%2Bdweb%3A%2F%2Fipns%2Fipfs.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash&ia=web')
@@ -399,7 +514,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const mediaRequest = { url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'media' }
           // mv2
           // expect(await modifyRequest.onBeforeRequest(mediaRequest)).to.equal(undefined)
-          await modifyRequest.onBeforeRequest(request)
+          await modifyRequest.onBeforeRequest(mediaRequest)
           Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
         })
       })
