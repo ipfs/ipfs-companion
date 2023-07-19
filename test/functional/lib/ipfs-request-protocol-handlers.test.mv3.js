@@ -177,7 +177,19 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if web+ipfs://{CID}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+                generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1')
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if web+ipns:/{foo}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipns%3A%2Fipfs.io%3FargTest%23hashTest')
@@ -188,11 +200,35 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if web+ipns://{foo}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bipns%3A%2F%2Fipfs.io%3FargTest%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+                generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bipns%3A%2F%2Fipfs\\.io%3FargTest%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
+            ],
+            removeRuleIds: []
+          })
         })
         it('should be normalized if web+dweb:/ipfs/{CID}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+                generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bdweb%3A%2Fipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1')
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if web+dweb://ipfs/{CID}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2F%2Fipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest')
@@ -203,7 +239,19 @@ describe('modifyRequest.onBeforeRequest:', function () {
         })
         it('should be normalized if web+dweb:/ipns/{foo}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2Fipns/ipfs.io%3FargTest%23hashTest')
-          expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+          // mv2
+          // expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).equal('https://ipfs.io/ipns/ipfs.io?argTest#hashTest')
+          await modifyRequest.onBeforeRequest(request)
+          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
+          expect(args).to.deep.equal({
+            addRules: [
+                generateAddRule(
+                args.addRules[0].id,
+                `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bdweb%3A%2Fipns\\/ipfs\\.io%3FargTest%23${groupAtEndRegex}`,
+                'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
+            ],
+            removeRuleIds: []
+          })
         })
         it('should not be normalized if web+dweb://ipns/{foo}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=web%2Bdweb%3A%2F%2Fipns/ipfs.io%3FargTest%23hashTest')
