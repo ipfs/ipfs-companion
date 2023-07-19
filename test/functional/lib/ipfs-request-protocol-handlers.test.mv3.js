@@ -73,7 +73,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1')
@@ -96,7 +96,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipns%3A%2F%2Fipfs\\.io%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
@@ -112,7 +112,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipfs%3A%2F%2Fipfs\\.io%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
@@ -128,7 +128,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=dweb%3A%2Fipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1')
@@ -151,7 +151,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=dweb%3A%2Fipns\\/ipfs\\.io%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
@@ -183,7 +183,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1')
@@ -206,7 +206,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bipns%3A%2F%2Fipfs\\.io%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
@@ -222,7 +222,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bdweb%3A%2Fipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1')
@@ -245,7 +245,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bdweb%3A%2Fipns\\/ipfs\\.io%3FargTest%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipns/ipfs.io?argTest#\\1')
@@ -292,7 +292,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest\\&foo\\=bar${groupAtEndRegex}`,
                 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest\\1')
@@ -315,7 +315,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
             addRules: [
-                generateAddRule(
+              generateAddRule(
                 args.addRules[0].id,
                 `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipns%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23${groupAtEndRegex}`,
                 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1')
