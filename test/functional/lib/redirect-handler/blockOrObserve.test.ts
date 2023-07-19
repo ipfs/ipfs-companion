@@ -1,3 +1,4 @@
+import { reset } from './../../../../node_modules/ansi-colors/types/index.d';
 import {expect} from 'chai'
 import {before, describe, it} from 'mocha'
 import sinon from 'sinon'
@@ -41,7 +42,7 @@ const LAST_GROUP_REGEX = '((?:[^\\.]|$).*)$'
 function ensureTabRedirected (url): void {
   expect(browserMock.tabs.query.called).to.be.true
   expect(browserMock.tabs.update.called).to.be.true
-  expect(browserMock.tabs.update.firstCall.args).to.deep.equal([TEST_TAB_ID, { url }])
+  expect(browserMock.tabs.update.lastCall.args).to.deep.equal([TEST_TAB_ID, { url }])
 }
 
 /**
@@ -49,10 +50,18 @@ function ensureTabRedirected (url): void {
  * @param expectedCondition
  * @param regexSubstitution
  */
-function ensureDeclrativeNetRequetRuleIsAdded ({ expectedCondition, regexSubstitution }): void {
+function ensureDeclrativeNetRequetRuleIsAdded ({
+  expectedCondition,
+  regexSubstitution,
+  removedRulesIds = []
+}: {
+  expectedCondition: string
+  regexSubstitution: string
+  removedRulesIds?: number[]
+}): void {
   expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
   const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
-  expect(removeRuleIds).to.deep.equal([])
+  expect(removeRuleIds).to.deep.equal(removedRulesIds)
   expect(addRules).to.have.lengthOf(1)
   const [{ id, priority, action, condition }] = addRules
   expect(id).to.be.a('number')
@@ -165,6 +174,32 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       ensureDeclrativeNetRequetRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
+      })
+    })
+
+    it('Should remove the old rule when redirect changes for local gateway', async () => {
+      await addRuleToDynamicRuleSet({
+        originUrl: 'http://docs.ipfs.tech',
+        redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
+      })
+      ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
+      ensureDeclrativeNetRequetRuleIsAdded({
+        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
+        regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
+      })
+      const [{ addRules }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
+
+      await browserMock.declarativeNetRequest.updateDynamicRules.resetHistory()
+      // assuming the localhost changed or the redirectURL changed.
+      await addRuleToDynamicRuleSet({
+        originUrl: 'http://docs.ipfs.tech',
+        redirectUrl: 'http://localhost:8081/ipns/docs.ipfs.tech'
+      })
+      ensureTabRedirected('http://localhost:8081/ipns/docs.ipfs.tech')
+      ensureDeclrativeNetRequetRuleIsAdded({
+        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
+        regexSubstitution: 'http://localhost:8081/ipns/docs.ipfs.tech\\1',
+        removedRulesIds: [addRules[0].id]
       })
     })
   })
