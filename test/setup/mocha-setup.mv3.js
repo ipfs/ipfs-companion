@@ -1,6 +1,6 @@
 import browser from 'sinon-chrome'
 import AbortController from 'abort-controller'
-import DeclarativeNetRequestMock from './redirect-handler/declarativeNetRequest.mock.js'
+import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
 import sinon from 'sinon'
 
 browser.runtime.id = 'testid'
