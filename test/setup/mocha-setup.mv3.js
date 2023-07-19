@@ -17,5 +17,4 @@ global.browser.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetReques
 
 afterEach(function () {
   sinonSandbox.resetHistory()
-  browser.flush()
 })

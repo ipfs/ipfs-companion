@@ -10,15 +10,12 @@ import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
-import { generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
+import { cleanupRules, generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 
 const url2request = (string) => {
   return { url: string, type: 'main_frame' }
 }
 
-const fakeRequestId = () => {
-  return Math.floor(Math.random() * 100000).toString()
-}
 
 const expectNoRedirect = async (modifyRequest, request, browser) => {
   await modifyRequest.onBeforeRequest(request)
@@ -37,6 +34,10 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
   before(async function () {
     global.URL = URL
     browser.runtime.getURL.returns('chrome-extension://testid/')
+  })
+
+  afterEach(async function () {
+    await cleanupRules(true)
   })
 
   beforeEach(async function () {
