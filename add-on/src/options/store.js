@@ -3,7 +3,7 @@
 
 import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
-import { RULE_REGEX_ENDING, notifyOptionChange, notifyStateChange } from '../lib/redirect-handler/blockOrObserve.js'
+import { DELETE_RULE_REQUEST_SUCCESS, RULE_REGEX_ENDING, notifyDeleteRule, notifyOptionChange, notifyStateChange } from '../lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../lib/runtime-checks.js'
 import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
@@ -37,6 +37,16 @@ export default function optionStore (state, emitter) {
     updateStateOptions()
     fetchRedirectRules()
     browser.storage.onChanged.addListener(updateStateOptions)
+  })
+
+  emitter.on('redirectRuleDeleteRequest', async (id) => {
+    console.log('delete rule request', id)
+    browser.runtime.onMessage.addListener(({ type }) => {
+      if (type === DELETE_RULE_REQUEST_SUCCESS) {
+        emitter.emit('render')
+      }
+    })
+    notifyDeleteRule(id)
   })
 
   emitter.on('optionChange', async ({ key, value }) => {

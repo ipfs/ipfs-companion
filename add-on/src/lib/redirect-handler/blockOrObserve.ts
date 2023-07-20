@@ -7,6 +7,12 @@ import { CompanionState } from '../../types/companion.js'
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
+export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
+export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
+export const DELETE_RULE_REQUEST_SUCCESS =  'DELETE_RULE_REQUEST_SUCCESS'
+export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
+
 interface regexFilterMap {
   id: number
   regexSubstitution: string
@@ -17,17 +23,16 @@ interface redirectHandlerInput {
   redirectUrl: string
 }
 
+type messageToSelfType = typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
 interface messageToSelf {
-  type: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE
+  type: messageToSelfType
+  value?: string | Record<string, unknown>
 }
 
 // We need to check if the browser supports the declarativeNetRequest API.
 // TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
 // which is currently a bug https://bugs.chromium.org/p/chromium/issues/detail?id=1427952
 export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
-export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
-export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
-export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
 
 /**
  * Notify self about state change.
@@ -45,16 +50,20 @@ export async function notifyOptionChange (): Promise<void> {
   return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
 }
 
+export async function notifyDeleteRule (id: number): Promise<void> {
+  return await sendMessageToSelf(DELETE_RULE_REQUEST, id)
+}
+
 /**
  * Sends message to self to notify about change.
  *
  * @param msg
  */
-async function sendMessageToSelf (msg: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE): Promise<void> {
+async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<void> {
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
   if (!supportsBlock) {
-    const message: messageToSelf = { type: msg }
-    await browser.runtime.sendMessage(message)
+    const message: messageToSelf = { type: msg, value }
+    await browser.runtime.sendMessage({ message })
   }
 }
 
@@ -173,17 +182,24 @@ export async function cleanupRules (resetInMemory: boolean = false): Promise<voi
 }
 
 /**
+ * Clean up a rule by ID.
+ *
+ * @param id number
+ */
+async function cleanupRuleById(id: number) {
+  const [{ condition: { regexFilter } }] = await browser.declarativeNetRequest.getDynamicRules({ ruleIds: [id] })
+  savedRegexFilters.delete(regexFilter as string)
+  await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: [id] })
+}
+
+/**
  * This function sets up the listeners for the extension.
  * @param {function} handlerFn
  */
-function setupListeners (handlerFn: () => Promise<void>): void {
-  browser.runtime.onMessage.addListener(async ({ type }: messageToSelf): Promise<void> => {
-    if (type === GLOBAL_STATE_CHANGE) {
-      await handlerFn()
-    }
-    if (type === GLOBAL_STATE_OPTION_CHANGE) {
-      await cleanupRules(true)
-      await handlerFn()
+function setupListeners (handlers: Record<messageToSelfType, (value: any) => Promise<void>>): void {
+  browser.runtime.onMessage.addListener(async ({ message: { type, value } }: { message: messageToSelf }): Promise<void> => {
+    if (type in handlers) {
+      await handlers[type](value)
     }
   })
 }
@@ -354,7 +370,23 @@ export function addRuleToDynamicRuleSetGenerator (
       await Promise.all(tabs.map(async tab => await browser.tabs.reload(tab.id)))
     }
 
-    setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
+    setupListeners({
+      [GLOBAL_STATE_CHANGE]: async (): Promise<void> => {
+        await reconcileRulesAndRemoveOld(getState())
+      },
+      [GLOBAL_STATE_OPTION_CHANGE]: async (): Promise<void> => {
+        await cleanupRules(true)
+        await reconcileRulesAndRemoveOld(getState())
+      },
+      [DELETE_RULE_REQUEST]: async (value: number): Promise<void> => {
+        if (value != null) {
+          await cleanupRuleById(value)
+          browser.runtime.sendMessage({ type: DELETE_RULE_REQUEST_SUCCESS })
+        } else {
+          cleanupRules(true)
+        }
+      }
+    })
     // call to reconcile rules and remove old ones.
     await reconcileRulesAndRemoveOld(state)
   }
