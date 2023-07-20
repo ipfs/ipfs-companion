@@ -3,13 +3,23 @@
 
 import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
-import { notifyOptionChange, notifyStateChange } from '../lib/redirect-handler/blockOrObserve.js'
+import { RULE_REGEX_ENDING, notifyOptionChange, notifyStateChange } from '../lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../lib/runtime-checks.js'
 import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
 export default function optionStore (state, emitter) {
   state.options = optionDefaults
+
+  const fetchRedirectRules = async () => {
+    const existingRedirectRules = await browser.declarativeNetRequest.getDynamicRules()
+    state.redirectRules = existingRedirectRules.map(rule => ({
+      id: rule.id,
+      origin: rule.condition.regexFilter?.replace(RULE_REGEX_ENDING, '(.*)').replaceAll('\\', ''),
+      target: rule.action.redirect?.regexSubstitution?.replace('\\1', '<resource-path>')
+    }))
+    emitter.emit('render')
+  }
 
   const updateStateOptions = async () => {
     const runtime = await createRuntimeChecks(browser)
@@ -25,6 +35,7 @@ export default function optionStore (state, emitter) {
     handleConsentFromState(state)
     trackView('options')
     updateStateOptions()
+    fetchRedirectRules()
     browser.storage.onChanged.addListener(updateStateOptions)
   })
 
