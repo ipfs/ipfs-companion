@@ -51,23 +51,32 @@ function ensureTabRedirected (url): void {
  * @param regexSubstitution
  */
 function ensureDeclrativeNetRequetRuleIsAdded ({
+  addRuleLength = 1,
+  callIndex = 0,
   expectedCondition,
   regexSubstitution,
-  removedRulesIds = []
+  removedRulesIds = [],
 }: {
+  addRuleLength?: number
+  callIndex?: number
   expectedCondition: string
   regexSubstitution: string
   removedRulesIds?: number[]
 }): void {
+  if (callIndex < 0) {
+    callIndex = browserMock.declarativeNetRequest.updateDynamicRules.getCalls().length + callIndex
+  }
   expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.true
-  const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
+  const [{ addRules, removeRuleIds }] = browserMock.declarativeNetRequest.updateDynamicRules.getCall(callIndex).args
   expect(removeRuleIds).to.deep.equal(removedRulesIds)
-  expect(addRules).to.have.lengthOf(1)
-  const [{ id, priority, action, condition }] = addRules
-  expect(id).to.be.a('number')
-  expect(priority).to.equal(1)
-  expect(action).to.deep.equal({type: 'redirect', redirect: { regexSubstitution }})
-  expect(condition).to.deep.equal(dynamicRulesConditions(expectedCondition))
+  if (addRuleLength > 0) {
+    expect(addRules).to.have.lengthOf(addRuleLength)
+    const [{ id, priority, action, condition }] = addRules
+    expect(id).to.be.a('number')
+    expect(priority).to.equal(1)
+    expect(action).to.deep.equal({ type: 'redirect', redirect: { regexSubstitution } })
+    expect(condition).to.deep.equal(dynamicRulesConditions(expectedCondition))
+  }
 }
 
 describe('lib/redirect-handler/blockOrObserve', () => {
@@ -201,6 +210,37 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         regexSubstitution: 'http://localhost:8081/ipns/docs.ipfs.tech\\1',
         removedRulesIds: [addRules[0].id]
       })
+    })
+
+    it('Should remove the old rules when companion is no longer in active state', async () => {
+      // first redirect
+      const getRuleIdsAddedSoFar = () => browserMock.declarativeNetRequest.updateDynamicRules.getCalls().map(({args}) => args[0]?.addRules.map(rule => rule.id).flat()).flat()
+
+      await addRuleToDynamicRuleSet({
+        originUrl: 'http://docs.ipfs.tech',
+        redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
+      })
+
+      await addRuleToDynamicRuleSet({
+        originUrl: 'http://awesome.ipfs.io',
+        redirectUrl: 'http://localhost:8080/ipns/awesome.ipfs.io'
+      })
+
+      state.active = false
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+
+      ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleLength: 0,
+        callIndex: -1,
+        expectedCondition: `^https?\\:\\/\\/ipfs\\.io${LAST_GROUP_REGEX}`,
+        regexSubstitution: 'http://localhost:8080\\1',
+        removedRulesIds: getRuleIdsAddedSoFar()
+      })
+
     })
   })
 })
