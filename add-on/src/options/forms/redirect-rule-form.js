@@ -4,13 +4,12 @@
 import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 
-
 /**
  *
  * @param {(event: string, value?: any) => void} emit
  * @returns
  */
-function ruleItem(emit) {
+function ruleItem (emit) {
   /**
    * Renders Rule Item
    *
@@ -52,7 +51,7 @@ function ruleItem(emit) {
  * }} param0
  * @returns
  */
-export default function redirectRuleForm({ emit, redirectRules }) {
+export default function redirectRuleForm ({ emit, redirectRules }) {
   return html`
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">

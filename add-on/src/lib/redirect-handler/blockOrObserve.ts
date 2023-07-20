@@ -10,7 +10,7 @@ log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
-export const DELETE_RULE_REQUEST_SUCCESS =  'DELETE_RULE_REQUEST_SUCCESS'
+export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
 export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
 
 interface regexFilterMap {
@@ -186,7 +186,7 @@ export async function cleanupRules (resetInMemory: boolean = false): Promise<voi
  *
  * @param id number
  */
-async function cleanupRuleById(id: number) {
+async function cleanupRuleById (id: number): Promise<void> {
   const [{ condition: { regexFilter } }] = await browser.declarativeNetRequest.getDynamicRules({ ruleIds: [id] })
   savedRegexFilters.delete(regexFilter as string)
   await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: [id] })
@@ -381,9 +381,9 @@ export function addRuleToDynamicRuleSetGenerator (
       [DELETE_RULE_REQUEST]: async (value: number): Promise<void> => {
         if (value != null) {
           await cleanupRuleById(value)
-          browser.runtime.sendMessage({ type: DELETE_RULE_REQUEST_SUCCESS })
+          await browser.runtime.sendMessage({ type: DELETE_RULE_REQUEST_SUCCESS })
         } else {
-          cleanupRules(true)
+          await cleanupRules(true)
         }
       }
     })
