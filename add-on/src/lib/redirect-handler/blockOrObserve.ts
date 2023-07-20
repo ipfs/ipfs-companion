@@ -27,6 +27,7 @@ interface messageToSelf {
 export const supportsBlock = !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
 
 /**
  * Notify self about state change.
@@ -119,16 +120,16 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   // We need to escape the characters that are allowed in the URL, but not in the regex.
   const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
   // We need to match the rest of the URL, so we can use a wildcard.
-  const regexEnding = '((?:[^\\.]|$).*)$'
-  let regexFilter = `^${regexFilterFirst}${regexEnding}`.replace(/https?/ig, 'https?')
+  const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
+  let regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
 
   // This method does not parse:
   // originUrl: "https://awesome.ipfs.io/"
   // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
   // that ends up with capturing all urls which we do not want.
-  if (regexFilter === `^https?\\:\\/${regexEnding}`) {
+  if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
     const subdomain = new URL(originUrl).hostname
-    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${regexEnding}`
+    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
     regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
   }
 
