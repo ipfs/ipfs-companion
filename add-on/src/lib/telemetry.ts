@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill'
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/MetricsProvider'
+import MetricsProvider from '@ipfs-shipyard/ignite-metrics/browser-vanilla'
 import PatchedCountly from 'countly-sdk-web'
 import debug from 'debug'
 import { WebExtensionStorageProvider } from './storage-provider/WebExtensionStorageProvider.js'
@@ -8,7 +8,7 @@ import { consentTypes } from '@ipfs-shipyard/ignite-metrics'
 
 const log = debug('ipfs-companion:telemetry')
 
-const metricsProvider = new MetricsProvider<PatchedCountly>({
+const metricsProvider = new MetricsProvider({
   appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
   autoTrack: false,
   metricsService: PatchedCountly,
