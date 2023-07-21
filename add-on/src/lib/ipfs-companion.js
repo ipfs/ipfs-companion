@@ -24,7 +24,7 @@ import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOpti
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
-import { handleConsentFromState, trackView } from '../lib/telemetry.js'
+import { endSession, handleConsentFromState, startSession, trackView } from '../lib/telemetry.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -66,7 +66,8 @@ export default async function init (inQuickImport = false) {
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
-        handleConsentFromState(state)
+        await handleConsentFromState(state)
+        startSession()
         ipfs = await initIpfsClient(browser, state, inQuickImport)
         trackView('init')
       } catch (err) {
@@ -179,6 +180,16 @@ export default async function init (inQuickImport = false) {
       const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
       const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
       return { pubGwUrlForIpfsOrIpnsPath: result }
+    }
+    if (request.telemetry) {
+      return Promise.resolve(onTelemetryMessage(request.telemetry))
+    }
+  }
+
+  function onTelemetryMessage (request) {
+    if (request.trackView) {
+      const { version } = browser.runtime.getManifest()
+      return trackView(request.trackView, { version })
     }
   }
 
@@ -584,6 +595,7 @@ export default async function init (inQuickImport = false) {
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
+          state.active ? startSession() : endSession()
           break
         case 'ipfsNodeType':
           if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
@@ -650,6 +662,8 @@ export default async function init (inQuickImport = false) {
           break
       }
     }
+    // ensure consent is set properly on state changes
+    handleConsentFromState(state)
 
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {

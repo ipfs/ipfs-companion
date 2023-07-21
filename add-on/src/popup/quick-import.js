@@ -12,7 +12,6 @@ import browser from 'webextension-polyfill'
 import * as externalApiClient from '../lib/ipfs-client/external.js'
 import createIpfsCompanion from '../lib/ipfs-companion.js'
 import { formatImportDirectory } from '../lib/ipfs-import.js'
-import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 import logo from './logo.js'
 import { POSSIBLE_NODE_TYPES } from '../lib/state.js'
 
@@ -51,8 +50,7 @@ function quickImportStore (state, emitter) {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
-    handleConsentFromState(state)
-    trackView('quick-import')
+    browser.runtime.sendMessage({ telemetry: { trackView: 'quick-import' } })
     // initialize connection to the background script which will trigger UI updates
     port = browser.runtime.connect({ name: 'browser-action-port' })
     port.onMessage.addListener(async (message) => {
