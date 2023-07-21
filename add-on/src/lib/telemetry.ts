@@ -48,10 +48,9 @@ const ignoredViewsRegex: RegExp[] = []
  * @param view
  * @param segments
  */
-export function trackView (view: string, segments: Record<string, string> = {}): void {
+export function trackView (view: string, segments: Record<string, string>): void {
   log('trackView called for view: ', view)
-  const { version } = browser.runtime.getManifest()
-  metricsProvider.trackView(view, ignoredViewsRegex, { ...segments, version })
+  metricsProvider.trackView(view, ignoredViewsRegex, segments)
 }
 
 export const startSession = (...args: any[]): void => metricsProvider.startSession(...args)
