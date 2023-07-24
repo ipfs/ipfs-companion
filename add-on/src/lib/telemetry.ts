@@ -1,4 +1,3 @@
-import browser from 'webextension-polyfill'
 import MetricsProvider from '@ipfs-shipyard/ignite-metrics/browser-vanilla'
 import PatchedCountly from 'countly-sdk-web'
 import debug from 'debug'
