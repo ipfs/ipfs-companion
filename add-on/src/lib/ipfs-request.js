@@ -11,6 +11,7 @@ import { safeURL } from './options.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { recoveryPagePath } from './constants.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { browser } from 'webextension-polyfill'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -144,6 +145,10 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     async onBeforeRequest (request) {
       const state = getState()
       if (!state.active) return
+      browser.runtime.sendMessage({ type: 'ipfs-companion:request', request: {
+        url: request.url,
+        type: request.type,
+      }})
 
       // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
@@ -481,9 +486,21 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
 function handleRedirection ({ originUrl, redirectUrl }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
     if (supportsBlock) {
+      browser.runtime.sendMessage({
+        type: 'ipfs-companion:request', request: {
+          url: originUrl,
+          type: 'main_frame'
+        }
+      })
       return { redirectUrl }
     }
 
+    browser.runtime.sendMessage({
+      type: 'ipfs-companion:request', request: {
+        url: originUrl,
+        type: 'main_frame'
+      }
+    })
     // Let browser handle redirection MV3 style.
     addRuleToDynamicRuleSet({ originUrl, redirectUrl })
   }

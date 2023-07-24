@@ -184,6 +184,15 @@ export default async function init (inQuickImport = false) {
     if (request.telemetry) {
       return Promise.resolve(onTelemetryMessage(request.telemetry))
     }
+    if (request.request) {
+      return Promise.resolve(onTrackRequest(request.request))
+    }
+  }
+
+  function onTrackRequest(request) {
+    if (request && request.url) {
+      return trackView(request.url, { version: browser.runtime.getManifest().version, type: request.type })
+    }
   }
 
   function onTelemetryMessage (request) {
