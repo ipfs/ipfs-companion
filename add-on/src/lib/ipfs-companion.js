@@ -24,7 +24,7 @@ import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOpti
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
-import { endSession, handleConsentFromState, startSession, trackView } from '../lib/telemetry.js'
+import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -67,7 +67,6 @@ export default async function init (inQuickImport = false) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
         await handleConsentFromState(state)
-        startSession()
         ipfs = await initIpfsClient(browser, state, inQuickImport)
         trackView('init')
       } catch (err) {
@@ -595,7 +594,6 @@ export default async function init (inQuickImport = false) {
           await registerSubdomainProxy(getState, runtime)
           shouldRestartIpfsClient = true
           shouldStopIpfsClient = !state.active
-          state.active ? startSession() : endSession()
           break
         case 'ipfsNodeType':
           if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {

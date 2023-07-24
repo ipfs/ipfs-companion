@@ -52,6 +52,3 @@ export function trackView (view: string, segments: Record<string, string>): void
   log('trackView called for view: ', view)
   metricsProvider.trackView(view, ignoredViewsRegex, segments)
 }
-
-export const startSession = (...args: any[]): void => metricsProvider.startSession(...args)
-export const endSession = (...args: any[]): void => metricsProvider.endSession(...args)
