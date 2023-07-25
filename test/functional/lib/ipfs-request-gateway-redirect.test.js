@@ -1,6 +1,6 @@
 'use strict'
 import { expect } from 'chai'
-import { afterEach, before, beforeEach, describe, it } from 'mocha'
+import { afterEach, beforeEach, describe, it } from 'mocha'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { URL } from 'url'
@@ -39,12 +39,12 @@ const sinonSandbox = sinon.createSandbox()
 
 describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
-  before(function () {
-    global.URL = URL
-    global.browser = browser
-    browser.runtime.id = 'testid'
-    browser.runtime.getURL.returns('chrome-extension://testid/')
-  })
+  // before(function () {
+  //   global.URL = URL
+  //   global.browser = browser
+  //   browser.runtime.id = 'testid'
+  //   browser.runtime.getURL.returns('chrome-extension://testid/')
+  // })
 
   beforeEach(async function () {
     state = Object.assign(initState(optionDefaults), {
