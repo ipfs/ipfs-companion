@@ -409,13 +409,11 @@ describe('modifyRequest.onBeforeRequest:', function () {
 //   return { url: string, type: 'main_frame' }
 // }
 
-
 const regexRuleEnding = '((?:[^\\.]|$).*)$'
 // const nodeTypes = ['external']
 const sinonSandbox = sinon.createSandbox()
 
 describe('[MV3] modifyRequest.onBeforeRequest:', function () {
-
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(async function () {

@@ -1,6 +1,6 @@
 'use strict'
 import { expect } from 'chai'
-import { beforeEach, describe, it } from 'mocha'
+import { after, before, beforeEach, describe, it } from 'mocha'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'

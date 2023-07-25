@@ -31,5 +31,5 @@ if (isMv3TestingEnabled()) {
     sinonSandbox.resetHistory()
   })
 } else {
-
+  // nothing needed here?
 }
