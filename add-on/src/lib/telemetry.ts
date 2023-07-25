@@ -1,8 +1,9 @@
-import browser from 'webextension-polyfill'
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/MetricsProvider'
+import MetricsProvider from '@ipfs-shipyard/ignite-metrics/browser-vanilla'
 import PatchedCountly from 'countly-sdk-web'
 import debug from 'debug'
 import { WebExtensionStorageProvider } from './storage-provider/WebExtensionStorageProvider.js'
+import { CompanionState } from '../types/companion.js'
+import { consentTypes } from '@ipfs-shipyard/ignite-metrics'
 
 const log = debug('ipfs-companion:telemetry')
 
@@ -19,7 +20,7 @@ const metricsProvider = new MetricsProvider({
  * @param {import('../types/companion.js').CompanionState} state
  * @returns {void}
  */
-export function handleConsentFromState (state) {
+export async function handleConsentFromState (state: CompanionState): Promise<void> {
   const telemetryGroups = {
     minimal: state?.telemetryGroupMinimal || false,
     performance: state?.telemetryGroupPerformance || false,
@@ -30,20 +31,23 @@ export function handleConsentFromState (state) {
   for (const [groupName, isEnabled] of Object.entries(telemetryGroups)) {
     if (isEnabled) {
       log(`Adding consent for '${groupName}'`)
-      metricsProvider.addConsent(groupName)
+      await metricsProvider.addConsent(groupName as consentTypes)
     } else {
       log(`Removing consent for '${groupName}'`)
-      metricsProvider.removeConsent(groupName)
+      await metricsProvider.removeConsent(groupName as consentTypes)
     }
   }
 }
 
-const ignoredViewsRegex = []
-export function trackView (view, segments) {
-  log('trackView called for view: ', view)
-  const { version } = browser.runtime.getManifest()
-  metricsProvider.trackView(view, ignoredViewsRegex, { ...segments, version })
-}
+const ignoredViewsRegex: RegExp[] = []
 
-export const startSession = (...args) => metricsProvider.startSession(...args)
-export const endSession = (...args) => metricsProvider.endSession(...args)
+/**
+ * TrackView is a wrapper around ignite-metrics trackView
+ *
+ * @param view
+ * @param segments
+ */
+export function trackView (view: string, segments: Record<string, string>): void {
+  log('trackView called for view: ', view)
+  metricsProvider.trackView(view, ignoredViewsRegex, segments)
+}
