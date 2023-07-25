@@ -382,17 +382,32 @@ describe('modifyRequest.onBeforeRequest:', function () {
     })
     it('should not show recovery page if node is offline, redirect is enabled, but non-gateway URL failed to load from the same port', async function () {
       // this covers https://github.com/ipfs/ipfs-companion/issues/1162 and https://twitter.com/unicomp21/status/1626244123102679041
-      state.redirect = true
-      expect(state.nodeActive).to.be.equal(false)
-      const request = url2request('https://localhost:8080/')
-      expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+      if (isMv3TestingEnabled()) {
+        state.redirect = true
+        expect(state.nodeActive).to.be.equal(false)
+        const request = url2request('https://localhost:8080/')
+        // mv2
+        // expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+        await modifyRequest.onBeforeRequest(request)
+        await expectNoRedirect(modifyRequest, request, browser)
+      } else {
+        state.redirect = true
+        expect(state.nodeActive).to.be.equal(false)
+        const request = url2request('https://localhost:8080/')
+        expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+      }
     })
     it('should not show recovery page if extension is disabled', async function () {
       // allows user to quickly avoid anything similar to https://github.com/ipfs/ipfs-companion/issues/1162
       state.active = false
       expect(state.nodeActive).to.be.equal(false)
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
-      expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+      if (isMv3TestingEnabled()) {
+        expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+      } else {
+        await modifyRequest.onBeforeRequest(request)
+        await expectNoRedirect(modifyRequest, request, browser)
+      }
     })
   })
 
@@ -403,14 +418,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
   })
 })
 
-// 'use strict'
-
-// const url2request = (string) => {
-//   return { url: string, type: 'main_frame' }
-// }
-
 const regexRuleEnding = '((?:[^\\.]|$).*)$'
-// const nodeTypes = ['external']
 const sinonSandbox = sinon.createSandbox()
 
 describe('[MV3] modifyRequest.onBeforeRequest:', function () {
@@ -721,26 +729,6 @@ describe('[MV3] modifyRequest.onBeforeRequest:', function () {
         `^https?\\:\\/\\/localhost\\:8080\\/ipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR\\/foo\\/${regexRuleEnding}`,
         'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1'
       ))
-    })
-    it('should not show recovery page if node is offline, redirect is enabled, but non-gateway URL failed to load from the same port', async function () {
-      // this covers https://github.com/ipfs/ipfs-companion/issues/1162 and https://twitter.com/unicomp21/status/1626244123102679041
-      state.redirect = true
-      expect(state.nodeActive).to.be.equal(false)
-      const request = url2request('https://localhost:8080/')
-      // mv2
-      // expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
-      await modifyRequest.onBeforeRequest(request)
-      await expectNoRedirect(modifyRequest, request, browser)
-    })
-    it('should not show recovery page if extension is disabled', async function () {
-      // allows user to quickly avoid anything similar to https://github.com/ipfs/ipfs-companion/issues/1162
-      state.active = false
-      expect(state.nodeActive).to.be.equal(false)
-      const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
-      // mv2
-      // expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
-      await modifyRequest.onBeforeRequest(request)
-      await expectNoRedirect(modifyRequest, request, browser)
     })
   })
 
