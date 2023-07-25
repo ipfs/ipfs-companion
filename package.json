@@ -48,7 +48,7 @@
     "test:e2e": "mocha --timeout 300000 \"test/e2e/**/*.test.js\"",
     "test:functional": "c8 mocha --timeout 5000 --file \"test/setup/mocha-setup.js\" \"test/functional/**/*.test.js\" \"test/functional/**/*.test.ts\"",
     "lint": "run-s lint:*",
-    "test:functional_MV3": "cross-env TEST_MV3=true c8 mocha --timeout 5000 --file \"test/setup/mocha-setup.js\" \"test/functional/**/*.test.mv3.js\"",
+    "test:functional_MV3": "cross-env TEST_MV3=true c8 mocha --timeout 5000 --file \"test/setup/mocha-setup.js\" \"test/functional/**/*.test.js\" \"test/functional/**/*.test.ts\"",
     "lint:standard": "ts-standard -v \"*.js\" \"add-on/src/**/*.js\" \"add-on/src/**/*.ts\" \"test/**/*.js\" \"scripts/**/*.js\"",
     "lint:web-ext": "shx cat add-on/manifest.common.json add-on/manifest.chromium.json add-on/manifest.firefox-beta.json | json --deep-merge > add-on/manifest.json && web-ext lint --firefox-preview",
     "fix:lint": "run-s fix:lint:*",
