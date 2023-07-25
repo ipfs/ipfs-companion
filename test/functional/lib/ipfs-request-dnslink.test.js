@@ -23,7 +23,7 @@ describe('modifyRequest processing of DNSLinks', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
-    if (isMv3TestingEnabled()) {
+    if (isMv3TestingEnabled) {
       return this.skip()
     }
     global.URL = URL

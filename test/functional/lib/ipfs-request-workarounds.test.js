@@ -17,7 +17,7 @@ describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
-    if (isMv3TestingEnabled()) {
+    if (isMv3TestingEnabled) {
       return this.skip()
     }
     global.URL = URL

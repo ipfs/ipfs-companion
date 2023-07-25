@@ -22,7 +22,7 @@ const fakeRequestId = () => {
 }
 
 const expectNoRedirect = async (modifyRequest, request, browser) => {
-  if (isMv3TestingEnabled()) {
+  if (isMv3TestingEnabled) {
     await modifyRequest.onBeforeRequest(request)
     sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
     await modifyRequest.onHeadersReceived(request)
@@ -70,7 +70,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
 
   afterEach(async function () {
     sinonSandbox.reset()
-    if (isMv3TestingEnabled()) {
+    if (isMv3TestingEnabled) {
       await cleanupRules(true)
     }
   })
@@ -83,7 +83,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       it('should be served from custom gateway if redirect is enabled', async function () {
         const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
           await modifyRequest.onBeforeRequest(request)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
@@ -109,7 +109,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it(`should be left untouched if redirect is disabled (${nodeType} node)`, async function () {
           state.redirect = false
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, request, browser)
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -119,7 +119,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           state.active = false
           state.redirect = true
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, request, browser)
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -129,7 +129,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           // A safe way for preloading data at arbitrary gateways - it should arrive at original destination
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect#hashTest')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, request, browser)
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -144,7 +144,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
             originUrl: 'https://example.com/?x-ipfs-companion-no-redirect#hashTest'
           }
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, subRequest, browser)
           } else {
             await expectNoRedirect(modifyRequest, subRequest)
@@ -153,7 +153,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it(`should be left untouched if CID is invalid (${nodeType} node)`, async function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, request, browser)
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -163,7 +163,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           // HTTP HEAD is a popular way for preloading data at arbitrary gateways, so we have a dedicated test to make sure it works as expected
           const headRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#x-ipfs-companion-no-redirect', method: 'HEAD' }
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, headRequest, browser)
           } else {
             await expectNoRedirect(modifyRequest, headRequest)
@@ -182,7 +182,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/' }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
           expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -192,7 +192,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/' }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(xhrRequest)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
@@ -211,7 +211,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
           expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -221,7 +221,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
           expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -236,7 +236,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       it('should be served from custom gateway if fetched from the same origin and redirect is enabled in Firefox', async function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://google.com/' }
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
           expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -246,7 +246,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/' }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
           expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -256,7 +256,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
           expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -267,7 +267,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = true
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           // return this.skip()
         } else {
         // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
@@ -292,7 +292,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         // pretend API is online and we can do dns lookups with it
         state.peerCount = 1
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(request)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
@@ -311,7 +311,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         const request = url2request('https://google.com/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
         dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().resolves(false)
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(request)
         } else {
           expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('http://localhost:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest')
@@ -329,7 +329,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           state.redirect = false
           const request = url2request('https://google.com/ipns/ipfs.io?argTest#hashTest')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, request, browser)
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -339,7 +339,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           const request = url2request('https://google.com/ipns/notafqdnorcid?argTest#hashTest')
           dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().resolves(false)
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
             await expectNoRedirect(modifyRequest, request, browser)
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -371,7 +371,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         // return redirect to a subdomain, and we don't want to break users
         // running older versions of go-ipfs by loading subdomain first and
         // failing.
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(request)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
@@ -394,7 +394,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         state.redirect = true
         const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/`)
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(request)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
@@ -415,7 +415,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         state.redirect = true
         const request = url2request('https://bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy.ipfs.dweb.link/%3Ffilename=test.jpg?arg=val')
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(request)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
@@ -436,7 +436,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         state.redirect = true
         const request = url2request(`https://${peerid}.ipns.dweb.link/`)
 
-        if (isMv3TestingEnabled()) {
+        if (isMv3TestingEnabled) {
           await modifyRequest.onBeforeRequest(request)
           const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
           expect(args).to.deep.equal({
@@ -469,7 +469,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it('should fix localhost Kubo RPC hostname to IP', async function () {
           const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
@@ -479,7 +479,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it('should be left untouched if localhost Gateway is used', async function () {
           const request = url2request('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -488,7 +488,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it('should fix 127.0.0.1 Gateway to localhost', async function () {
           const request = url2request('http://127.0.0.1:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
@@ -499,7 +499,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           // https://github.com/ipfs-shipyard/ipfs-companion/issues/867
           const request = url2request('http://0.0.0.0:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
@@ -510,7 +510,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
           const request = url2request('http://localhost:5001/webui')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
@@ -522,7 +522,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
           request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DDIFF' }]
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -532,7 +532,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
           const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             await expectNoRedirect(modifyRequest, request)
@@ -546,7 +546,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           const request = url2request(`http://127.0.0.1:8080/ipfs/${cid}?arg=val#hash`)
           request.type = 'main_frame' // explicit
 
-          if (isMv3TestingEnabled()) {
+          if (isMv3TestingEnabled) {
           // return this.skip()
           } else {
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
@@ -567,7 +567,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       state.gwURL = new URL(state.gwURLString)
       const request = url2request('https://bar.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
 
-      if (isMv3TestingEnabled()) {
+      if (isMv3TestingEnabled) {
         // return this.skip()
       } else {
         expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('http://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -578,7 +578,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       state.gwURL = new URL(state.gwURLString)
       const request = url2request('https://bar.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
 
-      if (isMv3TestingEnabled()) {
+      if (isMv3TestingEnabled) {
         // return this.skip()
       } else {
         expect((await modifyRequest.onBeforeRequest(request)).redirectUrl).to.equal('https://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
@@ -601,7 +601,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       expect(state.nodeActive).to.be.equal(false)
       state.redirect = true
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
-      if (isMv3TestingEnabled()) {
+      if (isMv3TestingEnabled) {
         await modifyRequest.onBeforeRequest(request)
         const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
 
@@ -619,7 +619,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       expect(state.nodeActive).to.be.equal(false)
       state.redirect = false
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
-      if (isMv3TestingEnabled()) {
+      if (isMv3TestingEnabled) {
         await modifyRequest.onBeforeRequest(request)
         const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
         console.log('args: ', args)
@@ -639,7 +639,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       state.redirect = true
       expect(state.nodeActive).to.be.equal(false)
       const request = url2request('https://localhost:8080/')
-      if (isMv3TestingEnabled()) {
+      if (isMv3TestingEnabled) {
         await modifyRequest.onBeforeRequest(request)
         await expectNoRedirect(modifyRequest, request, browser)
       } else {
@@ -652,7 +652,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       state.active = false
       expect(state.nodeActive).to.be.equal(false)
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
-      if (isMv3TestingEnabled()) {
+      if (isMv3TestingEnabled) {
         await modifyRequest.onBeforeRequest(request)
         await expectNoRedirect(modifyRequest, request, browser)
       } else {

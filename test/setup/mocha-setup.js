@@ -23,7 +23,7 @@ global.clock = useFakeTimers({
   now: new Date(2017, 10, 5, 12, 1, 1)
 })
 
-if (isMv3TestingEnabled()) {
+if (isMv3TestingEnabled) {
   const sinonSandbox = sinon.createSandbox()
   global.browser.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
 

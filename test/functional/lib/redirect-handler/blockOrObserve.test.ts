@@ -31,7 +31,7 @@ const dynamicRulesConditions = (regexFilter) => ({
   ]
 })
 
-const manifestVeresion = isMv3TestingEnabled() ? 'MV3' : 'MV2'
+const manifestVeresion = isMv3TestingEnabled ? 'MV3' : 'MV2'
 
 describe('lib/redirect-handler/blockOrObserve', () => {
   before(function () {
@@ -57,8 +57,8 @@ describe('lib/redirect-handler/blockOrObserve', () => {
   })
 
   describe(`supportsBlock on ${manifestVersion}` , () => {
-    it(`should return ${isMv3TestingEnabled() ? false : true} for ${manifestVersion}`, function () {
-      if (isMv3TestingEnabled()) {
+    it(`should return ${isMv3TestingEnabled ? false : true} for ${manifestVersion}`, function () {
+      if (isMv3TestingEnabled) {
         expect(supportsBlock()).to.be.false
       } else {
         expect(supportsBlock()).to.be.true
