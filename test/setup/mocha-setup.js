@@ -25,11 +25,15 @@ global.clock = useFakeTimers({
 
 if (isMv3TestingEnabled) {
   const sinonSandbox = sinon.createSandbox()
-  global.browser.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
+  beforeEach(function () {
+    global.browser.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
+  })
 
   afterEach(function () {
     sinonSandbox.resetHistory()
   })
 } else {
-  // nothing needed here?
+  beforeEach(function () {
+    browser.runtime.getURL.returns('chrome-extension://testid/')
+  })
 }
