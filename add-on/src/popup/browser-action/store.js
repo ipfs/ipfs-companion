@@ -8,7 +8,6 @@ import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, cont
 import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
 import { notifyStateChange } from '../../lib/redirect-handler/blockOrObserve.js'
-import { endSession, handleConsentFromState, startSession, trackView } from '../../lib/telemetry.js'
 import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 // The store contains and mutates the state for the app
@@ -41,8 +40,7 @@ export default (state, emitter) => {
   let port
 
   emitter.on('DOMContentLoaded', async () => {
-    handleConsentFromState(state)
-    trackView('browser-action')
+    browser.runtime.sendMessage({ telemetry: { trackView: 'browser-action' } })
 
     // initial render with status stub
     emitter.emit('render')
@@ -211,10 +209,7 @@ export default (state, emitter) => {
     state.active = !prev
     try {
       await browser.storage.local.set({ active: state.active })
-      if (state.active) {
-        startSession()
-      } else {
-        endSession()
+      if (!state.active) {
         state.gatewayAddress = state.pubGwURLString
         state.ipfsApiUrl = null
         state.gatewayVersion = null
@@ -223,7 +218,6 @@ export default (state, emitter) => {
       }
       await notifyStateChange()
       await browser.storage.local.set({ active: state.active })
-      handleConsentFromState(state)
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)
       state.active = prev
