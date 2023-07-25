@@ -1,5 +1,5 @@
 diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
-index da26eb6..2bc572e 100644
+index da26eb6..620cb3e 100644
 --- a/node_modules/countly-sdk-web/lib/countly.js
 +++ b/node_modules/countly-sdk-web/lib/countly.js
 @@ -52,10 +52,22 @@
@@ -149,23 +149,16 @@ index da26eb6..2bc572e 100644
              }
  
              if (useSessionCookie) {
-@@ -2066,15 +2078,6 @@
+@@ -2071,7 +2083,7 @@
+             else if (typeof document.referrer !== "undefined" && document.referrer.length) {
+                 var matches = urlParseRE.exec(document.referrer);
+                 // do not report referrers of current website
+-                if (matches && matches[11] && matches[11] !== window.location.hostname) {
++                if (matches && matches[11] && matches[11] !== globalThis.location.hostname) {
                      segments.start = 1;
                  }
              }
--            // if we are not using session cookie, there is no session state between refreshes
--            // so we fallback to old logic of landing
--            else if (typeof document.referrer !== "undefined" && document.referrer.length) {
--                var matches = urlParseRE.exec(document.referrer);
--                // do not report referrers of current website
--                if (matches && matches[11] && matches[11] !== window.location.hostname) {
--                    segments.start = 1;
--                }
--            }
- 
-             if (viewSegments) {
-                 viewSegments = truncateObject(viewSegments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "track_pageview", log);
-@@ -2147,7 +2150,7 @@
+@@ -2147,7 +2159,7 @@
                              // truncate new segment
                              segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processClick", log);
                              if (self.track_domains) {
@@ -174,7 +167,7 @@ index da26eb6..2bc572e 100644
                              }
                              add_cly_events({
                                  key: internalEventKeyEnums.ACTION,
-@@ -2173,7 +2176,7 @@
+@@ -2173,7 +2185,7 @@
              if (parent) {
                  log(logLevelEnums.INFO, "track_scrolls, Tracking the specified children");
              }
@@ -183,7 +176,7 @@ index da26eb6..2bc572e 100644
              isScrollRegistryOpen = true;
              trackingScrolls = true;
  
-@@ -2813,8 +2816,8 @@
+@@ -2813,8 +2825,8 @@
                                  else {
                                      var pages = widgets[i].target_pages;
                                      for (var k = 0; k < pages.length; k++) {
@@ -194,7 +187,7 @@ index da26eb6..2bc572e 100644
                                          var isContainAsterisk = pages[k].includes("*");
                                          if (((isContainAsterisk && isWildcardMatched) || isFullPathMatched) && !widgets[i].hide_sticker) {
                                              processWidget(widgets[i], true);
-@@ -3048,7 +3051,7 @@
+@@ -3048,7 +3060,7 @@
                      return;
                  }
  
@@ -203,7 +196,7 @@ index da26eb6..2bc572e 100644
                  var feedbackWidgetFamily;
  
                  // set feedback widget family as ratings and load related style file when type is ratings
-@@ -3170,7 +3173,7 @@
+@@ -3170,7 +3182,7 @@
                  wrapper.appendChild(iframe);
                  log(logLevelEnums.DEBUG, "present_feedback_widget, Appended the iframe");
  
@@ -212,7 +205,7 @@ index da26eb6..2bc572e 100644
                      var data = {};
                      try {
                          data = JSON.parse(e.data);
-@@ -3249,9 +3252,9 @@
+@@ -3249,9 +3261,9 @@
                          break;
  
                      case "onScrollHalfwayDown":
@@ -224,34 +217,26 @@ index da26eb6..2bc572e 100644
                                  var documentHeight = getDocHeight();
                                  if (scrollY >= (documentHeight / 2)) {
                                      surveyShown = true;
-@@ -3835,33 +3838,11 @@
-             metrics._app_version = metrics._app_version || self.app_version;
-             metrics._ua = metrics._ua || currentUserAgentString();
- 
--            // getting resolution
--            if (screen.width) {
--                var width = (screen.width) ? parseInt(screen.width) : 0;
--                var height = (screen.height) ? parseInt(screen.height) : 0;
--                if (width !== 0 && height !== 0) {
--                    var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+@@ -3841,13 +3853,13 @@
+                 var height = (screen.height) ? parseInt(screen.height) : 0;
+                 if (width !== 0 && height !== 0) {
+                     var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 -                    if (iOS && window.devicePixelRatio) {
--                        // ios provides dips, need to multiply
++                    if (iOS && globalThis.devicePixelRatio) {
+                         // ios provides dips, need to multiply
 -                        width = Math.round(width * window.devicePixelRatio);
 -                        height = Math.round(height * window.devicePixelRatio);
--                    }
--                    else {
++                        width = Math.round(width * globalThis.devicePixelRatio);
++                        height = Math.round(height * globalThis.devicePixelRatio);
+                     }
+                     else {
 -                        if (Math.abs(window.orientation) === 90) {
--                            // we have landscape orientation
--                            // switch values for all except ios
--                            var temp = width;
--                            width = height;
--                            height = temp;
--                        }
--                    }
--                    metrics._resolution = metrics._resolution || "" + width + "x" + height;
--                }
--            }
-+            metrics._resolution = metrics._resolution || '0x0';
++                        if (Math.abs(globalThis.orientation) === 90) {
+                             // we have landscape orientation
+                             // switch values for all except ios
+                             var temp = width;
+@@ -3860,8 +3872,8 @@
+             }
  
              // getting density ratio
 -            if (window.devicePixelRatio) {
@@ -261,49 +246,16 @@ index da26eb6..2bc572e 100644
              }
  
              // getting locale
-@@ -3870,32 +3851,6 @@
-                 metrics._locale = metrics._locale || locale;
-             }
- 
--            if (typeof document.referrer !== "undefined" && document.referrer.length) {
--                var matches = urlParseRE.exec(document.referrer);
--                // do not report referrers of current website
+@@ -3873,7 +3885,7 @@
+             if (typeof document.referrer !== "undefined" && document.referrer.length) {
+                 var matches = urlParseRE.exec(document.referrer);
+                 // do not report referrers of current website
 -                if (matches && matches[11] && matches[11] !== window.location.hostname) {
--                    var ignoring = false;
--                    if (ignoreReferrers && ignoreReferrers.length) {
--                        for (var k = 0; k < ignoreReferrers.length; k++) {
--                            try {
--                                var reg = new RegExp(ignoreReferrers[k]);
--                                if (reg.test(document.referrer)) {
--                                    log(logLevelEnums.DEBUG, "Ignored: " + document.referrer);
--                                    ignoring = true;
--                                    break;
--                                }
--                            }
--                            catch (ex) {
--                                log(logLevelEnums.ERROR, "Problem with ignoring: " + ignoreReferrers[k], ", error: " + ex);
--                            }
--                        }
--                    }
--                    if (!ignoring) {
--                        metrics._store = metrics._store || document.referrer;
--                    }
--                }
--            }
--
-             log(logLevelEnums.DEBUG, "Got metrics", metrics);
-             return metrics;
-         }
-@@ -3907,7 +3862,7 @@
-          * @memberof Countly._internals
-          */
-         function log(level, message) {
--            if (self.debug && typeof console !== "undefined") {
-+            if (typeof console !== "undefined") {
-                 // parse the arguments into a string if it is an object
-                 if (arguments[2] && typeof arguments[2] === "object") {
-                     arguments[2] = JSON.stringify(arguments[2]);
-@@ -3963,72 +3918,62 @@
++                if (matches && matches[11] && matches[11] !== globalThis.location.hostname) {
+                     var ignoring = false;
+                     if (ignoreReferrers && ignoreReferrers.length) {
+                         for (var k = 0; k < ignoreReferrers.length; k++) {
+@@ -3963,72 +3975,62 @@
           */
          function sendXmlHttpRequest(functionName, url, params, callback, useBroadResponseValidator) {
              useBroadResponseValidator = useBroadResponseValidator || false;
@@ -321,9 +273,6 @@ index da26eb6..2bc572e 100644
 -                var method = "GET";
 -                if (self.force_post || data.length >= 2000) {
 -                    method = "POST";
--                }
--                if (method === "GET") {
--                    xhr.open("GET", url + "?" + data, true);
 +            log(logLevelEnums.DEBUG, "Sending XML HTTP request");
 +            params = params || {};
 +            var data = prepareParams(params);
@@ -340,6 +289,9 @@ index da26eb6..2bc572e 100644
 +                    "Content-type": "application/x-www-form-urlencoded",
 +                  })
                  }
+-                if (method === "GET") {
+-                    xhr.open("GET", url + "?" + data, true);
+-                }
 -                else {
 -                    xhr.open("POST", url, true);
 -                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -372,17 +324,17 @@ index da26eb6..2bc572e 100644
 +                    const responseText = await response.text();
 +                    log(
 +                        logLevelEnums.DEBUG,
-+                        `${functionName} HTTP request completed [${response.status}][${responseText}]`
++                        `${functionName} HTTP request completed [${this.status}][${responseText}]`
 +                    );
 +                    // response validation function will be selected to also accept JSON arrays if useBroadResponseValidator is true
 +                    var isResponseValidated;
 +                    if (useBroadResponseValidator) {
 +                        // JSON array/object both can pass
-+                        isResponseValidated = isResponseValidBroad(response.status, responseText);
++                        isResponseValidated = isResponseValidBroad(this.status, responseText);
 +                    }
 +                    else {
 +                        // only JSON object can pass
-+                        isResponseValidated = isResponseValid(response.status, responseText);
++                        isResponseValidated = isResponseValid(this.status, responseText);
 +                    }
 +                    if (isResponseValidated) {
 +                        if (typeof callback === "function") {
@@ -395,7 +347,7 @@ index da26eb6..2bc572e 100644
 -                            }
 +                    }
 +                    else {
-+                        log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed, ", response.status);
++                        log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed, ", this.status);
 +                        if (typeof callback === "function") {
 +                            callback(true, params);
                          }
@@ -403,12 +355,12 @@ index da26eb6..2bc572e 100644
 -                };
 -                if (method === "GET") {
 -                    xhr.send();
--                }
--                else {
--                    xhr.send(data);
 +                } else {
 +                    throw new Error(response.statusText);
                  }
+-                else {
+-                    xhr.send(data);
+-                }
 -            }
 -            catch (e) {
 +            }).catch(function (e) {
@@ -423,11 +375,8 @@ index da26eb6..2bc572e 100644
          }
  
          /**
-@@ -4102,10 +4047,9 @@
-         /**
-          *  Get max scroll position
-          *  @memberof Countly._internals
--         * 
+@@ -4105,7 +4107,7 @@
+          *
           */
          function processScroll() {
 -            scrollRegistryTopPosition = Math.max(scrollRegistryTopPosition, window.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
@@ -435,7 +384,7 @@ index da26eb6..2bc572e 100644
          }
  
          /**
-@@ -4131,7 +4075,7 @@
+@@ -4131,7 +4133,7 @@
                          // truncate new segment
                      segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processScrollView", log);
                      if (self.track_domains) {
@@ -444,7 +393,7 @@ index da26eb6..2bc572e 100644
                      }
                      add_cly_events({
                          key: internalEventKeyEnums.ACTION,
-@@ -4862,7 +4806,7 @@
+@@ -4862,7 +4864,7 @@
       */
      var get_event_target = function(event) {
          if (!event) {
@@ -453,7 +402,7 @@ index da26eb6..2bc572e 100644
          }
          if (typeof event.target !== "undefined") {
              return event.target;
-@@ -4924,7 +4868,7 @@
+@@ -4924,7 +4926,7 @@
          var device = "desktop";
  
          // regexps corresponding to tablets or phones that can be found in userAgent string
@@ -462,7 +411,7 @@ index da26eb6..2bc572e 100644
          var phoneCheck = /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/;
  
          // check whether the regexp values corresponds to something in the user agent string
-@@ -5009,7 +4953,7 @@
+@@ -5009,7 +5011,7 @@
          return Math.min(
              Math.min(D.body.clientHeight, D.documentElement.clientHeight),
              Math.min(D.body.offsetHeight, D.documentElement.offsetHeight),
@@ -471,7 +420,7 @@ index da26eb6..2bc572e 100644
          );
      }
  
-@@ -5018,13 +4962,13 @@
+@@ -5018,13 +5020,13 @@
       *  @returns {String} device orientation
       */
      function getOrientation() {
@@ -487,7 +436,7 @@ index da26eb6..2bc572e 100644
          var parts = (e.key + "").split("/");
          var key = parts.pop();
          var appKey = parts.pop();
-@@ -5171,7 +5115,7 @@
+@@ -5171,7 +5173,7 @@
      * @return {string} view name
      * */
      Countly.getViewName = function() {
@@ -496,7 +445,7 @@ index da26eb6..2bc572e 100644
      };
  
      /**
-@@ -5179,7 +5123,7 @@
+@@ -5179,7 +5181,7 @@
      * @return {string} view url
      * */
      Countly.getViewUrl = function() {
@@ -505,7 +454,7 @@ index da26eb6..2bc572e 100644
      };
  
      /**
-@@ -5187,7 +5131,7 @@
+@@ -5187,7 +5189,7 @@
      * @return {string} view url
      * */
      Countly.getSearchQuery = function() {
