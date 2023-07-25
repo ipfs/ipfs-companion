@@ -1,15 +1,15 @@
 'use strict'
-import { describe, it, before, beforeEach, after } from 'mocha'
-import sinon from 'sinon'
 import { expect } from 'chai'
-import { URL } from 'url'
+import { beforeEach, describe, it } from 'mocha'
+import sinon from 'sinon'
 import browser from 'sinon-chrome'
-import { initState } from '../../../add-on/src/lib/state.js'
-import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
-import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
+import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
+import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
+import { initState } from '../../../add-on/src/lib/state.js'
+import isMv3TestingEnabled from '../../helpers/is-mv3-testing-enabled.js'
 
 const url2request = (string) => {
   return { url: string, type: 'main_frame' }
@@ -23,6 +23,9 @@ describe('modifyRequest processing of DNSLinks', function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
+    if (isMv3TestingEnabled()) {
+      return this.skip()
+    }
     global.URL = URL
     global.browser = browser
     browser.runtime.id = 'testid'

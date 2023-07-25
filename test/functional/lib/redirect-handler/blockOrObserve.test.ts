@@ -6,6 +6,7 @@ import browserMock from 'sinon-chrome'
 import { optionDefaults } from '../../../../add-on/src/lib/options.js'
 import { addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost, supportsBlock } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
 import { initState } from '../../../../add-on/src/lib/state.js'
+import isMv3TestingEnabled from '../../../helpers/is-mv3-testing-enabled.js'
 import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
 
 const dynamicRulesConditions = (regexFilter) => ({
@@ -54,8 +55,17 @@ describe('lib/redirect-handler/blockOrObserve', () => {
   })
 
   describe('supportsBlock', () => {
-    it('should return true for MV2', () => {
+    it('should return true for MV2', function () {
+      if (isMv3TestingEnabled()) {
+        return this.skip()
+      }
       expect(supportsBlock()).to.be.true
+    })
+    it('should return false for MV3', function () {
+      if (!isMv3TestingEnabled()) {
+        return this.skip()
+      }
+      expect(supportsBlock()).to.be.false
     })
   })
 
