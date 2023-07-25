@@ -1,5 +1,5 @@
 diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
-index da26eb6..620cb3e 100644
+index da26eb6..53c31d0 100644
 --- a/node_modules/countly-sdk-web/lib/countly.js
 +++ b/node_modules/countly-sdk-web/lib/countly.js
 @@ -52,10 +52,22 @@
@@ -255,6 +255,15 @@ index da26eb6..620cb3e 100644
                      var ignoring = false;
                      if (ignoreReferrers && ignoreReferrers.length) {
                          for (var k = 0; k < ignoreReferrers.length; k++) {
+@@ -3907,7 +3919,7 @@
+          * @memberof Countly._internals
+          */
+         function log(level, message) {
+-            if (self.debug && typeof console !== "undefined") {
++            if (typeof console !== "undefined") {
+                 // parse the arguments into a string if it is an object
+                 if (arguments[2] && typeof arguments[2] === "object") {
+                     arguments[2] = JSON.stringify(arguments[2]);
 @@ -3963,72 +3975,62 @@
           */
          function sendXmlHttpRequest(functionName, url, params, callback, useBroadResponseValidator) {
@@ -324,17 +333,17 @@ index da26eb6..620cb3e 100644
 +                    const responseText = await response.text();
 +                    log(
 +                        logLevelEnums.DEBUG,
-+                        `${functionName} HTTP request completed [${this.status}][${responseText}]`
++                        `${functionName} HTTP request completed [${response.status}][${responseText}]`
 +                    );
 +                    // response validation function will be selected to also accept JSON arrays if useBroadResponseValidator is true
 +                    var isResponseValidated;
 +                    if (useBroadResponseValidator) {
 +                        // JSON array/object both can pass
-+                        isResponseValidated = isResponseValidBroad(this.status, responseText);
++                        isResponseValidated = isResponseValidBroad(response.status, responseText);
 +                    }
 +                    else {
 +                        // only JSON object can pass
-+                        isResponseValidated = isResponseValid(this.status, responseText);
++                        isResponseValidated = isResponseValid(response.status, responseText);
 +                    }
 +                    if (isResponseValidated) {
 +                        if (typeof callback === "function") {
@@ -347,7 +356,7 @@ index da26eb6..620cb3e 100644
 -                            }
 +                    }
 +                    else {
-+                        log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed, ", this.status);
++                        log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed, ", response.status);
 +                        if (typeof callback === "function") {
 +                            callback(true, params);
                          }
