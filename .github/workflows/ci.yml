@@ -44,9 +44,9 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js') }}
+            ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
             ${{ runner.os }}-
 
       - name: Restore node_modules
@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v3.2.4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -124,9 +124,9 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js', 'patches/*.patch') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('package*json', 'package-lock.json', '*config.js', 'patches/*.patch') }}
+            ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
             ${{ runner.os }}-
 
       - name: Restore node_modules
@@ -134,7 +134,7 @@ jobs:
         uses: actions/cache@v3.2.4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
