@@ -67,7 +67,6 @@ export default async function init (inQuickImport = false) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
         await handleConsentFromState(state)
-        startSession()
         ipfs = await initIpfsClient(browser, state, inQuickImport)
         trackView('init')
       } catch (err) {
@@ -183,15 +182,6 @@ export default async function init (inQuickImport = false) {
     }
     if (request.telemetry) {
       return Promise.resolve(onTelemetryMessage(request.telemetry))
-    }
-    if (request.request) {
-      return Promise.resolve(onTrackRequest(request.request))
-    }
-  }
-
-  function onTrackRequest(request) {
-    if (request && request.url) {
-      return trackView(request.url, { version: browser.runtime.getManifest().version, type: request.type })
     }
   }
 

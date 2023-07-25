@@ -1,4 +1,3 @@
-import browser from 'webextension-polyfill'
 import MetricsProvider from '@ipfs-shipyard/ignite-metrics/browser-vanilla'
 import PatchedCountly from 'countly-sdk-web'
 import debug from 'debug'
@@ -52,6 +51,3 @@ export function trackView (view: string, segments: Record<string, string>): void
   log('trackView called for view: ', view)
   metricsProvider.trackView(view, ignoredViewsRegex, segments)
 }
-
-export const startSession = (...args: any[]): void => metricsProvider.startSession(...args)
-export const endSession = (...args: any[]): void => metricsProvider.endSession(...args)
