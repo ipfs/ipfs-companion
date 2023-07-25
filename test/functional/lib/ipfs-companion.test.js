@@ -1,7 +1,6 @@
-import { describe, it, before, after } from 'mocha'
 import { expect } from 'chai'
+import { after, before, describe, it } from 'mocha'
 import browser from 'sinon-chrome'
-import AbortController from 'abort-controller'
 import { URL } from 'url'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
 
@@ -10,17 +9,6 @@ import { optionDefaults } from '../../../add-on/src/lib/options.js'
 const init = async () => (await import('../../../add-on/src/lib/ipfs-companion.js')).default()
 
 describe('lib/ipfs-companion.js', function () {
-  before(function () {
-    browser.runtime.id = 'testid'
-    global.browser = browser
-    global.AbortController = AbortController
-    global.chrome = browser
-    global.navigator = {
-      clipboard: {
-        writeText: () => {}
-      }
-    }
-  })
   describe('init', function () {
     before(function () {
       global.localStorage = global.localStorage || {}
@@ -47,12 +35,6 @@ describe('lib/ipfs-companion.js', function () {
   })
 
   describe.skip('onStorageChange()', function () {
-    before(function () {
-      global.window = {}
-      global.browser = browser
-      global.URL = URL
-    })
-
     it('should update ipfs API instance on IPFS API URL change', async function () {
       browser.storage.local.get.resolves(optionDefaults)
       browser.storage.local.set.resolves()
