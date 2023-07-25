@@ -1,5 +1,5 @@
 diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
-index da26eb6..821ca21 100644
+index da26eb6..2bc572e 100644
 --- a/node_modules/countly-sdk-web/lib/countly.js
 +++ b/node_modules/countly-sdk-web/lib/countly.js
 @@ -52,10 +52,22 @@
@@ -321,6 +321,9 @@ index da26eb6..821ca21 100644
 -                var method = "GET";
 -                if (self.force_post || data.length >= 2000) {
 -                    method = "POST";
+-                }
+-                if (method === "GET") {
+-                    xhr.open("GET", url + "?" + data, true);
 +            log(logLevelEnums.DEBUG, "Sending XML HTTP request");
 +            params = params || {};
 +            var data = prepareParams(params);
@@ -337,9 +340,6 @@ index da26eb6..821ca21 100644
 +                    "Content-type": "application/x-www-form-urlencoded",
 +                  })
                  }
--                if (method === "GET") {
--                    xhr.open("GET", url + "?" + data, true);
--                }
 -                else {
 -                    xhr.open("POST", url, true);
 -                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -423,8 +423,11 @@ index da26eb6..821ca21 100644
          }
  
          /**
-@@ -4105,7 +4050,7 @@
-          *
+@@ -4102,10 +4047,9 @@
+         /**
+          *  Get max scroll position
+          *  @memberof Countly._internals
+-         * 
           */
          function processScroll() {
 -            scrollRegistryTopPosition = Math.max(scrollRegistryTopPosition, window.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
@@ -432,7 +435,7 @@ index da26eb6..821ca21 100644
          }
  
          /**
-@@ -4131,7 +4076,7 @@
+@@ -4131,7 +4075,7 @@
                          // truncate new segment
                      segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processScrollView", log);
                      if (self.track_domains) {
@@ -441,7 +444,7 @@ index da26eb6..821ca21 100644
                      }
                      add_cly_events({
                          key: internalEventKeyEnums.ACTION,
-@@ -4862,7 +4807,7 @@
+@@ -4862,7 +4806,7 @@
       */
      var get_event_target = function(event) {
          if (!event) {
@@ -450,7 +453,7 @@ index da26eb6..821ca21 100644
          }
          if (typeof event.target !== "undefined") {
              return event.target;
-@@ -4924,7 +4869,7 @@
+@@ -4924,7 +4868,7 @@
          var device = "desktop";
  
          // regexps corresponding to tablets or phones that can be found in userAgent string
@@ -459,7 +462,7 @@ index da26eb6..821ca21 100644
          var phoneCheck = /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/;
  
          // check whether the regexp values corresponds to something in the user agent string
-@@ -5009,7 +4954,7 @@
+@@ -5009,7 +4953,7 @@
          return Math.min(
              Math.min(D.body.clientHeight, D.documentElement.clientHeight),
              Math.min(D.body.offsetHeight, D.documentElement.offsetHeight),
@@ -468,7 +471,7 @@ index da26eb6..821ca21 100644
          );
      }
  
-@@ -5018,13 +4963,13 @@
+@@ -5018,13 +4962,13 @@
       *  @returns {String} device orientation
       */
      function getOrientation() {
@@ -484,7 +487,7 @@ index da26eb6..821ca21 100644
          var parts = (e.key + "").split("/");
          var key = parts.pop();
          var appKey = parts.pop();
-@@ -5171,7 +5116,7 @@
+@@ -5171,7 +5115,7 @@
      * @return {string} view name
      * */
      Countly.getViewName = function() {
@@ -493,7 +496,7 @@ index da26eb6..821ca21 100644
      };
  
      /**
-@@ -5179,7 +5124,7 @@
+@@ -5179,7 +5123,7 @@
      * @return {string} view url
      * */
      Countly.getViewUrl = function() {
@@ -502,7 +505,7 @@ index da26eb6..821ca21 100644
      };
  
      /**
-@@ -5187,7 +5132,7 @@
+@@ -5187,7 +5131,7 @@
      * @return {string} view url
      * */
      Countly.getSearchQuery = function() {
