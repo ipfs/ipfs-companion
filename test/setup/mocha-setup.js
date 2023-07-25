@@ -3,18 +3,9 @@ import { afterEach } from 'mocha'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
+import isMv3TestingEnabled from '../helpers/is-mv3-testing-enabled.js'
 
-if (process.env.TEST_MV3 !== 'true') {
-  browser.runtime.id = 'testid'
-  global.browser = browser
-  global.AbortController = AbortController
-  global.chrome = browser
-  global.navigator = {
-    clipboard: {
-      writeText: () => {}
-    }
-  }
-} else {
+if (isMv3TestingEnabled()) {
   browser.runtime.id = 'testid'
   global.browser = browser
   global.AbortController = AbortController
@@ -30,4 +21,14 @@ if (process.env.TEST_MV3 !== 'true') {
   afterEach(function () {
     sinonSandbox.resetHistory()
   })
+} else {
+  browser.runtime.id = 'testid'
+  global.browser = browser
+  global.AbortController = AbortController
+  global.chrome = browser
+  global.navigator = {
+    clipboard: {
+      writeText: () => {}
+    }
+  }
 }
