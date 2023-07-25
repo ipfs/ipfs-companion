@@ -11,7 +11,6 @@ const init = async () => (await import('../../../add-on/src/lib/ipfs-companion.j
 describe('lib/ipfs-companion.js', function () {
   describe('init', function () {
     before(function () {
-      global.localStorage = global.localStorage || {}
       global.URL = global.URL || URL
       global.screen = { width: 1024, height: 720 }
       global.addEventListener = () => { }
