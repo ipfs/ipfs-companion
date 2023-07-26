@@ -1,8 +1,8 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
+import browser from 'webextension-polyfill'
 
 /**
  *
@@ -32,7 +32,7 @@ function ruleItem (emit) {
           </dt>
         </dl>
         <div class="flex flex-column rule-delete">
-          <button class="f6 dim br2 ph3 pv2 mb2 mt2 dib white red" onclick=${() => emit('redirectRuleDeleteRequest', id)}>X</button>
+          <button class="f6 ph3 pv2 mt2 mb0 bg-transparent b--none red" onclick=${() => emit('redirectRuleDeleteRequest', id)}>X</button>
         </div>
       </div>
     `
@@ -70,7 +70,9 @@ export default function redirectRuleForm ({ emit, redirectRules }) {
             <button id="deleteAllRules" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${() => emit('redirectRuleDeleteRequest')}>${browser.i18n.getMessage('option_redirect_rules_reset_all')}</button>
           </div>
         </div>
-        ${redirectRules ? redirectRules.map(ruleItem(emit)) : html`<div>Loading...</div>`}
+        <div>
+          ${redirectRules ? redirectRules.map(ruleItem(emit)) : html`<div>Loading...</div>`}
+        </div>
       </fieldset>
     </form>
   `
