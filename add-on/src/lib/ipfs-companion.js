@@ -181,7 +181,7 @@ export default async function init (inQuickImport = false) {
   }
 
   /**
-   * @type {Array<{check: (request: any) => boolean, handler: (request: any, sender?: any) => Promise<any>}>}
+   * @type {Array<import('./message-handler/IMessageHandler.js').IMessageHandler<string>>}
    */
   const runtimeMessageHandlers = [
     {
