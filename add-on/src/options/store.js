@@ -5,7 +5,6 @@ import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
 import { DELETE_RULE_REQUEST_SUCCESS, RULE_REGEX_ENDING, notifyDeleteRule, notifyOptionChange, notifyStateChange } from '../lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../lib/runtime-checks.js'
-import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 // The store contains and mutates the state for the app
 export default function optionStore (state, emitter) {
@@ -32,8 +31,7 @@ export default function optionStore (state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', async () => {
-    handleConsentFromState(state)
-    trackView('options')
+    browser.runtime.sendMessage({ telemetry: { trackView: 'options' } })
     updateStateOptions()
     fetchRedirectRules()
     browser.storage.onChanged.addListener(updateStateOptions)
