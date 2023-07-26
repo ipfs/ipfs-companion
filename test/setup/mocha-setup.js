@@ -1,5 +1,5 @@
 import AbortController from 'abort-controller'
-import { afterEach } from 'mocha'
+import { afterEach, beforeEach } from 'mocha'
 import sinon, { useFakeTimers } from 'sinon'
 import browser from 'sinon-chrome'
 import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
