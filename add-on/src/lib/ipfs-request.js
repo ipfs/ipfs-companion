@@ -3,15 +3,15 @@
 
 import debug from 'debug'
 
-import LRU from 'lru-cache'
-import isIPFS from 'is-ipfs'
 import isFQDN from 'is-fqdn'
+import isIPFS from 'is-ipfs'
+import LRU from 'lru-cache'
+import browser from 'webextension-polyfill'
+import { recoveryPagePath } from './constants.js'
+import { braveNodeType } from './ipfs-client/brave.js'
 import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
-import { braveNodeType } from './ipfs-client/brave.js'
-import { recoveryPagePath } from './constants.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
-import { browser } from 'webextension-polyfill'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -145,10 +145,10 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     async onBeforeRequest (request) {
       const state = getState()
       if (!state.active) return
-      browser.runtime.sendMessage({ type: 'ipfs-companion:request', request: {
-        url: request.url,
-        type: request.type,
-      }})
+      browser.runtime.sendMessage({
+        type: 'ipfs-companion:track-request:url-observed',
+        requestType: request.type
+      })
 
       // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
@@ -156,7 +156,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const publicUri = await ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         return handleRedirection({
           originUrl: request.url,
-          redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}`
+          redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}`,
+          type: request.type
         })
       }
 
@@ -167,7 +168,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
         return handleRedirection({
           originUrl: request.url,
-          redirectUrl
+          redirectUrl,
+          type: request.type
         })
       }
 
@@ -176,7 +178,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const redirectUrl = safeURL(request.url, { useLocalhostName: false }).toString()
         return handleRedirection({
           originUrl: request.url,
-          redirectUrl
+          redirectUrl,
+          type: request.type
         })
       }
 
@@ -483,24 +486,16 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  * @param {object} input contains originUrl and redirectUrl.
  * @returns
  */
-function handleRedirection ({ originUrl, redirectUrl }) {
+function handleRedirection ({ originUrl, redirectUrl, type }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
+    browser.runtime.sendMessage({
+      type: 'ipfs-companion:track-request:url-resolved',
+      requestType: type
+    })
     if (supportsBlock) {
-      browser.runtime.sendMessage({
-        type: 'ipfs-companion:request', request: {
-          url: originUrl,
-          type: 'main_frame'
-        }
-      })
       return { redirectUrl }
     }
 
-    browser.runtime.sendMessage({
-      type: 'ipfs-companion:request', request: {
-        url: originUrl,
-        type: 'main_frame'
-      }
-    })
     // Let browser handle redirection MV3 style.
     addRuleToDynamicRuleSet({ originUrl, redirectUrl })
   }
@@ -555,7 +550,8 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
 
   return handleRedirection({
     originUrl: request.url,
-    redirectUrl
+    redirectUrl,
+    type: request.type
   })
 }
 
@@ -625,7 +621,8 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   if (oldPath !== path && isIPFS.path(path)) {
     return handleRedirection({
       originUrl: request.url,
-      redirectUrl: pathAtHttpGateway(path, pubGwUrl)
+      redirectUrl: pathAtHttpGateway(path, pubGwUrl),
+      type: request.type
     })
   }
   return null
@@ -670,7 +667,9 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
     // (will be redirected later, if needed)
     return handleRedirection({
       originUrl: request.url,
-      redirectUrl: pathAtHttpGateway(path, pubGwUrl)
+      redirectUrl: pathAtHttpGateway(path, pubGwUrl),
+      type: request.type
+
     })
   }
 }
