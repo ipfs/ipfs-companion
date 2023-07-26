@@ -35,16 +35,9 @@ const expectNoRedirect = async (modifyRequest, request, browser) => {
 
 const nodeTypes = ['external']
 const regexRuleEnding = '((?:[^\\.]|$).*)$'
-const sinonSandbox = sinon.createSandbox()
 
 describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
-  // before(function () {
-  //   global.URL = URL
-  //   global.browser = browser
-  //   browser.runtime.id = 'testid'
-  //   browser.runtime.getURL.returns('chrome-extension://testid/')
-  // })
 
   beforeEach(async function () {
     state = Object.assign(initState(optionDefaults), {
@@ -61,7 +54,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       pubSubdomainGwURL: new URL('https://dweb.link')
     })
     const getState = () => state
-    const getIpfs = () => { }
+    const getIpfs = () => {}
     dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
@@ -69,7 +62,6 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
   })
 
   afterEach(async function () {
-    sinonSandbox.reset()
     if (isMv3TestingEnabled) {
       await cleanupRules(true)
     }
@@ -599,7 +591,6 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
 
     it('should present recovery page if node is offline and redirect is enabled', async function () {
       expect(state.nodeActive).to.be.equal(false)
-      state.redirect = true
       const request = url2request('https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
       if (isMv3TestingEnabled) {
         await modifyRequest.onBeforeRequest(request)
@@ -622,7 +613,6 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
       if (isMv3TestingEnabled) {
         await modifyRequest.onBeforeRequest(request)
         const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
-        console.log('args: ', args)
 
         expect(args.addRules[0]).to.deep.equal(generateAddRule(
           args.addRules[0].id,

@@ -35,6 +35,9 @@ const manifestVeresion = isMv3TestingEnabled ? 'MV3' : 'MV2'
 
 describe('lib/redirect-handler/blockOrObserve', () => {
   before(function () {
+    if (!isMv3TestingEnabled) {
+      return this.skip()
+    }
     browserMock.runtime.id = 'testid'
   })
 
@@ -79,8 +82,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
 
     beforeEach(async () => {
       sinonSandbox.restore()
-      browserMock.tabs.query.resetHistory()
-      browserMock.tabs.reload.resetHistory()
       browserMock.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
       // this cleans up the rules from the previous test stored in memory.
       await cleanupRules(true)
@@ -174,7 +175,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
           redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
         })
         sinon.assert.calledWith(browserMock.tabs.query, { url: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org*' })
-        sinon.assert.calledWith(browserMock.tabs.reload, 1234)
+        sinon.assert.calledWith(browserMock.tabs.update, 1234, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' })
       }
     })
   })

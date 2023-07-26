@@ -181,7 +181,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       }
       // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
       if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-        const fix = normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
+        const fix = await normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
         if (fix) {
           return fix
         }
@@ -478,14 +478,14 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  * @param {object} input contains originUrl and redirectUrl.
  * @returns
  */
-function handleRedirection ({ originUrl, redirectUrl }) {
+async function handleRedirection ({ originUrl, redirectUrl }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
     if (supportsBlock()) {
       return { redirectUrl }
     }
 
     // Let browser handle redirection MV3 style.
-    addRuleToDynamicRuleSet({ originUrl, redirectUrl })
+    await addRuleToDynamicRuleSet({ originUrl, redirectUrl })
   }
 }
 
