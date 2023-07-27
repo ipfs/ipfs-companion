@@ -12,7 +12,7 @@ import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrOb
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
-import { ensureCallRedirected } from '../../helpers/mv3-test-helper.js'
+import { ensureCallRedirected, expectNoRedirect } from '../../helpers/mv3-test-helper.js'
 import { spoofDnsTxtRecord } from './dnslink.test.js'
 
 describe('modifyRequest processing', function () {
@@ -355,7 +355,7 @@ describe('modifyRequest processing', function () {
   })
 
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
-  describe('redirect of IPFS resource to local gateway in Brave', function () {
+  describe('redirect of IPFS resource to local gateway in Brave', async function () {
     it('should be redirected if not a subresource (not impacted by Brave Shields)', async function () {
       runtime.isFirefox = false
       runtime.brave = { thisIsFakeBraveRuntime: true }
@@ -365,8 +365,7 @@ describe('modifyRequest processing', function () {
         url: 'https://ipfs.io/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss',
         initiator: 'https://some-website.example.com' // Brave (built on Chromium)
       }
-      expect(await modifyRequest.onBeforeRequest(request))
-        .to.equal(undefined)
+      await expectNoRedirect(modifyRequest, request)
     })
     it('should be left untouched if subresource (would be blocked by Brave Shields)', async function () {
       runtime.isFirefox = false

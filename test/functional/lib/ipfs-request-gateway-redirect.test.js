@@ -232,7 +232,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
 
         // onBeforeRequest should not change anything, as it will trigger false-positive CORS error
-        expect(await modifyRequest.onBeforeRequest(xhrRequest)).to.equal(undefined)
+        ensureRequestUntouched(await modifyRequest.onBeforeRequest(xhrRequest))
 
         ensureCallRedirected({
           modifiedRequestCallResp: await modifyRequest.onHeadersReceived(xhrRequest),
