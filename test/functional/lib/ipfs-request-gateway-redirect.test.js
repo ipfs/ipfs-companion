@@ -83,20 +83,20 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           state.redirect = false
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it(`should be left untouched if redirect is enabled but global active flag is OFF (${nodeType} node)`, async function () {
           state.active = false
           state.redirect = true
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it(`should be left untouched if URL includes opt-out hint (${nodeType} node)`, async function () {
           // A safe way for preloading data at arbitrary gateways - it should arrive at original destination
           const request = url2request('https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect#hashTest')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
           expect(redirectOptOutHint).to.equal('x-ipfs-companion-no-redirect')
         })
         it(`should be left untouched if request is for subresource on a page loaded from URL that includes opt-out hint (${nodeType} node)`, async function () {
@@ -107,18 +107,18 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
             originUrl: 'https://example.com/?x-ipfs-companion-no-redirect#hashTest'
           }
 
-          await expectNoRedirect(modifyRequest, subRequest, browser)
+          await expectNoRedirect(modifyRequest, subRequest)
         })
         it(`should be left untouched if CID is invalid (${nodeType} node)`, async function () {
           const request = url2request('https://google.com/ipfs/notacid?argTest#hashTest')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it(`should be left untouched if its is a HEAD preload with explicit opt-out in URL hash (${nodeType} node)`, async function () {
           // HTTP HEAD is a popular way for preloading data at arbitrary gateways, so we have a dedicated test to make sure it works as expected
           const headRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#x-ipfs-companion-no-redirect', method: 'HEAD' }
 
-          await expectNoRedirect(modifyRequest, headRequest, browser)
+          await expectNoRedirect(modifyRequest, headRequest)
         })
       })
     })
@@ -293,13 +293,13 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           state.redirect = false
           const request = url2request('https://google.com/ipns/ipfs.io?argTest#hashTest')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it(`should be left untouched if FQDN is not a real domain nor a valid CID (${nodeType} node)`, async function () {
           const request = url2request('https://google.com/ipns/notafqdnorcid?argTest#hashTest')
           dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().resolves(false)
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
       })
     })
@@ -396,7 +396,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it('should be left untouched if localhost Gateway is used', async function () {
           const request = url2request('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it('should fix 127.0.0.1 Gateway to localhost', async function () {
           const request = url2request('http://127.0.0.1:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
@@ -436,13 +436,13 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           const request = url2request('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
           request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DDIFF' }]
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it('should be left untouched if [::1] is used', async function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
           const request = url2request('http://[::1]:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          await expectNoRedirect(modifyRequest, request, browser)
+          await expectNoRedirect(modifyRequest, request)
         })
         it('should be redirected to localhost (subdomain in go-ipfs >0.5) if type=main_frame and  127.0.0.1 (path gw) is used un URL', async function () {
           state.redirect = true

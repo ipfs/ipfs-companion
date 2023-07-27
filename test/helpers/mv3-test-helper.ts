@@ -39,13 +39,10 @@ export function ensureRequestUntouched (resp): void {
 }
 
 export async function expectNoRedirect (modifyRequest, request, browser): Promise<void> {
-  if (isManifestV3) {
-    await modifyRequest.onBeforeRequest(request)
-    Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
-    await modifyRequest.onHeadersReceived(request)
-    Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
-  } else {
-    expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
-    expect(await modifyRequest.onHeadersReceived(request)).to.equal(undefined)
-  }
+  await Promise.all([
+    modifyRequest.onBeforeRequest(request),
+    modifyRequest.onHeadersReceived(request)
+  ].map(async (resp) => {
+    await ensureRequestUntouched(await resp)
+  }))
 }
