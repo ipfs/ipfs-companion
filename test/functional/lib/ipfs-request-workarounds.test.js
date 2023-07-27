@@ -12,7 +12,7 @@ import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrOb
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
-import { ensureCallRedirected, expectNoRedirect } from '../../helpers/mv3-test-helper.js'
+import { ensureCallRedirected, ensureNoRedirect } from '../../helpers/mv3-test-helper.js'
 import { spoofDnsTxtRecord } from './dnslink.test.js'
 
 describe('modifyRequest processing', function () {
@@ -365,7 +365,7 @@ describe('modifyRequest processing', function () {
         url: 'https://ipfs.io/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss',
         initiator: 'https://some-website.example.com' // Brave (built on Chromium)
       }
-      await expectNoRedirect(modifyRequest, request)
+      await ensureNoRedirect(modifyRequest, request)
     })
     it('should be left untouched if subresource (would be blocked by Brave Shields)', async function () {
       runtime.isFirefox = false

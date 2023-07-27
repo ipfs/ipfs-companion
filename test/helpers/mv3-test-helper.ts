@@ -38,7 +38,7 @@ export function ensureRequestUntouched (resp): void {
   }
 }
 
-export async function expectNoRedirect (modifyRequest, request, browser): Promise<void> {
+export async function ensureNoRedirect (modifyRequest, request, browser): Promise<void> {
   await Promise.all([
     modifyRequest.onBeforeRequest(request),
     modifyRequest.onHeadersReceived(request)

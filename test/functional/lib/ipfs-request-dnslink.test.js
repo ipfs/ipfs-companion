@@ -10,7 +10,7 @@ import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrOb
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
-import { ensureCallRedirected, ensureRequestUntouched, expectNoRedirect } from '../../helpers/mv3-test-helper.js'
+import { ensureCallRedirected, ensureNoRedirect, ensureRequestUntouched } from '../../helpers/mv3-test-helper.js'
 
 const url2request = (string) => {
   return { url: string, type: 'main_frame' }
@@ -71,7 +71,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
       // onBeforeRequest should not change anything
       // onHeadersReceived should not change anything
-      await expectNoRedirect(modifyRequest, request)
+      await ensureNoRedirect(modifyRequest, request)
     })
     it('should do nothing if dnslink for FQDN is in cache', async function () {
       // stub existence of a positive DNSLink cache hit
@@ -81,7 +81,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
       // onBeforeRequest should not change anything
       // onHeadersReceived should not change anything
-      await expectNoRedirect(modifyRequest, request)
+      await ensureNoRedirect(modifyRequest, request)
     })
     it('should do nothing if DNS TXT record exists and dnslink is in cache', async function () {
       // stub existence of a valid DNS record and cache
@@ -92,7 +92,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
       // onBeforeRequest should not change anything
       // onHeadersReceived should not change anything
-      await expectNoRedirect(modifyRequest, request)
+      await ensureNoRedirect(modifyRequest, request)
     })
     it('should do nothing if DNS TXT record exists and x-ipfs-path is disabled', async function () {
       // enable detection of x-ipfs-path to ensure it is not enough without dnslinkPolicy=detectIpfsPathHeader
@@ -243,7 +243,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       const xhrRequest = { url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
       // onBeforeRequest should not change anything
       // onHeadersReceived should not change anything
-      await expectNoRedirect(modifyRequest, xhrRequest)
+      await ensureNoRedirect(modifyRequest, xhrRequest)
     })
   })
 
@@ -317,7 +317,7 @@ describe('modifyRequest processing of DNSLinks', function () {
         //
         const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
         request.type = 'sub_frame' // we test a subrequest here because main_frame gets early DNSLink preload in onBeforeRequest
-        await expectNoRedirect(modifyRequest, request)
+        await ensureNoRedirect(modifyRequest, request)
       })
       describe('(XHR CORS scenario)', function () {
         // Test makes more sense for dnslinkPolicy=enabled, but we keep it here for completeness
@@ -391,7 +391,7 @@ describe('modifyRequest processing of DNSLinks', function () {
           const xhrRequest = { url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           // onBeforeRequest should not change anything
           // onHeadersReceived should not change anything
-          await expectNoRedirect(modifyRequest, xhrRequest)
+          await ensureNoRedirect(modifyRequest, xhrRequest)
         })
       })
     })
@@ -455,7 +455,7 @@ describe('modifyRequest processing of DNSLinks', function () {
           const xhrRequest = { url: 'https://youtube.com/index.html?argTest#hashTest', type: 'xmlhttprequest', originUrl: 'https://www.nasa.gov/foo.html', requestId: fakeRequestId() }
           // onBeforeRequest should not change anything
           // onHeadersReceived should not change anything
-          await expectNoRedirect(modifyRequest, xhrRequest)
+          await ensureNoRedirect(modifyRequest, xhrRequest)
         })
       })
     })
