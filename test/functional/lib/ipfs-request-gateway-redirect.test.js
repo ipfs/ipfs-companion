@@ -147,20 +147,14 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         runtime.isFirefox = false
         const xhrRequest = { url: 'https://google.com/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest', type: 'xmlhttprequest', initiator: 'https://google.com/' }
 
-        if (isMv3TestingEnabled) {
-          await modifyRequest.onBeforeRequest(xhrRequest)
-          const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
-          expect(args).to.deep.equal({
-            addRules: [generateAddRule(
-              args.addRules[0].id,
-            `${'^https?\\:\\/\\/google\\.com'}${regexRuleEnding}`,
-            'http://127.0.0.1:8080\\1'
-            )],
-            removeRuleIds: []
-          })
-        } else {
-          expect((await modifyRequest.onBeforeRequest(xhrRequest)).redirectUrl).to.equal('http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
-        }
+        ensureCallRedirected({
+          modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
+          MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
+          MV3Expectation: {
+            origin: '^https?\\:\\/\\/google\\.com',
+            destination: 'http://127.0.0.1:8080'
+          }
+        })
       })
       it('should be served from custom gateway if XHR is cross-origin and redirect is enabled in Chromium', async function () {
         runtime.isFirefox = false
