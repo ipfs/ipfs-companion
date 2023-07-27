@@ -6,7 +6,7 @@ import browserMock from 'sinon-chrome'
 import { optionDefaults } from '../../../../add-on/src/lib/options.js'
 import { addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost, supportsBlock } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
 import { initState } from '../../../../add-on/src/lib/state.js'
-import isMv3TestingEnabled, { manifestVersion } from '../../../helpers/is-mv3-testing-enabled.js'
+import isManifestV3, { manifestVersion } from '../../../helpers/is-mv3-testing-enabled.js'
 import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
 
 const dynamicRulesConditions = (regexFilter) => ({
@@ -31,11 +31,11 @@ const dynamicRulesConditions = (regexFilter) => ({
   ]
 })
 
-const manifestVeresion = isMv3TestingEnabled ? 'MV3' : 'MV2'
+const manifestVeresion = isManifestV3 ? 'MV3' : 'MV2'
 
 describe('lib/redirect-handler/blockOrObserve', () => {
   before(function () {
-    if (!isMv3TestingEnabled) {
+    if (!isManifestV3) {
       return this.skip()
     }
     browserMock.runtime.id = 'testid'
@@ -60,8 +60,8 @@ describe('lib/redirect-handler/blockOrObserve', () => {
   })
 
   describe(`supportsBlock on ${manifestVersion}` , () => {
-    it(`should return ${isMv3TestingEnabled ? false : true} for ${manifestVersion}`, function () {
-      if (isMv3TestingEnabled) {
+    it(`should return ${isManifestV3 ? false : true} for ${manifestVersion}`, function () {
+      if (isManifestV3) {
         expect(supportsBlock()).to.be.false
       } else {
         expect(supportsBlock()).to.be.true
@@ -165,7 +165,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
     })
 
     it('Should refresh the tab when redirect URL is added', async () => {
-      if (!isMv3TestingEnabled) {
+      if (!isManifestV3) {
         // TODO
       } else {
 

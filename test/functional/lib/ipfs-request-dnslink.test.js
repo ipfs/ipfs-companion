@@ -10,7 +10,7 @@ import { optionDefaults } from '../../../add-on/src/lib/options.js'
 import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
-import isMv3TestingEnabled from '../../helpers/is-mv3-testing-enabled.js'
+import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
 import { ensureCallRedirected } from '../../helpers/mv3-test-helper.js'
 
 const url2request = (string) => {
@@ -48,7 +48,7 @@ describe('modifyRequest processing of DNSLinks', function () {
   })
 
   afterEach(async function () {
-    if (isMv3TestingEnabled) {
+    if (isManifestV3) {
       await cleanupRules(true)
     }
   })

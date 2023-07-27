@@ -8,10 +8,10 @@ import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
 import { createRequestModifier, redirectOptOutHint } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
-import { cleanupRules, generateAddRule } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
+import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
-import isMv3TestingEnabled, { manifestVersion } from '../../helpers/is-mv3-testing-enabled.js'
+import isManifestV3, { manifestVersion } from '../../helpers/is-mv3-testing-enabled.js'
 import { ensureCallRedirected, ensureRequestUntouched, expectNoRedirect } from '../../helpers/mv3-test-helper.js'
 
 const url2request = (string) => {
@@ -23,7 +23,6 @@ const fakeRequestId = () => {
 }
 
 const nodeTypes = ['external']
-const regexRuleEnding = '((?:[^\\.]|$).*)$'
 
 describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
@@ -51,7 +50,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
   })
 
   afterEach(async function () {
-    if (isMv3TestingEnabled) {
+    if (isManifestV3) {
       await cleanupRules(true)
     }
   })
@@ -388,7 +387,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it('should fix localhost Kubo RPC hostname to IP', async function () {
           const request = url2request('http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (!isMv3TestingEnabled) {
+          if (!isManifestV3) {
             // this is set as a default rule in MV3
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
               .to.equal('http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
@@ -402,7 +401,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
         it('should fix 127.0.0.1 Gateway to localhost', async function () {
           const request = url2request('http://127.0.0.1:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
 
-          if (!isMv3TestingEnabled) {
+          if (!isManifestV3) {
             // this is set as a default rule in MV3.
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
               .to.equal('http://localhost:8080/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/')
@@ -425,7 +424,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           // https://github.com/ipfs/ipfs-companion/issues/291
           const request = url2request('http://localhost:5001/webui')
 
-          if (isMv3TestingEnabled) {
+          if (isManifestV3) {
             sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
           } else {
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
@@ -453,7 +452,7 @@ describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
           const request = url2request(`http://127.0.0.1:8080/ipfs/${cid}?arg=val#hash`)
           request.type = 'main_frame' // explicit
 
-          if (!isMv3TestingEnabled) {
+          if (!isManifestV3) {
             // this is set as a default rule in MV3.
             expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
               .to.equal(`http://localhost:8080/ipfs/${cid}?arg=val#hash`)

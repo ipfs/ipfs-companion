@@ -1,3 +1,3 @@
-const isMv3TestingEnabled = process.env.TEST_MV3 === 'true'
-export const manifestVersion = isMv3TestingEnabled ? 'MV3' : 'MV2'
-export default isMv3TestingEnabled
+const isManifestV3 = process.env.TEST_MV3 === 'true'
+export const manifestVersion = isManifestV3 ? 'MV3' : 'MV2'
+export default isManifestV3

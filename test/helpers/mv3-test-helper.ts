@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import Sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { generateAddRule } from '../../add-on/src/lib/redirect-handler/blockOrObserve'
-import isMv3TestingEnabled from './is-mv3-testing-enabled'
+import isManifestV3 from './is-mv3-testing-enabled'
 
 export const regexRuleEnding = '((?:[^\\.]|$).*)$'
 
@@ -18,7 +18,7 @@ export function ensureCallRedirected ({
     destination: string
   }
 }) {
-  if (isMv3TestingEnabled) {
+  if (isManifestV3) {
     const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
     expect(args.addRules[0]).to.deep.equal(generateAddRule(
       args.addRules[0].id,
@@ -31,7 +31,7 @@ export function ensureCallRedirected ({
 }
 
 export function ensureRequestUntouched (resp): void {
-  if (isMv3TestingEnabled) {
+  if (isManifestV3) {
     Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
   } else {
     expect(resp).to.equal(undefined)
@@ -39,7 +39,7 @@ export function ensureRequestUntouched (resp): void {
 }
 
 export async function expectNoRedirect (modifyRequest, request, browser): Promise<void> {
-  if (isMv3TestingEnabled) {
+  if (isManifestV3) {
     await modifyRequest.onBeforeRequest(request)
     Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
     await modifyRequest.onHeadersReceived(request)
