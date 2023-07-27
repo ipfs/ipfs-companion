@@ -37,3 +37,15 @@ export function ensureRequestUntouched (resp): void {
     expect(resp).to.equal(undefined)
   }
 }
+
+export async function expectNoRedirect (modifyRequest, request, browser): Promise<void> {
+  if (isMv3TestingEnabled) {
+    await modifyRequest.onBeforeRequest(request)
+    Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
+    await modifyRequest.onHeadersReceived(request)
+    Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
+  } else {
+    expect(await modifyRequest.onBeforeRequest(request)).to.equal(undefined)
+    expect(await modifyRequest.onHeadersReceived(request)).to.equal(undefined)
+  }
+}
