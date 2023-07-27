@@ -6,6 +6,15 @@ import isManifestV3 from './is-mv3-testing-enabled'
 
 export const regexRuleEnding = '((?:[^\\.]|$).*)$'
 
+/**
+ * Ensure that the request is redirected
+ *
+ * @param modifiedRequestCallResp - Response from onBeforeRequest or onHeadersReceived
+ * @param MV2Expectation - Expected redirect URL for Manifest V2
+ * @param MV3Expectation - Expected redirect URL for Manifest V3
+ * @param MV3Expectation.origin - Expected origin URL for Manifest V3
+ * @param MV3Expectation.destination - Expected destination URL for Manifest V3
+ */
 export function ensureCallRedirected ({
   modifiedRequestCallResp,
   MV2Expectation,
@@ -17,7 +26,7 @@ export function ensureCallRedirected ({
     origin: string,
     destination: string
   }
-}) {
+}): void {
   if (isManifestV3) {
     const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
     expect(args.addRules[0]).to.deep.equal(generateAddRule(
@@ -30,6 +39,11 @@ export function ensureCallRedirected ({
   }
 }
 
+/**
+ * Ensure that the request is not touched
+ *
+ * @param resp - Response from onBeforeRequest or onHeadersReceived
+ */
 export function ensureRequestUntouched (resp): void {
   if (isManifestV3) {
     Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
@@ -38,7 +52,13 @@ export function ensureRequestUntouched (resp): void {
   }
 }
 
-export async function ensureNoRedirect (modifyRequest, request, browser): Promise<void> {
+/**
+ * Ensure that the request is not redirected
+ *
+ * @param modifyRequest - Request Modifier
+ * @param request - Request to be modified
+ */
+export async function ensureNoRedirect (modifyRequest, request): Promise<void> {
   await Promise.all([
     modifyRequest.onBeforeRequest(request),
     modifyRequest.onHeadersReceived(request)
