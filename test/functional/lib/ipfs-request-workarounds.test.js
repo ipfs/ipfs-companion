@@ -1,6 +1,6 @@
 'use strict'
 import { assert, expect } from 'chai'
-import { after, before, beforeEach, describe, it } from 'mocha'
+import { after, afterEach, before, beforeEach, describe, it } from 'mocha'
 import browser from 'sinon-chrome'
 import { URL } from 'url' // URL implementation with support for .origin attribute
 import createDNSLinkResolver from '../../../add-on/src/lib/dnslink.js'
@@ -8,18 +8,17 @@ import { braveNodeType } from '../../../add-on/src/lib/ipfs-client/brave.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
 import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
+import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import isMv3TestingEnabled from '../../helpers/is-mv3-testing-enabled.js'
+import { ensureCallRedirected } from '../../helpers/mv3-test-helper.js'
 import { spoofDnsTxtRecord } from './dnslink.test.js'
 
 describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   before(function () {
-    if (isMv3TestingEnabled) {
-      return this.skip()
-    }
     global.URL = URL
     global.browser = browser
     browser.runtime.id = 'testid'
@@ -36,6 +35,12 @@ describe('modifyRequest processing', function () {
     modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
   })
 
+  afterEach(async function () {
+    if (isMv3TestingEnabled) {
+      await cleanupRules(true)
+    }
+  })
+
   // Additional handling is required for redirected IPFS subresources on regular HTTPS pages
   // (eg. image embedded from public gateway on HTTPS website)
   describe('a subresource request on HTTPS website', function () {
@@ -48,8 +53,14 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         initiator: 'https://some-website.example.com' // Chromium
       }
-      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
-        .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+        MV2Expectation: `http://127.0.0.1:8080/ipfs/${cid}`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/ipfs\\.io',
+          destination: 'http://127.0.0.1:8080'
+        }
+      })
     })
     it('should be routed to "localhost" gw in Chromium if not a subresource', async function () {
       runtime.isFirefox = false
@@ -59,8 +70,14 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         initiator: 'https://some-website.example.com' // Chromium
       }
-      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
-        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+        MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/ipfs\\.io',
+          destination: 'http://localhost:8080'
+        }
+      })
     })
     it('should be routed to "127.0.0.1" gw to avoid mixed content warning in Firefox', async function () {
       runtime.isFirefox = true
@@ -70,8 +87,14 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         originUrl: 'https://some-website.example.com/some/page.html' // FF only
       }
-      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
-        .to.equal(`http://127.0.0.1:8080/ipfs/${cid}`)
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+        MV2Expectation: `http://127.0.0.1:8080/ipfs/${cid}`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/ipfs\\.io',
+          destination: 'http://127.0.0.1:8080'
+        }
+      })
     })
     it('should be routed to "localhost" gw in Firefox if not a subresource', async function () {
       runtime.isFirefox = true
@@ -81,8 +104,14 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         originUrl: 'https://some-website.example.com/some/page.html' // FF only
       }
-      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
-        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+        MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/ipfs\\.io',
+          destination: 'http://localhost:8080'
+        }
+      })
     })
   })
 
@@ -292,11 +321,11 @@ describe('modifyRequest processing', function () {
         type: 'main_frame',
         url: brokenDNSLinkUrl
       }
-      browser.tabs.update.flush()
+      browser.tabs.update.resetHistory()
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).notCalled)
       await modifyRequest.onCompleted(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).calledOnce)
-      browser.tabs.update.flush()
+      browser.tabs.update.resetHistory()
     })
   })
 
@@ -317,11 +346,11 @@ describe('modifyRequest processing', function () {
         type: 'main_frame',
         url: httpDNSLinkUrl
       }
-      browser.tabs.update.flush()
+      browser.tabs.update.resetHistory()
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: nativeDNSLinkUri }).notCalled)
       await modifyRequest.onBeforeRequest(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: nativeDNSLinkUri }).calledOnce)
-      browser.tabs.update.flush()
+      browser.tabs.update.resetHistory()
     })
   })
 
@@ -349,8 +378,14 @@ describe('modifyRequest processing', function () {
         url: `https://ipfs.io/ipfs/${cid}`,
         initiator: 'https://some-website.example.com' // Brave (built on Chromium)
       }
-      expect((await modifyRequest.onBeforeRequest(request)).redirectUrl)
-        .to.equal(`http://localhost:8080/ipfs/${cid}`)
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+        MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/ipfs\\.io',
+          destination: 'http://localhost:8080'
+        }
+      })
     })
   })
 
