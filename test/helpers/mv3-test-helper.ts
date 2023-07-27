@@ -1,7 +1,8 @@
 import { expect } from 'chai'
-import isMv3TestingEnabled from './is-mv3-testing-enabled'
+import Sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { generateAddRule } from '../../add-on/src/lib/redirect-handler/blockOrObserve'
+import isMv3TestingEnabled from './is-mv3-testing-enabled'
 
 export const regexRuleEnding = '((?:[^\\.]|$).*)$'
 
@@ -26,5 +27,13 @@ export function ensureCallRedirected ({
     ))
   } else {
     expect(modifiedRequestCallResp.redirectUrl).to.equal(MV2Expectation)
+  }
+}
+
+export function ensureRequestUntouched (resp): void {
+  if (isMv3TestingEnabled) {
+    Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
+  } else {
+    expect(resp).to.equal(undefined)
   }
 }
