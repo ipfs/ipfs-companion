@@ -4,19 +4,20 @@ import { trackEvent } from '../telemetry.js'
 
 export class RequestTracker {
   private readonly eventKey: 'url-observed' | 'url-resolved'
-  private readonly flushInterval: number = 1000 * 60 * 5 // 5 minutes
+  private readonly flushInterval: number
   private readonly log: debug.Debugger & { error?: debug.Debugger }
   private lastSync: number = Date.now()
   private requestTypeStore: { [key in browser.WebRequest.ResourceType]?: number } = {}
 
-  constructor (eventKey: 'url-observed' | 'url-resolved') {
+  constructor (eventKey: 'url-observed' | 'url-resolved', flushInterval = 1000 * 60 * 5) {
     this.eventKey = eventKey
     this.log = debug(`ipfs-companion:request-tracker:${eventKey}`)
     this.log.error = debug(`ipfs-companion:request-tracker:${eventKey}:error`)
+    this.flushInterval = flushInterval
     this.setupFlushScheduler()
   }
 
-  async track ({ type }: browser.WebRequest.OnBeforeRequestDetailsType): Promise<any> {
+  track ({ type }: browser.WebRequest.OnBeforeRequestDetailsType): void {
     this.log(`track ${type}`, JSON.stringify(this.requestTypeStore))
     this.requestTypeStore[type] = (this.requestTypeStore[type] ?? 0) + 1
   }
