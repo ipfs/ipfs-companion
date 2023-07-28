@@ -22,8 +22,8 @@ function ruleItem (emit) {
    */
   return function ({ id, origin, target }) {
     return html`
-      <div class="flex-row-ns pb0-ns">
-        <dl>
+      <div class="flex flex-row-ns pb0-ns">
+        <dl class="flex-grow-1">
           <dt>
           <span class="b">${browser.i18n.getMessage('option_redirect_rules_row_origin')}:</span> ${origin}
           </dt>
@@ -31,8 +31,8 @@ function ruleItem (emit) {
           <span class="b">${browser.i18n.getMessage('option_redirect_rules_row_target')}:</span> ${target}
           </dt>
         </dl>
-        <div class="flex flex-column rule-delete">
-          <button class="f6 ph3 pv2 mt2 mb0 bg-transparent b--none red" onclick=${() => emit('redirectRuleDeleteRequest', id)}>X</button>
+        <div class="rule-delete">
+          <button class="f6 ph3 pv2 mt0 mb0 bg-transparent b--none red" onclick=${() => emit('redirectRuleDeleteRequest', id)}>X</button>
         </div>
       </div>
     `
@@ -70,7 +70,7 @@ export default function redirectRuleForm ({ emit, redirectRules }) {
             <button id="deleteAllRules" class="Button transition-all sans-serif v-mid fw5 nowrap lh-copy bn br1 pa2 pointer focus-outline white bg-red white" onclick=${() => emit('redirectRuleDeleteRequest')}>${browser.i18n.getMessage('option_redirect_rules_reset_all')}</button>
           </div>
         </div>
-        <div>
+        <div style="max-height: 250px; overflow-y: auto">
           ${redirectRules ? redirectRules.map(ruleItem(emit)) : html`<div>Loading...</div>`}
         </div>
       </fieldset>
