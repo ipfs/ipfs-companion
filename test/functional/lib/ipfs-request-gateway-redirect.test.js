@@ -24,7 +24,7 @@ const fakeRequestId = () => {
 
 const nodeTypes = ['external']
 
-describe(`[${manifestVersion}] modifyRequest.onBeforeRequest:`, function () {
+describe(`[${manifestVersion}] gateway-redirect:`, function () {
   let state, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
 
   beforeEach(async function () {
