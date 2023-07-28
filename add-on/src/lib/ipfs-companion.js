@@ -8,6 +8,7 @@ import LRU from 'lru-cache'
 import pMemoize from 'p-memoize'
 import toMultiaddr from 'uri-to-multiaddr'
 import browser from 'webextension-polyfill'
+import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway, createContextMenus, findValueForContext } from './context-menus.js'
 import createCopier from './copier.js'
 import createDnslinkResolver from './dnslink.js'
@@ -24,8 +25,6 @@ import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOpti
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
-import { handleConsentFromState, trackView } from '../lib/telemetry.js'
-import RequestTracker from './message-handler/requestTracker.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -173,40 +172,23 @@ export default async function init (inQuickImport = false) {
   // ===================================================================
   // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
 
+  async function onRuntimeMessage (request, sender) {
+    // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
+    if (request.pubGwUrlForIpfsOrIpnsPath) {
+      const path = request.pubGwUrlForIpfsOrIpnsPath
+      const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
+      const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
+      return { pubGwUrlForIpfsOrIpnsPath: result }
+    }
+    if (request.telemetry) {
+      return Promise.resolve(onTelemetryMessage(request.telemetry))
+    }
+  }
+
   function onTelemetryMessage (request) {
     if (request.trackView) {
       const { version } = browser.runtime.getManifest()
       return trackView(request.trackView, { version })
-    }
-  }
-
-  /**
-   * @type {Array<import('./message-handler/IMessageHandler.js').IMessageHandler<string>>}
-   */
-  const runtimeMessageHandlers = [
-    {
-      check: (request) => request.pubGwUrlForIpfsOrIpnsPath,
-      handler: async (request) => {
-        const path = request.pubGwUrlForIpfsOrIpnsPath
-        const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
-        const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
-        return { pubGwUrlForIpfsOrIpnsPath: result }
-      }
-    },
-    {
-      check: (request) => request.telemetry,
-      handler: (request) => Promise.resolve(onTelemetryMessage(request.telemetry))
-    },
-    new RequestTracker('url-observed'),
-    new RequestTracker('url-resolved')
-  ]
-
-  async function onRuntimeMessage (request, sender) {
-    // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
-    try {
-      return await runtimeMessageHandlers.find(({ check }) => check(request))?.handler(request, sender)
-    } catch (error) {
-      log.error('onRuntimeMessage failed', error)
     }
   }
 
