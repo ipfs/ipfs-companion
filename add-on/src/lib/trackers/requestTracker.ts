@@ -7,7 +7,7 @@ export class RequestTracker {
   private readonly flushInterval: number = 1000 * 60 * 5 // 5 minutes
   private readonly log: debug.Debugger & { error?: debug.Debugger }
   private lastSync: number = Date.now()
-  private requestTypeStore: {[key in browser.WebRequest.ResourceType]?: number} = {}
+  private requestTypeStore: { [key in browser.WebRequest.ResourceType]?: number } = {}
 
   constructor (eventKey: 'url-observed' | 'url-resolved') {
     this.eventKey = eventKey
@@ -18,7 +18,7 @@ export class RequestTracker {
 
   async track ({ type }: browser.WebRequest.OnBeforeRequestDetailsType): Promise<any> {
     this.log(`track ${type}`, JSON.stringify(this.requestTypeStore))
-    this.requestTypeStore[type] = (this.requestTypeStore[type] || 0) + 1
+    this.requestTypeStore[type] = (this.requestTypeStore[type] ?? 0) + 1
   }
 
   private flushStore (): void {
