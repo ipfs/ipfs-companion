@@ -7,6 +7,12 @@ import { CompanionState } from '../../types/companion.js'
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
+export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
+export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
+export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
+export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
+
 interface regexFilterMap {
   id: number
   regexSubstitution: string
@@ -17,8 +23,10 @@ interface redirectHandlerInput {
   redirectUrl: string
 }
 
+type messageToSelfType = typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
 interface messageToSelf {
-  type: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE
+  type: messageToSelfType
+  value?: string | Record<string, unknown>
 }
 
 // We need to check if the browser supports the declarativeNetRequest API.
@@ -48,12 +56,16 @@ export async function notifyOptionChange (): Promise<void> {
   return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
 }
 
+export async function notifyDeleteRule (id: number): Promise<void> {
+  return await sendMessageToSelf(DELETE_RULE_REQUEST, id)
+}
+
 /**
  * Sends message to self to notify about change.
  *
  * @param msg
  */
-async function sendMessageToSelf (msg: typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE): Promise<void> {
+async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<void> {
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
   if (!supportsBlock()) {
     const message: messageToSelf = { type: msg }
@@ -123,16 +135,16 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   // We need to escape the characters that are allowed in the URL, but not in the regex.
   const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
   // We need to match the rest of the URL, so we can use a wildcard.
-  const regexEnding = '((?:[^\\.]|$).*)$'
-  let regexFilter = `^${regexFilterFirst}${regexEnding}`.replace(/https?/ig, 'https?')
+  const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
+  let regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
 
   // This method does not parse:
   // originUrl: "https://awesome.ipfs.io/"
   // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
   // that ends up with capturing all urls which we do not want.
-  if (regexFilter === `^https?\\:\\/${regexEnding}`) {
+  if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
     const subdomain = new URL(originUrl).hostname
-    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${regexEnding}`
+    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
     regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
   }
 
@@ -176,17 +188,24 @@ export async function cleanupRules (resetInMemory: boolean = false): Promise<voi
 }
 
 /**
+ * Clean up a rule by ID.
+ *
+ * @param id number
+ */
+async function cleanupRuleById (id: number): Promise<void> {
+  const [{ condition: { regexFilter } }] = await browser.declarativeNetRequest.getDynamicRules({ ruleIds: [id] })
+  savedRegexFilters.delete(regexFilter as string)
+  await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: [id] })
+}
+
+/**
  * This function sets up the listeners for the extension.
  * @param {function} handlerFn
  */
-function setupListeners (handlerFn: () => Promise<void>): void {
-  browser.runtime.onMessage.addListener(async ({ type }: messageToSelf): Promise<void> => {
-    if (type === GLOBAL_STATE_CHANGE) {
-      await handlerFn()
-    }
-    if (type === GLOBAL_STATE_OPTION_CHANGE) {
-      await cleanupRules(true)
-      await handlerFn()
+function setupListeners (handlers: Record<messageToSelfType, (value: any) => Promise<void>>): void {
+  browser.runtime.onMessage.addListener(async ({ message: { type, value } }: { message: messageToSelf }): Promise<void> => {
+    if (type in handlers) {
+      await handlers[type](value)
     }
   })
 }
@@ -358,7 +377,23 @@ export function addRuleToDynamicRuleSetGenerator (
       )
     }
 
-    setupListeners(async (): Promise<void> => await reconcileRulesAndRemoveOld(getState()))
+    setupListeners({
+      [GLOBAL_STATE_CHANGE]: async (): Promise<void> => {
+        await reconcileRulesAndRemoveOld(getState())
+      },
+      [GLOBAL_STATE_OPTION_CHANGE]: async (): Promise<void> => {
+        await cleanupRules(true)
+        await reconcileRulesAndRemoveOld(getState())
+      },
+      [DELETE_RULE_REQUEST]: async (value: number): Promise<void> => {
+        if (value != null) {
+          await cleanupRuleById(value)
+          await browser.runtime.sendMessage({ type: DELETE_RULE_REQUEST_SUCCESS })
+        } else {
+          await cleanupRules(true)
+        }
+      }
+    })
     // call to reconcile rules and remove old ones.
     await reconcileRulesAndRemoveOld(state)
   }

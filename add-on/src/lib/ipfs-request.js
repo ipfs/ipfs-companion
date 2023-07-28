@@ -3,14 +3,15 @@
 
 import debug from 'debug'
 
-import LRU from 'lru-cache'
-import isIPFS from 'is-ipfs'
 import isFQDN from 'is-fqdn'
+import isIPFS from 'is-ipfs'
+import LRU from 'lru-cache'
+import { recoveryPagePath } from './constants.js'
+import { braveNodeType } from './ipfs-client/brave.js'
 import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
-import { braveNodeType } from './ipfs-client/brave.js'
-import { recoveryPagePath } from './constants.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { RequestTracker } from './trackers/requestTracker.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -32,6 +33,8 @@ const recoverableHttpError = (code) => code && code >= 400
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
 let addRuleToDynamicRuleSet = null
+const observedRequestTracker = new RequestTracker('url-observed')
+const resolvedRequestTracker = new RequestTracker('url-resolved')
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
@@ -144,6 +147,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     async onBeforeRequest (request) {
       const state = getState()
       if (!state.active) return
+      observedRequestTracker.track(request)
 
       // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
@@ -151,7 +155,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const publicUri = await ipfsPathValidator.resolveToPublicUrl(request.url, state.pubGwURLString)
         return handleRedirection({
           originUrl: request.url,
-          redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}`
+          redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}`,
+          request
         })
       }
 
@@ -162,7 +167,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const redirectUrl = safeURL(request.url, { useLocalhostName: state.useSubdomains }).toString()
         return handleRedirection({
           originUrl: request.url,
-          redirectUrl
+          redirectUrl,
+          request
         })
       }
 
@@ -171,7 +177,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const redirectUrl = safeURL(request.url, { useLocalhostName: false }).toString()
         return handleRedirection({
           originUrl: request.url,
-          redirectUrl
+          redirectUrl,
+          request
         })
       }
 
@@ -480,6 +487,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  */
 async function handleRedirection ({ originUrl, redirectUrl }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
+    resolvedRequestTracker.track(request)
     if (supportsBlock()) {
       return { redirectUrl }
     }
@@ -538,7 +546,8 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
 
   return handleRedirection({
     originUrl: request.url,
-    redirectUrl
+    redirectUrl,
+    request
   })
 }
 
@@ -608,7 +617,8 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   if (oldPath !== path && isIPFS.path(path)) {
     return handleRedirection({
       originUrl: request.url,
-      redirectUrl: pathAtHttpGateway(path, pubGwUrl)
+      redirectUrl: pathAtHttpGateway(path, pubGwUrl),
+      request
     })
   }
   return null
@@ -653,7 +663,9 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
     // (will be redirected later, if needed)
     return handleRedirection({
       originUrl: request.url,
-      redirectUrl: pathAtHttpGateway(path, pubGwUrl)
+      redirectUrl: pathAtHttpGateway(path, pubGwUrl),
+      request
+
     })
   }
 }
