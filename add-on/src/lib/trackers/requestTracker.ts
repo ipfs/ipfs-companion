@@ -1,4 +1,5 @@
 import debug from 'debug'
+import type browser from 'webextension-polyfill'
 import { trackEvent } from '../telemetry.js'
 
 export class RequestTracker {
@@ -6,7 +7,7 @@ export class RequestTracker {
   private readonly flushInterval: number = 1000 * 60 * 5 // 5 minutes
   private readonly log: debug.Debugger & { error?: debug.Debugger }
   private lastSync: number = Date.now()
-  private requestTypeStore: Record<string, number> = {}
+  private requestTypeStore: {[key in browser.WebRequest.ResourceType]?: number} = {}
 
   constructor (eventKey: 'url-observed' | 'url-resolved') {
     this.eventKey = eventKey
@@ -15,15 +16,13 @@ export class RequestTracker {
     this.setupFlushScheduler()
   }
 
-  async track ({ type }: { type: string }): Promise<any> {
+  async track ({ type }: browser.WebRequest.OnBeforeRequestDetailsType): Promise<any> {
     this.log(`track ${type}`, JSON.stringify(this.requestTypeStore))
-    if (!(type in this.requestTypeStore)) {
-      this.requestTypeStore[type] = 0
-    }
-    this.requestTypeStore[type] += 1
+    this.requestTypeStore[type] = (this.requestTypeStore[type] || 0) + 1
   }
 
   private flushStore (): void {
+    this.log('flushing')
     const count = Object.values(this.requestTypeStore).reduce((a, b): number => a + b, 0)
     if (count === 0) {
       this.log('nothing to flush')

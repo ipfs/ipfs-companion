@@ -9,9 +9,9 @@ import LRU from 'lru-cache'
 import { recoveryPagePath } from './constants.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
-import { RequestTracker } from './trackers/requestTracker.js'
 import { safeURL } from './options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { RequestTracker } from './trackers/requestTracker.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -156,7 +156,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         return handleRedirection({
           originUrl: request.url,
           redirectUrl: `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(publicUri)}`,
-          type: request.type
+          request
         })
       }
 
@@ -168,7 +168,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         return handleRedirection({
           originUrl: request.url,
           redirectUrl,
-          type: request.type
+          request
         })
       }
 
@@ -178,7 +178,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         return handleRedirection({
           originUrl: request.url,
           redirectUrl,
-          type: request.type
+          request
         })
       }
 
@@ -485,9 +485,9 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  * @param {object} input contains originUrl and redirectUrl.
  * @returns
  */
-function handleRedirection ({ originUrl, redirectUrl, type }) {
+function handleRedirection ({ originUrl, redirectUrl, request }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
-    resolvedRequestTracker.track({ type })
+    resolvedRequestTracker.track(request)
     if (supportsBlock) {
       return { redirectUrl }
     }
@@ -547,7 +547,7 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
   return handleRedirection({
     originUrl: request.url,
     redirectUrl,
-    type: request.type
+    request
   })
 }
 
@@ -618,7 +618,7 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
     return handleRedirection({
       originUrl: request.url,
       redirectUrl: pathAtHttpGateway(path, pubGwUrl),
-      type: request.type
+      request
     })
   }
   return null
@@ -664,7 +664,7 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
     return handleRedirection({
       originUrl: request.url,
       redirectUrl: pathAtHttpGateway(path, pubGwUrl),
-      type: request.type
+      request
 
     })
   }
