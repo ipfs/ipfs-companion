@@ -6,10 +6,10 @@ import debug from 'debug'
 import isFQDN from 'is-fqdn'
 import isIPFS from 'is-ipfs'
 import LRU from 'lru-cache'
-import browser from 'webextension-polyfill'
 import { recoveryPagePath } from './constants.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
+import { RequestTracker } from './trackers/requestTracker.js'
 import { safeURL } from './options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
 
@@ -33,6 +33,8 @@ const recoverableHttpError = (code) => code && code >= 400
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
 let addRuleToDynamicRuleSet = null
+const observedRequestTracker = new RequestTracker('url-observed')
+const resolvedRequestTracker = new RequestTracker('url-resolved')
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
@@ -145,10 +147,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     async onBeforeRequest (request) {
       const state = getState()
       if (!state.active) return
-      browser.runtime.sendMessage({
-        type: 'ipfs-companion:track-request:url-observed',
-        requestType: request.type
-      })
+      observedRequestTracker.track(request)
 
       // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
@@ -488,10 +487,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  */
 function handleRedirection ({ originUrl, redirectUrl, type }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
-    browser.runtime.sendMessage({
-      type: 'ipfs-companion:track-request:url-resolved',
-      requestType: type
-    })
+    resolvedRequestTracker.track({ type })
     if (supportsBlock) {
       return { redirectUrl }
     }
