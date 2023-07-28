@@ -8,6 +8,7 @@ import LRU from 'lru-cache'
 import pMemoize from 'p-memoize'
 import toMultiaddr from 'uri-to-multiaddr'
 import browser from 'webextension-polyfill'
+import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway, createContextMenus, findValueForContext } from './context-menus.js'
 import createCopier from './copier.js'
 import createDnslinkResolver from './dnslink.js'
@@ -24,7 +25,6 @@ import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOpti
 import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
-import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
