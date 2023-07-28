@@ -92,4 +92,9 @@ input:invalid {
 input.brave {
   background-color: #f7f8fa;
 }
-
+div.rule-delete {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  max-width: 50px;
+}
