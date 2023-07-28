@@ -5,7 +5,7 @@ import PatchedCountly from 'countly-sdk-web'
 import { RequestTracker } from './../../../../add-on/src/lib/trackers/requestTracker.js'
 
 const sinonSandBox = sinon.createSandbox()
-describe.only('lib/trackers/requestTracker', () => {
+describe('lib/trackers/requestTracker', () => {
 
   let requestTracker: RequestTracker
   let countlySDKStub: sinon.SinonStub
