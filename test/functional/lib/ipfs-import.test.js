@@ -30,13 +30,4 @@ describe('ipfs-import.js', function () {
       expect(formatImportDirectory(path)).to.equal('/ipfs-companion-imports/2017-11-05_120101/')
     })
   })
-  // TODO: complete tests
-  // describe('openFilesAtWebUI', function () {
-  // })
-  //
-  // describe('openFilesAtGateway', function () {
-  // })
-  //
-  // describe('importFiles', function () {
-  // })
 })
