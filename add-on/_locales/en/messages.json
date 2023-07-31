@@ -770,5 +770,29 @@
   "recovery_page_update_preferences": {
     "message": "Update your IPFS Companion preferences",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "request_permissions_page_title": {
+    "message": "Grant Host Permissions | IPFS Companion",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "request_permissions_page_sub_header": {
+    "message": "IPFS Companion needs additional permissions :(",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
+  "request_permissions_page_message_p1": {
+    "message": "Host permissions are required to access the web requests and interact with the IPFS web.",
+    "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
+  },
+  "request_permissions_page_message_p2": {
+    "message": "Host permissions (permission to access data on all websites) are a new addition to the WebExtensions API, your browser considers it as an optional permission by default. IPFS companion needs this permission to intercept all web requests and modify those accordingly. Please click the button below to grant the required permissions.",
+    "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
+  },
+  "request_permissions_page_button": {
+    "message": "Grant Host Permissions",
+    "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "request_permissions_page_learn_more": {
+    "message": "Learn more about host permissions",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }
