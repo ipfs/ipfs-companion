@@ -4,6 +4,7 @@ import debug from 'debug'
 import { WebExtensionStorageProvider } from './storage-provider/WebExtensionStorageProvider.js'
 import { CompanionState } from '../types/companion.js'
 import { consentTypes } from '@ipfs-shipyard/ignite-metrics'
+import type { CountlyEvent } from 'countly-web-sdk'
 
 const log = debug('ipfs-companion:telemetry')
 
@@ -50,4 +51,15 @@ const ignoredViewsRegex: RegExp[] = []
 export function trackView (view: string, segments: Record<string, string>): void {
   log('trackView called for view: ', view)
   metricsProvider.trackView(view, ignoredViewsRegex, segments)
+}
+
+/**
+ * TrackView is a wrapper around ignite-metrics trackView
+ *
+ * @param event
+ * @param segments
+ */
+export function trackEvent (event: CountlyEvent): void {
+  log('trackEvent called for event: ', event)
+  metricsProvider.trackEvent(event)
 }

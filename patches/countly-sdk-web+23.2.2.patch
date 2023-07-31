@@ -1,5 +1,5 @@
 diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
-index da26eb6..53c31d0 100644
+index da26eb6..0bf0ec8 100644
 --- a/node_modules/countly-sdk-web/lib/countly.js
 +++ b/node_modules/countly-sdk-web/lib/countly.js
 @@ -52,10 +52,22 @@
@@ -27,7 +27,7 @@ index da26eb6..53c31d0 100644
          // TODO: check if logging can be added here, like:
          // console.error("Not running in browser");
          return;
-@@ -347,12 +359,12 @@
+@@ -347,23 +359,16 @@
  
              checkIgnore();
  
@@ -39,11 +39,23 @@ index da26eb6..53c31d0 100644
                  }
                  catch (ex) {
 -                    log(logLevelEnums.ERROR, "initialize, Could not parse name: " + window.name + ", error: " + ex);
+-                }
+-            }
+-            else if (location.hash && location.hash.indexOf("#cly:") === 0) {
+-                try {
+-                    this.passed_data = JSON.parse(location.hash.replace("#cly:", ""));
+-                }
+-                catch (ex) {
+-                    log(logLevelEnums.ERROR, "initialize, Could not parse hash: " + location.hash + ", error: " + ex);
 +                    log(logLevelEnums.ERROR, "initialize, Could not parse name: " + globalThis.name + ", error: " + ex);
                  }
              }
-             else if (location.hash && location.hash.indexOf("#cly:") === 0) {
-@@ -1028,7 +1040,7 @@
+ 
++
+             if ((this.passed_data && this.passed_data.app_key && this.passed_data.app_key === this.app_key) || (this.passed_data && !this.passed_data.app_key && global)) {
+                 if (this.passed_data.token && this.passed_data.purpose) {
+                     if (this.passed_data.token !== getValueFromStorage("cly_old_token")) {
+@@ -1028,7 +1033,7 @@
                      if (this.enableOrientationTracking) {
                          // report orientation
                          this.report_orientation();
@@ -52,7 +64,7 @@ index da26eb6..53c31d0 100644
                              self.report_orientation();
                          });
                      }
-@@ -1618,11 +1630,11 @@
+@@ -1618,11 +1623,11 @@
              log(logLevelEnums.INFO, "track_errors, Started tracking errors");
              // Indicated that for this instance of the countly error tracking is enabled
              Countly.i[this.app_key].tracking_crashes = true;
@@ -67,7 +79,7 @@ index da26eb6..53c31d0 100644
                      // old browsers like IE 10 and Safari 9 won't give this value 'err' to us, but if it is provided we can trigger error recording immediately
                      if (err !== undefined && err !== null) {
                          // false indicates fatal error (as in non_fatal:false)
-@@ -1630,7 +1642,7 @@
+@@ -1630,7 +1635,7 @@
                      }
                      // fallback if no error object is present for older browsers, we create it instead
                      else {
@@ -76,7 +88,7 @@ index da26eb6..53c31d0 100644
                          var error = "";
                          if (typeof msg !== "undefined") {
                              error += msg + "\n";
-@@ -1666,7 +1678,7 @@
+@@ -1666,7 +1671,7 @@
                  };
  
                  // error handling for 'uncaught rejections'
@@ -85,7 +97,7 @@ index da26eb6..53c31d0 100644
                      // true indicates non fatal error (as in non_fatal: true)
                      dispatchErrors(new Error("Unhandled rejection (reason: " + (event.reason && event.reason.stack ? event.reason.stack : event.reason) + ")."), true);
                  });
-@@ -1909,13 +1921,13 @@
+@@ -1909,13 +1914,13 @@
              this.begin_session();
              this.start_time();
              // end session on unload
@@ -101,7 +113,7 @@ index da26eb6..53c31d0 100644
              var hidden = "hidden";
  
              /**
-@@ -1931,17 +1943,17 @@
+@@ -1931,17 +1936,17 @@
              }
  
              // add focus handling eventListeners
@@ -125,7 +137,7 @@ index da26eb6..53c31d0 100644
              }
  
              // Page Visibility API for changing tabs and minimizing browser
-@@ -1971,10 +1983,10 @@
+@@ -1971,10 +1976,10 @@
                  inactivityCounter = 0;
              }
  
@@ -140,7 +152,7 @@ index da26eb6..53c31d0 100644
  
              // track user inactivity
              setInterval(function() {
-@@ -2048,7 +2060,7 @@
+@@ -2048,7 +2053,7 @@
              // truncate new segment
              segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "track_pageview", log);
              if (this.track_domains) {
@@ -149,7 +161,7 @@ index da26eb6..53c31d0 100644
              }
  
              if (useSessionCookie) {
-@@ -2071,7 +2083,7 @@
+@@ -2071,7 +2076,7 @@
              else if (typeof document.referrer !== "undefined" && document.referrer.length) {
                  var matches = urlParseRE.exec(document.referrer);
                  // do not report referrers of current website
@@ -158,7 +170,7 @@ index da26eb6..53c31d0 100644
                      segments.start = 1;
                  }
              }
-@@ -2147,7 +2159,7 @@
+@@ -2147,7 +2152,7 @@
                              // truncate new segment
                              segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processClick", log);
                              if (self.track_domains) {
@@ -167,7 +179,7 @@ index da26eb6..53c31d0 100644
                              }
                              add_cly_events({
                                  key: internalEventKeyEnums.ACTION,
-@@ -2173,7 +2185,7 @@
+@@ -2173,7 +2178,7 @@
              if (parent) {
                  log(logLevelEnums.INFO, "track_scrolls, Tracking the specified children");
              }
@@ -176,7 +188,7 @@ index da26eb6..53c31d0 100644
              isScrollRegistryOpen = true;
              trackingScrolls = true;
  
-@@ -2813,8 +2825,8 @@
+@@ -2813,8 +2818,8 @@
                                  else {
                                      var pages = widgets[i].target_pages;
                                      for (var k = 0; k < pages.length; k++) {
@@ -187,7 +199,7 @@ index da26eb6..53c31d0 100644
                                          var isContainAsterisk = pages[k].includes("*");
                                          if (((isContainAsterisk && isWildcardMatched) || isFullPathMatched) && !widgets[i].hide_sticker) {
                                              processWidget(widgets[i], true);
-@@ -3048,7 +3060,7 @@
+@@ -3048,7 +3053,7 @@
                      return;
                  }
  
@@ -196,7 +208,7 @@ index da26eb6..53c31d0 100644
                  var feedbackWidgetFamily;
  
                  // set feedback widget family as ratings and load related style file when type is ratings
-@@ -3170,7 +3182,7 @@
+@@ -3170,7 +3175,7 @@
                  wrapper.appendChild(iframe);
                  log(logLevelEnums.DEBUG, "present_feedback_widget, Appended the iframe");
  
@@ -205,7 +217,7 @@ index da26eb6..53c31d0 100644
                      var data = {};
                      try {
                          data = JSON.parse(e.data);
-@@ -3249,9 +3261,9 @@
+@@ -3249,9 +3254,9 @@
                          break;
  
                      case "onScrollHalfwayDown":
@@ -217,7 +229,7 @@ index da26eb6..53c31d0 100644
                                  var documentHeight = getDocHeight();
                                  if (scrollY >= (documentHeight / 2)) {
                                      surveyShown = true;
-@@ -3841,13 +3853,13 @@
+@@ -3841,13 +3846,13 @@
                  var height = (screen.height) ? parseInt(screen.height) : 0;
                  if (width !== 0 && height !== 0) {
                      var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
@@ -235,7 +247,7 @@ index da26eb6..53c31d0 100644
                              // we have landscape orientation
                              // switch values for all except ios
                              var temp = width;
-@@ -3860,8 +3872,8 @@
+@@ -3860,8 +3865,8 @@
              }
  
              // getting density ratio
@@ -246,7 +258,7 @@ index da26eb6..53c31d0 100644
              }
  
              // getting locale
-@@ -3873,7 +3885,7 @@
+@@ -3873,7 +3878,7 @@
              if (typeof document.referrer !== "undefined" && document.referrer.length) {
                  var matches = urlParseRE.exec(document.referrer);
                  // do not report referrers of current website
@@ -255,7 +267,7 @@ index da26eb6..53c31d0 100644
                      var ignoring = false;
                      if (ignoreReferrers && ignoreReferrers.length) {
                          for (var k = 0; k < ignoreReferrers.length; k++) {
-@@ -3907,7 +3919,7 @@
+@@ -3907,7 +3912,7 @@
           * @memberof Countly._internals
           */
          function log(level, message) {
@@ -264,7 +276,7 @@ index da26eb6..53c31d0 100644
                  // parse the arguments into a string if it is an object
                  if (arguments[2] && typeof arguments[2] === "object") {
                      arguments[2] = JSON.stringify(arguments[2]);
-@@ -3963,72 +3975,62 @@
+@@ -3963,72 +3968,62 @@
           */
          function sendXmlHttpRequest(functionName, url, params, callback, useBroadResponseValidator) {
              useBroadResponseValidator = useBroadResponseValidator || false;
@@ -364,12 +376,12 @@ index da26eb6..53c31d0 100644
 -                };
 -                if (method === "GET") {
 -                    xhr.send();
+-                }
+-                else {
+-                    xhr.send(data);
 +                } else {
 +                    throw new Error(response.statusText);
                  }
--                else {
--                    xhr.send(data);
--                }
 -            }
 -            catch (e) {
 +            }).catch(function (e) {
@@ -384,7 +396,7 @@ index da26eb6..53c31d0 100644
          }
  
          /**
-@@ -4105,7 +4107,7 @@
+@@ -4105,7 +4100,7 @@
           *
           */
          function processScroll() {
@@ -393,7 +405,7 @@ index da26eb6..53c31d0 100644
          }
  
          /**
-@@ -4131,7 +4133,7 @@
+@@ -4131,7 +4126,7 @@
                          // truncate new segment
                      segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processScrollView", log);
                      if (self.track_domains) {
@@ -402,7 +414,7 @@ index da26eb6..53c31d0 100644
                      }
                      add_cly_events({
                          key: internalEventKeyEnums.ACTION,
-@@ -4862,7 +4864,7 @@
+@@ -4862,7 +4857,7 @@
       */
      var get_event_target = function(event) {
          if (!event) {
@@ -411,7 +423,7 @@ index da26eb6..53c31d0 100644
          }
          if (typeof event.target !== "undefined") {
              return event.target;
-@@ -4924,7 +4926,7 @@
+@@ -4924,7 +4919,7 @@
          var device = "desktop";
  
          // regexps corresponding to tablets or phones that can be found in userAgent string
@@ -420,7 +432,7 @@ index da26eb6..53c31d0 100644
          var phoneCheck = /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/;
  
          // check whether the regexp values corresponds to something in the user agent string
-@@ -5009,7 +5011,7 @@
+@@ -5009,7 +5004,7 @@
          return Math.min(
              Math.min(D.body.clientHeight, D.documentElement.clientHeight),
              Math.min(D.body.offsetHeight, D.documentElement.offsetHeight),
@@ -429,7 +441,7 @@ index da26eb6..53c31d0 100644
          );
      }
  
-@@ -5018,13 +5020,13 @@
+@@ -5018,22 +5013,9 @@
       *  @returns {String} device orientation
       */
      function getOrientation() {
@@ -437,15 +449,23 @@ index da26eb6..53c31d0 100644
 +        return globalThis.innerWidth > globalThis.innerHeight ? "landscape" : "portrait";
      }
  
-     /**
-      *  Monitor parallel storage changes like other opened tabs
-      */
+-    /**
+-     *  Monitor parallel storage changes like other opened tabs
+-     */
 -    window.addEventListener("storage", function(e) {
-+    globalThis.addEventListener("storage", function(e) {
-         var parts = (e.key + "").split("/");
-         var key = parts.pop();
-         var appKey = parts.pop();
-@@ -5171,7 +5173,7 @@
+-        var parts = (e.key + "").split("/");
+-        var key = parts.pop();
+-        var appKey = parts.pop();
+-
+-        if (Countly.i && Countly.i[appKey]) {
+-            Countly.i[appKey].onStorageChange(key, e.newValue);
+-        }
+-    });
+-
+     /**
+      *  Load external js files
+      *  @param {String} tag - Tag/node name to load file in
+@@ -5171,7 +5153,7 @@
      * @return {string} view name
      * */
      Countly.getViewName = function() {
@@ -454,7 +474,7 @@ index da26eb6..53c31d0 100644
      };
  
      /**
-@@ -5179,7 +5181,7 @@
+@@ -5179,7 +5161,7 @@
      * @return {string} view url
      * */
      Countly.getViewUrl = function() {
@@ -463,12 +483,12 @@ index da26eb6..53c31d0 100644
      };
  
      /**
-@@ -5187,7 +5189,7 @@
+@@ -5187,7 +5169,7 @@
      * @return {string} view url
      * */
      Countly.getSearchQuery = function() {
 -        return window.location.search;
-+        return globalThis.location.search;
++        return '';
      };
  
      /**

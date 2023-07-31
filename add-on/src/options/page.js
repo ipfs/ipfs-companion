@@ -11,6 +11,8 @@ import apiForm from './forms/api-form.js'
 import experimentsForm from './forms/experiments-form.js'
 import telemetryForm from './forms/telemetry-form.js'
 import resetForm from './forms/reset-form.js'
+import redirectRuleForm from './forms/redirect-rule-form.js'
+import { supportsBlock } from '../lib/redirect-handler/blockOrObserve.js'
 
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -112,6 +114,12 @@ export default function optionsPage (state, emit) {
   })}
   ${resetForm({
     onOptionsReset
+  })}
+  ${supportsBlock
+      ? ''
+      : redirectRuleForm({
+    redirectRules: state.redirectRules,
+    emit
   })}
     </div>
   `

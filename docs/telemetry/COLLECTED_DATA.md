@@ -17,7 +17,7 @@ Telemetry is sent to Countly instance at `countly.ipfs.tech`. You can read how t
 As a general rule, we collect only application data; no user data. Some examples of application data we collect are:
 
 | Metric data name    | Metric feature name | Metric trigger                                          | Analytics use                                                     | Notes         |
-|:-------------------:|---------------------|---------------------------------------------------------|-------------------------------------------------------------------|---------------|                                                  |               |
+|:-------------------:|---------------------|---------------------------------------------------------|-------------------------------------------------------------------|---------------|
 | view:welcome        | views               | When the welcome view is shown                          | View count                                                        |               |
 | view:options        | views               | When the options view is shown                          | View count                                                        |               |
 | view:quick-import   | views               | When the quick-import view is shown                     | View count                                                        |               |
