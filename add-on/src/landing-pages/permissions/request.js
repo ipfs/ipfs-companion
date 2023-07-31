@@ -3,7 +3,7 @@
 
 import choo from 'choo'
 import html from 'choo/html/index.js'
-import { i18n, runtime } from 'webextension-polyfill'
+import { i18n, runtime, permissions } from 'webextension-polyfill'
 import { nodeOffSvg } from '../welcome/page.js'
 import createWelcomePageStore from '../welcome/store.js'
 import { optionsPage } from '../../lib/constants.js'
@@ -18,11 +18,11 @@ const optionsPageLink = html`<a class="navy link underline-under hover-aqua" id=
 // TODO (whizzzkid): refactor base store to be more generic.
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
-app.route('*', (state) => {
-  browser.runtime.sendMessage({ telemetry: { trackView: 'request-permissions' } })
+app.route('*', () => {
+  runtime.sendMessage({ telemetry: { trackView: 'request-permissions' } })
   const requestPermission = async () => {
-    await browser.permissions.request({ origins: ['<all_urls>'] })
-    browser.runtime.reload()
+    await permissions.request({ origins: ['<all_urls>'] })
+    runtime.reload()
   }
 
   return html`<div class="flex flex-column flex-row-l">
