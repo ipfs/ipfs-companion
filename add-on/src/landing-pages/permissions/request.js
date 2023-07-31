@@ -19,7 +19,7 @@ const optionsPageLink = html`<a class="navy link underline-under hover-aqua" id=
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
 app.route('*', (state) => {
-  browser.runtime.sendMessage({ telemetry: { trackView: 'recovery' } })
+  browser.runtime.sendMessage({ telemetry: { trackView: 'request-permissions' } })
   const requestPermission = async () => {
     await browser.permissions.request({ origins: ['<all_urls>'] })
     browser.runtime.reload()
