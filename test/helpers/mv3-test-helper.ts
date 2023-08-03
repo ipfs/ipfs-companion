@@ -53,16 +53,15 @@ export function ensureRequestUntouched (resp): void {
 }
 
 /**
- * Ensure that the request is not redirected
+ * Execute webRequest stages in order and ensure that the request
+ * is not redirected by any of them
  *
  * @param modifyRequest - Request Modifier
  * @param request - Request to be modified
  */
 export async function ensureNoRedirect (modifyRequest, request): Promise<void> {
-  await Promise.all([
-    modifyRequest.onBeforeRequest(request),
-    modifyRequest.onHeadersReceived(request)
-  ].map(async (resp) => {
-    await ensureRequestUntouched(await resp)
-  }))
+  // check webRequest stages sequentially in the same order a browser would
+  // (each stage may modify state and must be inspected idependently, in order)
+  await ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
+  await ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
 }
