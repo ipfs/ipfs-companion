@@ -786,5 +786,29 @@
   "recovery_page_update_preferences": {
     "message": "Update your IPFS Companion preferences",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "request_permissions_page_title": {
+    "message": "Grant Host Permissions | IPFS Companion",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "request_permissions_page_sub_header": {
+    "message": "Just one more thing to do before you're all set! :)",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
+  "request_permissions_page_message_p1": {
+    "message": "IPFS Companion needs permission to identify IPFS resources on the web.",
+    "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
+  },
+  "request_permissions_page_message_p2": {
+    "message": "The IPFS Companion requires Host permission to access data on all websites. This allows it to inspect all web requests, identify ones for content-addressed IPFS resources, and load them using your local IPFS node. Please click the button below to grant these permissions.",
+    "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
+  },
+  "request_permissions_page_button": {
+    "message": "Grant Permission",
+    "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "request_permissions_page_learn_more": {
+    "message": "Learn more about host permissions",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }
