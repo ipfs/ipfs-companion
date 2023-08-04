@@ -240,7 +240,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const { requestHeaders } = request
 
         if (isCompanionRequest(request)) {
-          // '403 - Forbidden' fix for Firefox
+          // '403 - Forbidden' fix for browsers that support blocking webRequest API (e.g. Firefox)
           // --------------------------------------------
           // We update "Origin: *-extension://" HTTP headers in requests made to API
           // by js-kubo-rpc-client running in the background page of browser
