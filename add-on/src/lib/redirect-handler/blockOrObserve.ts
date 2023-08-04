@@ -58,17 +58,7 @@ async function sendMessageToSelf (msg: typeof GLOBAL_STATE_CHANGE | typeof GLOBA
 }
 
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
-const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
-  {
-    originUrl: 'http://127.0.0.1',
-    redirectUrl: 'http://localhost'
-  },
-  {
-    originUrl: 'http://[::1]',
-    redirectUrl: 'http://localhost'
-  }
-]
-
+const DEFAULT_NAMESPACES = ['ipfs', 'ipns']
 /**
  * This function determines if the request is headed to a local IPFS gateway.
  *
@@ -226,16 +216,17 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
       }
     }
 
-    // make sure that the default rules are added.
-    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
-      const { port } = new URL(state.gwURLString)
-      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
-      const regexSubstitution = `${redirectUrl}:${port}\\1`
+    const { host, port, protocol } = new URL(state.gwURLString)
+    if (host !== 'localhost') {
+      DEFAULT_NAMESPACES.forEach((namespace): void => {
+        const regexFilter = `^${escapeURLRegex(`${host}:${port}`)}/${namespace}/(.*)$`
+        const regexSubstitution = `${protocol}://localhost:${port}/${namespace}/\\1`
 
-      if (!savedRegexFilters.has(regexFilter)) {
-        // We need to add the new rule.
-        addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
-      }
+        if (!savedRegexFilters.has(regexFilter)) {
+          // We need to add the new rule.
+          addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
+        }
+      })
     }
 
     await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
