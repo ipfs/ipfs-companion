@@ -1,0 +1,54 @@
+@import url('~tachyons/css/tachyons.css');
+@import url('~ipfs-css/ipfs.css');
+
+#left-col {
+  background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%, #043b55 100%);
+  background-size: 100%;
+  background-repeat: repeat;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
+}
+
+/*
+  https://github.com/tachyons-css/tachyons-queries
+  Tachyons: $point == large
+*/
+@media (min-width: 60em) {
+  #left-col {
+    position: fixed;
+    top: 0;
+    right: 55%;
+    width: 45%;
+    background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%, #043b55 100%);
+    background-size: 100%;
+    background-repeat: repeat;
+  }
+
+  #right-col {
+    margin-left: 54%;
+    margin-right: 6%;
+  }
+}
+
+@media (max-height: 800px) {
+  #left-col img {
+    width: 98px !important;
+    height: 98px !important;
+  }
+
+  #left-col svg {
+    width: 60px;
+  }
+}
+
+.recovery-root {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+}
