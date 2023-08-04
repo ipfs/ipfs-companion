@@ -36,7 +36,7 @@ interface messageToSelf {
 // the way sinon ends up stubbing it, it's not directly available in the global scope on import
 // rather it gets replaced dynamically when the module is imported. Which means, we can't
 // just check for the existence of the property, we need to call the browser instance at that point.
-export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES === 5000)
+export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES > 0)
 
 /**
  * Notify self about state change.
