@@ -7,11 +7,15 @@ import { CompanionState } from '../../types/companion.js'
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
+const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
+
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
-export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
+
+// We need to match the rest of the URL, so we can use a wildcard.
+export const RULE_REGEX_ENDING = `(\\/(?:${[...DEFAULT_NAMESPACES].join('|')})\\/(?:[^\\.]|$).*)$`
 
 interface regexFilterMap {
   id: number
@@ -72,7 +76,17 @@ async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<
 }
 
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
-const DEFAULT_NAMESPACES = ['ipfs', 'ipns']
+const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
+  {
+    originUrl: 'http://127.0.0.1',
+    redirectUrl: 'http://localhost'
+  },
+  {
+    originUrl: 'http://[::1]',
+    redirectUrl: 'http://localhost'
+  }
+]
+
 /**
  * This function determines if the request is headed to a local IPFS gateway.
  *
@@ -99,6 +113,16 @@ function escapeURLRegex (str: string): string {
 }
 
 /**
+ * Compute the namespace from the URL.
+ *
+ * @param url string
+ */
+function computeNamespaceFromUrl (url: string): string {
+  const { pathname } = new URL(url)
+  return (/\/([^\/]+)\//i.exec(pathname)?.[1] ?? '').toLowerCase()
+}
+
+/**
  * Construct a regex filter and substitution for a redirect.
  *
  * @param originUrl
@@ -109,31 +133,39 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   regexSubstitution: string
   regexFilter: string
 } {
-  // We can traverse the URL from the end, and find the first character that is different.
-  let commonIdx = 1
-  while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
-    if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
-      break
+  let regexSubstitution = redirectUrl;
+  let regexFilter = originUrl;
+  const redirectNS = computeNamespaceFromUrl(redirectUrl)
+  const originNS = computeNamespaceFromUrl(originUrl)
+  if (
+    DEFAULT_NAMESPACES.has(redirectNS) &&
+    DEFAULT_NAMESPACES.has(originNS) &&
+    redirectNS === originNS
+  ) {
+    // We can traverse the URL from the end, and find the first character that is different.
+    let commonIdx = 1
+    while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
+      if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
+        break
+      }
+      commonIdx += 1
     }
-    commonIdx += 1
-  }
 
-  // We can now construct the regex filter and substitution.
-  let regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
-  // We need to escape the characters that are allowed in the URL, but not in the regex.
-  const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
-  // We need to match the rest of the URL, so we can use a wildcard.
-  const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
-  let regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
+    // We can now construct the regex filter and substitution.
+    regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
+    // We need to escape the characters that are allowed in the URL, but not in the regex.
+    const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
+    regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
 
-  // This method does not parse:
-  // originUrl: "https://awesome.ipfs.io/"
-  // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
-  // that ends up with capturing all urls which we do not want.
-  if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
-    const subdomain = new URL(originUrl).hostname
-    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
-    regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
+    // This method does not parse:
+    // originUrl: "https://awesome.ipfs.io/"
+    // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
+    // that ends up with capturing all urls which we do not want.
+    if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
+      const subdomain = new URL(originUrl).hostname
+      regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
+      regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
+    }
   }
 
   return { regexSubstitution, regexFilter }
@@ -237,17 +269,16 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
       }
     }
 
-    const { host, port, protocol } = new URL(state.gwURLString)
-    if (host !== 'localhost') {
-      DEFAULT_NAMESPACES.forEach((namespace): void => {
-        const regexFilter = `^${escapeURLRegex(`${host}:${port}`)}/${namespace}/(.*)$`
-        const regexSubstitution = `${protocol}://localhost:${port}/${namespace}/\\1`
+    const { port } = new URL(state.gwURLString)
+    // make sure that the default rules are added.
+    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
+      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}${RULE_REGEX_ENDING}`
+      const regexSubstitution = `${redirectUrl}:${port}/\\1`
 
-        if (!savedRegexFilters.has(regexFilter)) {
-          // We need to add the new rule.
-          addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
-        }
-      })
+      if (!savedRegexFilters.has(regexFilter)) {
+        // We need to add the new rule.
+        addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
+      }
     }
 
     await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
