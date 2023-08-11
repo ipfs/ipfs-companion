@@ -1,6 +1,7 @@
 import debug from 'debug'
 import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
+import isIPFS from 'is-ipfs'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -133,15 +134,43 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   regexSubstitution: string
   regexFilter: string
 } {
-  let regexSubstitution = redirectUrl;
-  let regexFilter = originUrl;
+  let regexSubstitution = redirectUrl.toLowerCase()
+  let regexFilter = originUrl.toLowerCase()
   const redirectNS = computeNamespaceFromUrl(redirectUrl)
   const originNS = computeNamespaceFromUrl(originUrl)
-  if (
-    DEFAULT_NAMESPACES.has(redirectNS) &&
-    DEFAULT_NAMESPACES.has(originNS) &&
-    redirectNS === originNS
-  ) {
+  if (!DEFAULT_NAMESPACES.has(originNS) && DEFAULT_NAMESPACES.has(redirectNS)) {
+    // A redirect like https://github.com/ipfs/ipfs-companion/issues/1255
+    regexFilter = `^${escapeURLRegex(regexFilter)}`.replace(/https?/ig, 'https?')
+
+    const originURL = new URL(originUrl)
+    const [tld, root, ...subdomain] = originURL.hostname.split('.').reverse()
+    const staticUrl = [root, tld]
+    while (subdomain.length > 0) {
+      const subdomainPart = subdomain.shift()
+      const commonStaticUrlStart = `^${originURL.protocol}\\:\\/\\/`
+      const commonStaticUrlEnd = `\\.${escapeURLRegex(staticUrl.join('.'))}\\/${RULE_REGEX_ENDING}`
+      if (isIPFS.cid(subdomainPart as string)) {
+        // We didn't find a namespace, but we found a CID
+        // e.g. https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.on.fleek.co
+        regexFilter = `${commonStaticUrlStart}(.*?)${commonStaticUrlEnd}`
+        regexSubstitution = redirectUrl
+          .replace(subdomainPart as string, '\\1') // replace CID
+          .replace(new RegExp(`${originURL.pathname}?$`), '\\2') // replace path
+        break
+      }
+      if (DEFAULT_NAMESPACES.has(subdomainPart as string)) {
+        // We found a namespace, this is going to match group 2, i.e. namespace.
+        // e.g https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.ipfs.dweb.link
+        regexFilter = `${commonStaticUrlStart}(.*?)\\.(${[...DEFAULT_NAMESPACES].join('|')})${commonStaticUrlEnd}`
+        regexSubstitution = redirectUrl
+          .replace(subdomain.reverse().join('.') as string, '\\1') // replace subdomain or CID.
+          .replace(`/${subdomainPart as string}/`, '/\\2/') // replace namespace dynamically.
+          .replace(new RegExp(`${originURL.pathname}?$`), '\\3') // replace path
+      }
+      // till we find a namespace or CID, we keep adding subdomains to the staticUrl.
+      staticUrl.unshift(subdomainPart as string)
+    }
+  } else {
     // We can traverse the URL from the end, and find the first character that is different.
     let commonIdx = 1
     while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
