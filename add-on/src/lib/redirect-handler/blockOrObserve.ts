@@ -120,7 +120,7 @@ function escapeURLRegex (str: string): string {
  */
 function computeNamespaceFromUrl (url: string): string {
   const { pathname } = new URL(url)
-  return (/\/([^\/]+)\//i.exec(pathname)?.[1] ?? '').toLowerCase()
+  return (/\/([^/]+)\//i.exec(pathname)?.[1] ?? '').toLowerCase()
 }
 
 /**
@@ -163,7 +163,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
         // e.g https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.ipfs.dweb.link
         regexFilter = `${commonStaticUrlStart}(.*?)\\.(${[...DEFAULT_NAMESPACES].join('|')})${commonStaticUrlEnd}`
         regexSubstitution = redirectUrl
-          .replace(subdomain.reverse().join('.') as string, '\\1') // replace subdomain or CID.
+          .replace(subdomain.reverse().join('.'), '\\1') // replace subdomain or CID.
           .replace(`/${subdomainPart as string}/`, '/\\2/') // replace namespace dynamically.
           .replace(new RegExp(`${originURL.pathname}?$`), '\\3') // replace path
       }
