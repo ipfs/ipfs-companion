@@ -16,7 +16,7 @@ export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
 
 // We need to match the rest of the URL, so we can use a wildcard.
-export const RULE_REGEX_ENDING = `(\\/(?:${[...DEFAULT_NAMESPACES].join('|')})\\/(?:[^\\.]|$).*)$`
+export const RULE_REGEX_ENDING = `((?:[^\\.]|$).*)$`
 
 interface regexFilterMap {
   id: number
@@ -134,13 +134,14 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
   regexSubstitution: string
   regexFilter: string
 } {
-  let regexSubstitution = redirectUrl.toLowerCase()
-  let regexFilter = originUrl.toLowerCase()
+  let regexSubstitution = redirectUrl
+  let regexFilter = originUrl
   const redirectNS = computeNamespaceFromUrl(redirectUrl)
   const originNS = computeNamespaceFromUrl(originUrl)
   if (!DEFAULT_NAMESPACES.has(originNS) && DEFAULT_NAMESPACES.has(redirectNS)) {
     // A redirect like https://github.com/ipfs/ipfs-companion/issues/1255
     regexFilter = `^${escapeURLRegex(regexFilter)}`.replace(/https?/ig, 'https?')
+    const origRegexFilter = regexFilter
 
     const originURL = new URL(originUrl)
     const [tld, root, ...subdomain] = originURL.hostname.split('.').reverse()
@@ -156,45 +157,61 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
         regexSubstitution = redirectUrl
           .replace(subdomainPart as string, '\\1') // replace CID
           .replace(new RegExp(`${originURL.pathname}?$`), '\\2') // replace path
+
         break
       }
       if (DEFAULT_NAMESPACES.has(subdomainPart as string)) {
         // We found a namespace, this is going to match group 2, i.e. namespace.
         // e.g https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.ipfs.dweb.link
         regexFilter = `${commonStaticUrlStart}(.*?)\\.(${[...DEFAULT_NAMESPACES].join('|')})${commonStaticUrlEnd}`
+
         regexSubstitution = redirectUrl
           .replace(subdomain.reverse().join('.'), '\\1') // replace subdomain or CID.
           .replace(`/${subdomainPart as string}/`, '/\\2/') // replace namespace dynamically.
-          .replace(new RegExp(`${originURL.pathname}?$`), '\\3') // replace path
+
+        const pathWithSearch = originURL.pathname + originURL.search
+        if (pathWithSearch !== '/') {
+          regexSubstitution = regexSubstitution.replace(pathWithSearch, '/\\3') // replace path
+        } else {
+          regexSubstitution += '\\3'
+        }
+
+        break
       }
       // till we find a namespace or CID, we keep adding subdomains to the staticUrl.
       staticUrl.unshift(subdomainPart as string)
     }
-  } else {
-    // We can traverse the URL from the end, and find the first character that is different.
-    let commonIdx = 1
-    while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
-      if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
-        break
-      }
-      commonIdx += 1
-    }
 
-    // We can now construct the regex filter and substitution.
-    regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
-    // We need to escape the characters that are allowed in the URL, but not in the regex.
-    const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
-    regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
-
-    // This method does not parse:
-    // originUrl: "https://awesome.ipfs.io/"
-    // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
-    // that ends up with capturing all urls which we do not want.
-    if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
-      const subdomain = new URL(originUrl).hostname
-      regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
-      regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
+    if (regexFilter !== origRegexFilter) {
+      return { regexSubstitution, regexFilter }
+    } else {
+      regexFilter = originUrl
     }
+  }
+
+  // We can traverse the URL from the end, and find the first character that is different.
+  let commonIdx = 1
+  while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
+    if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
+      break
+    }
+    commonIdx += 1
+  }
+
+  // We can now construct the regex filter and substitution.
+  regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
+  // We need to escape the characters that are allowed in the URL, but not in the regex.
+  const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
+  regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
+
+  // This method does not parse:
+  // originUrl: "https://awesome.ipfs.io/"
+  // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
+  // that ends up with capturing all urls which we do not want.
+  if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
+    const subdomain = new URL(originUrl).hostname
+    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
+    regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
   }
 
   return { regexSubstitution, regexFilter }
