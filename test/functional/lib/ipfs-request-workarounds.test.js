@@ -58,7 +58,7 @@ describe('modifyRequest processing', function () {
         MV2Expectation: `http://127.0.0.1:8080/ipfs/${cid}`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/ipfs\\.io',
-          destination: 'http://127.0.0.1:8080'
+          destination: 'http://127.0.0.1:8080\\1'
         }
       })
     })
@@ -75,7 +75,7 @@ describe('modifyRequest processing', function () {
         MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/ipfs\\.io',
-          destination: 'http://localhost:8080'
+          destination: 'http://localhost:8080\\1'
         }
       })
     })
@@ -92,7 +92,7 @@ describe('modifyRequest processing', function () {
         MV2Expectation: `http://127.0.0.1:8080/ipfs/${cid}`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/ipfs\\.io',
-          destination: 'http://127.0.0.1:8080'
+          destination: 'http://127.0.0.1:8080\\1'
         }
       })
     })
@@ -109,7 +109,7 @@ describe('modifyRequest processing', function () {
         MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/ipfs\\.io',
-          destination: 'http://localhost:8080'
+          destination: 'http://localhost:8080\\1'
         }
       })
     })
@@ -382,7 +382,7 @@ describe('modifyRequest processing', function () {
         MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/ipfs\\.io',
-          destination: 'http://localhost:8080'
+          destination: 'http://localhost:8080\\1'
         }
       })
     })

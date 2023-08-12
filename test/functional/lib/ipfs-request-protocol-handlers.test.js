@@ -72,7 +72,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1'
             }
           })
         })
@@ -89,7 +89,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipns%3A%2F%2Fipfs\\.io%3FargTest%23',
-              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#'
+              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#\\1'
             }
           })
         })
@@ -101,7 +101,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipfs%3A%2F%2Fipfs\\.io%3FargTest%23',
-              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#'
+              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#\\1'
             }
           })
         })
@@ -113,7 +113,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=dweb%3A%2Fipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1'
             }
           })
         })
@@ -130,7 +130,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=dweb%3A%2Fipns\\/ipfs\\.io%3FargTest%23',
-              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#'
+              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#\\1'
             }
           })
         })
@@ -154,7 +154,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1'
             }
           })
         })
@@ -171,7 +171,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bipns%3A%2F%2Fipfs\\.io%3FargTest%23',
-              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#'
+              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#\\1'
             }
           })
         })
@@ -183,7 +183,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bdweb%3A%2Fipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#\\1'
             }
           })
         })
@@ -200,7 +200,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=web%2Bdweb%3A%2Fipns\\/ipfs\\.io%3FargTest%23',
-              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#'
+              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#\\1'
             }
           })
         })
@@ -235,7 +235,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest\\&foo\\=bar',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest\\1'
             }
           })
         })
@@ -252,7 +252,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipns%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23',
-              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#'
+              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1'
             }
           })
         })
@@ -264,7 +264,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23',
-              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#'
+              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1'
             }
           })
         })
@@ -276,7 +276,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=dweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=software',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash\\1'
             }
           })
         })
@@ -293,7 +293,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=dweb%3A%2Fipns%2Fipfs\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=web',
-              destination: 'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash'
+              destination: 'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash\\1'
             }
           })
         })
@@ -316,7 +316,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bipfs%3A%2F%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest\\&foo\\=bar',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest\\1'
             }
           })
         })
@@ -333,7 +333,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bipns%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23',
-              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#'
+              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1'
             }
           })
         })
@@ -345,7 +345,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bdweb%3A%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=software',
-              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash'
+              destination: 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?arg=foo&bar=buzz#hash\\1'
             }
           })
         })
@@ -362,7 +362,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
             MV2Expectation: 'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash',
             MV3Expectation: {
               origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=web%2Bdweb%3A%2Fipns%2Fipfs\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23hash\\&ia\\=web',
-              destination: 'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash'
+              destination: 'https://ipfs.io/ipns/ipfs.io/index.html?arg=foo&bar=buzz#hash\\1'
             }
           })
         })
