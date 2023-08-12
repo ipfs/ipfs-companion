@@ -16,7 +16,7 @@ export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
 
 // We need to match the rest of the URL, so we can use a wildcard.
-export const RULE_REGEX_ENDING = `((?:[^\\.]|$).*)$`
+export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
 
 interface regexFilterMap {
   id: number
