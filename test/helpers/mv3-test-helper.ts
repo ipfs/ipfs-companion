@@ -31,7 +31,7 @@ export function ensureCallRedirected ({
     expect(args.addRules[0]).to.deep.equal(generateAddRule(
       args.addRules[0].id,
       MV3Expectation.origin + RULE_REGEX_ENDING,
-      MV3Expectation.destination + '\\1'
+      MV3Expectation.destination
     ))
   } else {
     expect(modifiedRequestCallResp.redirectUrl).to.equal(MV2Expectation)
