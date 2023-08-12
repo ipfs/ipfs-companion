@@ -136,6 +136,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
 } {
   let regexSubstitution = redirectUrl
   let regexFilter = originUrl
+  const originURL = new URL(originUrl)
   const redirectNS = computeNamespaceFromUrl(redirectUrl)
   const originNS = computeNamespaceFromUrl(originUrl)
   if (!DEFAULT_NAMESPACES.has(originNS) && DEFAULT_NAMESPACES.has(redirectNS)) {
@@ -143,7 +144,6 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
     regexFilter = `^${escapeURLRegex(regexFilter)}`.replace(/https?/ig, 'https?')
     const origRegexFilter = regexFilter
 
-    const originURL = new URL(originUrl)
     const [tld, root, ...subdomain] = originURL.hostname.split('.').reverse()
     const staticUrl = [root, tld]
     while (subdomain.length > 0) {
@@ -183,10 +183,33 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
     }
 
     if (regexFilter !== origRegexFilter) {
+      // we found a valid regexFilter, so we can return.
       return { regexSubstitution, regexFilter }
     } else {
+      // we didn't find a valid regexFilter, so we can return the default.
       regexFilter = originUrl
     }
+  }
+
+  // if the namespaces are the same, we can generate simpler regex.
+  // The only value that needs special handling is the `uri` param.
+  // TODO: Remove this check, as `uri` param is deprecated.
+  if (
+    DEFAULT_NAMESPACES.has(originNS) &&
+    DEFAULT_NAMESPACES.has(redirectNS) &&
+    originNS === redirectNS &&
+    originURL.searchParams.get('uri') == null
+  ) {
+    // A redirect like
+    // https://ipfs.io/ipfs/QmZMxU -> http://localhost:8080/ipfs/QmZMxU
+    const [originFirst, originLast] = originUrl.split(`/${originNS}/`)
+    const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
+    regexFilter = `^${escapeURLRegex(originFirst)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
+      .replace(/https?/ig, 'https?')
+    regexSubstitution = redirectUrl
+      .replace(`/${redirectNS}/`, '/\\1/')
+      .replace(originLast, '\\2')
+    return { regexSubstitution, regexFilter }
   }
 
   // We can traverse the URL from the end, and find the first character that is different.

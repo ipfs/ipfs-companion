@@ -157,8 +157,8 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/ipfs\\.io${RULE_REGEX_ENDING}`,
-        regexSubstitution: 'http://localhost:8080\\1'
+        expectedCondition: `^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://localhost:8080/\\1/\\2'
       })
     })
 
