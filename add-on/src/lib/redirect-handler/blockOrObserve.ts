@@ -26,6 +26,7 @@ interface regexFilterMap {
 interface redirectHandlerInput {
   originUrl: string
   redirectUrl: string
+  getPort: (state: CompanionState) => string
 }
 
 type messageToSelfType = typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
@@ -82,11 +83,18 @@ const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
     originUrl: 'http://127.0.0.1',
-    redirectUrl: 'http://localhost'
+    redirectUrl: 'http://localhost',
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port
   },
   {
     originUrl: 'http://[::1]',
-    redirectUrl: 'http://localhost'
+    redirectUrl: 'http://localhost',
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port
+  },
+  {
+    originUrl: 'http://localhost',
+    redirectUrl: 'http://127.0.0.1',
+    getPort: ({ apiURL }): string => new URL(apiURL).port
   }
 ]
 
@@ -339,9 +347,9 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
       }
     }
 
-    const { port } = new URL(state.gwURLString)
     // make sure that the default rules are added.
-    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
+    for (const { originUrl, redirectUrl, getPort } of DEFAULT_LOCAL_RULES) {
+      const port = getPort(state)
       const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
       const regexSubstitution = `${redirectUrl}:${port}/\\1/\\2`
 
