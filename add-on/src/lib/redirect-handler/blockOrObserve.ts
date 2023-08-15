@@ -26,6 +26,7 @@ interface regexFilterMap {
 interface redirectHandlerInput {
   originUrl: string
   redirectUrl: string
+  getPort: (state: CompanionState) => string
 }
 
 type messageToSelfType = typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
@@ -33,6 +34,8 @@ interface messageToSelf {
   type: messageToSelfType
   value?: string | Record<string, unknown>
 }
+
+const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
 
 // We need to check if the browser supports the declarativeNetRequest API.
 // TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
@@ -80,11 +83,18 @@ const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
     originUrl: 'http://127.0.0.1',
-    redirectUrl: 'http://localhost'
+    redirectUrl: 'http://localhost',
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port
   },
   {
     originUrl: 'http://[::1]',
-    redirectUrl: 'http://localhost'
+    redirectUrl: 'http://localhost',
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port
+  },
+  {
+    originUrl: 'http://localhost',
+    redirectUrl: 'http://127.0.0.1',
+    getPort: ({ apiURL }): string => new URL(apiURL).port
   }
 ]
 
@@ -163,7 +173,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
       if (DEFAULT_NAMESPACES.has(subdomainPart as string)) {
         // We found a namespace, this is going to match group 2, i.e. namespace.
         // e.g https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.ipfs.dweb.link
-        regexFilter = `${commonStaticUrlStart}(.*?)\\.(${[...DEFAULT_NAMESPACES].join('|')})${commonStaticUrlEnd}`
+        regexFilter = `${commonStaticUrlStart}(.*?)\\.${defaultNSRegexStr}${commonStaticUrlEnd}`
 
         regexSubstitution = redirectUrl
           .replace(subdomain.reverse().join('.'), '\\1') // replace subdomain or CID.
@@ -203,7 +213,6 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
     // A redirect like
     // https://ipfs.io/ipfs/QmZMxU -> http://localhost:8080/ipfs/QmZMxU
     const [originFirst, originLast] = originUrl.split(`/${originNS}/`)
-    const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
     regexFilter = `^${escapeURLRegex(originFirst)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
       .replace(/https?/ig, 'https?')
     regexSubstitution = redirectUrl
@@ -338,11 +347,11 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
       }
     }
 
-    const { port } = new URL(state.gwURLString)
     // make sure that the default rules are added.
-    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
-      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}${RULE_REGEX_ENDING}`
-      const regexSubstitution = `${redirectUrl}:${port}/\\1`
+    for (const { originUrl, redirectUrl, getPort } of DEFAULT_LOCAL_RULES) {
+      const port = getPort(state)
+      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
+      const regexSubstitution = `${redirectUrl}:${port}/\\1/\\2`
 
       if (!savedRegexFilters.has(regexFilter)) {
         // We need to add the new rule.

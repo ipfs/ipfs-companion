@@ -49,12 +49,14 @@ function ensureTabRedirected (url): void {
  * @param regexSubstitution
  */
 function ensureDeclrativeNetRequetRuleIsAdded ({
+  addRuleIndex = 0,
   addRuleLength = 1,
   callIndex = 0,
   expectedCondition,
   regexSubstitution,
   removedRulesIds = [],
 }: {
+  addRuleIndex?: number
   addRuleLength?: number
   callIndex?: number
   expectedCondition: string
@@ -69,7 +71,7 @@ function ensureDeclrativeNetRequetRuleIsAdded ({
   expect(removeRuleIds).to.deep.equal(removedRulesIds)
   if (addRuleLength > 0) {
     expect(addRules).to.have.lengthOf(addRuleLength)
-    const [{ id, priority, action, condition }] = addRules
+    const { id, priority, action, condition } = addRules[addRuleIndex]
     expect(id).to.be.a('number')
     expect(priority).to.equal(1)
     expect(action).to.deep.equal({ type: 'redirect', redirect: { regexSubstitution } })
@@ -135,6 +137,37 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       await addRuleToDynamicRuleSet({ originUrl: 'http://localhost:9001/foo', redirectUrl: 'http://localhost:9001/bar' })
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.false
       expect (browserMock.tabs.query.called).to.be.false
+    })
+
+    it('Should add default rules for localhost', async () => {
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleIndex: 0,
+        addRuleLength: 3,
+        callIndex: 1,
+        expectedCondition: `^http\\:\\/\\/127\\.0\\.0\\.1\\:8080\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://localhost:8080/\\1/\\2'
+      })
+
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleIndex: 1,
+        addRuleLength: 3,
+        callIndex: 1,
+        expectedCondition: `^http\\:\\/\\/\\[\\:\\:1\\]\\:8080\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://localhost:8080/\\1/\\2'
+      })
+
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleIndex: 2,
+        addRuleLength: 3,
+        callIndex: 1,
+        expectedCondition: `^http\\:\\/\\/localhost\\:5001\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://127.0.0.1:5001/\\1/\\2'
+      })
     })
 
     it('Should allow pages to be recovered', async () => {
