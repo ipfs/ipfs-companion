@@ -203,7 +203,6 @@ function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput)
 
   // if the namespaces are the same, we can generate simpler regex.
   // The only value that needs special handling is the `uri` param.
-  // TODO: Remove this check, as `uri` param is deprecated.
   if (
     DEFAULT_NAMESPACES.has(originNS) &&
     DEFAULT_NAMESPACES.has(redirectNS) &&
