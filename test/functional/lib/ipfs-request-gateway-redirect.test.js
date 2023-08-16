@@ -327,7 +327,7 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: `http://localhost:8080/ipfs/${cid}/`,
           MV3Expectation: {
-            origin: '^https:\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
             destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
@@ -340,7 +340,7 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: `http://localhost:8080/ipfs/${cid}/`,
           MV3Expectation: {
-            origin: '^https:\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.cf\\-ipfs\\.com\\/',
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.cf\\-ipfs\\.com\\/',
             destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
@@ -353,7 +353,7 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: 'http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy/%3Ffilename=test.jpg?arg=val',
           MV3Expectation: {
-            origin: '^https:\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
             destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
@@ -366,7 +366,7 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: `http://localhost:8080/ipns/${peerid}/`,
           MV3Expectation: {
-            origin: '^https:\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
             destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
