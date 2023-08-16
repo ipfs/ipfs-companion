@@ -124,12 +124,14 @@ function escapeURLRegex (str: string): string {
 }
 
 /**
- * Compute the namespace from the URL.
+ * Compute the namespace from the URL. This finds the first path segment.
+ * e.g. http://<gateway>/<namespace>/path/to/file/or/cid
  *
  * @param url string
  */
 function computeNamespaceFromUrl (url: string): string {
   const { pathname } = new URL(url)
+  // regex to match the first path segment.
   return (/\/([^/]+)\//i.exec(pathname)?.[1] ?? '').toLowerCase()
 }
 
