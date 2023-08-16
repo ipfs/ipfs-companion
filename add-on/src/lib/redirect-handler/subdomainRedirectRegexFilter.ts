@@ -74,6 +74,8 @@ export class SubdomainRedirectRegexFilter extends RegexFilter {
       }
 
       if (this.regexFilter !== origRegexFilter) {
+        // this means we constructed a regexFilter with dynamic parts, instead of the original regexFilter which was
+        // static. There might be other suited regexFilters in that case.
         this.canHandle = true
       }
     }
