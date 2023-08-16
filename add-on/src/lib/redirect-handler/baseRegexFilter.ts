@@ -41,7 +41,6 @@ export class RegexFilter {
     return this._originUrl
   }
 
-
   /**
    * Getter for the redirectUrl provided at construction.
    */
