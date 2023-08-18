@@ -1,7 +1,8 @@
 import debug from 'debug'
+import isIPFS from 'is-ipfs'
 import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
-import isIPFS from 'is-ipfs'
+import { brave } from '../ipfs-client/brave.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -23,9 +24,19 @@ interface regexFilterMap {
   regexSubstitution: string
 }
 
-interface redirectHandlerInput {
-  originUrl: string
+interface redirectPair {
+  originUrl: string,
   redirectUrl: string
+}
+
+interface redirectRegexPair {
+  regexSubstitution: string,
+  regexFilter: string
+}
+
+interface redirectHandlerInput extends Omit<redirectPair, 'redirectUrl'> {
+  priority?: number
+  getRedirectUrl: (port: string) => string
   getPort: (state: CompanionState) => string
 }
 
@@ -83,19 +94,25 @@ const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
     originUrl: 'http://127.0.0.1',
-    redirectUrl: 'http://localhost',
+    getRedirectUrl: (port): string => `http://localhost:${port}/\\1/\\2`,
     getPort: ({ gwURLString }): string => new URL(gwURLString).port
   },
   {
     originUrl: 'http://[::1]',
-    redirectUrl: 'http://localhost',
+    getRedirectUrl: (port): string => `http://localhost:${port}/\\1/\\2`,
     getPort: ({ gwURLString }): string => new URL(gwURLString).port
   },
   {
     originUrl: 'http://localhost',
-    redirectUrl: 'http://127.0.0.1',
+    getRedirectUrl: (port): string => `http://localhost:${port}/\\1/\\2`,
     getPort: ({ apiURL }): string => new URL(apiURL).port
-  }
+  },
+  ...(brave ? [{
+    originUrl: 'http://localhost',
+    getRedirectUrl: (): string => `\\1://\\2`,
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port,
+    priority: 1
+  }] : []) as redirectHandlerInput[]
 ]
 
 /**
@@ -142,10 +159,7 @@ function computeNamespaceFromUrl (url: string): string {
  * @param redirectUrl
  * @returns
  */
-function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput): {
-  regexSubstitution: string
-  regexFilter: string
-} {
+function constructRegexFilter ({ originUrl, redirectUrl }: redirectPair): redirectRegexPair {
   let regexSubstitution = redirectUrl
   let regexFilter = originUrl
   const originURL = new URL(originUrl)
@@ -344,19 +358,19 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
     if (rules.length === 0) {
       // we need to populate old rules.
       for (const [regexFilter, { regexSubstitution, id }] of savedRegexFilters.entries()) {
-        addRules.push(generateAddRule(id, regexFilter, regexSubstitution))
+        addRules.push(generateAddRule({ id, regexFilter, regexSubstitution }))
       }
     }
 
     // make sure that the default rules are added.
-    for (const { originUrl, redirectUrl, getPort } of DEFAULT_LOCAL_RULES) {
+    for (const { originUrl, getRedirectUrl, getPort, priority } of DEFAULT_LOCAL_RULES) {
       const port = getPort(state)
       const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
-      const regexSubstitution = `${redirectUrl}:${port}/\\1/\\2`
+      const regexSubstitution = getRedirectUrl(port)
 
       if (!savedRegexFilters.has(regexFilter)) {
         // We need to add the new rule.
-        addRules.push(saveAndGenerateRule(regexFilter, regexSubstitution))
+        addRules.push(saveAndGenerateRule({ regexFilter, regexSubstitution, priority }))
       }
     }
 
@@ -372,16 +386,20 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
  * @param excludedInitiatorDomains - The domains that are excluded from the rule.
  * @returns
  */
-function saveAndGenerateRule (
-  regexFilter: string,
-  regexSubstitution: string,
-  excludedInitiatorDomains: string[] = []
-): browser.DeclarativeNetRequest.Rule {
+function saveAndGenerateRule ({
+  regexFilter,
+  regexSubstitution,
+  excludedInitiatorDomains = [],
+  priority
+}: redirectRegexPair & {
+  excludedInitiatorDomains?: string[],
+  priority?: number
+}): browser.DeclarativeNetRequest.Rule {
   // We need to generate a random ID for the rule.
   const id = Math.floor(Math.random() * 29999)
   // We need to save the regex filter and ID to check if the rule already exists later.
   savedRegexFilters.set(regexFilter, { id, regexSubstitution })
-  return generateAddRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
+  return generateAddRule({ id, regexFilter, regexSubstitution, excludedInitiatorDomains, priority })
 }
 
 /**
@@ -392,15 +410,20 @@ function saveAndGenerateRule (
  * @param excludedInitiatorDomains - The domains that are excluded from the rule.
  * @returns
  */
-export function generateAddRule (
+export function generateAddRule ({
+  id,
+  priority = 10,
+  regexFilter,
+  regexSubstitution,
+  excludedInitiatorDomains = []
+}: redirectRegexPair & {
   id: number,
-  regexFilter: string,
-  regexSubstitution: string,
-  excludedInitiatorDomains: string[] = []
-): browser.DeclarativeNetRequest.Rule {
+  priority?: number,
+  excludedInitiatorDomains?: string[]
+}): browser.DeclarativeNetRequest.Rule {
   return {
     id,
-    priority: 1,
+    priority,
     action: {
       type: 'redirect',
       redirect: { regexSubstitution }
@@ -436,9 +459,9 @@ export function generateAddRule (
  * @returns {Promise<void>}
  */
 export function addRuleToDynamicRuleSetGenerator (
-  getState: () => CompanionState): (input: redirectHandlerInput) => Promise<void> {
+  getState: () => CompanionState): (input: redirectPair) => Promise<void> {
   // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
-  return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
+  return async function ({ originUrl, redirectUrl }: redirectPair): Promise<void> {
     // update the rules so that the next request is handled correctly.
     const state = getState()
     const redirectIsOrigin = originUrl === redirectUrl
@@ -469,7 +492,7 @@ export function addRuleToDynamicRuleSetGenerator (
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           // We need to add the new rule.
-          addRules: [saveAndGenerateRule(regexFilter, regexSubstitution)],
+          addRules: [saveAndGenerateRule({ regexFilter, regexSubstitution })],
           // We need to remove the old rules.
           removeRuleIds
         }

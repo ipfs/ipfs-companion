@@ -28,11 +28,11 @@ export function ensureCallRedirected ({
 }): void {
   if (isManifestV3) {
     const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
-    expect(args.addRules[0]).to.deep.equal(generateAddRule(
-      args.addRules[0].id,
-      MV3Expectation.origin + RULE_REGEX_ENDING,
-      MV3Expectation.destination
-    ))
+    expect(args.addRules[0]).to.deep.equal(generateAddRule({
+      id: args.addRules[0].id,
+      regexFilter: MV3Expectation.origin + RULE_REGEX_ENDING,
+      regexSubstitution: MV3Expectation.destination
+    }))
   } else {
     expect(modifiedRequestCallResp.redirectUrl).to.equal(MV2Expectation)
   }

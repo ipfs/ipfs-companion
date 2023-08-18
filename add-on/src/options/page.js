@@ -115,12 +115,13 @@ export default function optionsPage (state, emit) {
   ${resetForm({
     onOptionsReset
   })}
-  ${supportsBlock
+  ${supportsBlock()
       ? ''
       : redirectRuleForm({
-    redirectRules: state.redirectRules,
-    emit
-  })}
+        redirectRules: state.redirectRules,
+        emit
+      })
+  }
     </div>
   `
 }
