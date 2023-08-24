@@ -1,10 +1,10 @@
 import debug from 'debug'
 import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
-import { SubdomainRedirectRegexFilter } from './subdomainRedirectRegexFilter.js'
-import { NamespaceRedirectRegexFilter } from './namespaceRedirectRegexFilter.js'
 import { IFilter, IRegexFilter, RegexFilter } from './baseRegexFilter.js'
-import { CommonPatterRedirectRegexFilter } from './commonPatternRedirectRegexFilter.js'
+import { CommonPatternRedirectRegexFilter } from './commonPatternRedirectRegexFilter.js'
+import { NamespaceRedirectRegexFilter } from './namespaceRedirectRegexFilter.js'
+import { SubdomainRedirectRegexFilter } from './subdomainRedirectRegexFilter.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -138,7 +138,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: IRegexFilter): IFilte
   const filtersToTryInOrder: Array<typeof RegexFilter> = [
     SubdomainRedirectRegexFilter,
     NamespaceRedirectRegexFilter,
-    CommonPatterRedirectRegexFilter
+    CommonPatternRedirectRegexFilter
   ]
 
   for (const Filter of filtersToTryInOrder) {
@@ -148,9 +148,9 @@ function constructRegexFilter ({ originUrl, redirectUrl }: IRegexFilter): IFilte
     }
   }
 
-  // this is just to satisfy the compiler, this should never happen. Because CommonPatterRedirectRegexFilter can always
+  // this is just to satisfy the compiler, this should never happen. Because CommonPatternRedirectRegexFilter can always
   // handle.
-  return new CommonPatterRedirectRegexFilter({ originUrl, redirectUrl }).filter
+  return new CommonPatternRedirectRegexFilter({ originUrl, redirectUrl }).filter
 }
 
 // If the browser supports the declarativeNetRequest API, we can block the request.

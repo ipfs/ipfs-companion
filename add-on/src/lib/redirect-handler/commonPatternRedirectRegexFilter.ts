@@ -1,7 +1,7 @@
 import { IRegexFilter, RegexFilter } from './baseRegexFilter.js'
 import { RULE_REGEX_ENDING, escapeURLRegex } from './blockOrObserve.js'
 
-export class CommonPatterRedirectRegexFilter extends RegexFilter {
+export class CommonPatternRedirectRegexFilter extends RegexFilter {
   constructor ({ originUrl, redirectUrl }: IRegexFilter) {
     super({ originUrl, redirectUrl })
 
