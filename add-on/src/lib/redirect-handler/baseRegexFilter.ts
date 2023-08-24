@@ -19,7 +19,7 @@ export class RegexFilter {
   readonly originNS: string
   readonly redirectNS: string
   // by default we cannot handle the request.
-  _canHandle = false
+  private _canHandle = false
   regexFilter!: string
   regexSubstitution!: string
 
