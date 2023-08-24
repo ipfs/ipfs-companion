@@ -1,15 +1,15 @@
-import { IRegexFilter, RegexFilter } from './baseRegexFilter.js'
+import { RegexFilter } from './baseRegexFilter.js'
 import { RULE_REGEX_ENDING, escapeURLRegex } from './blockOrObserve.js'
 
+/**
+ * Handles redirects like:
+ * origin: '^https?\\:\\/\\/awesome\\.ipfs\\.io\\/(.*)'
+ * destination: 'http://localhost:8081/ipns/awesome.ipfs.io/$1'
+ */
 export class CommonPatternRedirectRegexFilter extends RegexFilter {
-  constructor ({ originUrl, redirectUrl }: IRegexFilter) {
-    super({ originUrl, redirectUrl })
-
-    // this filter is the worst case scenario, we can handle any redirect.
-    this._canHandle = true
-  }
-
   computeFilter (): void {
+    // this filter is the worst case scenario, we can handle any redirect.
+    this.canHandle = true
     // We can traverse the URL from the end, and find the first character that is different.
     let commonIdx = 1
     while (commonIdx < Math.min(this.originUrl.length, this.redirectUrl.length)) {

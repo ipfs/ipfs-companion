@@ -2,14 +2,12 @@ import isIPFS from 'is-ipfs'
 import { IRegexFilter, RegexFilter } from './baseRegexFilter.js'
 import { DEFAULT_NAMESPACES, RULE_REGEX_ENDING, defaultNSRegexStr, escapeURLRegex } from './blockOrObserve.js'
 
+/**
+ * Handles subdomain redirects like:
+ * origin: '^https?\\:\\/\\/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy\\.ipfs\\.dweb\\.link'
+ * destination: 'http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy'
+ */
 export class SubdomainRedirectRegexFilter extends RegexFilter {
-  /**
-   * Handles subdomain redirects like:
-   * origin: '^https?\\:\\/\\/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy\\.ipfs\\.dweb\\.link'
-   * destination: 'http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy'
-   *
-   * @param param IRegexFilter
-   */
   constructor ({ originUrl, redirectUrl }: IRegexFilter) {
     super({ originUrl, redirectUrl })
   }
