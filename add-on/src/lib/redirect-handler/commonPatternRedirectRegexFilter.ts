@@ -12,7 +12,8 @@ export class CommonPatternRedirectRegexFilter extends RegexFilter {
     this.canHandle = true
     // We can traverse the URL from the end, and find the first character that is different.
     let commonIdx = 1
-    while (commonIdx < Math.min(this.originUrl.length, this.redirectUrl.length)) {
+    const leastLength = Math.min(this.originUrl.length, this.redirectUrl.length)
+    while (commonIdx < leastLength) {
       if (this.originUrl[this.originUrl.length - commonIdx] !== this.redirectUrl[this.redirectUrl.length - commonIdx]) {
         break
       }
