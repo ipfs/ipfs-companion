@@ -12,8 +12,6 @@ const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
 export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
-
-export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
@@ -32,7 +30,7 @@ interface redirectHandlerInput {
   getPort: (state: CompanionState) => string
 }
 
-type messageToSelfType = typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
+type messageToSelfType = typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
 interface messageToSelf {
   type: messageToSelfType
   value?: string | Record<string, unknown>
@@ -50,18 +48,11 @@ export const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
 export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES > 0)
 
 /**
- * Notify self about state change.
- * @returns void
- */
-export async function notifyStateChange (): Promise<void> {
-  return await sendMessageToSelf(GLOBAL_STATE_CHANGE)
-}
-
-/**
  * Notify self about option change.
  * @returns void
  */
 export async function notifyOptionChange (): Promise<void> {
+  log('notifyOptionChange')
   return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
 }
 
@@ -380,10 +371,8 @@ export function addRuleToDynamicRuleSetGenerator (
     }
 
     setupListeners({
-      [GLOBAL_STATE_CHANGE]: async (): Promise<void> => {
-        await reconcileRulesAndRemoveOld(getState())
-      },
       [GLOBAL_STATE_OPTION_CHANGE]: async (): Promise<void> => {
+        log('GLOBAL_STATE_OPTION_CHANGE')
         await cleanupRules(true)
         await reconcileRulesAndRemoveOld(getState())
       },

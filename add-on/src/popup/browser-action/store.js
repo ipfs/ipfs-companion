@@ -7,7 +7,7 @@ import { optionsPage, welcomePage } from '../../lib/constants.js'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway } from '../../lib/context-menus.js'
 import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
-import { notifyStateChange } from '../../lib/redirect-handler/blockOrObserve.js'
+import { notifyOptionChange } from '../../lib/redirect-handler/blockOrObserve.js'
 import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 // The store contains and mutates the state for the app
@@ -179,7 +179,7 @@ export default (state, emitter) => {
       }
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
-      await notifyStateChange()
+      await notifyOptionChange()
 
       const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference
@@ -216,7 +216,7 @@ export default (state, emitter) => {
         state.swarmPeers = null
         state.isIpfsOnline = false
       }
-      await notifyStateChange()
+      await notifyOptionChange()
       await browser.storage.local.set({ active: state.active })
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)

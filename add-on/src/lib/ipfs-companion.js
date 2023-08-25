@@ -22,7 +22,7 @@ import { createRequestModifier } from './ipfs-request.js'
 import createNotifier from './notifier.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
 import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOptions } from './options.js'
-import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
+import { getExtraInfoSpec, notifyOptionChange } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
 
@@ -577,7 +577,7 @@ export default async function init (inQuickImport = false) {
     }
   }
 
-  async function onStorageChange (changes, area) {
+  async function onStorageChange (changes) {
     let shouldReloadExtension = false
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
@@ -660,6 +660,7 @@ export default async function init (inQuickImport = false) {
           break
       }
     }
+    await notifyOptionChange()
     // ensure consent is set properly on state changes
     handleConsentFromState(state)
 
@@ -696,6 +697,8 @@ export default async function init (inQuickImport = false) {
       browser.tabs.reload() // async reload of options page to keep it alive
       await browser.runtime.reload()
     }
+    log('storage change processed')
+
     // Post update to Browser Action (if exists) -- this gives UX a snappy feel
     await sendStatusUpdateToBrowserAction()
   }
