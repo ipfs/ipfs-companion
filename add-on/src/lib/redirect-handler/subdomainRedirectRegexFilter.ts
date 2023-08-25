@@ -1,4 +1,3 @@
-import isIPFS from 'is-ipfs'
 import { IRegexFilter, RegexFilter } from './baseRegexFilter.js'
 import { DEFAULT_NAMESPACES, RULE_REGEX_ENDING, defaultNSRegexStr, escapeURLRegex } from './blockOrObserve.js'
 
