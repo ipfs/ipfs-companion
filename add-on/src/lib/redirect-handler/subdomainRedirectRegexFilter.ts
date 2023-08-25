@@ -33,19 +33,9 @@ export class SubdomainRedirectRegexFilter extends RegexFilter {
         // this needs to be computed for every iteration as the staticUrlParts changes
         const commonStaticUrlEnd = `\\.${escapeURLRegex(staticUrlParts.join('.'))}\\/${RULE_REGEX_ENDING}`
 
-        // check if the subdomainPart is a CID.
-        if (isIPFS.cid(subdomainPart)) {
-          // We didn't find a namespace, but we found a CID
-          // e.g. https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.on.fleek.co
-          this.regexFilter = `${commonStaticUrlStart}(.*?)${commonStaticUrlEnd}`
-          this.regexSubstitution = this._redirectUrl
-            .replace(subdomainPart, '\\1') // replace CID
-            .replace(new RegExp(`${this.originURL.pathname}?$`), '\\2') // replace path
-
-          // no need to continue, we found a CID.
-          break
-        }
-
+        // this does not work for subdomains where namespace is not provided.
+        // e.g. https://helia-identify.on.fleek.co/
+        // e.g. https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.on.fleek.co/
         // check if the subdomainPart is a namespace.
         if (DEFAULT_NAMESPACES.has(subdomainPart)) {
           // We found a namespace, this is going to match group 2, i.e. namespace.
