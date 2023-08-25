@@ -1,14 +1,17 @@
 import debug from 'debug'
 import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
-import isIPFS from 'is-ipfs'
+import { IFilter, IRegexFilter, RegexFilter } from './baseRegexFilter.js'
+import { CommonPatternRedirectRegexFilter } from './commonPatternRedirectRegexFilter.js'
+import { NamespaceRedirectRegexFilter } from './namespaceRedirectRegexFilter.js'
+import { SubdomainRedirectRegexFilter } from './subdomainRedirectRegexFilter.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
-const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
+export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
 
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
@@ -35,7 +38,7 @@ interface messageToSelf {
   value?: string | Record<string, unknown>
 }
 
-const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
+export const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
 
 // We need to check if the browser supports the declarativeNetRequest API.
 // TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
@@ -116,23 +119,11 @@ export function isLocalHost (url: string): boolean {
  * @param str URL string to escape
  * @returns
  */
-function escapeURLRegex (str: string): string {
+export function escapeURLRegex (str: string): string {
   // these characters are allowed in the URL, but not in the regex.
   // eslint-disable-next-line no-useless-escape
   const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=\-_\.~])/g
   return str.replace(ALLOWED_CHARS_URL_REGEX, '\\$1')
-}
-
-/**
- * Compute the namespace from the URL. This finds the first path segment.
- * e.g. http://<gateway>/<namespace>/path/to/file/or/cid
- *
- * @param url string
- */
-function computeNamespaceFromUrl (url: string): string {
-  const { pathname } = new URL(url)
-  // regex to match the first path segment.
-  return (/\/([^/]+)\//i.exec(pathname)?.[1] ?? '').toLowerCase()
 }
 
 /**
@@ -142,112 +133,24 @@ function computeNamespaceFromUrl (url: string): string {
  * @param redirectUrl
  * @returns
  */
-function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput): {
-  regexSubstitution: string
-  regexFilter: string
-} {
-  let regexSubstitution = redirectUrl
-  let regexFilter = originUrl
-  const originURL = new URL(originUrl)
-  const redirectNS = computeNamespaceFromUrl(redirectUrl)
-  const originNS = computeNamespaceFromUrl(originUrl)
-  if (!DEFAULT_NAMESPACES.has(originNS) && DEFAULT_NAMESPACES.has(redirectNS)) {
-    // A redirect like https://github.com/ipfs/ipfs-companion/issues/1255
-    regexFilter = `^${escapeURLRegex(regexFilter)}`.replace(/https?/ig, 'https?')
-    const origRegexFilter = regexFilter
+function constructRegexFilter ({ originUrl, redirectUrl }: IRegexFilter): IFilter {
+  // the order is very important here, because we want to match the best possible filter.
+  const filtersToTryInOrder: Array<typeof RegexFilter> = [
+    SubdomainRedirectRegexFilter,
+    NamespaceRedirectRegexFilter,
+    CommonPatternRedirectRegexFilter
+  ]
 
-    const [tld, root, ...subdomain] = originURL.hostname.split('.').reverse()
-    const staticUrl = [root, tld]
-    while (subdomain.length > 0) {
-      const subdomainPart = subdomain.shift()
-      const commonStaticUrlStart = `^${originURL.protocol}\\:\\/\\/`
-      const commonStaticUrlEnd = `\\.${escapeURLRegex(staticUrl.join('.'))}\\/${RULE_REGEX_ENDING}`
-      if (isIPFS.cid(subdomainPart as string)) {
-        // We didn't find a namespace, but we found a CID
-        // e.g. https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.on.fleek.co
-        regexFilter = `${commonStaticUrlStart}(.*?)${commonStaticUrlEnd}`
-        regexSubstitution = redirectUrl
-          .replace(subdomainPart as string, '\\1') // replace CID
-          .replace(new RegExp(`${originURL.pathname}?$`), '\\2') // replace path
-
-        break
-      }
-      if (DEFAULT_NAMESPACES.has(subdomainPart as string)) {
-        // We found a namespace, this is going to match group 2, i.e. namespace.
-        // e.g https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.ipfs.dweb.link
-        regexFilter = `${commonStaticUrlStart}(.*?)\\.${defaultNSRegexStr}${commonStaticUrlEnd}`
-
-        regexSubstitution = redirectUrl
-          .replace(subdomain.reverse().join('.'), '\\1') // replace subdomain or CID.
-          .replace(`/${subdomainPart as string}/`, '/\\2/') // replace namespace dynamically.
-
-        const pathWithSearch = originURL.pathname + originURL.search
-        if (pathWithSearch !== '/') {
-          regexSubstitution = regexSubstitution.replace(pathWithSearch, '/\\3') // replace path
-        } else {
-          regexSubstitution += '\\3'
-        }
-
-        break
-      }
-      // till we find a namespace or CID, we keep adding subdomains to the staticUrl.
-      staticUrl.unshift(subdomainPart as string)
-    }
-
-    if (regexFilter !== origRegexFilter) {
-      // we found a valid regexFilter, so we can return.
-      return { regexSubstitution, regexFilter }
-    } else {
-      // we didn't find a valid regexFilter, so we can return the default.
-      regexFilter = originUrl
+  for (const Filter of filtersToTryInOrder) {
+    const filter = new Filter({ originUrl, redirectUrl })
+    if (filter.canHandle) {
+      return filter.filter
     }
   }
 
-  // if the namespaces are the same, we can generate simpler regex.
-  // The only value that needs special handling is the `uri` param.
-  if (
-    DEFAULT_NAMESPACES.has(originNS) &&
-    DEFAULT_NAMESPACES.has(redirectNS) &&
-    originNS === redirectNS &&
-    originURL.searchParams.get('uri') == null
-  ) {
-    // A redirect like
-    // https://ipfs.io/ipfs/QmZMxU -> http://localhost:8080/ipfs/QmZMxU
-    const [originFirst, originLast] = originUrl.split(`/${originNS}/`)
-    regexFilter = `^${escapeURLRegex(originFirst)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
-      .replace(/https?/ig, 'https?')
-    regexSubstitution = redirectUrl
-      .replace(`/${redirectNS}/`, '/\\1/')
-      .replace(originLast, '\\2')
-    return { regexSubstitution, regexFilter }
-  }
-
-  // We can traverse the URL from the end, and find the first character that is different.
-  let commonIdx = 1
-  while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
-    if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
-      break
-    }
-    commonIdx += 1
-  }
-
-  // We can now construct the regex filter and substitution.
-  regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
-  // We need to escape the characters that are allowed in the URL, but not in the regex.
-  const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
-  regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
-
-  // This method does not parse:
-  // originUrl: "https://awesome.ipfs.io/"
-  // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
-  // that ends up with capturing all urls which we do not want.
-  if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
-    const subdomain = new URL(originUrl).hostname
-    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
-    regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
-  }
-
-  return { regexSubstitution, regexFilter }
+  // this is just to satisfy the compiler, this should never happen. Because CommonPatternRedirectRegexFilter can always
+  // handle.
+  return new CommonPatternRedirectRegexFilter({ originUrl, redirectUrl }).filter
 }
 
 // If the browser supports the declarativeNetRequest API, we can block the request.
