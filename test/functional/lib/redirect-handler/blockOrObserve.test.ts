@@ -1,13 +1,14 @@
-import { reset } from './../../../../node_modules/ansi-colors/types/index.d';
-import {expect} from 'chai'
-import {before, describe, it} from 'mocha'
-import sinon from 'sinon'
-import browserMock from 'sinon-chrome'
+import { expect } from 'chai';
+import { before, describe, it } from 'mocha';
+import sinon from 'sinon';
+import browserMock from 'sinon-chrome';
 
-import {optionDefaults} from '../../../../add-on/src/lib/options.js'
-import {addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost} from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
-import {initState} from '../../../../add-on/src/lib/state.js'
-import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
+import { optionDefaults } from '../../../../add-on/src/lib/options.js';
+import { addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
+import { initState } from '../../../../add-on/src/lib/state.js';
+import isManifestV3 from '../../../helpers/is-mv3-testing-enabled';
+import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js';
+import { RULE_REGEX_ENDING } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
 
 const dynamicRulesConditions = (regexFilter) => ({
   regexFilter,
@@ -31,9 +32,6 @@ const dynamicRulesConditions = (regexFilter) => ({
   ]
 })
 
-const TEST_TAB_ID = 1234
-const LAST_GROUP_REGEX = '((?:[^\\.]|$).*)$'
-
 /**
  * Ensures that the tab is redirected to the given url on the first request.
  *
@@ -42,7 +40,7 @@ const LAST_GROUP_REGEX = '((?:[^\\.]|$).*)$'
 function ensureTabRedirected (url): void {
   expect(browserMock.tabs.query.called).to.be.true
   expect(browserMock.tabs.update.called).to.be.true
-  expect(browserMock.tabs.update.lastCall.args).to.deep.equal([TEST_TAB_ID, { url }])
+  expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url }])
 }
 
 /**
@@ -51,12 +49,14 @@ function ensureTabRedirected (url): void {
  * @param regexSubstitution
  */
 function ensureDeclrativeNetRequetRuleIsAdded ({
+  addRuleIndex = 0,
   addRuleLength = 1,
   callIndex = 0,
   expectedCondition,
   regexSubstitution,
   removedRulesIds = [],
 }: {
+  addRuleIndex?: number
   addRuleLength?: number
   callIndex?: number
   expectedCondition: string
@@ -71,7 +71,7 @@ function ensureDeclrativeNetRequetRuleIsAdded ({
   expect(removeRuleIds).to.deep.equal(removedRulesIds)
   if (addRuleLength > 0) {
     expect(addRules).to.have.lengthOf(addRuleLength)
-    const [{ id, priority, action, condition }] = addRules
+    const { id, priority, action, condition } = addRules[addRuleIndex]
     expect(id).to.be.a('number')
     expect(priority).to.equal(1)
     expect(action).to.deep.equal({ type: 'redirect', redirect: { regexSubstitution } })
@@ -81,8 +81,10 @@ function ensureDeclrativeNetRequetRuleIsAdded ({
 
 describe('lib/redirect-handler/blockOrObserve', () => {
   before(function () {
+    if (!isManifestV3) {
+      return this.skip()
+    }
     browserMock.runtime.id = 'testid'
-    browserMock.tabs.query.resolves([{id: TEST_TAB_ID}])
   })
 
   describe('isLocalHost', () => {
@@ -137,6 +139,37 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect (browserMock.tabs.query.called).to.be.false
     })
 
+    it('Should add default rules for localhost', async () => {
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleIndex: 0,
+        addRuleLength: 3,
+        callIndex: 1,
+        expectedCondition: `^http\\:\\/\\/127\\.0\\.0\\.1\\:8080\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://localhost:8080/\\1/\\2'
+      })
+
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleIndex: 1,
+        addRuleLength: 3,
+        callIndex: 1,
+        expectedCondition: `^http\\:\\/\\/\\[\\:\\:1\\]\\:8080\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://localhost:8080/\\1/\\2'
+      })
+
+      ensureDeclrativeNetRequetRuleIsAdded({
+        addRuleIndex: 2,
+        addRuleLength: 3,
+        callIndex: 1,
+        expectedCondition: `^http\\:\\/\\/localhost\\:5001\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://127.0.0.1:5001/\\1/\\2'
+      })
+    })
+
     it('Should allow pages to be recovered', async () => {
       // when redirecting to recovery page
       await addRuleToDynamicRuleSet({
@@ -145,7 +178,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('chrome-extension://some-path/dist/recover/recovery.html')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/localhost\\:8080${LAST_GROUP_REGEX}`,
+        expectedCondition: `^https?\\:\\/\\/localhost\\:8080${RULE_REGEX_ENDING}`,
         regexSubstitution: 'chrome-extension://some-path/dist/recover/recovery.html\\1',
       })
     })
@@ -157,8 +190,8 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/ipfs\\.io${LAST_GROUP_REGEX}`,
-        regexSubstitution: 'http://localhost:8080\\1'
+        expectedCondition: `^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
+        regexSubstitution: 'http://localhost:8080/\\1/\\2'
       })
     })
 
@@ -169,7 +202,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
+        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
       })
     })
@@ -181,7 +214,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
+        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
       })
     })
@@ -193,7 +226,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
+        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
       })
       const [{ addRules }] = browserMock.declarativeNetRequest.updateDynamicRules.firstCall.args
@@ -206,7 +239,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
       ensureTabRedirected('http://localhost:8081/ipns/docs.ipfs.tech')
       ensureDeclrativeNetRequetRuleIsAdded({
-        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${LAST_GROUP_REGEX}`,
+        expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8081/ipns/docs.ipfs.tech\\1',
         removedRulesIds: [addRules[0].id]
       })
@@ -236,7 +269,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       ensureDeclrativeNetRequetRuleIsAdded({
         addRuleLength: 0,
         callIndex: -1,
-        expectedCondition: `^https?\\:\\/\\/ipfs\\.io${LAST_GROUP_REGEX}`,
+        expectedCondition: `^https?\\:\\/\\/ipfs\\.io${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080\\1',
         removedRulesIds: getRuleIdsAddedSoFar()
       })
