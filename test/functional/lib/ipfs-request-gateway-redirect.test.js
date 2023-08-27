@@ -67,8 +67,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: 'http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://localhost:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://localhost:8080/\\1/\\2'
           }
         })
       })
@@ -137,8 +137,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -150,8 +150,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -163,8 +163,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -176,8 +176,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -195,8 +195,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -208,8 +208,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -221,8 +221,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -238,8 +238,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onHeadersReceived(xhrRequest),
           MV2Expectation: 'http://127.0.0.1:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://127.0.0.1:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://127.0.0.1:8080/\\1/\\2'
           }
         })
       })
@@ -263,8 +263,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org/index.html?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://localhost:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://localhost:8080/\\1/\\2'
           }
         })
       })
@@ -276,8 +276,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: 'http://localhost:8080/ipns/QmSWnBwMKZ28tcgMFdihD8XS7p6QzdRSGf71cCybaETSsU/index.html?argTest#hashTest',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/google\\.com',
-            destination: 'http://localhost:8080'
+            origin: '^https?\\:\\/\\/google\\.com\\/(ipfs|ipns)\\/',
+            destination: 'http://localhost:8080/\\1/\\2'
           }
         })
       })
@@ -327,8 +327,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: `http://localhost:8080/ipfs/${cid}/`,
           MV3Expectation: {
-            origin: `^https?\\:\\/\\/${cid}\\.ipfs\\.dweb\\.link`,
-            destination: `http://localhost:8080/ipfs/${cid}`
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
+            destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
       })
@@ -340,8 +340,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: `http://localhost:8080/ipfs/${cid}/`,
           MV3Expectation: {
-            origin: `^https?\\:\\/\\/${cid}\\.ipfs\\.cf\\-ipfs\\.com`,
-            destination: `http://localhost:8080/ipfs/${cid}`
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.cf\\-ipfs\\.com\\/',
+            destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
       })
@@ -353,8 +353,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: 'http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy/%3Ffilename=test.jpg?arg=val',
           MV3Expectation: {
-            origin: '^https?\\:\\/\\/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy\\.ipfs\\.dweb\\.link',
-            destination: 'http://localhost:8080/ipfs/bafybeigfejjsuq5im5c3w3t3krsiytszhfdc4v5myltcg4myv2n2w6jumy'
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
+            destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
       })
@@ -366,8 +366,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
           modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
           MV2Expectation: `http://localhost:8080/ipns/${peerid}/`,
           MV3Expectation: {
-            origin: `^https?\\:\\/\\/${peerid}\\.ipns\\.dweb\\.link`,
-            destination: `http://localhost:8080/ipns/${peerid}`
+            origin: '^https?\\:\\/\\/(.*?)\\.(ipfs|ipns)\\.dweb\\.link\\/',
+            destination: 'http://localhost:8080/\\2/\\1/\\3'
           }
         })
       })
@@ -415,8 +415,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
             modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
             MV2Expectation: 'http://127.0.0.1:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/',
             MV3Expectation: {
-              origin: '^https?\\:\\/\\/0\\.0\\.0\\.0',
-              destination: 'http://127.0.0.1'
+              origin: '^https?\\:\\/\\/0\\.0\\.0\\.0\\:5001\\/(ipfs|ipns)\\/',
+              destination: 'http://127.0.0.1:5001/\\1/\\2'
             }
           })
         })
@@ -476,8 +476,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
         modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
         MV2Expectation: 'http://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
         MV3Expectation: {
-          origin: '^https?\\:\\/\\/bar\\.com',
-          destination: 'http://foo'
+          origin: '^https?\\:\\/\\/bar\\.com\\/(ipfs|ipns)\\/',
+          destination: 'http://foo/\\1/\\2'
         }
       })
     })
@@ -490,8 +490,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
         modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
         MV2Expectation: 'https://foo/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest',
         MV3Expectation: {
-          origin: '^https?\\:\\/\\/bar\\.com',
-          destination: 'https://foo'
+          origin: '^https?\\:\\/\\/bar\\.com\\/(ipfs|ipns)\\/',
+          destination: 'https://foo/\\1/\\2'
         }
       })
     })
@@ -517,7 +517,7 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
         MV2Expectation: 'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2Fbar',
         MV3Expectation: {
           origin: '^https?\\:\\/\\/localhost\\:8080\\/ipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR\\/foo\\/',
-          destination: 'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F'
+          destination: 'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1'
         }
       })
     })
@@ -532,7 +532,7 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
         MV2Expectation: 'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2Fbar',
         MV3Expectation: {
           origin: '^https?\\:\\/\\/localhost\\:8080\\/ipfs\\/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR\\/foo\\/',
-          destination: 'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F'
+          destination: 'chrome-extension://testid/dist/recovery/recovery.html#https%3A%2F%2Fipfs.io%2Fipfs%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%2Ffoo%2F\\1'
         }
       })
     })

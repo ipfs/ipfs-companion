@@ -127,7 +127,7 @@ describe('modifyRequest processing of DNSLinks', function () {
         MV2Expectation: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd?argTest#hashTest`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/explore\\.ipld\\.io\\/index\\.html',
-          destination: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd`
+          destination: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd\\1`
         }
       })
     })
@@ -174,7 +174,7 @@ describe('modifyRequest processing of DNSLinks', function () {
         MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-          destination: `${activeGateway}/ipns/explore.ipld.io`
+          destination: `${activeGateway}/ipns/explore.ipld.io\\1`
         }
       })
     })
@@ -191,7 +191,7 @@ describe('modifyRequest processing of DNSLinks', function () {
         MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-          destination: `${activeGateway}/ipns/explore.ipld.io`
+          destination: `${activeGateway}/ipns/explore.ipld.io\\1`
         }
       })
     })
@@ -208,7 +208,7 @@ describe('modifyRequest processing of DNSLinks', function () {
         MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-          destination: `${activeGateway}/ipns/explore.ipld.io`
+          destination: `${activeGateway}/ipns/explore.ipld.io\\1`
         }
       })
     })
@@ -229,7 +229,7 @@ describe('modifyRequest processing of DNSLinks', function () {
         MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
         MV3Expectation: {
           origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-          destination: `${activeGateway}/ipns/explore.ipld.io`
+          destination: `${activeGateway}/ipns/explore.ipld.io\\1`
         }
       })
     })
@@ -282,7 +282,7 @@ describe('modifyRequest processing of DNSLinks', function () {
           MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
           MV3Expectation: {
             origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-            destination: `${activeGateway}/ipns/explore.ipld.io`
+            destination: `${activeGateway}/ipns/explore.ipld.io\\1`
           }
         })
       })
@@ -304,7 +304,7 @@ describe('modifyRequest processing of DNSLinks', function () {
           MV2Expectation: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd?argTest#hashTest`,
           MV3Expectation: {
             origin: '^https?\\:\\/\\/explore\\.ipld\\.io\\/index\\.html',
-            destination: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd`
+            destination: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd\\1`
           }
         })
       })
@@ -335,7 +335,7 @@ describe('modifyRequest processing of DNSLinks', function () {
             MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
             MV3Expectation: {
               origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-              destination: `${activeGateway}/ipns/explore.ipld.io`
+              destination: `${activeGateway}/ipns/explore.ipld.io\\1`
             }
           })
         })
@@ -357,7 +357,7 @@ describe('modifyRequest processing of DNSLinks', function () {
             MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
             MV3Expectation: {
               origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-              destination: `${activeGateway}/ipns/explore.ipld.io`
+              destination: `${activeGateway}/ipns/explore.ipld.io\\1`
             }
           })
         })
@@ -377,7 +377,7 @@ describe('modifyRequest processing of DNSLinks', function () {
             MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
             MV3Expectation: {
               origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-              destination: `${activeGateway}/ipns/explore.ipld.io`
+              destination: `${activeGateway}/ipns/explore.ipld.io\\1`
             }
           })
         })
@@ -408,7 +408,7 @@ describe('modifyRequest processing of DNSLinks', function () {
           MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
           MV3Expectation: {
             origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-            destination: `${activeGateway}/ipns/explore.ipld.io`
+            destination: `${activeGateway}/ipns/explore.ipld.io\\1`
           }
         })
       })
@@ -425,7 +425,7 @@ describe('modifyRequest processing of DNSLinks', function () {
             MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
             MV3Expectation: {
               origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-              destination: `${activeGateway}/ipns/explore.ipld.io`
+              destination: `${activeGateway}/ipns/explore.ipld.io\\1`
             }
           })
         })
@@ -442,7 +442,7 @@ describe('modifyRequest processing of DNSLinks', function () {
             MV2Expectation: `${activeGateway}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
             MV3Expectation: {
               origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
-              destination: `${activeGateway}/ipns/explore.ipld.io`
+              destination: `${activeGateway}/ipns/explore.ipld.io\\1`
             }
           })
         })

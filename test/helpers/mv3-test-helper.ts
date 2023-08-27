@@ -3,8 +3,7 @@ import Sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { generateAddRule } from '../../add-on/src/lib/redirect-handler/blockOrObserve'
 import isManifestV3 from './is-mv3-testing-enabled'
-
-export const regexRuleEnding = '((?:[^\\.]|$).*)$'
+import { RULE_REGEX_ENDING } from '../../add-on/src/lib/redirect-handler/blockOrObserve'
 
 /**
  * Ensure that the request is redirected
@@ -31,8 +30,8 @@ export function ensureCallRedirected ({
     const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
     expect(args.addRules[0]).to.deep.equal(generateAddRule(
       args.addRules[0].id,
-      MV3Expectation.origin + regexRuleEnding,
-      MV3Expectation.destination + '\\1'
+      MV3Expectation.origin + RULE_REGEX_ENDING,
+      MV3Expectation.destination
     ))
   } else {
     expect(modifiedRequestCallResp.redirectUrl).to.equal(MV2Expectation)

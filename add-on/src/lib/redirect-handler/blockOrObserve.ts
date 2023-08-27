@@ -1,16 +1,24 @@
 import debug from 'debug'
 import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
+import { IFilter, IRegexFilter, RegexFilter } from './baseRegexFilter.js'
+import { CommonPatternRedirectRegexFilter } from './commonPatternRedirectRegexFilter.js'
+import { NamespaceRedirectRegexFilter } from './namespaceRedirectRegexFilter.js'
+import { SubdomainRedirectRegexFilter } from './subdomainRedirectRegexFilter.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
+export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
+
 export const GLOBAL_STATE_CHANGE = 'GLOBAL_STATE_CHANGE'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
+
+// We need to match the rest of the URL, so we can use a wildcard.
 export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
 
 interface regexFilterMap {
@@ -21,6 +29,7 @@ interface regexFilterMap {
 interface redirectHandlerInput {
   originUrl: string
   redirectUrl: string
+  getPort: (state: CompanionState) => string
 }
 
 type messageToSelfType = typeof GLOBAL_STATE_CHANGE | typeof GLOBAL_STATE_OPTION_CHANGE | typeof DELETE_RULE_REQUEST
@@ -28,6 +37,8 @@ interface messageToSelf {
   type: messageToSelfType
   value?: string | Record<string, unknown>
 }
+
+export const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
 
 // We need to check if the browser supports the declarativeNetRequest API.
 // TODO: replace with check for `Blocking` in `chrome.webRequest.OnBeforeRequestOptions`
@@ -75,11 +86,18 @@ const savedRegexFilters: Map<string, regexFilterMap> = new Map()
 const DEFAULT_LOCAL_RULES: redirectHandlerInput[] = [
   {
     originUrl: 'http://127.0.0.1',
-    redirectUrl: 'http://localhost'
+    redirectUrl: 'http://localhost',
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port
   },
   {
     originUrl: 'http://[::1]',
-    redirectUrl: 'http://localhost'
+    redirectUrl: 'http://localhost',
+    getPort: ({ gwURLString }): string => new URL(gwURLString).port
+  },
+  {
+    originUrl: 'http://localhost',
+    redirectUrl: 'http://127.0.0.1',
+    getPort: ({ apiURL }): string => new URL(apiURL).port
   }
 ]
 
@@ -101,7 +119,7 @@ export function isLocalHost (url: string): boolean {
  * @param str URL string to escape
  * @returns
  */
-function escapeURLRegex (str: string): string {
+export function escapeURLRegex (str: string): string {
   // these characters are allowed in the URL, but not in the regex.
   // eslint-disable-next-line no-useless-escape
   const ALLOWED_CHARS_URL_REGEX = /([:\/\?#\[\]@!$&'\(\ )\*\+,;=\-_\.~])/g
@@ -115,38 +133,24 @@ function escapeURLRegex (str: string): string {
  * @param redirectUrl
  * @returns
  */
-function constructRegexFilter ({ originUrl, redirectUrl }: redirectHandlerInput): {
-  regexSubstitution: string
-  regexFilter: string
-} {
-  // We can traverse the URL from the end, and find the first character that is different.
-  let commonIdx = 1
-  while (commonIdx < Math.min(originUrl.length, redirectUrl.length)) {
-    if (originUrl[originUrl.length - commonIdx] !== redirectUrl[redirectUrl.length - commonIdx]) {
-      break
+function constructRegexFilter ({ originUrl, redirectUrl }: IRegexFilter): IFilter {
+  // the order is very important here, because we want to match the best possible filter.
+  const filtersToTryInOrder: Array<typeof RegexFilter> = [
+    SubdomainRedirectRegexFilter,
+    NamespaceRedirectRegexFilter,
+    CommonPatternRedirectRegexFilter
+  ]
+
+  for (const Filter of filtersToTryInOrder) {
+    const filter = new Filter({ originUrl, redirectUrl })
+    if (filter.canHandle) {
+      return filter.filter
     }
-    commonIdx += 1
   }
 
-  // We can now construct the regex filter and substitution.
-  let regexSubstitution = redirectUrl.slice(0, redirectUrl.length - commonIdx + 1) + '\\1'
-  // We need to escape the characters that are allowed in the URL, but not in the regex.
-  const regexFilterFirst = escapeURLRegex(originUrl.slice(0, originUrl.length - commonIdx + 1))
-  // We need to match the rest of the URL, so we can use a wildcard.
-  const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
-  let regexFilter = `^${regexFilterFirst}${RULE_REGEX_ENDING}`.replace(/https?/ig, 'https?')
-
-  // This method does not parse:
-  // originUrl: "https://awesome.ipfs.io/"
-  // redirectUrl: "http://localhost:8081/ipns/awesome.ipfs.io/"
-  // that ends up with capturing all urls which we do not want.
-  if (regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
-    const subdomain = new URL(originUrl).hostname
-    regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
-    regexSubstitution = regexSubstitution.replace('\\1', `/${subdomain}\\1`)
-  }
-
-  return { regexSubstitution, regexFilter }
+  // this is just to satisfy the compiler, this should never happen. Because CommonPatternRedirectRegexFilter can always
+  // handle.
+  return new CommonPatternRedirectRegexFilter({ originUrl, redirectUrl }).filter
 }
 
 // If the browser supports the declarativeNetRequest API, we can block the request.
@@ -248,10 +252,10 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
     }
 
     // make sure that the default rules are added.
-    for (const { originUrl, redirectUrl } of DEFAULT_LOCAL_RULES) {
-      const { port } = new URL(state.gwURLString)
-      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}(.*)$`
-      const regexSubstitution = `${redirectUrl}:${port}\\1`
+    for (const { originUrl, redirectUrl, getPort } of DEFAULT_LOCAL_RULES) {
+      const port = getPort(state)
+      const regexFilter = `^${escapeURLRegex(`${originUrl}:${port}`)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
+      const regexSubstitution = `${redirectUrl}:${port}/\\1/\\2`
 
       if (!savedRegexFilters.has(regexFilter)) {
         // We need to add the new rule.
