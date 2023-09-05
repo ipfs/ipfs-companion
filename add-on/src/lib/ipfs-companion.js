@@ -22,7 +22,7 @@ import { createRequestModifier } from './ipfs-request.js'
 import createNotifier from './notifier.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
 import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOptions } from './options.js'
-import { getExtraInfoSpec, notifyOptionChange } from './redirect-handler/blockOrObserve.js'
+import { cleanupRules, getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
 
@@ -521,6 +521,7 @@ export default async function init (inQuickImport = false) {
     try {
       const oldColor = colorArraytoHex(await browser.action.getBadgeBackgroundColor({}))
       if (badgeColor !== oldColor) {
+        await cleanupRules(true)
         await browser.action.setBadgeBackgroundColor({ color: badgeColor })
         await setBrowserActionIcon(badgeIcon)
       }

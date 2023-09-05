@@ -66,9 +66,9 @@ async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<
  *
  * @returns void
  */
-export function notifyOptionChange (): Promise<void> {
+export async function notifyOptionChange (): Promise<void> {
   log('notifyOptionChange')
-  return sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
+  return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
 }
 
 /**
@@ -77,8 +77,8 @@ export function notifyOptionChange (): Promise<void> {
  * @param id number
  * @returns void
  */
-export function notifyDeleteRule (id: number): Promise<void> {
-  return sendMessageToSelf(DELETE_RULE_REQUEST, id)
+export async function notifyDeleteRule (id: number): Promise<void> {
+  return await sendMessageToSelf(DELETE_RULE_REQUEST, id)
 }
 
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
@@ -339,7 +339,6 @@ export function generateAddRule (
  */
 export function addRuleToDynamicRuleSetGenerator (
   getState: () => CompanionState): (input: redirectHandlerInput) => Promise<void> {
-
   // setup listeners for the extension.
   setupListeners({
     [GLOBAL_STATE_OPTION_CHANGE]: async (): Promise<void> => {
