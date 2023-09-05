@@ -180,6 +180,10 @@ export default (state, emitter) => {
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
       await notifyOptionChange()
+      // notifyOptionsChange call is async, sends a message to background and
+      // waits for it to resolve. However, that doesnt work the
+      // same way in Chrome and FF. So we need to wait a bit before reloading.
+      await new Promise(resolve => setTimeout(resolve, 200))
 
       const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference

@@ -56,6 +56,8 @@ async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
   if (!supportsBlock()) {
     const message: messageToSelf = { type: msg, value }
+    // on FF, this call waits for the response from the listener.
+    // on Chrome, this needs a callback.
     await browser.runtime.sendMessage(message)
   }
 }
