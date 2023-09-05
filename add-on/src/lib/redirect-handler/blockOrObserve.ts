@@ -48,19 +48,6 @@ export const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
 export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES > 0)
 
 /**
- * Notify self about option change.
- * @returns void
- */
-export async function notifyOptionChange (): Promise<void> {
-  log('notifyOptionChange')
-  return await sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
-}
-
-export async function notifyDeleteRule (id: number): Promise<void> {
-  return await sendMessageToSelf(DELETE_RULE_REQUEST, id)
-}
-
-/**
  * Sends message to self to notify about change.
  *
  * @param msg
@@ -68,9 +55,30 @@ export async function notifyDeleteRule (id: number): Promise<void> {
 async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<void> {
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
   if (!supportsBlock()) {
-    const message: messageToSelf = { type: msg }
+    const message: messageToSelf = { type: msg, value }
+    console.log(`[ipfs-companion] sendMessageToSelf: ${msg}`)
     await browser.runtime.sendMessage(message)
   }
+}
+
+/**
+ * Notify self about option change.
+ *
+ * @returns void
+ */
+export function notifyOptionChange (): Promise<void> {
+  log('notifyOptionChange')
+  return sendMessageToSelf(GLOBAL_STATE_OPTION_CHANGE)
+}
+
+/**
+ * Notify self about rule deletion.
+ *
+ * @param id number
+ * @returns void
+ */
+export function notifyDeleteRule (id: number): Promise<void> {
+  return sendMessageToSelf(DELETE_RULE_REQUEST, id)
 }
 
 const savedRegexFilters: Map<string, regexFilterMap> = new Map()
@@ -331,6 +339,24 @@ export function generateAddRule (
  */
 export function addRuleToDynamicRuleSetGenerator (
   getState: () => CompanionState): (input: redirectHandlerInput) => Promise<void> {
+
+  // setup listeners for the extension.
+  setupListeners({
+    [GLOBAL_STATE_OPTION_CHANGE]: async (): Promise<void> => {
+      log('GLOBAL_STATE_OPTION_CHANGE')
+      await cleanupRules(true)
+      await reconcileRulesAndRemoveOld(getState())
+    },
+    [DELETE_RULE_REQUEST]: async (value: number): Promise<void> => {
+      if (value != null) {
+        await cleanupRuleById(value)
+        await browser.runtime.sendMessage({ type: DELETE_RULE_REQUEST_SUCCESS })
+      } else {
+        await cleanupRules(true)
+      }
+    }
+  })
+
   // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
     // update the rules so that the next request is handled correctly.
@@ -369,22 +395,6 @@ export function addRuleToDynamicRuleSetGenerator (
         }
       )
     }
-
-    setupListeners({
-      [GLOBAL_STATE_OPTION_CHANGE]: async (): Promise<void> => {
-        log('GLOBAL_STATE_OPTION_CHANGE')
-        await cleanupRules(true)
-        await reconcileRulesAndRemoveOld(getState())
-      },
-      [DELETE_RULE_REQUEST]: async (value: number): Promise<void> => {
-        if (value != null) {
-          await cleanupRuleById(value)
-          await browser.runtime.sendMessage({ type: DELETE_RULE_REQUEST_SUCCESS })
-        } else {
-          await cleanupRules(true)
-        }
-      }
-    })
     // call to reconcile rules and remove old ones.
     await reconcileRulesAndRemoveOld(state)
   }

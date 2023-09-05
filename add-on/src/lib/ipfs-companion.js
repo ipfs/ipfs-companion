@@ -660,7 +660,6 @@ export default async function init (inQuickImport = false) {
           break
       }
     }
-    await notifyOptionChange()
     // ensure consent is set properly on state changes
     handleConsentFromState(state)
 
