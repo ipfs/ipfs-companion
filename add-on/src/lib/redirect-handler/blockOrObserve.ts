@@ -56,7 +56,6 @@ async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
   if (!supportsBlock()) {
     const message: messageToSelf = { type: msg, value }
-    console.log(`[ipfs-companion] sendMessageToSelf: ${msg}`)
     await browser.runtime.sendMessage(message)
   }
 }
@@ -204,7 +203,8 @@ async function cleanupRuleById (id: number): Promise<void> {
  * @param {function} handlerFn
  */
 function setupListeners (handlers: Record<messageToSelfType, (value: any) => Promise<void>>): void {
-  browser.runtime.onMessage.addListener(async ({ message: { type, value } }: { message: messageToSelf }): Promise<void> => {
+  browser.runtime.onMessage.addListener(async (message: messageToSelf): Promise<void> => {
+    const { type, value } = message
     if (type in handlers) {
       await handlers[type](value)
     }
