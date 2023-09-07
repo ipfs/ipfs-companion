@@ -22,7 +22,7 @@ import { createRequestModifier } from './ipfs-request.js'
 import createNotifier from './notifier.js'
 import { runPendingOnInstallTasks } from './on-installed.js'
 import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOptions } from './options.js'
-import { getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
+import { cleanupRules, getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
 
@@ -521,6 +521,7 @@ export default async function init (inQuickImport = false) {
     try {
       const oldColor = colorArraytoHex(await browser.action.getBadgeBackgroundColor({}))
       if (badgeColor !== oldColor) {
+        await cleanupRules(true)
         await browser.action.setBadgeBackgroundColor({ color: badgeColor })
         await setBrowserActionIcon(badgeIcon)
       }
@@ -577,7 +578,7 @@ export default async function init (inQuickImport = false) {
     }
   }
 
-  async function onStorageChange (changes, area) {
+  async function onStorageChange (changes) {
     let shouldReloadExtension = false
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
@@ -696,6 +697,8 @@ export default async function init (inQuickImport = false) {
       browser.tabs.reload() // async reload of options page to keep it alive
       await browser.runtime.reload()
     }
+    log('storage change processed')
+
     // Post update to Browser Action (if exists) -- this gives UX a snappy feel
     await sendStatusUpdateToBrowserAction()
   }
