@@ -31,7 +31,6 @@ export class SubdomainRedirectRegexFilter extends RegexFilter {
         const subdomainPart = urlParts.shift() as string
         // this needs to be computed for every iteration as the staticUrlParts changes
         const commonStaticUrlEnd = `\\.${escapeURLRegex(staticUrlParts.join('.'))}\\/${RULE_REGEX_ENDING}`
-
         // this does not work for subdomains where namespace is not provided.
         // e.g. https://helia-identify.on.fleek.co/
         // e.g. https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.on.fleek.co/

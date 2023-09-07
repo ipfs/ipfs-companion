@@ -43,10 +43,10 @@ export default function optionsPage (state, emit) {
     // when global toggle is in "suspended" state
     return html`
     <div class="sans-serif">
-  ${globalToggleForm({
-    active: state.options.active,
-    onOptionChange
-  })}
+      ${globalToggleForm({
+        active: state.options.active,
+        onOptionChange
+      })}
     </div>
     `
   }
