@@ -11,7 +11,8 @@ export class SubdomainRedirectRegexFilter extends RegexFilter {
     super({ originUrl, redirectUrl })
   }
 
-  computeFilter (): void {
+  computeFilter (isBraveOverride: boolean): void {
+    const isBrave = this.isBrave || isBraveOverride
     this.regexSubstitution = this.redirectUrl
     this.regexFilter = this.originUrl
     if (!DEFAULT_NAMESPACES.has(this.originNS) && DEFAULT_NAMESPACES.has(this.redirectNS)) {
@@ -40,12 +41,16 @@ export class SubdomainRedirectRegexFilter extends RegexFilter {
           // e.g https://bafybeib3bzis4mejzsnzsb65od3rnv5ffit7vsllratddjkgfgq4wiamqu.ipfs.dweb.link
           this.regexFilter = `${commonStaticUrlStart}(.*?)\\.${defaultNSRegexStr}${commonStaticUrlEnd}`
 
-          this.regexSubstitution = this._redirectUrl
-            .replace(urlParts.reverse().join('.'), '\\1') // replace urlParts or CID.
-            .replace(`/${subdomainPart}/`, '/\\2/') // replace namespace dynamically.
+          if (isBrave) {
+            this.regexSubstitution = '\\2://\\1'
+          } else {
+            this.regexSubstitution = this._redirectUrl
+              .replace(urlParts.reverse().join('.'), '\\1') // replace urlParts or CID.
+              .replace(`/${subdomainPart}/`, '/\\2/') // replace namespace dynamically.
+          }
 
           const pathWithSearch = this.originURL.pathname + this.originURL.search
-          if (pathWithSearch !== '/') {
+          if (pathWithSearch !== '/' && !isBrave) {
             this.regexSubstitution = this.regexSubstitution.replace(pathWithSearch, '/\\3') // replace path
           } else {
             this.regexSubstitution += '\\3'
