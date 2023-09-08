@@ -175,21 +175,23 @@ async function runBrowserTest (browserName, testFunc) {
   }
 }
 
-async function checkNumberOfConnectedPeers (browser, url) {
-  const peers = await getNumberOfConnectedPeers(browser, url)
-  expect(peers).not.to.equal(0)
-}
-
-describe('ipfs-companion', function () {
+describe('ipfs-companion', () => {
   before(function () {
     if (process.env.TEST_E2E !== 'true') {
       this.skip()
     }
   })
-  it('should be able to discover peers in Chromium', async function () {
-    await runBrowserTest('chromium', checkNumberOfConnectedPeers)
-  })
-  it('should be able to discover peers in Firefox', async function () {
-    await runBrowserTest('firefox', checkNumberOfConnectedPeers)
-  })
+
+  const browsersToTest = ['chromium', 'firefox']
+
+  for (const browserName of browsersToTest) {
+    describe(`ipfs-companion in ${browserName}`, () => {
+      it(`should be able to install the extension in ${browserName}`, async () => {
+        await runBrowserTest(browserName, async (browser, url) => {
+          const peers = await getNumberOfConnectedPeers(browser, url)
+          expect(peers).not.to.equal(0)
+        })
+      })
+    })
+  }
 })
