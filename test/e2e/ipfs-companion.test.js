@@ -137,6 +137,20 @@ async function getNumberOfConnectedPeers (browser, url) {
   return parseInt(peers)
 }
 
+async function getFinalUrl (browser, initialUrl) {
+  await browser.get(initialUrl)
+  console.info('Checking the final url')
+  const finalUrl = await backOff(async () => {
+    const currentUrl = await browser.getCurrentUrl()
+    return currentUrl
+  }, {
+    delayFirstAttempt: true,
+    numOfAttempts: 5,
+    startingDelay: 500
+  })
+  return finalUrl
+}
+
 async function runBrowserTest (browserName, testFunc) {
   const extension = getExtension(browserName)
 
@@ -190,6 +204,29 @@ describe('ipfs-companion', () => {
         await runBrowserTest(browserName, async (browser, url) => {
           const peers = await getNumberOfConnectedPeers(browser, url)
           expect(peers).not.to.equal(0)
+        })
+      })
+
+      it(`should resolve urls in ${browserName}`, async () => {
+        await runBrowserTest(browserName, async (browser, url) => {
+          const urlsToTest = [{
+            initialUrl: 'https://ipfs.io/ipfs/QmTqZhR6f7jzdhLgPArDPnsbZpvvgxzCZycXK7ywkLxSyU?filename=ipfs-logo.3ea91a2f.svg',
+            finalUrl: 'http://bafybeicrwkoherkuzwp2zk3cd4jc3miwp7mrkz2blxrd5afbdibqv5ivo4.ipfs.localhost:8080/?filename=ipfs-logo.3ea91a2f.svg'
+          }, {
+            initialUrl: 'https://awesome.ipfs.io',
+            finalUrl: 'http://awesome.ipfs.io.ipns.localhost:8080/'
+          }, {
+            initialUrl: 'https://docs.ipfs.tech',
+            finalUrl: 'http://docs.ipfs.tech.ipns.localhost:8080/'
+          }, {
+            initialUrl: 'https://en.wikipedia-on-ipfs.org/wiki/InterPlanetary_File_System',
+            finalUrl: 'http://en.wikipedia-on-ipfs.org.ipns.localhost:8080/wiki/InterPlanetary_File_System'
+          }]
+
+          for (const { initialUrl, finalUrl } of urlsToTest) {
+            const resolvedUrl = await getFinalUrl(browser, initialUrl)
+            expect(resolvedUrl).to.equal(finalUrl)
+          }
         })
       })
     })
