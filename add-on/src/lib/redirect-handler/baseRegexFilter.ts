@@ -1,4 +1,4 @@
-import {brave} from '../../lib/ipfs-client/brave.js'
+import { brave } from '../../lib/ipfs-client/brave.js'
 
 export interface IRegexFilter {
   originUrl: string
