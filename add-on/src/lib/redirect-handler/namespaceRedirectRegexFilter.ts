@@ -7,7 +7,7 @@ import { DEFAULT_NAMESPACES, RULE_REGEX_ENDING, defaultNSRegexStr, escapeURLRege
  * destination: 'http://localhost:8080/$1/$2'
  */
 export class NamespaceRedirectRegexFilter extends RegexFilter {
-  computeFilter (): void {
+  computeFilter (isBraveOverride: boolean): void {
     this.canHandle = DEFAULT_NAMESPACES.has(this.originNS) &&
       DEFAULT_NAMESPACES.has(this.redirectNS) &&
       this.originNS === this.redirectNS &&
@@ -18,8 +18,12 @@ export class NamespaceRedirectRegexFilter extends RegexFilter {
     // https://ipfs.io/ipfs/QmZMxU -> http://localhost:8080/ipfs/QmZMxU
     const [originFirst, originLast] = this.originUrl.split(`/${this.originNS}/`)
     this.regexFilter = `^${escapeURLRegex(originFirst)}\\/${defaultNSRegexStr}\\/${RULE_REGEX_ENDING}`
-    this.regexSubstitution = this.redirectUrl
-      .replace(`/${this.redirectNS}/`, '/\\1/')
-      .replace(originLast, '\\2')
+    if (this.isBrave || isBraveOverride) {
+      this.regexSubstitution = '\\1://\\2'
+    } else {
+      this.regexSubstitution = this.redirectUrl
+        .replace(`/${this.redirectNS}/`, '/\\1/')
+        .replace(originLast, '\\2')
+    }
   }
 }
