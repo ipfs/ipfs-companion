@@ -4,11 +4,10 @@ import sinon from 'sinon';
 import browserMock from 'sinon-chrome';
 
 import { optionDefaults } from '../../../../add-on/src/lib/options.js';
-import { addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
+import { RULE_REGEX_ENDING, addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
 import { initState } from '../../../../add-on/src/lib/state.js';
 import isManifestV3 from '../../../helpers/is-mv3-testing-enabled';
 import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js';
-import { RULE_REGEX_ENDING } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
 
 const dynamicRulesConditions = (regexFilter) => ({
   regexFilter,
@@ -46,7 +45,7 @@ function ensureTabRedirected (url): void {
  * @param expectedCondition
  * @param regexSubstitution
  */
-function ensureDeclrativeNetRequetRuleIsAdded ({
+function ensureDeclarativeNetRequestRuleIsAdded ({
   addRuleIndex = 0,
   addRuleLength = 1,
   callIndex = 0,
@@ -143,7 +142,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
 
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         addRuleIndex: 0,
         addRuleLength: 3,
         callIndex: 1,
@@ -151,7 +150,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         regexSubstitution: 'http://localhost:8080/\\1/\\2'
       })
 
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         addRuleIndex: 1,
         addRuleLength: 3,
         callIndex: 1,
@@ -159,7 +158,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         regexSubstitution: 'http://localhost:8080/\\1/\\2'
       })
 
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         addRuleIndex: 2,
         addRuleLength: 3,
         callIndex: 1,
@@ -175,7 +174,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'chrome-extension://some-path/dist/recover/recovery.html'
       })
       ensureTabRedirected('chrome-extension://some-path/dist/recover/recovery.html')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/localhost\\:8080${RULE_REGEX_ENDING}`,
         regexSubstitution: 'chrome-extension://some-path/dist/recover/recovery.html\\1',
       })
@@ -187,7 +186,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
       ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/\\1/\\2'
       })
@@ -199,7 +198,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
       ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
       })
@@ -211,7 +210,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
       ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
       })
@@ -223,7 +222,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
       ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
       })
@@ -236,7 +235,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8081/ipns/docs.ipfs.tech'
       })
       ensureTabRedirected('http://localhost:8081/ipns/docs.ipfs.tech')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8081/ipns/docs.ipfs.tech\\1',
         removedRulesIds: [addRules[0].id]
@@ -264,7 +263,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       })
 
       ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
-      ensureDeclrativeNetRequetRuleIsAdded({
+      ensureDeclarativeNetRequestRuleIsAdded({
         addRuleLength: 0,
         callIndex: -1,
         expectedCondition: `^https?\\:\\/\\/ipfs\\.io${RULE_REGEX_ENDING}`,
