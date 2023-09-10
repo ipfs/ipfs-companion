@@ -96,8 +96,6 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
 - Re-route requests made via the following [experimental protocols](https://github.com/ipfs/ipfs-companion/issues/164) to an HTTP gateway (public or custom):
     - `ipfs://$cid`
     - `ipns://$cid_or_fqdn`
-    - `dweb:/ipfs/$cid`
-    - `dweb:/ipns/$cid_or_fqdn`
 
 ## Install IPFS Companion
 
