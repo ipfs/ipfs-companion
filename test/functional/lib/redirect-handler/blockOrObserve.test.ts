@@ -26,8 +26,6 @@ const dynamicRulesConditions = (regexFilter) => ({
     'stylesheet',
     'sub_frame',
     'webbundle',
-    'websocket',
-    'webtransport',
     'xmlhttprequest'
   ]
 })

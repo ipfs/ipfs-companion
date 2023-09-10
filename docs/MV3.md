@@ -67,8 +67,6 @@ The process is asynchronous, the browser allows "observation" of requests to com
       'stylesheet',
       'sub_frame',
       'webbundle',
-      'websocket',
-      'webtransport',
       'xmlhttprequest'
     ]
   }
@@ -115,8 +113,6 @@ That's just an example, but in reality it looks more like (which covers edge cas
       "stylesheet",
       "sub_frame",
       "webbundle",
-      "websocket",
-      "webtransport",
       "xmlhttprequest"
     ]
   },

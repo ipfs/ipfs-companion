@@ -325,8 +325,6 @@ export function generateAddRule (
         'stylesheet',
         'sub_frame',
         'webbundle',
-        'websocket',
-        'webtransport',
         'xmlhttprequest'
       ]
     }
