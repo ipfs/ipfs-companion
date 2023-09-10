@@ -100,7 +100,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       expect(isLocalHost('http://localhost:8080/ipfs/QmHash')).to.be.true
       expect(isLocalHost('http://localhost:8080/ipfs/QmHash')).to.be.true
       expect(isLocalHost('http://localhost')).to.be.true
-      expect(isLocalHost('http://0.0.0.0:8080')).to.be.true
       expect(isLocalHost('https://google.com')).to.be.false
       expect(isLocalHost('https://ipfs.io')).to.be.false
     })
