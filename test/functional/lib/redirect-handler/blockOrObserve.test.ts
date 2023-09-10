@@ -34,7 +34,7 @@ const dynamicRulesConditions = (regexFilter) => ({
  *
  * @param url
  */
-function ensureTabRedirected (url): void {
+function ensureTabUpdatedTo (url): void {
   expect(browserMock.tabs.query.called).to.be.true
   expect(browserMock.tabs.update.called).to.be.true
   expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url }])
@@ -173,7 +173,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'http://localhost:8080',
         redirectUrl: 'chrome-extension://some-path/dist/recover/recovery.html'
       })
-      ensureTabRedirected('chrome-extension://some-path/dist/recover/recovery.html')
+      ensureTabUpdatedTo('chrome-extension://some-path/dist/recover/recovery.html')
       ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/localhost\\:8080${RULE_REGEX_ENDING}`,
         regexSubstitution: 'chrome-extension://some-path/dist/recover/recovery.html\\1',
@@ -185,7 +185,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
-      ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
+      ensureTabUpdatedTo('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
       ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/\\1/\\2'
@@ -197,7 +197,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'https://docs.ipfs.tech',
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
-      ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
+      ensureTabUpdatedTo('http://localhost:8080/ipns/docs.ipfs.tech')
       ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
@@ -209,7 +209,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'http://docs.ipfs.tech',
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
-      ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
+      ensureTabUpdatedTo('http://localhost:8080/ipns/docs.ipfs.tech')
       ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
@@ -221,7 +221,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'http://docs.ipfs.tech',
         redirectUrl: 'http://localhost:8080/ipns/docs.ipfs.tech'
       })
-      ensureTabRedirected('http://localhost:8080/ipns/docs.ipfs.tech')
+      ensureTabUpdatedTo('http://localhost:8080/ipns/docs.ipfs.tech')
       ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8080/ipns/docs.ipfs.tech\\1'
@@ -234,7 +234,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'http://docs.ipfs.tech',
         redirectUrl: 'http://localhost:8081/ipns/docs.ipfs.tech'
       })
-      ensureTabRedirected('http://localhost:8081/ipns/docs.ipfs.tech')
+      ensureTabUpdatedTo('http://localhost:8081/ipns/docs.ipfs.tech')
       ensureDeclarativeNetRequestRuleIsAdded({
         expectedCondition: `^https?\\:\\/\\/docs\\.ipfs\\.tech${RULE_REGEX_ENDING}`,
         regexSubstitution: 'http://localhost:8081/ipns/docs.ipfs.tech\\1',
@@ -262,7 +262,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
 
-      ensureTabRedirected('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
+      ensureTabUpdatedTo('http://localhost:8080/ipns/en.wikipedia-on-ipfs.org')
       ensureDeclarativeNetRequestRuleIsAdded({
         addRuleLength: 0,
         callIndex: -1,
