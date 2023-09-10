@@ -332,7 +332,7 @@ export function generateAddRule (
 }
 
 /**
- * Register a redirect rule in the dynamic rule set.
+ * Register a redirect rule in the dynamic rule set and update all tabs that match the rule.
  *
  * @param {redirectHandlerInput} input
  * @returns {Promise<void>}
@@ -369,7 +369,7 @@ export function addRuleToDynamicRuleSetGenerator (
       return
     }
 
-    // first update the tab to apply the new rule.
+    // first update all the matching tabs to apply the new rule.
     const tabs = await browser.tabs.query({ url: `${originUrl}*` })
     await Promise.all(tabs.map(async tab => await browser.tabs.update(tab.id, { url: redirectUrl })))
 
