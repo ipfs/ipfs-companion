@@ -62,7 +62,7 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
             <dl>
               <dt>${browser.i18n.getMessage('option_automaticMode_title')}</dt>
               <dd>${browser.i18n.getMessage('option_automaticMode_description')}</dd>
-              <p class="red i">${browser.i18n.getMessage('option_automaticMode_description_subtext')}</p>
+              <p class="i">${browser.i18n.getMessage('option_automaticMode_description_subtext')}</p>
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'automaticMode', checked: automaticMode, onchange: onAutomaticModeChange })}</div>
