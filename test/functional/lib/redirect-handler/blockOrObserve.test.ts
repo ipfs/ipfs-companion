@@ -132,6 +132,10 @@ describe('lib/redirect-handler/blockOrObserve', () => {
 
       // when redirectUrl is different from originUrl, but both are localhost.
       await addRuleToDynamicRuleSet({ originUrl: 'http://localhost:9001/foo', redirectUrl: 'http://localhost:9001/bar' })
+
+      // when originUrl is a valid IPFS URL.
+      await addRuleToDynamicRuleSet({ originUrl: 'http://localhost:8080/ipfs/bafkqaaa', redirectUrl: 'http://localhost:9001/bar' })
+
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.false
       expect (browserMock.tabs.query.called).to.be.false
     })
