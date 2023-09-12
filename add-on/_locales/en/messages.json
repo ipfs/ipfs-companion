@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "Toggle all IPFS integrations",
-    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
+    "description": "A label for toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "offline",
