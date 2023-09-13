@@ -23,7 +23,7 @@ function set-manifest {
 # Name includes git revision to make QA and bug reporting easier for users :-)
 REVISION=$(git show-ref --head HEAD | head -c 7)
 if [ "$RELEASE_CHANNEL" = "beta" ]; then
-    set-manifest ".name = \"IPFS Companion (@ $REVISION)\""
+    set-manifest ".name = \"IPFS Companion (Beta @ $REVISION)\""
 else
     set-manifest ".name = \"IPFS Companion (Dev Build @ $REVISION)\""
 fi
