@@ -181,6 +181,9 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
  * Clean up all the rules, when extension is disabled.
  */
 export async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
+  if (supportsBlock()) {
+    return
+  }
   const existingRules = await browser.declarativeNetRequest.getDynamicRules()
   const existingRulesIds = existingRules.map(({ id }): number => id)
   await browser.declarativeNetRequest.updateDynamicRules({ addRules: [], removeRuleIds: existingRulesIds })
