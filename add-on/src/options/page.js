@@ -2,17 +2,17 @@
 /* eslint-env browser, webextensions */
 
 import html from 'choo/html/index.js'
+import { supportsDeclarativeNetRequest } from '../lib/redirect-handler/blockOrObserve.js'
+import apiForm from './forms/api-form.js'
+import dnslinkForm from './forms/dnslink-form.js'
+import experimentsForm from './forms/experiments-form.js'
+import fileImportForm from './forms/file-import-form.js'
+import gatewaysForm from './forms/gateways-form.js'
 import globalToggleForm from './forms/global-toggle-form.js'
 import ipfsNodeForm from './forms/ipfs-node-form.js'
-import fileImportForm from './forms/file-import-form.js'
-import dnslinkForm from './forms/dnslink-form.js'
-import gatewaysForm from './forms/gateways-form.js'
-import apiForm from './forms/api-form.js'
-import experimentsForm from './forms/experiments-form.js'
-import telemetryForm from './forms/telemetry-form.js'
-import resetForm from './forms/reset-form.js'
 import redirectRuleForm from './forms/redirect-rule-form.js'
-import { supportsBlock } from '../lib/redirect-handler/blockOrObserve.js'
+import resetForm from './forms/reset-form.js'
+import telemetryForm from './forms/telemetry-form.js'
 
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -115,7 +115,7 @@ export default function optionsPage (state, emit) {
   ${resetForm({
     onOptionsReset
   })}
-  ${supportsBlock()
+  ${!supportsDeclarativeNetRequest()
       ? ''
       : redirectRuleForm({
     redirectRules: state.redirectRules,

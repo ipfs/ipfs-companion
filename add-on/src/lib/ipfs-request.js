@@ -10,7 +10,7 @@ import { recoveryPagePath } from './constants.js'
 import { braveNodeType } from './ipfs-client/brave.js'
 import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
-import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsBlock } from './redirect-handler/blockOrObserve.js'
+import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsDeclarativeNetRequest } from './redirect-handler/blockOrObserve.js'
 import { RequestTracker } from './trackers/requestTracker.js'
 
 const log = debug('ipfs-companion:request')
@@ -488,7 +488,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
 async function handleRedirection ({ originUrl, redirectUrl, request }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
     resolvedRequestTracker.track(request)
-    if (supportsBlock()) {
+    if (!supportsDeclarativeNetRequest()) {
       return { redirectUrl }
     }
 

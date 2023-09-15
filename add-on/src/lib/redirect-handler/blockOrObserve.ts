@@ -46,7 +46,7 @@ export const defaultNSRegexStr = `(${[...DEFAULT_NAMESPACES].join('|')})`
 // the way sinon ends up stubbing it, it's not directly available in the global scope on import
 // rather it gets replaced dynamically when the module is imported. Which means, we can't
 // just check for the existence of the property, we need to call the browser instance at that point.
-export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES > 0)
+export const supportsDeclarativeNetRequest = (): boolean => browser.declarativeNetRequest?.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES > 0
 
 /**
  * Sends message to self to notify about change.
@@ -55,7 +55,7 @@ export const supportsBlock = (): boolean => !(browser.declarativeNetRequest?.MAX
  */
 async function sendMessageToSelf (msg: messageToSelfType, value?: any): Promise<void> {
   // this check ensures we don't send messages to ourselves if blocking mode is enabled.
-  if (!supportsBlock()) {
+  if (supportsDeclarativeNetRequest()) {
     const message: messageToSelf = { type: msg, value }
     // on FF, this call waits for the response from the listener.
     // on Chrome, this needs a callback.
@@ -156,7 +156,7 @@ function constructRegexFilter ({ originUrl, redirectUrl }: IRegexFilter): IFilte
 
 // If the browser supports the declarativeNetRequest API, we can block the request.
 export function getExtraInfoSpec<T> (additionalParams: T[] = []): T[] {
-  if (supportsBlock()) {
+  if (!supportsDeclarativeNetRequest()) {
     return ['blocking' as T, ...additionalParams]
   }
   return additionalParams
@@ -182,7 +182,7 @@ function validateIfRuleChanged (rule: browser.DeclarativeNetRequest.Rule): boole
  * Clean up all the rules, when extension is disabled.
  */
 export async function cleanupRules (resetInMemory: boolean = false): Promise<void> {
-  if (supportsBlock()) {
+  if (!supportsDeclarativeNetRequest()) {
     return
   }
   const existingRules = await browser.declarativeNetRequest.getDynamicRules()
