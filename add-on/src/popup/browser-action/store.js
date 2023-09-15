@@ -212,7 +212,6 @@ export default (state, emitter) => {
     const prev = state.active
     state.active = !prev
     try {
-      await browser.storage.local.set({ active: state.active })
       if (!state.active) {
         state.gatewayAddress = state.pubGwURLString
         state.ipfsApiUrl = null
