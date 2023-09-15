@@ -70,7 +70,7 @@ describe('ipfs-import.js', function () {
             })
           }
         }
-        const state = { pubGwURLString: 'http://ipfs.io' }
+        const state = { pubGwURLString: 'https://ipfs.io' }
         const mfsPath = '/my-directory'
         const url = `${state.pubGwURLString}/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa`
         getState.returns(state)
