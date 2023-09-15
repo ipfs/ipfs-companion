@@ -88,7 +88,7 @@ describe('ipfs-import.js', function () {
           }
         }
         getIpfs.returns(ipfs)
-        getState.returns({ pubGwURLString: 'http://ipfs.io' })
+        getState.returns({ pubGwURLString: 'https://ipfs.io' })
         hasNativeProtocolHandlerStub.value(true)
         const mfsPath = '/my-directory'
         const url = 'ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa'
