@@ -1,4 +1,5 @@
 import debug from 'debug'
+import { fastHashCode } from 'fast-hash-code'
 import browser from 'webextension-polyfill'
 import { CompanionState } from '../../types/companion.js'
 import { IFilter, IRegexFilter, RegexFilter } from './baseRegexFilter.js'
@@ -284,8 +285,10 @@ function saveAndGenerateRule (
   regexSubstitution: string,
   excludedInitiatorDomains: string[] = []
 ): browser.DeclarativeNetRequest.Rule {
-  // We need to generate a random ID for the rule.
-  const id = Math.floor(Math.random() * 29999)
+  // We need to generate a positive number as an id.
+  const id = fastHashCode(`${regexFilter}:${regexSubstitution}:${excludedInitiatorDomains.join(':')}`, {
+    forcePositive: true
+  })
   // We need to save the regex filter and ID to check if the rule already exists later.
   savedRegexFilters.set(regexFilter, { id, regexSubstitution })
   return generateAddRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
