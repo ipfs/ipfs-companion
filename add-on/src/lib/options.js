@@ -2,6 +2,7 @@
 
 import isFQDN from 'is-fqdn'
 import { isIPv4, isIPv6 } from 'is-ip'
+import { POSSIBLE_NODE_TYPES } from './state.js'
 
 /**
  * @type {Readonly<import('../types/companion.js').CompanionOptions>}
@@ -216,6 +217,15 @@ export async function migrateOptions (storage, debug) {
     if (!dismissedUpdate && displayReleaseNotes) {
       log('converting displayReleaseNotes from out-out to opt-in')
       await storage.set({ displayReleaseNotes: false })
+    }
+  }
+
+  {
+    // -v3.0.0: migrate ipfsNodeType to 'external' (if missing)
+    const { ipfsNodeType } = await storage.get(['ipfsNodeType'])
+    if (!POSSIBLE_NODE_TYPES.includes(ipfsNodeType)) {
+      log('migrating ipfsNodeType to "external"')
+      await storage.set({ ipfsNodeType: 'external' })
     }
   }
 
