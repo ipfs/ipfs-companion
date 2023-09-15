@@ -98,7 +98,41 @@ describe('ipfs-import.js', function () {
     })
 
     describe('copyImportResultsToFiles', function () {
-      // TODO: implement
+      it('should copy files to the correct directory', async function () {
+        const cpSpy = sandbox.spy()
+        const mkdirSpy = sandbox.spy()
+        const ipfs = {
+          files: {
+            cp: cpSpy,
+            mkdir: mkdirSpy
+          }
+        }
+        const resultFiles = [
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
+            path: '/tmp/test-file1'
+          },
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqb',
+            path: ''
+          },
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
+            path: '/tmp/test-file2'
+          }
+        ]
+        getIpfs.returns(ipfs)
+        await ipfsImportHandler.copyImportResultsToFiles(resultFiles, '/my-directory')
+        sinon.assert.calledWith(mkdirSpy, '/my-directory')
+        expect(cpSpy.getCalls()[0].args).to.deep.equal([
+          '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
+          '/my-directory/tmp/test-file1'
+        ])
+        expect(cpSpy.getCalls()[1].args).to.deep.equal([
+          '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
+          '/my-directory/tmp/test-file2'
+        ])
+      })
     })
 
     describe('copyShareLink', function () {
