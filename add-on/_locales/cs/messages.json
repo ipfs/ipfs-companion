@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "Zapnout/vypnout IPFS integraci",
-    "description": "A label for an embedded IPFS node (panel_headerActiveToggleTitle)"
+    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "odpojený",
@@ -92,8 +92,8 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_importCurrentIpfsAddressTooltip)"
   },
   "panelCopy_currentIpnsAddress": {
-  "message": "Kopírovat IPNS cestu",
-  "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
+    "message": "Kopírovat IPNS cestu",
+    "description": "A menu item in Browser Action pop-up and right-click context menu (panelCopy_currentIpnsAddress)"
   },
   "panelCopy_currentIpnsAddressTooltip": {
     "message": "Pomocí této cesty k obsahu se pomocí nástrojů a bran IPFS dostanete k poslední aktualizované verzi obsahu této karty.",
@@ -239,19 +239,15 @@
     "message": "Nepodařilo se zastavit uzel IPFS",
     "description": "System notification title displayed when stopping an IPFS node fails (notify_stopIpfsNodeErrorTitle)"
   },
-  "option_page_title" : {
+  "option_page_title": {
     "message": "Předvolby | IPFS Companion",
     "description": "Title of the Preferences page (option_page_title)"
   },
-  "option_page_header" : {
+  "option_page_header": {
     "message": "Předvolby Companion",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
-  "option_legend_readMore" : {
-    "message": "Více informací",
-    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
-  },
-  "option_header_nodeType" : {
+  "option_header_nodeType": {
     "message": "IPFS uzel",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
   },
@@ -267,10 +263,6 @@
     "message": "Nastavením na hodnotu \"Externí\" se připojíte k místnímu uzlu pomocí rozhraní HTTP API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
-  "option_ipfsNodeType_embedded_description": {
-    "message": "Nastavením na \"Embedded\" spustíte uzel js-ipfs přímo v prohlížeči. (Kliknutím na \"Přečtěte si více\" se dozvíte o omezeních této experimentální funkce.)",
-    "description": "An option description on the Preferences screen (option_ipfsNodeType_embedded_description)"
-  },
   "option_ipfsNodeType_brave_description": {
     "message": "Nastavte možnost \"Provided by Brave\", abyste využili nativní podporu IPFS v prohlížeči Brave.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_brave_description)"
@@ -279,17 +271,9 @@
     "message": "Konfigurace IPFS uzlu",
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
-  "option_ipfsNodeConfig_description": {
-    "message": "Další konfigurace pro embedovaný uzel JS IPFS. Musí to být platný JSON.",
-    "description": "An option description on the Preferences screen (option_ipfsNodeConfig_description)"
-  },
   "option_ipfsNodeType_external": {
     "message": "Externí",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
-  },
-  "option_ipfsNodeType_embedded": {
-    "message": "Integrovaný",
-    "description": "An option on the Preferences screen (option_ipfsNodeType_embedded)"
   },
   "option_ipfsNodeType_brave": {
     "message": "Poskytuje Brave",

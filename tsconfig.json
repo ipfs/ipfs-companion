@@ -1,6 +1,9 @@
 {
+  "transpileOnly": true,
   "compilerOptions": {
-    "target": "es2016",
+    "typeRoots" : ["./src/types"],
+    "lib": ["DOM", "ESNext"],
+    "target": "ESNext",
     "allowJs": true,
     "checkJs": true,
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
@@ -13,6 +16,14 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "moduleResolution": "nodenext",
+    "allowSyntheticDefaultImports": true,
+    "module": "NodeNext",
+    "importHelpers": true,
+    "noImplicitAny": true,
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
     "noImplicitAny": false
   },
   "include": ["add-on/src/**/*.js", "add-on/src/**/*.ts"]

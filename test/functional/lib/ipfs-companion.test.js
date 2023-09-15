@@ -1,18 +1,9 @@
-import { describe, it, before, after } from 'mocha'
 import { expect } from 'chai'
+import { after, before, describe, it } from 'mocha'
 import browser from 'sinon-chrome'
-import AbortController from 'abort-controller'
 import { URL } from 'url'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
-browser.runtime.id = 'testid'
-global.browser = browser
-global.AbortController = AbortController
-global.chrome = browser
-global.navigator = {
-  clipboard: {
-    writeText: () => {}
-  }
-}
+
 // We need to do this because global is not mapped otherwise, we need to stub browser and chrome runtime
 // so that the webextension-polyfill does not complain about the test runner not being a browser instance.
 const init = async () => (await import('../../../add-on/src/lib/ipfs-companion.js')).default()
@@ -20,9 +11,10 @@ const init = async () => (await import('../../../add-on/src/lib/ipfs-companion.j
 describe('lib/ipfs-companion.js', function () {
   describe('init', function () {
     before(function () {
-      global.localStorage = global.localStorage || {}
       global.URL = global.URL || URL
       global.screen = { width: 1024, height: 720 }
+      global.addEventListener = () => { }
+      global.location = { hostname: 'test' }
 
       browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
     })
@@ -42,18 +34,12 @@ describe('lib/ipfs-companion.js', function () {
   })
 
   describe.skip('onStorageChange()', function () {
-    before(function () {
-      global.window = {}
-      global.browser = browser
-      global.URL = URL
-    })
-
     it('should update ipfs API instance on IPFS API URL change', async function () {
       browser.storage.local.get.resolves(optionDefaults)
       browser.storage.local.set.resolves()
-      browser.browserAction.setBadgeBackgroundColor.resolves()
-      browser.browserAction.setBadgeText.resolves()
-      browser.browserAction.setIcon.resolves()
+      browser.action.setBadgeBackgroundColor.resolves()
+      browser.action.setBadgeText.resolves()
+      browser.action.setIcon.resolves()
       browser.tabs.query.resolves([{ id: 'TEST' }])
       browser.contextMenus.update.resolves()
       browser.idle.queryState.resolves('active')

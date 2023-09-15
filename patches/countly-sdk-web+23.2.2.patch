@@ -1,0 +1,494 @@
+diff --git a/node_modules/countly-sdk-web/lib/countly.js b/node_modules/countly-sdk-web/lib/countly.js
+index da26eb6..0bf0ec8 100644
+--- a/node_modules/countly-sdk-web/lib/countly.js
++++ b/node_modules/countly-sdk-web/lib/countly.js
+@@ -52,10 +52,22 @@
+     else {
+         root.Countly = factory(root.Countly);
+     }
+-}(typeof window !== "undefined" ? window : this, function(Countly) {
++}(typeof globalThis !== "undefined" ? globalThis : this, function (Countly) {
++    // Blackhole proxy for document object
++    // This proxy is designed to swallow weird quirkiness of DOM and chaining.
++    // This is certainly not fool-proof, but does a decent job of allowing weird chains like:
++    // a.b.c().e().d think document.body.getElementsByTagName("div").item(0).innerHTML
++    // it's absolutely crucial that the target is () => '', if it is {} then the chain will break
++    // as at certain point it won't be callable, it also cannot be () => {} as it won't be chainable.
++    const blackholeProxy = new Proxy(() => '', {
++        get: () => blackholeProxy,
++        apply: () => blackholeProxy,
++        set: () => blackholeProxy
++    })
++    document = blackholeProxy
+     // Make sure the code is being run in a browser
+     // eslint-disable-next-line no-undef
+-    if (typeof (window) === "undefined") {
++    if (typeof (globalThis) === "undefined") {
+         // TODO: check if logging can be added here, like:
+         // console.error("Not running in browser");
+         return;
+@@ -347,23 +359,16 @@
+ 
+             checkIgnore();
+ 
+-            if (window.name && window.name.indexOf("cly:") === 0) {
++            if (globalThis.name && globalThis.name.indexOf("cly:") === 0) {
+                 try {
+-                    this.passed_data = JSON.parse(window.name.replace("cly:", ""));
++                    this.passed_data = JSON.parse(globalThis.name.replace("cly:", ""));
+                 }
+                 catch (ex) {
+-                    log(logLevelEnums.ERROR, "initialize, Could not parse name: " + window.name + ", error: " + ex);
+-                }
+-            }
+-            else if (location.hash && location.hash.indexOf("#cly:") === 0) {
+-                try {
+-                    this.passed_data = JSON.parse(location.hash.replace("#cly:", ""));
+-                }
+-                catch (ex) {
+-                    log(logLevelEnums.ERROR, "initialize, Could not parse hash: " + location.hash + ", error: " + ex);
++                    log(logLevelEnums.ERROR, "initialize, Could not parse name: " + globalThis.name + ", error: " + ex);
+                 }
+             }
+ 
++
+             if ((this.passed_data && this.passed_data.app_key && this.passed_data.app_key === this.app_key) || (this.passed_data && !this.passed_data.app_key && global)) {
+                 if (this.passed_data.token && this.passed_data.purpose) {
+                     if (this.passed_data.token !== getValueFromStorage("cly_old_token")) {
+@@ -1028,7 +1033,7 @@
+                     if (this.enableOrientationTracking) {
+                         // report orientation
+                         this.report_orientation();
+-                        add_event(window, "resize", function() {
++                        add_event(globalThis, "resize", function() {
+                             self.report_orientation();
+                         });
+                     }
+@@ -1618,11 +1623,11 @@
+             log(logLevelEnums.INFO, "track_errors, Started tracking errors");
+             // Indicated that for this instance of the countly error tracking is enabled
+             Countly.i[this.app_key].tracking_crashes = true;
+-            if (!window.cly_crashes) {
+-                window.cly_crashes = true;
++            if (!globalThis.cly_crashes) {
++                globalThis.cly_crashes = true;
+                 crashSegments = segments;
+                 // override global 'uncaught error' handler
+-                window.onerror = function errorBundler(msg, url, line, col, err) {
++                globalThis.onerror = function errorBundler(msg, url, line, col, err) {
+                     // old browsers like IE 10 and Safari 9 won't give this value 'err' to us, but if it is provided we can trigger error recording immediately
+                     if (err !== undefined && err !== null) {
+                         // false indicates fatal error (as in non_fatal:false)
+@@ -1630,7 +1635,7 @@
+                     }
+                     // fallback if no error object is present for older browsers, we create it instead
+                     else {
+-                        col = col || (window.event && window.event.errorCharacter);
++                        col = col || (globalThis.event && globalThis.event.errorCharacter);
+                         var error = "";
+                         if (typeof msg !== "undefined") {
+                             error += msg + "\n";
+@@ -1666,7 +1671,7 @@
+                 };
+ 
+                 // error handling for 'uncaught rejections'
+-                window.addEventListener("unhandledrejection", function(event) {
++                globalThis.addEventListener("unhandledrejection", function(event) {
+                     // true indicates non fatal error (as in non_fatal: true)
+                     dispatchErrors(new Error("Unhandled rejection (reason: " + (event.reason && event.reason.stack ? event.reason.stack : event.reason) + ")."), true);
+                 });
+@@ -1909,13 +1914,13 @@
+             this.begin_session();
+             this.start_time();
+             // end session on unload
+-            add_event(window, "beforeunload", function() {
++            add_event(globalThis, "beforeunload", function() {
+                 // empty the event queue
+                 sendEventsForced();
+                 self.end_session();
+             });
+ 
+-            // manage sessions on window visibility events
++            // manage sessions on globalThis visibility events
+             var hidden = "hidden";
+ 
+             /**
+@@ -1931,17 +1936,17 @@
+             }
+ 
+             // add focus handling eventListeners
+-            add_event(window, "focus", onchange);
+-            add_event(window, "blur", onchange);
++            add_event(globalThis, "focus", onchange);
++            add_event(globalThis, "blur", onchange);
+ 
+             // newer mobile compatible way
+-            add_event(window, "pageshow", onchange);
+-            add_event(window, "pagehide", onchange);
++            add_event(globalThis, "pageshow", onchange);
++            add_event(globalThis, "pagehide", onchange);
+ 
+             // IE 9 and lower:
+             if ("onfocusin" in document) {
+-                add_event(window, "focusin", onchange);
+-                add_event(window, "focusout", onchange);
++                add_event(globalThis, "focusin", onchange);
++                add_event(globalThis, "focusout", onchange);
+             }
+ 
+             // Page Visibility API for changing tabs and minimizing browser
+@@ -1971,10 +1976,10 @@
+                 inactivityCounter = 0;
+             }
+ 
+-            add_event(window, "mousemove", resetInactivity);
+-            add_event(window, "click", resetInactivity);
+-            add_event(window, "keydown", resetInactivity);
+-            add_event(window, "scroll", resetInactivity);
++            add_event(globalThis, "mousemove", resetInactivity);
++            add_event(globalThis, "click", resetInactivity);
++            add_event(globalThis, "keydown", resetInactivity);
++            add_event(globalThis, "scroll", resetInactivity);
+ 
+             // track user inactivity
+             setInterval(function() {
+@@ -2048,7 +2053,7 @@
+             // truncate new segment
+             segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "track_pageview", log);
+             if (this.track_domains) {
+-                segments.domain = window.location.hostname;
++                segments.domain = globalThis.location.hostname;
+             }
+ 
+             if (useSessionCookie) {
+@@ -2071,7 +2076,7 @@
+             else if (typeof document.referrer !== "undefined" && document.referrer.length) {
+                 var matches = urlParseRE.exec(document.referrer);
+                 // do not report referrers of current website
+-                if (matches && matches[11] && matches[11] !== window.location.hostname) {
++                if (matches && matches[11] && matches[11] !== globalThis.location.hostname) {
+                     segments.start = 1;
+                 }
+             }
+@@ -2147,7 +2152,7 @@
+                             // truncate new segment
+                             segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processClick", log);
+                             if (self.track_domains) {
+-                                segments.domain = window.location.hostname;
++                                segments.domain = globalThis.location.hostname;
+                             }
+                             add_cly_events({
+                                 key: internalEventKeyEnums.ACTION,
+@@ -2173,7 +2178,7 @@
+             if (parent) {
+                 log(logLevelEnums.INFO, "track_scrolls, Tracking the specified children");
+             }
+-            parent = parent || window;
++            parent = parent || globalThis;
+             isScrollRegistryOpen = true;
+             trackingScrolls = true;
+ 
+@@ -2813,8 +2818,8 @@
+                                 else {
+                                     var pages = widgets[i].target_pages;
+                                     for (var k = 0; k < pages.length; k++) {
+-                                        var isWildcardMatched = pages[k].substr(0, pages[k].length - 1) === window.location.pathname.substr(0, pages[k].length - 1);
+-                                        var isFullPathMatched = pages[k] === window.location.pathname;
++                                        var isWildcardMatched = pages[k].substr(0, pages[k].length - 1) === globalThis.location.pathname.substr(0, pages[k].length - 1);
++                                        var isFullPathMatched = pages[k] === globalThis.location.pathname;
+                                         var isContainAsterisk = pages[k].includes("*");
+                                         if (((isContainAsterisk && isWildcardMatched) || isFullPathMatched) && !widgets[i].hide_sticker) {
+                                             processWidget(widgets[i], true);
+@@ -3048,7 +3053,7 @@
+                     return;
+                 }
+ 
+-                var passedOrigin = window.origin || window.location.origin;
++                var passedOrigin = globalThis.origin || globalThis.location.origin;
+                 var feedbackWidgetFamily;
+ 
+                 // set feedback widget family as ratings and load related style file when type is ratings
+@@ -3170,7 +3175,7 @@
+                 wrapper.appendChild(iframe);
+                 log(logLevelEnums.DEBUG, "present_feedback_widget, Appended the iframe");
+ 
+-                add_event(window, "message", function(e) {
++                add_event(globalThis, "message", function(e) {
+                     var data = {};
+                     try {
+                         data = JSON.parse(e.data);
+@@ -3249,9 +3254,9 @@
+                         break;
+ 
+                     case "onScrollHalfwayDown":
+-                        add_event(window, "scroll", function() {
++                        add_event(globalThis, "scroll", function() {
+                             if (!surveyShown) {
+-                                var scrollY = Math.max(window.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
++                                var scrollY = Math.max(globalThis.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
+                                 var documentHeight = getDocHeight();
+                                 if (scrollY >= (documentHeight / 2)) {
+                                     surveyShown = true;
+@@ -3841,13 +3846,13 @@
+                 var height = (screen.height) ? parseInt(screen.height) : 0;
+                 if (width !== 0 && height !== 0) {
+                     var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+-                    if (iOS && window.devicePixelRatio) {
++                    if (iOS && globalThis.devicePixelRatio) {
+                         // ios provides dips, need to multiply
+-                        width = Math.round(width * window.devicePixelRatio);
+-                        height = Math.round(height * window.devicePixelRatio);
++                        width = Math.round(width * globalThis.devicePixelRatio);
++                        height = Math.round(height * globalThis.devicePixelRatio);
+                     }
+                     else {
+-                        if (Math.abs(window.orientation) === 90) {
++                        if (Math.abs(globalThis.orientation) === 90) {
+                             // we have landscape orientation
+                             // switch values for all except ios
+                             var temp = width;
+@@ -3860,8 +3865,8 @@
+             }
+ 
+             // getting density ratio
+-            if (window.devicePixelRatio) {
+-                metrics._density = metrics._density || window.devicePixelRatio;
++            if (globalThis.devicePixelRatio) {
++                metrics._density = metrics._density || globalThis.devicePixelRatio;
+             }
+ 
+             // getting locale
+@@ -3873,7 +3878,7 @@
+             if (typeof document.referrer !== "undefined" && document.referrer.length) {
+                 var matches = urlParseRE.exec(document.referrer);
+                 // do not report referrers of current website
+-                if (matches && matches[11] && matches[11] !== window.location.hostname) {
++                if (matches && matches[11] && matches[11] !== globalThis.location.hostname) {
+                     var ignoring = false;
+                     if (ignoreReferrers && ignoreReferrers.length) {
+                         for (var k = 0; k < ignoreReferrers.length; k++) {
+@@ -3907,7 +3912,7 @@
+          * @memberof Countly._internals
+          */
+         function log(level, message) {
+-            if (self.debug && typeof console !== "undefined") {
++            if (typeof console !== "undefined") {
+                 // parse the arguments into a string if it is an object
+                 if (arguments[2] && typeof arguments[2] === "object") {
+                     arguments[2] = JSON.stringify(arguments[2]);
+@@ -3963,72 +3968,62 @@
+          */
+         function sendXmlHttpRequest(functionName, url, params, callback, useBroadResponseValidator) {
+             useBroadResponseValidator = useBroadResponseValidator || false;
+-            try {
+-                log(logLevelEnums.DEBUG, "Sending XML HTTP request");
+-                var xhr = null;
+-                if (window.XMLHttpRequest) {
+-                    xhr = new window.XMLHttpRequest();
+-                }
+-                else if (window.ActiveXObject) {
+-                    xhr = new window.ActiveXObject("Microsoft.XMLHTTP");
+-                }
+-                params = params || {};
+-                var data = prepareParams(params);
+-                var method = "GET";
+-                if (self.force_post || data.length >= 2000) {
+-                    method = "POST";
++            log(logLevelEnums.DEBUG, "Sending XML HTTP request");
++            params = params || {};
++            var data = prepareParams(params);
++            var method = "GET";
++            if (self.force_post || data.length >= 2000) {
++                method = "POST";
++            }
++            const fetchUrl = method === "GET" ? url + "?" + data : url;
++            const fetchReq = fetch(fetchUrl, {
++                method: method,
++                headers: {
++                  ...self.headers,
++                  ...(method !== "POST" ? {} : {
++                    "Content-type": "application/x-www-form-urlencoded",
++                  })
+                 }
+-                if (method === "GET") {
+-                    xhr.open("GET", url + "?" + data, true);
+-                }
+-                else {
+-                    xhr.open("POST", url, true);
+-                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+-                }
+-                for (var header in self.headers) {
+-                    xhr.setRequestHeader(header, self.headers[header]);
+-                }
+-                // fallback on error
+-                xhr.onreadystatechange = function() {
+-                    if (this.readyState === 4) {
+-                        log(logLevelEnums.DEBUG, functionName + " HTTP request completed [" + this.status + "][" + this.responseText + "]");
+-                        // response validation function will be selected to also accept JSON arrays if useBroadResponseValidator is true
+-                        var isResponseValidated;
+-                        if (useBroadResponseValidator) {
+-                            // JSON array/object both can pass
+-                            isResponseValidated = isResponseValidBroad(this.status, this.responseText);
+-                        }
+-                        else {
+-                            // only JSON object can pass
+-                            isResponseValidated = isResponseValid(this.status, this.responseText);
+-                        }
+-                        if (isResponseValidated) {
+-                            if (typeof callback === "function") {
+-                                callback(false, params, this.responseText);
+-                            }
++            });
++            // fallback on error
++            fetchReq.then(async function (response) {
++                if (response.ok) {
++                    const responseText = await response.text();
++                    log(
++                        logLevelEnums.DEBUG,
++                        `${functionName} HTTP request completed [${response.status}][${responseText}]`
++                    );
++                    // response validation function will be selected to also accept JSON arrays if useBroadResponseValidator is true
++                    var isResponseValidated;
++                    if (useBroadResponseValidator) {
++                        // JSON array/object both can pass
++                        isResponseValidated = isResponseValidBroad(response.status, responseText);
++                    }
++                    else {
++                        // only JSON object can pass
++                        isResponseValidated = isResponseValid(response.status, responseText);
++                    }
++                    if (isResponseValidated) {
++                        if (typeof callback === "function") {
++                            callback(false, params, responseText);
+                         }
+-                        else {
+-                            log(logLevelEnums.ERROR, functionName + " Failed Server XML HTTP request, ", this.status);
+-                            if (typeof callback === "function") {
+-                                callback(true, params);
+-                            }
++                    }
++                    else {
++                        log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed, ", response.status);
++                        if (typeof callback === "function") {
++                            callback(true, params);
+                         }
+                     }
+-                };
+-                if (method === "GET") {
+-                    xhr.send();
+-                }
+-                else {
+-                    xhr.send(data);
++                } else {
++                    throw new Error(response.statusText);
+                 }
+-            }
+-            catch (e) {
++            }).catch(function (e) {
+                 // fallback
+-                log(logLevelEnums.ERROR, functionName + " Failed XML HTTP request: " + e);
++                log(logLevelEnums.ERROR, functionName + " Patched XML HTTP request failed: " + e);
+                 if (typeof callback === "function") {
+                     callback(true, params);
+                 }
+-            }
++            });
+         }
+ 
+         /**
+@@ -4105,7 +4100,7 @@
+          *
+          */
+         function processScroll() {
+-            scrollRegistryTopPosition = Math.max(scrollRegistryTopPosition, window.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
++            scrollRegistryTopPosition = Math.max(scrollRegistryTopPosition, globalThis.scrollY, document.body.scrollTop, document.documentElement.scrollTop);
+         }
+ 
+         /**
+@@ -4131,7 +4126,7 @@
+                         // truncate new segment
+                     segments = truncateObject(segments, self.maxKeyLength, self.maxValueSize, self.maxSegmentationValues, "processScrollView", log);
+                     if (self.track_domains) {
+-                        segments.domain = window.location.hostname;
++                        segments.domain = globalThis.location.hostname;
+                     }
+                     add_cly_events({
+                         key: internalEventKeyEnums.ACTION,
+@@ -4862,7 +4857,7 @@
+      */
+     var get_event_target = function(event) {
+         if (!event) {
+-            return window.event.srcElement;
++            return globalThis.event.srcElement;
+         }
+         if (typeof event.target !== "undefined") {
+             return event.target;
+@@ -4924,7 +4919,7 @@
+         var device = "desktop";
+ 
+         // regexps corresponding to tablets or phones that can be found in userAgent string
+-        var tabletCheck = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/;
++        var tabletCheck = /(ipad|tablet|(android(?!.*mobile))|(globalThiss(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/;
+         var phoneCheck = /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/;
+ 
+         // check whether the regexp values corresponds to something in the user agent string
+@@ -5009,7 +5004,7 @@
+         return Math.min(
+             Math.min(D.body.clientHeight, D.documentElement.clientHeight),
+             Math.min(D.body.offsetHeight, D.documentElement.offsetHeight),
+-            window.innerHeight
++            globalThis.innerHeight
+         );
+     }
+ 
+@@ -5018,22 +5013,9 @@
+      *  @returns {String} device orientation
+      */
+     function getOrientation() {
+-        return window.innerWidth > window.innerHeight ? "landscape" : "portrait";
++        return globalThis.innerWidth > globalThis.innerHeight ? "landscape" : "portrait";
+     }
+ 
+-    /**
+-     *  Monitor parallel storage changes like other opened tabs
+-     */
+-    window.addEventListener("storage", function(e) {
+-        var parts = (e.key + "").split("/");
+-        var key = parts.pop();
+-        var appKey = parts.pop();
+-
+-        if (Countly.i && Countly.i[appKey]) {
+-            Countly.i[appKey].onStorageChange(key, e.newValue);
+-        }
+-    });
+-
+     /**
+      *  Load external js files
+      *  @param {String} tag - Tag/node name to load file in
+@@ -5171,7 +5153,7 @@
+     * @return {string} view name
+     * */
+     Countly.getViewName = function() {
+-        return window.location.pathname;
++        return globalThis.location.pathname;
+     };
+ 
+     /**
+@@ -5179,7 +5161,7 @@
+     * @return {string} view url
+     * */
+     Countly.getViewUrl = function() {
+-        return window.location.pathname;
++        return globalThis.location.pathname;
+     };
+ 
+     /**
+@@ -5187,7 +5169,7 @@
+     * @return {string} view url
+     * */
+     Countly.getSearchQuery = function() {
+-        return window.location.search;
++        return '';
+     };
+ 
+     /**

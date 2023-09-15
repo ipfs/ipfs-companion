@@ -3,15 +3,17 @@
 
 import './quick-import.css'
 
-import browser from 'webextension-polyfill'
 import choo from 'choo'
 import html from 'choo/html/index.js'
-import logo from './logo.js'
-import * as externalApiClient from '../lib/ipfs-client/external.js'
-import { formatImportDirectory } from '../lib/ipfs-import.js'
-import all from 'it-all'
 import drop from 'drag-and-drop-files'
 import { filesize } from 'filesize'
+import all from 'it-all'
+import browser from 'webextension-polyfill'
+import * as externalApiClient from '../lib/ipfs-client/external.js'
+import createIpfsCompanion from '../lib/ipfs-companion.js'
+import { formatImportDirectory } from '../lib/ipfs-import.js'
+import logo from './logo.js'
+import { POSSIBLE_NODE_TYPES } from '../lib/state.js'
 
 document.title = browser.i18n.getMessage('quickImport_page_title')
 
@@ -73,7 +75,7 @@ function quickImportStore (state, emitter) {
 
 async function processFiles (state, emitter, files) {
   console.log('Processing files', files)
-  const { ipfsCompanion } = await browser.runtime.getBackgroundPage()
+  const ipfsCompanion = await createIpfsCompanion(true)
   try {
     console.log('importing files', files)
     if (!files.length) {
@@ -119,7 +121,7 @@ async function processFiles (state, emitter, files) {
 
     let ipfs
     if (httpStreaming) {
-      // We create separate instance of http client running in thie same page to
+      // We create separate instance of http client running in the same page to
       // avoid serialization issues in Chromium
       // (https://bugs.chromium.org/p/chromium/issues/detail?id=112163) when
       // crossing process boundary, which enables streaming upload of big files
@@ -148,8 +150,8 @@ async function processFiles (state, emitter, files) {
     if (state.userChangedImportDir) {
       emitter.emit('optionChange', { key: 'importDir', value: state.importDir })
     }
-    // present result to the user using the beast available way
-    if (!state.openViaWebUI || state.ipfsNodeType.startsWith('embedded')) {
+    // present result to the user using the best available way
+    if (!state.openViaWebUI) {
       await openFilesAtGateway(importDir)
     } else {
       await openFilesAtWebUI(importDir)
@@ -171,7 +173,7 @@ function quickImportOptions (state, emit) {
   const onExpandOptions = (e) => { state.expandOptions = true; emit('render') }
   const onDirectoryChange = (e) => { state.userChangedImportDir = true; state.importDir = e.target.value }
   const onOpenViaWebUIChange = (e) => { state.userChangedOpenViaWebUI = true; state.openViaWebUI = e.target.checked }
-  const displayOpenWebUI = state.ipfsNodeType !== 'embedded'
+  const displayOpenWebUI = POSSIBLE_NODE_TYPES.includes(state.ipfsNodeType)
 
   if (state.expandOptions) {
     return html`

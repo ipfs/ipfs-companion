@@ -4,12 +4,14 @@
 
 import debug from 'debug'
 
-import * as external from './external.js'
-import * as embedded from './embedded.js'
-import * as brave from './brave.js'
 import { precache } from '../precache.js'
+import * as brave from './brave.js'
+import * as external from './external.js'
 import {
-  prepareReloadExtensions, WebUiReloader, LocalGatewayReloader, InternalTabReloader
+  InternalTabReloader,
+  LocalGatewayReloader,
+  WebUiReloader,
+  prepareReloadExtensions
 } from './reloaders/index.js'
 const log = debug('ipfs-companion:client')
 log.error = debug('ipfs-companion:client:error')
@@ -17,27 +19,11 @@ log.error = debug('ipfs-companion:client:error')
 // ensure single client at all times, and no overlap between init and destroy
 let client
 
-export async function initIpfsClient (browser, opts) {
+export async function initIpfsClient (browser, opts, inQuickImport) {
   log('init ipfs client')
   if (client) return // await destroyIpfsClient()
   let backend
   switch (opts.ipfsNodeType) {
-    case 'embedded:chromesockets':
-      // TODO: remove this one-time migration after in second half of 2021
-      setTimeout(async () => {
-        log('converting embedded:chromesockets to native external:brave')
-        opts.ipfsNodeType = 'external:brave'
-        await browser.storage.local.set({
-          ipfsNodeType: 'external:brave',
-          ipfsNodeConfig: '{}' // remove chrome-apps config
-        })
-        await browser.tabs.create({ url: 'https://docs.ipfs.tech/how-to/companion-node-types/#native' })
-      }, 0)
-      // Halt client init
-      throw new Error('Embedded + chrome.sockets is deprecated. Switching to Native IPFS in Brave.')
-    case 'embedded':
-      backend = embedded
-      break
     case 'external:brave':
       backend = brave
       break
@@ -48,7 +34,9 @@ export async function initIpfsClient (browser, opts) {
       throw new Error(`Unsupported ipfsNodeType: ${opts.ipfsNodeType}`)
   }
   const instance = await backend.init(browser, opts)
-  _reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
+  if (!inQuickImport) {
+    _reloadIpfsClientDependents(browser, instance, opts) // async (API is present)
+  }
   client = backend
   return instance
 }
@@ -67,7 +55,7 @@ export async function destroyIpfsClient (browser) {
 /**
  * Reloads pages dependant on ipfs to be online
  *
- * @typedef {embedded|brave|external} Browser
+ * @typedef {brave|external} Browser
  * @param {Browser} browser
  * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts
@@ -100,7 +88,7 @@ async function _reloadIpfsClientDependents (
 /**
  * Reloads local gateway pages dependant on ipfs to be online
  *
- * @typedef {embedded|brave|external} Browser
+ * @typedef {brave|external} Browser
  * @param {Browser} browser
  * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts

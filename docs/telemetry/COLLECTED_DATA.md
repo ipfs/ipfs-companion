@@ -18,14 +18,12 @@ As a general rule, we collect only application data; no user data. Some examples
 
 | Metric data name    | Metric feature name | Metric trigger                                          | Analytics use                                                     | Notes         |
 |:-------------------:|---------------------|---------------------------------------------------------|-------------------------------------------------------------------|---------------|
-| begin_session       | sessions            | At the start of the extension being active and enabled  | Count unique active users (daily/weekly/monthly) & session length | see [Countly's session flow documentation](https://support.count.ly/hc/en-us/articles/360037753291-SDK-development-guide#session-flow) |
-| end_session         | sessions            | Whenever extension is disabled or idle                  | Count unique active users (daily/weekly/monthly) & session length | see [Countly's session flow documentation](https://support.count.ly/hc/en-us/articles/360037753291-SDK-development-guide#session-flow) |
-| session_duration    | sessions            | At the end of the extension being active and enabled    | Count unique active users (daily/weekly/monthly) & session length | see [Countly's session flow documentation](https://support.count.ly/hc/en-us/articles/360037753291-SDK-development-guide#session-flow) |
-| view:background     | views               | When the background view is shown                       | View count                                                        |               |
 | view:welcome        | views               | When the welcome view is shown                          | View count                                                        |               |
 | view:options        | views               | When the options view is shown                          | View count                                                        |               |
 | view:quick-import   | views               | When the quick-import view is shown                     | View count                                                        |               |
 | view:browser-action | views               | When the browser-action view is shown                   | View count                                                        |               |
+| event:url-resolved  | event               | Number of URLs resolved by companion                    | Metrics                                                           |               |
+| event:url-observed  | event               | Number of URLs observed (including resolved)            | Metrics                                                           |               |
 
 * "Metric data name" - The app-specific metric/event name we're using for this metric data. (e.g. APP_BOOTSTRAP_START)
 * "Metric feature name" - The metric feature the event/metric data correlates to. The group the metric feature belongs to is defined in our [COLLECTION_POLICY](https://github.com/ipfs-shipyard/ignite-metrics/blob/main/docs/telemetry/COLLECTION_POLICY.md#metric-features-and-their-groupings). (e.g. Minimal)

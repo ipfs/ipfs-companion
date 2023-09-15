@@ -4,6 +4,7 @@
 import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import toolsButton from './tools-button.js'
+import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 export default function tools ({
   active,
@@ -14,7 +15,7 @@ export default function tools ({
   onQuickImport
 }) {
   const activeQuickImport = active && isIpfsOnline && isApiAvailable
-  const activeWebUI = active && isIpfsOnline && ipfsNodeType !== 'embedded'
+  const activeWebUI = active && isIpfsOnline && POSSIBLE_NODE_TYPES.includes(ipfsNodeType)
 
   return html`
     <div class="flex pb2 ph2 justify-between">

@@ -1,17 +1,22 @@
 {
-  "minimum_chrome_version": "72",
+  "minimum_chrome_version": "111",
+  "background": {
+    "service_worker": "dist/bundles/backgroundPage.bundle.js"
+  },
   "permissions": [
-    "<all_urls>",
-    "idle",
-    "tabs",
-    "notifications",
-    "storage",
-    "unlimitedStorage",
-    "contextMenus",
+    "activeTab",
     "clipboardWrite",
+    "contextMenus",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "idle",
+    "notifications",
+    "scripting",
+    "storage",
+    "tabs",
+    "unlimitedStorage",
     "webNavigation",
-    "webRequest",
-    "webRequestBlocking"
+    "webRequest"
   ],
   "incognito": "not_allowed"
 }

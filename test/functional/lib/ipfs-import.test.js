@@ -1,24 +1,11 @@
 'use strict'
-import { describe, it, before, after } from 'mocha'
 import { expect } from 'chai'
-import { useFakeTimers } from 'sinon'
+import { describe, it, afterEach } from 'mocha'
+import sinon from 'sinon'
 import browser from 'sinon-chrome'
-import { formatImportDirectory } from '../../../add-on/src/lib/ipfs-import.js'
+import { createIpfsImportHandler, formatImportDirectory } from '../../../add-on/src/lib/ipfs-import.js'
 
 describe('ipfs-import.js', function () {
-  before(function () {
-    browser.runtime.id = 'testid'
-    global.document = {}
-    global.browser = browser
-    // ipfs-import depends on webextension/polyfill which can't be imported
-    // in a non-browser environment unless global.browser is stubbed
-
-    // need to force Date to return a particular date
-    global.clock = useFakeTimers({
-      now: new Date(2017, 10, 5, 12, 1, 1)
-    })
-  })
-
   describe('formatImportDirectory', function () {
     it('should change nothing if path is properly formatted and date wildcards are not provided', function () {
       const path = '/ipfs-companion-imports/my-directory/'
@@ -45,20 +32,119 @@ describe('ipfs-import.js', function () {
       expect(formatImportDirectory(path)).to.equal('/ipfs-companion-imports/2017-11-05_120101/')
     })
   })
-  // TODO: complete tests
-  // describe('openFilesAtWebUI', function () {
-  // })
-  //
-  // describe('openFilesAtGateway', function () {
-  // })
-  //
-  // describe('importFiles', function () {
-  // })
 
-  after(function () {
-    global.browser.flush()
-    global.clock.restore()
-    delete global.document
-    delete global.browser
+  describe('createIpfsImportHandler', function () {
+    const sandbox = sinon.createSandbox()
+    const getState = sandbox.stub()
+    const getIpfs = sandbox.stub()
+    const ipfsPathValidator = sandbox.stub()
+    const runtime = {
+      hasNativeProtocolHandler: false
+    }
+    const hasNativeProtocolHandlerStub = sandbox.stub(runtime, 'hasNativeProtocolHandler')
+    const copier = sandbox.stub()
+
+    const ipfsImportHandler = createIpfsImportHandler(getState, getIpfs, ipfsPathValidator, runtime, copier)
+
+    afterEach(function () {
+      sandbox.restore()
+    })
+
+    describe('openFilesAtWebUI', function () {
+      it('should open the webui with the correct path', async function () {
+        const state = { webuiRootUrl: 'http://localhost:5001' }
+        const mfsPath = '/my-directory'
+        const url = `${state.webuiRootUrl}#/files${mfsPath}`
+        getState.returns(state)
+        await ipfsImportHandler.openFilesAtWebUI(mfsPath)
+        sinon.assert.calledWith(browser.tabs.create, { url })
+      })
+    })
+
+    describe('openFilesAtGateway', function () {
+      it('should open the gateway with the correct path', async function () {
+        const ipfs = {
+          files: {
+            stat: () => Promise.resolve({
+              cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa'
+            })
+          }
+        }
+        const state = { pubGwURLString: 'https://ipfs.io' }
+        const mfsPath = '/my-directory'
+        const url = `${state.pubGwURLString}/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa`
+        getState.returns(state)
+        getIpfs.returns(ipfs)
+        await ipfsImportHandler.openFilesAtGateway(mfsPath)
+        sinon.assert.calledWith(browser.tabs.create, { url })
+      })
+
+      it('should open the gateway with the correct path when native protocol handlers are set', async function () {
+        const ipfs = {
+          files: {
+            stat: () => Promise.resolve({
+              cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa'
+            })
+          }
+        }
+        getIpfs.returns(ipfs)
+        getState.returns({ pubGwURLString: 'https://ipfs.io' })
+        hasNativeProtocolHandlerStub.value(true)
+        const mfsPath = '/my-directory'
+        const url = 'ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa'
+        await ipfsImportHandler.openFilesAtGateway(mfsPath)
+        sinon.assert.calledWith(browser.tabs.create, { url })
+      })
+    })
+
+    describe('copyImportResultsToFiles', function () {
+      it('should copy files to the correct directory', async function () {
+        const cpSpy = sandbox.spy()
+        const mkdirSpy = sandbox.spy()
+        const ipfs = {
+          files: {
+            cp: cpSpy,
+            mkdir: mkdirSpy
+          }
+        }
+        const resultFiles = [
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
+            path: '/tmp/test-file1'
+          },
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqb',
+            path: ''
+          },
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
+            path: '/tmp/test-file2'
+          }
+        ]
+        getIpfs.returns(ipfs)
+        await ipfsImportHandler.copyImportResultsToFiles(resultFiles, '/my-directory')
+        sinon.assert.calledWith(mkdirSpy, '/my-directory')
+        expect(cpSpy.getCalls()[0].args).to.deep.equal([
+          '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
+          '/my-directory/tmp/test-file1'
+        ])
+        expect(cpSpy.getCalls()[1].args).to.deep.equal([
+          '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
+          '/my-directory/tmp/test-file2'
+        ])
+      })
+    })
+
+    describe('copyShareLink', function () {
+      // TODO: implement
+    })
+
+    describe('preloadFilesAtPublicGateway', function () {
+      // TODO: implement
+    })
+
+    describe('filesCpImportCurrentTab', function () {
+      // TODO: implement
+    })
   })
 })

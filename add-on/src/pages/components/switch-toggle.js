@@ -4,7 +4,7 @@
 import html from 'choo/html/index.js'
 
 /**
- * @type {import('../../types.js').SwitchToggle}
+ * @type {import('../../types/companion.js').SwitchToggle}
  */
 export default function switchToggle ({
   checked,

@@ -46,7 +46,7 @@ const commonConfig = {
       Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
     }),
     new webpack.DefinePlugin({
-      global: 'window', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
+      global: 'globalThis', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.emitWarning': (message, type) => {}, // console.warn(`${type}${type ? ': ' : ''}${message}`),
       'process.env': {
         // NODE_ENV: '"production"',
@@ -77,12 +77,27 @@ const commonConfig = {
         exclude: /node_modules/,
         test: /\.js$/,
         use: ['babel-loader']
+      },
+      {
+        exclude: /node_modules/,
+        test: /\.ts?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          }
+        ]
       }
     ]
   },
   resolve: {
     mainFields: ['browser', 'main'],
-    extensions: ['.js', '.json'],
+    extensions: ['.js', '.json', '.ts'],
+    extensionAlias: {
+      '.js': ['.js', '.json', '.ts']
+    },
     alias: {
       buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
       url: 'iso-url',
@@ -125,8 +140,12 @@ if (devBuild) {
  */
 const bgConfig = merge(commonConfig, {
   name: 'background',
+  target: 'webworker',
   entry: {
     backgroundPage: './add-on/src/background/background.js'
+  },
+  output: {
+    globalObject: 'globalThis'
   },
   optimization: {
     splitChunks: {
@@ -138,11 +157,25 @@ const bgConfig = merge(commonConfig, {
           name: 'ipfs',
           priority: 10,
           enforce: true,
-          // Include js-ipfs and js-kubo-rpc-client
-          test: /\/node_modules\/(ipfs-core|kubo-rpc-client)\//
+          // Include js-kubo-rpc-client
+          test: /\/node_modules\/kubo-rpc-client\//
         }
       }
     }
+  }
+})
+
+/**
+ * background page bundle (with heavy dependencies)
+ * @type {import('webpack').Configuration}
+ */
+const bgFirefoxConfig = merge(commonConfig, {
+  name: 'background-firefox',
+  entry: {
+    backgroundPage: './add-on/src/background/background.js'
+  },
+  output: {
+    filename: '[name].firefox.bundle.js'
   }
 })
 
@@ -157,7 +190,8 @@ const uiConfig = merge(commonConfig, {
     importPage: './add-on/src/popup/quick-import.js',
     optionsPage: './add-on/src/options/options.js',
     recoveryPage: './add-on/src/recovery/recovery.js',
-    welcomePage: './add-on/src/landing-pages/welcome/index.js'
+    welcomePage: './add-on/src/landing-pages/welcome/index.js',
+    requestPermissionsPage: './add-on/src/landing-pages/permissions/request.js'
   },
   optimization: {
     splitChunks: {
@@ -190,6 +224,7 @@ const contentScriptsConfig = merge(commonConfig, {
 
 const config = [
   bgConfig,
+  bgFirefoxConfig,
   uiConfig,
   contentScriptsConfig
 ]

@@ -1,12 +1,14 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import browser from 'webextension-polyfill'
 import isIPFS from 'is-ipfs'
+import browser from 'webextension-polyfill'
+import { optionsPage, welcomePage } from '../../lib/constants.js'
+import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway } from '../../lib/context-menus.js'
 import { browserActionFilesCpImportCurrentTab } from '../../lib/ipfs-import.js'
 import { ipfsContentPath } from '../../lib/ipfs-path.js'
-import { welcomePage, optionsPage } from '../../lib/constants.js'
-import { contextMenuViewOnGateway, contextMenuCopyAddressAtPublicGw, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress } from '../../lib/context-menus.js'
+import { notifyOptionChange } from '../../lib/redirect-handler/blockOrObserve.js'
+import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 // The store contains and mutates the state for the app
 export default (state, emitter) => {
@@ -177,6 +179,11 @@ export default (state, emitter) => {
       }
       // console.dir('toggleSiteIntegrations', state)
       await browser.storage.local.set({ disabledOn, enabledOn })
+      await notifyOptionChange()
+      // notifyOptionsChange call is async, sends a message to background and
+      // waits for it to resolve. However, that doesnt work the
+      // same way in Chrome and FF. So we need to wait a bit before reloading.
+      await new Promise(resolve => setTimeout(resolve, 200))
 
       const path = ipfsContentPath(currentTab.url, { keepURIParams: true })
       // Reload the current tab to apply updated redirect preference
@@ -204,14 +211,15 @@ export default (state, emitter) => {
   emitter.on('toggleActive', async () => {
     const prev = state.active
     state.active = !prev
-    if (!state.active) {
-      state.gatewayAddress = state.pubGwURLString
-      state.ipfsApiUrl = null
-      state.gatewayVersion = null
-      state.swarmPeers = null
-      state.isIpfsOnline = false
-    }
     try {
+      if (!state.active) {
+        state.gatewayAddress = state.pubGwURLString
+        state.ipfsApiUrl = null
+        state.gatewayVersion = null
+        state.swarmPeers = null
+        state.isIpfsOnline = false
+      }
+      await notifyOptionChange()
       await browser.storage.local.set({ active: state.active })
     } catch (error) {
       console.error(`Unable to update global Active flag due to ${error}`)
@@ -225,13 +233,12 @@ export default (state, emitter) => {
       // Copy all attributes
       Object.assign(state, status)
 
-      if (state.active && status.redirect && (status.ipfsNodeType !== 'embedded')) {
+      if (state.active && status.redirect && POSSIBLE_NODE_TYPES.includes(status.ipfsNodeType)) {
         state.gatewayAddress = status.gwURLString
       } else {
         state.gatewayAddress = status.pubGwURLString
       }
-      // Import requires access to the background page (https://github.com/ipfs-shipyard/ipfs-companion/issues/477)
-      state.isApiAvailable = state.active && !!(await getBackgroundPage()) && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
+      state.isApiAvailable = state.active && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
       state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
@@ -245,8 +252,4 @@ export default (state, emitter) => {
       state.isRedirectContext = false
     }
   }
-}
-
-function getBackgroundPage () {
-  return browser.runtime.getBackgroundPage()
 }
