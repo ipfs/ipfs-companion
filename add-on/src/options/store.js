@@ -15,7 +15,7 @@ export default function optionStore (state, emitter) {
     state.redirectRules = existingRedirectRules.map(rule => ({
       id: rule.id,
       origin: rule.condition.regexFilter?.replace(RULE_REGEX_ENDING, '(.*)').replaceAll('\\', ''),
-      target: rule.action.redirect?.regexSubstitution?.replace('\\1', '<resource-path>')
+      target: rule.action.redirect?.regexSubstitution
     }))
     emitter.emit('render')
   }
