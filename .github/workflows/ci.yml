@@ -101,8 +101,8 @@ jobs:
       - uses: google-github-actions/release-please-action@v3.7.3
         with:
           changelog-notes-type: github
-          command: manifest-pr
           release-type: node
+          skip-github-release: true
 
   release-assets:
     runs-on: ubuntu-latest
