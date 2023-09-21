@@ -103,6 +103,7 @@ jobs:
           changelog-notes-type: github
           release-type: node
           skip-github-release: true
+          skip-labeling: true
 
   release-assets:
     runs-on: ubuntu-latest
