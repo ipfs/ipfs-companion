@@ -98,12 +98,10 @@ jobs:
     needs: [test]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
-      - uses: google-github-actions/release-please-action@v3.7.11
+      - uses: google-github-actions/release-please-action@v3.7.3
         with:
           changelog-notes-type: github
           command: manifest-pr
-          include-v-in-tag: true
-          release-as: v3.0.0
           release-type: node
 
   release-assets:
