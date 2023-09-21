@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "Basculer toutes les intégrations IPFS",
-    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
+    "description": "A label for toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "hors ligne",
@@ -28,11 +28,11 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
-    "message": "API",
+    "message": "RPC",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusApiAddressTitle": {
-    "message": "L'URL de l'API de votre nœud local",
+    "message": "L'URL du RPC de votre Kubo local",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
@@ -199,24 +199,8 @@
     "message": "Erreur lors de l'importation de la Ressource IPFS",
     "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
-  "notify_apiOnlineTitle": {
-    "message": "L'API IPFS est en ligne",
-    "description": "A title of system notification (notify_apiOnlineTitle)"
-  },
-  "notify_apiOnlineAutomaticModeMsg": {
-    "message": "Mode automatique : La redirection vers la passerelle personnalisée est activée",
-    "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
-  },
-  "notify_apiOfflineTitle": {
-    "message": "L'API IPFS est hors ligne",
-    "description": "A title of system notification (notify_apiOfflineTitle)"
-  },
-  "notify_apiOfflineAutomaticModeMsg": {
-    "message": "Mode automatique : la passerelle publique sera utilisée en cas de problème",
-    "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
-  },
   "notify_importErrorTitle": {
-    "message": "Impossible d'importer via l'API IPFS",
+    "message": "Impossible d'importer via le RPC de Kubo",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -247,6 +231,10 @@
     "message": "Préférences de Companion",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
+  "option_legend_readMore": {
+    "message": "En savoir plus",
+    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
+  },
   "option_header_nodeType": {
     "message": "Nœud IPFS",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
@@ -260,7 +248,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Choisissez \"Externe\" pour vous connecter à un nœud local grâce à l'API HTTP.",
+    "message": "Set to \"External\" to connect to a local Kubo node using the Kubo RPC API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_brave_description": {
@@ -316,7 +304,7 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isoler les racines de contenus les unes des autres en les chargeant en tant que sous-domaines (sur *.localhost) et en créant une oriigine unique pour chaque CID, IPNS, ou enregistrement DNSLink. Nécessite un nœud IPFS local go-ipfs 0.5.0 ou plus récent.",
+    "message": "Isole les racines des contenus les unes des autres en les chargeant comme sous-domaines (à *.localhost) et en créant une origine unique pour chaque CID, enregistrement IPNS ou DNSLink.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
@@ -372,15 +360,15 @@
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
-    "message": "API",
+    "message": "Kubo RPC API",
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "Lien de l'API IPFS",
+    "message": "URL du RPC Kubo",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "Indiquez l'URL de votre API IPFS. (Astuce: c'est là où /api/v0/config se trouve.)",
+    "message": "Définissez l'URL du RPC de votre Kubo. (Indice: c'est où se trouve https://docs.ipfs.tech/reference/kubo/rpc/ )",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -396,8 +384,12 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Passer automatiquement de votre passerelle locale vers votre passerelle publique par défaut si l'API IPFS est indisponible.",
+    "message": "Automatically enables automatic redirection to your local gateway when the Kubo RPC endpoint is accessible, and disable it when the endpoint is unavailable.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
+  },
+  "option_automaticMode_description_subtext": {
+    "message": "Note: disabling this feature will result in static redirects, independent of the Kubo RPC endpoint's availability, and may produce error when your node is offline.",
+    "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
     "message": "DNSLink",
@@ -406,6 +398,10 @@
   "option_header_experiments": {
     "message": "Fonctionnalités expérimentales",
     "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_header_redirect_rules": {
+    "message": "Redirect Rules",
+    "description": "A section header on the Preferences screen (option_header_redirect_rules)"
   },
   "option_header_reset": {
     "message": "Réinitialiser les Préférences",
@@ -514,6 +510,18 @@
   "option_preloadAtPublicGateway_description": {
     "message": "Précharger automatiquement les éléments importés dans IPFS via une requête HTTP HEAD asynchrone vers une passerelle publique.",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
+  },
+  "option_redirect_rules_reset_all": {
+    "message": "Reset All Redirect Rules",
+    "description": "A button label on the Preferences screen (option_redirect_rules_reset_all)"
+  },
+  "option_redirect_rules_row_origin": {
+    "message": "Origin",
+    "description": "A table header on the Preferences screen (option_redirect_rules_row_origin)"
+  },
+  "option_redirect_rules_row_target": {
+    "message": "Target",
+    "description": "A table header on the Preferences screen (option_redirect_rules_row_target)"
   },
   "option_logNamespaces_title": {
     "message": "Garder l'historique des espaces de noms",
@@ -710,5 +718,97 @@
   "page_landingWelcome_projects_title": {
     "message": "Projets affiliés",
     "description": "Projects section title (page_landingWelcome_projects_title)"
+  },
+  "option_header_telemetry": {
+    "message": "Télémétrie",
+    "description": "A section header on the Preferences screen (option_header_telemetry)"
+  },
+  "option_telemetry_disclaimer": {
+    "message": "Nous collectons une télémétrie minimale pour améliorer et établir des priorités dans notre travail. Merci de consentir à cette collection de mesures pour soutenir nos efforts !",
+    "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
+  },
+  "option_telemetryGroupMinimal_title": {
+    "message": "Télémétrie des fonctionnalités",
+    "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
+  },
+  "option_telemetryGroupMinimal_description": {
+    "message": "Collecte des mesures de fonctionnalité et d'usage général pour aider les mainteneurs à prioriser leur travail sur les fonctionnalités les plus utiles.",
+    "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
+  },
+  "option_telemetryGroupMarketing_title": {
+    "message": "TItre marketing",
+    "description": "A title for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_title)"
+  },
+  "option_telemetryGroupMarketing_description": {
+    "message": "Description marketing",
+    "description": "A description for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_description)"
+  },
+  "option_telemetryGroupPerformance_title": {
+    "message": "Titre performance",
+    "description": "A title for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_title)"
+  },
+  "option_telemetryGroupPerformance_description": {
+    "message": "Description performance",
+    "description": "A description for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_description)"
+  },
+  "option_telemetryGroupTracking_title": {
+    "message": "Titre traçabilité",
+    "description": "A title for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_title)"
+  },
+  "option_telemetryGroupTracking_description": {
+    "message": "Description traçabilité",
+    "description": "A description for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_description)"
+  },
+  "recovery_page_title": {
+    "message": "Problème avec votre nœud IPFS | IPFS Companion",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "recovery_page_sub_header": {
+    "message": "Impossible d'atteindre votre nœud IPFS :(",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
+  "recovery_page_message_p1": {
+    "message": "Vérifiez que votre nœud IPFS fournit une passerelle IPFS accessible.",
+    "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
+  },
+  "recovery_page_message_p2": {
+    "message": "Vous pouvez aussi accéder à la version désérialisée de la ressource demandée via la passerelle publique favorite définie dans IPFS Companion. Ceci délègue la confiance à l'adresse ci-dessous d'une tierce partie, et évite la validation locale du hash. ",
+    "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
+  },
+  "recovery_page_button": {
+    "message": "Continuer vers la passerelle publique",
+    "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "recovery_page_learn_more": {
+    "message": "En savoir plus sur la passerelle publique",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "recovery_page_update_preferences": {
+    "message": "Mettre-à-jour vos préférences d'IPFS Companion",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "request_permissions_page_title": {
+    "message": "Grant Host Permissions | IPFS Companion",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "request_permissions_page_sub_header": {
+    "message": "Just one more thing to do before you're all set! :)",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
+  "request_permissions_page_message_p1": {
+    "message": "IPFS Companion needs permission to identify IPFS resources on the web.",
+    "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
+  },
+  "request_permissions_page_message_p2": {
+    "message": "The IPFS Companion requires Host permission to access data on all websites. This allows it to inspect all web requests, identify ones for content-addressed IPFS resources, and load them using your local IPFS node. Please click the button below to grant these permissions.",
+    "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
+  },
+  "request_permissions_page_button": {
+    "message": "Grant Permission",
+    "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "request_permissions_page_learn_more": {
+    "message": "Learn more about host permissions",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }
