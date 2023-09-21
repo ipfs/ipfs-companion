@@ -9,7 +9,6 @@ on:
   pull_request:
     branches:
       - main
-      - rc/3.0-mv3
 
 env:
   XDG_CACHE_HOME: ${{ github.workspace }}/.cache
