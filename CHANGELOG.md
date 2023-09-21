@@ -9,6 +9,25 @@
 
 
 
+## [3.0.0](https://github.com/ipfs/ipfs-companion/compare/v2.22.1...v3.0.0) (2023-09-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **MV3:** Implements the new MV3 standard for browser extensions.
+
+### Features
+
+* **i18n:** :arrow_down: Pulling Translations ([#1286](https://github.com/ipfs/ipfs-companion/issues/1286)) ([33a8f4c](https://github.com/ipfs/ipfs-companion/commit/33a8f4cace4895c79bb978eb3b0302e96ed890cb))
+* **MV3:** MV3 Implementation Collector Branch ([#1182](https://github.com/ipfs/ipfs-companion/issues/1182)) ([5873528](https://github.com/ipfs/ipfs-companion/commit/5873528ebcdeff1ce778e41aedc2db793b6279c6))
+
+
+### Bug Fixes
+
+* **brave:** not updating tab to the new redirect url in some cases. ([#1285](https://github.com/ipfs/ipfs-companion/issues/1285)) ([4097e2d](https://github.com/ipfs/ipfs-companion/commit/4097e2d88d956400d2143adfbc916ac63587488d))
+* build context in docker-compose.e2e.yml ([76a38f3](https://github.com/ipfs/ipfs-companion/commit/76a38f3cff1a4929dd9a24ab4465f8bf6a8e1bb1))
+* **options:** :wastebasket: Fix target URLs. ([#1280](https://github.com/ipfs/ipfs-companion/issues/1280)) ([dcc10f0](https://github.com/ipfs/ipfs-companion/commit/dcc10f0c995fc8cfa97094f491e10a771d6addef))
+
 ## [2.22.1](https://github.com/ipfs/ipfs-companion/compare/v2.22.0...v2.22.1) (2023-02-22)
 
 
