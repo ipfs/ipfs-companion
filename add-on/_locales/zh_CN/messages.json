@@ -13,7 +13,7 @@
   },
   "panel_headerActiveToggleTitle": {
     "message": "切换所有 IPFS 集成",
-    "description": "A label for an toggling all IPFS integrations (panel_headerActiveToggleTitle)"
+    "description": "A label for toggling all IPFS integrations (panel_headerActiveToggleTitle)"
   },
   "panel_statusOffline": {
     "message": "离线",
@@ -28,11 +28,11 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayAddressTitle)"
   },
   "panel_statusApiAddress": {
-    "message": "API",
+    "message": "RPC",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddress)"
   },
   "panel_statusApiAddressTitle": {
-    "message": "您本地节点的API URL地址",
+    "message": "您本地Kubo RPC的URL",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
   "panel_statusGatewayVersion": {
@@ -199,24 +199,8 @@
     "message": "导入 IPFS 资源时出错",
     "description": "A title of system notification (notify_fileCpImportErrorTitle)"
   },
-  "notify_apiOnlineTitle": {
-    "message": "IPFS API 在线",
-    "description": "A title of system notification (notify_apiOnlineTitle)"
-  },
-  "notify_apiOnlineAutomaticModeMsg": {
-    "message": "自动模式：重定向至自定义网关已激活",
-    "description": "A message in system notification (notify_apiOnlineAutomaticModeMsg)"
-  },
-  "notify_apiOfflineTitle": {
-    "message": "IPFS API 离线",
-    "description": "A title of system notification (notify_apiOfflineTitle)"
-  },
-  "notify_apiOfflineAutomaticModeMsg": {
-    "message": "自动模式：公共网关将作为备选方案",
-    "description": "A message in system notification (notify_apiOfflineAutomaticModeMsg)"
-  },
   "notify_importErrorTitle": {
-    "message": "无法通过IPFS API导入",
+    "message": "无法通过Kubo RPC导入",
     "description": "A title of system notification (notify_importErrorTitle)"
   },
   "notify_importTrackingProtectionErrorMsg": {
@@ -247,6 +231,10 @@
     "message": "伴侣首选项",
     "description": "Main header on the Preferences screen (option_page_header)"
   },
+  "option_legend_readMore": {
+    "message": "阅读更多",
+    "description": "A generic link in option description on the Preferences screen (option_legend_readMore)"
+  },
   "option_header_nodeType": {
     "message": "IPFS 节点",
     "description": "A section header on the Preferences screen (option_header_nodeType)"
@@ -260,7 +248,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "设置为“外部”来通过 HTTP API 连接本地节点",
+    "message": "Set to \"External\" to connect to a local Kubo node using the Kubo RPC API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_brave_description": {
@@ -316,7 +304,7 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "通过在*.localhost使用子域名并针对CID、IPNS或DNSLINK记录创建唯一的Origin,使得内容的根目录互相隔离。需要本地节点的go-ipfs版本为0.5.0或更高",
+    "message": "通过在*.localhost使用子域名并针对CID、IPNS或DNSLINK记录创建唯一的Origin,使得内容的根目录互相隔离.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
@@ -372,15 +360,15 @@
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
-    "message": "API",
+    "message": "Kubo RPC API",
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
-    "message": "IPFS API 链接",
+    "message": "Kubo RPC URL",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "设置IPFS API 地址 （提示：就是/api/v0/config所在的位置）",
+    "message": "为您的Kubo RPC设置URL. (提示: 请参考 https://docs.ipfs.tech/reference/kubo/rpc/)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -396,8 +384,12 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "当IPFS API不可用时，自动从你的本地网关切换到默认公共网关",
+    "message": "Automatically enables automatic redirection to your local gateway when the Kubo RPC endpoint is accessible, and disable it when the endpoint is unavailable.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
+  },
+  "option_automaticMode_description_subtext": {
+    "message": "Note: disabling this feature will result in static redirects, independent of the Kubo RPC endpoint's availability, and may produce error when your node is offline.",
+    "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
     "message": "DNSLink",
@@ -406,6 +398,10 @@
   "option_header_experiments": {
     "message": "试验",
     "description": "A section header on the Preferences screen (option_header_experiments)"
+  },
+  "option_header_redirect_rules": {
+    "message": "Redirect Rules",
+    "description": "A section header on the Preferences screen (option_header_redirect_rules)"
   },
   "option_header_reset": {
     "message": "重置首选项",
@@ -514,6 +510,18 @@
   "option_preloadAtPublicGateway_description": {
     "message": "通过使用对公共网关的异步 HTTP 请求头实现对已导入的IPFS资源进行预加载",
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
+  },
+  "option_redirect_rules_reset_all": {
+    "message": "Reset All Redirect Rules",
+    "description": "A button label on the Preferences screen (option_redirect_rules_reset_all)"
+  },
+  "option_redirect_rules_row_origin": {
+    "message": "Origin",
+    "description": "A table header on the Preferences screen (option_redirect_rules_row_origin)"
+  },
+  "option_redirect_rules_row_target": {
+    "message": "Target",
+    "description": "A table header on the Preferences screen (option_redirect_rules_row_target)"
   },
   "option_logNamespaces_title": {
     "message": "记录命名空间",
@@ -710,5 +718,97 @@
   "page_landingWelcome_projects_title": {
     "message": "相关项目",
     "description": "Projects section title (page_landingWelcome_projects_title)"
+  },
+  "option_header_telemetry": {
+    "message": "遥测数据",
+    "description": "A section header on the Preferences screen (option_header_telemetry)"
+  },
+  "option_telemetry_disclaimer": {
+    "message": "为了改进我们的工作并确定其优先事项，我们正在收集少量的遥测数据。请同意收集这些数据，以帮助我们的更好的工作！",
+    "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
+  },
+  "option_telemetryGroupMinimal_title": {
+    "message": "数据功能特征",
+    "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
+  },
+  "option_telemetryGroupMinimal_description": {
+    "message": "通过收集基本功能特性和使用情况，来帮助维护人员能了解和优先更新用户认为最有用的功能",
+    "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
+  },
+  "option_telemetryGroupMarketing_title": {
+    "message": "推广标题",
+    "description": "A title for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_title)"
+  },
+  "option_telemetryGroupMarketing_description": {
+    "message": "推广描述",
+    "description": "A description for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_description)"
+  },
+  "option_telemetryGroupPerformance_title": {
+    "message": "性能标题",
+    "description": "A title for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_title)"
+  },
+  "option_telemetryGroupPerformance_description": {
+    "message": "性能描述",
+    "description": "A description for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_description)"
+  },
+  "option_telemetryGroupTracking_title": {
+    "message": "追踪标题",
+    "description": "A title for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_title)"
+  },
+  "option_telemetryGroupTracking_description": {
+    "message": "追踪描述",
+    "description": "A description for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_description)"
+  },
+  "recovery_page_title": {
+    "message": "IPFS节点 | IPFS 伴侣 出现问题",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "recovery_page_sub_header": {
+    "message": "无法访问您的IPFS 节点 (ㄒoㄒ)",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
+  "recovery_page_message_p1": {
+    "message": "确保您的IPFS 节点正常运行并提供HTTP网关",
+    "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
+  },
+  "recovery_page_message_p2": {
+    "message": "您还可以通过IPFS 伴侣中设置的首选公共网关来访问所请求资源的反序列化版本。当然这将信任下面的第三方地址，同时会跳过本地哈希验证。",
+    "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
+  },
+  "recovery_page_button": {
+    "message": "进入公共网关",
+    "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "recovery_page_learn_more": {
+    "message": "了解公共网关",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "recovery_page_update_preferences": {
+    "message": "更新您的IPFS 伴侣首选项",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "request_permissions_page_title": {
+    "message": "Grant Host Permissions | IPFS Companion",
+    "description": "Title of the recovery page (recovery_page_title)"
+  },
+  "request_permissions_page_sub_header": {
+    "message": "Just one more thing to do before you're all set! :)",
+    "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
+  },
+  "request_permissions_page_message_p1": {
+    "message": "IPFS Companion needs permission to identify IPFS resources on the web.",
+    "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
+  },
+  "request_permissions_page_message_p2": {
+    "message": "The IPFS Companion requires Host permission to access data on all websites. This allows it to inspect all web requests, identify ones for content-addressed IPFS resources, and load them using your local IPFS node. Please click the button below to grant these permissions.",
+    "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
+  },
+  "request_permissions_page_button": {
+    "message": "Grant Permission",
+    "description": "Button on the recovery screen (recovery_page_button)"
+  },
+  "request_permissions_page_learn_more": {
+    "message": "Learn more about host permissions",
+    "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }
