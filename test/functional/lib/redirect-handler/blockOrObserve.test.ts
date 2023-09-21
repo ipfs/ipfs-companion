@@ -116,7 +116,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
     beforeEach(async () => {
       sinonSandbox.restore()
       browserMock.tabs.query.resetHistory()
-      browserMock.tabs.reload.resetHistory()
       browserMock.tabs.update.resetHistory()
       browserMock.declarativeNetRequest = sinonSandbox.spy(new DeclarativeNetRequestMock())
       // this cleans up the rules from the previous test stored in memory.
@@ -182,6 +181,30 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         expectedCondition: `^https?\\:\\/\\/localhost\\:8080${RULE_REGEX_ENDING}`,
         regexSubstitution: 'chrome-extension://some-path/dist/recover/recovery.html\\1',
       })
+    })
+
+    it('Should update tab from originUrl to redirectUrl for the first time', async () => {
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+      expect(browserMock.tabs.query.called).to.be.true
+      expect(browserMock.tabs.update.called).to.be.true
+      expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])
+    })
+
+    it('Should wait for the tab to exist before updating tab from originUrl to redirectUrl for the first time', async () => {
+      const clock = sinon.useFakeTimers();
+      browserMock.tabs.query.onCall(0).resolves([])
+      browserMock.tabs.query.onCall(1).resolves([{ id: 40 }])
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+      await clock.tickAsync(400)
+      expect(browserMock.tabs.query.callCount).to.be.equal(2)
+      expect(browserMock.tabs.update.called).to.be.true
+      expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])
     })
 
     it('Should add redirect rules for local gateway', async () => {

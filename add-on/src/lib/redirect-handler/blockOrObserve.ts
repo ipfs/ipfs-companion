@@ -381,8 +381,9 @@ export function addRuleToDynamicRuleSetGenerator (
 
     const tabs = await browser.tabs.query({ url: `${originUrl}*` })
     if (tabs.length === 0) {
-      // wait for the tab to be created or a redirect to happen.
-      setTimeout(async (): Promise<void> => await updateTabToNewUrl({ originUrl, redirectUrl }, numTry + 1), 100)
+      // wait for the tab to be created or a redirect to happen. Check every 100ms.
+      await new Promise(resolve => setTimeout(resolve, 100))
+      await updateTabToNewUrl({ originUrl, redirectUrl }, numTry + 1)
     } else {
       await Promise.all(tabs.map(async tab => await browser.tabs.update(tab.id, { url: redirectUrl })))
     }
