@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { before, describe, it } from 'mocha';
 import sinon from 'sinon';
 import browserMock from 'sinon-chrome';
+import { MAX_RETRIES_TO_UPDATE_TAB } from './../../../../add-on/src/lib/redirect-handler/blockOrObserve';
 
 import { optionDefaults } from '../../../../add-on/src/lib/options.js';
 import { RULE_REGEX_ENDING, addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
@@ -201,7 +202,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
         redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
       })
-      await clock.tickAsync(400)
+      await clock.tickAsync(100 * MAX_RETRIES_TO_UPDATE_TAB)
       expect(browserMock.tabs.query.callCount).to.be.equal(2)
       expect(browserMock.tabs.update.called).to.be.true
       expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])

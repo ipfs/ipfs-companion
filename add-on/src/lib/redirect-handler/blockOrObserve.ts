@@ -12,11 +12,11 @@ import { SubdomainRedirectRegexFilter } from './subdomainRedirectRegexFilter.js'
 const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
-const MAX_RETRIES_TO_UPDATE_TAB = 5
 export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
-export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
+export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+export const MAX_RETRIES_TO_UPDATE_TAB = 5
 
 // We need to match the rest of the URL, so we can use a wildcard.
 export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
