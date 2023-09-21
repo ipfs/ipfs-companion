@@ -2,7 +2,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "ipfs-companion-dev-build@ci.ipfs.team",
-      "strict_min_version": "111.0.0"
+      "strict_min_version": "111.0"
     }
   }
 }

@@ -11,7 +11,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "ipfs-firefox-addon@lidel.org",
-      "strict_min_version": "111.0.0"
+      "strict_min_version": "111.0"
     }
   },
   "permissions": [
