@@ -9,6 +9,14 @@
 
 
 
+## [3.0.1](https://github.com/ipfs/ipfs-companion/compare/v3.0.0...v3.0.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* **firefox:** :wrench: Min FF Version ([#1290](https://github.com/ipfs/ipfs-companion/issues/1290)) ([09492a4](https://github.com/ipfs/ipfs-companion/commit/09492a4ff8b2df69f25ce2fea4f35882a5d9ae2f))
+* **release-automation:** :alien: Tags are not being created. ([#1287](https://github.com/ipfs/ipfs-companion/issues/1287)) ([3229c2a](https://github.com/ipfs/ipfs-companion/commit/3229c2a2be30a3cc440fd47c02474ff8a36eeb16))
+
 ## [3.0.0](https://github.com/ipfs/ipfs-companion/compare/v2.22.1...v3.0.0) (2023-09-21)
 
 
