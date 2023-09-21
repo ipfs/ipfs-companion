@@ -13,9 +13,10 @@ const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
 export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
-export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
+export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
+export const MAX_RETRIES_TO_UPDATE_TAB = 5
 
 // We need to match the rest of the URL, so we can use a wildcard.
 export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
@@ -25,9 +26,12 @@ interface regexFilterMap {
   regexSubstitution: string
 }
 
-interface redirectHandlerInput {
+interface redirectPair {
   originUrl: string
   redirectUrl: string
+}
+
+interface redirectHandlerInput extends redirectPair {
   getPort: (state: CompanionState) => string
 }
 
@@ -362,6 +366,29 @@ export function addRuleToDynamicRuleSetGenerator (
     }
   })
 
+  /**
+   * Update the tab that matches the origin URL to the redirect URL.
+   *
+   * @param param0 redirectPair
+   * @param numTry number of times we have tried to update the tab.
+   * @returns
+   */
+  async function updateTabToNewUrl ({ originUrl, redirectUrl }: redirectPair, numTry: number = 1): Promise<void> {
+    // Don't get stuck in a loop.
+    if (numTry > MAX_RETRIES_TO_UPDATE_TAB) {
+      return
+    }
+
+    const tabs = await browser.tabs.query({ url: `${originUrl}*` })
+    if (tabs.length === 0) {
+      // wait for the tab to be created or a redirect to happen. Check every 100ms.
+      await new Promise(resolve => setTimeout(resolve, 100))
+      await updateTabToNewUrl({ originUrl, redirectUrl }, numTry + 1)
+    } else {
+      await Promise.all(tabs.map(async tab => await browser.tabs.update(tab.id, { url: redirectUrl })))
+    }
+  }
+
   // returning a closure to avoid passing `getState` as an argument to `addRuleToDynamicRuleSet`.
   return async function ({ originUrl, redirectUrl }: redirectHandlerInput): Promise<void> {
     // update the rules so that the next request is handled correctly.
@@ -376,8 +403,8 @@ export function addRuleToDynamicRuleSetGenerator (
     }
 
     // first update all the matching tabs to apply the new rule.
-    const tabs = await browser.tabs.query({ url: `${originUrl}*` })
-    await Promise.all(tabs.map(async tab => await browser.tabs.update(tab.id, { url: redirectUrl })))
+    // don't await this as this can happen in parallel.
+    void updateTabToNewUrl({ originUrl, redirectUrl })
 
     // Then update the rule set for future, we need to construct the regex filter and substitution.
     const { regexSubstitution, regexFilter } = constructRegexFilter({ originUrl, redirectUrl })
