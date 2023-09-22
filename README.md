@@ -6,9 +6,9 @@
   <a href="https://ipfs.tech"><img src="https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square" alt="Official Part of IPFS Project"></a>
   <a href="https://discuss.ipfs.tech"><img alt="Discourse Forum" src="https://img.shields.io/discourse/posts?server=https%3A%2F%2Fdiscuss.ipfs.tech&amp;color=blue"></a>
   <a href="https://matrix.to/#/#ipfs-space:ipfs.io"><img alt="Matrix Chat" src="https://img.shields.io/matrix/ipfs-space%3Aipfs.io?server_fqdn=matrix.org&amp;color=blue"></a>
-  <a href="https://github.com/ipfs/ipfs-companion/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/ipfs/kubo?filter=!*rc*"></a>
+  <a href="https://github.com/ipfs/ipfs-companion/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/ipfs/ipfs-companion?filter=!*rc*"></a>
   <a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/main/docs/LOCALIZATION-NOTES.md"><img src="https://img.shields.io/badge/i18n-translated-blue.svg" alt="i18n status"></a>
-  <a href="https://github.com/ipfs/ipfs-companion/actions"><img src="https://img.shields.io/github/actions/workflow/status/ipfs/kubo/build.yml?branch=master" alt="ci"></a>
+  <a href="https://github.com/ipfs/ipfs-companion/actions"><img src="https://img.shields.io/github/actions/workflow/status/ipfs/ipfs-companion/ci.yml?branch=main" alt="ci"></a>
 </p>
 
 <a href="https://docs.ipfs.tech/install/ipfs-companion/"><img src="https://gateway.ipfs.io/ipfs/QmSsGphTN1eWMhkFFNFb23jWTXyhNbo47PF9FbmC6ZaRNg" alt="Companion UX demo" title="Companion UX demo" width="100%"></a>
