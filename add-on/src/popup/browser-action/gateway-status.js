@@ -19,7 +19,7 @@ function statusEntry ({ label, labelLegend, value, check, itemClass = '', valueC
 
 export default function gatewayStatus ({
   gatewayAddress,
-  gatewayVersion,
+  kuboRpcBackendVersion,
   ipfsApiUrl,
   swarmPeers
 }) {
@@ -42,7 +42,7 @@ export default function gatewayStatus ({
       label: 'panel_statusApiAddress',
       labelLegend: 'panel_statusApiAddressTitle',
       value: api,
-      check: gatewayVersion
+      check: kuboRpcBackendVersion
     })}
     </ul>
   `

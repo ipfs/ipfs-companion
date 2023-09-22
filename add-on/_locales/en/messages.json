@@ -35,13 +35,9 @@
     "message": "The URL of your local Kubo RPC",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
-  "panel_statusGatewayVersion": {
-    "message": "version",
-    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
-  },
-  "panel_statusGatewayVersionTitle": {
-    "message": "The version of IPFS your local node is using",
-    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
+  "panel_kuboRpcBackendVersionTitle": {
+    "message": "The version of IPFS backend this extension talks to over Kubo RPC API",
+    "description": "A label in Node status section of Browser Action pop-up (panel_kuboRpcBackendVersionTitle)"
   },
   "panel_statusSwarmPeers": {
     "message": "Peers",

@@ -230,6 +230,25 @@ export default async function init (inQuickImport = false) {
     handler(message)
   }
 
+  async function fetchKuboRpcBackendVersion () {
+    // prefer AgentVersion string from 'ipfs id' , but if that fails, use 'ipfs version'
+    try {
+      const id = await ipfs.id()
+      if (id) {
+        return id.agentVersion
+      }
+    } catch (_) {
+      try {
+        const v = await ipfs.version()
+        if (v) {
+          return v.commit ? v.version + '/' + v.commit : v.version
+        }
+      } catch (_) {
+      }
+    }
+    return null
+  }
+
   async function sendStatusUpdateToBrowserAction () {
     if (!browserActionPort) return
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
@@ -250,14 +269,9 @@ export default async function init (inQuickImport = false) {
       newVersion: state.dismissedUpdate !== version ? version : null,
       currentTab
     }
-    try {
-      const v = await ipfs.version()
-      if (v) {
-        info.gatewayVersion = v.commit ? v.version + '/' + v.commit : v.version
-      }
-    } catch (error) {
-      info.gatewayVersion = null
-    }
+
+    info.kuboRpcBackendVersion = await fetchKuboRpcBackendVersion()
+
     if (state.active && info.currentTab) {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
