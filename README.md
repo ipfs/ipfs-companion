@@ -1,22 +1,27 @@
-# IPFS Companion
-**Harness the power of [IPFS](https://ipfs.io/) in your browser!**
+<h1 align="center">IPFS Companion Browser Extension</h1>
 
-[![](https://img.shields.io/github/release/ipfs/ipfs-companion.svg)](https://github.com/ipfs/ipfs-companion/releases/latest)
-[![](https://img.shields.io/badge/mozilla-reviewed-blue.svg)](https://addons.mozilla.org/en-US/firefox/addon/ipfs-companion/)
-[![i18n status](https://img.shields.io/badge/i18n-translated-blue.svg)](https://github.com/ipfs-shipyard/ipfs-companion/blob/main/docs/LOCALIZATION-NOTES.md)
-[![](https://img.shields.io/badge/matrix%20chat-%23lobby:ipfs.io-blue.svg?style=flat-square)](https://matrix.to/#/#lobby:ipfs.io)
+<p align="center" style="font-size: 1.2rem;">Harness the power of <a href="https://ipfs.tech">IPFS</a> in your browser!</p>
 
-![Quick runthrough of basic IPFS Companion features](https://gateway.ipfs.io/ipfs/QmSsGphTN1eWMhkFFNFb23jWTXyhNbo47PF9FbmC6ZaRNg)
+<p align="center">
+  <a href="https://ipfs.tech"><img src="https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square" alt="Official Part of IPFS Project"></a>
+  <a href="https://discuss.ipfs.tech"><img alt="Discourse Forum" src="https://img.shields.io/discourse/posts?server=https%3A%2F%2Fdiscuss.ipfs.tech&amp;color=blue"></a>
+  <a href="https://matrix.to/#/#ipfs-space:ipfs.io"><img alt="Matrix Chat" src="https://img.shields.io/matrix/ipfs-space%3Aipfs.io?server_fqdn=matrix.org&amp;color=blue"></a>
+  <a href="https://github.com/ipfs/ipfs-companion/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/ipfs/kubo?filter=!*rc*"></a>
+  <a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/main/docs/LOCALIZATION-NOTES.md"><img src="https://img.shields.io/badge/i18n-translated-blue.svg" alt="i18n status"></a>
+  <a href="https://github.com/ipfs/ipfs-companion/actions"><img src="https://img.shields.io/github/actions/workflow/status/ipfs/kubo/build.yml?branch=master" alt="ci"></a>
+</p>
 
+<a href="https://docs.ipfs.tech/install/ipfs-companion/"><img src="https://gateway.ipfs.io/ipfs/QmSsGphTN1eWMhkFFNFb23jWTXyhNbo47PF9FbmC6ZaRNg" alt="Companion UX demo" title="Companion UX demo" width="100%"></a>
 
-
+<div align="center">
+  
 | <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
-## Lead maintainer
+</div>
 
-[Marcin Rataj](https://github.com/lidel)
+<hr />
 
 ## Table of contents
 
