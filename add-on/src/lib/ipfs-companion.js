@@ -233,19 +233,15 @@ export default async function init (inQuickImport = false) {
   async function fetchKuboRpcBackendVersion () {
     // prefer AgentVersion string from 'ipfs id' , but if that fails, use 'ipfs version'
     try {
-      const id = await ipfs.id()
-      if (id) {
-        return id.agentVersion
+      const { agentVersion } = await ipfs.id()
+      if (agentVersion) {
+        return agentVersion
       }
-    } catch (_) {
-      try {
-        const v = await ipfs.version()
-        if (v) {
-          return v.commit ? v.version + '/' + v.commit : v.version
-        }
-      } catch (_) {
+      const { version, commit } = await ipfs.version()
+      if (version || commit) {
+        return [version, commit].filter(Boolean).join('/')
       }
-    }
+    } catch (_) {}
     return null
   }
 
