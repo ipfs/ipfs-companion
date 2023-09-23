@@ -256,7 +256,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeType_external": {
-    "message": "External",
+    "message": "External (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_brave": {
