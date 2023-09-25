@@ -104,6 +104,8 @@ jobs:
           release-type: node
           skip-github-release: true
           skip-labeling: true
+          extra-files: |
+            add-on/manifest.common.json
 
   release-assets:
     runs-on: ubuntu-latest
