@@ -9,6 +9,16 @@
 
 
 
+## What's Changed
+* fix(release-automation): :wrench: removing default command and skippi github release by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1291
+* fix(release-automation): :wrench: Skip Labels by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1293
+* chore(readme): update header by @lidel in https://github.com/ipfs/ipfs-companion/pull/1295
+* feat: show full rpc backend version by @lidel in https://github.com/ipfs/ipfs-companion/pull/1294
+* fix(telemetry): :arrow_down: Reduce event syncs by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1296
+
+
+**Full Changelog**: https://github.com/ipfs/ipfs-companion/compare/v3.0.1...v3.1.0
+
 ## [3.0.1](https://github.com/ipfs/ipfs-companion/compare/v3.0.0...v3.0.1) (2023-09-21)
 
 
