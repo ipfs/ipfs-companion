@@ -2,6 +2,8 @@ import debug from 'debug'
 import type browser from 'webextension-polyfill'
 import { trackEvent } from '../telemetry.js'
 
+export const DEFAULT_REQUEST_TRACKER_FLUSH_INTERVAL = 1000 * 60 * 60
+
 export class RequestTracker {
   private readonly eventKey: 'url-observed' | 'url-resolved'
   private readonly flushInterval: number
@@ -9,7 +11,7 @@ export class RequestTracker {
   private lastSync: number = Date.now()
   private requestTypeStore: { [key in browser.WebRequest.ResourceType]?: number } = {}
 
-  constructor (eventKey: 'url-observed' | 'url-resolved', flushInterval = 1000 * 60 * 60) {
+  constructor (eventKey: 'url-observed' | 'url-resolved', flushInterval = DEFAULT_REQUEST_TRACKER_FLUSH_INTERVAL) {
     this.eventKey = eventKey
     this.log = debug(`ipfs-companion:request-tracker:${eventKey}`)
     this.log.error = debug(`ipfs-companion:request-tracker:${eventKey}:error`)
