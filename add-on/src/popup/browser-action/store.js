@@ -27,7 +27,7 @@ export default (state, emitter) => {
     publicSubdomainGatewayUrl: null,
     gatewayAddress: null,
     swarmPeers: null,
-    gatewayVersion: null,
+    kuboRpcBackendVersion: null,
     isApiAvailable: false,
     // isRedirectContext
     currentTab: null,
@@ -215,7 +215,7 @@ export default (state, emitter) => {
       if (!state.active) {
         state.gatewayAddress = state.pubGwURLString
         state.ipfsApiUrl = null
-        state.gatewayVersion = null
+        state.kuboRpcBackendVersion = null
         state.swarmPeers = null
         state.isIpfsOnline = false
       }
@@ -241,13 +241,13 @@ export default (state, emitter) => {
       state.isApiAvailable = state.active && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount
       state.isIpfsOnline = state.active && status.peerCount > -1
-      state.gatewayVersion = state.active && status.gatewayVersion ? status.gatewayVersion : null
+      state.kuboRpcBackendVersion = state.active && status.kuboRpcBackendVersion ? status.kuboRpcBackendVersion : null
       state.ipfsApiUrl = state.active ? status.apiURLString : null
     } else {
       state.ipfsNodeType = 'external'
       state.swarmPeers = null
       state.isIpfsOnline = false
-      state.gatewayVersion = null
+      state.kuboRpcBackendVersion = null
       state.isIpfsContext = false
       state.isRedirectContext = false
     }
