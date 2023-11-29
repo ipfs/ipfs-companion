@@ -1,5 +1,5 @@
 {
-  "minimum_chrome_version": "111",
+  "minimum_chrome_version": "1",
   "background": {
     "service_worker": "dist/bundles/backgroundPage.bundle.js"
   },
