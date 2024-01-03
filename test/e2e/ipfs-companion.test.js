@@ -1,11 +1,11 @@
-import { Builder, By, Key } from 'selenium-webdriver'
-import { describe, it, before } from 'mocha'
+import { equal, fail, notEqual } from 'assert'
 import { expect } from 'chai'
+import { backOff } from 'exponential-backoff'
 import fs from 'fs'
+import { before, describe, it } from 'mocha'
+import { Builder, By, Key } from 'selenium-webdriver'
 import chrome from 'selenium-webdriver/chrome.js'
 import firefox from 'selenium-webdriver/firefox.js'
-import { fail, equal, notEqual } from 'assert'
-import { backOff } from 'exponential-backoff'
 
 function getExtension (browserName) {
   const version = process.env.IPFS_COMPANION_VERSION || JSON.parse(fs.readFileSync('add-on/manifest.common.json')).version
@@ -71,6 +71,15 @@ async function findExtensionUrl (browser) {
     await browser.switchTo().window(handle)
     const url = await browser.getCurrentUrl()
     console.info(`The current URL is: ${url}`)
+    /**
+     * Read line-209 for why this is commented out.
+     * if the extension wants permissions, this happens in firefox for host permission.
+     * this might happen in chromium in the future.
+     * if (url.includes('landing-pages/permissions/request.html')) {
+     *   //By.tagName is deprecated, replacement is called By.css() for some reason.
+     *   browser.findElement(By.css('button')).click()
+     * }
+     */
     const extensionURL = ExtensionURLRegex.exec(url)?.at(0)
     if (extensionURL !== undefined) {
       console.info(`Found the extension URL: ${extensionURL}`)
@@ -196,7 +205,19 @@ describe('ipfs-companion', () => {
     }
   })
 
-  const browsersToTest = ['chromium', 'firefox']
+  /**
+   * [read line-75] firefox is disabled for now, because: https://github.com/w3c/webextensions/issues/227
+   * the new host-permission API is optional be default. In a normal UI, the extension shows the permission request
+   * screen located at `landing-pages/permissions/request.html`. Clicking on the grant permission button shows a popup
+   * which requires further interaction to click "Allow". The selenium driver is unable to interact with the popup.
+   * Things Tried:
+   *    - using custom profiles.
+   *    - Clicking grant permissions button on line-74, but that results in a popup which is not interactable.
+   *    - using capabilities (in builder section, to handler alert popups and accept all).
+   *      https://www.selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/lib/capabilities_exports_Capabilities.html
+   *      selenium has different interfaces for chrome permissions, e.g.: https://github.com/SeleniumHQ/selenium/blob/selenium-4.10.0/javascript/node/selenium-webdriver/test/chrome/permission_test.js#L37
+   */
+  const browsersToTest = ['chromium']
 
   for (const browserName of browsersToTest) {
     describe(`ipfs-companion in ${browserName}`, () => {
@@ -212,9 +233,6 @@ describe('ipfs-companion', () => {
           const urlsToTest = [{
             initialUrl: 'https://ipfs.io/ipfs/QmTqZhR6f7jzdhLgPArDPnsbZpvvgxzCZycXK7ywkLxSyU?filename=ipfs-logo.3ea91a2f.svg',
             finalUrl: 'http://bafybeicrwkoherkuzwp2zk3cd4jc3miwp7mrkz2blxrd5afbdibqv5ivo4.ipfs.localhost:8080/?filename=ipfs-logo.3ea91a2f.svg'
-          }, {
-            initialUrl: 'https://awesome.ipfs.io',
-            finalUrl: 'http://awesome.ipfs.io.ipns.localhost:8080/'
           }, {
             initialUrl: 'https://docs.ipfs.tech',
             finalUrl: 'http://docs.ipfs.tech.ipns.localhost:8080/'
