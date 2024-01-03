@@ -1,11 +1,11 @@
-import { Builder, By, Key } from 'selenium-webdriver'
-import { describe, it, before } from 'mocha'
+import { equal, fail, notEqual } from 'assert'
 import { expect } from 'chai'
+import { backOff } from 'exponential-backoff'
 import fs from 'fs'
+import { before, describe, it } from 'mocha'
+import { Builder, By, Key } from 'selenium-webdriver'
 import chrome from 'selenium-webdriver/chrome.js'
 import firefox from 'selenium-webdriver/firefox.js'
-import { fail, equal, notEqual } from 'assert'
-import { backOff } from 'exponential-backoff'
 
 function getExtension (browserName) {
   const version = process.env.IPFS_COMPANION_VERSION || JSON.parse(fs.readFileSync('add-on/manifest.common.json')).version
