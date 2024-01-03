@@ -71,13 +71,15 @@ async function findExtensionUrl (browser) {
     await browser.switchTo().window(handle)
     const url = await browser.getCurrentUrl()
     console.info(`The current URL is: ${url}`)
-    // Read line-206 for why this is commented out.
-    // if the extension wants permissions, this happens in firefox for host permission.
-    // this might happen in chromium in the future.
-    // if (url.includes('landing-pages/permissions/request.html')) {
-    //   //By.tagName is deprecated, replacement is called By.css() for some reason.
-    //   browser.findElement(By.css('button')).click()
-    // }
+    /**
+     * Read line-209 for why this is commented out.
+     * if the extension wants permissions, this happens in firefox for host permission.
+     * this might happen in chromium in the future.
+     * if (url.includes('landing-pages/permissions/request.html')) {
+     *   //By.tagName is deprecated, replacement is called By.css() for some reason.
+     *   browser.findElement(By.css('button')).click()
+     * }
+     */
     const extensionURL = ExtensionURLRegex.exec(url)?.at(0)
     if (extensionURL !== undefined) {
       console.info(`Found the extension URL: ${extensionURL}`)
@@ -203,17 +205,18 @@ describe('ipfs-companion', () => {
     }
   })
 
-  // [read line-74] firefox is disabled for now, because: https://github.com/w3c/webextensions/issues/227
-  // the new host-permission API is optional be default. In a normal UI, the extension shows the permission request
-  // screen located at `landing-pages/permissions/request.html`. Clicking on the grant permission button shows a popup
-  // which requires further interaction to click "Allow". The selenium driver is unable to interact with the popup.
-  // Things Tried:
-  //   - using custom profiles.
-  //   - Clicking grant permissions button on line-74, but that results in a popup which is not interactable.
-  //   - using capabilities (in builder section, to handler alert popups and accept all).
-  //     https://www.selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/lib/capabilities_exports_Capabilities.html
-  //     selenium has different interfaces for chrome permissions, e.g.: https://github.com/SeleniumHQ/selenium/blob/selenium-4.10.0/javascript/node/selenium-webdriver/test/chrome/permission_test.js#L37
-  //
+  /**
+   * [read line-75] firefox is disabled for now, because: https://github.com/w3c/webextensions/issues/227
+   * the new host-permission API is optional be default. In a normal UI, the extension shows the permission request
+   * screen located at `landing-pages/permissions/request.html`. Clicking on the grant permission button shows a popup
+   * which requires further interaction to click "Allow". The selenium driver is unable to interact with the popup.
+   * Things Tried:
+   *    - using custom profiles.
+   *    - Clicking grant permissions button on line-74, but that results in a popup which is not interactable.
+   *    - using capabilities (in builder section, to handler alert popups and accept all).
+   *      https://www.selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/lib/capabilities_exports_Capabilities.html
+   *      selenium has different interfaces for chrome permissions, e.g.: https://github.com/SeleniumHQ/selenium/blob/selenium-4.10.0/javascript/node/selenium-webdriver/test/chrome/permission_test.js#L37
+   */
   const browsersToTest = ['chromium']
 
   for (const browserName of browsersToTest) {
