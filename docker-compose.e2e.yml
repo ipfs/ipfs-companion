@@ -2,6 +2,7 @@ version: "3.9"
 services:
   firefox:
     image: ${FIREFOX_IMAGE:-selenium/standalone-firefox}:${FIREFOX_VERSION:-latest}
+    platform: linux/amd64
     shm_size: 2g
     ports:
       - 4444
@@ -12,6 +13,7 @@ services:
     #  try using `seleniarm/standalone-chromium` instead
     # export CHROMIUM_IMAGE=seleniarm/standalone-chromium
     image: ${CHROMIUM_IMAGE:-selenium/standalone-chrome}:${CHROMIUM_VERSION:-latest}
+    platform: linux/amd64
     shm_size: 2g
     ports:
       - 4444
