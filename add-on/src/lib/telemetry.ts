@@ -57,7 +57,6 @@ export function trackView (view: string, segments: Record<string, string>): void
  * TrackView is a wrapper around ignite-metrics trackView
  *
  * @param event
- * @param segments
  */
 export function trackEvent (event: CountlyEvent): void {
   log('trackEvent called for event: ', event)
