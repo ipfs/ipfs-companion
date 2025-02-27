@@ -1,6 +1,7 @@
-import type { consentTypes } from '@ipfs-shipyard/ignite-metrics/typings/countly'
 import type { StorageProviderInterface } from '@ipfs-shipyard/ignite-metrics/StorageProvider'
 import browser from 'webextension-polyfill'
+
+type consentTypes = 'all' | 'except-all'
 
 export class WebExtensionStorageProvider implements StorageProviderInterface {
   async setStore (consentArray: consentTypes[]): Promise<void> {

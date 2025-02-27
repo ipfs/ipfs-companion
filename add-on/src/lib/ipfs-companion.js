@@ -69,6 +69,7 @@ export default async function init (inQuickImport = false) {
         await handleConsentFromState(state)
         ipfs = await initIpfsClient(browser, state, inQuickImport)
         trackView('init')
+        // TODO: implement tracking of `init` view
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(

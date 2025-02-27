@@ -1,20 +1,9 @@
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/browser-vanilla'
-import PatchedCountly from 'countly-sdk-web'
+
 import debug from 'debug'
-import { WebExtensionStorageProvider } from './storage-provider/WebExtensionStorageProvider.js'
 import { CompanionState } from '../types/companion.js'
 import { consentTypes } from '@ipfs-shipyard/ignite-metrics'
-import type { CountlyEvent } from 'countly-web-sdk'
 
 const log = debug('ipfs-companion:telemetry')
-
-const metricsProvider = new MetricsProvider({
-  appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
-  autoTrack: false,
-  metricsService: PatchedCountly,
-  storage: 'none',
-  storageProvider: new WebExtensionStorageProvider()
-})
 
 /**
  *
@@ -32,10 +21,10 @@ export async function handleConsentFromState (state: CompanionState): Promise<vo
   for (const [groupName, isEnabled] of Object.entries(telemetryGroups)) {
     if (isEnabled) {
       log(`Adding consent for '${groupName}'`)
-      await metricsProvider.addConsent(groupName as consentTypes)
+      // TODO: implement adding consent
     } else {
       log(`Removing consent for '${groupName}'`)
-      await metricsProvider.removeConsent(groupName as consentTypes)
+      // TODO: implement removing consent
     }
   }
 }
@@ -45,12 +34,13 @@ const ignoredViewsRegex: RegExp[] = []
 /**
  * TrackView is a wrapper around ignite-metrics trackView
  *
+ * @note: currently it's a no-op because of https://github.com/ipfs/ipfs-companion/issues/1315
  * @param view
  * @param segments
  */
 export function trackView (view: string, segments: Record<string, string>): void {
   log('trackView called for view: ', view)
-  metricsProvider.trackView(view, ignoredViewsRegex, segments)
+  // TODO: implement tracking for views
 }
 
 /**
@@ -59,7 +49,7 @@ export function trackView (view: string, segments: Record<string, string>): void
  * @param event
  * @param segments
  */
-export function trackEvent (event: CountlyEvent): void {
+export function trackEvent (event: object): void {
   log('trackEvent called for event: ', event)
-  metricsProvider.trackEvent(event)
+  // TODO: implement tracking for events
 }
