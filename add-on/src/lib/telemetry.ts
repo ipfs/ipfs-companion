@@ -25,8 +25,6 @@ export async function handleConsentFromState (state: CompanionState): Promise<vo
   }
 }
 
-const ignoredViewsRegex: RegExp[] = []
-
 /**
  * TrackView is a no-op function that only logs debug messages
  * Tracking functionality has been removed
