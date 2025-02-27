@@ -1,7 +1,5 @@
-
 import debug from 'debug'
 import { CompanionState } from '../types/companion.js'
-import { consentTypes } from '@ipfs-shipyard/ignite-metrics'
 
 const log = debug('ipfs-companion:telemetry')
 
@@ -20,11 +18,9 @@ export async function handleConsentFromState (state: CompanionState): Promise<vo
   }
   for (const [groupName, isEnabled] of Object.entries(telemetryGroups)) {
     if (isEnabled) {
-      log(`Adding consent for '${groupName}'`)
-      // TODO: implement adding consent
+      log(`Telemetry consent for '${groupName}' would be enabled, but tracking has been removed`)
     } else {
-      log(`Removing consent for '${groupName}'`)
-      // TODO: implement removing consent
+      log(`Telemetry consent for '${groupName}' is disabled`)
     }
   }
 }
@@ -32,24 +28,22 @@ export async function handleConsentFromState (state: CompanionState): Promise<vo
 const ignoredViewsRegex: RegExp[] = []
 
 /**
- * TrackView is a wrapper around ignite-metrics trackView
+ * TrackView is a no-op function that only logs debug messages
+ * Tracking functionality has been removed
  *
- * @note: currently it's a no-op because of https://github.com/ipfs/ipfs-companion/issues/1315
  * @param view
  * @param segments
  */
 export function trackView (view: string, segments: Record<string, string>): void {
-  log('trackView called for view: ', view)
-  // TODO: implement tracking for views
+  log('trackView called for view (no-op): ', view)
 }
 
 /**
- * TrackView is a wrapper around ignite-metrics trackView
+ * TrackEvent is a no-op function that only logs debug messages
+ * Tracking functionality has been removed
  *
  * @param event
- * @param segments
  */
 export function trackEvent (event: object): void {
-  log('trackEvent called for event: ', event)
-  // TODO: implement tracking for events
+  log('trackEvent called for event (no-op): ', event)
 }
