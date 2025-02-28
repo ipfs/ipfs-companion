@@ -1,20 +1,7 @@
-import MetricsProvider from '@ipfs-shipyard/ignite-metrics/browser-vanilla'
-import PatchedCountly from 'countly-sdk-web'
 import debug from 'debug'
-import { WebExtensionStorageProvider } from './storage-provider/WebExtensionStorageProvider.js'
 import { CompanionState } from '../types/companion.js'
-import { consentTypes } from '@ipfs-shipyard/ignite-metrics'
-import type { CountlyEvent } from 'countly-web-sdk'
 
 const log = debug('ipfs-companion:telemetry')
-
-const metricsProvider = new MetricsProvider({
-  appKey: '393f72eb264c28a1b59973da1e0a3938d60dc38a',
-  autoTrack: false,
-  metricsService: PatchedCountly,
-  storage: 'none',
-  storageProvider: new WebExtensionStorageProvider()
-})
 
 /**
  *
@@ -31,35 +18,30 @@ export async function handleConsentFromState (state: CompanionState): Promise<vo
   }
   for (const [groupName, isEnabled] of Object.entries(telemetryGroups)) {
     if (isEnabled) {
-      log(`Adding consent for '${groupName}'`)
-      await metricsProvider.addConsent(groupName as consentTypes)
+      log(`Telemetry consent for '${groupName}' would be enabled, but tracking has been removed`)
     } else {
-      log(`Removing consent for '${groupName}'`)
-      await metricsProvider.removeConsent(groupName as consentTypes)
+      log(`Telemetry consent for '${groupName}' is disabled`)
     }
   }
 }
 
-const ignoredViewsRegex: RegExp[] = []
-
 /**
- * TrackView is a wrapper around ignite-metrics trackView
+ * TrackView is a no-op function that only logs debug messages
+ * Tracking functionality has been removed
  *
  * @param view
  * @param segments
  */
 export function trackView (view: string, segments: Record<string, string>): void {
-  log('trackView called for view: ', view)
-  metricsProvider.trackView(view, ignoredViewsRegex, segments)
+  log('trackView called for view (no-op): ', view)
 }
 
 /**
- * TrackView is a wrapper around ignite-metrics trackView
+ * TrackEvent is a no-op function that only logs debug messages
+ * Tracking functionality has been removed
  *
  * @param event
- * @param segments
  */
-export function trackEvent (event: CountlyEvent): void {
-  log('trackEvent called for event: ', event)
-  metricsProvider.trackEvent(event)
+export function trackEvent (event: object): void {
+  log('trackEvent called for event (no-op): ', event)
 }
