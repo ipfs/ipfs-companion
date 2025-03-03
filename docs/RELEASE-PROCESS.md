@@ -30,7 +30,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
     - brave
     - chromium
     - firefox
-- Attach these assets to the draft release.
+- ~~Attach these assets to the draft release.~~ The built assets should be attached to the draft release automatically if all the above steps are followed.
 
 ## Publish on Chrome Web Store
 
@@ -39,14 +39,16 @@ Brave, Opera, and Edge do not require  additional publishing step.
 
 - IPFS Companion Chrome Webstore: https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch
 - Publishing requires your Google Account to belong to the IPFS Companion Maintainers Google Group (ask IPFS Stewards to be added).
-- Go to Developer Dashboard and select publisher: `IPFS Shipyard`.
-- Select `Package` from the left sub-menu.
-- Upload the newly built package for Chromium [earlier](#build-release-artifacts).
+- Go to Developer Dashboard and select publisher in the top right: `IPFS Shipyard`
+- You should see `IPFS Companion` and `IPFS Companion (Beta @ xxxxxx). If not, select `Items` on the left menu.
+- Select the correct extension you want to publish, usually `IPFS Companion`.
+- Select `Package` on the left menu (Under the Build category).
+- Upload the newly built package for Chromium [earlier](#build-release-artifacts). Use the same `ipfs_companion-<semver>_chromium.zip` file on the draft release.
 - The new package goes to draft state automatically.
-- Go to `Store listing` section from the left sub-menu.
+- Go to `Store listing` section from the left sub-menu. (This should happen automatically after uploading a new package).
 - Click `Save Draft` and then `Submit for Review`.
 - "Review" may take from a few hours to a few days. Google sends no email informing when new version is approved.
-- Only way to check it is to inspect the version number on the store listing or Dev Dashboard.
+- Only way to check when it is published is to inspect the version number on the store listing or Dev Dashboard.
 
 ## Publish on [Firefox Add-Ons Store](https://addons.mozilla.org/)
 
@@ -73,4 +75,6 @@ Brave, Opera, and Edge do not require  additional publishing step.
 
 ## Release on Github.
 
-Release the draft release just created. That's it!
+Release the draft release just created. You don't need to wait for the Chrome or Firefox stores to finish the extension review; you can just verify that the review is in progress.
+
+That's it!
