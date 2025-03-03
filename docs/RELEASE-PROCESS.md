@@ -73,4 +73,6 @@ Brave, Opera, and Edge do not require  additional publishing step.
 
 ## Release on Github.
 
-Release the draft release just created. That's it!
+Release the draft release just created. You don't need to wait for the Chrome or Firefox stores to finish the extension review; you can just verify that the review is in progress.
+
+That's it!
