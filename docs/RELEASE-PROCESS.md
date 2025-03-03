@@ -30,7 +30,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
     - brave
     - chromium
     - firefox
-- Attach these assets to the draft release.
+- ~~Attach these assets to the draft release.~~ The built assets should be attached to the draft release automatically if all the above steps are followed.
 
 ## Publish on Chrome Web Store
 
