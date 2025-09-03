@@ -31,7 +31,7 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
             type="url"
             inputmode="url"
             required
-            pattern="^https?://[^/]+/?$"
+            pattern="https?://.+"
             spellcheck="false"
             title="${browser.i18n.getMessage(apiAddresEditable ? 'option_hint_url' : 'option_hint_readonly')}"
             onchange=${onIpfsApiUrlChange}
