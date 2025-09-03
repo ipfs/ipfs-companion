@@ -15,7 +15,7 @@ const learnMoreLink = html`<a class="navy link underline-under hover-aqua" href=
 
 const optionsPageLink = html`<a class="navy link underline-under hover-aqua" id="learn-more" href="${optionsPage}" target="_blank" rel="noopener noreferrer">${i18n.getMessage('recovery_page_update_preferences')}</a>`
 
-// TODO (whizzzkid): refactor base store to be more generic.
+// TODO: refactor base store to be more generic.
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
 app.route('*', () => {
