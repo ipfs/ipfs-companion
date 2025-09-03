@@ -53,7 +53,7 @@ IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safe
 
 #### Detect URLs with IPFS paths
 
-IPFS Companion detects and tests requests for IPFS-like paths (such as `/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it is redirected to load from your local gateway. The gateway at `localhost` will also automatically switch to a [subdomain gateway](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway) to provide a unique origin for each website:
+IPFS Companion detects requests for IPFS-like paths (such as `/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it is redirected to load from your local gateway. The gateway at `localhost` will also automatically switch to a [subdomain gateway](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway) to provide a unique origin for each website:
 
 > [!NOTE]
 > **Path gateway redirect flow:**
