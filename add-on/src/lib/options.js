@@ -199,7 +199,10 @@ export async function migrateOptions (storage, debug) {
     }
   }
 
-  { // ~v2.15.x: opt-out some hostnames if user does not have excplicit rule already
+  // ~v2.15.x: opt-out some hostnames if user does not have excplicit rule already
+  // Commented out - no longer adding default items to disabledOn
+  /*
+  {
     const { enabledOn, disabledOn } = await storage.get(['enabledOn', 'disabledOn'])
     for (const fqdn of [
       'proto.school', //  https://github.com/ipfs-shipyard/ipfs-companion/issues/921
@@ -211,6 +214,7 @@ export async function migrateOptions (storage, debug) {
       await storage.set({ disabledOn })
     }
   }
+  */
 
   { // ~v2.15.1: change displayReleaseNotes opt-out flag to opt-in
     const { displayReleaseNotes, dismissedUpdate } = await storage.get(['displayReleaseNotes', 'dismissedUpdate'])
