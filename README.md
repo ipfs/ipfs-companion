@@ -23,6 +23,15 @@
 
 <hr />
 
+
+## Maintenance
+
+<a href="https://ipshipyard.com/"><img align="right" src="https://github.com/user-attachments/assets/39ed3504-bb71-47f6-9bf8-cb9a1698f272" /></a>
+
+> [!NOTE]
+> This browser extension is currently maintained by the [Shipyard](https://ipshipyard.com/) team.
+
+
 ## Table of contents
 
 - [About IPFS Companion](#about-ipfs-companion)
