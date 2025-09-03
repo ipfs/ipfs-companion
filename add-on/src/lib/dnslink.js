@@ -71,7 +71,10 @@ export default function createDnslinkResolver (getState) {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = await dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
-          if (dnslink) {
+          if (dnslink === undefined) {
+            // Offline - don't update cache, return cached value or false
+            return dnslinkResolver.cachedDnslink(fqdn) || false
+          } else if (dnslink) {
             // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
             dnslinkResolver.setDnslink(fqdn, dnslink)
             log(`found dnslink: '${fqdn}' -> '${dnslink}'`)
@@ -123,25 +126,19 @@ export default function createDnslinkResolver (getState) {
     // low level lookup without cache
     async readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
-      let apiProvider
-      if (state.peerCount !== offlinePeerCount) {
-        // Use gw port so it can be a GET:
-        // Chromium does not execute onBeforeSendHeaders for synchronous calls
-        // made from the same extension context as onBeforeSendHeaders
-        // which means we are unable to fixup Origin on the fly for this
-        // This will no longer be needed when we switch
-        // to async lookup via ipfs.dns everywhere
-        apiProvider = state.gwURLString
-      } else {
-        // fallback to resolver at public gateway
-        apiProvider = 'https://ipfs.io/'
+
+      // Return undefined when offline to avoid caching false negatives
+      if (state.peerCount === offlinePeerCount) {
+        return undefined
       }
-      // js-ipfs-api does not provide method for fetching this
-      // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
-      // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
-      const apiCall = `${apiProvider}api/v0/name/resolve/${fqdn}?r=false`
+
+      // Use API port for RPC calls
+      const apiProvider = state.apiURLString
+
+      // Use modern /api/v0/resolve endpoint
+      const apiCall = `${apiProvider}api/v0/resolve?arg=/ipns/${fqdn}&recursive=false`
       const response = await fetch(apiCall, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           Accept: 'application/json'
         }
