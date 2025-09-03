@@ -16,6 +16,8 @@ export default function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, ttl: 1000 * 60 * 60 * 12 }
   const cache = new LRU(cacheOptions)
+  // Track in-flight DNS lookups to avoid duplicate requests for the same domain
+  const pendingLookups = new Map()
   // upper bound for concurrent background lookups done by resolve(url)
   const lookupQueue = new Pqueue({ concurrency: 4 })
   // preload of DNSLink data
@@ -66,8 +68,21 @@ export default function createDnslinkResolver (getState) {
     },
 
     async readAndCacheDnslink (fqdn) {
+      // Check cache first
       let dnslink = dnslinkResolver.cachedDnslink(fqdn)
-      if (typeof dnslink === 'undefined') {
+      if (typeof dnslink !== 'undefined') {
+        // Most of the time we will hit cache, which makes below line is too noisy
+        // console.info(`[ipfs-companion] using cached dnslink: '${fqdn}' -> '${dnslink}'`)
+        return dnslink
+      }
+
+      // Check if lookup is already in progress for this domain
+      if (pendingLookups.has(fqdn)) {
+        return pendingLookups.get(fqdn)
+      }
+
+      // Create new lookup promise
+      const lookupPromise = (async () => {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = await dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
@@ -82,14 +97,19 @@ export default function createDnslinkResolver (getState) {
             dnslinkResolver.setDnslink(fqdn, false)
             log(`found NO dnslink for '${fqdn}'`)
           }
+          return dnslink
         } catch (error) {
           log.error(`error in readAndCacheDnslink for '${fqdn}'`, error)
+          return false
+        } finally {
+          // Clean up pending lookup once complete
+          pendingLookups.delete(fqdn)
         }
-      } else {
-        // Most of the time we will hit cache, which makes below line is too noisy
-        // console.info(`[ipfs-companion] using cached dnslink: '${fqdn}' -> '${dnslink}'`)
-      }
-      return dnslink
+      })()
+
+      // Store the promise for deduplication
+      pendingLookups.set(fqdn, lookupPromise)
+      return lookupPromise
     },
 
     // runs async lookup in a queue in the background and returns the record
