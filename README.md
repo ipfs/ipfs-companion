@@ -15,9 +15,9 @@
 
 <div align="center">
   
-| <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
+| <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/)  \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoft.com/en-us/edge/download)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chromewebstore.google.com/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
 </div>
 
@@ -34,9 +34,9 @@
 
 ## About IPFS Companion
 
-IPFS Companion harnesses the power of your locally running IPFS node (either through the [IPFS Desktop](https://docs.ipfs.io/install/ipfs-desktop/) app or the [command-line daemon](https://docs.ipfs.io/install/command-line/)) directly inside your favorite Chromium-based or Firefox browser, enabling support for [`ipfs://` addresses](https://docs.ipfs.io/how-to/address-ipfs-on-web/#native-urls), redirecting content-addressed  websites and file paths to your local [Gateway](https://docs.ipfs.io/concepts/glossary/#gateway), easy IPFS file import and sharing, and more.
+IPFS Companion harnesses the power of your locally running IPFS [Kubo](https://github.com/ipfs/kubo) node (either through the [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/) app or the [command-line daemon](https://docs.ipfs.tech/install/command-line/)) directly inside your favorite Chromium-based or Firefox browser, enabling support for [`ipfs://` addresses](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#native-urls), redirecting content-addressed websites and file paths to your local [Gateway](https://docs.ipfs.tech/concepts/glossary/#gateway), easy IPFS file import and sharing, and more.
 
-IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safer, more resilient, and more open. It enables the creation and dissemination of completely distributed sites and applications that don’t rely on centralized hosting and stay true to the original vision of an open, flat web. Visit [the IPFS Project website](https://ipfs.io) to learn more.
+IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safer, more resilient, and more open. It enables completely distributed sites and applications that don’t rely on centralized hosting and stay true to the original vision of an open, flat web. Visit [the IPFS Project website](https://ipfs.tech) to learn more.
 
 ## IPFS Companion features
 
@@ -44,21 +44,43 @@ IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safe
 
 #### Detect URLs with IPFS paths
 
-IPFS Companion detects and tests requests for IPFS-like paths ( such as `/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it is redirected to load from your local gateway. The gateway at `localhost` will also automatically switch to a subdomain to provide a unique origin for each website:
-> `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
-> → `http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
-> → `http://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.localhost:8080`
+IPFS Companion detects and tests requests for IPFS-like paths (such as `/ipfs/{cid}` or `/ipns/{peerid_or_host-with-dnslink}`) on any website. If a path is a [valid IPFS address](https://github.com/ipfs/is-ipfs), it is redirected to load from your local gateway. The gateway at `localhost` will also automatically switch to a [subdomain gateway](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway) to provide a unique origin for each website:
+
+> [!NOTE]
+> **Path gateway redirect flow:**
+> 
+> - **Step 1:** Public gateway URL detected
+>   - `https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+> - **Step 2:** Redirect to local gateway
+>   - `http://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR`
+> - **Step 3:** Automatic upgrade to subdomain with origin isolation
+>   - `http://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.localhost:8080`
+
+> [!NOTE]
+> **Subdomain gateway redirect flow:**
+> 
+> - **Step 1:** Subdomain gateway URL detected
+>   - `https://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.dweb.link`
+> - **Step 2:** Redirect to local subdomain with origin isolation
+>   - `http://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.localhost:8080`
 
 #### Detect DNSLink-enabled URLs
 
-IPFS Companion [detects DNSLink info](http://docs.ipfs.io/how-to/dnslink-companion/) in the DNS records of websites. If a site uses DNSLink (a few examples are https://docs.ipfs.io, https://ipld.io, and http://tr.wikipedia-on-ipfs.org), IPFS Companion redirects the HTTP request to your local gateway:
+IPFS Companion [detects DNSLink info](https://docs.ipfs.tech/how-to/dnslink-companion/) in the DNS records of websites. If a site uses DNSLink (a few examples are https://docs.ipfs.tech, https://ipld.io, and http://tr.wikipedia-on-ipfs.org), IPFS Companion redirects the HTTP request to your local gateway:
 
-> `http://docs.ipfs.tech`
-> → `http://localhost:8080/ipns/docs.ipfs.tech` → `http://docs.ipfs.tech.ipns.localhost:8080/`
+> [!NOTE]
+> **DNSLink redirect flow:**
+> 
+> - **Step 1:** DNSLink-enabled website detected
+>   - `http://docs.ipfs.tech`
+> - **Step 2:** Redirect to local gateway
+>   - `http://localhost:8080/ipns/docs.ipfs.tech`
+> - **Step 3:** Automatic upgrade to subdomain with origin isolation
+>   - `http://docs.ipfs.tech.ipns.localhost:8080/`
 
 #### Detect pages with `x-ipfs-path` headers
 
-IPFS Companion also upgrades transport to IPFS if it finds the `x-ipfs-path` in any HTTP response headers; this also acts as a fallback for cases when an IPFS path is not present in the URL. [Learn more.](http://docs.ipfs.io/how-to/companion-x-ipfs-path-header/)
+IPFS Companion also upgrades transport to IPFS when it detects `x-ipfs-path` in HTTP response headers; this also acts as a fallback for cases when an IPFS path is not present in the URL. [Learn more.](https://docs.ipfs.tech/how-to/companion-x-ipfs-path-header/)
 
 
 #### Toggle redirects globally or per site
@@ -72,7 +94,7 @@ You can disable and re-enable local gateway redirects by several means:
 
 IPFS Companion enables you to quickly and easily access common actions from your browser bar with just a few clicks:
 
-- See how many peers you're connected with a glance at the cube icon in your browser bar
+- See how many peers you're connected to at a glance at the cube icon in your browser bar
 - Check your IPFS API and gateway status by clicking the cube icon to reveal the main menu
 - Right-click images and other page assets to easily add them to IPFS (including the option to preserve file names)
 - Choose the _Import_ option in the main menu for quick drag-and-drop import from a browser tab
@@ -106,14 +128,14 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
 
 ### Latest stable release
 
-| <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/) \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoftedgeinsider.com/)
+| <img src="https://unpkg.com/@browser-logos/firefox/firefox_16x16.png" width="16" height="16"> [Firefox](https://www.mozilla.org/firefox/new/) \| [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox) | <img src="https://unpkg.com/@browser-logos/chrome/chrome_16x16.png" width="16" height="16"> [Chrome](https://www.google.com/chrome/) \| <img src="https://unpkg.com/@browser-logos/brave/brave_16x16.png" width="16" height="16"> [Brave](https://brave.com/) \| <img src="https://unpkg.com/@browser-logos/opera/opera_16x16.png" width="16" height="16"> [Opera](https://www.opera.com/) \| <img src="https://unpkg.com/@browser-logos/edge/edge_16x16.png" width="16" height="16"> [Edge](https://www.microsoft.com/en-us/edge/download)
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
+| [![Install From AMO](https://ipfs.io/ipfs/QmWNa64XjA78QvK3zG2593bSMizkDXXcubDHjnRDYUivqt)<br>![](https://img.shields.io/amo/users/ipfs-companion?label=AMO%20users&style=social)](https://addons.mozilla.org/firefox/addon/ipfs-companion/) | [![Install from Chrome Store](https://ipfs.io/ipfs/QmU4Qm5YEKy5yHmdAgU2fD7PjZLgrYTUUbxTydqG2QK3TT)<br>![](https://img.shields.io/chrome-web-store/users/nibjojkomfdiaoajekhjakgkdhaomnch?label=Chrome%20Web%20Store%20users&style=social)](https://chromewebstore.google.com/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch) |
 
-**Important!** Make sure you have [IPFS installed](https://ipfs.io/#install) on your computer as well. Because IPFS Companion (in its standard configuration) talks to your computer’s local IPFS node to work its browser magic, you’ll need to have IPFS running on your computer, too.
+**Important!** Make sure you have [IPFS installed](https://docs.ipfs.tech/install/) on your computer as well. IPFS Companion requires a local IPFS [Kubo](https://github.com/ipfs/kubo) node running on your computer to function properly.
 
 It's also possible to grab [vendor-specific packages for each release](https://github.com/ipfs-shipyard/ipfs-companion/releases),
-but these builds are not signed, nor will automatically update. `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium) or `about:debugging` (Firefox) for smoke-testing.
+but these builds are not signed, nor will they automatically update. `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium) or `about:debugging` (Firefox) for smoke-testing.
 
 ### Development
 
@@ -146,12 +168,14 @@ The release process has been [documented here](./docs/RELEASE-PROCESS.md).
 ## Help & troubleshooting
 
 ### Ask a question
-The best place to ask about IPFS Companion (or IPFS in general!) is in the [official IPFS Forums](https://discuss.ipfs.io/), where you can search past discussions for others who may have had the same questions, too. There's also an active [#ipfs](https://webchat.freenode.net/?channels=ipfs) community on IRC.
+
+> [!TIP]
+> The best place to ask about IPFS Companion (or IPFS in general!) is in the [official IPFS Forums](https://discuss.ipfs.tech/), where you can search past discussions for others who may have had the same questions, too.
 
 ### Common troubleshooting steps
 These frequently encountered troubleshooting situations may be helpful:
 - **Import via right-click does not work in Firefox:** See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
-- **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to toy with HTTP-to-HTTPS redirect, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
+- **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to interfere with HTTP-to-HTTPS redirects, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [whitelist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
 - **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first):
 ```
 # Enable IPFS redirect to LOCAL
