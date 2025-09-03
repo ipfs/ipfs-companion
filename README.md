@@ -11,7 +11,7 @@
   <a href="https://github.com/ipfs/ipfs-companion/actions"><img src="https://img.shields.io/github/actions/workflow/status/ipfs/ipfs-companion/ci.yml?branch=main" alt="ci"></a>
 </p>
 
-<a href="https://docs.ipfs.tech/install/ipfs-companion/"><img src="https://gateway.ipfs.io/ipfs/QmSsGphTN1eWMhkFFNFb23jWTXyhNbo47PF9FbmC6ZaRNg" alt="Companion UX demo" title="Companion UX demo" width="100%"></a>
+<a href="https://docs.ipfs.tech/install/ipfs-companion/"><img src="https://github.com/user-attachments/assets/ae0131b8-1802-47d3-87ea-65ff5d548199" alt="Companion UX demo" title="Companion UX demo" width="100%"></a>
 
 <div align="center">
   
