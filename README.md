@@ -103,7 +103,7 @@ You can disable and re-enable local gateway redirects by several means:
 
 IPFS Companion enables you to quickly and easily access common actions from your browser bar with just a few clicks:
 
-- See how many peers you're connected to at a glance at the cube icon in your browser bar
+- The cube icon in your browser bar shows your live peer count for quick reference.
 - Check your IPFS API and gateway status by clicking the cube icon to reveal the main menu
 - Right-click images and other page assets to easily add them to IPFS (including the option to preserve file names)
 - Choose the _Import_ option in the main menu for quick drag-and-drop import from a browser tab
