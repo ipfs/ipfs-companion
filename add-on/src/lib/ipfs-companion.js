@@ -64,6 +64,13 @@ export default async function init (inQuickImport = false) {
     state = initState(options)
     notify = createNotifier(getState)
 
+    // Enable debug namespaces on initialization
+    if (state.logNamespaces) {
+      debug.enable(state.logNamespaces)
+    } else {
+      debug.disable()
+    }
+
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
@@ -638,7 +645,6 @@ export default async function init (inQuickImport = false) {
   }
 
   async function onStorageChange (changes) {
-    let shouldReloadExtension = false
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
 
@@ -712,8 +718,13 @@ export default async function init (inQuickImport = false) {
           }
           break
         case 'logNamespaces':
-          shouldReloadExtension = true
-          state[key] = localStorage.debug = change.newValue
+          state[key] = change.newValue
+          // Use debug.enable() API for both Manifest V2 and V3
+          if (change.newValue) {
+            debug.enable(change.newValue)
+          } else {
+            debug.disable()
+          }
           break
         default:
           state[key] = change.newValue
@@ -774,11 +785,6 @@ export default async function init (inQuickImport = false) {
       } else {
         apiStatusUpdate()
       }
-    }
-    if (shouldReloadExtension) {
-      log('reloading extension due to config change')
-      browser.tabs.reload() // async reload of options page to keep it alive
-      await browser.runtime.reload()
     }
     log('storage change processed')
 

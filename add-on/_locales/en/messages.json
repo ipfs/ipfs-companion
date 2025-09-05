@@ -524,7 +524,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Namespaces in this comma-separated list will be logged to your browser's console. Changing this list will restart IPFS Companion.",
+    "message": "Namespaces in this comma-separated list will be logged to your browser's console.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
