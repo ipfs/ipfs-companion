@@ -486,12 +486,12 @@ export default async function init (inQuickImport = false) {
 
     // Use alarms API if available (for Manifest V3 compatibility)
     if (browser.alarms) {
-      // Always create an alarm as backup (minimum 30 seconds)
-      const periodInSeconds = Math.max(30, Math.floor(ipfsApiPollMs / 1000))
+      // Always create an alarm as backup (minimum 30 seconds / 0.5 minutes)
+      const periodInMinutes = Math.max(0.5, Math.floor(ipfsApiPollMs / 1000) / 60)
       await browser.alarms.create(kuboRpcStatusAlarmName, {
-        periodInMinutes: periodInSeconds / 60
+        periodInMinutes
       })
-      log(`Created alarm for API status updates every ${periodInSeconds} seconds`)
+      log(`Created alarm for API status updates every ${periodInMinutes} minutes`)
 
       // For fast polling (< 30s), also use setInterval for more precise updates
       // This ensures responsive updates when the service worker is active
