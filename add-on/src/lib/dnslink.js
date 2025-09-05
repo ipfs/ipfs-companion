@@ -82,7 +82,7 @@ export default function createDnslinkResolver (getState) {
       }
 
       // Create new lookup promise
-      const lookupPromise = (async () => {
+      const lookupPromise = async () => {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = await dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
@@ -105,11 +105,11 @@ export default function createDnslinkResolver (getState) {
           // Clean up pending lookup once complete
           pendingLookups.delete(fqdn)
         }
-      })()
+      }
 
       // Store the promise for deduplication
-      pendingLookups.set(fqdn, lookupPromise)
-      return lookupPromise
+      pendingLookups.set(fqdn, lookupPromise())
+      return pendingLookups.get(fqdn)
     },
 
     // runs async lookup in a queue in the background and returns the record
