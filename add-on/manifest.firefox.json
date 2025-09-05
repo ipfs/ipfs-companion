@@ -15,6 +15,7 @@
     }
   },
   "permissions": [
+    "alarms",
     "idle",
     "tabs",
     "notifications",
