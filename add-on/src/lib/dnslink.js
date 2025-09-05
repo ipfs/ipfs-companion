@@ -16,6 +16,8 @@ export default function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, ttl: 1000 * 60 * 60 * 12 }
   const cache = new LRU(cacheOptions)
+  // Track in-flight DNS lookups to avoid duplicate requests for the same domain
+  const pendingLookups = new Map()
   // upper bound for concurrent background lookups done by resolve(url)
   const lookupQueue = new Pqueue({ concurrency: 4 })
   // preload of DNSLink data
@@ -66,12 +68,28 @@ export default function createDnslinkResolver (getState) {
     },
 
     async readAndCacheDnslink (fqdn) {
+      // Check cache first
       let dnslink = dnslinkResolver.cachedDnslink(fqdn)
-      if (typeof dnslink === 'undefined') {
+      if (typeof dnslink !== 'undefined') {
+        // Most of the time we will hit cache, which makes below line is too noisy
+        // console.info(`[ipfs-companion] using cached dnslink: '${fqdn}' -> '${dnslink}'`)
+        return dnslink
+      }
+
+      // Check if lookup is already in progress for this domain
+      if (pendingLookups.has(fqdn)) {
+        return pendingLookups.get(fqdn)
+      }
+
+      // Create new lookup promise
+      const lookupPromise = async () => {
         try {
           log(`dnslink cache miss for '${fqdn}', running DNS TXT lookup`)
           dnslink = await dnslinkResolver.readDnslinkFromTxtRecord(fqdn)
-          if (dnslink) {
+          if (dnslink === undefined) {
+            // Offline - don't update cache, return cached value or false
+            return dnslinkResolver.cachedDnslink(fqdn) || false
+          } else if (dnslink) {
             // TODO: set TTL as maxAge: setDnslink(fqdn, dnslink, maxAge)
             dnslinkResolver.setDnslink(fqdn, dnslink)
             log(`found dnslink: '${fqdn}' -> '${dnslink}'`)
@@ -79,14 +97,19 @@ export default function createDnslinkResolver (getState) {
             dnslinkResolver.setDnslink(fqdn, false)
             log(`found NO dnslink for '${fqdn}'`)
           }
+          return dnslink
         } catch (error) {
           log.error(`error in readAndCacheDnslink for '${fqdn}'`, error)
+          return false
+        } finally {
+          // Clean up pending lookup once complete
+          pendingLookups.delete(fqdn)
         }
-      } else {
-        // Most of the time we will hit cache, which makes below line is too noisy
-        // console.info(`[ipfs-companion] using cached dnslink: '${fqdn}' -> '${dnslink}'`)
       }
-      return dnslink
+
+      // Store the promise for deduplication
+      pendingLookups.set(fqdn, lookupPromise())
+      return pendingLookups.get(fqdn)
     },
 
     // runs async lookup in a queue in the background and returns the record
@@ -120,28 +143,29 @@ export default function createDnslinkResolver (getState) {
       })
     },
 
-    // low level lookup without cache
+    /**
+     * Low level DNSLink lookup without cache
+     * @param {string} fqdn - Fully qualified domain name to lookup
+     * @returns {Promise<string|false|undefined>}
+     *   - string: valid DNSLink path (e.g., '/ipfs/QmHash')
+     *   - false: no DNSLink found or error occurred
+     *   - undefined: offline/no peers available
+     */
     async readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
-      let apiProvider
-      if (state.peerCount !== offlinePeerCount) {
-        // Use gw port so it can be a GET:
-        // Chromium does not execute onBeforeSendHeaders for synchronous calls
-        // made from the same extension context as onBeforeSendHeaders
-        // which means we are unable to fixup Origin on the fly for this
-        // This will no longer be needed when we switch
-        // to async lookup via ipfs.dns everywhere
-        apiProvider = state.gwURLString
-      } else {
-        // fallback to resolver at public gateway
-        apiProvider = 'https://ipfs.io/'
+
+      // Return undefined when offline to avoid caching false negatives
+      if (state.peerCount === offlinePeerCount) {
+        return undefined
       }
-      // js-ipfs-api does not provide method for fetching this
-      // TODO: revisit after https://github.com/ipfs/js-ipfs-api/issues/501 is addressed
-      // TODO: consider worst-case-scenario fallback to https://developers.google.com/speed/public-dns/docs/dns-over-https
-      const apiCall = `${apiProvider}api/v0/name/resolve/${fqdn}?r=false`
+
+      // Use API port for RPC calls
+      const apiProvider = state.apiURLString
+
+      // Use modern /api/v0/resolve endpoint
+      const apiCall = `${apiProvider}api/v0/resolve?arg=/ipns/${fqdn}&recursive=false`
       const response = await fetch(apiCall, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           Accept: 'application/json'
         }
