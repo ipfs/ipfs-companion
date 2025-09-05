@@ -143,7 +143,14 @@ export default function createDnslinkResolver (getState) {
       })
     },
 
-    // low level lookup without cache
+    /**
+     * Low level DNSLink lookup without cache
+     * @param {string} fqdn - Fully qualified domain name to lookup
+     * @returns {Promise<string|false|undefined>}
+     *   - string: valid DNSLink path (e.g., '/ipfs/QmHash')
+     *   - false: no DNSLink found or error occurred
+     *   - undefined: offline/no peers available
+     */
     async readDnslinkFromTxtRecord (fqdn) {
       const state = getState()
 
