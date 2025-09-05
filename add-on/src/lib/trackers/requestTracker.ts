@@ -1,6 +1,5 @@
 import debug from 'debug'
 import type browser from 'webextension-polyfill'
-import { trackEvent } from '../telemetry.js'
 
 export const DEFAULT_REQUEST_TRACKER_FLUSH_INTERVAL = 1000 * 60 * 60
 
@@ -31,12 +30,7 @@ export class RequestTracker {
       this.log('nothing to flush')
       return
     }
-    trackEvent({
-      key: this.eventKey,
-      count,
-      dur: Date.now() - this.lastSync,
-      segmentation: Object.assign({}, this.requestTypeStore) as unknown as Record<string, string>
-    })
+    // TODO: implement tracking
     // reset
     this.lastSync = Date.now()
     this.requestTypeStore = {}

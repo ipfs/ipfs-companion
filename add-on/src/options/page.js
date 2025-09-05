@@ -105,6 +105,7 @@ export default function optionsPage (state, emit) {
     logNamespaces: state.options.logNamespaces,
     onOptionChange
   })}
+  <!-- we gather no telemetry (https://github.com/ipfs/ipfs-companion/issues/1315), hiding UI for now
   ${telemetryForm({
     telemetryGroupMinimal: state.options.telemetryGroupMinimal,
     telemetryGroupMarketing: state.options.telemetryGroupMarketing,
@@ -112,6 +113,7 @@ export default function optionsPage (state, emit) {
     telemetryGroupTracking: state.options.telemetryGroupTracking,
     onOptionChange
   })}
+  -->
   ${resetForm({
     onOptionsReset
   })}

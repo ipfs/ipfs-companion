@@ -11,6 +11,12 @@ export default function optionStore (state, emitter) {
   state.options = optionDefaults
 
   const fetchRedirectRules = async () => {
+    // Check if declarativeNetRequest is supported before using it
+    if (!browser.declarativeNetRequest) {
+      state.redirectRules = []
+      return
+    }
+
     const existingRedirectRules = await browser.declarativeNetRequest.getDynamicRules()
     state.redirectRules = existingRedirectRules.map(rule => ({
       id: rule.id,

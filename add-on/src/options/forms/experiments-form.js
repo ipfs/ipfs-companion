@@ -107,7 +107,6 @@ export default function experimentsForm ({
             class="bg-white navy self-center-ns"
             id="logNamespaces"
             type="text"
-            required
             onchange=${onOptionChange('logNamespaces')}
             value=${logNamespaces} />
         </div>

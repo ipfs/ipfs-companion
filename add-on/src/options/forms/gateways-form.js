@@ -53,7 +53,7 @@ export default function gatewaysForm ({
               type="url"
               inputmode="url"
               required
-              pattern="^https?://[^/]+/?$"
+              pattern="https?://.+"
               spellcheck="false"
               title="${browser.i18n.getMessage('option_hint_url')}"
               onchange=${onPublicGatewayUrlChange}
@@ -77,7 +77,7 @@ export default function gatewaysForm ({
               type="url"
               inputmode="url"
               required
-              pattern="^https?://[^/]+/?$"
+              pattern="https?://.+"
               spellcheck="false"
               title="${browser.i18n.getMessage('option_hint_url')}"
               onchange=${onPublicSubdomainGatewayUrlChange}
@@ -99,7 +99,7 @@ export default function gatewaysForm ({
                 type="url"
                 inputmode="url"
                 required
-                pattern="^https?://[^/]+/?$"
+                pattern="https?://.+"
                 spellcheck="false"
                 title="${browser.i18n.getMessage(allowChangeOfCustomGateway ? 'option_hint_url' : 'option_hint_readonly')}"
                 onchange=${onCustomGatewayUrlChange}

@@ -39,7 +39,7 @@ jobs:
           npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
 
       - name: Restore .cache
-        uses: actions/cache@v3.2.4
+        uses: actions/cache@v4
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -50,7 +50,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v3.2.4
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
@@ -84,7 +84,7 @@ jobs:
       # - action artifacts can be downloaded for 90 days, then are removed by github
       # - binaries in PRs from forks won't be signed
       - name: Attach produced packages to Github Action
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
           name: built-on-${{ matrix.os }}
           path: build/ipfs_companion*.*
@@ -123,7 +123,7 @@ jobs:
           node-version: 18
 
       - name: Restore .cache
-        uses: actions/cache@v3.2.4
+        uses: actions/cache@v4
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -134,7 +134,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v3.2.4
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}

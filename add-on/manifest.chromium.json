@@ -5,6 +5,7 @@
   },
   "permissions": [
     "activeTab",
+    "alarms",
     "clipboardWrite",
     "contextMenus",
     "declarativeNetRequest",

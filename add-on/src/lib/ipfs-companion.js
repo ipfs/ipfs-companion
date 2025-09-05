@@ -52,6 +52,7 @@ export default async function init (inQuickImport = false) {
   let ipfsImportHandler
   const idleInSecs = 5 * 60
   const browserActionPortName = 'browser-action-port'
+  const kuboRpcStatusAlarmName = 'kubo-rpc-status'
 
   try {
     log('init')
@@ -63,12 +64,20 @@ export default async function init (inQuickImport = false) {
     state = initState(options)
     notify = createNotifier(getState)
 
+    // Enable debug namespaces on initialization
+    if (state.logNamespaces) {
+      debug.enable(state.logNamespaces)
+    } else {
+      debug.disable()
+    }
+
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
         await handleConsentFromState(state)
         ipfs = await initIpfsClient(browser, state, inQuickImport)
         trackView('init')
+        // TODO: implement tracking of `init` view
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -137,6 +146,18 @@ export default async function init (inQuickImport = false) {
     }
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
+
+    // Register alarm listener for Manifest V3 compatibility
+    // This ensures API status updates continue even when service worker goes dormant
+    if (browser.alarms) {
+      browser.alarms.onAlarm.addListener((alarm) => {
+        if (alarm.name === kuboRpcStatusAlarmName) {
+          log('Alarm triggered for API status update')
+          runIfNotIdle(apiStatusUpdate)
+        }
+      })
+      log('Registered alarm listener for API status updates')
+    }
 
     if (runtime.hasNativeProtocolHandler) {
       log('native protocol handler support detected, but IPFS handler is not implemented yet :-(')
@@ -452,12 +473,47 @@ export default async function init (inQuickImport = false) {
   // API STATUS UPDATES
   // -------------------------------------------------------------------
   // API is polled for peer count every ipfsApiPollMs
+  // In Manifest V3 (Chromium), service workers go dormant after ~30 seconds of inactivity,
+  // which stops setInterval. To ensure continuous monitoring, we use a hybrid approach:
+  // - For polling < 30s: Use BOTH setInterval (for precise timing) AND alarms (as backup)
+  // - For polling >= 30s: Use ONLY alarms (avoids duplicate timers, more efficient)
+  // Note: Chrome alarms API has a minimum interval of 30 seconds
 
   async function setApiStatusUpdateInterval (ipfsApiPollMs) {
+    // Clear existing interval if present
     if (apiStatusUpdateInterval) {
       clearInterval(apiStatusUpdateInterval)
+      apiStatusUpdateInterval = null
     }
-    apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
+
+    // Clear existing alarm if present
+    if (browser.alarms) {
+      await browser.alarms.clear(kuboRpcStatusAlarmName)
+    }
+
+    // Use alarms API if available (for Manifest V3 compatibility)
+    if (browser.alarms) {
+      // Always create an alarm as backup (minimum 30 seconds / 0.5 minutes)
+      const periodInMinutes = Math.max(0.5, Math.floor(ipfsApiPollMs / 1000) / 60)
+      await browser.alarms.create(kuboRpcStatusAlarmName, {
+        periodInMinutes
+      })
+      log(`Created alarm for API status updates every ${periodInMinutes} minutes`)
+
+      // For fast polling (< 30s), also use setInterval for more precise updates
+      // This ensures responsive updates when the service worker is active
+      if (ipfsApiPollMs < 30000) {
+        apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
+        log(`Also using setInterval for fast polling every ${ipfsApiPollMs}ms`)
+      }
+      // For slow polling (>= 30s), rely only on alarms to avoid duplicate timers
+    } else {
+      // Fallback for environments without alarms API
+      apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
+      log(`Using setInterval only (no alarms API available) every ${ipfsApiPollMs}ms`)
+    }
+
+    // Run immediately
     await apiStatusUpdate()
   }
 
@@ -589,7 +645,6 @@ export default async function init (inQuickImport = false) {
   }
 
   async function onStorageChange (changes) {
-    let shouldReloadExtension = false
     let shouldRestartIpfsClient = false
     let shouldStopIpfsClient = false
 
@@ -663,8 +718,13 @@ export default async function init (inQuickImport = false) {
           }
           break
         case 'logNamespaces':
-          shouldReloadExtension = true
-          state[key] = localStorage.debug = change.newValue
+          state[key] = change.newValue
+          // Use debug.enable() API for both Manifest V2 and V3
+          if (change.newValue) {
+            debug.enable(change.newValue)
+          } else {
+            debug.disable()
+          }
           break
         default:
           state[key] = change.newValue
@@ -686,6 +746,24 @@ export default async function init (inQuickImport = false) {
         ipfs = null
       }
 
+      // Stop API status updates when extension is disabled
+      if (shouldStopIpfsClient) {
+        log('stopping API status updates (extension disabled)')
+
+        // Stop monitoring first
+        if (apiStatusUpdateInterval) {
+          clearInterval(apiStatusUpdateInterval)
+          apiStatusUpdateInterval = null
+        }
+        if (browser.alarms) {
+          await browser.alarms.clear(kuboRpcStatusAlarmName)
+        }
+
+        // Set offline state and update badge as the final action
+        state.peerCount = offlinePeerCount
+        await updateBrowserActionBadge()
+      }
+
       if (!state.active) return
 
       try {
@@ -700,12 +778,13 @@ export default async function init (inQuickImport = false) {
         )
       }
 
-      apiStatusUpdate()
-    }
-    if (shouldReloadExtension) {
-      log('reloading extension due to config change')
-      browser.tabs.reload() // async reload of options page to keep it alive
-      await browser.runtime.reload()
+      // Restart API status updates when extension is re-enabled
+      if (state.active && ipfs) {
+        log('restarting API status updates (extension enabled)')
+        setApiStatusUpdateInterval(state.ipfsApiPollMs)
+      } else {
+        apiStatusUpdate()
+      }
     }
     log('storage change processed')
 
@@ -753,6 +832,11 @@ export default async function init (inQuickImport = false) {
       if (apiStatusUpdateInterval) {
         clearInterval(apiStatusUpdateInterval)
         apiStatusUpdateInterval = null
+      }
+
+      // Clear alarm if present
+      if (browser.alarms) {
+        await browser.alarms.clear(kuboRpcStatusAlarmName)
       }
 
       if (ipfs) {
