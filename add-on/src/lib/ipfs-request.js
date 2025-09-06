@@ -565,6 +565,13 @@ function isSafeToRedirect (request, runtime) {
     }
   }
 
+  // Ignore requests for which redirect would fail due to Brave Shields rules
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
+  if (runtime.isBrave && request.type !== 'main_frame') {
+    log('Skipping redirect of IPFS subresource due to Brave Shields', request)
+    return false
+  }
+
   return true
 }
 

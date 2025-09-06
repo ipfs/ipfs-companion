@@ -11,7 +11,7 @@ import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrOb
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
-import { ensureCallRedirected } from '../../helpers/mv3-test-helper.js'
+import { ensureCallRedirected, ensureNoRedirect } from '../../helpers/mv3-test-helper.js'
 
 describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
@@ -324,6 +324,40 @@ describe('modifyRequest processing', function () {
       await modifyRequest.onCompleted(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).calledOnce)
       browser.tabs.update.resetHistory()
+    })
+  })
+
+  // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
+  describe('redirect of IPFS resource to local gateway in Brave', async function () {
+    it('should NOT be redirected if subresource (blocked by Brave Shields)', async function () {
+      runtime.isFirefox = false
+      runtime.isBrave = true
+      const request = {
+        method: 'GET',
+        type: 'image', // This IS a subresource
+        url: 'https://ipfs.io/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss',
+        initiator: 'https://some-website.example.com' // Brave (built on Chromium)
+      }
+      await ensureNoRedirect(modifyRequest, request)
+    })
+    it('should be redirected if main_frame (not blocked by Brave Shields)', async function () {
+      runtime.isFirefox = false
+      runtime.isBrave = true
+      const cid = 'bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss'
+      const request = {
+        method: 'GET',
+        type: 'main_frame', // This is NOT a subresource
+        url: `https://ipfs.io/ipfs/${cid}`,
+        initiator: 'https://some-website.example.com' // Brave (built on Chromium)
+      }
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+        MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/',
+          destination: 'http://localhost:8080/\\1/\\2'
+        }
+      })
     })
   })
 
