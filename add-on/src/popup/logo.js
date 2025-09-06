@@ -2,12 +2,9 @@
 /* eslint-env browser, webextensions */
 
 import html from 'choo/html/index.js'
-import { braveNodeType } from '../lib/ipfs-client/brave.js'
 
 function logoFileName (nodeType, isIpfsOnline) {
-  let prefix
-  if (nodeType === braveNodeType) prefix = 'brave-'
-  return `${prefix || ''}ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
+  return `ipfs-logo-${isIpfsOnline ? 'on' : 'off'}.svg`
 }
 
 export default function logo ({

@@ -1,13 +1,8 @@
 'use strict'
 
-import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import logo from '../../popup/logo.js'
 import { renderTranslatedLinks, renderTranslatedSpans } from '../../utils/i18n.js'
-
-// Brave detection
-import { brave } from '../../../src/lib/ipfs-client/brave.js'
-import { optionsPage } from '../../../src/lib/constants.js'
 
 // Assets
 const libp2pLogo = '../../../images/libp2p.svg'
@@ -107,18 +102,12 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
   const anchorClass = 'aqua hover-white'
   const stateUnknown = isIpfsOnline === null
 
-  const optionsUrl = browser.runtime.getURL(optionsPage)
   return html`
     <div class="w-80 mt0 flex flex-column transition-all ${stateUnknown && 'state-unknown'}">
       <div class="mb4 flex flex-column justify-center items-center">
         ${nodeOffSvg()}
         <p class="mt0 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
       </div>
-      ${brave
-        ? html`
-          <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_brave_title')}</p>
-          <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_brave_install', [optionsUrl], `target="_blank" class="${anchorClass}"`)}</p>`
-        : null}
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_desktop_title')}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>

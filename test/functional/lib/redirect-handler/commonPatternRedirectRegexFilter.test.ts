@@ -11,16 +11,4 @@ describe('lib/redirect-handler/commonPatternRedirectRegexFilter', () => {
     browserMock.runtime.id = 'testid'
   })
 
-  describe('isBrave', () => {
-    it('should create filter for brave', () => {
-      const filter = new CommonPatternRedirectRegexFilter({
-        originUrl: 'https://awesome.ipfs.io/',
-        redirectUrl: 'http://localhost:8080/ipns/awesome.ipfs.io/'
-      })
-      filter.computeFilter(true)
-      filter.normalizeRegexFilter()
-      expect(filter.regexFilter).to.equal('^https?\\:\\/\\/awesome\\.ipfs\\.io((?:[^\\.]|$).*)$')
-      expect(filter.regexSubstitution).to.equal('ipns://awesome.ipfs.io\\1')
-    })
-  })
 })

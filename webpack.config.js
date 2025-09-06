@@ -115,7 +115,6 @@ const commonConfig = {
       fs: false,
       path: require.resolve('path-browserify'), // legacy in src/lib/ipfs-proxy
       os: require.resolve('os-browserify/browser'), // some legacy TBD
-      crypto: false, // @hapi (Brave)
       process: require.resolve('process/browser.js')
     }
   },

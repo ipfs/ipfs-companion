@@ -11,16 +11,4 @@ describe('lib/redirect-handler/namespaceRedirectRegexFilter', () => {
     browserMock.runtime.id = 'testid'
   })
 
-  describe('isBrave', () => {
-    it('should create filter for brave', () => {
-      const filter = new NamespaceRedirectRegexFilter({
-        originUrl: 'https://ipfs.io/ipfs/QmZMxU',
-        redirectUrl: 'http://localhost:8080/ipfs/QmZMxU'
-      })
-      filter.computeFilter(true)
-      filter.normalizeRegexFilter()
-      expect(filter.regexFilter).to.equal('^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/((?:[^\\.]|$).*)$')
-      expect(filter.regexSubstitution).to.equal('\\1://\\2')
-    })
-  })
 })

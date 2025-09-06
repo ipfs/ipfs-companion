@@ -122,7 +122,6 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 - `npm run build`: Build the add-on (copy external libraries, create `.zip` bundles for Chrome and Firefox)
 - `npm run watch`: Rebuild JS/CSS on file changes (run regular `build` first to ensure everything else is in place)
 - `npm run bundle:chromium`: Overwrite manifest and package a generic, Chromium-compatible version
-- `npm run bundle:brave`: Overwrite manifest and package a Brave-compatible version requesting access to `chrome.sockets`
 - `npm run bundle:firefox`: Overwrite manifest and package a Firefox-compatible version
 - `npm run build:rename-artifacts`: Rename artifacts to include runtimes in filenames
 - `npm run ci`: Run tests and build (with frozen `yarn.lock`)

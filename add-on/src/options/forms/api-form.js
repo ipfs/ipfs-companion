@@ -4,7 +4,6 @@
 import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import { guiURLString } from '../../lib/options.js'
-import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
 export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
@@ -12,7 +11,6 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
   const onIpfsApiPollMsChange = onOptionChange('ipfsApiPollMs')
   const onAutomaticModeChange = onOptionChange('automaticMode')
   const apiAddresEditable = ipfsNodeType === 'external'
-  const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
 
   return html`
     <form>
@@ -26,7 +24,7 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
             </dl>
           </label>
           <input
-            class="bg-white navy self-center-ns ${braveClass}"
+            class="bg-white navy self-center-ns"
             id="ipfsApiUrl"
             type="url"
             inputmode="url"

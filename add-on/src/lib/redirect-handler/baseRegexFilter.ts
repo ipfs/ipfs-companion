@@ -1,5 +1,3 @@
-import { brave } from '../../lib/ipfs-client/brave.js'
-
 export interface IRegexFilter {
   originUrl: string
   redirectUrl: string
@@ -20,7 +18,6 @@ export class RegexFilter {
   readonly redirectURL: URL
   readonly originNS: string
   readonly redirectNS: string
-  readonly isBrave: boolean = brave !== undefined
   // by default we cannot handle the request.
   private _canHandle = false
   regexFilter!: string
@@ -82,9 +79,9 @@ export class RegexFilter {
   /**
    * Compute the regex filter and substitution.
    * This is the main method that needs to be implemented by subclasses.
-   * isBraveOverride is used to force the filter to be generated for Brave. For testing purposes only.
+   * Reserved for future use.
    */
-  computeFilter (isBraveOverride?: boolean): void {
+  computeFilter (): void {
     throw new Error('Method not implemented.')
   }
 

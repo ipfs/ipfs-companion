@@ -7,7 +7,7 @@ import { RULE_REGEX_ENDING, escapeURLRegex } from './blockOrObserve.js'
  * destination: 'http://localhost:8081/ipns/awesome.ipfs.io/$1'
  */
 export class CommonPatternRedirectRegexFilter extends RegexFilter {
-  computeFilter (isBraveOverride: boolean): void {
+  computeFilter (): void {
     // this filter is the worst case scenario, we can handle any redirect.
     this.canHandle = true
     // We can traverse the URL from the end, and find the first character that is different.
@@ -36,11 +36,7 @@ export class CommonPatternRedirectRegexFilter extends RegexFilter {
     if (this.regexFilter === `^https?\\:\\/${RULE_REGEX_ENDING}`) {
       const subdomain = new URL(this.originUrl).hostname
       this.regexFilter = `^https?\\:\\/\\/${escapeURLRegex(subdomain)}${RULE_REGEX_ENDING}`
-      if (this.isBrave || isBraveOverride) {
-        this.regexSubstitution = `ipns://${subdomain}\\1`
-      } else {
-        this.regexSubstitution = this.regexSubstitution.replace('\\1', `/${subdomain}\\1`)
-      }
+      this.regexSubstitution = this.regexSubstitution.replace('\\1', `/${subdomain}\\1`)
     }
   }
 }

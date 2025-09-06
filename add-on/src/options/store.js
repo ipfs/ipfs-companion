@@ -4,7 +4,6 @@
 import browser from 'webextension-polyfill'
 import { optionDefaults } from '../lib/options.js'
 import { DELETE_RULE_REQUEST_SUCCESS, RULE_REGEX_ENDING, notifyDeleteRule, notifyOptionChange } from '../lib/redirect-handler/blockOrObserve.js'
-import createRuntimeChecks from '../lib/runtime-checks.js'
 
 // The store contains and mutates the state for the app
 export default function optionStore (state, emitter) {
@@ -27,8 +26,6 @@ export default function optionStore (state, emitter) {
   }
 
   const updateStateOptions = async () => {
-    const runtime = await createRuntimeChecks(browser)
-    state.withNodeFromBrave = runtime.brave && await runtime.brave.getIPFSEnabled()
     /**
      * FIXME: Why are we setting `state.options` when state is supposed to extend options?
      */

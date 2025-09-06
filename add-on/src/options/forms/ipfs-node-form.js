@@ -3,11 +3,9 @@
 
 import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
-import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 
-export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange, withNodeFromBrave }) {
+export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange }) {
   const onIpfsNodeTypeChange = onOptionChange('ipfsNodeType')
-  const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
   return html`
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
@@ -18,23 +16,15 @@ export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange, withNodeFr
               <dt>${browser.i18n.getMessage('option_ipfsNodeType_title')}</dt>
               <dd>
                 <p>${browser.i18n.getMessage('option_ipfsNodeType_external_description')}</p>
-                ${withNodeFromBrave ? html`<p>${browser.i18n.getMessage('option_ipfsNodeType_brave_description')}</p>` : null}
               </dd>
             </dl>
           </label>
-          <select id="ipfsNodeType" name='ipfsNodeType' class="self-center-ns bg-white navy ${braveClass}" onchange=${onIpfsNodeTypeChange}>
+          <select id="ipfsNodeType" name='ipfsNodeType' class="self-center-ns bg-white navy" onchange=${onIpfsNodeTypeChange}>
             <option
               value='external'
               selected=${ipfsNodeType === 'external'}>
               ${browser.i18n.getMessage('option_ipfsNodeType_external')}
             </option>
-            ${withNodeFromBrave
-            ? html`<option
-                  value='external:brave'
-                  selected=${ipfsNodeType === 'external:brave'}>
-                  ${browser.i18n.getMessage('option_ipfsNodeType_brave')}
-                </option>`
-              : null}
           </select>
         </div>
       </fieldset>
