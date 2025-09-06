@@ -21,7 +21,11 @@ const commonConfig = {
   output: {
     path: path.resolve(__dirname, './add-on/dist/bundles/'),
     publicPath: '/dist/bundles/',
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
+    environment: {
+      // Don't use node: protocol for core modules in browser builds
+      nodePrefixForCoreModules: false
+    }
   },
   cache: process.env.CI
     ? false // no gain on CI
@@ -107,11 +111,12 @@ const commonConfig = {
       stream: 'readable-stream',
       'stream/web': 'readable-stream',
       worker_threads: false,
-      util: false,
+      util: require.resolve('util/'),
       fs: false,
       path: require.resolve('path-browserify'), // legacy in src/lib/ipfs-proxy
       os: require.resolve('os-browserify/browser'), // some legacy TBD
-      crypto: false // @hapi (Brave)
+      crypto: false, // @hapi (Brave)
+      process: require.resolve('process/browser.js')
     }
   },
   node: {
