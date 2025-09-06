@@ -5,7 +5,6 @@ import browser from 'webextension-polyfill'
 import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 import { guiURLString, hostTextToArray, hostArrayToText } from '../../lib/options.js'
-import { braveNodeType } from '../../lib/ipfs-client/brave.js'
 import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 
 // Warn about mixed content issues when changing the gateway
@@ -34,7 +33,6 @@ export default function gatewaysForm ({
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
   const supportRedirectToCustomGateway = POSSIBLE_NODE_TYPES.includes(ipfsNodeType)
   const allowChangeOfCustomGateway = ipfsNodeType === 'external'
-  const braveClass = ipfsNodeType === braveNodeType ? 'brave' : ''
 
   return html`
     <form>
@@ -94,7 +92,7 @@ export default function gatewaysForm ({
                 </dl>
               </label>
               <input
-                class="bg-white navy self-center-ns ${braveClass}"
+                class="bg-white navy self-center-ns"
                 id="customGatewayUrl"
                 type="url"
                 inputmode="url"

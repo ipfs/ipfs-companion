@@ -1,8 +1,6 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import { brave } from './ipfs-client/brave.js'
-
 // this is our kitchen sink for runtime detection
 
 function getBrowserInfo (browser) {
@@ -30,7 +28,6 @@ export default async function createRuntimeChecks (browser) {
   const isAndroid = platformInfo ? platformInfo.os === 'android' : false
   return Object.freeze({
     browser,
-    brave, // easy Boolean(runtime.brave)
     isFirefox,
     isAndroid,
     requiresXHRCORSfix: !!(isFirefox && version && version.startsWith('68')),

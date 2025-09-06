@@ -26,8 +26,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 ## Build Release Artifacts
 
 - run `npm run release-build`
-- `build` folder would contain three artifacts, one each for:
-    - brave
+- `build` folder would contain two artifacts, one each for:
     - chromium
     - firefox
 - ~~Attach these assets to the draft release.~~ The built assets should be attached to the draft release automatically if all the above steps are followed.
@@ -35,7 +34,7 @@ This process can be used to push a manual release to the [Firefox Add-Ons](https
 ## Publish on Chrome Web Store
 
 All Chromium-based browsers support install from Chrome Web Store.
-Brave, Opera, and Edge do not require  additional publishing step.
+Brave, Opera, and Edge do not require additional publishing step.
 
 - IPFS Companion Chrome Webstore: https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch
 - Publishing requires your Google Account to belong to the IPFS Companion Maintainers Google Group (ask IPFS Stewards to be added).

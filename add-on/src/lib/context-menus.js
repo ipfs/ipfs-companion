@@ -133,11 +133,6 @@ export function createContextMenus (
     buildSubmenu(menuParentLink, 'link')
     buildSubmenu(menuParentPage, 'page')
   } catch (err) {
-    // documentUrlPatterns is not supported in Muon-Brave
-    if (err.message.indexOf('createProperties.documentUrlPatterns of contextMenus.create is not supported yet') > -1) {
-      log('context menus disabled - createProperties.documentUrlPatterns of contextMenus.create is not supported yet')
-      return { update: () => Promise.resolve() }
-    }
     // contextMenus are not supported in Firefox for Android
     if (err.message === 'browser.contextMenus is undefined' || typeof browser.contextMenus === 'undefined') {
       log('context menus disabled - browser.contextMenus is undefined')

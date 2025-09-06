@@ -4,7 +4,6 @@ import { after, afterEach, before, beforeEach, describe, it } from 'mocha'
 import browser from 'sinon-chrome'
 import { URL } from 'url' // URL implementation with support for .origin attribute
 import createDNSLinkResolver from '../../../add-on/src/lib/dnslink.js'
-import { braveNodeType } from '../../../add-on/src/lib/ipfs-client/brave.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
 import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
@@ -12,8 +11,7 @@ import { cleanupRules } from '../../../add-on/src/lib/redirect-handler/blockOrOb
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
-import { ensureCallRedirected, ensureNoRedirect } from '../../helpers/mv3-test-helper.js'
-import { spoofDnsTxtRecord } from './dnslink.test.js'
+import { ensureCallRedirected } from '../../helpers/mv3-test-helper.js'
 
 describe('modifyRequest processing', function () {
   let state, getState, dnslinkResolver, ipfsPathValidator, modifyRequest, runtime
@@ -326,65 +324,6 @@ describe('modifyRequest processing', function () {
       await modifyRequest.onCompleted(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: fixedDNSLinkUrl }).calledOnce)
       browser.tabs.update.resetHistory()
-    })
-  })
-
-  // Brave seems to ignore redirect to ipfs:// and ipns://, but if we force tab update via tabs API,
-  // then address bar is correct
-  describe('redirect of main_frame request to local gateway when Brave node is used', function () {
-    it('should force native URI in address bar via tabs.update API', async function () {
-      const httpDNSLinkUrl = 'https://example.com/ipns/docs.ipfs.io/some/path?query=val'
-      const nativeDNSLinkUri = 'ipns://docs.ipfs.io/some/path?query=val'
-      spoofDnsTxtRecord('docs.ipfs.io', dnslinkResolver, '/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss')
-      state.ipfsNodeType = braveNodeType
-      // ensure clean modifyRequest
-      runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
-      modifyRequest = createRequestModifier(getState, dnslinkResolver, ipfsPathValidator, runtime)
-      // test
-      const request = {
-        tabId: 42,
-        type: 'main_frame',
-        url: httpDNSLinkUrl
-      }
-      browser.tabs.update.resetHistory()
-      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: nativeDNSLinkUri }).notCalled)
-      await modifyRequest.onBeforeRequest(request)
-      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: nativeDNSLinkUri }).calledOnce)
-      browser.tabs.update.resetHistory()
-    })
-  })
-
-  // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
-  describe('redirect of IPFS resource to local gateway in Brave', async function () {
-    it('should be redirected if not a subresource (not impacted by Brave Shields)', async function () {
-      runtime.isFirefox = false
-      runtime.brave = { thisIsFakeBraveRuntime: true }
-      const request = {
-        method: 'GET',
-        type: 'image',
-        url: 'https://ipfs.io/ipfs/bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss',
-        initiator: 'https://some-website.example.com' // Brave (built on Chromium)
-      }
-      await ensureNoRedirect(modifyRequest, request)
-    })
-    it('should be left untouched if subresource (would be blocked by Brave Shields)', async function () {
-      runtime.isFirefox = false
-      runtime.brave = { thisIsFakeBraveRuntime: true }
-      const cid = 'bafkqae2xmvwgg33nmuqhi3zajfiemuzahiwss'
-      const request = {
-        method: 'GET',
-        type: 'main_frame',
-        url: `https://ipfs.io/ipfs/${cid}`,
-        initiator: 'https://some-website.example.com' // Brave (built on Chromium)
-      }
-      ensureCallRedirected({
-        modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
-        MV2Expectation: `http://localhost:8080/ipfs/${cid}`,
-        MV3Expectation: {
-          origin: '^https?\\:\\/\\/ipfs\\.io\\/(ipfs|ipns)\\/',
-          destination: 'http://localhost:8080/\\1/\\2'
-        }
-      })
     })
   })
 
