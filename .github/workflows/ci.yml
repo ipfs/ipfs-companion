@@ -24,12 +24,12 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version-file: '.nvmrc'
 
       - name: patch node gyp on windows to support Visual Studio 2019
         shell: powershell
@@ -115,12 +115,12 @@ jobs:
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version-file: '.nvmrc'
 
       - name: Restore .cache
         uses: actions/cache@v4

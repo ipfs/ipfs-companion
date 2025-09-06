@@ -9,11 +9,17 @@ browser.runtime.id = 'testid'
 global.browser = browser
 global.AbortController = AbortController
 global.chrome = browser
-global.navigator = {
-  clipboard: {
-    writeText: () => {}
-  }
-}
+
+// Mock navigator.clipboard for tests (required for Node.js 20+)
+Object.defineProperty(global, 'navigator', {
+  value: {
+    clipboard: {
+      writeText: () => {}
+    }
+  },
+  writable: true,
+  configurable: true
+})
 
 global.URL = URL
 browser.tabs = { ...browser.tabs, getCurrent: sinon.stub().resolves({ id: 20 }) }
