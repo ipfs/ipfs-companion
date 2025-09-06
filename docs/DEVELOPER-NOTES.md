@@ -112,9 +112,9 @@ It is an alias for running `ci:build` script inside of immutable Docker image, w
 
 Each `npm` task can run separately, but most of the time, `dev-build`, `test`, and `fix:lint` are all you need.
 
-- `npm run dev-build`: Fast dependency install, build with yarn (updates `yarn.lock` if needed)
-- `npm run dev-build firefox`: All-in-one for Firefox: fast dependency install, build with yarn, run as temporary add-on in Firefox
-- `npm run dev-build chromium`: All-in-one for Chromium: fast dependency install, build with yarn, run as temporary add-on in Chromium
+- `npm run dev-build`: Fast dependency install and build
+- `npm run dev-build firefox`: All-in-one for Firefox: fast dependency install, build, run as temporary add-on in Firefox
+- `npm run dev-build chromium`: All-in-one for Chromium: fast dependency install, build, run as temporary add-on in Chromium
 - `npm run firefox`: Run as temporary add-on in Firefox
 - `npm run firefox:nightly`: Run as temporary add-on in Firefox Nightly (uses one in `./firefox/`, see `get-firefox-nightly` below)
 - `npm run chromium`: Run as temporary add-on in Chromium
@@ -134,8 +134,8 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 
 Release build shortcuts:
 
-- `npm run dev-build`: All-in-one: fast dependency install, build with yarn (updates `yarn.lock` if needed)
-- `npm run release-build`: Reproducible release build in docker with frozen `yarn.lock`
+- `npm run dev-build`: All-in-one: fast dependency install and build
+- `npm run release-build`: Reproducible release build in docker with frozen dependencies
 
 E2E tests:
 
