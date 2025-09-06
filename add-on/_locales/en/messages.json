@@ -715,46 +715,6 @@
     "message": "Related Projects",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
-  "option_header_telemetry": {
-    "message": "Telemetry",
-    "description": "A section header on the Preferences screen (option_header_telemetry)"
-  },
-  "option_telemetry_disclaimer": {
-    "message": "We're collecting minimal telemetry data to improve and prioritize our work. Please consent to the collection of these metrics to assist in our efforts!",
-    "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
-  },
-  "option_telemetryGroupMinimal_title": {
-    "message": "Feature Telemetry",
-    "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
-  },
-  "option_telemetryGroupMinimal_description": {
-    "message": "Collect basic feature and usage metrics to help maintainers to prioritize work on the most useful features.",
-    "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
-  },
-  "option_telemetryGroupMarketing_title": {
-    "message": "Marketing title",
-    "description": "A title for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_title)"
-  },
-  "option_telemetryGroupMarketing_description": {
-    "message": "Marketing description",
-    "description": "A description for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_description)"
-  },
-  "option_telemetryGroupPerformance_title": {
-    "message": "Performance title",
-    "description": "A title for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_title)"
-  },
-  "option_telemetryGroupPerformance_description": {
-    "message": "Performance description",
-    "description": "A description for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_description)"
-  },
-  "option_telemetryGroupTracking_title": {
-    "message": "Tracking title",
-    "description": "A title for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_title)"
-  },
-  "option_telemetryGroupTracking_description": {
-    "message": "Tracking description",
-    "description": "A description for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_description)"
-  },
   "recovery_page_title": {
     "message": "Problem with your IPFS node | IPFS Companion",
     "description": "Title of the recovery page (recovery_page_title)"

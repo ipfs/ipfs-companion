@@ -37,7 +37,6 @@ export default function optionStore (state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', async () => {
-    browser.runtime.sendMessage({ telemetry: { trackView: 'options' } })
     updateStateOptions()
     fetchRedirectRules()
     browser.storage.onChanged.addListener(updateStateOptions)

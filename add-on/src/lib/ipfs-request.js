@@ -11,7 +11,6 @@ import { braveNodeType } from './ipfs-client/brave.js'
 import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsDeclarativeNetRequest } from './redirect-handler/blockOrObserve.js'
-import { RequestTracker } from './trackers/requestTracker.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
@@ -33,8 +32,6 @@ const recoverableHttpError = (code) => code && code >= 400
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
 let addRuleToDynamicRuleSet = null
-const observedRequestTracker = new RequestTracker('url-observed')
-const resolvedRequestTracker = new RequestTracker('url-resolved')
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
 // API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
@@ -147,7 +144,6 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     async onBeforeRequest (request) {
       const state = getState()
       if (!state.active) return
-      observedRequestTracker.track(request)
 
       // When local IPFS node is unreachable , show recovery page where user can redirect
       // to public gateway.
@@ -487,7 +483,6 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
  */
 async function handleRedirection ({ originUrl, redirectUrl, request }) {
   if (redirectUrl !== '' && originUrl !== '' && redirectUrl !== originUrl) {
-    resolvedRequestTracker.track(request)
     if (!supportsDeclarativeNetRequest()) {
       return { redirectUrl }
     }

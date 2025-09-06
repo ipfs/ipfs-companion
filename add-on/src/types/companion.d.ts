@@ -28,11 +28,6 @@ export interface CompanionOptions {
   useLatestWebUI: boolean
   dismissedUpdate: null | string
   openViaWebUI: boolean
-  telemetryGroupMinimal: boolean
-  telemetryGroupPerformance: boolean
-  telemetryGroupUx: boolean
-  telemetryGroupFeedback: boolean
-  telemetryGroupLocation: boolean
 }
 
 export interface CompanionState extends Omit<CompanionOptions, 'publicGatewayUrl' | 'publicSubdomainGatewayUrl' | 'useCustomGateway' | 'ipfsApiUrl' | 'customGatewayUrl'> {
