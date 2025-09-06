@@ -35,12 +35,7 @@ export const optionDefaults = Object.freeze({
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
   useLatestWebUI: false,
   dismissedUpdate: null,
-  openViaWebUI: true,
-  telemetryGroupMinimal: true,
-  telemetryGroupPerformance: false,
-  telemetryGroupUx: false,
-  telemetryGroupFeedback: false,
-  telemetryGroupLocation: false
+  openViaWebUI: true
 })
 
 function buildDefaultIpfsNodeConfig () {

@@ -19,7 +19,6 @@ const optionsPageLink = html`<a class="navy link underline-under hover-aqua" id=
 app.use(createWelcomePageStore(i18n, runtime))
 // Register our single route
 app.route('*', (state) => {
-  runtime.sendMessage({ telemetry: { trackView: 'recovery' } })
   const { hash } = window.location
   const { href: publicURI } = new URL(decodeURIComponent(hash.slice(1)))
 

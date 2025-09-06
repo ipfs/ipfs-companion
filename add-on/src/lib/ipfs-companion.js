@@ -8,7 +8,6 @@ import LRU from 'lru-cache'
 import pMemoize from 'p-memoize'
 import toMultiaddr from 'uri-to-multiaddr'
 import browser from 'webextension-polyfill'
-import { handleConsentFromState, trackView } from '../lib/telemetry.js'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway, createContextMenus, findValueForContext } from './context-menus.js'
 import createCopier from './copier.js'
 import createDnslinkResolver from './dnslink.js'
@@ -74,10 +73,7 @@ export default async function init (inQuickImport = false) {
     if (state.active) {
       // It's ok for this to fail, node might be unavailable or mis-configured
       try {
-        await handleConsentFromState(state)
         ipfs = await initIpfsClient(browser, state, inQuickImport)
-        trackView('init')
-        // TODO: implement tracking of `init` view
       } catch (err) {
         console.error('[ipfs-companion] Failed to init IPFS client', err)
         notify(
@@ -200,16 +196,6 @@ export default async function init (inQuickImport = false) {
       const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
       const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
       return { pubGwUrlForIpfsOrIpnsPath: result }
-    }
-    if (request.telemetry) {
-      return Promise.resolve(onTelemetryMessage(request.telemetry))
-    }
-  }
-
-  function onTelemetryMessage (request) {
-    if (request.trackView) {
-      const { version } = browser.runtime.getManifest()
-      return trackView(request.trackView, { version })
     }
   }
 
@@ -731,8 +717,6 @@ export default async function init (inQuickImport = false) {
           break
       }
     }
-    // ensure consent is set properly on state changes
-    handleConsentFromState(state)
 
     if ((state.active && shouldRestartIpfsClient) || shouldStopIpfsClient) {
       try {

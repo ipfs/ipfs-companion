@@ -12,7 +12,6 @@ import globalToggleForm from './forms/global-toggle-form.js'
 import ipfsNodeForm from './forms/ipfs-node-form.js'
 import redirectRuleForm from './forms/redirect-rule-form.js'
 import resetForm from './forms/reset-form.js'
-import telemetryForm from './forms/telemetry-form.js'
 
 // Render the options page:
 // Passed current app `state` from the store and `emit`, a function to create
@@ -105,15 +104,6 @@ export default function optionsPage (state, emit) {
     logNamespaces: state.options.logNamespaces,
     onOptionChange
   })}
-  <!-- we gather no telemetry (https://github.com/ipfs/ipfs-companion/issues/1315), hiding UI for now
-  ${telemetryForm({
-    telemetryGroupMinimal: state.options.telemetryGroupMinimal,
-    telemetryGroupMarketing: state.options.telemetryGroupMarketing,
-    telemetryGroupPerformance: state.options.telemetryGroupPerformance,
-    telemetryGroupTracking: state.options.telemetryGroupTracking,
-    onOptionChange
-  })}
-  -->
   ${resetForm({
     onOptionsReset
   })}
