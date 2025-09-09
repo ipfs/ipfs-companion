@@ -10,10 +10,10 @@ import { brave } from '../../../src/lib/ipfs-client/brave.js'
 import { optionsPage } from '../../../src/lib/constants.js'
 
 // Assets
+const kuboLogo = '../../../images/kubo.svg'
+const boxoLogo = '../../../images/boxo.svg'
 const libp2pLogo = '../../../images/libp2p.svg'
-const multiformatsLogo = '../../../images/multiformats.svg'
-const ipldLogo = '../../../images/ipld.svg'
-const shipyardLogo = '../../../images/shipyard.svg'
+const ipfsSpecsLogo = '../../../images/ipfs-specs.svg'
 const whyIpfsThumbnail = '../../../images/why-ipfs.jpg'
 const howIpfsWorksThumbnail = '../../../images/how-ipfs-works.jpg'
 const contentAddressingThumbnail = '../../../images/content-addressing.jpg'
@@ -146,9 +146,10 @@ const renderResources = (i18n) => {
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_new_ipfs')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_companion_features', ['https://github.com/ipfs-shipyard/ipfs-companion#ipfs-companion-features'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_companion_features', ['https://github.com/ipfs/ipfs-companion#ipfs-companion-features'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_concepts', ['https://docs.ipfs.tech/concepts/how-ipfs-works/'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_docs', ['https://docs.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_specs', ['https://specs.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_build')}</p>
@@ -159,11 +160,12 @@ const renderResources = (i18n) => {
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_get_help')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_get_help', ['https://discuss.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_get_help', ['https://discuss.ipfs.tech/c/help/13'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_community')}</p>
       <ul class="${copyClass}">
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_forums', ['https://discuss.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_community_contribute', ['https://docs.ipfs.tech/community/contribute/ways-to-contribute/'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_community_translate', ['https://github.com/ipfs-shipyard/i18n#readme'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_community_resources', ['https://docs.ipfs.tech/community/'], `target="_blank" class="${anchorClass}"`)}</li>
@@ -243,24 +245,24 @@ const renderProjects = (i18n) => {
       <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_projects_title')}</p>
 
       <div class="flex justify-between-ns">
-        <a class="${anchorClass}" href="https://libp2p.io/" target="_blank">
-          <img width="${logoWidth}" src="${libp2pLogo}" alt="libp2p Logo">
-          <p>libp2p</p>
+        <a class="${anchorClass}" href="https://github.com/ipfs/kubo" target="_blank">
+          <img width="${logoWidth}" src="${kuboLogo}" alt="Kubo Logo">
+          <p>Kubo</p>
         </a>
 
-        <a class="${anchorClass}" href="https://ipld.io/" target="_blank">
-          <img width="${logoWidth}" src="${ipldLogo}" alt="IPLD Logo">
-          <p>IPLD</p>
+        <a class="${anchorClass}" href="https://github.com/ipfs/boxo" target="_blank">
+          <img width="${logoWidth}" src="${boxoLogo}" alt="Boxo Logo">
+          <p>Boxo</p>
         </a>
 
-        <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">
-          <img width="${logoWidth}" src="${multiformatsLogo}" alt="Multiformats Logo">
-          <p>Multiformats</p>
+        <a class="${anchorClass}" href="https://github.com/libp2p/go-libp2p" target="_blank">
+          <img width="${logoWidth}" src="${libp2pLogo}" alt="go-libp2p Logo">
+          <p>go-libp2p</p>
         </a>
 
-        <a class="${anchorClass}" href="https://ipshipyard.com/stack/" target="_blank">
-          <img width="${logoWidth}" src="${shipyardLogo}" alt="Shipyard Logo">
-          <p>Shipyard</p>
+        <a class="${anchorClass}" href="https://specs.ipfs.tech/" target="_blank">
+          <img width="${logoWidth}" src="${ipfsSpecsLogo}" alt="IPFS Specs Logo">
+          <p>Specs</p>
         </a>
       </div>
     </div>
