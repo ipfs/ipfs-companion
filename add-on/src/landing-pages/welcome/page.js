@@ -245,17 +245,17 @@ const renderProjects = (i18n) => {
       <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_projects_title')}</p>
 
       <div class="flex justify-between-ns">
-        <a class="${anchorClass}" href="https://github.com/ipfs/kubo" target="_blank">
+        <a class="${anchorClass}" href="https://github.com/ipfs/kubo#readme" target="_blank">
           <img width="${logoWidth}" src="${kuboLogo}" alt="Kubo Logo">
           <p>Kubo</p>
         </a>
 
-        <a class="${anchorClass}" href="https://github.com/ipfs/boxo" target="_blank">
+        <a class="${anchorClass}" href="https://github.com/ipfs/boxo#readme" target="_blank">
           <img width="${logoWidth}" src="${boxoLogo}" alt="Boxo Logo">
           <p>Boxo</p>
         </a>
 
-        <a class="${anchorClass}" href="https://github.com/libp2p/go-libp2p" target="_blank">
+        <a class="${anchorClass}" href="https://github.com/libp2p/go-libp2p#readme" target="_blank">
           <img width="${logoWidth}" src="${libp2pLogo}" alt="go-libp2p Logo">
           <p>go-libp2p</p>
         </a>
