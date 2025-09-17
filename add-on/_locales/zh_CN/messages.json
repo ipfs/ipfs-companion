@@ -35,13 +35,9 @@
     "message": "您本地Kubo RPC的URL",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
-  "panel_statusGatewayVersion": {
-    "message": "版本",
-    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
-  },
-  "panel_statusGatewayVersionTitle": {
-    "message": "您本地节点所使用的IPFS版本",
-    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
+  "panel_kuboRpcBackendVersionTitle": {
+    "message": "此扩展为通过 Kubo RPC API 与 IPFS 后端节点通讯的版本",
+    "description": "A label in Node status section of Browser Action pop-up (panel_kuboRpcBackendVersionTitle)"
   },
   "panel_statusSwarmPeers": {
     "message": "节点",
@@ -248,7 +244,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Set to \"External\" to connect to a local Kubo node using the Kubo RPC API.",
+    "message": "设定为 \"外部\" 来使用 Kubo RPC API 连接到一个本地的Kubo节点",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_brave_description": {
@@ -260,7 +256,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeType_external": {
-    "message": "外部",
+    "message": "外部 (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_brave": {
@@ -384,11 +380,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Automatically enables automatic redirection to your local gateway when the Kubo RPC endpoint is accessible, and disable it when the endpoint is unavailable.",
+    "message": "当Kubo RPC 节点可用时自动重定向至您的本地IPFS网关，同时当Kubo RPC节点失效时关闭自动重定向。",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "Note: disabling this feature will result in static redirects, independent of the Kubo RPC endpoint's availability, and may produce error when your node is offline.",
+    "message": "注意：关闭这个功能会导致静态的重定向，即无论您的Kubo RPC节点是否可用都会进行重定向，所以当您的节点失效时，它可能会引起错误。",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -400,7 +396,7 @@
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_header_redirect_rules": {
-    "message": "Redirect Rules",
+    "message": "重定向规则",
     "description": "A section header on the Preferences screen (option_header_redirect_rules)"
   },
   "option_header_reset": {
@@ -512,15 +508,15 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_redirect_rules_reset_all": {
-    "message": "Reset All Redirect Rules",
+    "message": "重置所有重定向规则",
     "description": "A button label on the Preferences screen (option_redirect_rules_reset_all)"
   },
   "option_redirect_rules_row_origin": {
-    "message": "Origin",
+    "message": "源",
     "description": "A table header on the Preferences screen (option_redirect_rules_row_origin)"
   },
   "option_redirect_rules_row_target": {
-    "message": "Target",
+    "message": "目的",
     "description": "A table header on the Preferences screen (option_redirect_rules_row_target)"
   },
   "option_logNamespaces_title": {
@@ -528,7 +524,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "此逗号分隔列表中的名称空间将会被记录到浏览器控制台。更改此列表将重新启动IPFS 伴侣。",
+    "message": "此逗号分隔列表中的命名空间将被记录到浏览器的控制台中。",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -719,46 +715,6 @@
     "message": "相关项目",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
-  "option_header_telemetry": {
-    "message": "遥测数据",
-    "description": "A section header on the Preferences screen (option_header_telemetry)"
-  },
-  "option_telemetry_disclaimer": {
-    "message": "为了改进我们的工作并确定其优先事项，我们正在收集少量的遥测数据。请同意收集这些数据，以帮助我们的更好的工作！",
-    "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
-  },
-  "option_telemetryGroupMinimal_title": {
-    "message": "数据功能特征",
-    "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
-  },
-  "option_telemetryGroupMinimal_description": {
-    "message": "通过收集基本功能特性和使用情况，来帮助维护人员能了解和优先更新用户认为最有用的功能",
-    "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
-  },
-  "option_telemetryGroupMarketing_title": {
-    "message": "推广标题",
-    "description": "A title for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_title)"
-  },
-  "option_telemetryGroupMarketing_description": {
-    "message": "推广描述",
-    "description": "A description for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_description)"
-  },
-  "option_telemetryGroupPerformance_title": {
-    "message": "性能标题",
-    "description": "A title for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_title)"
-  },
-  "option_telemetryGroupPerformance_description": {
-    "message": "性能描述",
-    "description": "A description for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_description)"
-  },
-  "option_telemetryGroupTracking_title": {
-    "message": "追踪标题",
-    "description": "A title for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_title)"
-  },
-  "option_telemetryGroupTracking_description": {
-    "message": "追踪描述",
-    "description": "A description for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_description)"
-  },
   "recovery_page_title": {
     "message": "IPFS节点 | IPFS 伴侣 出现问题",
     "description": "Title of the recovery page (recovery_page_title)"
@@ -788,27 +744,27 @@
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   },
   "request_permissions_page_title": {
-    "message": "Grant Host Permissions | IPFS Companion",
+    "message": "授予主机权限 | IPFS 伴侣",
     "description": "Title of the recovery page (recovery_page_title)"
   },
   "request_permissions_page_sub_header": {
-    "message": "Just one more thing to do before you're all set! :)",
+    "message": "在离您完成所有设定之前，仅差一步! :)",
     "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
   },
   "request_permissions_page_message_p1": {
-    "message": "IPFS Companion needs permission to identify IPFS resources on the web.",
+    "message": "IPFS伴侣需要获得在网页上标识IPFS资源的权限。",
     "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
   },
   "request_permissions_page_message_p2": {
-    "message": "The IPFS Companion requires Host permission to access data on all websites. This allows it to inspect all web requests, identify ones for content-addressed IPFS resources, and load them using your local IPFS node. Please click the button below to grant these permissions.",
+    "message": "IPFS 伴侣需要主机权限才能访问所有网站上的数据。这允许它检查所有网页请求，识别内容寻址IPFS资源的请求，并使用本地IPFS节点加载它们。请单击下面的按钮授予这些权限。",
     "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
   },
   "request_permissions_page_button": {
-    "message": "Grant Permission",
+    "message": "授予权限",
     "description": "Button on the recovery screen (recovery_page_button)"
   },
   "request_permissions_page_learn_more": {
-    "message": "Learn more about host permissions",
+    "message": "了解更多关于主机权限的说明",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }

@@ -35,13 +35,9 @@
     "message": "URL Kubo RPC lokal Anda",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusApiAddressTitle)"
   },
-  "panel_statusGatewayVersion": {
-    "message": "versi",
-    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersion)"
-  },
-  "panel_statusGatewayVersionTitle": {
-    "message": "Versi IPFS yang digunakan node lokal Anda",
-    "description": "A label in Node status section of Browser Action pop-up (panel_statusGatewayVersionTitle)"
+  "panel_kuboRpcBackendVersionTitle": {
+    "message": "Versi IPFS yang mendukung ekstensi ini berbicara melalui Kubo RPC API",
+    "description": "A label in Node status section of Browser Action pop-up (panel_kuboRpcBackendVersionTitle)"
   },
   "panel_statusSwarmPeers": {
     "message": "Rekan",
@@ -248,7 +244,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "Set to \"External\" to connect to a local Kubo node using the Kubo RPC API.",
+    "message": "Setel ke \"Eksternal\" untuk terhubung ke node Kubo lokal menggunakan Kubo RPC API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_brave_description": {
@@ -260,7 +256,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeType_external": {
-    "message": "Eksternal",
+    "message": "Eksternal (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_brave": {
@@ -360,7 +356,7 @@
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_header_api": {
-    "message": "Kubo RPC API",
+    "message": "API RPC Kubo",
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_ipfsApiUrl_title": {
@@ -384,11 +380,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Automatically enables automatic redirection to your local gateway when the Kubo RPC endpoint is accessible, and disable it when the endpoint is unavailable.",
+    "message": "Secara otomatis mengaktifkan pengalihan otomatis ke gerbang lokal Anda ketika titik akhir Kubo RPC dapat diakses, dan menonaktifkannya ketika titik akhir tidak tersedia.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "Note: disabling this feature will result in static redirects, independent of the Kubo RPC endpoint's availability, and may produce error when your node is offline.",
+    "message": "Catatan: menonaktifkan fitur ini akan mengakibatkan pengalihan statis, terlepas dari ketersediaan titik akhir RPC Kubo, dan mungkin menghasilkan kesalahan saat node Anda sedang offline.",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -400,7 +396,7 @@
     "description": "A section header on the Preferences screen (option_header_experiments)"
   },
   "option_header_redirect_rules": {
-    "message": "Redirect Rules",
+    "message": "Aturan Pengalihan",
     "description": "A section header on the Preferences screen (option_header_redirect_rules)"
   },
   "option_header_reset": {
@@ -512,11 +508,11 @@
     "description": "An option description on the Preferences screen (option_preloadAtPublicGateway_description)"
   },
   "option_redirect_rules_reset_all": {
-    "message": "Reset All Redirect Rules",
+    "message": "Setel Ulang Semua Aturan Pengalihan",
     "description": "A button label on the Preferences screen (option_redirect_rules_reset_all)"
   },
   "option_redirect_rules_row_origin": {
-    "message": "Origin",
+    "message": "Asal",
     "description": "A table header on the Preferences screen (option_redirect_rules_row_origin)"
   },
   "option_redirect_rules_row_target": {
@@ -528,7 +524,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "Ruang nama dalam daftar yang dipisahkan koma ini akan dicatat ke konsol peramban Anda. Mengubah daftar ini akan memulai ulang Sahabat IPFS.",
+    "message": "",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -719,46 +715,6 @@
     "message": "Proyek Terkait",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
-  "option_header_telemetry": {
-    "message": "Telemetri",
-    "description": "A section header on the Preferences screen (option_header_telemetry)"
-  },
-  "option_telemetry_disclaimer": {
-    "message": "Kami mengumpulkan data telemetri minimal untuk meningkatkan dan memprioritaskan pekerjaan kami. Harap setujui pengumpulan metrik ini untuk membantu upaya kami!",
-    "description": "Disclaimer about telemetry collection in the telemetry section on the Preferences screen (option_telemetry_disclaimer)"
-  },
-  "option_telemetryGroupMinimal_title": {
-    "message": "Fitur Telemetri",
-    "description": "A title for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_title)"
-  },
-  "option_telemetryGroupMinimal_description": {
-    "message": "Kumpulkan fitur dasar dan metrik penggunaan untuk membantu pengelola memprioritaskan pekerjaan pada fitur yang paling berguna.",
-    "description": "A description for the 'minimal' grouping of metrics we collect (option_telemetryGroupMinimal_description)"
-  },
-  "option_telemetryGroupMarketing_title": {
-    "message": "Judul pemasaran",
-    "description": "A title for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_title)"
-  },
-  "option_telemetryGroupMarketing_description": {
-    "message": "Deskripsi pemasaran",
-    "description": "A description for the 'marketing' grouping of metrics we collect (option_telemetryGroupMarketing_description)"
-  },
-  "option_telemetryGroupPerformance_title": {
-    "message": "Judul pertunjukan",
-    "description": "A title for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_title)"
-  },
-  "option_telemetryGroupPerformance_description": {
-    "message": "Deskripsi kinerja",
-    "description": "A description for the 'performance' grouping of metrics we collect (option_telemetryGroupPerformance_description)"
-  },
-  "option_telemetryGroupTracking_title": {
-    "message": "Judul pelacakan",
-    "description": "A title for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_title)"
-  },
-  "option_telemetryGroupTracking_description": {
-    "message": "Deskripsi pelacakan",
-    "description": "A description for the 'tracking' grouping of metrics we collect (option_telemetryGroupTracking_description)"
-  },
   "recovery_page_title": {
     "message": "Masalah dengan node IPFS Anda | Sahabat IPFS",
     "description": "Title of the recovery page (recovery_page_title)"
@@ -788,27 +744,27 @@
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   },
   "request_permissions_page_title": {
-    "message": "Grant Host Permissions | IPFS Companion",
+    "message": "Berikan Izin Host | Pendamping IPFS",
     "description": "Title of the recovery page (recovery_page_title)"
   },
   "request_permissions_page_sub_header": {
-    "message": "Just one more thing to do before you're all set! :)",
+    "message": "Hanya satu hal lagi yang harus dilakukan sebelum Anda siap! :)",
     "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
   },
   "request_permissions_page_message_p1": {
-    "message": "IPFS Companion needs permission to identify IPFS resources on the web.",
+    "message": "IPFS Companion memerlukan izin untuk mengidentifikasi sumber daya IPFS di web.",
     "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
   },
   "request_permissions_page_message_p2": {
-    "message": "The IPFS Companion requires Host permission to access data on all websites. This allows it to inspect all web requests, identify ones for content-addressed IPFS resources, and load them using your local IPFS node. Please click the button below to grant these permissions.",
+    "message": "Pendamping IPFS memerlukan izin Host untuk mengakses data di semua situs web. Hal ini memungkinkannya memeriksa semua permintaan web, mengidentifikasi permintaan untuk sumber daya IPFS yang ditujukan pada konten, dan memuatnya menggunakan node IPFS lokal Anda. Silakan klik tombol di bawah untuk memberikan izin ini.",
     "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
   },
   "request_permissions_page_button": {
-    "message": "Grant Permission",
+    "message": "Memberikan Ijin",
     "description": "Button on the recovery screen (recovery_page_button)"
   },
   "request_permissions_page_learn_more": {
-    "message": "Learn more about host permissions",
+    "message": "Pelajari lebih lanjut tentang izin host",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }
