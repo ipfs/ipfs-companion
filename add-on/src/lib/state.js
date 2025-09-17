@@ -4,7 +4,7 @@
 import { isHostname, safeURL } from './options.js'
 
 export const offlinePeerCount = -1
-export const POSSIBLE_NODE_TYPES = ['external', 'external:brave']
+export const POSSIBLE_NODE_TYPES = ['external']
 
 /**
  *

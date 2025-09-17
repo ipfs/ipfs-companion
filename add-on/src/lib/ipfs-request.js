@@ -7,8 +7,7 @@ import isFQDN from 'is-fqdn'
 import isIPFS from 'is-ipfs'
 import LRU from 'lru-cache'
 import { recoveryPagePath } from './constants.js'
-import { braveNodeType } from './ipfs-client/brave.js'
-import { dropSlash, ipfsUri, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
+import { dropSlash, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsDeclarativeNetRequest } from './redirect-handler/blockOrObserve.js'
 
@@ -525,18 +524,6 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
       const useLocalhostName = false
       redirectUrl = safeURL(redirectUrl, { useLocalhostName }).toString()
     }
-    // Leverage native URI support in Brave for nice address bar.
-    if (type === 'main_frame' && state.ipfsNodeType === braveNodeType && !sameGateway(request.url, state.gwURL)) {
-      redirectUrl = ipfsUri(redirectUrl)
-      // In Brave 1.20.54 a webRequest redirect pointing at ipfs:// URI
-      // is not reflected in address bar - a http://*.localhost URL is displayed instead.
-      // but tabs.update works, so we do that for the main request.
-      if (redirectUrl !== url) { // futureproofing in case url from request becomes native
-        log('redirectToGateway: upgrading address bar to native URI', redirectUrl)
-        // manually set tab to native URI
-        return runtime.browser.tabs.update(request.tabId, { url: redirectUrl })
-      }
-    }
   }
 
   return handleRedirection({
@@ -572,10 +559,23 @@ function isSafeToRedirect (request, runtime) {
       }
     }
   }
-  // Ignore requests for which redirect would fail due to Brave Shields rules
+
+  // Workaround for Brave Shields interfering with IPFS resource redirects
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
-  if (runtime.brave && request.type !== 'main_frame') {
-    // log('Skippping redirect of IPFS subresource due to Brave Shields', request)
+  //
+  // Brave Shields blocks redirects of subresources (non-main-frame requests) when
+  // certain shield settings are enabled. This causes IPFS resources loaded as
+  // subresources (images, scripts, styles, etc.) to fail when redirected from
+  // public gateways to local node.
+  //
+  // Currently, we conservatively block ALL subresource redirects in Brave to avoid
+  // breaking page loads. This means IPFS subresources will load from public gateways
+  // instead of the local node when Shields are enabled.
+  //
+  // TODO: Implement smarter detection when Brave provides an API to check Shields status.
+  // See: https://github.com/ipfs/ipfs-companion/issues/1095
+  if (runtime.isBrave && request.type !== 'main_frame') {
+    log(`Skipping redirect of IPFS subresource (${request.type}) due to potential Brave Shields interference: ${request.url}`)
     return false
   }
 

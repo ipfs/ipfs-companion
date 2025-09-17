@@ -13,7 +13,6 @@ import createCopier from './copier.js'
 import createDnslinkResolver from './dnslink.js'
 import { registerSubdomainProxy } from './http-proxy.js'
 import createInspector from './inspector.js'
-import { braveNodeType, releaseBraveEndpoint, useBraveEndpoint } from './ipfs-client/brave.js'
 import { destroyIpfsClient, initIpfsClient, reloadIpfsClientOfflinePages } from './ipfs-client/index.js'
 import { browserActionFilesCpImportCurrentTab, createIpfsImportHandler, formatImportDirectory } from './ipfs-import.js'
 import { createIpfsPathValidator, dropSlash, safeHostname, sameGateway } from './ipfs-path.js'
@@ -442,7 +441,6 @@ export default async function init (inQuickImport = false) {
         log.error(`Unable to linkify DOM at '${details.url}' due to`, error)
       }
     }
-    // Ensure Brave uses correct API
     if (details.url.startsWith(state.webuiRootUrl)) {
       const apiMultiaddr = toMultiaddr(state.apiURLString)
       await browser.tabs.executeScript(details.tabId, {
@@ -648,11 +646,6 @@ export default async function init (inQuickImport = false) {
           shouldStopIpfsClient = !state.active
           break
         case 'ipfsNodeType':
-          if (change.oldValue !== braveNodeType && change.newValue === braveNodeType) {
-            useBraveEndpoint(browser)
-          } else if (change.oldValue === braveNodeType && change.newValue !== braveNodeType) {
-            releaseBraveEndpoint(browser)
-          }
           shouldRestartIpfsClient = true
           state[key] = change.newValue
           break

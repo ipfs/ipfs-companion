@@ -5,7 +5,6 @@
 import debug from 'debug'
 
 import { precache } from '../precache.js'
-import * as brave from './brave.js'
 import * as external from './external.js'
 import {
   InternalTabReloader,
@@ -24,9 +23,6 @@ export async function initIpfsClient (browser, opts, inQuickImport) {
   if (client) return // await destroyIpfsClient()
   let backend
   switch (opts.ipfsNodeType) {
-    case 'external:brave':
-      backend = brave
-      break
     case 'external':
       backend = external
       break
@@ -55,7 +51,7 @@ export async function destroyIpfsClient (browser) {
 /**
  * Reloads pages dependant on ipfs to be online
  *
- * @typedef {brave|external} Browser
+ * @typedef {external} Browser
  * @param {Browser} browser
  * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts
@@ -88,7 +84,7 @@ async function _reloadIpfsClientDependents (
 /**
  * Reloads local gateway pages dependant on ipfs to be online
  *
- * @typedef {brave|external} Browser
+ * @typedef {external} Browser
  * @param {Browser} browser
  * @param {import('kubo-rpc-client').default} instance
  * @param {Object} opts
