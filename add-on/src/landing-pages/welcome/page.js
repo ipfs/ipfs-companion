@@ -5,9 +5,14 @@ import logo from '../../popup/logo.js'
 import { renderTranslatedLinks, renderTranslatedSpans } from '../../utils/i18n.js'
 
 // Assets
+const kuboLogo = '../../../images/kubo.svg'
+const boxoLogo = '../../../images/boxo.svg'
 const libp2pLogo = '../../../images/libp2p.svg'
-const multiformatsLogo = '../../../images/multiformats.svg'
-const ipldLogo = '../../../images/ipld.svg'
+const ipfsSpecsLogo = '../../../images/ipfs-specs.svg'
+const whyIpfsThumbnail = '../../../images/why-ipfs.webp'
+const howIpfsWorksThumbnail = '../../../images/how-ipfs-works.webp'
+const contentAddressingThumbnail = '../../../images/content-addressing.webp'
+const contentRoutingThumbnail = '../../../images/content-routing.webp'
 
 // Colors
 const colorIpfsLogo = '#57cbd0'
@@ -109,7 +114,7 @@ const renderInstallSteps = (i18n, isIpfsOnline) => {
         <p class="mt0 mb0 f3 tc">${i18n.getMessage('page_landingWelcome_installSteps_notRunning_title')}</p>
       </div>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_desktop_title')}</p>
-      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://github.com/ipfs-shipyard/ipfs-desktop#ipfs-desktop'], `target="_blank" class="${anchorClass}"`)}</p>
+      <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_desktop_install', ['https://docs.ipfs.tech/install/ipfs-desktop/'], `target="_blank" class="${anchorClass}"`)}</p>
       <p class="mb2 aqua b f4 lh-title">${i18n.getMessage('page_landingWelcome_installSteps_cli_title')}</p>
       <p class="${copyClass}">${renderTranslatedLinks('page_landingWelcome_installSteps_cli_install', ['https://docs.ipfs.tech/how-to/command-line-quick-start/'], `target="_blank" class="${anchorClass}"`)}</p>
     </div>
@@ -130,26 +135,28 @@ const renderResources = (i18n) => {
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_new_ipfs')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_companion_features', ['https://github.com/ipfs-shipyard/ipfs-companion#ipfs-companion-features'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_companion_features', ['https://github.com/ipfs/ipfs-companion#ipfs-companion-features'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_concepts', ['https://docs.ipfs.tech/concepts/how-ipfs-works/'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_docs', ['https://docs.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_new_ipfs_specs', ['https://specs.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_build')}</p>
       <ul class="${copyClass}">
         <li>${renderTranslatedLinks('page_landingWelcome_resources_build_tutorials', ['https://docs.ipfs.tech/how-to/'], `target="_blank" class="${anchorClass}"`)}</li>
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_build_examples', ['https://awesome.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_build_examples', ['https://blog.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_get_help')}</p>
       <ul class="${copyClass}">
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_get_help', ['https://discuss.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_get_help', ['https://discuss.ipfs.tech/c/help/13'], `target="_blank" class="${anchorClass}"`)}</li>
       </ul>
 
       <p class="${labelClass}">${i18n.getMessage('page_landingWelcome_resources_title_community')}</p>
       <ul class="${copyClass}">
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_forums', ['https://discuss.ipfs.tech'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_community_contribute', ['https://docs.ipfs.tech/community/contribute/ways-to-contribute/'], `target="_blank" class="${anchorClass}"`)}</li>
-        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_translate', ['https://www.transifex.com/ipfs/public/'], `target="_blank" class="${anchorClass}"`)}</li>
+        <li>${renderTranslatedLinks('page_landingWelcome_resources_community_translate', ['https://github.com/ipfs-shipyard/i18n#readme'], `target="_blank" class="${anchorClass}"`)}</li>
         <li>${renderTranslatedLinks('page_landingWelcome_resources_community_resources', ['https://docs.ipfs.tech/community/'], `target="_blank" class="${anchorClass}"`)}</li>
     </ul>
     </div>
@@ -174,23 +181,45 @@ const renderVideos = (i18n) => {
   `
 
   return html`
-    <div class="w-80 flex flex-column flex-row-ns justify-between-ns aqua f5">
-      <div class="flex flex-column mr1">
-        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_why_ipfs')}</p>
-        <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=zE_WSLbqqvo" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmS4Ae3WBzkaANSPD82Dsax8QuJQpS4TEfaC53FMPkdxMA" alt="${i18n.getMessage('page_landingWelcome_videos_why_ipfs')}" />
-          ${overlayDiv()}
-          ${playSvg()}
-        </a>
+    <div class="w-80 aqua f5">
+      <div class="flex flex-column flex-row-ns justify-between-ns mb3">
+        <div class="flex flex-column mr1">
+          <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_why_ipfs')}</p>
+          <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?v=zE_WSLbqqvo" target="_blank">
+            <img width="${videoWidth}" height="${videoHeight}" src="${whyIpfsThumbnail}" alt="${i18n.getMessage('page_landingWelcome_videos_why_ipfs')}" />
+            ${overlayDiv()}
+            ${playSvg()}
+          </a>
+        </div>
+
+        <div class="flex flex-column">
+          <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_how_ipfs_works')}</p>
+          <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?v=0IGzEYixJHk" target="_blank">
+            <img width="${videoWidth}" height="${videoHeight}" src="${howIpfsWorksThumbnail}" alt="${i18n.getMessage('page_landingWelcome_videos_how_ipfs_works')}" />
+            ${overlayDiv()}
+            ${playSvg()}
+          </a>
+        </div>
       </div>
 
-      <div class="flex flex-column">
-        <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_videos_how_ipfs_works')}</p>
-        <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://www.youtube.com/watch?feature=player_embedded&v=0IGzEYixJHk" target="_blank">
-          <img width="${videoWidth}" height="${videoHeight}" src="https://ipfs.io/ipfs/QmP5uNwDjYZmoLxw8zJeeheSJEnBKYpFn4uuEQQWFYGKvM" alt="${i18n.getMessage('page_landingWelcome_videos_how_ipfs_works')}" />
-          ${overlayDiv()}
-          ${playSvg()}
-        </a>
+      <div class="flex flex-column flex-row-ns justify-between-ns mt4">
+        <div class="flex flex-column mr1">
+          <p class="ttu tracked f6 fw4 teal mt0 mb3">Content Addressing</p>
+          <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://research.protocol.ai/tutorials/resnetlab-on-tour/content-addressing/" target="_blank">
+            <img width="${videoWidth}" height="${videoHeight}" src="${contentAddressingThumbnail}" alt="Content Addressing" />
+            ${overlayDiv()}
+            ${playSvg()}
+          </a>
+        </div>
+
+        <div class="flex flex-column">
+          <p class="ttu tracked f6 fw4 teal mt0 mb3">Content Routing</p>
+          <a class="${anchorClass}" style="height: ${videoHeight}px" href="https://research.protocol.ai/tutorials/resnetlab-on-tour/content-routing/" target="_blank">
+            <img width="${videoWidth}" height="${videoHeight}" src="${contentRoutingThumbnail}" alt="Content Routing" />
+            ${overlayDiv()}
+            ${playSvg()}
+          </a>
+        </div>
       </div>
     </div>
   `
@@ -205,19 +234,24 @@ const renderProjects = (i18n) => {
       <p class="ttu tracked f6 fw4 teal mt0 mb3">${i18n.getMessage('page_landingWelcome_projects_title')}</p>
 
       <div class="flex justify-between-ns">
-        <a class="${anchorClass}" href="https://multiformats.io/" target="_blank">
-          <img width="${logoWidth}" src="${multiformatsLogo}" alt="Multiformats Logo">
-          <p>Multiformats</p>
+        <a class="${anchorClass}" href="https://github.com/ipfs/kubo#readme" target="_blank">
+          <img width="${logoWidth}" src="${kuboLogo}" alt="Kubo Logo">
+          <p>Kubo</p>
         </a>
 
-        <a class="${anchorClass}" href="https://ipld.io/" target="_blank">
-          <img width="${logoWidth}" src="${ipldLogo}" alt="IPLD Logo">
-          <p>IPLD</p>
+        <a class="${anchorClass}" href="https://github.com/ipfs/boxo#readme" target="_blank">
+          <img width="${logoWidth}" src="${boxoLogo}" alt="Boxo Logo">
+          <p>Boxo</p>
         </a>
 
-        <a class="${anchorClass}" href="https://libp2p.io/" target="_blank">
-        <img width="${logoWidth}" src="${libp2pLogo}" alt="libp2p Logo">
-          <p>libp2p</p>
+        <a class="${anchorClass}" href="https://github.com/libp2p/go-libp2p#readme" target="_blank">
+          <img width="${logoWidth}" src="${libp2pLogo}" alt="go-libp2p Logo">
+          <p>go-libp2p</p>
+        </a>
+
+        <a class="${anchorClass}" href="https://specs.ipfs.tech/" target="_blank">
+          <img width="${logoWidth}" src="${ipfsSpecsLogo}" alt="IPFS Specs Logo">
+          <p>Specs</p>
         </a>
       </div>
     </div>
