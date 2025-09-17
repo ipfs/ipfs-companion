@@ -45,7 +45,7 @@ Unless you've installed a locale-specific build, Firefox will have English only.
 
 ## Contributing translations
 
-Internationalization in IPFS Companion (and all IPFS-related projects) depends on the contributions of the community. You can give back by contributing translations in your language(s)! Go to the [IPFS Companion Transifex page](https://www.transifex.com/ipfs/ipfs-companion/), send a request to join a specific language team, and start translating. You can also download raw files from Transifex, translate them in your own editor/tool, and then upload them back there, but many people prefer using the simple and friendly Transifex GUI.
+Internationalization in IPFS Companion (and all IPFS-related projects) depends on the contributions of the community. You can give back by contributing translations in your language(s)! Go to the [IPFS Companion Transifex page](https://explore.transifex.com/ipfs/ipfs-companion/), send a request to join a specific language team, and start translating. You can also download raw files from Transifex, translate them in your own editor/tool, and then upload them back there, but many people prefer using the simple and friendly Transifex GUI.
 
 If your language is not present in `add-on/_locales` yet, but is supported by mainstream browsers, please create a [new issue](https://github.com/ipfs/ipfs-companion/issues/new) requesting it.
 

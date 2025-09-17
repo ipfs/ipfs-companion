@@ -91,7 +91,7 @@ jobs:
         - Only pulls translated strings (empty strings fallback to English)
         - Includes locales with 40%+ completion
 
-        To contribute translations: https://github.com/ipfs/i18n#how-can-i-contribute-translation-for-my-language"
+        To contribute translations: https://explore.transifex.com/ipfs/ipfs-companion/"
 
           gh pr create \
             --base main \

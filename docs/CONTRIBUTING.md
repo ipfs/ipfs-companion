@@ -26,7 +26,7 @@ See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for de
 ## Translations
 
 
-Go to Transifex and join [IPFS Companion Translation Project](https://www.transifex.com/ipfs/ipfs-companion/) :sparkles:
+Go to Transifex and join [IPFS Companion Translation Project](https://explore.transifex.com/ipfs/ipfs-companion/) :sparkles:
 
 If you want to download translations from Transifex and run them locally, make sure to read [Localization Notes](./LOCALIZATION-NOTES.md) first.
 
