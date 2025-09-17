@@ -11,6 +11,7 @@ permissions:
 jobs:
   tx-sync:
     runs-on: ubuntu-latest
+    environment: transifex
     steps:
     - uses: actions/checkout@v4
     - name: Install Transifex client
