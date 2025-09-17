@@ -9,6 +9,7 @@
   - [Running Firefox with a specific locale](#running-firefox-with-a-specific-locale)
     - [Further resources](#further-resources-1)
   - [Contributing translations](#contributing-translations)
+  - [Translation synchronization](#translation-synchronization)
 
 IPFS Companion supports running in specific locales, with translations provided by the community via Transifex.
 
@@ -48,4 +49,11 @@ Internationalization in IPFS Companion (and all IPFS-related projects) depends o
 
 If your language is not present in `add-on/_locales` yet, but is supported by mainstream browsers, please create a [new issue](https://github.com/ipfs/ipfs-companion/issues/new) requesting it.
 
-Don't worry if GitHub does not immediately reflect translations added at Transifex: New translations are merged manually before every release. Locale files at GitHub are often behind what is already translated at Transifex. It is a good idea to keep Transifex email notifications enabled to be notified about new strings to translate.
+## Translation synchronization
+
+Translations sync automatically from Transifex weekly via `.github/workflows/tx-pull.yml`:
+- Uses `--mode onlytranslated` to pull only translated strings
+- Empty strings fallback to English via browser's i18n API at runtime
+- Creates PR for review
+
+**Note:** Edit translations only in Transifex. GitHub changes will be overwritten.

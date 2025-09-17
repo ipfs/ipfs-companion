@@ -1,0 +1,102 @@
+name: Transifex sync
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  tx-sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Transifex client
+      run: |
+        curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+        chmod +x ./tx
+    - name: Pull translations from Transifex
+      run: |
+        # Pull only translated strings, leaving untranslated ones empty
+        # This prevents replacing existing translations with English
+        # -f: force download, always use Transifex as source of truth (ignore timestamps)
+        # --mode onlytranslated: only includes translated strings, untranslated keys will be empty
+        # --minimum-perc 40: only pulls files that are at least 40% translated
+        # Empty strings will fallback to English at runtime via browser.i18n
+        ./tx -t ${{ secrets.TX_TOKEN }} pull -a -f --mode onlytranslated --minimum-perc 40
+    - uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842
+      with:
+        # Optional. Commit message for the created commit.
+        # Defaults to "Apply automatic changes"
+        commit_message: "chore: pull transifex translations"
+
+        # Optional. Local and remote branch name where commit is going to be pushed
+        #  to. Defaults to the current branch.
+        #  You might need to set `create_branch: true` if the branch does not exist.
+        branch: i18n-sync
+
+        # Optional. Options used by `git-commit`.
+        # See https://git-scm.com/docs/git-commit#_options
+        commit_options: '--no-verify --signoff'
+
+        # Optional glob pattern of files which should be added to the commit
+        # Defaults to all (.)
+        # See the `pathspec`-documentation for git
+        # - https://git-scm.com/docs/git-add#Documentation/git-add.txt-ltpathspecgt82308203
+        # - https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
+        file_pattern: add-on/_locales
+
+        # Optional. Local file path to the repository.
+        # Defaults to the root of the repository.
+        repository: .
+
+        # Optional. Options used by `git-add`.
+        # See https://git-scm.com/docs/git-add#_options
+        add_options: '-A'
+
+        # Optional. Options used by `git-push`.
+        # See https://git-scm.com/docs/git-push#_options
+        push_options: '--force-with-lease'
+
+        # Optional. Disable dirty check and always try to create a commit and push
+        skip_dirty_check: true
+
+        # Optional. Skip internal call to `git fetch`
+        skip_fetch: true
+
+        # Optional. Skip internal call to `git checkout`
+        skip_checkout: true
+
+        # Optional. Prevents the shell from expanding filenames.
+        # Details: https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html
+        disable_globbing: true
+
+        # Optional. Create given branch name in local and remote repository.
+        create_branch: true
+    - name: Create pull request
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Check if PR already exists
+        existing_pr=$(gh pr list --base main --head i18n-sync --state open --json number --jq '.[0].number' || true)
+        if [ -n "$existing_pr" ]; then
+          echo "PR #$existing_pr already exists for i18n-sync -> main"
+        else
+          # Create new PR
+          gh pr create \
+            --base main \
+            --head i18n-sync \
+            --title "chore: pull new translations" \
+            --body "$(cat <<'EOF'
+Automated translation update from Transifex.
+
+- Only pulls translated strings (empty strings fallback to English)
+- Includes locales with 40%+ completion
+
+To contribute translations: https://github.com/ipfs/i18n#how-can-i-contribute-translation-for-my-language
+EOF
+          )" \
+            --label "need/triage" || echo "No changes to create PR"
+        fi
