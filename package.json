@@ -161,7 +161,7 @@
     "ipfs-css": "1.4.0",
     "is-fqdn": "2.0.1",
     "is-ip": "5.0.0",
-    "is-ipfs": "https://github.com/ipfs/is-ipfs/tarball/5d6d1a2aa2fc64b61f374532c1f0766ce38725f3",
+    "is-ipfs": "2.0.0",
     "it-all": "2.0.0",
     "lru-cache": "7.14.1",
     "merge-options": "3.0.4",
