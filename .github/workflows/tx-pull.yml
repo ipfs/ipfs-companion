@@ -25,7 +25,7 @@ jobs:
         # --mode onlytranslated: only includes translated strings, untranslated keys will be empty
         # --minimum-perc 40: only pulls files that are at least 40% translated
         # Empty strings will fallback to English at runtime via browser.i18n
-        ./tx -t ${{ secrets.TX_TOKEN }} pull -a -f --mode onlytranslated --minimum-perc 40
+        ./tx --token "${{ secrets.TX_TOKEN }}" pull --all --force --mode onlytranslated --minimum-perc 40
     - uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842
       with:
         # Optional. Commit message for the created commit.
