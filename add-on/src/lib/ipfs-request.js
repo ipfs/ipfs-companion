@@ -565,10 +565,22 @@ function isSafeToRedirect (request, runtime) {
     }
   }
 
-  // Ignore requests for which redirect would fail due to Brave Shields rules
+  // Workaround for Brave Shields interfering with IPFS resource redirects
   // https://github.com/ipfs-shipyard/ipfs-companion/issues/962
+  //
+  // Brave Shields blocks redirects of subresources (non-main-frame requests) when
+  // certain shield settings are enabled. This causes IPFS resources loaded as
+  // subresources (images, scripts, styles, etc.) to fail when redirected from
+  // public gateways to local node.
+  //
+  // Currently, we conservatively block ALL subresource redirects in Brave to avoid
+  // breaking page loads. This means IPFS subresources will load from public gateways
+  // instead of the local node when Shields are enabled.
+  //
+  // TODO: Implement smarter detection when Brave provides an API to check Shields status.
+  // See: https://github.com/ipfs/ipfs-companion/issues/1095
   if (runtime.isBrave && request.type !== 'main_frame') {
-    log('Skipping redirect of IPFS subresource due to Brave Shields', request)
+    log(`Skipping redirect of IPFS subresource (${request.type}) due to potential Brave Shields interference: ${request.url}`)
     return false
   }
 
