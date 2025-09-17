@@ -26,7 +26,7 @@ export default function header (props) {
     isIpfsOnline: (active && isIpfsOnline)
   })}
         </div>
-          <div class="flex flex-column ml2 white ${active ? '' : 'o-40'}">
+          <div class="flex flex-column ml2 white ${active ? '' : 'o-40'}" style="position: relative;">
             <div>
               <h1 class="inter fw6 f2 ttu ma0 pa0">
                 IPFS
