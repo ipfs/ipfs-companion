@@ -85,18 +85,17 @@ jobs:
           echo "PR #$existing_pr already exists for i18n-sync -> main"
         else
           # Create new PR
+          body="Automated translation update from Transifex.
+
+        - Only pulls translated strings (empty strings fallback to English)
+        - Includes locales with 40%+ completion
+
+        To contribute translations: https://github.com/ipfs/i18n#how-can-i-contribute-translation-for-my-language"
+
           gh pr create \
             --base main \
             --head i18n-sync \
             --title "chore: pull new translations" \
-            --body "$(cat <<'EOF'
-Automated translation update from Transifex.
-
-- Only pulls translated strings (empty strings fallback to English)
-- Includes locales with 40%+ completion
-
-To contribute translations: https://github.com/ipfs/i18n#how-can-i-contribute-translation-for-my-language
-EOF
-          )" \
+            --body "$body" \
             --label "need/triage" || echo "No changes to create PR"
         fi
