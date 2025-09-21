@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPFS Protocol Error - IPFS Companion</title>
+    <link rel="stylesheet" href="protocol-error.css">
+</head>
+<body>
+    <div class="container">
+        <div class="warning-icon">⚠️</div>
+        
+        <h1>Incorrect Protocol Usage</h1>
+        
+        <div class="error-message">
+            You're trying to access a domain name using <code>ipfs://</code> protocol, 
+            but domain names should use <code>ipns://</code> instead.
+        </div>
+        
+        <div class="url-display">
+            <div class="url-row">
+                <span class="url-label">Incorrect:</span>
+                <span class="url-incorrect" id="incorrect-url">ipfs://example.com</span>
+            </div>
+            <div class="url-row">
+                <span class="url-label">Correct:</span>
+                <span class="url-correct" id="correct-url">ipns://example.com</span>
+            </div>
+        </div>
+        
+        <div class="explanation-box">
+            <div class="explanation-title">Quick Guide</div>
+            <ul class="explanation-list">
+                <li><code>ipfs://</code> - Use only for immutable content identifiers (CIDs)</li>
+                <li><code>ipns://</code> - Use for mutable pointers like domain names and IPNS records</li>
+            </ul>
+        </div>
+        
+        <div class="button-container">
+           <button class="btn btn-back" id="go-back">
+  Go Back
+</button>
+<button class="btn btn-continue" id="continue-btn">
+  Continue to <span id="btn-url">ipns://example.com</span>
+  <span class="arrow">→</span>
+</button>
+        </div>
+        
+        <div class="learn-more">
+            <a href="https://docs.ipfs.tech/concepts/ipns/" target="_blank" rel="noopener noreferrer">
+                Learn more about IPFS addressing →
+            </a>
+        </div>
+    </div>
+    
+    <script src="protocol-error.js"></script>
+</body>
+</html>
