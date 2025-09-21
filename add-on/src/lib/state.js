@@ -4,7 +4,8 @@
 import { isHostname, safeURL } from './options.js'
 
 export const offlinePeerCount = -1
-export const POSSIBLE_NODE_TYPES = ['external']
+export const SERVICE_WORKER_GATEWAY_NODE = 'service_worker_gateway'
+export const POSSIBLE_NODE_TYPES = ['external',SERVICE_WORKER_GATEWAY_NODE]
 
 /**
  *
@@ -36,6 +37,18 @@ export function initState (options, overrides) {
   state.gwURLString = state.gwURL?.toString()
   delete state.customGatewayUrl
   state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
+  state.isServiceWorkerGateway =
+    options.ipfsNodeType === SERVICE_WORKER_GATEWAY_NODE
+
+  // Normalize and expose current/fallback SW gateway endpoints (keep originals too)
+  if (options.serviceWorkerGatewayUrl) {
+    state.swGwURL = safeURL(options.serviceWorkerGatewayUrl)
+    state.swGwURLString = state.swGwURL?.toString()
+  }
+  if (options.serviceWorkerGatewayFallbackUrl) {
+    state.swGwFallbackURL = safeURL(options.serviceWorkerGatewayFallbackUrl)
+    state.swGwFallbackURLString = state.swGwFallbackURL?.toString()
+  }
 
   // attach helper functions
   state.activeIntegrations = (url) => {

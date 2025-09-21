@@ -12,6 +12,73 @@ import { POSSIBLE_NODE_TYPES } from '../../lib/state.js'
 // https://github.com/ipfs-shipyard/ipfs-companion/issues/648
 const secureContextUrl = /^https:\/\/|^http:\/\/localhost|^http:\/\/127.0.0.1|^http:\/\/\[::1\]/
 
+// Add this function before the export default
+function renderServiceWorkerGatewayOptions({
+  ipfsNodeType,
+  serviceWorkerGatewayUrl,
+  onOptionChange
+}) {
+  const isSwGateway = ipfsNodeType === 'service_worker_gateway'
+  const onSwGatewayUrlChange = onOptionChange('serviceWorkerGatewayUrl', guiURLString)
+  
+  if (!isSwGateway) return null
+  
+  return html`
+    <div class="flex-row-ns pb0-ns">
+      <label for="serviceWorkerGatewayUrl">
+        <dl>
+          <dt>Service Worker Gateway URL</dt>
+          <dd>
+            The Service Worker Gateway endpoint for trustless content retrieval.
+            <div class="mt2">
+              <button
+                type="button"
+                class="button-reset pv1 ph2 ba b--gray hover-bg-light-gray"
+                onclick=${() => {
+                  const el = document.getElementById('serviceWorkerGatewayUrl')
+                  el.value = 'https://inbrowser.link'
+                  el.dispatchEvent(new Event('change', { bubbles: true }))
+                }}>
+                Use Production
+              </button>
+
+              <button
+                type="button"
+                class="ml2 button-reset pv1 ph2 ba b--gray hover-bg-light-gray"
+                onclick=${() => {
+                  const el = document.getElementById('serviceWorkerGatewayUrl')
+                  el.value = 'https://inbrowser.dev'
+                  el.dispatchEvent(new Event('change', { bubbles: true }))
+                }}>
+                Use Staging
+              </button>
+            </div>
+          </dd>
+        </dl>
+      </label>
+      <input
+        class="bg-white navy self-center-ns"
+        id="serviceWorkerGatewayUrl"
+        type="url"
+        inputmode="url"
+        required
+        pattern="https?://.+"
+        spellcheck="false"
+        title="Service Worker Gateway URL"
+        onchange=${onSwGatewayUrlChange}
+        value=${serviceWorkerGatewayUrl || 'https://inbrowser.link'} />
+    </div>
+    <div class="pa3 bg-washed-yellow navy br2 f6">
+      <strong>ℹ️ Service Worker Gateway Mode:</strong>
+      <ul class="mt2 mb0 pl3">
+        <li>Provides trustless, browser-based IPFS content fetching</li>
+        <li>Upload and pinning features are disabled in this mode</li>
+        <li>No local IPFS node required</li>
+      </ul>
+    </div>
+  `
+}
+
 export default function gatewaysForm ({
   ipfsNodeType,
   customGatewayUrl,
@@ -21,7 +88,8 @@ export default function gatewaysForm ({
   enabledOn,
   publicGatewayUrl,
   publicSubdomainGatewayUrl,
-  onOptionChange
+  onOptionChange,
+  serviceWorkerGatewayUrl
 }) {
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', (url) => guiURLString(url, { useLocalhostName: useSubdomains }))
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
@@ -38,6 +106,7 @@ export default function gatewaysForm ({
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_gateways')}</h2>
+        ${renderServiceWorkerGatewayOptions({ ipfsNodeType, serviceWorkerGatewayUrl, onOptionChange })}
           <div class="flex-row-ns pb0-ns">
             <label for="publicGatewayUrl">
               <dl>

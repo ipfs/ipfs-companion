@@ -94,6 +94,7 @@
     "@istanbuljs/esm-loader-hook": "0.2.0",
     "@types/chai": "4.3.20",
     "@types/debug": "4.1.12",
+    "@types/is-fqdn": "^2.0.0",
     "@types/mocha": "10.0.10",
     "@types/selenium-webdriver": "4.1.28",
     "@types/webextension-polyfill": "0.10.7",
