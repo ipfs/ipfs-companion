@@ -244,7 +244,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "",
+    "message": "Ustaw na \"Zdalny (Kubo RPC)\", aby połączyć się z lokalnym węzłem za pomocą Kubo RPC API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_brave_description": {
@@ -256,7 +256,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeType_external": {
-    "message": "",
+    "message": "Zdalny (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_brave": {
@@ -624,7 +624,7 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS nie jest uruchomiony",
+    "message": "Kubo nie jest uruchomiony",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
@@ -632,7 +632,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "Możesz uruchomić IPFS bezpośrednio w przeglądarce - nie potrzebujesz  IPFS Desktop ani wiersza poleceń. Otwórz <0>Preferencje Asystenta</0> i ustaw typ węzła IPFS na \"Dostarczony przez Brave\".",
+    "message": "",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
@@ -664,8 +664,12 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Odwiedź stronę z <0>dokumentacją IPFS</0>, aby dowiedzieć się więcej",
+    "message": "",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
+  },
+  "page_landingWelcome_resources_new_ipfs_specs": {
+    "message": "",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_specs)"
   },
   "page_landingWelcome_resources_title_build": {
     "message": "Buduj na IPFS",
@@ -684,12 +688,16 @@
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Zadawaj pytania i dyskutuj o IPFS na <0>oficjalnym forum</0>",
+    "message": "",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
     "message": "Dołącz do społeczności",
     "description": "Community title (page_landingWelcome_resources_title_community)"
+  },
+  "page_landingWelcome_resources_community_forums": {
+    "message": "",
+    "description": "Community copy (page_landingWelcome_resources_community_forums)"
   },
   "page_landingWelcome_resources_community_contribute": {
     "message": "<0>Wnieś swój wkład</0> w postaci kodu, dokumentacji i nie tylko",
@@ -712,7 +720,7 @@
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Powiązane projekty",
+    "message": "Zbudowany z",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
   "recovery_page_title": {

@@ -624,7 +624,7 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS لا يعمل",
+    "message": "",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
@@ -632,7 +632,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "يمكنك تشغيل IPFS مباشرة في متصفحك - لا حاجة إلى IPFS سطح المكتب أو سطر الأوامر. افتح <0>التفضيلات المصاحبة </0> التفضيلات المصاحبة وقم بتعيين نوع عقدة IPFS على \"المقدمة من Brave\".",
+    "message": "",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
@@ -664,8 +664,12 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "قم بزيارة موقع <0> وثائق IPFS  </0> للتعمق أكثر",
+    "message": "",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
+  },
+  "page_landingWelcome_resources_new_ipfs_specs": {
+    "message": "",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_specs)"
   },
   "page_landingWelcome_resources_title_build": {
     "message": "البناء على IPFS",
@@ -684,12 +688,16 @@
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "طرح الأسئلة ومناقشة IPFS في <0> المنتديات الرسمية </0>",
+    "message": "",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
     "message": "الانضمام إلى المجتمع",
     "description": "Community title (page_landingWelcome_resources_title_community)"
+  },
+  "page_landingWelcome_resources_community_forums": {
+    "message": "",
+    "description": "Community copy (page_landingWelcome_resources_community_forums)"
   },
   "page_landingWelcome_resources_community_contribute": {
     "message": "<0> ساهم </0> بالرمز والوثائق والمزيد",
@@ -712,7 +720,7 @@
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "مشاريع ذات صلة",
+    "message": "",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
   "recovery_page_title": {

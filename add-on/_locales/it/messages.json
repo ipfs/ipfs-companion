@@ -624,7 +624,7 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "IPFS non è in esecuzione",
+    "message": "",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
@@ -632,7 +632,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "Puoi eseguire IPFS direttamente nel tuo browser - non c'è bisogno di IPFS Desktop o della riga di comando. Apri <0>Preferenze Companion</0> ed imposta il tipo di nodo IPFS su \"Offerto da Brave\".",
+    "message": "",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
@@ -664,8 +664,12 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "Visita il <0>sito di documentazione IPFS</0> per saperne di più",
+    "message": "",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
+  },
+  "page_landingWelcome_resources_new_ipfs_specs": {
+    "message": "",
+    "description": "Resources copy (page_landingWelcome_resources_new_ipfs_specs)"
   },
   "page_landingWelcome_resources_title_build": {
     "message": "Sviluppa su IPFS",
@@ -684,12 +688,16 @@
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "Chiedi e discuti riguardo IPFS nei <0>forum ufficiali</0>",
+    "message": "",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
     "message": "Unisciti alla community",
     "description": "Community title (page_landingWelcome_resources_title_community)"
+  },
+  "page_landingWelcome_resources_community_forums": {
+    "message": "",
+    "description": "Community copy (page_landingWelcome_resources_community_forums)"
   },
   "page_landingWelcome_resources_community_contribute": {
     "message": "<0>Contribuisci</0> con codice, documentazione ed altro",
@@ -712,7 +720,7 @@
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "Progetti Correlati",
+    "message": "",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
   "recovery_page_title": {
