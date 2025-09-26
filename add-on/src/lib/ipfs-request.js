@@ -183,7 +183,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       }
       // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
       if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-        const fix = await normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
+        const fix = await normalizedUnhandledIpfsProtocol(request, state.pubGwURLString, runtime)
         if (fix) {
           return fix
         }
@@ -412,7 +412,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         url.protocol = 'https:' // force HTTPS, as HSTS may be missing on initial load
         const redirectUrl = url.toString()
         log(`onErrorOccurred: attempting to recover from DNS error (${request.error}) using EthDNS for ${request.url} → ${redirectUrl}`, request)
-        return updateTabWithURL(request, redirectUrl, browser)
+        return updateTabWithURL(request, redirectUrl, runtime.browser)
       }
 
       // Check if error can be recovered via DNSLink
@@ -423,7 +423,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
           const redirectUrl = await dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
           log(`onErrorOccurred: attempting to recover from network error (${request.error}) using dnslink for ${request.url} → ${redirectUrl}`, request)
           // We are unable to redirect in onErrorOccurred, but we can update the tab
-          return updateTabWithURL(request, redirectUrl, browser)
+          return updateTabWithURL(request, redirectUrl, runtime.browser)
         }
       }
 
@@ -438,7 +438,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const redirectUrl = await ipfsPathValidator.resolveToPublicUrl(request.url)
         log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
         // We are unable to redirect in onErrorOccurred, but we can update the tab
-        return updateTabWithURL(request, redirectUrl, browser)
+        return updateTabWithURL(request, redirectUrl, runtime.browser)
       }
     },
 
@@ -468,7 +468,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       if (await isRecoverable(request, state, ipfsPathValidator)) {
         const redirectUrl = await ipfsPathValidator.resolveToPublicUrl(request.url)
         log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url} → ${redirectUrl}`, request)
-        return updateTabWithURL(request, redirectUrl, browser)
+        return updateTabWithURL(request, redirectUrl, runtime.browser)
       }
     }
   }
@@ -634,6 +634,22 @@ function fixupDnslinkPath (path) {
 // Background: https://github.com/ipfs-shipyard/ipfs-companion/issues/164#issuecomment-328374052
 // ===================================================================
 
+function isDomainName (path) {
+  // Check if it's a domain (has dots and is not a CID)
+  if (!path) return false
+  
+  // Check for common CID patterns
+  const isCID = 
+    path.startsWith('Qm') ||  // CIDv0
+    path.startsWith('bafy') || // CIDv1
+    path.startsWith('bafk') || // CIDv1
+    path.startsWith('bafz') || // CIDv1
+    path.match(/^[a-z2-7]{59}$/) // base32 CIDv1
+  
+  // It's a domain if it has dots and is not a CID
+  return path.includes('.') && !isCID
+}
+
 const unhandledIpfsRE = /=(?:web%2B|)(ipfs(?=%3A%2F%2F)|ipns(?=%3A%2F%2F)|dweb(?=%3A%2Fip[f|n]s))%3A(?:%2F%2F|%2F)([^&]+)/
 
 function mayContainUnhandledIpfsProtocol (request) {
@@ -650,19 +666,38 @@ function unhandledIpfsPath (requestUrl) {
   return null
 }
 
-function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
+function normalizedUnhandledIpfsProtocol (request, pubGwUrl, runtime) {
   let path = unhandledIpfsPath(request.url)
-  path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
+  
+  // Check if ipfs:// is being used with a domain name
+  if (path && path.startsWith('/ipfs/')) {
+    const extractedPath = path.replace(/^\/ipfs\//, '')
+    
+    // If it's a domain name, redirect to error page
+    if (isDomainName(extractedPath)) {
+      // Using the runtime.browser that was passed in from createRequestModifier
+     const errorPageUrl = runtime.browser.runtime.getURL(
+  `dist/landing-pages/protocol-error.html?url=${encodeURIComponent('ipfs://' + extractedPath)}`
+)
+      
+      return handleRedirection({
+        originUrl: request.url,
+        redirectUrl: errorPageUrl,
+        request
+      })
+    }
+  }
+  
+  path = fixupDnslinkPath(path)
   if (isIPFS.path(path)) {
-    // replace search query with a request to a public gateway
-    // (will be redirected later, if needed)
     return handleRedirection({
       originUrl: request.url,
       redirectUrl: pathAtHttpGateway(path, pubGwUrl),
       request
-
     })
   }
+  
+  return null
 }
 
 // RECOVERY OF FAILED REQUESTS
@@ -704,11 +739,11 @@ function isRecoverableViaEthDNS (request, state) {
 // We can't redirect in onErrorOccurred/onCompleted
 // Indead, we recover by opening URL in a new tab that replaces the failed one
 // TODO: display an user-friendly prompt when the very first recovery is done
-async function updateTabWithURL (request, redirectUrl, browser) {
+async function updateTabWithURL (request, redirectUrl, browserAPI) {
   // Do nothing if the URL remains the same
   if (request.url === redirectUrl) return
 
-  return browser.tabs.update(request.tabId, {
+  return browserAPI.tabs.update(request.tabId, {
     active: true,
     url: redirectUrl
   })
