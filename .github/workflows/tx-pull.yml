@@ -2,7 +2,7 @@ name: Transifex sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 9 * * 1'
 
 permissions:
   contents: write
@@ -66,7 +66,7 @@ jobs:
 
           # Commit changes
           git commit --no-verify --signoff -m "chore: pull transifex translations"
-          COMMIT_SHA=$(git rev-parse HEAD)
+          SYNC_TIME=$(date -u +%Y-%m-%d\ %H:%M)
 
           # Push to remote (force to handle any conflicts)
           git push origin i18n-sync --force
@@ -80,7 +80,7 @@ jobs:
             echo ""
             echo "✅ **Translation updates found and committed**"
             echo ""
-            echo "**Commit:** \`$COMMIT_SHA\`"
+            echo "**Sync time:** $SYNC_TIME UTC"
             echo "**Files changed:** $FILES_COUNT"
             echo ""
             echo "### 📁 Changed files:"
@@ -96,7 +96,7 @@ jobs:
 
           {
             echo "changes=true"
-            echo "commit_sha=$COMMIT_SHA"
+            echo "sync_time=$SYNC_TIME"
             echo "files_count=$FILES_COUNT"
           } >> "$GITHUB_OUTPUT"
         fi
@@ -122,7 +122,7 @@ jobs:
           # Create new PR
           body="Automated translation update from Transifex.
 
-          **Commit:** \\\`${{ steps.commit.outputs.commit_sha }}\\\`
+          **Sync time:** ${{ steps.commit.outputs.sync_time }} UTC
           **Files changed:** ${{ steps.commit.outputs.files_count }}
 
           - Only pulls translated strings (empty strings fallback to English)
