@@ -244,7 +244,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeType_title)"
   },
   "option_ipfsNodeType_external_description": {
-    "message": "",
+    "message": "Ustaw na \"Zdalny (Kubo RPC)\", aby połączyć się z lokalnym węzłem za pomocą Kubo RPC API.",
     "description": "An option description on the Preferences screen (option_ipfsNodeType_external_description)"
   },
   "option_ipfsNodeType_brave_description": {
@@ -256,7 +256,7 @@
     "description": "An option title on the Preferences screen (option_ipfsNodeConfig_title)"
   },
   "option_ipfsNodeType_external": {
-    "message": "",
+    "message": "Zdalny (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_brave": {
