@@ -524,7 +524,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "",
+    "message": "Ruang nama dalam daftar yang dipisahkan koma ini akan dicatat pada konsol peramban Anda.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -624,7 +624,7 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "",
+    "message": "API Kubo RPC tidak berjalan",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
@@ -632,7 +632,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "",
+    "message": "Anda dapat menjalankan IPFS langsung di peramban Anda — tidak perlu IPFS Desktop atau baris perintah. Buka <0>Preferensi Pendamping</0> dan atur jenis node IPFS ke \"Disediakan oleh Brave\".",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
@@ -664,11 +664,11 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "",
+    "message": "Kunjungi <0>situs dokumentasi</0> untuk menggali lebih dalam",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_new_ipfs_specs": {
-    "message": "",
+    "message": "Jelajahi <0>spesifikasi protokol</0> untuk detail teknis",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_specs)"
   },
   "page_landingWelcome_resources_title_build": {
@@ -688,7 +688,7 @@
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "",
+    "message": "Dapatkan bantuan dari komunitas di <0>forum dukungan</0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
@@ -696,7 +696,7 @@
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_forums": {
-    "message": "",
+    "message": "Diskusikan di <0>forum komunitas</0>",
     "description": "Community copy (page_landingWelcome_resources_community_forums)"
   },
   "page_landingWelcome_resources_community_contribute": {
@@ -720,7 +720,7 @@
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "",
+    "message": "Dibangun Dengan",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
   "recovery_page_title": {
