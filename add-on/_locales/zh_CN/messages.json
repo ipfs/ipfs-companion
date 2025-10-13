@@ -624,7 +624,7 @@
     "description": "Ready message button text for opening Web UI files page (page_landingWelcome_welcome_peersButton_text)"
   },
   "page_landingWelcome_installSteps_notRunning_title": {
-    "message": "",
+    "message": "Kubo RPC API未运行",
     "description": "Install steps title (page_landingWelcome_installSteps_notRunning_title)"
   },
   "page_landingWelcome_installSteps_brave_title": {
@@ -632,7 +632,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "",
+    "message": "您可以直接在浏览器中运行IPFS而不需要IPFS 桌面或者命令行。打开<0>伴侣首选项</0>然后设置IPFS 节点类型为“Brave支持”。",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
@@ -664,11 +664,11 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "",
+    "message": "访问<0>IPFS在线文档</0>以深入了解",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_new_ipfs_specs": {
-    "message": "",
+    "message": "浏览<0>协议规范</0>以了解技术细节",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_specs)"
   },
   "page_landingWelcome_resources_title_build": {
@@ -688,7 +688,7 @@
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "",
+    "message": "在<0>支持论坛</0>中获得社区帮助",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
@@ -696,7 +696,7 @@
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_forums": {
-    "message": "",
+    "message": "在<0>社区论坛</0>上讨论",
     "description": "Community copy (page_landingWelcome_resources_community_forums)"
   },
   "page_landingWelcome_resources_community_contribute": {
@@ -720,7 +720,7 @@
     "description": "Videos section title (page_landingWelcome_videos_how_ipfs_works)"
   },
   "page_landingWelcome_projects_title": {
-    "message": "",
+    "message": "相关项目",
     "description": "Projects section title (page_landingWelcome_projects_title)"
   },
   "recovery_page_title": {
