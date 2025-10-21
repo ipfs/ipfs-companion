@@ -15,8 +15,8 @@ export async function precache (ipfs, state) {
   try {
     let cid, name
     if (state.useLatestWebUI) { // resolve DNSLink
-      cid = await ipfs.resolve('/ipns/webui.ipfs.io', { recursive: true })
-      name = 'latest webui from DNSLink at webui.ipfs.io'
+      cid = await ipfs.resolve('/ipns/webui.ipfs.tech', { recursive: true })
+      name = 'latest webui from DNSLink at webui.ipfs.tech'
     } else { // find out safelisted path behind <api-port>/webui
       cid = new URL((await fetch(`${state.apiURLString}webui`)).url).pathname
       name = `stable webui hardcoded at ${state.apiURLString}webui`
