@@ -41,7 +41,10 @@ export async function destroyIpfsClient (browser) {
   log('destroy ipfs client')
   if (!client) return
   try {
-    await client.destroy(browser)
+    // Only destroy if client has a destroy method (not SW Gateway)
+    if (client.destroy) {
+      await client.destroy(browser)
+    }
     await _reloadIpfsClientDependents(browser) // sync (API stopped working)
   } finally {
     client = null

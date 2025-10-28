@@ -3,6 +3,7 @@
 import isFQDN from 'is-fqdn'
 import { isIPv4, isIPv6 } from 'is-ip'
 import { POSSIBLE_NODE_TYPES } from './state.js'
+export const SERVICE_WORKER_GATEWAY_NODE = 'service_worker_gateway'
 
 /**
  * @type {Readonly<import('../types/companion.js').CompanionOptions>}
@@ -35,7 +36,9 @@ export const optionDefaults = Object.freeze({
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
   useLatestWebUI: false,
   dismissedUpdate: null,
-  openViaWebUI: true
+  openViaWebUI: true,
+  serviceWorkerGatewayUrl: 'https://inbrowser.link',
+  serviceWorkerGatewayFallbackUrl: 'https://inbrowser.dev'
 })
 
 function buildDefaultIpfsNodeConfig () {
@@ -98,6 +101,18 @@ export function guiURLString (url, opts) {
   return safeURL(url, opts).toString().replace(/\/$/, '')
 }
 
+export function normalizeGatewayURL (value) {
+  try {
+    const u = new URL(value)
+    if (u.protocol !== 'https:' && (u.hostname.endsWith('inbrowser.link') || u.hostname.endsWith('inbrowser.dev'))) {
+      u.protocol = 'https:'
+    }
+    return guiURLString(u)
+  } catch {
+    // fall back to prod default if invalid
+    return optionDefaults.serviceWorkerGatewayUrl
+  }
+}
 // ensure value is a valid URL.hostname (FQDN || ipv4 || ipv6 WITH brackets)
 export function isHostname (x) {
   if (isFQDN(x) || isIPv4(x)) {
@@ -226,6 +241,28 @@ export async function migrateOptions (storage, debug) {
       log('migrating ipfsNodeType to "external"')
       await storage.set({ ipfsNodeType: 'external' })
     }
+  }
+
+    // v3.x: normalize/introduce Service Worker Gateway options
+  {
+    // Map any historical synonyms to the canonical value
+    const { ipfsNodeType } = await storage.get(['ipfsNodeType'])
+    if (ipfsNodeType === 'service-worker-gateway' || ipfsNodeType === 'sw-gateway') {
+      await storage.set({ ipfsNodeType: SERVICE_WORKER_GATEWAY_NODE })
+    }
+
+    // Ensureing SW gateway URLs exist and are normalized (drop trailing slash, enforce https on known hosts)
+    const { serviceWorkerGatewayUrl, serviceWorkerGatewayFallbackUrl } =
+      await storage.get(['serviceWorkerGatewayUrl', 'serviceWorkerGatewayFallbackUrl'])
+
+    const desiredPrimary = serviceWorkerGatewayUrl || optionDefaults.serviceWorkerGatewayUrl
+    const desiredFallback = serviceWorkerGatewayFallbackUrl || optionDefaults.serviceWorkerGatewayFallbackUrl
+
+    const normalized = {
+      serviceWorkerGatewayUrl: normalizeGatewayURL(desiredPrimary),
+      serviceWorkerGatewayFallbackUrl: normalizeGatewayURL(desiredFallback)
+    }
+    await storage.set(normalized)
   }
 
   // TODO: refactor this, so migrations only run once (like https://github.com/sindresorhus/electron-store#migrations)
