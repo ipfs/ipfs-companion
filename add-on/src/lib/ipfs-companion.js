@@ -23,6 +23,7 @@ import { guiURLString, migrateOptions, optionDefaults, safeURL, storeMissingOpti
 import { cleanupRules, getExtraInfoSpec } from './redirect-handler/blockOrObserve.js'
 import createRuntimeChecks from './runtime-checks.js'
 import { initState, offlinePeerCount } from './state.js'
+import { redirectToSwGateway, isFeatureDisabledForSwGateway } from './ipfs-request-sw-gateway.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
@@ -169,6 +170,12 @@ export default async function init (inQuickImport = false) {
   }
 
   function onBeforeRequest (request) {
+    if (state && (state.isServiceWorkerGateway || state.ipfsNodeType === 'service_worker_gateway')) {
+      const swRedirect = redirectToSwGateway(state, request)
+      if (swRedirect) {
+        return swRedirect
+      } 
+    }
     return modifyRequest.onBeforeRequest(request)
   }
 
@@ -648,6 +655,14 @@ export default async function init (inQuickImport = false) {
         case 'ipfsNodeType':
           shouldRestartIpfsClient = true
           state[key] = change.newValue
+          state.isServiceWorkerGateway = (change.newValue === 'service_worker_gateway')
+          break
+        case 'serviceWorkerGatewayUrl':
+          state[key] = change.newValue
+          if (change.newValue) {
+            state.swGwURL = safeURL(change.newValue)
+            state.swGwURLString = state.swGwURL?.toString()
+          }
           break
         case 'ipfsNodeConfig':
           shouldRestartIpfsClient = true

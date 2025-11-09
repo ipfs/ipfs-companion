@@ -25,6 +25,11 @@ export default function ipfsNodeForm ({ ipfsNodeType, onOptionChange }) {
               selected=${ipfsNodeType === 'external'}>
               ${browser.i18n.getMessage('option_ipfsNodeType_external')}
             </option>
+            <option
+              value='service_worker_gateway'
+              selected=${ipfsNodeType === 'service_worker_gateway'}>
+              Service Worker Gateway (Trustless)
+            </option>
           </select>
         </div>
       </fieldset>

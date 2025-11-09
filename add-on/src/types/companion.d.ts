@@ -1,7 +1,6 @@
 
 export interface CompanionOptions {
   active: boolean
-  ipfsNodeType: string
   ipfsNodeConfig: string
   publicGatewayUrl: string
   publicSubdomainGatewayUrl: string
@@ -27,7 +26,10 @@ export interface CompanionOptions {
   importDir: string
   useLatestWebUI: boolean
   dismissedUpdate: null | string
-  openViaWebUI: boolean
+  openViaWebUI: boolean,
+  ipfsNodeType: 'external' | 'service_worker_gateway'
+  serviceWorkerGatewayUrl: string
+  serviceWorkerGatewayFallbackUrl: string
 }
 
 export interface CompanionState extends Omit<CompanionOptions, 'publicGatewayUrl' | 'publicSubdomainGatewayUrl' | 'useCustomGateway' | 'ipfsApiUrl' | 'customGatewayUrl'> {
@@ -43,7 +45,13 @@ export interface CompanionState extends Omit<CompanionOptions, 'publicGatewayUrl
   gwURLString: string
   activeIntegrations: (url: string) => boolean
   localGwAvailable: boolean
-  webuiRootUrl: string
+  webuiRootUrl: string | null
+  nodeActive: boolean 
+  isServiceWorkerGateway?: boolean
+  swGwURL?: URL
+  swGwURLString?: string
+  swGwFallbackURL?: URL
+  swGwFallbackURLString?: string
 }
 
 interface SwitchToggleArguments {
