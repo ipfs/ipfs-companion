@@ -103,6 +103,7 @@
     "bufferutil": "4.0.9",
     "c8": "7.12.0",
     "chai": "4.3.7",
+    "copy-webpack-plugin": "^13.0.1",
     "cross-env": "7.0.3",
     "css-loader": "6.7.2",
     "download-cli": "1.1.1",
