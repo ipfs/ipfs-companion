@@ -5,6 +5,7 @@ import TerserPlugin from 'terser-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import { fileURLToPath } from 'url'
 import { createRequire } from 'module'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 const require = createRequire(import.meta.url)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -57,6 +58,11 @@ const commonConfig = {
         IPFS_MONITORING: false,
         DEBUG: false // controls verbosity of Hapi HTTP server in js-ipfs
       }
+    }),
+     new CopyWebpackPlugin({
+      patterns: [
+        { from: 'add-on/src/landing-pages/protocol-error', to: '../landing-pages' }
+      ]
     })
   ],
   module: {
