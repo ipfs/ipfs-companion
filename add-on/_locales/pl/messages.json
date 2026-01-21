@@ -40,7 +40,7 @@
     "description": "A label in Node status section of Browser Action pop-up (panel_kuboRpcBackendVersionTitle)"
   },
   "panel_statusSwarmPeers": {
-    "message": "połączenia",
+    "message": "Węzły",
     "description": "A label in Node status section of Browser Action pop-up (panel_statusSwarmPeers)"
   },
   "panel_statusSwarmPeersTitle": {
@@ -80,7 +80,7 @@
     "description": "A menu item tooltip in Browser Action pop-up (panel_activeTabSiteIntegrationsToggleTooltip)"
   },
   "panel_importCurrentIpfsAddress": {
-    "message": "Zaimportuj do plików w moim więźle",
+    "message": "Zaimportuj do plików w moim węźle",
     "description": "A menu item in Browser Action pop-up (panel_importCurrentIpfsAddress)"
   },
   "panel_importCurrentIpfsAddressTooltip": {
@@ -364,7 +364,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
   },
   "option_ipfsApiUrl_description": {
-    "message": "",
+    "message": "Ustaw adres URL swojego Kubo RPC. (Wskazówka: pod tym adresem znajduje się https://docs.ipfs.tech/reference/kubo/rpc/.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
   "option_ipfsApiPollMs_title": {
@@ -372,7 +372,7 @@
     "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
   },
   "option_ipfsApiPollMs_description": {
-    "message": "Określ jak często (w milisekundach) ma być odświeżany licznik peerów.",
+    "message": "Określ jak często (w milisekundach) ma być odświeżany licznik węzłów.",
     "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
   },
   "option_automaticMode_title": {
@@ -380,11 +380,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "",
+    "message": "Automatycznie włącza przekierowanie do lokalnej bramy, gdy Kubo RPC jest dostępne, i wyłącza je, gdy jest niedostępne.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "",
+    "message": "Uwaga: wyłączenie tej funkcji spowoduje statyczne przekierowania niezależne od dostępności Kubo RPC i może powodować błędy, gdy węzeł jest offline.",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -524,7 +524,7 @@
     "description": "An option title for tweaking log level (option_logNamespaces_title)"
   },
   "option_logNamespaces_description": {
-    "message": "",
+    "message": "Przestrzenie nazw z tej listy (oddzielone przecinkami) będą zapisywane w konsoli przeglądarki.",
     "description": "An option description for the log level (option_logNamespaces_description)"
   },
   "option_importDir_title": {
@@ -608,7 +608,7 @@
     "description": "Extension name after the IPFS logo (page_landingWelcome_logo_title)"
   },
   "page_landingWelcome_welcome_peers": {
-    "message": "Twoje węzły są połączone z <0>$1</0> peers",
+    "message": "Twój węzeł jest połączony z <0>$1</0> innymi węzłami",
     "description": "Ready message copy (page_landingWelcome_welcome_peers)"
   },
   "page_landingWelcome_welcome_statusButton_text": {
@@ -632,7 +632,7 @@
     "description": "Install steps title (page_landingWelcome_installSteps_brave_title)"
   },
   "page_landingWelcome_installSteps_brave_install": {
-    "message": "",
+    "message": "Możesz uruchomić IPFS bezpośrednio w przeglądarce, bez IPFS Desktop ani wiersza poleceń. Otwórz <0>Preferencje Asystenta</0> i ustaw typ węzła IPFS na \"Dostarczane przez Brave\".",
     "description": "Install steps copy (page_landingWelcome_installSteps_brave_install)"
   },
   "page_landingWelcome_installSteps_desktop_title": {
@@ -664,11 +664,11 @@
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_concepts)"
   },
   "page_landingWelcome_resources_new_ipfs_docs": {
-    "message": "",
+    "message": "Odwiedź <0>stronę dokumentacji</0>, aby dowiedzieć się więcej",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_docs)"
   },
   "page_landingWelcome_resources_new_ipfs_specs": {
-    "message": "",
+    "message": "Poznaj <0>specyfikacje protokołu</0> dla szczegółów technicznych",
     "description": "Resources copy (page_landingWelcome_resources_new_ipfs_specs)"
   },
   "page_landingWelcome_resources_title_build": {
@@ -688,7 +688,7 @@
     "description": "Resources title (page_landingWelcome_resources_title_get_help)"
   },
   "page_landingWelcome_resources_get_help": {
-    "message": "",
+    "message": "Uzyskaj pomoc od społeczności na <0>forum wsparcia</0>",
     "description": "Resources copy (page_landingWelcome_resources_get_help)"
   },
   "page_landingWelcome_resources_title_community": {
@@ -696,7 +696,7 @@
     "description": "Community title (page_landingWelcome_resources_title_community)"
   },
   "page_landingWelcome_resources_community_forums": {
-    "message": "",
+    "message": "Dyskutuj na <0>forach społeczności</0>",
     "description": "Community copy (page_landingWelcome_resources_community_forums)"
   },
   "page_landingWelcome_resources_community_contribute": {
@@ -752,7 +752,7 @@
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   },
   "request_permissions_page_title": {
-    "message": "Ustaw permisje dla hosta | IPFS Companion",
+    "message": "Ustaw uprawnienia dla hosta | IPFS Companion",
     "description": "Title of the recovery page (recovery_page_title)"
   },
   "request_permissions_page_sub_header": {
@@ -760,19 +760,19 @@
     "description": "Sub-Header on the recovery screen (recovery_page_sub_header)"
   },
   "request_permissions_page_message_p1": {
-    "message": "IPFS Companion potrzebuje permisji aby zidentyfikować zasoby IPFS na internecie.",
+    "message": "IPFS Companion potrzebuje uprawnień, aby zidentyfikować zasoby IPFS w Internecie.",
     "description": "Message Para-1 on the recovery screen (recovery_page_message_p1)"
   },
   "request_permissions_page_message_p2": {
-    "message": "IPFS Companion potrzebuje permisji hosta aby uzyskać dostęp do wszystkich stron internetowych. Może dzięki temu badać wszystkie prośby internetowe, identyfikować te dla merytorycznych zasobów IPFS i wczytać je używając twojego lokalnego IPFS node. Kliknij przycisk poniżej aby nadać te permisje.",
+    "message": "IPFS Companion potrzebuje uprawnień hosta, aby uzyskać dostęp do wszystkich stron internetowych. Dzięki temu może monitorować wszystkie żądania sieciowe, identyfikować zasoby IPFS i wczytywać je za pomocą Twojego lokalnego węzła IPFS. Kliknij przycisk poniżej, aby nadać te uprawnienia.",
     "description": "Message Para-2 on the recovery screen (recovery_page_message_p2)"
   },
   "request_permissions_page_button": {
-    "message": "Nadać permisje",
+    "message": "Nadaj uprawnienia",
     "description": "Button on the recovery screen (recovery_page_button)"
   },
   "request_permissions_page_learn_more": {
-    "message": "Dowiedz się więcej na temat permisji hosta",
+    "message": "Dowiedz się więcej o uprawnieniach hosta",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   }
 }
