@@ -63,7 +63,7 @@ export function initState (options, overrides) {
   Object.defineProperty(state, 'webuiRootUrl', {
     get: function () {
       // Did user opt-in for rolling release published on DNSLink?
-      if (state.useLatestWebUI) return `${state.gwURLString}ipns/webui.ipfs.io/`
+      if (state.useLatestWebUI) return `${state.gwURLString}ipns/webui.ipfs.tech/`
       return `${state.apiURLString}webui`
     }
   })
