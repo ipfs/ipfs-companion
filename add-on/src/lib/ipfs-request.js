@@ -33,7 +33,7 @@ const onHeadersReceivedRedirect = new Set()
 let addRuleToDynamicRuleSet = null
 
 // Request modifier provides event listeners for the various stages of making an HTTP request
-// API Details: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest
+// API Details: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest
 export function createRequestModifier (getState, dnslinkResolver, ipfsPathValidator, runtime) {
   const browser = runtime.browser
   const runtimeRoot = browser.runtime.getURL('/')

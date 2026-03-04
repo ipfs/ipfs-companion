@@ -8,7 +8,7 @@ const log = debug('ipfs-companion:context-menus')
 log.error = debug('ipfs-companion:context-menus:error')
 
 // mapping between context name and field with data for it
-// https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/menus/ContextType
+// https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/menus/ContextType
 const contextSources = {
   selection: 'selectionText',
   image: 'srcUrl',

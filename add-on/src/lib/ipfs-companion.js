@@ -186,7 +186,7 @@ export default async function init (inQuickImport = false) {
 
   // RUNTIME MESSAGES (one-off messaging)
   // ===================================================================
-  // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/sendMessage
+  // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage
 
   async function onRuntimeMessage (request, sender) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
@@ -200,7 +200,7 @@ export default async function init (inQuickImport = false) {
 
   // PORTS (connection-based messaging)
   // ===================================================================
-  // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/connect
+  // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/connect
   // Make a connection between different contexts inside the add-on,
   // e.g. signalling between browser action popup and background page that works
   // in everywhere, even in private contexts (https://github.com/ipfs/ipfs-companion/issues/243)
