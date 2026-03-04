@@ -235,7 +235,7 @@ npm run compose:e2e:down
   ```
 
 - [Using localization in IPFS Companion](./LOCALIZATION-NOTES.md) (running browsers with specific locale, etc)
-- [Testing persistent and restart features (Mozilla)](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
+- [Testing persistent and restart features (Mozilla)](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Testing_persistent_and_restart_features)
 
 ## Legacy Firefox (< 53) and XUL-compatible browsers
 
@@ -301,4 +301,4 @@ The fastest way to connect is to open `chrome://devtools/content/framework/conne
 
 ### Further resources
 
-- [MDN: Developing extensions for Firefox for Android](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Developing_WebExtensions_for_Firefox_for_Android)
+- [MDN: Developing extensions for Firefox for Android](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Developing_WebExtensions_for_Firefox_for_Android)
