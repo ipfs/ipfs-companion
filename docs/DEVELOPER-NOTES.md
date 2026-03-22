@@ -5,7 +5,7 @@
 - [Developer notes for IPFS Companion](#developer-notes-for-ipfs-companion)
     - [Table of contents](#table-of-contents)
   - [Build from source](#build-from-source)
-    - [Clone and install dependencies](#clone-and-install-dependencies)
+    - [Clone and build](#clone-and-build)
     - [Build and run in Firefox](#build-and-run-in-firefox)
     - [Build and run in Chromium](#build-and-run-in-chromium)
     - [Run build on file changes](#run-build-on-file-changes)
@@ -24,7 +24,7 @@
 
 If you're looking to develop on IPFS Companion, you should build the project from source. You will need [NodeJS](https://nodejs.org/) and [Firefox](https://www.mozilla.org/en-US/firefox/developer/). Make sure `npm` and `firefox` are in your `PATH`.
 
-### Clone and install dependencies
+### Clone and build
 
 First, clone the `ipfs-shipyard/ipfs-companion` [repository](https://github.com/ipfs-shipyard/ipfs-companion):
 
@@ -37,6 +37,8 @@ Then, run this all-in-one dev build, which includes installing dependencies into
 ```bash
 npm run dev-build
 ```
+
+> **Note:** Do not run `npm install` or `npm ci` separately. The `dev-build` script handles dependency installation automatically and ensures correct build order.
 
 ### Build and run in Firefox
 
@@ -95,7 +97,7 @@ npm run watch     # watch for new changes
 ## Reproducible build in Docker
 
 Want to ensure prebuilt bundle does not include any additional code?
-Don't want to install JS dependencies such as NodeJS and yarn?
+Don't want to install JS dependencies such as NodeJS?
 
 Do an isolated build inside of Docker!
 
@@ -124,7 +126,7 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 - `npm run bundle:chromium`: Overwrite manifest and package a generic, Chromium-compatible version
 - `npm run bundle:firefox`: Overwrite manifest and package a Firefox-compatible version
 - `npm run build:rename-artifacts`: Rename artifacts to include runtimes in filenames
-- `npm run ci`: Run tests and build (with frozen `yarn.lock`)
+- `npm run ci`: Run tests and build (with frozen `package-lock.json`)
 - `npm test`: Run the entire test suite
 - `npm run lint`: Read-only check for potential syntax problems (run all linters)
 - `npm run fix:lint`: Try to fix simple syntax problems (run `standard` with `--fix`, etc.)
