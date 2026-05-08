@@ -75,6 +75,10 @@
   },
   "private": true,
   "preferGlobal": false,
+  "overrides": {
+    "diff": "9.0.0",
+    "serialize-javascript": "7.0.5"
+  },
   "c8": {
     "all": true,
     "src": [
@@ -105,7 +109,6 @@
     "chai": "6.2.2",
     "cross-env": "10.1.0",
     "css-loader": "7.1.4",
-    "download-cli": "1.1.1",
     "exponential-backoff": "3.1.3",
     "fast-hash-code": "2.1.0",
     "file-loader": "6.2.0",
@@ -126,14 +129,12 @@
     "path": "0.12.7",
     "process": "0.11.10",
     "raw-loader": "4.0.2",
-    "request-progress": "3.0.0",
     "selenium-webdriver": "4.43.0",
     "shx": "0.4.0",
     "sinon": "22.0.0",
     "sinon-chrome": "3.0.1",
     "standard": "17.1.2",
     "style-loader": "4.0.0",
-    "tar": "6.1.12",
     "terser": "5.47.1",
     "terser-webpack-plugin": "5.6.0",
     "transform-loader": "0.2.4",
