@@ -117,7 +117,7 @@
     "ignore-loader": "0.1.2",
     "ignore-styles": "5.0.1",
     "json": "11.0.0",
-    "kubo-rpc-client": "5.2.0",
+    "kubo-rpc-client": "6.1.0",
     "mem-storage-area": "1.0.3",
     "mini-css-extract-plugin": "2.10.2",
     "mocha": "11.7.5",
