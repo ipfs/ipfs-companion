@@ -46,7 +46,7 @@ const commonConfig = {
       filename: '[name].css'
     }),
     new webpack.ProvidePlugin({
-      process: 'process/browser',
+      process: 'process/browser.js',
       Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
     }),
     new webpack.DefinePlugin({
