@@ -129,7 +129,7 @@
     "request-progress": "3.0.0",
     "selenium-webdriver": "4.43.0",
     "shx": "0.4.0",
-    "sinon": "13.0.1",
+    "sinon": "22.0.0",
     "sinon-chrome": "3.0.1",
     "standard": "17.1.2",
     "style-loader": "4.0.0",

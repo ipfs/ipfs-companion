@@ -195,17 +195,21 @@ describe('lib/redirect-handler/blockOrObserve', () => {
     })
 
     it('Should wait for the tab to exist before updating tab from originUrl to redirectUrl for the first time', async () => {
-      const clock = sinon.useFakeTimers();
-      browserMock.tabs.query.onCall(0).resolves([])
-      browserMock.tabs.query.onCall(1).resolves([{ id: 40 }])
-      await addRuleToDynamicRuleSet({
-        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
-        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
-      })
-      await clock.tickAsync(100 * MAX_RETRIES_TO_UPDATE_TAB)
-      expect(browserMock.tabs.query.callCount).to.be.equal(2)
-      expect(browserMock.tabs.update.called).to.be.true
-      expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])
+      const clock = sinon.useFakeTimers()
+      try {
+        browserMock.tabs.query.onCall(0).resolves([])
+        browserMock.tabs.query.onCall(1).resolves([{ id: 40 }])
+        await addRuleToDynamicRuleSet({
+          originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+          redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+        })
+        await clock.tickAsync(100 * MAX_RETRIES_TO_UPDATE_TAB)
+        expect(browserMock.tabs.query.callCount).to.be.equal(2)
+        expect(browserMock.tabs.update.called).to.be.true
+        expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])
+      } finally {
+        clock.restore()
+      }
     })
 
     it('Should add redirect rules for local gateway', async () => {

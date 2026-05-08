@@ -1,6 +1,6 @@
 import AbortController from 'abort-controller'
 import { afterEach, beforeEach } from 'mocha'
-import sinon, { useFakeTimers } from 'sinon'
+import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
 import isManifestV3 from '../helpers/is-mv3-testing-enabled.js'
@@ -23,11 +23,6 @@ Object.defineProperty(global, 'navigator', {
 
 global.URL = URL
 browser.tabs = { ...browser.tabs, getCurrent: sinon.stub().resolves({ id: 20 }) }
-
-// need to force Date to return a particular date
-global.clock = useFakeTimers({
-  now: new Date(2017, 10, 5, 12, 1, 1)
-})
 
 if (isManifestV3) {
   const sinonSandbox = sinon.createSandbox()
