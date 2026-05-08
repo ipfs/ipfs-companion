@@ -167,7 +167,7 @@
     "merge-options": "3.0.4",
     "os-browserify": "0.3.0",
     "p-memoize": "8.0.0",
-    "p-queue": "7.3.0",
+    "p-queue": "9.2.0",
     "path-browserify": "1.0.1",
     "piggybacker": "2.0.0",
     "postmsg-rpc": "2.4.0",
