@@ -19,6 +19,14 @@ export function ipfsContentPath (urlOrPath, opts) {
     urlOrPath = urlOrPath.replace(/^(ip[n|f]s):\/\//, '/$1/')
   }
 
+  // Un-inline DNSLink labels in subdomain URLs so is-ipfs recognises them.
+  // is-ipfs requires the id portion to look like an FQDN-with-TLD; an
+  // inlined label like `en-wikipedia--on--ipfs-org` has no dot and fails
+  // that check. Rewriting it to `en.wikipedia-on-ipfs.org` up front lets
+  // the rest of this function (and downstream callers) treat both forms
+  // identically. Context: https://github.com/ipfs/in-web-browsers/issues/169
+  urlOrPath = unfoldInlinedDnslinkSubdomain(urlOrPath)
+
   // Fail fast if no content path can be extracted from input
   if (!isIPFS.urlOrPath(urlOrPath)) return null
 
@@ -75,6 +83,16 @@ function dnsLabelToFqdn (label) {
     label = label.replace(/--/g, '@').replace(/-/g, '.').replace(/@/g, '-')
   }
   return label
+}
+
+function unfoldInlinedDnslinkSubdomain (urlOrPath) {
+  if (typeof urlOrPath !== 'string') return urlOrPath
+  const match = urlOrPath.match(isIPFS.subdomainGatewayPattern)
+  if (!match) return urlOrPath
+  const id = match[1]
+  const fqdn = dnsLabelToFqdn(id)
+  if (fqdn === id) return urlOrPath
+  return urlOrPath.replace(`${id}.${match[2]}.`, `${fqdn}.${match[2]}.`)
 }
 
 export function pathAtHttpGateway (path, gatewayUrl) {
