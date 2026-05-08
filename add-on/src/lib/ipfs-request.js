@@ -4,7 +4,7 @@
 import debug from 'debug'
 
 import isFQDN from 'is-fqdn'
-import isIPFS from 'is-ipfs'
+import * as isIPFS from 'is-ipfs'
 import { LRUCache } from 'lru-cache'
 import { recoveryPagePath } from './constants.js'
 import { dropSlash, pathAtHttpGateway, sameGateway } from './ipfs-path.js'

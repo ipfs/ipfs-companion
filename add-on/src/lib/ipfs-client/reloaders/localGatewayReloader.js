@@ -1,5 +1,5 @@
 import ReloaderBase from './reloaderBase.js'
-import isIPFS from 'is-ipfs'
+import * as isIPFS from 'is-ipfs'
 
 export default class LocalGatewayReloader extends ReloaderBase {
   /**

@@ -4,7 +4,7 @@
 import Pqueue from 'p-queue'
 
 import debug from 'debug'
-import IsIpfs from 'is-ipfs'
+import * as IsIpfs from 'is-ipfs'
 import { LRUCache } from 'lru-cache'
 import { offlinePeerCount } from './state.js'
 import { ipfsContentPath, sameGateway, pathAtHttpGateway } from './ipfs-path.js'

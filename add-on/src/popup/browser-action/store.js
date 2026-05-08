@@ -1,7 +1,7 @@
 'use strict'
 /* eslint-env browser, webextensions */
 
-import isIPFS from 'is-ipfs'
+import * as isIPFS from 'is-ipfs'
 import browser from 'webextension-polyfill'
 import { optionsPage, welcomePage } from '../../lib/constants.js'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway } from '../../lib/context-menus.js'

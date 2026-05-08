@@ -161,7 +161,7 @@
     "ipfs-css": "1.4.0",
     "is-fqdn": "2.0.1",
     "is-ip": "5.0.1",
-    "is-ipfs": "2.0.0",
+    "is-ipfs": "8.0.4",
     "it-all": "3.0.11",
     "lru-cache": "11.3.6",
     "merge-options": "3.0.4",
