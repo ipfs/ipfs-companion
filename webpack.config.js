@@ -11,6 +11,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const devBuild = process.env.NODE_ENV === 'development'
 
+// SWC handles both the JS and TS rules; targets bound how far syntax is down-leveled
+const swcLoader = (syntax) => ({
+  loader: 'swc-loader',
+  options: {
+    jsc: { parser: { syntax } },
+    env: { targets: { chrome: '72', firefox: '68' } }
+  }
+})
+
 /**
  * common configuration shared by all targets
  * @type {import('webpack').Configuration}
@@ -34,7 +43,8 @@ const commonConfig = {
     minimize: true,
     minimizer: [
       new TerserPlugin({
-        parallel: true
+        parallel: true,
+        minify: TerserPlugin.swcMinify
       })
     ]
   },
@@ -80,19 +90,12 @@ const commonConfig = {
       {
         exclude: /node_modules/,
         test: /\.js$/,
-        use: ['babel-loader']
+        use: [swcLoader('ecmascript')]
       },
       {
         exclude: /node_modules/,
-        test: /\.ts?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true
-            }
-          }
-        ]
+        test: /\.ts$/,
+        use: [swcLoader('typescript')]
       }
     ]
   },
