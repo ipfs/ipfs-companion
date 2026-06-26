@@ -9,12 +9,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const devBuild = process.env.NODE_ENV === 'development'
 
-// SWC handles both the JS and TS rules; targets bound how far syntax is down-leveled
+// SWC handles both the JS and TS rules; targets match the manifests' minimum
+// supported browsers (minimum_chrome_version and gecko strict_min_version)
 const swcLoader = (syntax) => ({
   loader: 'builtin:swc-loader',
   options: {
     jsc: { parser: { syntax } },
-    env: { targets: { chrome: '72', firefox: '68' } }
+    env: { targets: { chrome: '111', firefox: '111' } }
   }
 })
 
