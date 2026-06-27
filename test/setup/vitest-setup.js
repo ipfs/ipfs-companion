@@ -1,8 +1,13 @@
-import { afterEach, beforeEach } from 'mocha'
+import { afterEach, beforeAll, afterAll, beforeEach } from 'vitest'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
 import isManifestV3 from '../helpers/is-mv3-testing-enabled.js'
+
+// Provide mocha's before/after as globals for suites that still use them
+// (vitest's globals are beforeAll/afterAll).
+global.before = beforeAll
+global.after = afterAll
 
 browser.runtime.id = 'testid'
 global.browser = browser

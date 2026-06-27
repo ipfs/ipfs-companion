@@ -1,12 +1,11 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import debug from 'debug'
 
 import all from 'it-all'
 import { LRUCache } from 'lru-cache'
 import pMemoize from 'p-memoize'
-import toMultiaddr from 'uri-to-multiaddr'
+import toMultiaddr from './uri-to-multiaddr.js'
 import browser from 'webextension-polyfill'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway, createContextMenus, findValueForContext } from './context-menus.js'
 import createCopier from './copier.js'

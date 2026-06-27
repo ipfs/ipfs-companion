@@ -1,6 +1,6 @@
 import { ContextMenus } from '../../../../add-on/src/lib/context-menus/ContextMenus'
-import {expect} from 'chai'
-import { before, describe, it } from 'mocha'
+import { expect } from 'chai'
+import { beforeAll as before, describe, it } from 'vitest'
 import browserMock from 'sinon-chrome'
 import sinon from 'sinon'
 

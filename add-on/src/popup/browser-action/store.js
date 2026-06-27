@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import * as isIPFS from 'is-ipfs'
 import browser from 'webextension-polyfill'

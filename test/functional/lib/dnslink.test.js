@@ -1,5 +1,5 @@
 'use strict'
-import { describe, it, before, beforeEach, after } from 'mocha'
+import { describe, it, beforeAll as before, beforeEach, afterAll as after } from 'vitest'
 import { expect } from 'chai'
 import { URL } from 'url'
 import sinon from 'sinon'

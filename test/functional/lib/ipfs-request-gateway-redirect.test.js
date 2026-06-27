@@ -1,6 +1,6 @@
 'use strict'
 import { expect } from 'chai'
-import { afterEach, beforeEach, describe, it } from 'mocha'
+import { afterEach, beforeEach, describe, it } from 'vitest'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { URL } from 'url'

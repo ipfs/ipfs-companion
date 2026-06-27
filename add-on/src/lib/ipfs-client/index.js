@@ -1,7 +1,5 @@
 'use strict'
 
-/* eslint-env browser, webextensions */
-
 import debug from 'debug'
 
 import { precache } from '../precache.js'

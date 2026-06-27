@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser */
 
 import pMemoize from 'p-memoize'
 import * as isIPFS from 'is-ipfs'

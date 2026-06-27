@@ -1,6 +1,6 @@
 'use strict'
 import { stub } from 'sinon'
-import { describe, it, beforeEach, afterEach } from 'mocha'
+import { describe, it, beforeEach, afterEach } from 'vitest'
 import { expect } from 'chai'
 import { URL } from 'url'
 import { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname } from '../../../add-on/src/lib/ipfs-path.js'

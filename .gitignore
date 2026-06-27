@@ -18,3 +18,7 @@
 
 .DS_Store
 .vscode
+
+# playwright e2e artifacts
+test-results/
+playwright-report/

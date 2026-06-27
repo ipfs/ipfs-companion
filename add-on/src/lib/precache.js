@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import debug from 'debug'
 const log = debug('ipfs-companion:precache')

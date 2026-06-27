@@ -1,6 +1,6 @@
 'use strict'
 import { expect } from 'chai'
-import { after, before, describe, it, afterEach } from 'mocha'
+import { afterAll as after, beforeAll as before, describe, it, afterEach } from 'vitest'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { createIpfsImportHandler, formatImportDirectory } from '../../../add-on/src/lib/ipfs-import.js'
@@ -143,16 +143,16 @@ describe('ipfs-import.js', function () {
       })
     })
 
-    describe('copyShareLink', function () {
-      // TODO: implement
+    describe('copyShareLink', () => {
+      it.todo('implement')
     })
 
-    describe('preloadFilesAtPublicGateway', function () {
-      // TODO: implement
+    describe('preloadFilesAtPublicGateway', () => {
+      it.todo('implement')
     })
 
-    describe('filesCpImportCurrentTab', function () {
-      // TODO: implement
+    describe('filesCpImportCurrentTab', () => {
+      it.todo('implement')
     })
   })
 })

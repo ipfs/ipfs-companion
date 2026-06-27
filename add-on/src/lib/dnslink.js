@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser */
 
 import Pqueue from 'p-queue'
 

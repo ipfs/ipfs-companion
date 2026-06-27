@@ -1,5 +1,5 @@
 'use strict'
-import { describe, it, before, beforeEach } from 'mocha'
+import { describe, it, beforeAll as before, beforeEach } from 'vitest'
 import browser from 'sinon-chrome'
 import sinon from 'sinon'
 

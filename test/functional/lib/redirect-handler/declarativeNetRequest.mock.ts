@@ -7,19 +7,19 @@ import browser from 'webextension-polyfill'
  * This still needs to be instrumented in sinon, to be able to assert on calls.
  */
 class DeclarativeNetRequestMock implements browser.DeclarativeNetRequest.Static {
-  private dynamicRules: Map<number, browser.DeclarativeNetRequest.Rule>;
-  private sessionRules: Map<number, browser.DeclarativeNetRequest.Rule>;
+  private dynamicRules: Map<number, browser.DeclarativeNetRequest.Rule>
+  private sessionRules: Map<number, browser.DeclarativeNetRequest.Rule>
 
-  constructor() {
+  constructor () {
     this.dynamicRules = new Map()
     this.MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES = 5000
   }
 
-  async getDynamicRules(): Promise<browser.DeclarativeNetRequest.Rule[]> {
+  async getDynamicRules (): Promise<browser.DeclarativeNetRequest.Rule[]> {
     return [...this.dynamicRules.values()]
   }
 
-  async updateDynamicRules({
+  async updateDynamicRules ({
     addRules,
     removeRuleIds
   }: browser.DeclarativeNetRequest.UpdateDynamicRulesOptionsType): Promise<void> {
@@ -29,7 +29,7 @@ class DeclarativeNetRequestMock implements browser.DeclarativeNetRequest.Static 
     }
   }
 
-  async updateSessionRules({
+  async updateSessionRules ({
     addRules,
     removeRuleIds
   }: browser.DeclarativeNetRequest.UpdateSessionRulesOptionsType): Promise<void> {
@@ -43,11 +43,11 @@ class DeclarativeNetRequestMock implements browser.DeclarativeNetRequest.Static 
     return [...this.sessionRules.values()]
   }
 
-  async getEnabledRulesets(): Promise<browser.DeclarativeNetRequest.MatchedRule["rulesetId"][]> {
+  async getEnabledRulesets (): Promise<browser.DeclarativeNetRequest.MatchedRule['rulesetId'][]> {
     throw new Error('Method not implemented.')
   }
 
-  async getDisabledRulesets (): Promise<browser.DeclarativeNetRequest.MatchedRule["rulesetId"][]> {
+  async getDisabledRulesets (): Promise<browser.DeclarativeNetRequest.MatchedRule['rulesetId'][]> {
     throw new Error('Method not implemented.')
   }
 

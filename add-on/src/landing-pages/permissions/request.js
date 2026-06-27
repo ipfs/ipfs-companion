@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import choo from 'choo'
 import html from 'choo/html/index.js'

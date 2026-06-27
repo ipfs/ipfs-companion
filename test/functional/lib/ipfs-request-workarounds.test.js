@@ -1,6 +1,6 @@
 'use strict'
 import { assert, expect } from 'chai'
-import { after, afterEach, before, beforeEach, describe, it } from 'mocha'
+import { afterAll as after, afterEach, beforeAll as before, beforeEach, describe, it } from 'vitest'
 import browser from 'sinon-chrome'
 import { URL } from 'url' // URL implementation with support for .origin attribute
 import createDNSLinkResolver from '../../../add-on/src/lib/dnslink.js'
