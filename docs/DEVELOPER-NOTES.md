@@ -129,8 +129,9 @@ Each `npm` task can run separately, but most of the time, `dev-build`, `test`, a
 - `npm run ci`: Run tests and build (with frozen `package-lock.json`)
 - `npm test`: Run the entire test suite
 - `npm run lint`: Read-only check for potential syntax problems (run all linters)
-- `npm run fix:lint`: Try to fix simple syntax problems (run `standard` with `--fix`, etc.)
-- `npm run lint:standard`: Run [Standard](http://standardjs.com) linter ([IPFS JavaScript projects default to standard code style](https://github.com/ipfs/community/blob/master/CONTRIBUTING_JS.md))
+- `npm run fix:lint`: Try to fix simple syntax problems (run `eslint --fix`, etc.)
+- `npm run lint:standard`: Run [eslint](https://eslint.org) with [neostandard](https://github.com/neostandard/neostandard) ([standard code style](http://standardjs.com), the [IPFS JavaScript default](https://github.com/ipfs/community/blob/master/CONTRIBUTING_JS.md))
+- `npm run lint:typecheck`: Type-check the TypeScript sources with `tsc`
 - `npm run lint:web-ext`: Run [addons-linter](https://github.com/mozilla/addons-linter) shipped with `web-ext` tool
 
 Release build shortcuts:
