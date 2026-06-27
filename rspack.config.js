@@ -55,8 +55,7 @@ const commonConfig = {
       filename: '[name].css'
     }),
     new rspack.ProvidePlugin({
-      process: 'process/browser.js',
-      Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
+      process: 'process/browser.js'
     }),
     new rspack.DefinePlugin({
       global: 'globalThis', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
@@ -105,18 +104,11 @@ const commonConfig = {
       '.js': ['.js', '.json', '.ts']
     },
     alias: {
-      buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
-      url: 'iso-url',
-      stream: 'readable-stream' // cure general insanity
+      url: 'iso-url'
     },
     fallback: {
-      stream: 'readable-stream',
-      'stream/web': 'readable-stream',
       worker_threads: false,
-      util: require.resolve('util/'),
       fs: false,
-      path: require.resolve('path-browserify'), // legacy in src/lib/ipfs-proxy
-      os: require.resolve('os-browserify/browser'), // some legacy TBD
       process: require.resolve('process/browser.js')
     }
   },

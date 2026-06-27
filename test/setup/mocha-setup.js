@@ -1,4 +1,3 @@
-import AbortController from 'abort-controller'
 import { afterEach, beforeEach } from 'mocha'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
@@ -7,7 +6,6 @@ import isManifestV3 from '../helpers/is-mv3-testing-enabled.js'
 
 browser.runtime.id = 'testid'
 global.browser = browser
-global.AbortController = AbortController
 global.chrome = browser
 
 // Mock navigator.clipboard for tests (required for Node.js 20+)

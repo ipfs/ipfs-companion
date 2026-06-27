@@ -4,8 +4,7 @@
   "package": "./package.json",
   "require": [
     "ignore-styles",
-    "ts-node/register",
-    "tsconfig-paths/register"
+    "ts-node/register"
   ],
   "exit": true,
   "recursive": true,

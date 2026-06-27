@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   firefox:
     image: ${FIREFOX_IMAGE:-selenium/standalone-firefox}:${FIREFOX_VERSION:-latest}
