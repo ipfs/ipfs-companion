@@ -98,7 +98,7 @@ jobs:
     needs: [test]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
-      - uses: google-github-actions/release-please-action@v3.7.3
+      - uses: googleapis/release-please-action@v4
         with:
           changelog-notes-type: github
           release-type: node
