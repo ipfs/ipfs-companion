@@ -103,9 +103,6 @@ const commonConfig = {
     extensionAlias: {
       '.js': ['.js', '.json', '.ts']
     },
-    alias: {
-      url: 'iso-url'
-    },
     fallback: {
       worker_threads: false,
       fs: false,
