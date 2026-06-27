@@ -10,6 +10,8 @@ global.before = beforeAll
 global.after = afterAll
 
 browser.runtime.id = 'testid'
+// MV3 code uses browser.action; sinon-chrome only stubs the MV2 browserAction.
+browser.action = browser.browserAction
 global.browser = browser
 global.chrome = browser
 
