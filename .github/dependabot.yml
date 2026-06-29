@@ -25,7 +25,6 @@ updates:
           - "kubo-rpc-client"
           - "is-ipfs"
           - "ipfs-css"
-          - "uri-to-multiaddr"
       # Bundler, loaders, and packaging tools. Build-output changes are
       # easier to smoke-test as a single PR.
       build:
@@ -37,18 +36,18 @@ updates:
       # Linter and TypeScript move together: the linter gates the TS version.
       lint:
         patterns:
-          - "ts-standard"
+          - "eslint"
+          - "neostandard"
           - "typescript"
       # Test runners and mocks.
       test:
         patterns:
-          - "mocha"
+          - "vitest"
+          - "@vitest/*"
+          - "@playwright/test"
           - "chai"
           - "sinon"
           - "sinon-chrome"
-          - "c8"
-          - "ts-node"
-          - "selenium-webdriver"
       # Type definitions.
       types:
         patterns:
