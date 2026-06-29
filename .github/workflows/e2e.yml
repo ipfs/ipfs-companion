@@ -44,4 +44,5 @@ jobs:
         env:
           IPFS_COMPANION_VERSION: ${{ inputs.ipfs-companion-version }}
       - name: Stop E2E env
+        if: always()
         run: npm run compose:e2e:down

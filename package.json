@@ -66,8 +66,8 @@
     "dev-build": "npm ci && cross-env NODE_ENV='development' npm run build",
     "compose:e2e:prepare": "docker compose --file docker-compose.e2e.yml pull && docker compose --file docker-compose.e2e.yml build",
     "compose:e2e:up": "docker compose --file docker-compose.e2e.yml up --remove-orphans --detach kubo",
-    "compose:e2e:test": "docker compose --file docker-compose.e2e.yml run e2e sh -c 'npx playwright install --with-deps chromium && npm run test:e2e'",
-    "compose:e2e:down": "docker compose --file docker-compose.e2e.yml down"
+    "compose:e2e:test": "docker compose --file docker-compose.e2e.yml run --rm e2e sh -c 'npx playwright install --with-deps chromium && npm run test:e2e'",
+    "compose:e2e:down": "docker compose --file docker-compose.e2e.yml down --volumes --remove-orphans"
   },
   "private": true,
   "preferGlobal": false,
