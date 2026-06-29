@@ -38,7 +38,7 @@
     "watch:js:rspack": "rspack build --watch --mode development --devtool inline-source-map",
     "test": "run-s test:*",
     "test:e2e": "playwright test",
-    "test:functional": "vitest run",
+    "test:functional": "vitest run --coverage",
     "lint": "run-s lint:*",
     "test:functional_MV3": "cross-env TEST_MV3=true vitest run",
     "lint:standard": "eslint .",
@@ -67,9 +67,7 @@
     "compose:e2e:prepare": "docker compose --file docker-compose.e2e.yml pull && docker compose --file docker-compose.e2e.yml build",
     "compose:e2e:up": "docker compose --file docker-compose.e2e.yml up --remove-orphans --detach kubo",
     "compose:e2e:test": "docker compose --file docker-compose.e2e.yml run e2e sh -c 'npx playwright install --with-deps chromium && npm run test:e2e'",
-    "compose:e2e:down": "docker compose --file docker-compose.e2e.yml down",
-    "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "compose:e2e:down": "docker compose --file docker-compose.e2e.yml down"
   },
   "private": true,
   "preferGlobal": false,
