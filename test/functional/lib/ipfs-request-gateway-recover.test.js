@@ -35,7 +35,8 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   })
 
   beforeEach(async function () {
-    state = initState(optionDefaults)
+    // public gateways are empty by default; recovery cases need them configured
+    state = initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' })
     const getState = () => state
     const getIpfs = () => {}
     dnslinkResolver = createDnslinkResolver(getState)
@@ -134,7 +135,8 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
   })
 
   beforeEach(async function () {
-    state = initState(optionDefaults)
+    // public gateways are empty by default; recovery cases need them configured
+    state = initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' })
     const getState = () => state
     const getIpfs = () => {}
     dnslinkResolver = createDnslinkResolver(getState)
@@ -183,6 +185,13 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true }).calledOnce, 'tabs.update should be called with IPFS default public gateway URL')
+    })
+    it('should recover on the local gateway when no public gateway is configured', async function () {
+      // default config has empty public gateways, so recovery uses the local gateway
+      Object.assign(state, { pubGwURL: undefined, pubGwURLString: undefined, pubSubdomainGwURL: undefined, pubSubdomainGwURLString: undefined })
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'http://localhost:8080/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true }).calledOnce, 'tabs.update should recover on the local gateway')
     })
     it('should recover from unreachable HTTP server by reopening DNSLink on the active gateway', async function () {
       state.dnslinkPolicy = 'best-effort'

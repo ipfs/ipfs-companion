@@ -3,7 +3,7 @@ import { stub } from 'sinon'
 import { describe, it, beforeEach, afterEach } from 'vitest'
 import { expect } from 'chai'
 import { URL } from 'url'
-import { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname } from '../../../add-on/src/lib/ipfs-path.js'
+import { ipfsUri, ipfsContentPath, createIpfsPathValidator, sameGateway, safeHostname, toCaseInsensitiveRoot } from '../../../add-on/src/lib/ipfs-path.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
@@ -21,7 +21,11 @@ describe('ipfs-path.js', function () {
 
   beforeEach(function () {
     global.URL = URL
-    state = Object.assign(initState(optionDefaults), { peerCount: 1 })
+    // public gateways are empty by default; these cases exercise configured-gateway behavior
+    state = Object.assign(
+      initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' }),
+      { peerCount: 1 }
+    )
     ipfs = {
       name: {
         resolve (arg) {
@@ -124,11 +128,11 @@ describe('ipfs-path.js', function () {
   describe('ipfsUri', function () {
     it('should detect /ipfs/ path in URL from a public gateway', function () {
       const url = 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
-      expect(ipfsUri(url)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect(ipfsUri(url)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/foo/bar')
     })
     it('should detect /ipfs/ path in detached IPFS path', function () {
       const path = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
-      expect(ipfsUri(path)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar')
+      expect(ipfsUri(path)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/foo/bar')
     })
     it('should detect /ipns/ path in URL from a public gateway', function () {
       const url = 'https://ipfs.io/ipns/libp2p.io/bundles/'
@@ -140,19 +144,19 @@ describe('ipfs-path.js', function () {
     })
     it('should keep search and hash from original URL', function () {
       const url = 'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
-      expect(ipfsUri(url)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      expect(ipfsUri(url)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi?argTest#hashTest')
     })
     it('should preserve search and hash in detached IPFS path', function () {
       const path = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest'
-      expect(ipfsUri(path)).to.equal('ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?argTest#hashTest')
+      expect(ipfsUri(path)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi?argTest#hashTest')
     })
     it('should decode special characters in URL', function () {
       const url = 'https://ipfs.io/ipfs/Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1%20-%20Barrel%20-%20Part%201'
-      expect(ipfsUri(url)).to.equal('ipfs://Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1 - Barrel - Part 1')
+      expect(ipfsUri(url)).to.equal('ipfs://bafybeif6fbogj4sog6hkbvsdktotjbumcmotnwky2z3cmc7imgbr27mc4u/1 - Barrel - Part 1')
     })
     it('should decode special characters in path', function () {
       const path = '/ipfs/Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1%20-%20Barrel%20-%20Part%201'
-      expect(ipfsUri(path)).to.equal('ipfs://Qmb8wsGZNXt5VXZh1pEmYynjB6Euqpq3HYyeAdw2vScTkQ/1 - Barrel - Part 1')
+      expect(ipfsUri(path)).to.equal('ipfs://bafybeif6fbogj4sog6hkbvsdktotjbumcmotnwky2z3cmc7imgbr27mc4u/1 - Barrel - Part 1')
     })
     it('should resolve CID-in-subdomain URL to IPFS path', function () {
       const url = 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest'
@@ -165,6 +169,41 @@ describe('ipfs-path.js', function () {
     it('should return null if there is no valid path for input path', function () {
       const path = '/invalid/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
       expect(ipfsUri(path)).to.equal(null)
+    })
+    it('should normalize a CIDv0 to a base32 CIDv1 ipfs:// URI', function () {
+      expect(ipfsUri('/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR')).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
+    })
+    it('should normalize an RSA ipns peer id to a base36 libp2p-key ipns:// URI', function () {
+      expect(ipfsUri('/ipns/QmbCMUZw6JFeZ7Wp9jkzbye3Fzp2GVcPEjHP52ijStQBEs/x')).to.equal('ipns://k2k4r8o6f2xzvywvsl380r29ur6qm6k4f6qhp5tkmsms4h9rvxe45g50/x')
+    })
+    it('should normalize an Ed25519 ipns peer id to a base36 libp2p-key ipns:// URI', function () {
+      expect(ipfsUri('/ipns/12D3KooWD3eckifWpRn9wQpMG9R9hX3sD158z7EqHWmweQAJU5SA')).to.equal('ipns://k51qzi5uqu5dhdmyb9bd18pypu2wp5lpv2xnskfmrqa4lb5knqryrotb05e7or')
+    })
+    it('should leave a DNSLink hostname ipns:// URI unchanged', function () {
+      expect(ipfsUri('/ipns/docs.ipfs.tech/concepts/')).to.equal('ipns://docs.ipfs.tech/concepts/')
+    })
+  })
+
+  describe('toCaseInsensitiveRoot', function () {
+    it('normalizes an ipfs CIDv0 to base32 CIDv1', function () {
+      expect(toCaseInsensitiveRoot('ipfs', 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR')).to.equal('bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
+    })
+    it('leaves an already base32 ipfs CIDv1 unchanged', function () {
+      const cid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+      expect(toCaseInsensitiveRoot('ipfs', cid)).to.equal(cid)
+    })
+    it('normalizes an ipns peer id to a base36 libp2p-key CIDv1', function () {
+      expect(toCaseInsensitiveRoot('ipns', '12D3KooWD3eckifWpRn9wQpMG9R9hX3sD158z7EqHWmweQAJU5SA')).to.equal('k51qzi5uqu5dhdmyb9bd18pypu2wp5lpv2xnskfmrqa4lb5knqryrotb05e7or')
+    })
+    it('leaves an ipns DNSLink hostname unchanged', function () {
+      expect(toCaseInsensitiveRoot('ipns', 'docs.ipfs.tech')).to.equal('docs.ipfs.tech')
+    })
+    it('returns the root unchanged when it cannot be parsed', function () {
+      expect(toCaseInsensitiveRoot('ipfs', 'not-a-cid')).to.equal('not-a-cid')
+      expect(toCaseInsensitiveRoot('ipns', 'not-a-peer-id')).to.equal('not-a-peer-id')
+    })
+    it('throws on an unsupported namespace', function () {
+      expect(() => toCaseInsensitiveRoot('ipld', 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR')).to.throw(/unsupported namespace/)
     })
   })
 
@@ -205,6 +244,10 @@ describe('ipfs-path.js', function () {
       const url = 'https://localhost:8081/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
       const gw = 'http://localhost:8080'
       expect(sameGateway(url, gw)).to.equal(false)
+    })
+    it('should return false when the gateway is not configured', function () {
+      const url = 'https://localhost:8080/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR/foo/bar'
+      expect(sameGateway(url, undefined)).to.equal(false)
     })
   })
 
@@ -359,6 +402,106 @@ describe('ipfs-path.js', function () {
     it('should resolve to null if input is an invalid URL', async function () {
       const url = 'example.com/foo/bar/?argTest#hashTest'
       expect(await ipfsPathValidator.resolveToPublicUrl(url)).to.equal(null)
+    })
+  })
+
+  describe('resolveToShareableUrl (Copy Shareable Link)', function () {
+    // default config: public gateways empty, so shareable links are native URIs
+    let nativeValidator
+    beforeEach(function () {
+      const nativeState = Object.assign(initState(optionDefaults), { peerCount: 1 })
+      nativeValidator = createIpfsPathValidator(() => nativeState, () => ipfs, dnslinkResolver)
+    })
+    it('copies a native ipfs:// URI for CID-in-subdomain', async function () {
+      const url = 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(await nativeValidator.resolveToShareableUrl(url)).to.equal('ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('copies a native ipfs:// URI for an /ipfs/ path', async function () {
+      const path = '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest'
+      expect(await nativeValidator.resolveToShareableUrl(path)).to.equal('ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('copies a native ipns:// URI for an /ipns/ path', async function () {
+      const path = '/ipns/docs.ipfs.io/?argTest#hashTest'
+      expect(await nativeValidator.resolveToShareableUrl(path)).to.equal('ipns://docs.ipfs.io/?argTest#hashTest')
+    })
+    it('copies a native ipns:// URI for an inlined DNSLink subdomain', async function () {
+      const url = 'https://en-wikipedia--on--ipfs-org.ipns.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(await nativeValidator.resolveToShareableUrl(url)).to.equal('ipns://en.wikipedia-on-ipfs.org/wiki/Mars.html?argTest#hashTest')
+    })
+    // opted into public sharing; overrides set the gateway URLs + Use Subdomains
+    const optedInValidator = (overrides) => {
+      const state = Object.assign(initState({ ...optionDefaults, usePublicGatewaysForShare: true, ...overrides }), { peerCount: 1 })
+      return createIpfsPathValidator(() => state, () => ipfs, dnslinkResolver)
+    }
+    const cidPath = '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest'
+    const bothGateways = { publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' }
+    it('public share with Use Subdomains on uses the subdomain gateway', async function () {
+      const v = optedInValidator({ ...bothGateways, useSubdomains: true })
+      expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest')
+    })
+    it('public share with Use Subdomains off uses the path gateway', async function () {
+      const v = optedInValidator({ ...bothGateways, useSubdomains: false })
+      expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://ipfs.io/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('public share falls back to the only configured gateway (path) with Use Subdomains on', async function () {
+      const v = optedInValidator({ publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: '', useSubdomains: true })
+      expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://ipfs.io/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('public share falls back to the only configured gateway (subdomain) with Use Subdomains off', async function () {
+      const v = optedInValidator({ publicGatewayUrl: '', publicSubdomainGatewayUrl: 'https://dweb.link', useSubdomains: false })
+      expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest')
+    })
+    it('public share of a DNSLink page keeps the FQDN with a subdomain gateway', async function () {
+      const v = optedInValidator({ ...bothGateways, useSubdomains: true })
+      const url = 'https://docs.ipfs.tech/concepts/'
+      spoofCachedDnslink('docs.ipfs.tech', dnslinkResolver, '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa')
+      expect(await v.resolveToShareableUrl(url)).to.equal('https://docs.ipfs.tech/concepts/')
+    })
+  })
+
+  describe('resolveToPublicUrl (no public gateway configured)', function () {
+    let nativeValidator
+    beforeEach(function () {
+      const nativeState = Object.assign(initState(optionDefaults), { peerCount: 1 })
+      nativeValidator = createIpfsPathValidator(() => nativeState, () => ipfs, dnslinkResolver)
+    })
+    it('falls back to a native ipfs:// URI for CID-in-subdomain', async function () {
+      const url = 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest'
+      expect(await nativeValidator.resolveToPublicUrl(url)).to.equal('ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('falls back to a native ipfs:// URI for an /ipfs/ path', async function () {
+      const path = '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest'
+      expect(await nativeValidator.resolveToPublicUrl(path)).to.equal('ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+  })
+
+  describe('resolveToPermalink (Copy Snapshot Link)', function () {
+    const ipnsPointer = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    // state (outer beforeEach) has public gateways set but the share toggle off
+    it('copies an immutable native ipfs:// URI when the share toggle is off', async function () {
+      const url = 'https://example.com/ipns/docs.ipfs.io/concepts/glossary/?argTest#hashTest'
+      spoofIpfsResolve(ipfs, '/ipns/docs.ipfs.io', ipnsPointer)
+      // native permalink normalizes the CIDv0 to a base32 CIDv1
+      expect(await ipfsPathValidator.resolveToPermalink(url)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/concepts/glossary/?argTest#hashTest')
+    })
+    it('public permalink with Use Subdomains off uses the path gateway', async function () {
+      const optedIn = Object.assign(
+        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link', usePublicGatewaysForShare: true, useSubdomains: false }),
+        { peerCount: 1 }
+      )
+      const validator = createIpfsPathValidator(() => optedIn, () => ipfs, dnslinkResolver)
+      spoofIpfsResolve(ipfs, '/ipns/libp2p.io', ipnsPointer)
+      expect(await validator.resolveToPermalink('/ipns/libp2p.io/?argTest#hashTest')).to.equal(`https://ipfs.io${ipnsPointer}/?argTest#hashTest`)
+    })
+    it('public permalink with Use Subdomains on uses the subdomain gateway', async function () {
+      const optedIn = Object.assign(
+        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link', usePublicGatewaysForShare: true, useSubdomains: true }),
+        { peerCount: 1 }
+      )
+      const validator = createIpfsPathValidator(() => optedIn, () => ipfs, dnslinkResolver)
+      spoofIpfsResolve(ipfs, '/ipns/libp2p.io', ipnsPointer)
+      // immutable CIDv0 normalizes to base32 in the subdomain label
+      expect(await validator.resolveToPermalink('/ipns/libp2p.io/?argTest#hashTest')).to.equal('https://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.dweb.link/?argTest#hashTest')
     })
   })
 

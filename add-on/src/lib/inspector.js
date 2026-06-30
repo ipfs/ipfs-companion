@@ -9,8 +9,10 @@ export default function createInspector (notify, ipfsPathValidator, getState) {
     async viewOnGateway (context, contextType) {
       const url = await findValueForContext(context, contextType)
       const ipfsPath = ipfsPathValidator.resolveToIpfsPath(url)
-      const gateway = getState().pubGwURLString
-      const gatewayUrl = pathAtHttpGateway(ipfsPath, gateway)
+      const { pubGwURLString, gwURLString } = getState()
+      // fall back to the local gateway when no public gateway is configured
+      // (a browser tab can't open a native ipfs:// URI)
+      const gatewayUrl = pathAtHttpGateway(ipfsPath, pubGwURLString || gwURLString)
       await browser.tabs.create({ url: gatewayUrl })
     }
     // TODO: view in WebUI's Files

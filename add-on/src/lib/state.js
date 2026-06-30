@@ -20,10 +20,11 @@ export function initState (options, overrides) {
   const state = Object.assign({}, options)
   // generate some additional values
   state.peerCount = offlinePeerCount
-  state.pubGwURL = safeURL(options.publicGatewayUrl)
+  // public gateways are optional: empty means "copy native ipfs:// URIs"
+  state.pubGwURL = options.publicGatewayUrl ? safeURL(options.publicGatewayUrl) : undefined
   state.pubGwURLString = state.pubGwURL?.toString()
   delete state.publicGatewayUrl
-  state.pubSubdomainGwURL = safeURL(options.publicSubdomainGatewayUrl)
+  state.pubSubdomainGwURL = options.publicSubdomainGatewayUrl ? safeURL(options.publicSubdomainGatewayUrl) : undefined
   state.pubSubdomainGwURLString = state.pubSubdomainGwURL?.toString()
   delete state.publicSubdomainGatewayUrl
   state.redirect = options.useCustomGateway

@@ -300,7 +300,7 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record.",
+    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. When public gateway sharing is on, this also picks the shareable link shape: on uses your subdomain gateway, off your path gateway.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
@@ -340,11 +340,11 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Default Public Gateway",
+    "message": "Default Public Path Gateway",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Set the URL of a default public gateway to use in publicly shareable links and as a fallback if your local gateway is unavailable.",
+    "message": "A path gateway serves every request from a single origin, so it works well outside the browser but gives no origin isolation. It is used as a fallback when your local gateway is unavailable, and for shareable links when public sharing is enabled below and Use Subdomains is off. Produces links like https://example.com/ipfs/CID. Leave it empty to copy native ipfs:// and ipns:// URIs.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
@@ -352,8 +352,16 @@
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Set the URL of a default public subdomain gateway for the recovery of broken subdomain gateways.",
+    "message": "A subdomain gateway gives each CID, IPNS, or DNSLink its own origin, isolating them the way browsers keep sites apart. It is used to recover broken subdomain links, and for shareable links when public sharing is enabled below and Use Subdomains is on. Produces links like https://CID.ipfs.example.com. Leave it empty to copy native ipfs:// and ipns:// URIs.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
+  "option_usePublicGatewaysForShare_title": {
+    "message": "Use Public Gateways above when Sharing links",
+    "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
+  },
+  "option_usePublicGatewaysForShare_description": {
+    "message": "When on, \"Copy Shareable Link\" copies a URL on the public gateways set above, handy for sending IPFS content to people who don't run IPFS. When off, it copies native ipfs:// and ipns:// URIs. Set the gateway URLs above to enable this.",
+    "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
     "message": "Kubo RPC API",
