@@ -104,19 +104,19 @@
     "webpack-merge": "6.0.1"
   },
   "dependencies": {
-    "@material/switch": "10.0.0",
+    "@material/switch": "14.0.0",
     "choo": "7.1.0",
     "debug": "4.4.3",
     "drag-and-drop-files": "0.0.1",
-    "filesize": "11.0.17",
+    "filesize": "11.0.19",
     "ipfs-css": "1.4.0",
     "is-fqdn": "2.0.1",
     "is-ip": "5.0.1",
     "is-ipfs": "8.0.4",
     "it-all": "3.0.11",
-    "lru-cache": "11.3.6",
+    "lru-cache": "11.5.1",
     "p-memoize": "8.0.0",
-    "p-queue": "9.2.0",
+    "p-queue": "9.3.0",
     "tachyons": "4.12.0",
     "webextension-polyfill": "0.12.0"
   },
