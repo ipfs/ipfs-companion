@@ -3,11 +3,15 @@
 import pMemoize from 'p-memoize'
 import * as isIPFS from 'is-ipfs'
 import isFQDN from 'is-fqdn'
+import { CID } from 'multiformats/cid'
+import { base32 } from 'multiformats/bases/base32'
+import { base36 } from 'multiformats/bases/base36'
+import { peerIdFromString } from '@libp2p/peer-id'
 
 // For how long more expensive lookups (DAG traversal etc) should be cached
 const RESULT_TTL_MS = 300000 // 5 minutes
 
-export const dropSlash = url => url.replace(/\/$/, '')
+export const dropSlash = url => url ? url.replace(/\/$/, '') : url
 
 // Turns URL or URIencoded path into a content path
 export function ipfsContentPath (urlOrPath, opts) {
@@ -52,7 +56,70 @@ export function ipfsContentPath (urlOrPath, opts) {
 export function ipfsUri (urlOrPath) {
   const contentPath = ipfsContentPath(urlOrPath, { keepURIParams: true })
   if (!contentPath) return null
-  return contentPath.replace(/^\/(ip[f|n]s)\//, '$1://')
+  return contentPathToNativeUri(contentPath)
+}
+
+// Turns a content path (/ipfs/<cid>/... or /ipns/<name>/...) into a native
+// ipfs:// or ipns:// URI. Browsers treat the authority of these URIs as a
+// case-insensitive origin, so the root is normalized to a case-insensitive CID.
+export function contentPathToNativeUri (contentPath) {
+  const match = contentPath.match(/^\/(ipfs|ipns)\/([^/?#]+)(.*)$/)
+  if (!match) return null
+  const [, ns, root, rest] = match
+  return `${ns}://${toCaseInsensitiveRoot(ns, root)}${rest}`
+}
+
+// Normalize the root of a native URI so it survives as a case-insensitive origin.
+// Only ipfs and ipns are valid namespaces; anything else is a programmer error.
+// Roots we cannot parse are returned unchanged.
+export function toCaseInsensitiveRoot (ns, root) {
+  if (ns === 'ipfs') {
+    // any CID collapses to a base32 CIDv1 (its multicodec is preserved)
+    try {
+      return CID.parse(root).toV1().toString(base32)
+    } catch (e) {
+      return root
+    }
+  }
+  if (ns === 'ipns') {
+    // DNSLink hostnames contain a dot and are left as-is; peer ids (PeerId or
+    // CID) normalize to a base36 CIDv1 with the libp2p-key codec
+    if (root.includes('.')) return root
+    try {
+      return peerIdFromString(root).toCID().toString(base36)
+    } catch (e) {
+      return root
+    }
+  }
+  throw new Error(`toCaseInsensitiveRoot: unsupported namespace '${ns}'`)
+}
+
+// Build a subdomain-gateway URL from a content path, e.g.
+// /ipfs/<cid>/x + https://dweb.link -> https://<cid-base32>.ipfs.dweb.link/x
+// (the label is normalized to a case-insensitive CID). A DNSLink hostname cannot
+// be a subdomain label, so we share the FQDN website itself.
+function contentPathToSubdomainUrl (contentPath, gwURL) {
+  const match = contentPath.match(/^\/(ipfs|ipns)\/([^/?#]+)(.*)$/)
+  if (!match) return null
+  const [, ns, root, rest] = match
+  if (ns === 'ipns' && root.includes('.')) {
+    return trimDoubleSlashes(new URL(`${gwURL.protocol}//${root}${rest}`).toString())
+  }
+  const label = toCaseInsensitiveRoot(ns, root)
+  return trimDoubleSlashes(new URL(`${gwURL.protocol}//${label}.${ns}.${gwURL.host}${rest}`).toString())
+}
+
+// Attach a content path to a public gateway for a shareable link. When both
+// public gateways are set, the "Use Subdomains" preference decides which one is
+// used (subdomain gateway -> subdomain link, path gateway -> path link); when
+// only one is set, that one is used. Returns null when neither is configured.
+function publicShareUrl (contentPath, state) {
+  if (!contentPath) return null
+  const { useSubdomains, pubGwURLString, pubSubdomainGwURL } = state
+  if (useSubdomains && pubSubdomainGwURL) return contentPathToSubdomainUrl(contentPath, pubSubdomainGwURL)
+  if (pubGwURLString) return pathAtHttpGateway(contentPath, pubGwURLString)
+  if (pubSubdomainGwURL) return contentPathToSubdomainUrl(contentPath, pubSubdomainGwURL)
+  return null
 }
 
 function subdomainPatternMatch (url) {
@@ -104,6 +171,8 @@ export function trimHashAndSearch (urlString) {
 // Returns true if URL belongs to the gateway.
 // The check includes subdomain gateways and quirks of ipfs.io
 export function sameGateway (url, gwUrl) {
+  // no gateway configured: nothing can belong to it
+  if (!gwUrl) return false
   if (typeof url === 'string') {
     url = new URL(url)
   }
@@ -240,6 +309,8 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
       // NATIVE ipns:// with DNSLink requires simple protocol swap
       if (input.startsWith('ipns://')) {
+        // no public gateway configured: keep the native ipns:// URI
+        if (!pubGwURLString) return input
         const dnslinkUrl = new URL(input)
         dnslinkUrl.protocol = 'https:'
         const dnslink = await dnslinkResolver.readAndCacheDnslink(dnslinkUrl.hostname)
@@ -251,6 +322,8 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       // SUBDOMAINS
       // Detect *.dweb.link and other subdomain gateways
       if (isIPFS.subdomain(input)) {
+        // no public subdomain gateway configured: copy the native ipfs:// / ipns:// URI
+        if (!pubSubdomainGwURL) return ipfsUri(input)
         // Switch Origin to prefered public subdomain gateway (default: dweb.link)
         const subdomainUrl = swapSubdomainGateway(input, pubSubdomainGwURL)
 
@@ -282,10 +355,37 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       const ipfsPath = ipfsContentPath(input, { keepURIParams: true })
 
       // IPFS Paths should be attached to the public gateway
-      if (isIPFS.path(ipfsPath)) return pathAtHttpGateway(ipfsPath, pubGwURLString)
+      if (isIPFS.path(ipfsPath)) {
+        // no public gateway configured: copy the native ipfs:// / ipns:// URI
+        if (!pubGwURLString) return ipfsUri(input)
+        return pathAtHttpGateway(ipfsPath, pubGwURLString)
+      }
 
       // Return original URL as-is (eg. DNSLink domains) or null if not an URL
       return input && input.startsWith('http') ? input : null
+    },
+
+    // Resolve URL or path to a native ipfs:// or ipns:// URI:
+    // - Gateway URLs and CID-in-subdomain are turned into ipfs://… / ipns://…
+    // - DNSLinked websites resolve to ipns://<fqdn> when a DNSLink is cached
+    // - Non-IPFS HTTP URLs are returned as-is, anything else yields null
+    resolveToNativeUri (urlOrPath) {
+      const ipfsPath = ipfsPathValidator.resolveToIpfsPath(urlOrPath)
+      if (ipfsPath) return contentPathToNativeUri(ipfsPath)
+      return urlOrPath && urlOrPath.startsWith('http') ? urlOrPath : null
+    },
+
+    // Resolve URL or path to the link used by "Copy Shareable Link":
+    // native ipfs:// / ipns:// URI by default, or a public gateway URL when the
+    // user opted in via usePublicGatewaysForShare. With public sharing on, the
+    // "Use Subdomains" preference picks which configured gateway is used.
+    async resolveToShareableUrl (urlOrPath) {
+      const state = getState()
+      if (!state.usePublicGatewaysForShare) {
+        return ipfsPathValidator.resolveToNativeUri(urlOrPath)
+      }
+      const contentPath = ipfsPathValidator.resolveToIpfsPath(urlOrPath)
+      return publicShareUrl(contentPath, state) ?? ipfsPathValidator.resolveToNativeUri(urlOrPath)
     },
 
     // Version of resolveToPublicUrl that always resolves to URL representing
@@ -306,10 +406,15 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     // and that never changes.
     async resolveToPermalink (urlOrPath, optionalGatewayUrl) {
       const input = urlOrPath
+      const state = getState()
       const ipfsPath = await this.resolveToImmutableIpfsPath(input)
-      const gateway = optionalGatewayUrl || getState().pubGwURLString
-      if (ipfsPath) return pathAtHttpGateway(ipfsPath, gateway)
-      return input.startsWith('http') ? input : null
+      if (!ipfsPath) return input.startsWith('http') ? input : null
+      // an explicit gateway wins; otherwise follow the same share preference as
+      // resolveToShareableUrl (immutable native ipfs:// URI unless public sharing
+      // is on, in which case "Use Subdomains" picks the gateway)
+      if (optionalGatewayUrl) return pathAtHttpGateway(ipfsPath, optionalGatewayUrl)
+      if (!state.usePublicGatewaysForShare) return ipfsUri(ipfsPath)
+      return publicShareUrl(ipfsPath, state) ?? ipfsUri(ipfsPath)
     },
 
     // Resolve URL or path to IPFS Path:

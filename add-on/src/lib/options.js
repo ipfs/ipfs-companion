@@ -11,8 +11,12 @@ export const optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external',
   ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
-  publicGatewayUrl: 'https://ipfs.io',
-  publicSubdomainGatewayUrl: 'https://dweb.link',
+  publicGatewayUrl: '',
+  publicSubdomainGatewayUrl: '',
+  // When off (default), "Copy Shareable Link" copies native ipfs:// and ipns://
+  // URIs. Turn it on to copy public gateway URLs instead (needs the two public
+  // gateway URLs above to be set).
+  usePublicGatewaysForShare: false,
   useCustomGateway: true,
   useSubdomains: true,
   enabledOn: [], // hostnames with explicit integration opt-in
@@ -93,8 +97,10 @@ export function safeURL (url, opts) {
   return url
 }
 
-// Return string without trailing slash
+// Return string without trailing slash (empty input stays empty, so optional
+// gateway URLs can be cleared)
 export function guiURLString (url, opts) {
+  if (!url) return ''
   return safeURL(url, opts).toString().replace(/\/$/, '')
 }
 

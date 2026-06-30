@@ -4,6 +4,7 @@ export interface CompanionOptions {
   ipfsNodeConfig: string
   publicGatewayUrl: string
   publicSubdomainGatewayUrl: string
+  usePublicGatewaysForShare: boolean
   useCustomGateway: boolean
   useSubdomains: boolean
   enabledOn: string[]
@@ -31,10 +32,10 @@ export interface CompanionOptions {
 
 export interface CompanionState extends Omit<CompanionOptions, 'publicGatewayUrl' | 'publicSubdomainGatewayUrl' | 'useCustomGateway' | 'ipfsApiUrl' | 'customGatewayUrl'> {
   peerCount: number
-  pubGwURL: URL
-  pubGwURLString: string
-  pubSubdomainGwURL: URL
-  pubSubdomainGwURLString: string
+  pubGwURL: URL | undefined
+  pubGwURLString: string | undefined
+  pubSubdomainGwURL: URL | undefined
+  pubSubdomainGwURLString: string | undefined
   redirect: boolean
   apiURL: URL
   apiURLString: string

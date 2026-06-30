@@ -119,8 +119,8 @@ export default function createCopier (notify, ipfsPathValidator) {
 
     async copyAddressAtPublicGw (context, contextType) {
       const url = await findValueForContext(context, contextType)
-      const publicUrl = await ipfsPathValidator.resolveToPublicUrl(url)
-      await copyTextToClipboard(publicUrl, notify)
+      const shareableUrl = await ipfsPathValidator.resolveToShareableUrl(url)
+      await copyTextToClipboard(shareableUrl, notify)
     },
 
     async copyPermalink (context, contextType) {

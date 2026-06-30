@@ -20,6 +20,7 @@ export default function gatewaysForm ({
   enabledOn,
   publicGatewayUrl,
   publicSubdomainGatewayUrl,
+  usePublicGatewaysForShare,
   onOptionChange
 }) {
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', (url) => guiURLString(url, { useLocalhostName: useSubdomains }))
@@ -27,6 +28,9 @@ export default function gatewaysForm ({
   const onUseSubdomainProxyChange = onOptionChange('useSubdomains')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', guiURLString)
   const onPublicSubdomainGatewayUrlChange = onOptionChange('publicSubdomainGatewayUrl', guiURLString)
+  const onUsePublicGatewaysForShareChange = onOptionChange('usePublicGatewaysForShare')
+  // sharing via public gateways needs at least one gateway URL set
+  const anyPublicGatewayConfigured = Boolean(publicGatewayUrl || publicSubdomainGatewayUrl)
   const onDisabledOnChange = onOptionChange('disabledOn', hostTextToArray)
   const onEnabledOnChange = onOptionChange('enabledOn', hostTextToArray)
   const mixedContentWarning = !secureContextUrl.test(customGatewayUrl)
@@ -37,49 +41,6 @@ export default function gatewaysForm ({
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_gateways')}</h2>
-          <div class="flex-row-ns pb0-ns">
-            <label for="publicGatewayUrl">
-              <dl>
-                <dt>${browser.i18n.getMessage('option_publicGatewayUrl_title')}</dt>
-                <dd>${browser.i18n.getMessage('option_publicGatewayUrl_description')}</dd>
-              </dl>
-            </label>
-            <input
-              class="bg-white navy self-center-ns"
-              id="publicGatewayUrl"
-              type="url"
-              inputmode="url"
-              required
-              pattern="https?://.+"
-              spellcheck="false"
-              title="${browser.i18n.getMessage('option_hint_url')}"
-              onchange=${onPublicGatewayUrlChange}
-              value=${publicGatewayUrl} />
-          </div>
-          <div class="flex-row-ns pb0-ns">
-            <label for="publicSubdomainGatewayUrl">
-              <dl>
-                <dt>${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_title')}</dt>
-                <dd>
-                  ${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_description')}
-                  <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
-                    ${browser.i18n.getMessage('option_legend_readMore')}
-                  </a></p>
-                </dd>
-              </dl>
-            </label>
-            <input
-              class="bg-white navy self-center-ns"
-              id="publicSubdomainGatewayUrl"
-              type="url"
-              inputmode="url"
-              required
-              pattern="https?://.+"
-              spellcheck="false"
-              title="${browser.i18n.getMessage('option_hint_url')}"
-              onchange=${onPublicSubdomainGatewayUrlChange}
-              value=${publicSubdomainGatewayUrl} />
-          </div>
           ${supportRedirectToCustomGateway
             ? html`<div class="flex-row-ns pb0-ns">
               <label for="customGatewayUrl">
@@ -131,6 +92,61 @@ export default function gatewaysForm ({
               <div class="self-center-ns">${switchToggle({ id: 'useSubdomains', checked: useSubdomains, onchange: onUseSubdomainProxyChange })}</div>
             </div>`
             : null}
+          <div class="flex-row-ns pb0-ns">
+            <label for="publicGatewayUrl">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_publicGatewayUrl_title')}</dt>
+                <dd>
+                  ${browser.i18n.getMessage('option_publicGatewayUrl_description')}
+                  <p><a class="link underline hover-aqua" href="https://specs.ipfs.tech/http-gateways/path-gateway/" target="_blank">
+                    ${browser.i18n.getMessage('option_legend_readMore')}
+                  </a></p>
+                </dd>
+              </dl>
+            </label>
+            <input
+              class="bg-white navy self-center-ns"
+              id="publicGatewayUrl"
+              type="url"
+              inputmode="url"
+              pattern="https?://.+"
+              spellcheck="false"
+              title="${browser.i18n.getMessage('option_hint_url')}"
+              onchange=${onPublicGatewayUrlChange}
+              value=${publicGatewayUrl} />
+          </div>
+          <div class="flex-row-ns pb0-ns">
+            <label for="publicSubdomainGatewayUrl">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_title')}</dt>
+                <dd>
+                  ${browser.i18n.getMessage('option_publicSubdomainGatewayUrl_description')}
+                  <p><a class="link underline hover-aqua" href="https://specs.ipfs.tech/http-gateways/subdomain-gateway/" target="_blank">
+                    ${browser.i18n.getMessage('option_legend_readMore')}
+                  </a></p>
+                </dd>
+              </dl>
+            </label>
+            <input
+              class="bg-white navy self-center-ns"
+              id="publicSubdomainGatewayUrl"
+              type="url"
+              inputmode="url"
+              pattern="https?://.+"
+              spellcheck="false"
+              title="${browser.i18n.getMessage('option_hint_url')}"
+              onchange=${onPublicSubdomainGatewayUrlChange}
+              value=${publicSubdomainGatewayUrl} />
+          </div>
+          <div class="flex-row-ns pb0-ns">
+            <label for="usePublicGatewaysForShare">
+              <dl>
+                <dt>${browser.i18n.getMessage('option_usePublicGatewaysForShare_title')}</dt>
+                <dd>${browser.i18n.getMessage('option_usePublicGatewaysForShare_description')}</dd>
+              </dl>
+            </label>
+            <div class="self-center-ns">${switchToggle({ id: 'usePublicGatewaysForShare', checked: usePublicGatewaysForShare && anyPublicGatewayConfigured, onchange: onUsePublicGatewaysForShareChange, disabled: !anyPublicGatewayConfigured })}</div>
+          </div>
           ${supportRedirectToCustomGateway
           ? html`<div class="flex-row-ns pb0-ns">
               <label for="disabledOn">
