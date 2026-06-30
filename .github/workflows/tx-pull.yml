@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: transifex
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Setup i18n-sync branch
       run: |
         # Fetch i18n-sync branch if it exists remotely
