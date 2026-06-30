@@ -77,8 +77,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.61.1",
-    "@rspack/cli": "2.1.0",
-    "@rspack/core": "2.1.0",
+    "@rspack/cli": "2.1.2",
+    "@rspack/core": "2.1.2",
     "@types/chai": "5.2.3",
     "@types/debug": "4.1.13",
     "@types/webextension-polyfill": "0.12.5",
