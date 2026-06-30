@@ -86,7 +86,7 @@
     "chai": "6.2.2",
     "cross-env": "10.1.0",
     "css-loader": "7.1.4",
-    "eslint": "9.39.4",
+    "eslint": "10.6.0",
     "fast-hash-code": "2.1.0",
     "get-firefox": "8.0.0",
     "ignore-loader": "0.1.2",
