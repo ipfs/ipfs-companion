@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 // @ts-check
 import { isHostname, safeURL } from './options.js'
 

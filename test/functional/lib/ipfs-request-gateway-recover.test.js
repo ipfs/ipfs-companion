@@ -1,6 +1,6 @@
 'use strict'
 import { assert } from 'chai'
-import { after, afterEach, before, beforeEach, describe, it } from 'mocha'
+import { afterAll as after, afterEach, beforeAll as before, beforeEach, describe, it } from 'vitest'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { URL } from 'url'

@@ -43,9 +43,9 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
+            ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
             ${{ runner.os }}-
 
       - name: Restore node_modules
@@ -53,7 +53,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -98,7 +98,7 @@ jobs:
     needs: [test]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
-      - uses: google-github-actions/release-please-action@v3.7.3
+      - uses: googleapis/release-please-action@v4
         with:
           changelog-notes-type: github
           release-type: node
@@ -127,9 +127,9 @@ jobs:
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
+            ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
             ${{ runner.os }}-
 
       - name: Restore node_modules
@@ -137,7 +137,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js', '**/*.patch') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'

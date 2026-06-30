@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 import browser from 'webextension-polyfill'
 
 export default function createWelcomePageStore (i18n, runtime) {

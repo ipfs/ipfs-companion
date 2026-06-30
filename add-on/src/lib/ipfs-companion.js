@@ -1,12 +1,11 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import debug from 'debug'
 
 import all from 'it-all'
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import pMemoize from 'p-memoize'
-import toMultiaddr from 'uri-to-multiaddr'
+import toMultiaddr from './uri-to-multiaddr.js'
 import browser from 'webextension-polyfill'
 import { contextMenuCopyAddressAtPublicGw, contextMenuCopyCanonicalAddress, contextMenuCopyCidAddress, contextMenuCopyPermalink, contextMenuCopyRawCid, contextMenuViewOnGateway, createContextMenus, findValueForContext } from './context-menus.js'
 import createCopier from './copier.js'
@@ -207,7 +206,7 @@ export default async function init (inQuickImport = false) {
 
   // Cache for async URL2CID resolution used by browser action
   // (resolution happens off-band so UI render is not blocked with sometimes expensive DHT traversal)
-  const resolveCache = new LRU({ max: 10, ttl: 1000 * 30 })
+  const resolveCache = new LRUCache({ max: 10, ttl: 1000 * 30 })
 
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)

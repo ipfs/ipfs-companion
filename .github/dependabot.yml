@@ -1,0 +1,58 @@
+# Modeled on ipfs/ipfs-desktop and ipfs/kubo: grouped updates on a slow cadence
+# so dependency PRs stay batched instead of one per package.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+    groups:
+      # Kubo RPC client and the IPFS libraries the extension is built on.
+      ipfs:
+        patterns:
+          - "kubo-rpc-client"
+          - "is-ipfs"
+          - "ipfs-css"
+      # Bundler, loaders, and packaging tools. Build-output changes are
+      # easier to smoke-test as a single PR.
+      build:
+        patterns:
+          - "@rspack/*"
+          - "*-loader"
+          - "webpack-merge"
+          - "web-ext"
+      # Linter and TypeScript move together: the linter gates the TS version.
+      lint:
+        patterns:
+          - "eslint"
+          - "neostandard"
+          - "typescript"
+      # Test runners and mocks.
+      test:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@playwright/test"
+          - "chai"
+          - "sinon"
+          - "sinon-chrome"
+      # Type definitions.
+      types:
+        patterns:
+          - "@types/*"
+      # Everything else in one PR rather than one per package.
+      rest:
+        patterns:
+          - "*"

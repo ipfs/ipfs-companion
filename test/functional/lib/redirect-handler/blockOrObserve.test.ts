@@ -1,14 +1,14 @@
-import { expect } from 'chai';
-import { before, describe, it } from 'mocha';
-import sinon from 'sinon';
-import browserMock from 'sinon-chrome';
-import { MAX_RETRIES_TO_UPDATE_TAB } from './../../../../add-on/src/lib/redirect-handler/blockOrObserve';
+import { expect } from 'chai'
+import { beforeAll as before, describe, it } from 'vitest'
+import sinon from 'sinon'
+import browserMock from 'sinon-chrome'
+import { MAX_RETRIES_TO_UPDATE_TAB } from './../../../../add-on/src/lib/redirect-handler/blockOrObserve'
 
-import { optionDefaults } from '../../../../add-on/src/lib/options.js';
-import { RULE_REGEX_ENDING, addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve';
-import { initState } from '../../../../add-on/src/lib/state.js';
-import isManifestV3 from '../../../helpers/is-mv3-testing-enabled';
-import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js';
+import { optionDefaults } from '../../../../add-on/src/lib/options.js'
+import { RULE_REGEX_ENDING, addRuleToDynamicRuleSetGenerator, cleanupRules, isLocalHost } from '../../../../add-on/src/lib/redirect-handler/blockOrObserve'
+import { initState } from '../../../../add-on/src/lib/state.js'
+import isManifestV3 from '../../../helpers/is-mv3-testing-enabled'
+import DeclarativeNetRequestMock from './declarativeNetRequest.mock.js'
 
 const dynamicRulesConditions = (regexFilter) => ({
   regexFilter,
@@ -77,11 +77,8 @@ function ensureDeclarativeNetRequestRuleIsAdded ({
   }
 }
 
-describe('lib/redirect-handler/blockOrObserve', () => {
-  before(function () {
-    if (!isManifestV3) {
-      return this.skip()
-    }
+describe.skipIf(!isManifestV3)('lib/redirect-handler/blockOrObserve', () => {
+  before(() => {
     browserMock.runtime.id = 'testid'
   })
 
@@ -137,7 +134,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
       await addRuleToDynamicRuleSet({ originUrl: 'http://localhost:8080/ipfs/bafkqaaa', redirectUrl: 'http://localhost:9001/bar' })
 
       expect(browserMock.declarativeNetRequest.updateDynamicRules.called).to.be.false
-      expect (browserMock.tabs.query.called).to.be.false
+      expect(browserMock.tabs.query.called).to.be.false
     })
 
     it('Should add default rules for localhost', async () => {
@@ -195,17 +192,21 @@ describe('lib/redirect-handler/blockOrObserve', () => {
     })
 
     it('Should wait for the tab to exist before updating tab from originUrl to redirectUrl for the first time', async () => {
-      const clock = sinon.useFakeTimers();
-      browserMock.tabs.query.onCall(0).resolves([])
-      browserMock.tabs.query.onCall(1).resolves([{ id: 40 }])
-      await addRuleToDynamicRuleSet({
-        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
-        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
-      })
-      await clock.tickAsync(100 * MAX_RETRIES_TO_UPDATE_TAB)
-      expect(browserMock.tabs.query.callCount).to.be.equal(2)
-      expect(browserMock.tabs.update.called).to.be.true
-      expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])
+      const clock = sinon.useFakeTimers()
+      try {
+        browserMock.tabs.query.onCall(0).resolves([])
+        browserMock.tabs.query.onCall(1).resolves([{ id: 40 }])
+        await addRuleToDynamicRuleSet({
+          originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+          redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+        })
+        await clock.tickAsync(100 * MAX_RETRIES_TO_UPDATE_TAB)
+        expect(browserMock.tabs.query.callCount).to.be.equal(2)
+        expect(browserMock.tabs.update.called).to.be.true
+        expect(browserMock.tabs.update.lastCall.args).to.deep.equal([40, { url: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org' }])
+      } finally {
+        clock.restore()
+      }
     })
 
     it('Should add redirect rules for local gateway', async () => {
@@ -272,7 +273,7 @@ describe('lib/redirect-handler/blockOrObserve', () => {
 
     it('Should remove the old rules when companion is no longer in active state', async () => {
       // first redirect
-      const getRuleIdsAddedSoFar = () => browserMock.declarativeNetRequest.updateDynamicRules.getCalls().map(({args}) => args[0]?.addRules.map(rule => rule.id).flat()).flat()
+      const getRuleIdsAddedSoFar = () => browserMock.declarativeNetRequest.updateDynamicRules.getCalls().map(({ args }) => args[0]?.addRules.map(rule => rule.id).flat()).flat()
 
       await addRuleToDynamicRuleSet({
         originUrl: 'http://docs.ipfs.tech',
@@ -298,7 +299,6 @@ describe('lib/redirect-handler/blockOrObserve', () => {
         regexSubstitution: 'http://localhost:8080\\1',
         removedRulesIds: getRuleIdsAddedSoFar()
       })
-
     })
   })
 })

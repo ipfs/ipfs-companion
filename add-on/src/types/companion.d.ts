@@ -1,4 +1,3 @@
-
 export interface CompanionOptions {
   active: boolean
   ipfsNodeType: string

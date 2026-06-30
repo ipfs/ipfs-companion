@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser */
 
 import browser from 'webextension-polyfill'
 import { requestRequiredPermissionsPage, welcomePage } from './constants.js'

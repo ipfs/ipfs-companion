@@ -1,11 +1,10 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import debug from 'debug'
 
 import isFQDN from 'is-fqdn'
-import isIPFS from 'is-ipfs'
-import LRU from 'lru-cache'
+import * as isIPFS from 'is-ipfs'
+import { LRUCache } from 'lru-cache'
 import { recoveryPagePath } from './constants.js'
 import { dropSlash, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
@@ -59,10 +58,10 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
 
   // Various types of requests are identified once and cached across all browser.webRequest hooks
   const requestCacheCfg = { max: 128, ttl: 1000 * 30 }
-  const ignoredRequests = new LRU(requestCacheCfg)
+  const ignoredRequests = new LRUCache(requestCacheCfg)
   const ignore = (id) => ignoredRequests.set(id, true)
   const isIgnored = (id) => ignoredRequests.get(id) !== undefined
-  const errorInFlight = new LRU({ max: 3, ttl: 1000 })
+  const errorInFlight = new LRUCache({ max: 3, ttl: 1000 })
 
   // Returns a canonical hostname representing the site from url
   // Main reason for this is unwrapping DNSLink from local subdomain

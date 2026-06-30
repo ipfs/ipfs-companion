@@ -1,7 +1,5 @@
 'use strict'
 
-/* eslint-env browser, webextensions */
-
 import debug from 'debug'
 
 import { precache } from '../precache.js'
@@ -17,6 +15,8 @@ log.error = debug('ipfs-companion:client:error')
 
 // ensure single client at all times, and no overlap between init and destroy
 let client
+// handle for the delayed precache so destroy() can cancel a pending run
+let precacheTimeout
 
 export async function initIpfsClient (browser, opts, inQuickImport) {
   log('init ipfs client')
@@ -40,6 +40,7 @@ export async function initIpfsClient (browser, opts, inQuickImport) {
 export async function destroyIpfsClient (browser) {
   log('destroy ipfs client')
   if (!client) return
+  clearTimeout(precacheTimeout)
   try {
     await client.destroy(browser)
     await _reloadIpfsClientDependents(browser) // sync (API stopped working)
@@ -77,7 +78,7 @@ async function _reloadIpfsClientDependents (
   // online only
   if (client && instance && opts) {
     // add important data to local ipfs repo for instant load
-    setTimeout(() => precache(instance, opts), 5000)
+    precacheTimeout = setTimeout(() => precache(instance, opts), 5000)
   }
 }
 

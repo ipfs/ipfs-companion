@@ -1,5 +1,5 @@
 'use strict'
-import { describe, it, beforeEach, after } from 'mocha'
+import { describe, it, beforeEach, afterAll as after } from 'vitest'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
@@ -13,34 +13,30 @@ describe('storeMissingOptions()', function () {
     browser.flush()
   })
 
-  it('should save all defaults during first run when no value is present in storage', done => {
+  it('should save all defaults during first run when no value is present in storage', () => {
     browser.storage.local.get.returns(Promise.resolve({})) // simulates empty user storage (clean install)
     browser.storage.local.set.returns(Promise.resolve({}))
     const read = Object.assign({}, optionDefaults)
-    storeMissingOptions(read, optionDefaults, browser.storage.local)
+    return storeMissingOptions(read, optionDefaults, browser.storage.local)
       .then(changes => {
         sinon.assert.calledWith(browser.storage.local.set, changes)
         expect(changes).to.be.deep.equal(optionDefaults)
-        done()
       })
-      .catch(error => { done(error) })
   })
-  it('should not touch non-default value present in storage', done => {
+  it('should not touch non-default value present in storage', () => {
     const read = Object.assign({}, optionDefaults)
     const userModifiedKey = 'linkify'
     read[userModifiedKey] = !optionDefaults[userModifiedKey] // simulate custom option set by user
     browser.storage.local.get.returns(Promise.resolve(read)) // simulate existing user data read from storage
     browser.storage.local.set.returns(Promise.resolve({}))
-    storeMissingOptions(read, optionDefaults, browser.storage.local)
+    return storeMissingOptions(read, optionDefaults, browser.storage.local)
       .then(changes => {
         sinon.assert.calledWith(browser.storage.local.set, changes)
         expect(changes).to.be.deep.equal({})
-        done()
       })
-      .catch(error => { done(error) })
   })
 
-  it('should initialize default value for key missing from both read options and storage', done => {
+  it('should initialize default value for key missing from both read options and storage', () => {
     const read = Object.assign({}, optionDefaults)
     const userMissingKey = 'customGatewayUrl'
     delete read[userMissingKey] // simulate the key not being in storage (eg. after extension update)
@@ -48,13 +44,11 @@ describe('storeMissingOptions()', function () {
     expectedChanges[userMissingKey] = optionDefaults[userMissingKey]
     browser.storage.local.get.returns(Promise.resolve(read)) // simulate existing user data read from storage
     browser.storage.local.set.returns(Promise.resolve({}))
-    storeMissingOptions(read, optionDefaults, browser.storage.local)
+    return storeMissingOptions(read, optionDefaults, browser.storage.local)
       .then(changes => {
         sinon.assert.calledWith(browser.storage.local.set, changes)
         expect(changes).to.be.deep.equal(expectedChanges)
-        done()
       })
-      .catch(error => { done(error) })
   })
 
   after(() => {

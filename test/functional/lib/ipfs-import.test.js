@@ -1,12 +1,20 @@
 'use strict'
 import { expect } from 'chai'
-import { describe, it, afterEach } from 'mocha'
+import { afterAll as after, beforeAll as before, describe, it, afterEach } from 'vitest'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import { createIpfsImportHandler, formatImportDirectory } from '../../../add-on/src/lib/ipfs-import.js'
 
 describe('ipfs-import.js', function () {
   describe('formatImportDirectory', function () {
+    let clock
+    before(function () {
+      clock = sinon.useFakeTimers({ now: new Date(2017, 10, 5, 12, 1, 1), toFake: ['Date'] })
+    })
+    after(function () {
+      clock.restore()
+    })
+
     it('should change nothing if path is properly formatted and date wildcards are not provided', function () {
       const path = '/ipfs-companion-imports/my-directory/'
       expect(formatImportDirectory(path)).to.equal('/ipfs-companion-imports/my-directory/')
@@ -135,16 +143,16 @@ describe('ipfs-import.js', function () {
       })
     })
 
-    describe('copyShareLink', function () {
-      // TODO: implement
+    describe('copyShareLink', () => {
+      it.todo('implement')
     })
 
-    describe('preloadFilesAtPublicGateway', function () {
-      // TODO: implement
+    describe('preloadFilesAtPublicGateway', () => {
+      it.todo('implement')
     })
 
-    describe('filesCpImportCurrentTab', function () {
-      // TODO: implement
+    describe('filesCpImportCurrentTab', () => {
+      it.todo('implement')
     })
   })
 })

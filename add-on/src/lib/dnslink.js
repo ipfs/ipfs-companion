@@ -1,11 +1,10 @@
 'use strict'
-/* eslint-env browser */
 
 import Pqueue from 'p-queue'
 
 import debug from 'debug'
-import IsIpfs from 'is-ipfs'
-import LRU from 'lru-cache'
+import * as IsIpfs from 'is-ipfs'
+import { LRUCache } from 'lru-cache'
 import { offlinePeerCount } from './state.js'
 import { ipfsContentPath, sameGateway, pathAtHttpGateway } from './ipfs-path.js'
 
@@ -15,13 +14,13 @@ log.error = debug('ipfs-companion:dnslink:error')
 export default function createDnslinkResolver (getState) {
   // DNSLink lookup result cache
   const cacheOptions = { max: 1000, ttl: 1000 * 60 * 60 * 12 }
-  const cache = new LRU(cacheOptions)
+  const cache = new LRUCache(cacheOptions)
   // Track in-flight DNS lookups to avoid duplicate requests for the same domain
   const pendingLookups = new Map()
   // upper bound for concurrent background lookups done by resolve(url)
   const lookupQueue = new Pqueue({ concurrency: 4 })
   // preload of DNSLink data
-  const preloadUrlCache = new LRU(cacheOptions)
+  const preloadUrlCache = new LRUCache(cacheOptions)
   const preloadQueue = new Pqueue({ concurrency: 4 })
 
   const dnslinkResolver = {

@@ -3,7 +3,7 @@ FROM node:22.19.0
 ARG USER_ID
 ARG GROUP_ID
 
-RUN curl -s https://ipfs.io/ipfs/QmbukYcmtyU6ZEKt6fepnvrTNa9F6VqsUPMUgNxQjEmphH > /usr/local/bin/jq && chmod +x /usr/local/bin/jq
+RUN apt-get update && apt-get install -y --no-install-recommends jq && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /home/node/app
 RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \

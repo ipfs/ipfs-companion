@@ -1,8 +1,6 @@
 import path from 'path'
-import webpack from 'webpack'
+import { rspack } from '@rspack/core'
 import { merge } from 'webpack-merge'
-import TerserPlugin from 'terser-webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import { fileURLToPath } from 'url'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
@@ -11,9 +9,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const devBuild = process.env.NODE_ENV === 'development'
 
+// SWC handles both the JS and TS rules; targets match the manifests' minimum
+// supported browsers (minimum_chrome_version and gecko strict_min_version)
+const swcLoader = (syntax) => ({
+  loader: 'builtin:swc-loader',
+  options: {
+    jsc: { parser: { syntax } },
+    env: { targets: { chrome: '111', firefox: '111' } }
+  }
+})
+
 /**
  * common configuration shared by all targets
- * @type {import('webpack').Configuration}
+ * @type {import('@rspack/core').Configuration}
  */
 const commonConfig = {
   target: 'web',
@@ -27,29 +35,29 @@ const commonConfig = {
       nodePrefixForCoreModules: false
     }
   },
-  cache: process.env.CI
-    ? false // no gain on CI
-    : { type: 'filesystem' },
+  // rspack's in-memory cache speeds up watch rebuilds; off in CI (single cold run)
+  cache: !process.env.CI,
+  // keep css-loader handling .css (it resolves the ~ @imports); rspack's native CSS is off
+  experiments: {
+    css: false
+  },
   optimization: {
     minimize: true,
     minimizer: [
-      new TerserPlugin({
-        parallel: true
-      })
+      new rspack.SwcJsMinimizerRspackPlugin()
     ]
   },
   plugins: [
-    new webpack.ProgressPlugin({
+    new rspack.ProgressPlugin({
       percentBy: 'entries'
     }),
-    new MiniCssExtractPlugin({
+    new rspack.CssExtractRspackPlugin({
       filename: '[name].css'
     }),
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
-      Buffer: ['buffer/', 'Buffer'] // ensure version from package.json is used
+    new rspack.ProvidePlugin({
+      process: 'process/browser.js'
     }),
-    new webpack.DefinePlugin({
+    new rspack.DefinePlugin({
       global: 'globalThis', // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
       'process.emitWarning': (message, type) => {}, // console.warn(`${type}${type ? ': ' : ''}${message}`),
       'process.env': {
@@ -63,7 +71,7 @@ const commonConfig = {
     rules: [
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        use: [rspack.CssExtractRspackPlugin.loader, 'css-loader']
       },
       {
         test: /\.(png|jpe?g|gif|svg|eot|otf|ttf|woff|woff2)$/i,
@@ -80,19 +88,12 @@ const commonConfig = {
       {
         exclude: /node_modules/,
         test: /\.js$/,
-        use: ['babel-loader']
+        use: [swcLoader('ecmascript')]
       },
       {
         exclude: /node_modules/,
-        test: /\.ts?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true
-            }
-          }
-        ]
+        test: /\.ts$/,
+        use: [swcLoader('typescript')]
       }
     ]
   },
@@ -102,28 +103,14 @@ const commonConfig = {
     extensionAlias: {
       '.js': ['.js', '.json', '.ts']
     },
-    alias: {
-      buffer: path.resolve(__dirname, 'node_modules/buffer'), // js-ipfs uses newer impl.
-      url: 'iso-url',
-      stream: 'readable-stream' // cure general insanity
-    },
     fallback: {
-      stream: 'readable-stream',
-      'stream/web': 'readable-stream',
       worker_threads: false,
-      util: require.resolve('util/'),
       fs: false,
-      path: require.resolve('path-browserify'), // legacy in src/lib/ipfs-proxy
-      os: require.resolve('os-browserify/browser'), // some legacy TBD
       process: require.resolve('process/browser.js')
     }
   },
   node: {
     global: false // https://github.com/webpack/webpack/issues/5627#issuecomment-394309966
-    // TODO: remove, this is default in webpack v5: Buffer: false, // we don't want to use old and buggy version bundled node-libs
-    // fs: 'empty',
-    // tls: 'empty',
-    // cluster: 'empty' // expected by js-ipfs dependency: node_modules/prom-client/lib/cluster.js
   },
   watchOptions: {
     ignored: ['add-on/dist/**/*', 'node_modules']
@@ -140,7 +127,7 @@ if (devBuild) {
 
 /**
  * background page bundle (with heavy dependencies)
- * @type {import('webpack').Configuration}
+ * @type {import('@rspack/core').Configuration}
  */
 const bgConfig = merge(commonConfig, {
   name: 'background',
@@ -171,7 +158,7 @@ const bgConfig = merge(commonConfig, {
 
 /**
  * background page bundle (with heavy dependencies)
- * @type {import('webpack').Configuration}
+ * @type {import('@rspack/core').Configuration}
  */
 const bgFirefoxConfig = merge(commonConfig, {
   name: 'background-firefox',
@@ -185,7 +172,7 @@ const bgFirefoxConfig = merge(commonConfig, {
 
 /**
  * user interface pages with shared common libraries
- * @type {import('webpack').Configuration}
+ * @type {import('@rspack/core').Configuration}
  */
 const uiConfig = merge(commonConfig, {
   name: 'ui',
@@ -217,7 +204,7 @@ const uiConfig = merge(commonConfig, {
 
 /**
  * content scripts injected into tabs
- * @type {import('webpack').Configuration}
+ * @type {import('@rspack/core').Configuration}
  */
 const contentScriptsConfig = merge(commonConfig, {
   name: 'contentScripts',

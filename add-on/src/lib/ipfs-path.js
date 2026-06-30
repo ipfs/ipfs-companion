@@ -1,8 +1,7 @@
 'use strict'
-/* eslint-env browser */
 
 import pMemoize from 'p-memoize'
-import isIPFS from 'is-ipfs'
+import * as isIPFS from 'is-ipfs'
 import isFQDN from 'is-fqdn'
 
 // For how long more expensive lookups (DAG traversal etc) should be cached

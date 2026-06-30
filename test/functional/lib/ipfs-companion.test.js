@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { after, before, describe, it } from 'mocha'
+import { afterAll as after, beforeAll as before, describe, it } from 'vitest'
 import browser from 'sinon-chrome'
 import { URL } from 'url'
 import { optionDefaults } from '../../../add-on/src/lib/options.js'
@@ -19,14 +19,13 @@ describe('lib/ipfs-companion.js', function () {
       browser.runtime.getManifest.returns({ version: '0.0.0' }) // on-installed.js
     })
 
-    it('should query local storage for options with hardcoded defaults for fallback', async function () {
-      this.timeout(10000)
+    it('should query local storage for options with hardcoded defaults for fallback', async () => {
       browser.storage.local.get.resolves(optionDefaults)
       browser.storage.local.set.resolves()
       const ipfsCompanion = await init()
       expect(browser.storage.local.get.calledWith(optionDefaults)).to.equal(true)
       return await ipfsCompanion.destroy()
-    })
+    }, 10000)
 
     after(function () {
       browser.flush()

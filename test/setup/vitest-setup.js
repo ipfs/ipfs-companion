@@ -1,13 +1,18 @@
-import AbortController from 'abort-controller'
-import { afterEach, beforeEach } from 'mocha'
-import sinon, { useFakeTimers } from 'sinon'
+import { afterEach, beforeAll, afterAll, beforeEach } from 'vitest'
+import sinon from 'sinon'
 import browser from 'sinon-chrome'
 import DeclarativeNetRequestMock from '../functional/lib/redirect-handler/declarativeNetRequest.mock.js'
 import isManifestV3 from '../helpers/is-mv3-testing-enabled.js'
 
+// Provide mocha's before/after as globals for suites that still use them
+// (vitest's globals are beforeAll/afterAll).
+global.before = beforeAll
+global.after = afterAll
+
 browser.runtime.id = 'testid'
+// MV3 code uses browser.action; sinon-chrome only stubs the MV2 browserAction.
+browser.action = browser.browserAction
 global.browser = browser
-global.AbortController = AbortController
 global.chrome = browser
 
 // Mock navigator.clipboard for tests (required for Node.js 20+)
@@ -23,11 +28,6 @@ Object.defineProperty(global, 'navigator', {
 
 global.URL = URL
 browser.tabs = { ...browser.tabs, getCurrent: sinon.stub().resolves({ id: 20 }) }
-
-// need to force Date to return a particular date
-global.clock = useFakeTimers({
-  now: new Date(2017, 10, 5, 12, 1, 1)
-})
 
 if (isManifestV3) {
   const sinonSandbox = sinon.createSandbox()

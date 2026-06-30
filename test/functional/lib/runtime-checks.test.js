@@ -1,7 +1,6 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
-import { describe, it, before, beforeEach, after } from 'mocha'
+import { describe, it, beforeAll as before, beforeEach, afterAll as after } from 'vitest'
 import { expect } from 'chai'
 import browser from 'sinon-chrome'
 import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'

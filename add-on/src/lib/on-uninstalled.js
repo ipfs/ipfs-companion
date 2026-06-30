@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser */
 
 const stableChannels = new Set([
   'ipfs-firefox-addon@lidel.org', // firefox (for legacy reasons)

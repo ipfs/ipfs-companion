@@ -1,5 +1,5 @@
 'use strict'
-import { after, before, beforeEach, describe, it } from 'mocha'
+import { afterAll as after, beforeAll as before, beforeEach, describe, it } from 'vitest'
 import browser from 'sinon-chrome'
 import { URL } from 'url'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'

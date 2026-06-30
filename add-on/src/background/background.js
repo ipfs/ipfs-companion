@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import browser from 'webextension-polyfill'
 import createIpfsCompanion from '../lib/ipfs-companion.js'

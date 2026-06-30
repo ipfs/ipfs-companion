@@ -1,5 +1,5 @@
 'use strict'
-import { describe, it, beforeEach } from 'mocha'
+import { describe, it, beforeEach } from 'vitest'
 import { expect } from 'chai'
 import { URL } from 'url'
 import { initState } from '../../../add-on/src/lib/state.js'

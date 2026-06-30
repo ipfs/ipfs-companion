@@ -1,5 +1,4 @@
 'use strict'
-/* eslint-env browser, webextensions */
 
 import html from 'choo/html/index.js'
 import switchToggle from '../../pages/components/switch-toggle.js'

@@ -9,7 +9,7 @@ import { SubdomainRedirectRegexFilter } from './subdomainRedirectRegexFilter.js'
 
 // this won't work in webworker context. Needs to be enabled manually
 // https://github.com/debug-js/debug/issues/916
-const log = debug('ipfs-companion:redirect-handler:blockOrObserve')
+const log = debug('ipfs-companion:redirect-handler:blockOrObserve') as ReturnType<typeof debug> & { error: ReturnType<typeof debug> }
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
 export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
@@ -213,8 +213,8 @@ async function cleanupRuleById (id: number): Promise<void> {
  * @param {function} handlerFn
  */
 function setupListeners (handlers: Record<messageToSelfType, (value: any) => Promise<void>>): void {
-  browser.runtime.onMessage.addListener(async (message: messageToSelf): Promise<void> => {
-    const { type, value } = message
+  browser.runtime.onMessage.addListener(async (message: unknown): Promise<void> => {
+    const { type, value } = message as messageToSelf
     if (type in handlers) {
       await handlers[type](value)
     }
@@ -322,6 +322,7 @@ export function generateAddRule (
     condition: {
       regexFilter,
       excludedInitiatorDomains,
+      // 'webbundle' is a valid Chrome DNR resourceType missing from @types/webextension-polyfill
       resourceTypes: [
         'csp_report',
         'font',
@@ -336,7 +337,7 @@ export function generateAddRule (
         'sub_frame',
         'webbundle',
         'xmlhttprequest'
-      ]
+      ] as browser.DeclarativeNetRequest.ResourceType[]
     }
   }
 }
