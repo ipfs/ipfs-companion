@@ -75,6 +75,7 @@ export default function optionsPage (state, emit) {
     useSubdomains: state.options.useSubdomains,
     publicGatewayUrl: state.options.publicGatewayUrl,
     publicSubdomainGatewayUrl: state.options.publicSubdomainGatewayUrl,
+    usePublicGatewaysForShare: state.options.usePublicGatewaysForShare,
     disabledOn: state.options.disabledOn,
     enabledOn: state.options.enabledOn,
     onOptionChange

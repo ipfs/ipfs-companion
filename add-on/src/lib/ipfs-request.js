@@ -182,7 +182,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       }
       // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
       if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-        const fix = await normalizedUnhandledIpfsProtocol(request, state.pubGwURLString)
+        const fix = await normalizedUnhandledIpfsProtocol(request, state.pubGwURLString || state.gwURLString)
         if (fix) {
           return fix
         }
@@ -190,7 +190,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // handler for protocol_handlers from manifest.json
       if (redirectingProtocolRequest(request)) {
         // fix path passed via custom protocol
-        const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString)
+        const fix = normalizedRedirectingProtocolRequest(request, state.pubGwURLString || state.gwURLString)
         if (fix) {
           return fix
         }
@@ -371,7 +371,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
                 // (optional redirect to custom one can happen later)
                 const url = new URL(request.url)
                 const pathWithArgs = `${xIpfsPath}${url.search}${url.hash}`
-                const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString)
+                const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString || state.gwURLString)
                 // redirect only if local node is around
                 if (newUrl && state.localGwAvailable) {
                   log(`onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
@@ -434,10 +434,13 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // Check if error can be recovered by opening same content-addresed path
       // using active gateway (public or local, depending on redirect state)
       if (await isRecoverable(request, state, ipfsPathValidator)) {
-        const redirectUrl = await ipfsPathValidator.resolveToPublicUrl(request.url)
-        log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
-        // We are unable to redirect in onErrorOccurred, but we can update the tab
-        return updateTabWithURL(request, redirectUrl, browser)
+        const redirectUrl = await resolveToActiveGatewayUrl(request.url, state, ipfsPathValidator)
+        // only recover to a loadable http(s) gateway; a tab can't open native ipfs://
+        if (redirectUrl && redirectUrl.startsWith('http')) {
+          log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
+          // We are unable to redirect in onErrorOccurred, but we can update the tab
+          return updateTabWithURL(request, redirectUrl, browser)
+        }
       }
     },
 
@@ -465,9 +468,12 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       }
 
       if (await isRecoverable(request, state, ipfsPathValidator)) {
-        const redirectUrl = await ipfsPathValidator.resolveToPublicUrl(request.url)
-        log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url} → ${redirectUrl}`, request)
-        return updateTabWithURL(request, redirectUrl, browser)
+        const redirectUrl = await resolveToActiveGatewayUrl(request.url, state, ipfsPathValidator)
+        // only recover to a loadable http(s) gateway; a tab can't open native ipfs://
+        if (redirectUrl && redirectUrl.startsWith('http')) {
+          log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url} → ${redirectUrl}`, request)
+          return updateTabWithURL(request, redirectUrl, browser)
+        }
       }
     }
   }
@@ -666,6 +672,16 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
 
 // RECOVERY OF FAILED REQUESTS
 // ===================================================================
+
+// Resolve a failed request to a loadable gateway URL for recovery: prefer the
+// configured public gateway, otherwise the local gateway when it is available.
+// Returns null (no recovery) when neither is usable, so we never navigate a tab
+// to a native ipfs:// URI that browsers without a protocol handler cannot open.
+async function resolveToActiveGatewayUrl (url, state, ipfsPathValidator) {
+  if (state.pubGwURLString) return ipfsPathValidator.resolveToPublicUrl(url)
+  if (state.localGwAvailable) return ipfsPathValidator.resolveToLocalUrl(url)
+  return null
+}
 
 // Recovery check for onErrorOccurred (request.error) and onCompleted (request.statusCode)
 async function isRecoverable (request, state, ipfsPathValidator) {

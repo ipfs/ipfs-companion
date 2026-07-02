@@ -14,6 +14,7 @@ export const browserActionFilesCpImportCurrentTab = 'browserActionFilesCpImportC
 export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime, copier) {
   const {
     resolveToPublicUrl,
+    resolveToShareableUrl,
     resolveToCid
   } = ipfsPathValidator
   const ipfsImportHandler = {
@@ -23,8 +24,9 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
       if (runtime.hasNativeProtocolHandler) {
         return { path, url: `ipfs://${cid}` }
       } else {
-        // open at public GW (will be redirected to local elsewhere, if enabled)
-        const url = new URL(path, state.pubGwURLString).toString()
+        // open at public GW (will be redirected to local elsewhere, if enabled);
+        // fall back to the local gateway when no public gateway is configured
+        const url = new URL(path, state.pubGwURLString || state.gwURLString).toString()
         return { path, url }
       }
     },
@@ -67,7 +69,7 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
         // share wrapping dir
         path = `/ipfs/${root.cid}/`
       }
-      const url = await resolveToPublicUrl(path)
+      const url = await resolveToShareableUrl(path)
       await copier.copyTextToClipboard(url)
     },
 
