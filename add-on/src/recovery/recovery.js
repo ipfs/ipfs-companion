@@ -45,6 +45,9 @@ app.route('*', (state) => {
   // copy and point the user at running a local node instead.
   const isNativeUri = /^ip[fn]s:\/\//.test(publicURI)
   const openInstallDesktop = () => window.open('https://docs.ipfs.tech/install/ipfs-desktop/', '_blank', 'noopener,noreferrer')
+  const [buttonOnclick, buttonLabelKey] = isNativeUri
+    ? [openInstallDesktop, 'recovery_page_button_installDesktop']
+    : [openURLFromHash, 'recovery_page_button']
 
   return html`<div class="flex flex-column flex-row-l">
     <div id="left-col" class="min-vh-100 flex flex-column justify-center items-center bg-navy white">
@@ -58,20 +61,12 @@ app.route('*', (state) => {
       <p class="f3 fw5">${i18n.getMessage('recovery_page_message_p1')}</p>
       <p class="f4 fw4">${isNativeUri ? i18n.getMessage('recovery_page_message_p2_native') : i18n.getMessage('recovery_page_message_p2')}</p>
       <p class="f4 fw4 w-100"><span class="b-ns">${isNativeUri ? i18n.getMessage('recovery_page_nativeUrl') : i18n.getMessage('recovery_page_publicUrl')}</span> <a class="no-underline navy link hover-aqua" href="${publicURI}" rel="noopener noreferrer" target="_blank">${publicURI}</a></p>
-      ${isNativeUri
-        ? html`<button
-            class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br2 ma4 pointer"
-            onclick=${openInstallDesktop}
-          >
-            <span class="f5 fw6">${i18n.getMessage('recovery_page_button_installDesktop')}</span>
-          </button>`
-        : html`<button
-            class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br2 ma4 pointer"
-            onclick=${openURLFromHash}
-            href="${publicURI}"
-          >
-            <span class="f5 fw6">${i18n.getMessage('recovery_page_button')}</span>
-          </button>`}
+      <button
+        class="fade-in ba bw1 b--teal bg-teal snow f7 ph2 pv3 br2 ma4 pointer"
+        onclick=${buttonOnclick}
+      >
+        <span class="f5 fw6">${i18n.getMessage(buttonLabelKey)}</span>
+      </button>
       <p class="f5 fw2 pt5">
         ${learnMoreLink} | ${optionsPageLink}
       </p>

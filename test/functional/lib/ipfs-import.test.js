@@ -148,7 +148,29 @@ describe('ipfs-import.js', function () {
     })
 
     describe('preloadFilesAtPublicGateway', () => {
-      it.todo('implement')
+      const files = [{ path: '', cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa' }]
+
+      it('should do nothing when no public gateway is configured', async function () {
+        const fetchStub = sandbox.stub(globalThis, 'fetch').resolves({})
+        getState.returns({ preloadAtPublicGateway: true, gwURLString: 'http://localhost:8080/' })
+        await ipfsImportHandler.preloadFilesAtPublicGateway(files)
+        sinon.assert.notCalled(fetchStub)
+      })
+
+      it('should preload at the public path gateway when only it is configured', async function () {
+        const fetchStub = sandbox.stub(globalThis, 'fetch').resolves({})
+        getState.returns({ preloadAtPublicGateway: true, pubGwURLString: 'https://ipfs.io/' })
+        await ipfsImportHandler.preloadFilesAtPublicGateway(files)
+        sinon.assert.calledWith(fetchStub, 'https://ipfs.io/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa#x-ipfs-companion-no-redirect', { method: 'HEAD' })
+      })
+
+      it('should preload at a random configured gateway when both are set', async function () {
+        const fetchStub = sandbox.stub(globalThis, 'fetch').resolves({})
+        sandbox.stub(Math, 'random').returns(0.99) // picks the second candidate
+        getState.returns({ preloadAtPublicGateway: true, pubGwURLString: 'https://ipfs.io/', pubSubdomainGwURL: new URL('https://dweb.link/') })
+        await ipfsImportHandler.preloadFilesAtPublicGateway(files)
+        sinon.assert.calledWith(fetchStub, 'https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/#x-ipfs-companion-no-redirect', { method: 'HEAD' })
+      })
     })
 
     describe('filesCpImportCurrentTab', () => {

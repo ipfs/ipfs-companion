@@ -25,7 +25,9 @@ const recoverableNetworkErrors = new Set([
   'net::ERR_CONNECTION_TIMED_OUT', // eg. httpd is offline
   'net::ERR_INTERNET_DISCONNECTED' // no network
 ])
-const recoverableHttpError = (code) => code && code >= 400
+// 4xx is the gateway answering about the resource (e.g. 404 for missing
+// content); only 5xx means the gateway itself is unhealthy and worth recovering
+const recoverableHttpError = (code) => code && code >= 500
 
 // Tracking late redirects for edge cases such as https://github.com/ipfs-shipyard/ipfs-companion/issues/436
 const onHeadersReceivedRedirect = new Set()
@@ -434,9 +436,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       // Check if error can be recovered by opening same content-addresed path
       // using active gateway (public or local, depending on redirect state)
       if (await isRecoverable(request, state, ipfsPathValidator)) {
-        const redirectUrl = await resolveToActiveGatewayUrl(request.url, state, ipfsPathValidator)
-        // only recover to a loadable http(s) gateway; a tab can't open native ipfs://
-        if (redirectUrl && redirectUrl.startsWith('http')) {
+        const redirectUrl = await recoveryUrlForFailedRequest(request, state, ipfsPathValidator, runtimeRoot)
+        if (redirectUrl) {
           log(`onErrorOccurred: attempting to recover from network error (${request.error}) for ${request.url} → ${redirectUrl}`, request)
           // We are unable to redirect in onErrorOccurred, but we can update the tab
           return updateTabWithURL(request, redirectUrl, browser)
@@ -468,9 +469,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       }
 
       if (await isRecoverable(request, state, ipfsPathValidator)) {
-        const redirectUrl = await resolveToActiveGatewayUrl(request.url, state, ipfsPathValidator)
-        // only recover to a loadable http(s) gateway; a tab can't open native ipfs://
-        if (redirectUrl && redirectUrl.startsWith('http')) {
+        const redirectUrl = await recoveryUrlForFailedRequest(request, state, ipfsPathValidator, runtimeRoot)
+        if (redirectUrl) {
           log(`onCompleted: attempting to recover from HTTP Error ${request.statusCode} for ${request.url} → ${redirectUrl}`, request)
           return updateTabWithURL(request, redirectUrl, browser)
         }
@@ -673,29 +673,43 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
 // RECOVERY OF FAILED REQUESTS
 // ===================================================================
 
-// Resolve a failed request to a loadable gateway URL for recovery: prefer the
-// configured public gateway, otherwise the local gateway when it is available.
-// Returns null (no recovery) when neither is usable, so we never navigate a tab
-// to a native ipfs:// URI that browsers without a protocol handler cannot open.
+// Resolve a failed request to a loadable gateway URL for recovery: a
+// configured public gateway first (skipped when the failure happened at that
+// very gateway), then the local gateway when the node is online. Returns null
+// when nothing loadable is left; callers fall back to the recovery page, so we
+// never navigate a tab to a native ipfs:// URI that browsers without a
+// protocol handler cannot open.
 async function resolveToActiveGatewayUrl (url, state, ipfsPathValidator) {
-  if (state.pubGwURLString) return ipfsPathValidator.resolveToPublicUrl(url)
-  if (state.localGwAvailable) return ipfsPathValidator.resolveToLocalUrl(url)
+  const failedAtPublicGw = sameGateway(url, state.pubGwURL) || sameGateway(url, state.pubSubdomainGwURL)
+  if (!failedAtPublicGw && (state.pubGwURLString || state.pubSubdomainGwURL)) {
+    const publicUrl = await ipfsPathValidator.resolveToPublicUrl(url)
+    if (publicUrl && publicUrl.startsWith('http')) return publicUrl
+  }
+  if (state.localGwAvailable && state.nodeActive) return ipfsPathValidator.resolveToLocalUrl(url)
+  return null
+}
+
+// The URL a failed request is recovered to: a loadable gateway URL when one
+// exists, otherwise the extension's recovery page with the native URI in the
+// hash, where the user can start a local node or install IPFS Desktop.
+async function recoveryUrlForFailedRequest (request, state, ipfsPathValidator, runtimeRoot) {
+  const gatewayUrl = await resolveToActiveGatewayUrl(request.url, state, ipfsPathValidator)
+  if (gatewayUrl) return gatewayUrl
+  const nativeUri = ipfsPathValidator.resolveToNativeUri(request.url)
+  if (nativeUri && nativeUri.startsWith('ip')) {
+    return `${dropSlash(runtimeRoot)}${recoveryPagePath}#${encodeURIComponent(nativeUri)}`
+  }
   return null
 }
 
 // Recovery check for onErrorOccurred (request.error) and onCompleted (request.statusCode)
 async function isRecoverable (request, state, ipfsPathValidator) {
-  // Note: we are unable to recover default public gateways without a local one
   const { error, statusCode, url } = request
-  const { redirect, localGwAvailable, pubGwURL, pubSubdomainGwURL } = state
   return (state.recoverFailedHttpRequests &&
     request.type === 'main_frame' &&
     (recoverableNetworkErrors.has(error) ||
       recoverableHttpError(statusCode)) &&
-    await ipfsPathValidator.publicIpfsOrIpnsResource(url) &&
-    ((redirect && localGwAvailable) ||
-      (!sameGateway(url, pubGwURL) &&
-       !sameGateway(url, pubSubdomainGwURL))))
+    await ipfsPathValidator.publicIpfsOrIpnsResource(url))
 }
 
 // Recovery check for onErrorOccurred (request.error)

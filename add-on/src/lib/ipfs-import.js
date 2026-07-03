@@ -5,7 +5,7 @@ import debug from 'debug'
 import browser from 'webextension-polyfill'
 
 import { redirectOptOutHint } from './ipfs-request.js'
-import { ipfsContentPath } from './ipfs-path.js'
+import { contentPathToSubdomainUrl, ipfsContentPath, pathAtHttpGateway } from './ipfs-path.js'
 const log = debug('ipfs-companion:import')
 log.error = debug('ipfs-companion:import:error')
 
@@ -13,7 +13,6 @@ export const browserActionFilesCpImportCurrentTab = 'browserActionFilesCpImportC
 
 export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, runtime, copier) {
   const {
-    resolveToPublicUrl,
     resolveToShareableUrl,
     resolveToCid
   } = ipfsPathValidator
@@ -76,10 +75,18 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
     async preloadFilesAtPublicGateway (files) {
       const state = getState()
       if (!state.preloadAtPublicGateway) return
+      // preload needs a public gateway; noop when none is configured
+      if (!state.pubGwURLString && !state.pubSubdomainGwURL) return
       for (const file of files) {
         if (file && file.cid) {
           const { path } = ipfsImportHandler.getIpfsPathAndNativeAddress(file.cid)
-          const preloadUrl = await resolveToPublicUrl(`${path}#${redirectOptOutHint}`)
+          const contentPath = `${path}#${redirectOptOutHint}`
+          // spread the load over a random configured gateway when both are set
+          const candidates = [
+            state.pubGwURLString && pathAtHttpGateway(contentPath, state.pubGwURLString),
+            state.pubSubdomainGwURL && contentPathToSubdomainUrl(contentPath, state.pubSubdomainGwURL)
+          ].filter(Boolean)
+          const preloadUrl = candidates[Math.floor(Math.random() * candidates.length)]
           try {
             await fetch(preloadUrl, { method: 'HEAD' })
             log('successfully preloaded', file)

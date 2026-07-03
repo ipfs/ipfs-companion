@@ -191,8 +191,14 @@ export default async function init (inQuickImport = false) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
-      const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
+      const { validIpfsOrIpns, resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
+      let result = null
+      if (await validIpfsOrIpns(path)) {
+        // linkified hrefs must be loadable http(s) URLs; with no public gateway
+        // configured the resolver returns a native URI, use the local gateway then
+        const publicUrl = await resolveToPublicUrl(path)
+        result = publicUrl && publicUrl.startsWith('http') ? publicUrl : resolveToLocalUrl(path)
+      }
       return { pubGwUrlForIpfsOrIpnsPath: result }
     }
   }
