@@ -11,6 +11,8 @@ export default function experimentsForm ({
   catchUnhandledProtocols,
   linkify,
   recoverFailedHttpRequests,
+  dnslinkDataPreload,
+  dnslinkRedirect,
   detectIpfsPathHeader,
   logNamespaces,
   onOptionChange
@@ -21,6 +23,7 @@ export default function experimentsForm ({
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
+  const onDnslinkDataPreloadChange = onOptionChange('dnslinkDataPreload')
   const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
 
   return html`
@@ -72,6 +75,15 @@ export default function experimentsForm ({
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'recoverFailedHttpRequests', checked: recoverFailedHttpRequests, onchange: onrecoverFailedHttpRequestsChange })}</div>
+        </div>
+        <div class="flex-row-ns pb0-ns">
+          <label for="dnslinkDataPreload">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_dnslinkDataPreload_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_dnslinkDataPreload_description')}</dd>
+            </dl>
+          </label>
+          <div class="self-center-ns">${switchToggle({ id: 'dnslinkDataPreload', checked: dnslinkDataPreload, disabled: dnslinkRedirect, onchange: onDnslinkDataPreloadChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="linkify">

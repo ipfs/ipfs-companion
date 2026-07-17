@@ -89,8 +89,8 @@ export default function optionsPage (state, emit) {
   })}
   ${dnslinkForm({
     dnslinkPolicy: state.options.dnslinkPolicy,
-    dnslinkDataPreload: state.options.dnslinkDataPreload,
     dnslinkRedirect: state.options.dnslinkRedirect,
+    useSubdomains: state.options.useSubdomains,
     onOptionChange
   })}
   ${experimentsForm({
@@ -100,6 +100,8 @@ export default function optionsPage (state, emit) {
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
+    dnslinkDataPreload: state.options.dnslinkDataPreload,
+    dnslinkRedirect: state.options.dnslinkRedirect,
     detectIpfsPathHeader: state.options.detectIpfsPathHeader,
     logNamespaces: state.options.logNamespaces,
     onOptionChange

@@ -6,13 +6,12 @@ import switchToggle from '../../pages/components/switch-toggle.js'
 
 export default function dnslinkForm ({
   dnslinkPolicy,
-  dnslinkDataPreload,
   dnslinkRedirect,
+  useSubdomains,
   onOptionChange
 }) {
   const onDnslinkPolicyChange = onOptionChange('dnslinkPolicy')
   const onDnslinkRedirectChange = onOptionChange('dnslinkRedirect')
-  const onDnslinkDataPreloadChange = onOptionChange('dnslinkDataPreload')
 
   return html`
     <form>
@@ -49,21 +48,12 @@ export default function dnslinkForm ({
           </select>
         </div>
         <div class="flex-row-ns pb0-ns">
-          <label for="dnslinkDataPreload">
-            <dl>
-              <dt>${browser.i18n.getMessage('option_dnslinkDataPreload_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_dnslinkDataPreload_description')}</dd>
-            </dl>
-          </label>
-          <div class="self-center-ns">${switchToggle({ id: 'dnslinkDataPreload', checked: dnslinkDataPreload, disabled: dnslinkRedirect, onchange: onDnslinkDataPreloadChange })}</div>
-        </div>
-        <div class="flex-row-ns pb0-ns">
           <label for="dnslinkRedirect">
             <dl>
               <dt>${browser.i18n.getMessage('option_dnslinkRedirect_title')}</dt>
               <dd>
                 ${browser.i18n.getMessage('option_dnslinkRedirect_description')}
-                ${dnslinkRedirect ? html`<p class="red i">${browser.i18n.getMessage('option_dnslinkRedirect_warning')}</p>` : null}
+                ${dnslinkRedirect && !useSubdomains ? html`<p class="red i">${browser.i18n.getMessage('option_dnslinkRedirect_warning')}</p>` : null}
                 <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>

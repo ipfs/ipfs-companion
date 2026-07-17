@@ -44,7 +44,9 @@ export const optionDefaults = Object.freeze({
   automaticMode: true,
   linkify: false,
   dnslinkPolicy: 'best-effort',
-  dnslinkDataPreload: true,
+  // experimental: a HEAD preload fetches only the root block, so its value is
+  // limited; off by default
+  dnslinkDataPreload: false,
   dnslinkRedirect: true,
   recoverFailedHttpRequests: true,
   // legacy x-ipfs-path header detection, opt-in and off by default: gateway
