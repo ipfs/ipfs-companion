@@ -151,20 +151,42 @@ describe('modifyRequest processing of DNSLinks', function () {
         }
       })
     })
-    it('should ignore DNS TXT record and also ignore /ipns/ path from x-ipfs-path if both are present', async function () {
-      // enable detection of x-ipfs-path to ensure it is not enough without dnslinkPolicy=detectIpfsPathHeader
+    it('should redirect to /ipns/ address if DNSLink for FQDN is in cache, regardless of the x-ipfs-path value', async function () {
+      // the header value is an opaque hint, never a redirect target: an /ipns/
+      // value (or any other) is treated the same as the /ipfs/ value in the
+      // test above, so a cached DNSLink still upgrades the page to the mutable
+      // /ipns/ address built from the domain name
       state.detectIpfsPathHeader = true
-      // stub existence of a valid DNS record
+      const fqdn = 'explore.ipld.io'
+      dnslinkResolver.setDnslink(fqdn, '/ipns/this-should-be-ignored.io')
+      //
+      const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+      // onBeforeRequest should not change anything (dnslinkPolicy=false)
+      ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
+      // simulate presence of x-ipfs-path header returned by HTTP gateway
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/value-from-x-ipfs-path-to-ignore.io' }]
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onHeadersReceived(request),
+        MV2Expectation: `${state.gwURLString}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
+          destination: `${state.gwURLString}/ipns/explore.ipld.io\\1`
+        }
+      })
+    })
+    it('should NOT redirect when no DNSLink is available, whatever the x-ipfs-path value', async function () {
+      // with lookups off (dnslinkPolicy=false) and nothing cached there is no
+      // DNSLink to confirm, so the header is ignored: its value is only a hint,
+      // never a redirect target, so an immutable /ipfs/ snapshot is never used
+      state.detectIpfsPathHeader = true
+      // stubbed DNS record is irrelevant here, dnslinkPolicy=false disables lookups
       const fqdn = 'explore.ipld.io'
       dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves('/ipns/this-should-be-ignored.io')
       //
       const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
-      // onBeforeRequest should not change anything
       ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
       // simulate presence of x-ipfs-path header returned by HTTP gateway
       request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipns/value-from-x-ipfs-path-to-ignore.io' }]
-      // onHeadersReceived should ignore /ipns/ from x-ipfs-path because dnslink is disabled in preferences
-      // and redirect would confuse users
       ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
     })
   })
