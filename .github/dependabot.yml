@@ -18,6 +18,13 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
+    # Later @material/switch majors rewrote the component, and the new CSS
+    # styles none of the classes switch-toggle.js builds, so a bump passes
+    # CI and silently unstyles every toggle. See AGENTS.md. Patches within
+    # 10.x still come through.
+    ignore:
+      - dependency-name: "@material/switch"
+        update-types: ["version-update:semver-major"]
     groups:
       # Kubo RPC client and the IPFS libraries the extension is built on.
       ipfs:

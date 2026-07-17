@@ -24,10 +24,10 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
@@ -39,7 +39,7 @@ jobs:
           npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
 
       - name: Restore .cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -50,7 +50,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
@@ -84,7 +84,7 @@ jobs:
       # - action artifacts can be downloaded for 90 days, then are removed by github
       # - binaries in PRs from forks won't be signed
       - name: Attach produced packages to Github Action
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: built-on-${{ matrix.os }}
           path: build/ipfs_companion*.*
@@ -98,7 +98,7 @@ jobs:
     needs: [test]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         with:
           changelog-notes-type: github
           release-type: node
@@ -115,15 +115,15 @@ jobs:
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
       - name: Restore .cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -134,7 +134,7 @@ jobs:
 
       - name: Restore node_modules
         id: yarn-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package*json', '**/package-lock.json', '**/*config.js') }}
@@ -147,7 +147,7 @@ jobs:
         run: npm run ci:build:stable
 
       - name: Release
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
           files: build/*.zip
           fail_on_unmatched_files: true
