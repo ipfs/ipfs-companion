@@ -191,8 +191,14 @@ export default async function init (inQuickImport = false) {
     // console.log((sender.tab ? 'Message from a content script:' + sender.tab.url : 'Message from the extension'), request)
     if (request.pubGwUrlForIpfsOrIpnsPath) {
       const path = request.pubGwUrlForIpfsOrIpnsPath
-      const { validIpfsOrIpns, resolveToPublicUrl } = ipfsPathValidator
-      const result = await validIpfsOrIpns(path) ? await resolveToPublicUrl(path) : null
+      const { validIpfsOrIpns, resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
+      let result = null
+      if (await validIpfsOrIpns(path)) {
+        // linkified hrefs must be loadable http(s) URLs; with no public gateway
+        // configured the resolver returns a native URI, use the local gateway then
+        const publicUrl = await resolveToPublicUrl(path)
+        result = publicUrl && publicUrl.startsWith('http') ? publicUrl : resolveToLocalUrl(path)
+      }
       return { pubGwUrlForIpfsOrIpnsPath: result }
     }
   }
@@ -277,19 +283,20 @@ export default async function init (inQuickImport = false) {
       const url = info.currentTab.url
       info.isIpfsContext = ipfsPathValidator.isIpfsPageActionsContext(url)
       if (info.isIpfsContext) {
-        info.currentTabPublicUrl = await ipfsPathValidator.resolveToPublicUrl(url)
+        info.currentTabPublicUrl = await ipfsPathValidator.resolveToShareableUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
         if (resolveCache.has(url)) {
-          const [immutableIpfsPath, permalink, cid] = resolveCache.get(url)
+          const [immutableIpfsPath, cid] = resolveCache.get(url)
           info.currentTabImmutablePath = immutableIpfsPath
-          info.currentTabPermalink = permalink
+          // resolve the permalink fresh so it tracks the share toggle; the costly
+          // DAG lookup underneath is memoized, so this stays cheap
+          info.currentTabPermalink = await ipfsPathValidator.resolveToPermalink(url)
           info.currentTabCid = cid
         } else {
           // run async resolution in the next event loop so it does not block the UI
           setTimeout(async () => {
             resolveCache.set(url, [
               await ipfsPathValidator.resolveToImmutableIpfsPath(url),
-              await ipfsPathValidator.resolveToPermalink(url),
               await ipfsPathValidator.resolveToCid(url)
             ])
             await sendStatusUpdateToBrowserAction()
@@ -665,12 +672,12 @@ export default async function init (inQuickImport = false) {
           state.gwURLString = state.gwURL.toString()
           break
         case 'publicGatewayUrl':
-          state.pubGwURL = new URL(change.newValue)
-          state.pubGwURLString = state.pubGwURL.toString()
+          state.pubGwURL = change.newValue ? new URL(change.newValue) : undefined
+          state.pubGwURLString = state.pubGwURL?.toString()
           break
         case 'publicSubdomainGatewayUrl':
-          state.pubSubdomainGwURL = new URL(change.newValue)
-          state.pubSubdomainGwURLString = state.pubSubdomainGwURL.toString()
+          state.pubSubdomainGwURL = change.newValue ? new URL(change.newValue) : undefined
+          state.pubSubdomainGwURLString = state.pubSubdomainGwURL?.toString()
           break
         case 'useCustomGateway':
           state.redirect = change.newValue

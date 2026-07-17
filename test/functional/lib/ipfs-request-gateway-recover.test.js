@@ -24,6 +24,9 @@ const urlRequestWithNetworkError = (url, error = 'net::ERR_CONNECTION_TIMED_OUT'
   return { ...url2request(url, type), error }
 }
 
+const recoveryPageUrl = (nativeUri) =>
+  `chrome-extension://testid/dist/recovery/recovery.html#${encodeURIComponent(nativeUri)}`
+
 describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   let state, dnslinkResolver, ipfsPathValidator, requestHandler, runtime
 
@@ -35,9 +38,11 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   })
 
   beforeEach(async function () {
+    // defaults prefill both public gateways (ipfs.io and dweb.link)
     state = initState(optionDefaults)
     const getState = () => state
     const getIpfs = () => {}
+    browser.runtime.getURL.returns('chrome-extension://testid/')
     dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
@@ -49,7 +54,17 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
       state.recoverFailedHttpRequests = true
       state.dnslinkPolicy = false
     })
-    it('should do nothing if broken request is for the default subdomain gateway', async function () {
+    it('should show recovery page when broken request is for the configured subdomain gateway and node is offline', async function () {
+      // failures at the configured public gateway cannot recover to it; with
+      // the node offline the user gets the recovery page with the native URI
+      const request = urlRequestWithStatus('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki/', 500)
+      await requestHandler.onCompleted(request)
+      const expectedUrl = recoveryPageUrl('ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/')
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: expectedUrl, active: true }).calledOnce, 'tabs.update should open the recovery page')
+    })
+    it('should do nothing if broken subdomain request has Base58 CIDv0 label', async function () {
+      // base58 is case-sensitive, so a CIDv0 lost in DNS lowercasing is not a
+      // recognizable IPFS resource
       const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.dweb.link/wiki/', 500)
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
@@ -79,10 +94,11 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
       await requestHandler.onCompleted(request)
       assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
     })
-    it('should do nothing if broken request is to the default public gateway', async function () {
+    it('should show recovery page when broken request is to the configured path gateway and node is offline', async function () {
       const request = urlRequestWithStatus('https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500)
       await requestHandler.onCompleted(request)
-      assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
+      const expectedUrl = recoveryPageUrl('ipfs://bafybeieym3tecwcvjhnsbc3rfmxck4yimrggclrwd5fav5q44o7xo7n3ky')
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: expectedUrl, active: true }).calledOnce, 'tabs.update should open the recovery page')
     })
     it('should do nothing if broken request is not a \'main_frame\' request', async function () {
       const request = urlRequestWithStatus('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', 500, 'stylesheet')
@@ -134,9 +150,11 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
   })
 
   beforeEach(async function () {
+    // defaults prefill both public gateways (ipfs.io and dweb.link)
     state = initState(optionDefaults)
     const getState = () => state
     const getIpfs = () => {}
+    browser.runtime.getURL.returns('chrome-extension://testid/')
     dnslinkResolver = createDnslinkResolver(getState)
     runtime = Object.assign({}, await createRuntimeChecks(browser)) // make it mutable for tests
     ipfsPathValidator = createIpfsPathValidator(getState, getIpfs, dnslinkResolver)
@@ -148,10 +166,11 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       state.recoverFailedHttpRequests = true
       state.dnslinkPolicy = false
     })
-    it('should do nothing if failed request is for the default subdomain gateway', async function () {
-      const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.dweb.link/wiki/', 500)
+    it('should show recovery page when failed request is for the configured subdomain gateway and node is offline', async function () {
+      const request = urlRequestWithStatus('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki/', 500)
       await requestHandler.onErrorOccurred(request)
-      assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
+      const expectedUrl = recoveryPageUrl('ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/')
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: expectedUrl, active: true }).calledOnce, 'tabs.update should open the recovery page')
     })
     it('should redirect to default subdomain gateway on failed subdomain gateway request', async function () {
       const request = urlRequestWithStatus('http://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.brokenexample.com/wiki/', 500)
@@ -168,10 +187,11 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
     })
-    it('should do nothing if failed request is to the default public gateway', async function () {
+    it('should show recovery page when failed request is to the configured path gateway and node is offline', async function () {
       const request = urlRequestWithNetworkError('https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
-      assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
+      const expectedUrl = recoveryPageUrl('ipfs://bafybeieym3tecwcvjhnsbc3rfmxck4yimrggclrwd5fav5q44o7xo7n3ky')
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: expectedUrl, active: true }).calledOnce, 'tabs.update should open the recovery page')
     })
     it('should do nothing if failed request is not a \'main_frame\' request', async function () {
       const requestType = 'stylesheet'
@@ -183,6 +203,36 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true }).calledOnce, 'tabs.update should be called with IPFS default public gateway URL')
+    })
+    it('should recover on the local gateway when no public gateway is configured and node is online', async function () {
+      // clear the prefilled public gateways so recovery must use the local gateway
+      Object.assign(state, { pubGwURL: undefined, pubGwURLString: undefined, pubSubdomainGwURL: undefined, pubSubdomainGwURLString: undefined, peerCount: 1 })
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'http://localhost:8080/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true }).calledOnce, 'tabs.update should recover on the local gateway')
+    })
+    it('should show recovery page when no public gateway is configured and node is offline', async function () {
+      Object.assign(state, { pubGwURL: undefined, pubGwURLString: undefined, pubSubdomainGwURL: undefined, pubSubdomainGwURLString: undefined })
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+      await requestHandler.onErrorOccurred(request)
+      const expectedUrl = recoveryPageUrl('ipfs://bafybeieym3tecwcvjhnsbc3rfmxck4yimrggclrwd5fav5q44o7xo7n3ky')
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: expectedUrl, active: true }).calledOnce, 'tabs.update should open the recovery page')
+    })
+    it('should recover subdomain gateway request on the local gateway when no public subdomain gateway is configured and node is online', async function () {
+      // a subdomain request is never downgraded to a public path gateway (it
+      // lacks origin isolation); the local gateway preserves isolation via
+      // its own redirect to *.ipfs.localhost
+      Object.assign(state, { pubSubdomainGwURL: undefined, pubSubdomainGwURLString: undefined, peerCount: 1 })
+      const request = urlRequestWithNetworkError('http://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.brokenexample.com/wiki/')
+      await requestHandler.onErrorOccurred(request)
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'http://localhost:8080/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/', active: true }).calledOnce, 'tabs.update should recover on the local gateway')
+    })
+    it('should recover path gateway request via the public subdomain gateway when only it is configured', async function () {
+      Object.assign(state, { pubGwURL: undefined, pubGwURLString: undefined })
+      const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
+      await requestHandler.onErrorOccurred(request)
+      // CIDv0 is normalized to a base32 CIDv1 subdomain label
+      assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'https://bafybeieym3tecwcvjhnsbc3rfmxck4yimrggclrwd5fav5q44o7xo7n3ky.ipfs.dweb.link/', active: true }).calledOnce, 'tabs.update should recover on the public subdomain gateway')
     })
     it('should recover from unreachable HTTP server by reopening DNSLink on the active gateway', async function () {
       state.dnslinkPolicy = 'best-effort'

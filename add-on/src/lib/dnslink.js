@@ -61,7 +61,11 @@ export default function createDnslinkResolver (getState) {
         // to load the correct path from IPFS
         // - https://github.com/ipfs/ipfs-companion/issues/298
         const ipnsPath = dnslinkResolver.convertToIpnsPath(url)
-        const gateway = state.redirect && state.localGwAvailable ? state.gwURLString : state.pubGwURLString
+        // redirect to the local gateway when enabled, and fall back to it when
+        // no public gateway is configured
+        const gateway = (state.redirect && state.localGwAvailable) || !state.pubGwURLString
+          ? state.gwURLString
+          : state.pubGwURLString
         return pathAtHttpGateway(ipnsPath, gateway)
       }
     },

@@ -3,8 +3,32 @@ import { describe, it, beforeEach, afterAll as after } from 'vitest'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import browser from 'sinon-chrome'
-import { storeMissingOptions, optionDefaults, isHostname, hostTextToArray, hostArrayToText } from '../../../add-on/src/lib/options.js'
+import { storeMissingOptions, optionDefaults, guiURLString, isHostname, hostTextToArray, hostArrayToText } from '../../../add-on/src/lib/options.js'
 import { URL } from 'url'
+
+describe('optionDefaults', function () {
+  // Fresh installs share links via the public subdomain gateway; flipping the
+  // default to native URIs means changing the DEFAULT_* constants in
+  // options.js and this test together.
+  it('should prefill public gateways and share via them by default', () => {
+    expect(optionDefaults.publicGatewayUrl).to.equal('https://ipfs.io')
+    expect(optionDefaults.publicSubdomainGatewayUrl).to.equal('https://dweb.link')
+    expect(optionDefaults.usePublicGatewaysForShare).to.equal(true)
+  })
+})
+
+describe('guiURLString()', function () {
+  beforeEach(() => {
+    global.URL = URL
+  })
+  it('should normalize URL and drop trailing slash', () => {
+    expect(guiURLString('https://ipfs.io/')).to.equal('https://ipfs.io')
+  })
+  // clearing a public gateway URL in Preferences stores '' to opt out of it
+  it('should keep empty input empty', () => {
+    expect(guiURLString('')).to.equal('')
+  })
+})
 
 describe('storeMissingOptions()', function () {
   beforeEach(() => {
