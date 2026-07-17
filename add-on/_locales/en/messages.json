@@ -259,6 +259,22 @@
     "message": "External (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
+  "option_ipfsNodeType_external_explainer": {
+    "message": "IPFS Companion controls your node over the Kubo RPC API, an HTTP interface served by Kubo, the standard IPFS node software. Don't have a node yet? Install Kubo (command line), or IPFS Desktop, a graphical app that runs the same Kubo daemon and provides the same RPC and Web UI in a nicer package.",
+    "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
+  },
+  "option_ipfsNodeType_external_installKubo": {
+    "message": "Install Kubo (command line)",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
+  },
+  "option_ipfsNodeType_external_installDesktop": {
+    "message": "Install IPFS Desktop",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
+  },
+  "option_ipfsNodeType_external_rpcDocs": {
+    "message": "Kubo RPC API docs",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
+  },
   "option_ipfsNodeType_brave": {
     "message": "Provided by Brave",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
