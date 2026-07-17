@@ -38,8 +38,8 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   })
 
   beforeEach(async function () {
-    // public gateways are empty by default; recovery cases need them configured
-    state = initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' })
+    // defaults prefill both public gateways (ipfs.io and dweb.link)
+    state = initState(optionDefaults)
     const getState = () => state
     const getIpfs = () => {}
     browser.runtime.getURL.returns('chrome-extension://testid/')
@@ -150,8 +150,8 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
   })
 
   beforeEach(async function () {
-    // public gateways are empty by default; recovery cases need them configured
-    state = initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' })
+    // defaults prefill both public gateways (ipfs.io and dweb.link)
+    state = initState(optionDefaults)
     const getState = () => state
     const getIpfs = () => {}
     browser.runtime.getURL.returns('chrome-extension://testid/')
@@ -205,7 +205,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'https://ipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h', active: true }).calledOnce, 'tabs.update should be called with IPFS default public gateway URL')
     })
     it('should recover on the local gateway when no public gateway is configured and node is online', async function () {
-      // default config has empty public gateways, so recovery uses the local gateway
+      // clear the prefilled public gateways so recovery must use the local gateway
       Object.assign(state, { pubGwURL: undefined, pubGwURLString: undefined, pubSubdomainGwURL: undefined, pubSubdomainGwURLString: undefined, peerCount: 1 })
       const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
       await requestHandler.onErrorOccurred(request)

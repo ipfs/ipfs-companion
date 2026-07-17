@@ -21,11 +21,8 @@ describe('ipfs-path.js', function () {
 
   beforeEach(function () {
     global.URL = URL
-    // public gateways are empty by default; these cases exercise configured-gateway behavior
-    state = Object.assign(
-      initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' }),
-      { peerCount: 1 }
-    )
+    // defaults prefill both public gateways (ipfs.io and dweb.link)
+    state = Object.assign(initState(optionDefaults), { peerCount: 1 })
     ipfs = {
       name: {
         resolve (arg) {
@@ -421,10 +418,13 @@ describe('ipfs-path.js', function () {
   })
 
   describe('resolveToShareableUrl (Copy Shareable Link)', function () {
-    // default config: public gateways empty, so shareable links are native URIs
+    // public gateway URLs cleared by the user: shareable links are native URIs
     let nativeValidator
     beforeEach(function () {
-      const nativeState = Object.assign(initState(optionDefaults), { peerCount: 1 })
+      const nativeState = Object.assign(
+        initState({ ...optionDefaults, publicGatewayUrl: '', publicSubdomainGatewayUrl: '' }),
+        { peerCount: 1 }
+      )
       nativeValidator = createIpfsPathValidator(() => nativeState, () => ipfs, dnslinkResolver)
     })
     it('copies a native ipfs:// URI for CID-in-subdomain', async function () {
@@ -443,31 +443,40 @@ describe('ipfs-path.js', function () {
       const url = 'https://en-wikipedia--on--ipfs-org.ipns.dweb.link/wiki/Mars.html?argTest#hashTest'
       expect(await nativeValidator.resolveToShareableUrl(url)).to.equal('ipns://en.wikipedia-on-ipfs.org/wiki/Mars.html?argTest#hashTest')
     })
-    // opted into public sharing; overrides set the gateway URLs + Use Subdomains
-    const optedInValidator = (overrides) => {
-      const state = Object.assign(initState({ ...optionDefaults, usePublicGatewaysForShare: true, ...overrides }), { peerCount: 1 })
+    // public sharing on (the default); overrides adjust the gateway URLs
+    const shareValidator = (overrides) => {
+      const state = Object.assign(initState({ ...optionDefaults, ...overrides }), { peerCount: 1 })
       return createIpfsPathValidator(() => state, () => ipfs, dnslinkResolver)
     }
     const cidPath = '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest'
-    const bothGateways = { publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link' }
-    it('public share with Use Subdomains on uses the subdomain gateway', async function () {
-      const v = optedInValidator({ ...bothGateways, useSubdomains: true })
+    // sha2-512 multihash: its base32 form (110 chars) exceeds the 63-char DNS label limit
+    const longCidPath = '/ipfs/bafkrgqfg37dz6kebxts6akxt7c7pjyn4w6yekk3gv7diw7euamcmmfbjskrucx3yjcxsqljdyfmxxjoeqz5j24yhgzkeq4fj4ag25jfblj274/wiki/Mars.html'
+    it('copies a subdomain gateway URL with default settings', async function () {
+      const v = shareValidator({})
       expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest')
     })
-    it('public share with Use Subdomains off uses the path gateway', async function () {
-      const v = optedInValidator({ ...bothGateways, useSubdomains: false })
+    it('copies a native URI when the share toggle is off, even with gateways set', async function () {
+      const v = shareValidator({ usePublicGatewaysForShare: false })
+      expect(await v.resolveToShareableUrl(cidPath)).to.equal('ipfs://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
+    })
+    it('falls back to the path gateway when no subdomain gateway is set', async function () {
+      const v = shareValidator({ publicSubdomainGatewayUrl: '' })
       expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://ipfs.io/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
     })
-    it('public share falls back to the only configured gateway (path) with Use Subdomains on', async function () {
-      const v = optedInValidator({ publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: '', useSubdomains: true })
-      expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://ipfs.io/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa/wiki/Mars.html?argTest#hashTest')
-    })
-    it('public share falls back to the only configured gateway (subdomain) with Use Subdomains off', async function () {
-      const v = optedInValidator({ publicGatewayUrl: '', publicSubdomainGatewayUrl: 'https://dweb.link', useSubdomains: false })
+    it('uses the subdomain gateway when only it is set', async function () {
+      const v = shareValidator({ publicGatewayUrl: '' })
       expect(await v.resolveToShareableUrl(cidPath)).to.equal('https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html?argTest#hashTest')
+    })
+    it('falls back to the path gateway when the CID exceeds the DNS label limit', async function () {
+      const v = shareValidator({})
+      expect(await v.resolveToShareableUrl(longCidPath)).to.equal('https://ipfs.io/ipfs/bafkrgqfg37dz6kebxts6akxt7c7pjyn4w6yekk3gv7diw7euamcmmfbjskrucx3yjcxsqljdyfmxxjoeqz5j24yhgzkeq4fj4ag25jfblj274/wiki/Mars.html')
+    })
+    it('falls back to a native URI when the CID exceeds the DNS label limit and only the subdomain gateway is set', async function () {
+      const v = shareValidator({ publicGatewayUrl: '' })
+      expect(await v.resolveToShareableUrl(longCidPath)).to.equal('ipfs://bafkrgqfg37dz6kebxts6akxt7c7pjyn4w6yekk3gv7diw7euamcmmfbjskrucx3yjcxsqljdyfmxxjoeqz5j24yhgzkeq4fj4ag25jfblj274/wiki/Mars.html')
     })
     it('public share of a DNSLink page keeps the FQDN with a subdomain gateway', async function () {
-      const v = optedInValidator({ ...bothGateways, useSubdomains: true })
+      const v = shareValidator({})
       const url = 'https://docs.ipfs.tech/concepts/'
       spoofCachedDnslink('docs.ipfs.tech', dnslinkResolver, '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa')
       expect(await v.resolveToShareableUrl(url)).to.equal('https://docs.ipfs.tech/concepts/')
@@ -477,7 +486,10 @@ describe('ipfs-path.js', function () {
   describe('resolveToPublicUrl (no public gateway configured)', function () {
     let nativeValidator
     beforeEach(function () {
-      const nativeState = Object.assign(initState(optionDefaults), { peerCount: 1 })
+      const nativeState = Object.assign(
+        initState({ ...optionDefaults, publicGatewayUrl: '', publicSubdomainGatewayUrl: '' }),
+        { peerCount: 1 }
+      )
       nativeValidator = createIpfsPathValidator(() => nativeState, () => ipfs, dnslinkResolver)
     })
     it('falls back to a native ipfs:// URI for CID-in-subdomain', async function () {
@@ -496,7 +508,7 @@ describe('ipfs-path.js', function () {
     // to a path gateway, so with no subdomain gateway it stays native
     it('keeps a native ipfs:// URI for CID-in-subdomain when only the path gateway is configured', async function () {
       const partialState = Object.assign(
-        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io' }),
+        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: '' }),
         { peerCount: 1 }
       )
       const validator = createIpfsPathValidator(() => partialState, () => ipfs, dnslinkResolver)
@@ -505,7 +517,7 @@ describe('ipfs-path.js', function () {
     })
     it('uses the public subdomain gateway for an /ipfs/ path when only it is configured', async function () {
       const partialState = Object.assign(
-        initState({ ...optionDefaults, publicSubdomainGatewayUrl: 'https://dweb.link' }),
+        initState({ ...optionDefaults, publicGatewayUrl: '', publicSubdomainGatewayUrl: 'https://dweb.link' }),
         { peerCount: 1 }
       )
       const validator = createIpfsPathValidator(() => partialState, () => ipfs, dnslinkResolver)
@@ -516,38 +528,30 @@ describe('ipfs-path.js', function () {
 
   describe('resolveToPermalink (Copy Snapshot Link)', function () {
     const ipnsPointer = '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
-    // state (outer beforeEach) has public gateways set but the share toggle off
+    const permalinkValidator = (overrides) => {
+      const state = Object.assign(initState({ ...optionDefaults, ...overrides }), { peerCount: 1 })
+      return createIpfsPathValidator(() => state, () => ipfs, dnslinkResolver)
+    }
     it('copies an immutable native ipfs:// URI when the share toggle is off', async function () {
+      const validator = permalinkValidator({ usePublicGatewaysForShare: false })
       const url = 'https://example.com/ipns/docs.ipfs.io/concepts/glossary/?argTest#hashTest'
       spoofIpfsResolve(ipfs, '/ipns/docs.ipfs.io', ipnsPointer)
       // native permalink normalizes the CIDv0 to a base32 CIDv1
-      expect(await ipfsPathValidator.resolveToPermalink(url)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/concepts/glossary/?argTest#hashTest')
+      expect(await validator.resolveToPermalink(url)).to.equal('ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/concepts/glossary/?argTest#hashTest')
     })
-    it('public permalink with Use Subdomains off uses the path gateway', async function () {
-      const optedIn = Object.assign(
-        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link', usePublicGatewaysForShare: true, useSubdomains: false }),
-        { peerCount: 1 }
-      )
-      const validator = createIpfsPathValidator(() => optedIn, () => ipfs, dnslinkResolver)
-      spoofIpfsResolve(ipfs, '/ipns/libp2p.io', ipnsPointer)
-      expect(await validator.resolveToPermalink('/ipns/libp2p.io/?argTest#hashTest')).to.equal(`https://ipfs.io${ipnsPointer}/?argTest#hashTest`)
-    })
-    it('public permalink with Use Subdomains on uses the subdomain gateway', async function () {
-      const optedIn = Object.assign(
-        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', publicSubdomainGatewayUrl: 'https://dweb.link', usePublicGatewaysForShare: true, useSubdomains: true }),
-        { peerCount: 1 }
-      )
-      const validator = createIpfsPathValidator(() => optedIn, () => ipfs, dnslinkResolver)
+    it('public permalink prefers the subdomain gateway with default settings', async function () {
+      const validator = permalinkValidator({})
       spoofIpfsResolve(ipfs, '/ipns/libp2p.io', ipnsPointer)
       // immutable CIDv0 normalizes to base32 in the subdomain label
       expect(await validator.resolveToPermalink('/ipns/libp2p.io/?argTest#hashTest')).to.equal('https://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.dweb.link/?argTest#hashTest')
     })
+    it('public permalink uses the path gateway when no subdomain gateway is set', async function () {
+      const validator = permalinkValidator({ publicSubdomainGatewayUrl: '' })
+      spoofIpfsResolve(ipfs, '/ipns/libp2p.io', ipnsPointer)
+      expect(await validator.resolveToPermalink('/ipns/libp2p.io/?argTest#hashTest')).to.equal(`https://ipfs.io${ipnsPointer}/?argTest#hashTest`)
+    })
     it('public permalink does not double-decode percent sequences in the path', async function () {
-      const optedIn = Object.assign(
-        initState({ ...optionDefaults, publicGatewayUrl: 'https://ipfs.io', usePublicGatewaysForShare: true, useSubdomains: false }),
-        { peerCount: 1 }
-      )
-      const validator = createIpfsPathValidator(() => optedIn, () => ipfs, dnslinkResolver)
+      const validator = permalinkValidator({ publicSubdomainGatewayUrl: '' })
       spoofIpfsResolve(ipfs, '/ipns/libp2p.io', ipnsPointer)
       // the input decodes once (%2525 -> %25) and must not decode again
       expect(await validator.resolveToPermalink('/ipns/libp2p.io/100%2525.txt')).to.equal(`https://ipfs.io${ipnsPointer}/100%25.txt`)

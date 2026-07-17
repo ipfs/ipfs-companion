@@ -4,6 +4,21 @@ import isFQDN from 'is-fqdn'
 import { isIPv4, isIPv6 } from 'is-ip'
 import { POSSIBLE_NODE_TYPES } from './state.js'
 
+// Public gateways prefilled on a fresh install; "Copy Shareable Link" builds
+// links on the subdomain one. Clearing a gateway URL in Preferences opts out
+// of it (shareable links then fall back to native ipfs:// and ipns:// URIs).
+// To ship native sharing by default, flip
+// DEFAULT_USE_PUBLIC_GATEWAYS_FOR_SHARE to false and set both gateway
+// constants to ''; everything else already copes with unset gateways.
+// Note: storeMissingOptions persists these values into every profile, so
+// flipping the constants alone only changes fresh installs. To reach existing
+// profiles, the flip also needs a migrateOptions entry that rewrites stored
+// values still equal to the constants below (users who changed them keep
+// their choice).
+export const DEFAULT_PUBLIC_GATEWAY_URL = 'https://ipfs.io'
+export const DEFAULT_PUBLIC_SUBDOMAIN_GATEWAY_URL = 'https://dweb.link'
+export const DEFAULT_USE_PUBLIC_GATEWAYS_FOR_SHARE = true
+
 /**
  * @type {Readonly<import('../types/companion.js').CompanionOptions>}
  */
@@ -11,12 +26,12 @@ export const optionDefaults = Object.freeze({
   active: true, // global ON/OFF switch, overrides everything else
   ipfsNodeType: 'external',
   ipfsNodeConfig: buildDefaultIpfsNodeConfig(),
-  publicGatewayUrl: '',
-  publicSubdomainGatewayUrl: '',
-  // When off (default), "Copy Shareable Link" copies native ipfs:// and ipns://
-  // URIs. Turn it on to copy public gateway URLs instead (needs the two public
-  // gateway URLs above to be set).
-  usePublicGatewaysForShare: false,
+  publicGatewayUrl: DEFAULT_PUBLIC_GATEWAY_URL,
+  publicSubdomainGatewayUrl: DEFAULT_PUBLIC_SUBDOMAIN_GATEWAY_URL,
+  // When on, "Copy Shareable Link" copies a URL at one of the public gateways
+  // above (subdomain preferred); when off, or when no public gateway URL is
+  // set, it copies native ipfs:// and ipns:// URIs.
+  usePublicGatewaysForShare: DEFAULT_USE_PUBLIC_GATEWAYS_FOR_SHARE,
   useCustomGateway: true,
   useSubdomains: true,
   enabledOn: [], // hostnames with explicit integration opt-in

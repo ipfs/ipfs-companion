@@ -49,17 +49,7 @@ export default function optionStore (state, emitter) {
   })
 
   emitter.on('optionChange', async ({ key, value }) => {
-    const changes = { [key]: value }
-    // clearing the last public gateway URL also turns off public-gateway
-    // sharing, so a URL added later for the recovery fallback does not
-    // silently re-enable it
-    const publicGatewayKeys = ['publicGatewayUrl', 'publicSubdomainGatewayUrl']
-    if (publicGatewayKeys.includes(key) && !value) {
-      const otherKey = publicGatewayKeys.find(k => k !== key)
-      const options = await getOptions()
-      if (!options[otherKey]) changes.usePublicGatewaysForShare = false
-    }
-    browser.storage.local.set(changes)
+    browser.storage.local.set({ [key]: value })
     await notifyOptionChange()
   })
 

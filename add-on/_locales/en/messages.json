@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "A shareable link to this tab that works for anyone, even if they don't use IPFS.",
+    "message": "A shareable link to this tab that anyone can open. When public gateway sharing is off in Preferences, a native IPFS address is copied instead.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "A link to a snapshot of this tab at this moment in time; it won't change, even if content changes later. This link works for anyone, even if they don't use IPFS.",
+    "message": "A link to a snapshot of this tab at this moment in time; it won't change, even if content changes later.",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -300,7 +300,7 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS, or DNSLink record. When public gateway sharing is on, this also picks the shareable link shape: on uses your subdomain gateway, off your path gateway.",
+    "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS name, or DNSLink site.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
@@ -340,27 +340,27 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Default Public Path Gateway",
+    "message": "Public Path Gateway",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "A path gateway serves every request from a single origin, so it works well outside the browser but gives no origin isolation. It is used as a fallback when your local gateway is unavailable, and for shareable links when public sharing is enabled below and Use Subdomains is off. Produces links like https://example.com/ipfs/CID. Leave it empty to copy native ipfs:// and ipns:// URIs.",
+    "message": "A public gateway serving links like https://example.com/ipfs/CID. All content shares that one origin, which works everywhere but does not keep sites isolated from each other. Used as a fallback when your local gateway is unavailable, and for shareable links when the subdomain gateway below is empty or cannot serve the address.",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Default Public Subdomain Gateway",
+    "message": "Public Subdomain Gateway",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "A subdomain gateway gives each CID, IPNS, or DNSLink its own origin, isolating them the way browsers keep sites apart. It is used to recover broken subdomain links, and for shareable links when public sharing is enabled below and Use Subdomains is on. Produces links like https://CID.ipfs.example.com. Leave it empty to copy native ipfs:// and ipns:// URIs.",
+    "message": "A public gateway serving links like https://CID.ipfs.example.com. Each CID, IPNS name, or DNSLink site gets its own origin, keeping sites isolated the way browsers expect. Preferred for shareable links, and used to repair broken links to other subdomain gateways.",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_usePublicGatewaysForShare_title": {
-    "message": "Use Public Gateways above when Sharing links",
+    "message": "Use Public Gateways for Shareable Links",
     "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
   },
   "option_usePublicGatewaysForShare_description": {
-    "message": "When on, \"Copy Shareable Link\" copies a URL on the public gateways set above, handy for sending IPFS content to people who don't run IPFS. When off, it copies native ipfs:// and ipns:// URIs. Set the gateway URLs above to enable this.",
+    "message": "When on, copied links such as \"Copy Shareable Link\" and \"Copy Snapshot Link\" point at one of the public gateways above and open for everyone, including people who don't run IPFS. When off, or when both gateway URLs above are empty, a native ipfs:// or ipns:// address is copied instead.",
     "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
@@ -488,7 +488,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Redirect failed HTTP requests for IPFS resources to the public gateway.",
+    "message": "Redirect failed requests for IPFS resources to another gateway: a public one when set, otherwise your local one.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {

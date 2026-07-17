@@ -34,16 +34,26 @@ app.route('*', (state) => {
     }
   }
 
-  // if the IPFS node is online, open the URL from the hash, this will redirect to the local node.
-  if (state.isIpfsOnline) {
-    openURLFromHash()
-    return
-  }
-
   // With no public gateway configured, the resource resolves to a native
   // ipfs:// / ipns:// URI that has no HTTP fallback. Drop the public-gateway
   // copy and point the user at running a local node instead.
   const isNativeUri = /^ip[fn]s:\/\//.test(publicURI)
+
+  // if the IPFS node is online, open the URL from the hash, this will redirect
+  // to the local node. Browsers without an ipfs:// protocol handler cannot
+  // navigate to a native URI, so ask the background to resolve it to a gateway
+  // URL (the local one, unless a public gateway is configured) first.
+  if (state.isIpfsOnline) {
+    if (isNativeUri) {
+      const contentPath = publicURI.replace(/^(ip[fn]s):\/\//, '/$1/')
+      runtime.sendMessage({ pubGwUrlForIpfsOrIpnsPath: contentPath })
+        .then(({ pubGwUrlForIpfsOrIpnsPath: url }) => { if (url) window.location.replace(url) })
+        .catch(err => console.error('Failed to resolve native URI to a gateway URL:', err))
+      return
+    }
+    openURLFromHash()
+    return
+  }
   const openInstallDesktop = () => window.open('https://docs.ipfs.tech/install/ipfs-desktop/', '_blank', 'noopener,noreferrer')
   const [buttonOnclick, buttonLabelKey] = isNativeUri
     ? [openInstallDesktop, 'recovery_page_button_installDesktop']

@@ -147,7 +147,8 @@ export default (state, emitter) => {
   emitter.on('toggleGlobalRedirect', async () => {
     const redirectEnabled = state.redirect
     state.redirect = !redirectEnabled
-    state.gatewayAddress = state.redirect ? state.gwURLString : state.pubGwURLString
+    // with no public gateway configured, show the local one instead
+    state.gatewayAddress = state.redirect ? state.gwURLString : (state.pubGwURLString || state.gwURLString)
     emitter.emit('render')
     try {
       await browser.storage.local.set({ useCustomGateway: !redirectEnabled })
@@ -210,7 +211,7 @@ export default (state, emitter) => {
     state.active = !prev
     try {
       if (!state.active) {
-        state.gatewayAddress = state.pubGwURLString
+        state.gatewayAddress = state.pubGwURLString || state.gwURLString
         state.ipfsApiUrl = null
         state.kuboRpcBackendVersion = null
         state.swarmPeers = null
@@ -233,7 +234,8 @@ export default (state, emitter) => {
       if (state.active && status.redirect && POSSIBLE_NODE_TYPES.includes(status.ipfsNodeType)) {
         state.gatewayAddress = status.gwURLString
       } else {
-        state.gatewayAddress = status.pubGwURLString
+        // with no public gateway configured, show the local one instead
+        state.gatewayAddress = status.pubGwURLString || status.gwURLString
       }
       state.isApiAvailable = state.active && !browser.extension.inIncognitoContext // https://github.com/ipfs-shipyard/ipfs-companion/issues/243
       state.swarmPeers = !state.active || status.peerCount === -1 ? null : status.peerCount

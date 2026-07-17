@@ -86,6 +86,7 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
             state.pubGwURLString && pathAtHttpGateway(contentPath, state.pubGwURLString),
             state.pubSubdomainGwURL && contentPathToSubdomainUrl(contentPath, state.pubSubdomainGwURL)
           ].filter(Boolean)
+          if (!candidates.length) continue
           const preloadUrl = candidates[Math.floor(Math.random() * candidates.length)]
           try {
             await fetch(preloadUrl, { method: 'HEAD' })

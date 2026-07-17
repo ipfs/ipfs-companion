@@ -103,10 +103,18 @@ export function toCaseInsensitiveRoot (ns, root) {
   throw new Error(`toCaseInsensitiveRoot: unsupported namespace '${ns}'`)
 }
 
+// A subdomain gateway puts the root (CID or IPNS name) in a DNS label, which
+// public DNS caps at 63 characters.
+const DNS_LABEL_MAX = 63
+
 // Build a subdomain-gateway URL from a content path, e.g.
 // /ipfs/<cid>/x + https://dweb.link -> https://<cid-base32>.ipfs.dweb.link/x
 // (the label is normalized to a case-insensitive CID). A DNSLink hostname cannot
-// be a subdomain label, so we share the FQDN website itself.
+// be a subdomain label, so we share the FQDN website itself. Returns null when
+// the path cannot be represented as a subdomain URL: a root that is not a valid
+// hostname (e.g. an /ipns/ name with spaces), or a label longer than a DNS
+// label allows (e.g. a CID with a sha2-512 multihash); callers fall back to a
+// path gateway or a native URI.
 export function contentPathToSubdomainUrl (contentPath, gwURL) {
   const parsed = parseContentPath(contentPath)
   if (!parsed) return null
@@ -116,36 +124,33 @@ export function contentPathToSubdomainUrl (contentPath, gwURL) {
       return trimDoubleSlashes(new URL(`${gwURL.protocol}//${root}${rest}`).toString())
     }
     const label = toCaseInsensitiveRoot(ns, root)
-    // KNOWN BUG: the label length is not checked. Local *.localhost subdomains
-    // tolerate labels longer than 63 characters, but public DNS does not, so a
-    // root CID with a multihash longer than sha2-256 (e.g. sha2-512) produces a
-    // hostname that will not resolve. Content that requires subdomain (origin)
-    // isolation should not use such CIDs as its root.
+    if (label.length > DNS_LABEL_MAX) return null
     return trimDoubleSlashes(new URL(`${gwURL.protocol}//${label}.${ns}.${gwURL.host}${rest}`).toString())
   } catch (e) {
-    // roots that are not valid hostnames (e.g. an /ipns/ name with spaces)
-    // cannot be turned into a subdomain URL
     return null
   }
 }
 
-// Attach a content path to a public gateway for a shareable link. When both
-// public gateways are set, the "Use Subdomains" preference decides which one is
-// used (subdomain gateway -> subdomain link, path gateway -> path link); when
-// only one is set, that one is used. Returns null when neither is configured.
+// Attach a content path to a public gateway for a shareable link, preferring
+// the subdomain gateway (origin isolation) and falling back to the path
+// gateway when the subdomain gateway is not set or cannot represent the path.
+// Returns null when no configured gateway can serve it.
 function publicShareUrl (contentPath, state) {
   if (!contentPath) return null
-  const { useSubdomains, pubGwURLString, pubSubdomainGwURL } = state
-  if (useSubdomains && pubSubdomainGwURL) return contentPathToSubdomainUrl(contentPath, pubSubdomainGwURL)
+  const { pubGwURLString, pubSubdomainGwURL } = state
+  if (pubSubdomainGwURL) {
+    const subdomainUrl = contentPathToSubdomainUrl(contentPath, pubSubdomainGwURL)
+    if (subdomainUrl) return subdomainUrl
+  }
   if (pubGwURLString) return pathAtHttpGateway(contentPath, pubGwURLString)
-  if (pubSubdomainGwURL) return contentPathToSubdomainUrl(contentPath, pubSubdomainGwURL)
   return null
 }
 
 // Shareable form of an already-normalized content path: a public gateway URL
-// when the user opted in and one is configured, the native ipfs:// / ipns://
-// URI otherwise. Takes the path verbatim; it must not be re-parsed here, as
-// another decodeURI pass would corrupt percent-encoded segments.
+// when usePublicGatewaysForShare is on and a public gateway can serve the
+// path, the native ipfs:// / ipns:// URI otherwise. Takes the path verbatim;
+// it must not be re-parsed here, as another decodeURI pass would corrupt
+// percent-encoded segments.
 function shareUrlForContentPath (contentPath, state) {
   if (state.usePublicGatewaysForShare) {
     const publicUrl = publicShareUrl(contentPath, state)
@@ -419,9 +424,9 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
     },
 
     // Resolve URL or path to the link used by "Copy Shareable Link":
-    // native ipfs:// / ipns:// URI by default, or a public gateway URL when the
-    // user opted in via usePublicGatewaysForShare. With public sharing on, the
-    // "Use Subdomains" preference picks which configured gateway is used.
+    // a public gateway URL when usePublicGatewaysForShare is on (subdomain
+    // gateway preferred, path gateway as fallback), or the native
+    // ipfs:// / ipns:// URI when it is off or no public gateway is set.
     async resolveToShareableUrl (urlOrPath) {
       const contentPath = ipfsPathValidator.resolveToIpfsPath(urlOrPath)
       if (contentPath) return shareUrlForContentPath(contentPath, getState())
