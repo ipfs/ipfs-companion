@@ -42,7 +42,9 @@ export const optionDefaults = Object.freeze({
   dnslinkDataPreload: true,
   dnslinkRedirect: true,
   recoverFailedHttpRequests: true,
-  detectIpfsPathHeader: true,
+  // legacy x-ipfs-path header detection, opt-in and off by default: gateway
+  // URL conventions and DNSLink have superseded it. See issue #1052.
+  detectIpfsPathHeader: false,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,

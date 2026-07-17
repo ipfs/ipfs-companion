@@ -508,11 +508,11 @@
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
-    "message": "Detect x-ipfs-path Headers",
+    "message": "Detect x-ipfs-path Headers (legacy)",
     "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
   },
   "option_detectIpfsPathHeader_description": {
-    "message": "Load items with x-ipfs-path headers over IPFS (instead of HTTP) if the header value is an IPFS path. To redirect IPNS paths as well, enable DNSLink support.",
+    "message": "Legacy: the x-ipfs-path HTTP header predates today's gateway URL conventions and DNSLink, which replace it. When on, a page that sends this header is loaded over IPFS only if its domain has a valid DNSLink. Off by default, kept for backward compatibility.",
     "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
   },
   "option_openViaWebUI_title": {
