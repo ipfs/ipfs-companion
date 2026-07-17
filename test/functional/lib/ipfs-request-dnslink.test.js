@@ -34,6 +34,7 @@ describe('modifyRequest processing of DNSLinks', function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
+      redirectSubresources: true, // several cases here redirect XHR/sub_frame; off-by-default is covered in ipfs-request-subresources.test.js
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
       pubGwURLString: 'https://ipfs.io'

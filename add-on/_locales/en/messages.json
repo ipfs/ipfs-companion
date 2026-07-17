@@ -319,6 +319,22 @@
     "message": "Isolate content roots from each other by loading them as subdomains (at *.localhost) and creating a unique origin for each CID, IPNS name, or DNSLink site.",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
+  "option_useSubdomains_warning": {
+    "message": "Without the origin isolation that subdomains provide, every website loaded from your gateway shares one origin, and with it the same storage and API permissions. Never disable this when using sensitive web apps such as wallets, secret and key management, or anything holding API access tokens.",
+    "description": "A warning on the Preferences screen, displayed when subdomain isolation is disabled (option_useSubdomains_warning)"
+  },
+  "option_redirectSubresources_title": {
+    "message": "Redirect Embedded Subresources",
+    "description": "An option title on the Preferences screen (option_redirectSubresources_title)"
+  },
+  "option_redirectSubresources_description": {
+    "message": "Also redirect IPFS resources embedded in other websites (images, scripts, iframes) to your local gateway, not just top-level pages you open yourself.",
+    "description": "An option description on the Preferences screen (option_redirectSubresources_description)"
+  },
+  "option_redirectSubresources_warning": {
+    "message": "If you enable this, drive-by public websites can embed IPFS resources that will be cached in your datastore, and their shared gateway origin can be used to track you across sites (a super-cookie). It is better to keep this unchecked so only top-level navigations are redirected, which ensures only entire IPFS-native websites are loaded and cached on your node, creating a clear separation between IPFS and regular HTTPS content. Enable it only if you understand the risks and inconveniences (such as your browser asking for local network access on every site).",
+    "description": "A warning on the Preferences screen, displayed when subresource redirects are enabled (option_redirectSubresources_warning)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "Load DNSLink Sites from Local Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"

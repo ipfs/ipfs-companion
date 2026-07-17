@@ -107,7 +107,7 @@ describe.skipIf(!isManifestV3)('lib/redirect-handler/blockOrObserve', () => {
 
     before(() => {
       sinonSandbox = sinon.createSandbox()
-      state = Object.assign(initState(optionDefaults), { peerCount: 1 })
+      state = Object.assign(initState(optionDefaults), { peerCount: 1, redirectSubresources: true })
       addRuleToDynamicRuleSet = addRuleToDynamicRuleSetGenerator(() => state)
     })
 

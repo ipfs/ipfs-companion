@@ -13,6 +13,31 @@ const log = debug('ipfs-companion:redirect-handler:blockOrObserve') as ReturnTyp
 log.error = debug('ipfs-companion:redirect-handler:blockOrObserve:error')
 
 export const DEFAULT_NAMESPACES = new Set(['ipfs', 'ipns'])
+
+// 'webbundle' is a valid Chrome DNR resourceType missing from @types/webextension-polyfill
+const RESOURCE_TYPES_ALL = [
+  'csp_report',
+  'font',
+  'image',
+  'main_frame',
+  'media',
+  'object',
+  'other',
+  'ping',
+  'script',
+  'stylesheet',
+  'sub_frame',
+  'webbundle',
+  'xmlhttprequest'
+] as browser.DeclarativeNetRequest.ResourceType[]
+const RESOURCE_TYPES_MAIN_FRAME = ['main_frame'] as browser.DeclarativeNetRequest.ResourceType[]
+
+// Content redirects apply to embedded subresources only when the user opts in;
+// otherwise just top-level document navigations are rewritten to the gateway.
+function contentRedirectResourceTypes (state: CompanionState): browser.DeclarativeNetRequest.ResourceType[] {
+  return state.redirectSubresources ? RESOURCE_TYPES_ALL : RESOURCE_TYPES_MAIN_FRAME
+}
+
 export const DELETE_RULE_REQUEST = 'DELETE_RULE_REQUEST'
 export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
@@ -256,7 +281,7 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
     if (rules.length === 0) {
       // we need to populate old rules.
       for (const [regexFilter, { regexSubstitution, id }] of savedRegexFilters.entries()) {
-        addRules.push(generateAddRule(id, regexFilter, regexSubstitution))
+        addRules.push(generateAddRule(id, regexFilter, regexSubstitution, [], contentRedirectResourceTypes(state)))
       }
     }
 
@@ -287,7 +312,8 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
 function saveAndGenerateRule (
   regexFilter: string,
   regexSubstitution: string,
-  excludedInitiatorDomains: string[] = []
+  excludedInitiatorDomains: string[] = [],
+  resourceTypes: browser.DeclarativeNetRequest.ResourceType[] = RESOURCE_TYPES_ALL
 ): browser.DeclarativeNetRequest.Rule {
   // We need to generate a positive number as an id.
   const id = fastHashCode(`${regexFilter}:${regexSubstitution}:${excludedInitiatorDomains.join(':')}`, {
@@ -295,7 +321,7 @@ function saveAndGenerateRule (
   })
   // We need to save the regex filter and ID to check if the rule already exists later.
   savedRegexFilters.set(regexFilter, { id, regexSubstitution })
-  return generateAddRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains)
+  return generateAddRule(id, regexFilter, regexSubstitution, excludedInitiatorDomains, resourceTypes)
 }
 
 /**
@@ -310,7 +336,8 @@ export function generateAddRule (
   id: number,
   regexFilter: string,
   regexSubstitution: string,
-  excludedInitiatorDomains: string[] = []
+  excludedInitiatorDomains: string[] = [],
+  resourceTypes: browser.DeclarativeNetRequest.ResourceType[] = RESOURCE_TYPES_ALL
 ): browser.DeclarativeNetRequest.Rule {
   return {
     id,
@@ -322,22 +349,7 @@ export function generateAddRule (
     condition: {
       regexFilter,
       excludedInitiatorDomains,
-      // 'webbundle' is a valid Chrome DNR resourceType missing from @types/webextension-polyfill
-      resourceTypes: [
-        'csp_report',
-        'font',
-        'image',
-        'main_frame',
-        'media',
-        'object',
-        'other',
-        'ping',
-        'script',
-        'stylesheet',
-        'sub_frame',
-        'webbundle',
-        'xmlhttprequest'
-      ] as browser.DeclarativeNetRequest.ResourceType[]
+      resourceTypes
     }
   }
 }
@@ -422,7 +434,7 @@ export function addRuleToDynamicRuleSetGenerator (
       await browser.declarativeNetRequest.updateDynamicRules(
         {
           // We need to add the new rule.
-          addRules: [saveAndGenerateRule(regexFilter, regexSubstitution)],
+          addRules: [saveAndGenerateRule(regexFilter, regexSubstitution, [], contentRedirectResourceTypes(state))],
           // We need to remove the old rules.
           removeRuleIds
         }

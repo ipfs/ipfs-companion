@@ -524,6 +524,14 @@ async function handleRedirection ({ originUrl, redirectUrl, request }) {
 
 // Returns a string with URL at the active gateway (local or public)
 async function redirectToGateway (request, url, state, ipfsPathValidator, runtime) {
+  // When subresource redirects are disabled, only redirect top-level document
+  // navigations. Embedded subresources keep loading from their original
+  // origin, which avoids sharing the local gateway origin across unrelated
+  // sites (a super-cookie vector) and Chrome Local Network Access prompts for
+  // subresource loads. https://github.com/ipfs/ipfs-companion/issues/1052
+  if (!state.redirectSubresources && request.type !== 'main_frame') {
+    return
+  }
   const { resolveToPublicUrl, resolveToLocalUrl } = ipfsPathValidator
   let redirectUrl = await (state.localGwAvailable ? resolveToLocalUrl(url) : resolveToPublicUrl(url))
 

@@ -73,6 +73,7 @@ export default function optionsPage (state, emit) {
     customGatewayUrl: state.options.customGatewayUrl,
     useCustomGateway: state.options.useCustomGateway,
     useSubdomains: state.options.useSubdomains,
+    redirectSubresources: state.options.redirectSubresources,
     publicGatewayUrl: state.options.publicGatewayUrl,
     publicSubdomainGatewayUrl: state.options.publicSubdomainGatewayUrl,
     usePublicGatewaysForShare: state.options.usePublicGatewaysForShare,

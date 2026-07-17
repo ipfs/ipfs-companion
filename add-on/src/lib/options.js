@@ -34,6 +34,11 @@ export const optionDefaults = Object.freeze({
   usePublicGatewaysForShare: DEFAULT_USE_PUBLIC_GATEWAYS_FOR_SHARE,
   useCustomGateway: true,
   useSubdomains: true,
+  // When off (default), only top-level document navigations are redirected to
+  // the local gateway. Redirecting embedded subresources shares the gateway
+  // origin across unrelated sites (a super-cookie vector) and triggers Chrome
+  // Local Network Access prompts, so it is opt-in.
+  redirectSubresources: false,
   enabledOn: [], // hostnames with explicit integration opt-in
   disabledOn: [], // hostnames with explicit integration opt-out
   automaticMode: true,

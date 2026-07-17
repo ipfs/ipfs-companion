@@ -7,6 +7,7 @@ export interface CompanionOptions {
   usePublicGatewaysForShare: boolean
   useCustomGateway: boolean
   useSubdomains: boolean
+  redirectSubresources: boolean
   enabledOn: string[]
   disabledOn: string[]
   automaticMode: boolean
