@@ -25,6 +25,7 @@ Node and npm versions come from `.nvmrc` and `engines` in `package.json`. Instal
 - TypeScript is transpiled type-strip only by rspack/SWC; type errors are caught by `npm run lint`, which runs `tsc` over the `.ts` files. `tsconfig.json` is strict.
 - The per-browser manifests are merged from `add-on/manifest.common.json` and `add-on/manifest.{chromium,firefox}.json` at bundle time. Edit those, not the generated `add-on/manifest.json`.
 - Source lives in `add-on/src/`; the UI is built on [choo](https://github.com/choojs/choo).
+- `@material/switch` stays on 10.x. Later majors rewrote the switch into a `<button role="switch">` using `mdc-switch__handle` and `mdc-switch--selected`, but `add-on/src/pages/components/switch-toggle.js` builds the 10.x DOM (an `<input type="checkbox">` inside `mdc-switch__thumb-underlay`). The newer CSS styles none of the classes we use, so a bump unstyles every toggle. Nothing in CI renders CSS, so such a bump passes all checks. Bumping it means rewriting the component along with `switch-toggle.css` and the `.mdc-switch` rules in `options.css`, and only landing it once someone has looked at the toggles in the options page and popup and confirmed they still render correctly.
 - Commits follow [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## Before opening a PR
