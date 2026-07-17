@@ -304,11 +304,11 @@
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Load DNSLink Sites from Custom Gateway",
+    "message": "Load DNSLink Sites from Local Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "When global gateway redirect is enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths at your custom gateway.",
+    "message": "When redirects to your local gateway are enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
@@ -388,11 +388,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Automatically enables automatic redirection to your local gateway when the Kubo RPC endpoint is accessible, and disable it when the endpoint is unavailable.",
+    "message": "Automatically enable redirection to your local gateway when the Kubo RPC endpoint is accessible, and disable it when the endpoint is unavailable.",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "Note: disabling this feature will result in static redirects, independent of the Kubo RPC endpoint's availability, and may produce error when your node is offline.",
+    "message": "Note: disabling this feature will result in static redirects, independent of the Kubo RPC endpoint's availability, and may produce errors when your node is offline.",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -436,7 +436,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Display OS-level notifications when a link is copied to the clipboard,the API state changes, etc.",
+    "message": "Display OS-level notifications when a link is copied to the clipboard, the API state changes, etc.",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
