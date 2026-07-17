@@ -53,13 +53,11 @@ describe('modifyRequest processing of DNSLinks', function () {
   })
 
   describe('a request to FQDN with dnslinkPolicy=false', function () {
-    let activeGateway
     beforeEach(function () {
       // Ensure the eager dnslinkPolicy is on (dns txt lookup for every request)
       state.dnslinkPolicy = false
       // API is online and has one peer
       state.peerCount = 1
-      activeGateway = state.gwURLString
       // clear dnslink cache to ensure DNS TXT record lookup is triggered
       dnslinkResolver.clearCache()
     })
@@ -109,10 +107,10 @@ describe('modifyRequest processing of DNSLinks', function () {
       // onHeadersReceived should not change anything
       ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
     })
-    it('should ignore DNS TXT record and use /ipfs/ path from x-ipfs-path if both are present', async function () {
+    it('should ignore /ipfs/ path from x-ipfs-path when DNSLink cannot be confirmed', async function () {
       // enable detection of x-ipfs-path to ensure it is not enough without dnslinkPolicy=detectIpfsPathHeader
       state.detectIpfsPathHeader = true
-      // stub existence of a valid DNS record
+      // stub existence of a valid DNS record (irrelevant, dnslinkPolicy=false disables lookups)
       const fqdn = 'explore.ipld.io'
       dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves('/ipns/this-should-be-ignored.io')
       //
@@ -121,13 +119,34 @@ describe('modifyRequest processing of DNSLinks', function () {
       ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
       // simulate presence of x-ipfs-path header returned by HTTP gateway
       request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
-      // onHeadersReceived should redirect to value from X-Ipfs-Path
+      // onHeadersReceived should not redirect: without a DNSLink lookup we can't
+      // tell a misconfigured website from an IPFS-hosted one, and redirect to an
+      // immutable snapshot would strand the user on a stale copy
+      // https://github.com/ipfs/ipfs-companion/issues/1052
+      ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+    })
+    it('should redirect to /ipns/ address if DNSLink for FQDN is in cache', async function () {
+      // enable detection of x-ipfs-path
+      state.detectIpfsPathHeader = true
+      // DNSLink in cache from before dnslinkPolicy was disabled:
+      // when DNSLink is known to be valid the user gets the mutable /ipns/
+      // address built from the domain name, never the immutable /ipfs/
+      // snapshot from the header
+      const fqdn = 'explore.ipld.io'
+      dnslinkResolver.setDnslink(fqdn, '/ipns/this-should-be-ignored.io')
+      //
+      const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+      // onBeforeRequest should not change anything (dnslinkPolicy=false)
+      ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
+      // simulate presence of x-ipfs-path header returned by HTTP gateway
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+      // onHeadersReceived should redirect to /ipns/ address of the website
       ensureCallRedirected({
         modifiedRequestCallResp: await modifyRequest.onHeadersReceived(request),
-        MV2Expectation: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd?argTest#hashTest`,
+        MV2Expectation: `${state.gwURLString}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
         MV3Expectation: {
-          origin: '^https?\\:\\/\\/explore\\.ipld\\.io\\/index\\.html',
-          destination: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd\\1`
+          origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
+          destination: `${state.gwURLString}/ipns/explore.ipld.io\\1`
         }
       })
     })
@@ -286,7 +305,7 @@ describe('modifyRequest processing of DNSLinks', function () {
           }
         })
       })
-      it('should redirect in onHeadersReceived if DNS TXT record is missing but x-ipfs-path header is present', async function () {
+      it('should NOT redirect subrequest in onHeadersReceived if DNS TXT record is missing but x-ipfs-path header is present', async function () {
         // clear dnslink cache to ensure miss
         dnslinkResolver.clearCache()
         // stub lack of DNS record
@@ -298,15 +317,113 @@ describe('modifyRequest processing of DNSLinks', function () {
         ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
         // simulate presence of x-ipfs-path header returned by HTTP gateway
         request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
-        // Note that DNSLink is missing, so a path from x-ipfs-path is used
-        ensureCallRedirected({
-          modifiedRequestCallResp: await modifyRequest.onHeadersReceived(request),
-          MV2Expectation: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd?argTest#hashTest`,
-          MV3Expectation: {
-            origin: '^https?\\:\\/\\/explore\\.ipld\\.io\\/index\\.html',
-            destination: `${activeGateway}/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd\\1`
-          }
-        })
+        // DNSLink is missing, so the website is misconfigured and immutable
+        // /ipfs/ from x-ipfs-path is ignored: in MV3 even a subresource
+        // redirect creates a host-wide rule that would strand future
+        // main_frame navigation on a stale snapshot
+        // https://github.com/ipfs/ipfs-companion/issues/1052
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should NOT redirect main_frame in onHeadersReceived if DNS TXT record is missing but x-ipfs-path header is present', async function () {
+        // clear dnslink cache to ensure miss
+        dnslinkResolver.clearCache()
+        // stub lack of DNS record (how fleek.co was set up when issue 1052 was filed)
+        const fqdn = 'explore.ipld.io'
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves(false)
+        //
+        const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+        ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
+        // simulate presence of x-ipfs-path header returned by HTTP gateway
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+        // no DNSLink means redirect would replace the live website in the
+        // address bar with an immutable snapshot the user cannot bookmark or
+        // refresh to get updates
+        // https://github.com/ipfs/ipfs-companion/issues/1052
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should NOT redirect in onHeadersReceived if DNSLink lookup is unavailable (offline)', async function () {
+        // clear dnslink cache to ensure miss
+        dnslinkResolver.clearCache()
+        // when offline readDnslinkFromTxtRecord returns undefined:
+        // without cache we cannot confirm DNSLink, so no redirect
+        const fqdn = 'explore.ipld.io'
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves(undefined)
+        //
+        const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+        // simulate presence of x-ipfs-path header returned by HTTP gateway
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should NOT redirect in onHeadersReceived if DNS TXT record is missing and URL only pretends to be a gateway URL', async function () {
+        // clear dnslink cache to ensure miss
+        dnslinkResolver.clearCache()
+        // stub lack of DNS record
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().resolves(false)
+        // path starts with /ipns/ but 'article' is not a CID nor a FQDN:
+        // the URL-shaped skip ignores the header, and URL-based handling in
+        // onBeforeRequest rejects the invalid /ipns/ root, so nothing
+        // redirects this regular website page to the value from the header
+        const request = url2request('http://explore.ipld.io/ipns/article/?argTest#hashTest')
+        // simulate presence of x-ipfs-path header returned by HTTP gateway
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should ignore x-ipfs-path in onHeadersReceived if request URL is a subdomain gateway URL', async function () {
+        // clear dnslink cache to ensure miss
+        dnslinkResolver.clearCache()
+        // stub lack of DNS record
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().resolves(false)
+        // same as for path gateways: content path comes from the URL alone,
+        // a header from the gateway cannot override it
+        const cid = 'bafybeidwgtlx54aifd5ynwwvlozr2fuw5xrmbu3ivnwmnoxi4ewdnxty5y'
+        const spoofedCid = 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
+        const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/index.html?argTest#hashTest`)
+        // simulate a malicious gateway pointing at different content
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: `/ipfs/${spoofedCid}/index.html` }]
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should ignore x-ipfs-path on a gateway URL even when a DNSLink is cached for the gateway host', async function () {
+        // pins the URL-shaped skip: a gateway hostname can carry a DNSLink of
+        // its own, and without the skip that cached record would trigger a
+        // redirect off a gateway URL whose content path already comes from
+        // the URL alone
+        dnslinkResolver.clearCache()
+        const cid = 'bafybeidwgtlx54aifd5ynwwvlozr2fuw5xrmbu3ivnwmnoxi4ewdnxty5y'
+        dnslinkResolver.setDnslink(`${cid}.ipfs.cf-ipfs.com`, '/ipns/unrelated.example')
+        const request = url2request(`https://${cid}.ipfs.cf-ipfs.com/index.html?argTest#hashTest`)
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: `/ipfs/${cid}/index.html` }]
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should ignore x-ipfs-path in onHeadersReceived if request URL is a path gateway URL', async function () {
+        // clear dnslink cache to ensure miss
+        dnslinkResolver.clearCache()
+        // stub lack of DNS record
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().resolves(false)
+        // gateways can put anything in response headers, but not in the URL
+        // the user navigated to: for gateway URLs the content path comes
+        // from the URL alone (onBeforeRequest), never from x-ipfs-path
+        const cid = 'QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd'
+        const spoofedCid = 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
+        const request = url2request(`http://example.com/ipfs/${cid}/index.html?argTest#hashTest`)
+        // simulate a malicious gateway pointing at different content
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: `/ipfs/${spoofedCid}/index.html` }]
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+      })
+      it('should NOT redirect in onHeadersReceived if DNS TXT record exists but dnslinkRedirect is disabled', async function () {
+        // clear dnslink cache to ensure miss
+        dnslinkResolver.clearCache()
+        // user opted out of DNSLink redirects: no /ipns/ redirect happens,
+        // and the immutable /ipfs/ snapshot from the header is never used
+        // as a fallback (it would strand the user on a stale copy)
+        state.dnslinkRedirect = false
+        // stub existence of a valid DNS record
+        const fqdn = 'explore.ipld.io'
+        dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves('/ipns/this-should-be-ignored.io')
+        //
+        const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+        // simulate presence of x-ipfs-path header returned by HTTP gateway
+        request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+        ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
       })
       it('should do nothing if DNS TXT record exists but there is no x-ipfs-path header', async function () {
         // clear dnslink cache to ensure miss
@@ -457,6 +574,49 @@ describe('modifyRequest processing of DNSLinks', function () {
           // onHeadersReceived should not change anything
           await ensureNoRedirect(modifyRequest, xhrRequest)
         })
+      })
+    })
+  })
+
+  describe('a request to FQDN with dnslinkPolicy=best-effort (shipped default)', function () {
+    beforeEach(function () {
+      state.dnslinkPolicy = 'best-effort'
+      state.detectIpfsPathHeader = true
+      // API is online and has one peer
+      state.peerCount = 1
+      // clear dnslink cache to ensure DNS TXT record lookup is triggered
+      dnslinkResolver.clearCache()
+    })
+    it('should NOT redirect in onHeadersReceived if DNS TXT record is missing but x-ipfs-path header is present', async function () {
+      // the misconfiguration from issue 1052 under default settings:
+      // back when the issue was filed, https://fleek.co returned x-ipfs-path
+      // with an immutable /ipfs/ snapshot but had no _dnslink DNS TXT record
+      const fqdn = 'explore.ipld.io'
+      dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves(false)
+      //
+      const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+      ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
+      // simulate presence of x-ipfs-path header returned by HTTP gateway
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+      ensureRequestUntouched(await modifyRequest.onHeadersReceived(request))
+    })
+    it('should redirect to /ipns/ in onHeadersReceived if DNS TXT record exists and x-ipfs-path header is present', async function () {
+      // positive control for the test above: proves x-ipfs-path processing
+      // is not dead under the default policy
+      const fqdn = 'explore.ipld.io'
+      dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).resolves('/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd')
+      //
+      const request = url2request('http://explore.ipld.io/index.html?argTest#hashTest')
+      // simulate presence of x-ipfs-path header returned by HTTP gateway
+      request.responseHeaders = [{ name: 'X-Ipfs-Path', value: '/ipfs/QmbfimSwTuCvGL8XBr3yk1iCjqgk2co2n21cWmcQohymDd' }]
+      // DNSLink is present, so we ignore hash from X-Ipfs-Path header and redirect to nice /ipns/ address
+      ensureCallRedirected({
+        modifiedRequestCallResp: await modifyRequest.onHeadersReceived(request),
+        MV2Expectation: `${state.gwURLString}/ipns/explore.ipld.io/index.html?argTest#hashTest`,
+        MV3Expectation: {
+          origin: '^https?\\:\\/\\/explore\\.ipld\\.io',
+          destination: `${state.gwURLString}/ipns/explore.ipld.io\\1`
+        }
       })
     })
   })

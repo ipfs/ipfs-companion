@@ -365,19 +365,45 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
                 // (means DNSLink is disabled so we don't want to make a redirect that works like DNSLink)
                 // log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} (dnslinkRedirect=false, dnslinkPolicy=false or missing DNS TXT record)`)
               } else if (isIPFS.ipfsPath(xIpfsPath)) {
-                // It is possible that someone exposed /ipfs/<cid>/ under /
-                // and our path-based onBeforeRequest heuristics were unable
-                // to identify request as IPFS one until onHeadersReceived revealed
-                // presence of x-ipfs-path header.
-                // Solution: convert header value to a path at public gateway
-                // (optional redirect to custom one can happen later)
-                const url = new URL(request.url)
-                const pathWithArgs = `${xIpfsPath}${url.search}${url.hash}`
-                const newUrl = pathAtHttpGateway(pathWithArgs, state.pubGwURLString || state.gwURLString)
-                // redirect only if local node is around
-                if (newUrl && state.localGwAvailable) {
-                  log(`onHeadersReceived: normalized ${request.url} to  ${newUrl}`)
-                  return redirectToGateway(request, newUrl, state, ipfsPathValidator, runtime)
+                // A gateway can put anything in a response header, but not
+                // in the URL the user navigated to, so the URL always wins:
+                // when it follows gateway conventions the content path is
+                // derived from the URL alone in onBeforeRequest, and the
+                // header is ignored here. (isIPFS.url over-matching any
+                // /ipns/<segment> is safe in a skip: it cannot be abused to
+                // force a redirect.)
+                if (isIPFS.url(request.url)) {
+                  log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} from ${request.url} (URL follows gateway conventions, content path comes from the URL)`)
+                  continue
+                }
+                // On a regular website the header is only a hint that the
+                // site supports IPFS: the immutable /ipfs/ snapshot it
+                // carries is never used as a redirect target, because a
+                // website without a DNSLink is misconfigured hosting (e.g.
+                // how https://fleek.co was set up in the past) and redirect
+                // would strand the user on a stale snapshot. This applies to
+                // subresources too: in MV3 a redirect becomes a host-wide
+                // dynamic rule that would also catch future main_frame
+                // navigations.
+                // https://github.com/ipfs/ipfs-companion/issues/1052
+                const { hostname } = new URL(request.url)
+                const dnslink = dnslinkResolver.canLookupURL(request.url)
+                  ? await dnslinkResolver.readAndCacheDnslink(hostname)
+                  : dnslinkResolver.cachedDnslink(hostname)
+                if (!dnslink) {
+                  log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} from ${request.url} (no DNSLink for ${hostname})`)
+                  continue
+                }
+                // DNSLink is valid: redirect to the mutable /ipns/ address
+                // of the website, which follows updates, instead of the
+                // /ipfs/ snapshot from the header (no-op when the user opted
+                // out of DNSLink redirects)
+                if (state.dnslinkRedirect) {
+                  const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
+                  if (dnslinkAtGw && state.localGwAvailable) {
+                    log(`onHeadersReceived: dnslinkRedirect from ${request.url} to ${dnslinkAtGw}`)
+                    return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
+                  }
                 }
               }
             }
