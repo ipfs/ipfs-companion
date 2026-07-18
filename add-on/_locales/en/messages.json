@@ -291,6 +291,10 @@
     "message": "Gateways",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
+  "option_gateways_sectionIntro": {
+    "message": "Gateways make IPFS content available over HTTP so your browser can load it.",
+    "description": "A short intro under the Gateways section header on the Preferences screen (option_gateways_sectionIntro)"
+  },
   "option_customGatewayUrl_title": {
     "message": "Local Gateway",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
@@ -335,21 +339,21 @@
     "message": "If you enable this, drive-by public websites can embed IPFS resources that will be cached in your datastore, and their shared gateway origin can be used to track you across sites (a super-cookie). It is better to keep this unchecked so only top-level navigations are redirected, which ensures only entire IPFS-native websites are loaded and cached on your node, creating a clear separation between IPFS and regular HTTPS content. Enable it only if you understand the risks and inconveniences (such as your browser asking for local network access on every site).",
     "description": "A warning on the Preferences screen, displayed when subresource redirects are enabled (option_redirectSubresources_warning)"
   },
+  "option_dnslinkLookup_title": {
+    "message": "Detect DNSLink Websites",
+    "description": "An option title on the Preferences screen (option_dnslinkLookup_title)"
+  },
+  "option_dnslinkLookup_description": {
+    "message": "Check each domain you visit for a DNSLink record, so Companion knows which sites are on IPFS. This powers the DNSLink actions in the toolbar menu and is required for loading DNSLink sites from your local gateway. Results are cached, but each new domain adds a background request to your local Kubo RPC.",
+    "description": "An option description on the Preferences screen (option_dnslinkLookup_description)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "Load DNSLink Sites from Local Gateway",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "When redirects to your local gateway are enabled, include DNSLink websites by redirecting them to their respective /ipns/{fqdn} paths.",
+    "message": "Load detected DNSLink websites from your local gateway (at /ipns/{domain} content path) instead of the original server. Requires DNSLink detection above.",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
-  },
-  "option_dnslinkDataPreload_title": {
-    "message": "Preload Visited Pages",
-    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
-  },
-  "option_dnslinkDataPreload_description": {
-    "message": "When you visit a DNSLink site, send a background HEAD request to your local node for the page. This only fetches the root block, not the page content, so its usefulness is limited.",
-    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
     "message": "Do not use if your IPFS node does not support *.ipfs.localhost. Redirecting to a path-based gateway breaks the origin-based security isolation of DNSLink websites, so make sure you understand the related risks.",
@@ -399,6 +403,10 @@
     "message": "Kubo RPC API",
     "description": "A section header on the Preferences screen (option_header_api)"
   },
+  "option_api_sectionIntro": {
+    "message": "Companion controls your IPFS node through its Kubo RPC API.",
+    "description": "A short intro under the Kubo RPC API section header on the Preferences screen (option_api_sectionIntro)"
+  },
   "option_ipfsApiUrl_title": {
     "message": "Kubo RPC URL",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
@@ -430,6 +438,10 @@
   "option_header_dnslink": {
     "message": "DNSLink",
     "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
+  "option_dnslink_sectionIntro": {
+    "message": "DNSLink points a regular domain name at IPFS content using a DNS record, so an ordinary website can be published on IPFS.",
+    "description": "A short intro under the DNSLink section header on the Preferences screen (option_dnslink_sectionIntro)"
   },
   "option_header_experiments": {
     "message": "Experiments",
@@ -495,26 +507,6 @@
     "message": "Turn /ipfs/ paths displayed as plaintext on web pages into clickable links.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
-  "option_dnslinkPolicy_title": {
-    "message": "DNSLink Lookup Policy",
-    "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
-  },
-  "option_dnslinkPolicy_description": {
-    "message": "Choose your policy for looking up and displaying contextual actions on DNSLink-enabled sites.",
-    "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
-  },
-  "option_dnslinkPolicy_disabled": {
-    "message": "Off",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
-  },
-  "option_dnslinkPolicy_bestEffort": {
-    "message": "Check after HTTP request",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
-  },
-  "option_dnslinkPolicy_enabled": {
-    "message": "Check before HTTP request",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
-  },
   "option_recoverFailedHttpRequests_title": {
     "message": "Recover Failed HTTP Requests",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
@@ -523,13 +515,17 @@
     "message": "Redirect failed requests for IPFS resources to another gateway: a public one when set, otherwise your local one.",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
-  "option_detectIpfsPathHeader_title": {
-    "message": "Detect x-ipfs-path Headers (legacy)",
-    "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
+  "option_redirectToXIpfsPathValue_title": {
+    "message": "Redirect to x-ipfs-path Header Value (legacy)",
+    "description": "An option title on the Preferences screen (option_redirectToXIpfsPathValue_title)"
   },
-  "option_detectIpfsPathHeader_description": {
-    "message": "Legacy: the x-ipfs-path HTTP header predates today's gateway URL conventions and DNSLink, which replace it. When on, a page that sends this header is loaded over IPFS only if its domain has a valid DNSLink. Off by default, kept for backward compatibility.",
-    "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
+  "option_redirectToXIpfsPathValue_description": {
+    "message": "When a website sends the x-ipfs-path response header, load the exact IPFS path it names instead of the website. Off by default. Most IPFS websites use DNSLink, which Companion already follows without this.",
+    "description": "An option description on the Preferences screen (option_redirectToXIpfsPathValue_description)"
+  },
+  "option_redirectToXIpfsPathValue_warning": {
+    "message": "Legacy experiment that can break sites. A website that sends this header but is not set up with DNSLink gets pinned to a frozen snapshot: you cannot refresh it for updates or bookmark it, and it may show errors. Leave this off unless you specifically need it.",
+    "description": "A warning on the Preferences screen, displayed when redirect to x-ipfs-path value is enabled (option_redirectToXIpfsPathValue_warning)"
   },
   "option_openViaWebUI_title": {
     "message": "Open Imported Files in the Files Screen",

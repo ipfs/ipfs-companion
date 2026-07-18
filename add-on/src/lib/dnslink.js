@@ -19,9 +19,6 @@ export default function createDnslinkResolver (getState) {
   const pendingLookups = new Map()
   // upper bound for concurrent background lookups done by resolve(url)
   const lookupQueue = new Pqueue({ concurrency: 4 })
-  // preload of DNSLink data
-  const preloadUrlCache = new LRUCache(cacheOptions)
-  const preloadQueue = new Pqueue({ concurrency: 4 })
 
   const dnslinkResolver = {
 
@@ -44,7 +41,7 @@ export default function createDnslinkResolver (getState) {
     canLookupURL (requestUrl) {
       // skip URLs that could produce infinite recursion or weird loops
       const state = getState()
-      return state.dnslinkPolicy &&
+      return state.dnslinkLookup &&
         requestUrl.startsWith('http') &&
         !IsIpfs.url(requestUrl) &&
         !sameGateway(requestUrl, state.apiURL) &&
@@ -127,25 +124,6 @@ export default function createDnslinkResolver (getState) {
       })
     },
 
-    // preloads data behind the url to local node
-    async preloadData (url) {
-      const state = getState()
-      if (!state.dnslinkDataPreload || state.dnslinkRedirect) return
-      if (preloadUrlCache.get(url)) return
-      preloadUrlCache.set(url, true)
-      const dnslink = await dnslinkResolver.resolve(url)
-      if (!dnslink) return
-      if (!state.localGwAvailable) return
-      if (state.peerCount < 1) return
-      return preloadQueue.add(async () => {
-        const { pathname } = new URL(url)
-        const preloadUrl = new URL(state.gwURLString)
-        preloadUrl.pathname = `${dnslink}${pathname}`
-        await fetch(preloadUrl.toString(), { method: 'HEAD' })
-        return preloadUrl
-      })
-    },
-
     /**
      * Low level DNSLink lookup without cache
      * @param {string} fqdn - Fully qualified domain name to lookup
@@ -203,19 +181,12 @@ export default function createDnslinkResolver (getState) {
       const path = url.pathname
       const httpGatewayPath = path.startsWith('/ipfs/') || path.startsWith('/ipns/') || path.startsWith('/api/v')
       if (!httpGatewayPath) {
-        const fqdn = url.hostname
-        // If dnslink policy is 'enabled' then lookups will be
-        // executed for every unique hostname on every visited website.
-        // Until we get efficient DNS TXT Lookup API there will be an overhead,
-        // so 'enabled' policy is an opt-in for now.  By default we use
-        // 'best-effort' policy which does async lookups to populate dnslink cache
-        // in the background and do blocking lookup only when X-Ipfs-Path header
-        // is found in initial response.
-        // More: https://github.com/ipfs-shipyard/ipfs-companion/blob/master/docs/dnslink.md
-        const foundDnslink = dnslink ||
-          await (getState().dnslinkPolicy === 'enabled'
-            ? dnslinkResolver.readAndCacheDnslink(fqdn)
-            : dnslinkResolver.cachedDnslink(fqdn))
+        // Redirect only on a DNSLink that is already known. Lookups run in the
+        // background (resolve()) to populate the cache without blocking the page;
+        // the first visit to a new domain is upgraded once that lookup resolves
+        // (lateDnslinkRedirect in ipfs-request.js). We never do a blocking lookup
+        // here, as MV3 cannot hold a request open for one anyway.
+        const foundDnslink = dnslink || dnslinkResolver.cachedDnslink(url.hostname)
         if (foundDnslink) {
           return true
         }

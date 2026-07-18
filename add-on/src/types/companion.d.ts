@@ -12,11 +12,10 @@ export interface CompanionOptions {
   disabledOn: string[]
   automaticMode: boolean
   linkify: boolean
-  dnslinkPolicy: boolean | string
-  dnslinkDataPreload: boolean
+  dnslinkLookup: boolean
   dnslinkRedirect: boolean
   recoverFailedHttpRequests: boolean
-  detectIpfsPathHeader: boolean
+  redirectToXIpfsPathValue: boolean
   preloadAtPublicGateway: boolean
   catchUnhandledProtocols: boolean
   displayNotifications: boolean

@@ -52,7 +52,7 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   describe('with recoverFailedHttpRequests=true', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = true
-      state.dnslinkPolicy = false
+      state.dnslinkLookup = false
     })
     it('should show recovery page when broken request is for the configured subdomain gateway and node is offline', async function () {
       // failures at the configured public gateway cannot recover to it; with
@@ -115,7 +115,7 @@ describe('requestHandler.onCompleted:', function () { // HTTP-level errors
   describe('with recoverFailedHttpRequests=false', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = false
-      state.dnslinkPolicy = false
+      state.dnslinkLookup = false
     })
     it('should do nothing on failed subdomain gateway request', async function () {
       const request = urlRequestWithStatus('https://QmYzZgeWE7r8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h.ipfs.brokendomain.com/wiki/', 500)
@@ -164,7 +164,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
   describe('with recoverFailedHttpRequests=true', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = true
-      state.dnslinkPolicy = false
+      state.dnslinkLookup = false
     })
     it('should show recovery page when failed request is for the configured subdomain gateway and node is offline', async function () {
       const request = urlRequestWithStatus('https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki/', 500)
@@ -235,7 +235,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       assert.ok(browser.tabs.update.withArgs(request.tabId, { url: 'https://bafybeieym3tecwcvjhnsbc3rfmxck4yimrggclrwd5fav5q44o7xo7n3ky.ipfs.dweb.link/', active: true }).calledOnce, 'tabs.update should recover on the public subdomain gateway')
     })
     it('should recover from unreachable HTTP server by reopening DNSLink on the active gateway', async function () {
-      state.dnslinkPolicy = 'best-effort'
+      state.dnslinkLookup = true
       dnslinkResolver.setDnslink('en.wikipedia-on-ipfs.org', '/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco')
       // avoid DNS failures when recovering to local gateweay (if available)
       const expectedUrl = 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org/'
@@ -245,7 +245,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       dnslinkResolver.clearCache()
     })
     it('should recover from failed DNS for .eth opening it on EthDNS gateway at .eth.link', async function () {
-      state.dnslinkPolicy = 'best-effort'
+      state.dnslinkLookup = true
       dnslinkResolver.setDnslink('almonit.eth', false)
       dnslinkResolver.setDnslink('almonit.eth.link', '/ipfs/QmPH7VMnfFKvrr7kLXNRwuxjYRLWnfcxPvnWs8ipyWAQK2')
       const dnsFailure = 'net::ERR_NAME_NOT_RESOLVED' // chrome code
@@ -260,7 +260,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
   describe('with recoverFailedHttpRequests=false', function () {
     beforeEach(function () {
       state.recoverFailedHttpRequests = false
-      state.dnslinkPolicy = false
+      state.dnslinkLookup = false
     })
     it('should do nothing on unreachable third party public gateway', async function () {
       const request = urlRequestWithNetworkError('https://nondefaultipfs.io/ipfs/QmYbZgeWE7y8HXkH8zbb8J9ddHQvp8LTqm6isL791eo14h')
@@ -273,7 +273,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       assert.ok(browser.tabs.update.notCalled, 'tabs.update should not be called')
     })
     it('should do nothing on unreachable HTTP server with DNSLink', async function () {
-      state.dnslinkPolicy = 'best-effort'
+      state.dnslinkLookup = true
       dnslinkResolver.setDnslink('en.wikipedia-on-ipfs.org', '/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco')
       const request = urlRequestWithNetworkError('https://en.wikipedia-on-ipfs.org')
       await requestHandler.onErrorOccurred(request)
@@ -281,7 +281,7 @@ describe('requestHandler.onErrorOccurred:', function () { // network errors
       dnslinkResolver.clearCache()
     })
     it('should do nothing on failed non-default public gateway IPFS request', async function () {
-      state.dnslinkPolicy = 'best-effort'
+      state.dnslinkLookup = true
       dnslinkResolver.setDnslink('almonit.eth', false)
       dnslinkResolver.setDnslink('almonit.eth.link', '/ipfs/QmPH7VMnfFKvrr7kLXNRwuxjYRLWnfcxPvnWs8ipyWAQK2')
       const dnsFailure = 'net::ERR_NAME_NOT_RESOLVED' // chrome code

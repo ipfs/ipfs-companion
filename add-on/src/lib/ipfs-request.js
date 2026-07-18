@@ -119,8 +119,8 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     // additional checks limited to requests for root documents
     if (request.type === 'main_frame') {
       // lazily trigger DNSLink lookup (will do anything only if status for root domain is not in cache)
-      if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
-        dnslinkResolver.resolve(request.url) // no await: preload record in background
+      if (dnslinkResolver.canLookupURL(request.url)) {
+        dnslinkResolver.resolve(request.url) // no await: populate cache in background
       }
     }
     return isIgnored(request.requestId)
@@ -136,8 +136,42 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     return isIgnored(request.requestId)
   }
 
+  // After a best-effort DNSLink lookup finishes for a main_frame navigation
+  // that already committed to its http(s) URL, re-navigate the tab to the
+  // mutable /ipns/ gateway address. Best-effort defers the lookup to the
+  // background, so the first visit to a DNSLink site would otherwise sit on the
+  // original URL until a manual refresh.
+  // https://github.com/ipfs/ipfs-companion/issues/1072
+  const lateDnslinkRedirect = async (request, dnslink) => {
+    if (!dnslink) return // no record, offline, or negative result
+    log(`lateDnslinkRedirect: DNSLink for ${request.url} resolved to ${dnslink}`)
+    const state = getState()
+    if (!state.active || !state.redirect || !state.dnslinkRedirect) return
+    if (!state.localGwAvailable) return // only upgrade to the local mutable address when the node is around
+    if (!dnslinkResolver.canLookupURL(request.url)) return // policy turned off, or now a gateway URL
+    if (request.type !== 'main_frame') return
+    if (request.method && request.method !== 'GET') return // don't turn a POST into a gateway GET
+    if (!isSafeToRedirect(request, runtime)) return
+    const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
+    if (!dnslinkAtGw) return
+    log(`lateDnslinkRedirect: upgrading ${request.url} to ${dnslinkAtGw}`)
+    // In MV3 redirectToGateway installs the DNR rule and re-navigates matching
+    // tabs itself: updateTabToNewUrl retries until the tab commits the origin and
+    // only touches tabs still on it, so it works even when the lookup resolves
+    // before the tab commits, and it never hijacks a tab the user has moved. In
+    // MV2 it returns the target and we navigate the initiating tab, as the
+    // onErrorOccurred and onCompleted late redirects already do.
+    const redirect = await redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
+    if (redirect && redirect.redirectUrl) {
+      await updateTabWithURL(request, redirect.redirectUrl, browser)
+    }
+  }
+
   // Build RequestModifier
   return {
+    // exposed for tests: drive the post-lookup tab redirect directly instead of
+    // draining the background lookup queue
+    lateDnslinkRedirect,
     // browser.webRequest.onBeforeRequest
     // This event is triggered when a request is about to be made, and before headers are available.
     // This is a good place to listen if you want to cancel or redirect the request.
@@ -207,18 +241,23 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         if (await ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
           return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
         }
-        // Detect dnslink using heuristics enabled in Preferences
-        if (state.dnslinkPolicy && dnslinkResolver.canLookupURL(request.url)) {
+        // DNSLink: look up the domain in the background (gated by dnslinkLookup
+        // via canLookupURL) so we know whether it is an IPFS site, for
+        // browser-action items and for redirect. When dnslinkRedirect is on,
+        // redirect to the local gateway: right away if the DNSLink is already
+        // cached, or once the background lookup resolves (lateDnslinkRedirect).
+        if (dnslinkResolver.canLookupURL(request.url)) {
           if (state.dnslinkRedirect) {
             const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url)
             if (dnslinkAtGw && isSafeToRedirect(request, runtime)) {
               return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
             }
-          } else if (state.dnslinkDataPreload) {
-            dnslinkResolver.preloadData(request.url)
           }
-          if (state.dnslinkPolicy === 'best-effort') {
-            dnslinkResolver.resolve(request.url)
+          // populate the cache even when redirect is off (browser-action items
+          // rely on it); the late redirect no-ops unless dnslinkRedirect is on
+          const resolving = dnslinkResolver.resolve(request.url)
+          if (request.type === 'main_frame') {
+            resolving.then((dnslink) => lateDnslinkRedirect(request, dnslink)).catch((err) => log.error('lateDnslinkRedirect failed', err))
           }
         }
       }
@@ -323,7 +362,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         // - CORS XHR in Firefox: https://github.com/ipfs-shipyard/ipfs-companion/issues/436
         if (runtime.requiresXHRCORSfix && onHeadersReceivedRedirect.has(request.requestId)) {
           onHeadersReceivedRedirect.delete(request.requestId)
-          if (state.dnslinkPolicy) {
+          if (state.dnslinkRedirect) {
             const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url)
             if (dnslinkAtGw) {
               return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
@@ -332,61 +371,37 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
           return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
         }
 
-        // Detect the x-ipfs-path response header and, when the site has a
-        // DNSLink, upgrade the page to its mutable /ipns/<host> address. The
-        // header value is only a hint that the site supports IPFS; it is never
-        // used as a redirect target.
-        // https://github.com/ipfs/ipfs-companion/issues/1052
+        // Legacy opt-in, off by default: when a site sends the x-ipfs-path
+        // response header, redirect to the exact /ipfs/ path it carries. Walled
+        // behind redirectToXIpfsPathValue because it is unsafe: a site that sets
+        // this header but has no DNSLink is misconfigured hosting (e.g. how
+        // https://fleek.co was set up in the past) and the redirect strands the
+        // user on an immutable snapshot. DNSLink sites are upgraded generically
+        // (the onBeforeRequest lookup plus lateDnslinkRedirect), which never
+        // uses the header value. https://github.com/ipfs/ipfs-companion/issues/1052
         const { url } = request
         const notActiveGatewayOrApi = !(sameGateway(url, state.pubGwURL) || sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL))
-        if (state.detectIpfsPathHeader && request.responseHeaders && notActiveGatewayOrApi) {
+        if (state.redirectToXIpfsPathValue && request.responseHeaders && notActiveGatewayOrApi) {
           for (const header of request.responseHeaders) {
             if (header.name.toLowerCase() !== 'x-ipfs-path' || !isSafeToRedirect(request, runtime)) {
               continue
             }
             const xIpfsPath = header.value
-            // A gateway controls its response headers but not the URL the user
-            // navigated to, so the URL always wins: when it follows gateway
-            // conventions the content path is derived from the URL alone in
-            // onBeforeRequest, and the header is ignored here. (isIPFS.url
-            // over-matching any /ipns/<segment> is safe in a skip: it cannot be
-            // abused to force a redirect.)
+            // only act on immutable /ipfs/ snapshots; an /ipns/ value would be a
+            // DNSLink, already handled generically without the header
+            if (!isIPFS.ipfsPath(xIpfsPath)) {
+              continue
+            }
+            // a gateway-shaped URL already carries its content path in the URL,
+            // so a header from the gateway must not override it
             if (isIPFS.url(request.url)) {
-              log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} from ${request.url} (URL follows gateway conventions, content path comes from the URL)`)
               continue
             }
-            // On a regular website the header only hints that the site supports
-            // IPFS. The immutable /ipfs/ snapshot it may carry is never used as
-            // a redirect target: a site without a DNSLink is misconfigured
-            // hosting (e.g. how https://fleek.co was set up in the past) and
-            // redirecting there would strand the user on a stale snapshot. So we
-            // redirect only when the host has a DNSLink, and only to its mutable
-            // /ipns/ address. This covers subresources too: in MV3 a redirect
-            // becomes a host-wide dynamic rule that would also catch future
-            // main_frame navigations.
-            if (!state.dnslinkRedirect) {
-              continue
-            }
-            const { hostname } = new URL(request.url)
-            // x-ipfs-path is a strong signal of IPFS support, so force a DNSLink
-            // lookup to pre-populate the cache even when dnslinkPolicy is not
-            // 'enabled'; fall back to a cached record when lookups are disabled.
-            const dnslink = dnslinkResolver.canLookupURL(request.url)
-              ? await dnslinkResolver.readAndCacheDnslink(hostname)
-              : dnslinkResolver.cachedDnslink(hostname)
-            if (!dnslink) {
-              log(`onHeadersReceived: ignoring x-ipfs-path=${xIpfsPath} from ${request.url} (no DNSLink for ${hostname})`)
-              continue
-            }
-            // DNSLink is valid: redirect to the mutable /ipns/ address of the
-            // website, which follows updates, instead of the /ipfs/ snapshot
-            // from the header. Redirect only when the local node is around;
-            // DNSLink support isn't guaranteed at a public subdomain gateway
-            // (needs more than one level of wildcard TLS certs).
-            const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
-            if (dnslinkAtGw && state.localGwAvailable) {
-              log(`onHeadersReceived: dnslinkRedirect from ${request.url} to ${dnslinkAtGw}`)
-              return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
+            const { search, hash } = new URL(request.url)
+            const newUrl = pathAtHttpGateway(`${xIpfsPath}${search}${hash}`, state.pubGwURLString || state.gwURLString)
+            if (newUrl && state.localGwAvailable) {
+              log(`onHeadersReceived: redirecting ${request.url} to x-ipfs-path value ${newUrl} (redirectToXIpfsPathValue opt-in)`)
+              return redirectToGateway(request, newUrl, state, ipfsPathValidator, runtime)
             }
           }
         }
@@ -732,7 +747,7 @@ function isRecoverableViaDNSLink (request, state, dnslinkResolver) {
   const recoverableViaDnslink =
     state.recoverFailedHttpRequests &&
     request.type === 'main_frame' &&
-    state.dnslinkPolicy &&
+    state.dnslinkRedirect &&
     recoverableNetworkErrors.has(request.error)
   return recoverableViaDnslink && dnslinkResolver.canLookupURL(request.url)
 }

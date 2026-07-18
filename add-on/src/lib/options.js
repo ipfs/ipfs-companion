@@ -43,15 +43,20 @@ export const optionDefaults = Object.freeze({
   disabledOn: [], // hostnames with explicit integration opt-out
   automaticMode: true,
   linkify: false,
-  dnslinkPolicy: 'best-effort',
-  // experimental: a HEAD preload fetches only the root block, so its value is
-  // limited; off by default
-  dnslinkDataPreload: false,
+  // DNSLink is two toggles: dnslinkLookup checks each visited domain for a
+  // DNSLink record (so we know which sites are IPFS-hosted, for browser-action
+  // items and as a prerequisite for redirect); dnslinkRedirect then loads those
+  // sites from the local gateway. Redirect does nothing without lookup.
+  dnslinkLookup: true,
   dnslinkRedirect: true,
   recoverFailedHttpRequests: true,
-  // legacy x-ipfs-path header detection, opt-in and off by default: gateway
-  // URL conventions and DNSLink have superseded it. See issue #1052.
-  detectIpfsPathHeader: false,
+  // legacy opt-in, off by default: when a site sends the x-ipfs-path response
+  // header, redirect to the exact /ipfs/ path it carries. Unsafe: a site with
+  // this header but no DNSLink is misconfigured hosting and the redirect
+  // strands the user on an immutable snapshot (#1052). DNSLink sites are
+  // upgraded without this; kept only as an escape hatch. A fresh key (renamed
+  // from detectIpfsPathHeader) so every existing profile also starts off.
+  redirectToXIpfsPathValue: false,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
@@ -185,15 +190,23 @@ export async function migrateOptions (storage, debug) {
   log.error = debug('ipfs-companion:migrations:error')
 
   // <= v2.4.4
-  // DNSLINK: convert old on/off 'dnslink' flag to text-based 'dnslinkPolicy'
+  // DNSLINK: convert the ancient on/off 'dnslink' flag to the DNSLink toggles
   const { dnslink } = await storage.get('dnslink')
   if (dnslink) {
-    // migrating old dnslink policy to 'best-effort'
-    await storage.set({
-      dnslinkPolicy: 'best-effort',
-      detectIpfsPathHeader: true
-    })
+    await storage.set({ dnslinkLookup: true, dnslinkRedirect: true })
     await storage.remove('dnslink')
+  }
+
+  // dnslinkPolicy (off | best-effort | enabled) becomes the boolean dnslinkLookup
+  // (on unless it was off); dnslinkRedirect keeps its own stored value. The
+  // preload experiment (dnslinkDataPreload) is removed.
+  {
+    const { dnslinkPolicy } = await storage.get('dnslinkPolicy')
+    if (dnslinkPolicy !== undefined) {
+      log('migrating dnslinkPolicy to dnslinkLookup')
+      await storage.set({ dnslinkLookup: String(dnslinkPolicy) !== 'false' })
+      await storage.remove(['dnslinkPolicy', 'dnslinkDataPreload'])
+    }
   }
 
   // ~ v2.9.x: migrating noRedirectHostnames → noIntegrationsHostnames

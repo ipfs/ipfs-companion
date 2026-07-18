@@ -40,7 +40,7 @@ describe(`[${manifestVersion}] subresource redirects:`, function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
-      dnslinkPolicy: false,
+      dnslinkLookup: false,
       gwURLString: 'http://127.0.0.1:8080',
       pubGwURLString: 'https://ipfs.io'
     })

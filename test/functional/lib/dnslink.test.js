@@ -28,7 +28,7 @@ function expectNoDnsTxtRecordLookup (fqdn, dnslinkResolver) {
   dnslinkResolver.readDnslinkFromTxtRecord = sinon.stub().withArgs(fqdn).throws('unexpected DNS TXT lookup', 'only cache should be used')
 }
 
-// dnslinkPolicy-agnostic tests
+// toggle-agnostic tests
 describe('dnslinkResolver', function () {
   before(() => {
     global.URL = URL
@@ -49,8 +49,8 @@ describe('dnslinkResolver', function () {
   })
 })
 
-// in this mode lookups are triggered externally, so all methods should work 'offline' using data from internal DNSLink cache
-describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
+// redirect decisions use the DNSLink cache only; no blocking DNS TXT lookup
+describe('dnslinkResolver (cache-only redirect decisions)', function () {
   before(() => {
     global.URL = URL
   })
@@ -60,7 +60,7 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
     // ensure each case uses clean state
     getState = () => Object.assign(initState(testOptions), {
       ipfsNodeType: 'external',
-      dnslinkPolicy: 'detectIpfsPathHeader',
+      dnslinkLookup: true,
       redirect: true,
       peerCount: 1
     })
@@ -136,67 +136,16 @@ describe('dnslinkResolver (dnslinkPolicy=detectIpfsPathHeader)', function () {
   })
 })
 
-// this policy triggers actual DNS TXT lookups
-describe('dnslinkResolver (dnslinkPolicy=enabled)', function () {
+// findDNSLinkHostname does its own DNS TXT lookups, independent of the toggles
+describe('dnslinkResolver (findDNSLinkHostname direct lookups)', function () {
   before(() => {
     global.URL = URL
   })
 
   const getState = () => Object.assign(initState(testOptions), {
     ipfsNodeType: 'external',
-    dnslinkPolicy: 'enabled',
+    dnslinkLookup: true,
     peerCount: 1
-  })
-  const getExternalNodeState = () => Object.assign(getState(), { ipfsNodeType: 'external' })
-
-  describe('dnslinkAtGateway(url)', function () {
-    ['/api/v0/foo', '/ipfs/foo', '/ipns/foo'].forEach(path => {
-      it('should return nothing if DNS TXT record is present but path starts with ' + path, async function () {
-        const url = new URL('https://dnslinksite1.io' + path)
-        const dnslinkResolver = createDnslinkResolver(getState)
-        spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
-        expect(await dnslinkResolver.dnslinkAtGateway(url.toString())).to.equal(undefined)
-      })
-    })
-    it('[external node] should return redirect to custom gateway if DNS TXT record is present and path does not belong to a gateway', async function () {
-      const url = new URL('https://dnslinksite4.io/foo/barl?a=b#c=d')
-      const dnslinkResolver = createDnslinkResolver(getExternalNodeState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
-      // note: locahost will redirect to subdomain if its go-ipfs >0.5,
-      // so companion does not need to handle that
-      expect(await dnslinkResolver.dnslinkAtGateway(url.toString()))
-        .to.equal('http://localhost:8080/ipns/dnslinksite4.io/foo/barl?a=b#c=d')
-    })
-  })
-
-  describe('canRedirectToIpns(url)', function () {
-    it('should return false if dnslink is present but path starts with /api/v0/', async function () {
-      const url = new URL('https://dnslinksite1.io/api/v0/dns/ipfs.io')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
-      expect(await dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
-    })
-    it('should return false if dnslink is present but path starts with /ipfs/', async function () {
-      const url = new URL('https://dnslinksite2.io/ipfs/foo/bar')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
-      expect(await dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
-    })
-    it('should return false if dnslink is present but path starts with /ipfs/', async function () {
-      const url = new URL('https://dnslinksite3.io/ipns/foo/bar')
-      const dnslinkResolver = createDnslinkResolver(getState)
-      spoofDnsTxtRecord(url.hostname, dnslinkResolver, dnslinkValue)
-      expect(await dnslinkResolver.canRedirectToIpns(url)).to.equal(false)
-    })
-    const dnsTxtRecordPresence = [undefined, '/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR']
-    dnsTxtRecordPresence.forEach(present => {
-      it(`should return ${Boolean(present)} if DNS TXT record is ${present ? 'present' : 'missing'} and path does not belong to an HTTP gateway`, async function () {
-        const url = new URL('https://dnslinksite4.io/foo/bar')
-        const dnslinkResolver = createDnslinkResolver(getState)
-        spoofDnsTxtRecord(url.hostname, dnslinkResolver, present)
-        expect(await dnslinkResolver.canRedirectToIpns(url)).to.equal(Boolean(present))
-      })
-    })
   })
 
   describe('findDNSLinkHostname(url)', function () {

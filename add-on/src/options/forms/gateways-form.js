@@ -43,6 +43,10 @@ export default function gatewaysForm ({
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_gateways')}</h2>
+        <div class="mb2">
+          ${browser.i18n.getMessage('option_gateways_sectionIntro')}
+          <a class="link underline hover-aqua" href="https://specs.ipfs.tech/http-gateways/" target="_blank">${browser.i18n.getMessage('option_legend_readMore')}</a>
+        </div>
           ${supportRedirectToCustomGateway
             ? html`<div class="flex-row-ns pb0-ns">
               <label for="customGatewayUrl">

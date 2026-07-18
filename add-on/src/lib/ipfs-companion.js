@@ -696,12 +696,6 @@ export default async function init (inQuickImport = false) {
           // Finally, update proxy settings based on the state
           await registerSubdomainProxy(getState, runtime)
           break
-        case 'dnslinkPolicy':
-          state.dnslinkPolicy = String(change.newValue) === 'false' ? false : change.newValue
-          if (state.dnslinkPolicy === 'best-effort' && !state.detectIpfsPathHeader) {
-            await browser.storage.local.set({ detectIpfsPathHeader: true })
-          }
-          break
         case 'logNamespaces':
           state[key] = change.newValue
           // Use debug.enable() API for both Manifest V2 and V3

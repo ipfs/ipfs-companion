@@ -31,7 +31,7 @@ describe('modifyRequest.onBeforeRequest:', function () {
       peerCount: 1,
       redirect: true,
       redirectSubresources: true,
-      dnslinkPolicy: false, // dnslink test suite is in ipfs-request-dnslink.test.js
+      dnslinkLookup: false, // dnslink test suite is in ipfs-request-dnslink.test.js
       catchUnhandledProtocols: true,
       gwURLString: 'http://127.0.0.1:8080',
       pubGwURLString: 'https://ipfs.io'
