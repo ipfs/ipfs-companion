@@ -87,9 +87,9 @@ IPFS Companion [detects DNSLink info](https://docs.ipfs.tech/how-to/dnslink-comp
 > - **Step 3:** Automatic upgrade to subdomain with origin isolation
 >   - `http://docs.ipfs.tech.ipns.localhost:8080/`
 
-#### Detect pages with `x-ipfs-path` headers
+#### Efficient DNSLink detection
 
-IPFS Companion also upgrades transport to IPFS when it detects `x-ipfs-path` in HTTP response headers; this also acts as a fallback for cases when an IPFS path is not present in the URL. [Learn more.](https://docs.ipfs.tech/how-to/companion-x-ipfs-path-header/)
+DNSLink lookups run in the background and are cached, so they don't slow down your browsing. The first time you open a DNSLink website, IPFS Companion upgrades the tab to your local gateway as soon as the record resolves, with no manual refresh. You can turn detection off under "Detect DNSLink Websites" in Preferences. [Learn more.](https://docs.ipfs.tech/how-to/dnslink-companion/)
 
 
 #### Toggle redirects globally or per site
@@ -114,7 +114,7 @@ IPFS Companion enables you to quickly and easily access common actions from your
 
 #### Toggle gateway redirects on a per-website basis
 
-You can toggle redirects (of any IPFS sub-resources) for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
+You can toggle redirects for an individual website under the _Current Tab_ section of the main menu. If that site uses DNSLink, toggling off will restore the site's original URL, too.
 
 ![Toggle per-site opt-out](https://gateway.ipfs.io/ipfs/QmYWXd4TSjk1RSzqzpaUbYp42obYjWtRme1oeYaTUdqkWu)
 
