@@ -118,7 +118,7 @@ describe('ipfs-import.js', function () {
         const resultFiles = [
           {
             cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
-            path: '/tmp/test-file1'
+            path: 'test-file1'
           },
           {
             cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqb',
@@ -126,19 +126,47 @@ describe('ipfs-import.js', function () {
           },
           {
             cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
-            path: '/tmp/test-file2'
+            path: 'test-file2'
           }
         ]
         getIpfs.returns(ipfs)
-        await ipfsImportHandler.copyImportResultsToFiles(resultFiles, '/my-directory')
-        sinon.assert.calledWith(mkdirSpy, '/my-directory')
+        await ipfsImportHandler.copyImportResultsToFiles(resultFiles, '/my-directory/')
+        sinon.assert.calledWith(mkdirSpy, '/my-directory/')
         expect(cpSpy.getCalls()[0].args).to.deep.equal([
           '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
-          '/my-directory/tmp/test-file1'
+          '/my-directory/test-file1'
         ])
         expect(cpSpy.getCalls()[1].args).to.deep.equal([
           '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
-          '/my-directory/tmp/test-file2'
+          '/my-directory/test-file2'
+        ])
+      })
+
+      it('should copy only the top-level node when importing a folder', async function () {
+        const cpSpy = sandbox.spy()
+        const mkdirSpy = sandbox.spy()
+        const ipfs = { files: { cp: cpSpy, mkdir: mkdirSpy } }
+        // addAll output for a folder: a nested file, its parent dir, the root
+        const resultFiles = [
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa',
+            path: 'sad-cats/download.png'
+          },
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqb',
+            path: 'sad-cats'
+          },
+          {
+            cid: 'bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqc',
+            path: ''
+          }
+        ]
+        getIpfs.returns(ipfs)
+        await ipfsImportHandler.copyImportResultsToFiles(resultFiles, '/my-directory/')
+        sinon.assert.calledOnce(cpSpy)
+        expect(cpSpy.getCall(0).args).to.deep.equal([
+          '/ipfs/bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqb',
+          '/my-directory/sad-cats'
         ])
       })
     })
