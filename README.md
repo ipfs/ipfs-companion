@@ -97,7 +97,7 @@ DNSLink lookups run in the background and are cached, so they don't slow down yo
 You can disable and re-enable local gateway redirects by several means:
 - Suspend redirects **globally** in IPFS Companion's preferences
 - Suspend redirects **per site** using the toggle under "Current tab" ([illustrated below](#toggle-gateway-redirects-on-a-per-website-basis)) or in IPFS Companion's preferences
-- Add `x-ipfs-companion-no-redirect` to the URL itself as a hash ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR#x-ipfs-companion-no-redirect)) or query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect))
+- Add `x-ipfs-companion-no-redirect` to the URL as a query parameter ([example](https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR?x-ipfs-companion-no-redirect)). You can turn this opt-out off under "Honor ?x-ipfs-companion-no-redirect opt-out" in Preferences.
 
 ### Access frequently-used IPFS actions from your browser bar
 

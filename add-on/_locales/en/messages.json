@@ -527,6 +527,14 @@
     "message": "Legacy experiment that can break sites. A website that sends this header but is not set up with DNSLink gets pinned to a frozen snapshot: you cannot refresh it for updates or bookmark it, and it may show errors. Leave this off unless you specifically need it.",
     "description": "A warning on the Preferences screen, displayed when redirect to x-ipfs-path value is enabled (option_redirectToXIpfsPathValue_warning)"
   },
+  "option_honorRedirectOptOutHint_title": {
+    "message": "Honor ?x-ipfs-companion-no-redirect opt-out",
+    "description": "An option title on the Preferences screen (option_honorRedirectOptOutHint_title)"
+  },
+  "option_honorRedirectOptOutHint_description": {
+    "message": "Leave a request on its original destination when its URL carries the ?x-ipfs-companion-no-redirect query parameter, instead of redirecting it to the local gateway. Handy for preloading data at a specific gateway. On by default; turn off to disable the opt-out.",
+    "description": "An option description on the Preferences screen (option_honorRedirectOptOutHint_description)"
+  },
   "option_openViaWebUI_title": {
     "message": "Open Imported Files in the Files Screen",
     "description": "An option title on the Preferences screen (option_openViaWebUI_title)"

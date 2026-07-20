@@ -101,6 +101,7 @@ export default function optionsPage (state, emit) {
     linkify: state.options.linkify,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
     redirectToXIpfsPathValue: state.options.redirectToXIpfsPathValue,
+    honorRedirectOptOutHint: state.options.honorRedirectOptOutHint,
     logNamespaces: state.options.logNamespaces,
     onOptionChange
   })}

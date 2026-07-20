@@ -9,12 +9,14 @@ import { invalidAddressPagePath, recoveryPagePath } from './constants.js'
 import { diagnoseAddress, encodeDiagnosis } from './invalid-address.js'
 import { contentPathToNativeUri, dropSlash, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
-import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsDeclarativeNetRequest } from './redirect-handler/blockOrObserve.js'
+import { addRuleToDynamicRuleSetGenerator, isLocalHost, redirectOptOutHint, supportsDeclarativeNetRequest } from './redirect-handler/blockOrObserve.js'
 
 const log = debug('ipfs-companion:request')
 log.error = debug('ipfs-companion:request:error')
 
-export const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
+// Re-exported for tests; the string lives in blockOrObserve.js next to the DNR
+// allow rule that enforces it under MV3.
+export { redirectOptOutHint }
 const recoverableNetworkErrors = new Set([
   // Firefox
   'NS_ERROR_UNKNOWN_HOST', // dns failure
@@ -152,7 +154,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     if (!dnslinkResolver.canLookupURL(request.url)) return // policy turned off, or now a gateway URL
     if (request.type !== 'main_frame') return
     if (request.method && request.method !== 'GET') return // don't turn a POST into a gateway GET
-    if (!isSafeToRedirect(request, runtime)) return
+    if (!isSafeToRedirect(request, runtime, state)) return
     const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url, dnslink)
     if (!dnslinkAtGw) return
     log(`lateDnslinkRedirect: upgrading ${request.url} to ${dnslinkAtGw}`)
@@ -246,7 +248,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
           return
         }
         // Detect valid /ipfs/ and /ipns/ on any site
-        if (await ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime)) {
+        if (await ipfsPathValidator.publicIpfsOrIpnsResource(request.url) && isSafeToRedirect(request, runtime, state)) {
           return redirectToGateway(request, request.url, state, ipfsPathValidator, runtime)
         }
         // DNSLink: look up the domain in the background (gated by dnslinkLookup
@@ -257,7 +259,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         if (dnslinkResolver.canLookupURL(request.url)) {
           if (state.dnslinkRedirect) {
             const dnslinkAtGw = await dnslinkResolver.dnslinkAtGateway(request.url)
-            if (dnslinkAtGw && isSafeToRedirect(request, runtime)) {
+            if (dnslinkAtGw && isSafeToRedirect(request, runtime, state)) {
               return redirectToGateway(request, dnslinkAtGw, state, ipfsPathValidator, runtime)
             }
           }
@@ -391,7 +393,7 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
         const notActiveGatewayOrApi = !(sameGateway(url, state.pubGwURL) || sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL))
         if (state.redirectToXIpfsPathValue && request.responseHeaders && notActiveGatewayOrApi) {
           for (const header of request.responseHeaders) {
-            if (header.name.toLowerCase() !== 'x-ipfs-path' || !isSafeToRedirect(request, runtime)) {
+            if (header.name.toLowerCase() !== 'x-ipfs-path' || !isSafeToRedirect(request, runtime, state)) {
               continue
             }
             const xIpfsPath = header.value
@@ -576,16 +578,21 @@ async function redirectToGateway (request, url, state, ipfsPathValidator, runtim
   })
 }
 
-function isSafeToRedirect (request, runtime) {
+function isSafeToRedirect (request, runtime, state) {
   const { url, type, originUrl } = request
-  // Do not redirect if URL includes opt-out hint
-  if (url.includes(redirectOptOutHint)) {
-    return false
-  }
-  // Do not redirect if parent URL in address bar includes opt-out hint
-  // Note: this works only in Firefox, Chromium does not provide full originUrl, only hostname in request.initiator
-  if (type !== 'main_frame' && originUrl && originUrl.includes(redirectOptOutHint)) {
-    return false
+  // Honor the per-request opt-out hint unless the experiment is turned off.
+  // The MV3 network-layer counterpart is the DNR allow rule in blockOrObserve.js,
+  // gated on the same honorRedirectOptOutHint option.
+  if (state.honorRedirectOptOutHint) {
+    // Do not redirect if URL includes opt-out hint
+    if (url.includes(redirectOptOutHint)) {
+      return false
+    }
+    // Do not redirect if parent URL in address bar includes opt-out hint
+    // Note: this works only in Firefox, Chromium does not provide full originUrl, only hostname in request.initiator
+    if (type !== 'main_frame' && originUrl && originUrl.includes(redirectOptOutHint)) {
+      return false
+    }
   }
 
   // Ignore XHR requests for which redirect would fail due to CORS bug in Firefox

@@ -57,6 +57,11 @@ export const optionDefaults = Object.freeze({
   // upgraded without this; kept only as an escape hatch. A fresh key (renamed
   // from detectIpfsPathHeader) so every existing profile also starts off.
   redirectToXIpfsPathValue: false,
+  // When on (default), a URL carrying the ?x-ipfs-companion-no-redirect query
+  // parameter is left on its original destination instead of being redirected
+  // to the local gateway. Under MV3 this installs a declarativeNetRequest allow
+  // rule; turning it off removes that rule and disables the opt-out.
+  honorRedirectOptOutHint: true,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
