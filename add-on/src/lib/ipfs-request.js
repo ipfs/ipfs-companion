@@ -5,8 +5,9 @@ import debug from 'debug'
 import isFQDN from 'is-fqdn'
 import * as isIPFS from 'is-ipfs'
 import { LRUCache } from 'lru-cache'
-import { recoveryPagePath } from './constants.js'
-import { dropSlash, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
+import { invalidAddressPagePath, recoveryPagePath } from './constants.js'
+import { diagnoseAddress, encodeDiagnosis } from './invalid-address.js'
+import { contentPathToNativeUri, dropSlash, pathAtHttpGateway, sameGateway } from './ipfs-path.js'
 import { safeURL } from './options.js'
 import { addRuleToDynamicRuleSetGenerator, isLocalHost, supportsDeclarativeNetRequest } from './redirect-handler/blockOrObserve.js'
 
@@ -218,7 +219,14 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
       }
       // poor-mans protocol handlers - https://github.com/ipfs/ipfs-companion/issues/164#issuecomment-328374052
       if (state.catchUnhandledProtocols && mayContainUnhandledIpfsProtocol(request)) {
-        const fix = await normalizedUnhandledIpfsProtocol(request, state.pubGwURLString || state.gwURLString)
+        const pubGwUrl = state.pubGwURLString || state.gwURLString
+        // Addresses that cannot work as written get an explainer instead of a
+        // silent fixup. See diagnoseAddress for what counts and why.
+        const diagnosis = diagnoseAddress(unhandledIpfsPath(request.url))
+        if (diagnosis) {
+          return showInvalidAddressPage(request, diagnosis, pubGwUrl, runtimeRoot, browser)
+        }
+        const fix = await normalizedUnhandledIpfsProtocol(request, pubGwUrl)
         if (fix) {
           return fix
         }
@@ -643,7 +651,7 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   path = path.replace(/^#ipfs:\/\//i, '/ipfs/') // ipfs://Qm → /ipfs/Qm
   path = path.replace(/^#ipns:\/\//i, '/ipns/') // ipns://Qm → /ipns/Qm
   // additional fixups of the final path
-  path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
+  path = fixupDnslinkPath(path) // the invalid /ipfs/<website name> → /ipns/<website name>
   if (oldPath !== path && isIPFS.path(path)) {
     return handleRedirection({
       originUrl: request.url,
@@ -654,7 +662,13 @@ function normalizedRedirectingProtocolRequest (request, pubGwUrl) {
   return null
 }
 
-// idempotent /ipfs/example.com → /ipns/example.com
+// Idempotent rewrite of a website name off the immutable namespace, e.g. the
+// invalid /ipfs/en.wikipedia-on-ipfs.org → the correct /ipns/en.wikipedia-on-ipfs.org.
+// A website name resolves through DNSLink and its owner can repoint it at any
+// time, so it is never valid under /ipfs/, which promises fixed content.
+// Reached only by the legacy fragment-based protocol handler below; addresses
+// arriving through the search-hijack path are explained to the user instead
+// (see diagnoseAddress in invalid-address.js).
 function fixupDnslinkPath (path) {
   if (!(path && path.startsWith('/ipfs/'))) return path
   const [, root] = path.match(/^\/ipfs\/([^/?#]+)/)
@@ -686,8 +700,10 @@ function unhandledIpfsPath (requestUrl) {
 }
 
 function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
-  let path = unhandledIpfsPath(request.url)
-  path = fixupDnslinkPath(path) // /ipfs/example.com → /ipns/example.com
+  // Addresses this cannot handle were already diagnosed by the caller, so no
+  // DNSLink fixup happens here: an ipfs:// address naming a DNSLink website is
+  // wrong and gets explained, never silently rewritten.
+  const path = unhandledIpfsPath(request.url)
   if (isIPFS.path(path)) {
     // replace search query with a request to a public gateway
     // (will be redirected later, if needed)
@@ -695,9 +711,48 @@ function normalizedUnhandledIpfsProtocol (request, pubGwUrl) {
       originUrl: request.url,
       redirectUrl: pathAtHttpGateway(path, pubGwUrl),
       request
-
     })
   }
+  return null
+}
+
+// Open the explainer for an address that cannot work as written, e.g. the
+// invalid `ipfs://en.wikipedia-on-ipfs.org` (a website name is mutable, so it
+// belongs to ipns://).
+//
+// Unlike every other redirect in this file it deliberately avoids
+// handleRedirection, because under MV3 that installs a persistent
+// declarativeNetRequest rule. A rule matches by pattern, but this page is a
+// verdict on one specific address, so the rule would go on to serve that verdict
+// to unrelated URLs on the same host: one bad address typed into a search bar
+// ended up redirecting every later search to this page. Navigating the tab is
+// also what the rule-based path does for the request that triggers it
+// (addRuleToDynamicRuleSet calls updateTabToNewUrl before building the rule),
+// so nothing is lost by skipping the rule.
+function showInvalidAddressPage (request, diagnosis, pubGwUrl, runtimeRoot, browser) {
+  const pageUrl = invalidAddressPageUrl(diagnosis, pubGwUrl, runtimeRoot)
+  if (!supportsDeclarativeNetRequest()) {
+    return { redirectUrl: pageUrl }
+  }
+  // MV3 has no blocking redirect. A tab that went away in the meantime must not
+  // throw out of the listener.
+  void updateTabWithURL(request, pageUrl, browser)
+    .catch(err => log.error('failed to open the invalid address page', err))
+  return null
+}
+
+// Build the address of the explainer page, carrying the diagnosis in the
+// fragment. The suggested address is shown to the user and the gateway URL
+// backs the continue button, so a click lands on the content itself rather than
+// on another address the browser cannot open.
+function invalidAddressPageUrl ({ reason, address, suggestedPath }, pubGwUrl, runtimeRoot) {
+  const fragment = encodeDiagnosis({
+    reason,
+    address,
+    suggestedAddress: suggestedPath ? contentPathToNativeUri(suggestedPath) : null,
+    suggestedUrl: suggestedPath ? pathAtHttpGateway(suggestedPath, pubGwUrl) : null
+  })
+  return `${dropSlash(runtimeRoot)}${invalidAddressPagePath}#${fragment}`
 }
 
 // RECOVERY OF FAILED REQUESTS

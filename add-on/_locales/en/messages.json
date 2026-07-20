@@ -826,5 +826,89 @@
   "request_permissions_page_learn_more": {
     "message": "Learn more about host permissions",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "invalid_address_page_title": {
+    "message": "Address cannot be opened | IPFS Companion",
+    "description": "Title of the invalid address page (invalid_address_page_title)"
+  },
+  "invalid_address_page_sub_header": {
+    "message": "This address cannot be opened as written",
+    "description": "Sub-header on the invalid address page (invalid_address_page_sub_header)"
+  },
+  "invalid_address_page_opened_label": {
+    "message": "You opened",
+    "description": "Label above the address the user requested (invalid_address_page_opened_label)"
+  },
+  "invalid_address_page_correct_label": {
+    "message": "Correct address",
+    "description": "Label above the corrected address (invalid_address_page_correct_label)"
+  },
+  "invalid_address_page_button": {
+    "message": "Continue to $1",
+    "description": "Button that opens the corrected address, $1 is the corrected address (invalid_address_page_button)"
+  },
+  "invalid_address_page_learn_more": {
+    "message": "Learn more about IPFS addresses",
+    "description": "Learn more link on the invalid address page (invalid_address_page_learn_more)"
+  },
+  "invalid_address_page_wrong_namespace_header": {
+    "message": "This address needs ipns://",
+    "description": "Header shown when ipfs:// was used for a mutable pointer (invalid_address_page_wrong_namespace_header)"
+  },
+  "invalid_address_page_dnslink_message": {
+    "message": "You opened a website name with ipfs://. Website names resolve through DNSLink, so the owner can publish new content while the address stays the same.",
+    "description": "Explanation for a DNSLink domain used with ipfs:// (invalid_address_page_dnslink_message)"
+  },
+  "invalid_address_page_ipns_key_message": {
+    "message": "You opened an IPNS name with ipfs://. Whoever holds the key behind it can republish new content while the address stays the same.",
+    "description": "Explanation for an IPNS key used with ipfs:// (invalid_address_page_ipns_key_message)"
+  },
+  "invalid_address_page_namespace_advice": {
+    "message": "The ipfs:// namespace is only for immutable identifiers. A CID comes from the content itself, so the data behind it is frozen like an insect in amber: it never changes, and anyone can verify they got exactly those bytes. An address someone can repoint is mutable, and mutable addresses belong under ipns://.",
+    "description": "Shared advice about what ipfs:// is for (invalid_address_page_namespace_advice)"
+  },
+  "invalid_address_page_lowercased_header": {
+    "message": "This address looks lowercased",
+    "description": "Header shown when the browser lowercased a CIDv0 (invalid_address_page_lowercased_header)"
+  },
+  "invalid_address_page_lowercased_message": {
+    "message": "This address holds what looks like a CIDv0, the older kind of content identifier: it starts with Qm and mixes upper and lower case. This one arrived entirely lower case. That happens when something along the way treats the part after ipfs:// as a website name, because website names are case-insensitive. Nothing can recover the original from what is left.",
+    "description": "Explanation of a lowercased CIDv0 (invalid_address_page_lowercased_message)"
+  },
+  "invalid_address_page_lowercased_advice": {
+    "message": "Ask whoever shared this link for a CIDv1 in Base32: those are lower case already, so lowercasing cannot damage them. If you still have the original identifier, paste it into the CID inspector below and use the CIDv1 (Base32) it produces.",
+    "description": "What to do about a lowercased CIDv0 (invalid_address_page_lowercased_advice)"
+  },
+  "invalid_address_page_convert_cid": {
+    "message": "Convert your identifier to CIDv1 (Base32) at cid.ipfs.tech",
+    "description": "Link to the CID inspector, shown when a CIDv0 was damaged by lowercasing (invalid_address_page_convert_cid)"
+  },
+  "invalid_address_page_learn_dnslink": {
+    "message": "How DNSLink connects a domain name to IPFS",
+    "description": "Link to the DNSLink concept docs, shown when a website name was used with ipfs:// (invalid_address_page_learn_dnslink)"
+  },
+  "invalid_address_page_learn_mutability": {
+    "message": "Why changing content needs a mutable pointer",
+    "description": "Link to the IPNS mutability docs, shown when an IPNS name was used with ipfs:// (invalid_address_page_learn_mutability)"
+  },
+  "invalid_address_page_unrecognized_header": {
+    "message": "This identifier does not look valid",
+    "description": "Header shown when the identifier matches no known form (invalid_address_page_unrecognized_header)"
+  },
+  "invalid_address_page_unrecognized_message": {
+    "message": "What follows ipfs:// or ipns:// names the thing to fetch: a CID for content that never changes, or a website name or IPNS key for a pointer that can be updated. This one does not match any of those, so it could not be looked up.",
+    "description": "Explanation shown when the identifier matches no known form (invalid_address_page_unrecognized_message)"
+  },
+  "invalid_address_page_unrecognized_advice": {
+    "message": "Check it for a typo first. Identifiers are long and easy to cut short when copied, so make sure you have the whole thing, and compare it against the original if you still have it.",
+    "description": "What to do about an unrecognized identifier (invalid_address_page_unrecognized_advice)"
+  },
+  "invalid_address_page_learn_cid": {
+    "message": "What a content identifier (CID) looks like",
+    "description": "Link to the CID spec (invalid_address_page_learn_cid)"
+  },
+  "invalid_address_page_learn_ipns_record": {
+    "message": "What an IPNS name looks like",
+    "description": "Link to the IPNS record spec (invalid_address_page_learn_ipns_record)"
   }
 }
