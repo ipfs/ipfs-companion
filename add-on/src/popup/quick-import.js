@@ -220,7 +220,6 @@ function quickImportOptions (state, emit) {
 function quickImportPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
   const onFolderInputChange = (e) => emit('folderInputChange', e)
-  const onPickFolder = () => document.getElementById('quickImportFolderInput').click()
   const { peerCount } = state
 
   return html`
@@ -241,28 +240,26 @@ function quickImportPage (state, emit) {
             </p>
           </div>
         </header>
-        <label for="quickImportInput" class='db relative mt5 hover-inner-shadow pointer' style="border:solid 2px #6ACAD1">
-          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
-          <div class='dt dim' style='padding-left: 100px; height: 300px'>
-            <div class='dtc v-mid'>
-              <span class="f3 dim br1 ph4 pv3 dib navy" style="background: #6ACAD1">
+        <div class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
+          <div class='dt' style='height: 300px; width: 100%'>
+            <div class='dtc v-mid tc'>
+              <label class="f3 dim br1 ph4 pv3 dib navy pointer" style="background: #6ACAD1">
                 ${browser.i18n.getMessage('quickImport_pick_file_button')}
-              </span>
-              <span class='f3'>
-                <emph class='underline pl3 pr2 moon-gray'>
+                <input class="clip" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
+              </label>
+              <label class="f3 dim br1 ph4 pv3 dib navy pointer ml3" style="background: #6ACAD1">
+                ${browser.i18n.getMessage('quickImport_pick_folder_button')}
+                <input class="clip" type="file" id="quickImportFolderInput" webkitdirectory multiple onchange=${onFolderInputChange} />
+              </label>
+              <p class='f3 mt4 mb0'>
+                <emph class='underline pr2 moon-gray'>
                   ${browser.i18n.getMessage('quickImport_or')}
                 </emph>
                 ${browser.i18n.getMessage('quickImport_drop_it_here')}
-              </span>
+              </p>
               <p class='f4 db'>${state.message}<span class='code db absolute fr pv2'>${state.progress}</span></p>
             </div>
           </div>
-        </label>
-        <div class='tc mt3'>
-          <input class='dn' type='file' id='quickImportFolderInput' webkitdirectory multiple onchange=${onFolderInputChange} />
-          <button class='f6 lh-copy link bn bg-transparent dib pa0 pointer' style='color: #6ACAD1' onclick=${onPickFolder}>
-            ${browser.i18n.getMessage('quickImport_pick_folder_button')} »
-          </button>
         </div>
         ${quickImportOptions(state, emit)}
       </div>
