@@ -43,6 +43,16 @@ export const DELETE_RULE_REQUEST_SUCCESS = 'DELETE_RULE_REQUEST_SUCCESS'
 export const GLOBAL_STATE_OPTION_CHANGE = 'GLOBAL_STATE_OPTION_CHANGE'
 export const MAX_RETRIES_TO_UPDATE_TAB = 5
 
+// Per-request opt-out token. Add it to a URL as a query parameter
+// (e.g. https://ipfs.io/ipfs/<cid>?x-ipfs-companion-no-redirect) and Companion
+// leaves that request on its original destination instead of redirecting it to
+// the local gateway. Handy for preloading data at an arbitrary gateway.
+// Only the query-parameter form works: URL fragments (#...) never reach the
+// network layer, so DNR cannot see a #x-ipfs-companion-no-redirect hint.
+export const redirectOptOutHint = 'x-ipfs-companion-no-redirect'
+// Deterministic id so the allow rule is added once and recognised on reconcile.
+const REDIRECT_OPT_OUT_RULE_ID = fastHashCode(`allow:${redirectOptOutHint}`, { forcePositive: true })
+
 // We need to match the rest of the URL, so we can use a wildcard.
 export const RULE_REGEX_ENDING = '((?:[^\\.]|$).*)$'
 
@@ -297,6 +307,17 @@ async function reconcileRulesAndRemoveOld (state: CompanionState): Promise<void>
       }
     }
 
+    // Keep the ?x-ipfs-companion-no-redirect allow rule in sync with the
+    // honorRedirectOptOutHint experiment. cleanupRules wipes every dynamic rule
+    // on each option change, so the rule has to be re-added here whenever the
+    // experiment is on. See generateOptOutAllowRule.
+    const hasOptOutRule = rules.some(({ id }) => id === REDIRECT_OPT_OUT_RULE_ID)
+    if (state.honorRedirectOptOutHint && !hasOptOutRule) {
+      addRules.push(generateOptOutAllowRule())
+    } else if (!state.honorRedirectOptOutHint && hasOptOutRule) {
+      removeRuleIds.push(REDIRECT_OPT_OUT_RULE_ID)
+    }
+
     await browser.declarativeNetRequest.updateDynamicRules({ addRules, removeRuleIds })
   }
 }
@@ -350,6 +371,31 @@ export function generateAddRule (
       regexFilter,
       excludedInitiatorDomains,
       resourceTypes
+    }
+  }
+}
+
+/**
+ * A single static allow rule that restores the ?x-ipfs-companion-no-redirect
+ * opt-out under MV3. DNR evaluates it at the network layer ahead of the generic
+ * redirect rules (which use priority 1), so any request whose URL carries the
+ * token is left on its original destination. This is the MV3 counterpart to
+ * isSafeToRedirect() in ipfs-request.js, which covers the MV2 blocking path.
+ *
+ * Caveat: using the opt-out on a service worker gateway (e.g. inbrowser.link)
+ * lets that origin's worker register, and Chromium DNR then cannot redirect the
+ * origin back at the network layer. That miss is recovered separately via
+ * webNavigation.onCommitted (recoverRedirectMiss in ipfs-request.js); see the
+ * service worker gateway gotcha in docs/MV3.md.
+ */
+function generateOptOutAllowRule (): browser.DeclarativeNetRequest.Rule {
+  return {
+    id: REDIRECT_OPT_OUT_RULE_ID,
+    priority: 2,
+    action: { type: 'allow' },
+    condition: {
+      regexFilter: redirectOptOutHint,
+      resourceTypes: RESOURCE_TYPES_ALL
     }
   }
 }

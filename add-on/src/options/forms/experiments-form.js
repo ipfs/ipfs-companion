@@ -12,6 +12,7 @@ export default function experimentsForm ({
   linkify,
   recoverFailedHttpRequests,
   redirectToXIpfsPathValue,
+  honorRedirectOptOutHint,
   logNamespaces,
   onOptionChange
 }) {
@@ -22,6 +23,7 @@ export default function experimentsForm ({
   const onLinkifyChange = onOptionChange('linkify')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
   const onRedirectToXIpfsPathValueChange = onOptionChange('redirectToXIpfsPathValue')
+  const onHonorRedirectOptOutHintChange = onOptionChange('honorRedirectOptOutHint')
 
   return html`
     <form>
@@ -96,6 +98,15 @@ export default function experimentsForm ({
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'redirectToXIpfsPathValue', checked: redirectToXIpfsPathValue, onchange: onRedirectToXIpfsPathValueChange })}</div>
+        </div>
+        <div class="flex-row-ns pb0-ns">
+          <label for="honorRedirectOptOutHint">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_honorRedirectOptOutHint_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_honorRedirectOptOutHint_description')}</dd>
+            </dl>
+          </label>
+          <div class="self-center-ns">${switchToggle({ id: 'honorRedirectOptOutHint', checked: honorRedirectOptOutHint, onchange: onHonorRedirectOptOutHintChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="logNamespaces">

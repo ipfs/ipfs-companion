@@ -107,7 +107,9 @@ describe.skipIf(!isManifestV3)('lib/redirect-handler/blockOrObserve', () => {
 
     before(() => {
       sinonSandbox = sinon.createSandbox()
-      state = Object.assign(initState(optionDefaults), { peerCount: 1, redirectSubresources: true })
+      // honorRedirectOptOutHint off keeps these rule-count assertions focused on
+      // redirect rules; the opt-out allow rule has its own describe block below.
+      state = Object.assign(initState(optionDefaults), { peerCount: 1, redirectSubresources: true, honorRedirectOptOutHint: false })
       addRuleToDynamicRuleSet = addRuleToDynamicRuleSetGenerator(() => state)
     })
 
@@ -299,6 +301,50 @@ describe.skipIf(!isManifestV3)('lib/redirect-handler/blockOrObserve', () => {
         regexSubstitution: 'http://localhost:8080\\1',
         removedRulesIds: getRuleIdsAddedSoFar()
       })
+    })
+  })
+
+  describe('honorRedirectOptOutHint (?x-ipfs-companion-no-redirect)', () => {
+    let addRuleToDynamicRuleSet
+    let state
+
+    const allowRules = () =>
+      browserMock.declarativeNetRequest.updateDynamicRules.getCalls()
+        .flatMap(({ args }) => args[0]?.addRules ?? [])
+        .filter(rule => rule.action.type === 'allow')
+
+    beforeEach(async () => {
+      browserMock.tabs.query.resetHistory()
+      browserMock.tabs.update.resetHistory()
+      browserMock.declarativeNetRequest = sinon.spy(new DeclarativeNetRequestMock())
+      await cleanupRules(true)
+      browserMock.declarativeNetRequest = sinon.spy(new DeclarativeNetRequestMock())
+      state = Object.assign(initState(optionDefaults), { peerCount: 1 })
+      addRuleToDynamicRuleSet = addRuleToDynamicRuleSetGenerator(() => state)
+    })
+
+    it('adds one high-priority allow rule for the opt-out token when on', async () => {
+      state.honorRedirectOptOutHint = true
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+      const rules = allowRules()
+      expect(rules).to.have.lengthOf(1)
+      const [rule] = rules
+      // priority must beat the redirect rules, which use priority 1
+      expect(rule.priority).to.equal(2)
+      expect(rule.action).to.deep.equal({ type: 'allow' })
+      expect(rule.condition.regexFilter).to.equal('x-ipfs-companion-no-redirect')
+    })
+
+    it('does not add the allow rule when off', async () => {
+      state.honorRedirectOptOutHint = false
+      await addRuleToDynamicRuleSet({
+        originUrl: 'https://ipfs.io/ipns/en.wikipedia-on-ipfs.org',
+        redirectUrl: 'http://localhost:8080/ipns/en.wikipedia-on-ipfs.org'
+      })
+      expect(allowRules()).to.have.lengthOf(0)
     })
   })
 })

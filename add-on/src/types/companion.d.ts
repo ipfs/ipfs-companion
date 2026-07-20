@@ -16,6 +16,7 @@ export interface CompanionOptions {
   dnslinkRedirect: boolean
   recoverFailedHttpRequests: boolean
   redirectToXIpfsPathValue: boolean
+  honorRedirectOptOutHint: boolean
   preloadAtPublicGateway: boolean
   catchUnhandledProtocols: boolean
   displayNotifications: boolean
