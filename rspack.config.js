@@ -182,7 +182,8 @@ const uiConfig = merge(commonConfig, {
     optionsPage: './add-on/src/options/options.js',
     recoveryPage: './add-on/src/recovery/recovery.js',
     welcomePage: './add-on/src/landing-pages/welcome/index.js',
-    requestPermissionsPage: './add-on/src/landing-pages/permissions/request.js'
+    requestPermissionsPage: './add-on/src/landing-pages/permissions/request.js',
+    invalidAddressPage: './add-on/src/landing-pages/invalid-address/index.js'
   },
   optimization: {
     splitChunks: {

@@ -1,7 +1,10 @@
 'use strict'
+import { expect } from 'chai'
+import Sinon from 'sinon'
 import { afterAll as after, beforeAll as before, beforeEach, describe, it } from 'vitest'
 import browser from 'sinon-chrome'
 import { URL } from 'url'
+import isManifestV3 from '../../helpers/is-mv3-testing-enabled.js'
 import createDnslinkResolver from '../../../add-on/src/lib/dnslink.js'
 import { createIpfsPathValidator } from '../../../add-on/src/lib/ipfs-path.js'
 import { createRequestModifier } from '../../../add-on/src/lib/ipfs-request.js'
@@ -10,9 +13,34 @@ import createRuntimeChecks from '../../../add-on/src/lib/runtime-checks.js'
 import { initState } from '../../../add-on/src/lib/state.js'
 import { ensureCallRedirected, ensureRequestUntouched } from '../../helpers/mv3-test-helper.js'
 
+const testTabId = 20
 const url2request = (string) => {
-  return { url: string, type: 'main_frame' }
+  return { url: string, type: 'main_frame', tabId: testTabId }
 }
+
+// The explainer shown instead of silently fixing up an address, or forwarding
+// one to a gateway that can only answer with an error.
+const invalidAddressPage = (params) =>
+  `chrome-extension://testid/dist/landing-pages/invalid-address/index.html#${new URLSearchParams(params).toString()}`
+
+/**
+ * The explainer is a verdict on one address, so it must reach the user by
+ * navigating the tab and must NEVER become a declarativeNetRequest rule. A rule
+ * matches by pattern and would go on to serve this verdict to unrelated URLs on
+ * the same host, which once turned a single bad address into a redirect for
+ * every later search. Asserting no rule is installed is the regression guard.
+ */
+const ensureInvalidAddressPageShown = ({ resp, page }) => {
+  if (isManifestV3) {
+    Sinon.assert.notCalled(browser.declarativeNetRequest.updateDynamicRules)
+    Sinon.assert.calledWith(browser.tabs.update, testTabId, { active: true, url: page })
+  } else {
+    expect(resp.redirectUrl).to.equal(page)
+  }
+}
+
+const lowercasedCidv0 = 'QmUVTKsrYJpaxUT7dr9FpKq6AoKHhEM7eG1ZHGL56haKLG'.toLowerCase()
+const ipnsKey = 'k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8'
 
 const nodeTypes = ['external']
 
@@ -94,16 +122,20 @@ describe('modifyRequest.onBeforeRequest:', function () {
             }
           })
         })
-        it('should be normalized if ipfs://{fqdn}', async function () {
+        // a DNSLink name under ipfs:// used to be corrected in silence, which
+        // let the wrong form spread: https://github.com/ipfs/ipfs-companion/issues/1316
+        it('should explain the mistake if ipfs://{fqdn}', async function () {
           const request = url2request('https://dweb.link/ipfs/?uri=ipfs%3A%2F%2Fipfs.io%3FargTest%23hashTest')
+          const page = invalidAddressPage({
+            reason: 'dnslink-under-ipfs',
+            address: 'ipfs://ipfs.io?argTest#hashTest',
+            suggestedAddress: 'ipns://ipfs.io?argTest#hashTest',
+            suggestedUrl: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest'
+          })
 
-          ensureCallRedirected({
-            modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
-            MV2Expectation: 'https://ipfs.io/ipns/ipfs.io?argTest#hashTest',
-            MV3Expectation: {
-              origin: '^https?\\:\\/\\/dweb\\.link\\/ipfs\\/\\?uri\\=ipfs%3A%2F%2Fipfs\\.io%3FargTest%23',
-              destination: 'https://ipfs.io/ipns/ipfs.io?argTest#\\1'
-            }
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
           })
         })
         it('should be normalized if dweb:/ipfs/{CID}', async function () {
@@ -257,16 +289,18 @@ describe('modifyRequest.onBeforeRequest:', function () {
             }
           })
         })
-        it('should be normalized if ipfs://{fqdn}', async function () {
+        it('should explain the mistake if ipfs://{fqdn}', async function () {
           const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2Fipns.io%2Findex.html%3Farg%3Dfoo%26bar%3Dbuzz%23hashTest')
+          const page = invalidAddressPage({
+            reason: 'dnslink-under-ipfs',
+            address: 'ipfs://ipns.io/index.html?arg=foo&bar=buzz#hashTest',
+            suggestedAddress: 'ipns://ipns.io/index.html?arg=foo&bar=buzz#hashTest',
+            suggestedUrl: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest'
+          })
 
-          ensureCallRedirected({
-            modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
-            MV2Expectation: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#hashTest',
-            MV3Expectation: {
-              origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2Fipns\\.io%2Findex\\.html%3Farg%3Dfoo%26bar%3Dbuzz%23',
-              destination: 'https://ipfs.io/ipns/ipns.io/index.html?arg=foo&bar=buzz#\\1'
-            }
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
           })
         })
         it('should be normalized if dweb:/ipfs/{CID}', async function () {
@@ -395,6 +429,75 @@ describe('modifyRequest.onBeforeRequest:', function () {
           const mediaRequest = { url: 'https://duckduckgo.com/?q=ipfs%3A%2FQmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR%3FargTest%23hashTest&foo=bar', type: 'media' }
 
           ensureRequestUntouched(await modifyRequest.onBeforeRequest(mediaRequest))
+        })
+      })
+
+      describe('explaining an address that cannot be opened as written', function () {
+        it('should explain an IPNS key addressed with ipfs://', async function () {
+          const request = url2request(`https://duckduckgo.com/?q=ipfs%3A%2F%2F${ipnsKey}`)
+          const page = invalidAddressPage({
+            reason: 'ipns-key-under-ipfs',
+            address: `ipfs://${ipnsKey}`,
+            suggestedAddress: `ipns://${ipnsKey}`,
+            suggestedUrl: `https://ipfs.io/ipns/${ipnsKey}`
+          })
+
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
+          })
+        })
+
+        // the browser lowercases the authority before we ever see the request,
+        // and base58btc cannot survive that: https://github.com/ipfs/ipfs-companion/issues/1006
+        it('should explain a CIDv0 the browser lowercased under ipfs://', async function () {
+          const request = url2request(`https://duckduckgo.com/?q=ipfs%3A%2F%2F${lowercasedCidv0}`)
+          const page = invalidAddressPage({
+            reason: 'lowercased-cidv0',
+            address: `ipfs://${lowercasedCidv0}`
+          })
+
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
+          })
+        })
+
+        it('should explain a CIDv0 the browser lowercased under ipns://', async function () {
+          const request = url2request(`https://duckduckgo.com/?q=ipns%3A%2F%2F${lowercasedCidv0}`)
+          const page = invalidAddressPage({
+            reason: 'lowercased-cidv0',
+            address: `ipns://${lowercasedCidv0}`
+          })
+
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
+          })
+        })
+
+        // a CID that is merely unfamiliar must still reach the gateway: a
+        // base58btc CIDv1 with a dotted sub-path looks like a hostname to a
+        // naive check, and breaking it would be worse than showing nothing
+        it('should send an unusual but valid CID to the gateway untouched', async function () {
+          const cid = 'zdj7WWeQ43G6JJvLWQWZpyHuAMq6uYWRjkBXFad11vE2LHhQ7'
+          const request = url2request(`https://duckduckgo.com/?q=ipfs%3A%2F%2F${cid}%2Fdir%2Findex.html`)
+
+          ensureCallRedirected({
+            modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+            MV2Expectation: `https://ipfs.io/ipfs/${cid}/dir/index.html`,
+            MV3Expectation: {
+              origin: `^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipfs%3A%2F%2F${cid}%2Fdir%2F`,
+              destination: `https://ipfs.io/ipfs/${cid}/dir/\\1`
+            }
+          })
+        })
+
+        it('should not explain anything if disabled in Preferences', async function () {
+          state.catchUnhandledProtocols = false
+          const request = url2request(`https://duckduckgo.com/?q=ipfs%3A%2F%2F${lowercasedCidv0}`)
+
+          ensureRequestUntouched(await modifyRequest.onBeforeRequest(request))
         })
       })
     })

@@ -826,5 +826,69 @@
   "request_permissions_page_learn_more": {
     "message": "Learn more about host permissions",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "invalid_address_page_title": {
+    "message": "Address cannot be opened | IPFS Companion",
+    "description": "Title of the invalid address page (invalid_address_page_title)"
+  },
+  "invalid_address_page_sub_header": {
+    "message": "This address cannot be opened as written",
+    "description": "Sub-header on the invalid address page (invalid_address_page_sub_header)"
+  },
+  "invalid_address_page_opened_label": {
+    "message": "You opened",
+    "description": "Label above the address the user requested (invalid_address_page_opened_label)"
+  },
+  "invalid_address_page_correct_label": {
+    "message": "Correct address",
+    "description": "Label above the corrected address (invalid_address_page_correct_label)"
+  },
+  "invalid_address_page_button": {
+    "message": "Continue to $1",
+    "description": "Button that opens the corrected address, $1 is the corrected address (invalid_address_page_button)"
+  },
+  "invalid_address_page_learn_more": {
+    "message": "Learn more about IPFS addresses",
+    "description": "Learn more link on the invalid address page (invalid_address_page_learn_more)"
+  },
+  "invalid_address_page_wrong_namespace_header": {
+    "message": "This address needs ipns://",
+    "description": "Header shown when ipfs:// was used for a mutable pointer (invalid_address_page_wrong_namespace_header)"
+  },
+  "invalid_address_page_dnslink_message": {
+    "message": "You opened a website name with ipfs://. A website name resolves through DNSLink, and the owner of the domain can point it at different content whenever they like, so what it means today is not what it will mean tomorrow. That makes it a mutable pointer.",
+    "description": "Explanation for a DNSLink domain used with ipfs:// (invalid_address_page_dnslink_message)"
+  },
+  "invalid_address_page_ipns_key_message": {
+    "message": "You opened an IPNS name with ipfs://. Whoever holds the key behind an IPNS name can republish it to point at different content at any time, so what it means today is not what it will mean tomorrow. That makes it a mutable pointer.",
+    "description": "Explanation for an IPNS key used with ipfs:// (invalid_address_page_ipns_key_message)"
+  },
+  "invalid_address_page_namespace_advice": {
+    "message": "The ipfs:// namespace is only for immutable identifiers. A CID is derived from the content itself, so the data behind it is frozen like an insect in amber: it can never change, and anyone can check they received exactly the bytes that CID names. Anything whose owner can repoint it later is a mutable pointer, and mutable pointers live under ipns://.",
+    "description": "Shared advice about what ipfs:// is for (invalid_address_page_namespace_advice)"
+  },
+  "invalid_address_page_lowercased_header": {
+    "message": "Your browser changed this address",
+    "description": "Header shown when the browser lowercased a CIDv0 (invalid_address_page_lowercased_header)"
+  },
+  "invalid_address_page_lowercased_message": {
+    "message": "This address holds a CIDv0, the older kind of content identifier that starts with Qm and mixes upper and lower case letters. Your browser reads the part right after ipfs:// as a website name, and website names are always lowercased, so the identifier arrived here damaged. The original cannot be worked out from what is left.",
+    "description": "Explanation of a lowercased CIDv0 (invalid_address_page_lowercased_message)"
+  },
+  "invalid_address_page_lowercased_advice": {
+    "message": "Ask whoever shared this link for a CIDv1 in Base32: those are all lower case, so a browser cannot damage them. If you still have the original identifier with its capital letters intact, paste it into the CID inspector linked below and use the CIDv1 (Base32) address it produces.",
+    "description": "What to do about a lowercased CIDv0 (invalid_address_page_lowercased_advice)"
+  },
+  "invalid_address_page_convert_cid": {
+    "message": "Convert your identifier to CIDv1 (Base32) at cid.ipfs.tech",
+    "description": "Link to the CID inspector, shown when a CIDv0 was damaged by lowercasing (invalid_address_page_convert_cid)"
+  },
+  "invalid_address_page_learn_dnslink": {
+    "message": "How DNSLink connects a domain name to IPFS",
+    "description": "Link to the DNSLink concept docs, shown when a website name was used with ipfs:// (invalid_address_page_learn_dnslink)"
+  },
+  "invalid_address_page_learn_mutability": {
+    "message": "Why changing content needs a mutable pointer",
+    "description": "Link to the IPNS mutability docs, shown when an IPNS name was used with ipfs:// (invalid_address_page_learn_mutability)"
   }
 }

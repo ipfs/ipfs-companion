@@ -38,7 +38,8 @@
         "icons/ipfs-logo-off.svg",
         "dist/recovery/recovery.css",
         "dist/recovery/recovery.html",
-        "dist/recovery/recovery.js"
+        "dist/recovery/recovery.js",
+        "dist/landing-pages/invalid-address/index.html"
       ],
       "matches": [
         "<all_urls>"
