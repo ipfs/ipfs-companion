@@ -28,9 +28,10 @@ const knownReasons = new Set([DNSLINK_UNDER_IPFS, IPNS_KEY_UNDER_IPFS, LOWERCASE
 // multicodec code carried by every IPNS name
 const LIBP2P_KEY = 0x72
 
-// A CIDv0 is 'Qm' plus 44 base58btc characters. Browsers read the authority of
-// ipfs://<cid> as a hostname, and hostnames are case-insensitive, so they
-// lowercase it before any extension is asked about the request. base58btc is
+// A CIDv0 is 'Qm' plus 44 base58btc characters. Anything that reads the
+// authority of ipfs://<cid> as a hostname will lowercase it, because hostnames
+// are case-insensitive. Browsers do so before any extension is asked about the
+// request, and they are not the only thing that does. base58btc is
 // case-sensitive, which makes that lossy: the original CID is gone and no
 // amount of work here brings it back.
 //

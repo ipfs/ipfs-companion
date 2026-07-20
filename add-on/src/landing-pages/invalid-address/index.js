@@ -76,14 +76,14 @@ app.route('*', () => {
   const { header, message, advice, links } = explanations[reason]
 
   return html`<div class="flex flex-column flex-row-l">
-    <div id="left-col" class="min-vh-100 flex flex-column justify-center items-center bg-navy white">
-      <div class="mb4 flex flex-column justify-center items-center">
+    <div id="left-col" class="flex flex-column justify-center items-center bg-navy white">
+      <div class="flex flex-column justify-center items-center">
         ${nodeOffSvg(200)}
-        <p class="mt0 mb0 f3 tc">${i18n.getMessage('invalid_address_page_sub_header')}</p>
+        <p class="mt3 mb0 f3 tc">${i18n.getMessage('invalid_address_page_sub_header')}</p>
       </div>
     </div>
 
-    <div id="right-col" class="pt5 mt5 w-100 flex flex-column justify-around items-start">
+    <div id="right-col" class="w-100 flex flex-column justify-around items-start">
       <h1 class="f3 fw5 mt0">${i18n.getMessage(header)}</h1>
       <p class="f5 fw4 lh-copy">${i18n.getMessage(message)}</p>
 

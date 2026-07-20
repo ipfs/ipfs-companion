@@ -1,10 +1,29 @@
 @import url('~tachyons/css/tachyons.css');
 @import url('~ipfs-css/ipfs.css');
 
+/*
+  Narrow screens stack the two columns, and there the explanation comes first.
+  Leading with a full-height decorative panel pushed the actual problem off the
+  bottom of the screen, so the reader had to scroll before learning anything.
+  Wide screens are unaffected: the rule below takes #left-col out of flow.
+*/
+#right-col {
+  order: 1;
+  padding: 1.5rem 1.25rem 2rem;
+}
+
 #left-col {
+  order: 2;
+  /* sized to the icon and its caption, since a full viewport of starfield below
+     the explanation would be a lot of scrolling for decoration */
+  padding: 2rem 1.25rem;
   background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%, #043b55 100%);
   background-size: 100%;
   background-repeat: repeat;
+}
+
+#left-col svg {
+  width: 120px;
 }
 
 a:hover {
@@ -31,18 +50,28 @@ a:visited {
 */
 @media (min-width: 60em) {
   #left-col {
+    /* out of flow, so the stacking order above stops applying */
+    order: 0;
     position: fixed;
     top: 0;
     right: 55%;
     width: 45%;
+    min-height: 100vh;
+    padding: 0;
     background-image: url('../../../images/stars.png'), linear-gradient(to bottom, #041727 0%, #043b55 100%);
     background-size: 100%;
     background-repeat: repeat;
   }
 
+  #left-col svg {
+    width: 200px;
+  }
+
   #right-col {
+    order: 0;
     margin-left: 54%;
     margin-right: 6%;
+    padding: 4rem 0 2rem;
   }
 }
 
