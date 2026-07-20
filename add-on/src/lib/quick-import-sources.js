@@ -16,23 +16,35 @@ export async function * fileListSource (fileList) {
 }
 
 // dataTransfer comes from a drop event. Its items expose FileSystemEntry via
-// webkitGetAsEntry(), which is the only cross-browser way to see a dropped
-// folder's contents; the flat dataTransfer.files list drops directories. When
-// no entry is available (e.g. content dragged from another app) we fall back
-// to the flat list.
-export async function * dataTransferSource (dataTransfer) {
+// webkitGetAsEntry(), the only cross-browser way to see a dropped folder's
+// contents; the flat dataTransfer.files list drops directories.
+//
+// This runs synchronously: DataTransferItem objects (and the entries they
+// hand out) are only valid during the drop event, so the entries have to be
+// grabbed now, before processFiles awaits anything. The FileSystemEntry
+// objects stay usable afterwards, so the tree is walked lazily below.
+export function dataTransferSource (dataTransfer) {
+  const entries = []
   const items = dataTransfer.items ? Array.from(dataTransfer.items) : []
-  let walkedEntries = false
   for (const item of items) {
     if (item.kind !== 'file') continue
     const entry = typeof item.webkitGetAsEntry === 'function' ? item.webkitGetAsEntry() : null
-    if (entry) {
-      walkedEntries = true
-      yield * fileSystemEntrySource(entry)
-    }
+    if (entry) entries.push(entry)
   }
-  if (!walkedEntries) {
-    yield * fileListSource(dataTransfer.files)
+  const files = Array.from(dataTransfer.files || [])
+  return walkDroppedItems(entries, files)
+}
+
+async function * walkDroppedItems (entries, files) {
+  if (entries.length) {
+    for (const entry of entries) yield * fileSystemEntrySource(entry)
+  } else if (files.length) {
+    // no FileSystemEntry (e.g. an older browser); use the flat file list
+    yield * fileListSource(files)
+  } else {
+    // dropped something that is neither files nor a folder (text, a link, an
+    // image from another tab). Tell the user rather than failing silently.
+    throw new Error('that drop is not a file or folder. Drop files or a folder from your file manager, or use the buttons above')
   }
 }
 

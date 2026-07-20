@@ -101,13 +101,35 @@ describe('quick-import-sources.js', function () {
       expect(entries.map(e => e.path)).to.deep.equal(['root/a.txt', 'root/b.txt'])
     })
 
-    it('ignores non-file items', async function () {
+    it('rejects with a friendly error for an unsupported drop', async function () {
       const dataTransfer = {
         items: [{ kind: 'string', webkitGetAsEntry: () => null }],
         files: []
       }
-      const entries = await collect(dataTransferSource(dataTransfer))
-      expect(entries).to.deep.equal([])
+      let err
+      try {
+        await collect(dataTransferSource(dataTransfer))
+      } catch (e) {
+        err = e
+      }
+      expect(err).to.be.an('error')
+      expect(err.message).to.match(/not a file or folder/)
+    })
+
+    it('snapshots dropped entries synchronously, before iteration', async function () {
+      // DataTransferItem objects are only valid during the drop event, so
+      // webkitGetAsEntry must be called when dataTransferSource is invoked,
+      // not lazily when the returned source is later drained.
+      const tree = dirEntry('root', [fileEntry('a.txt')])
+      let called = false
+      const dataTransfer = {
+        items: [{ kind: 'file', webkitGetAsEntry: () => { called = true; return tree } }],
+        files: []
+      }
+      const source = dataTransferSource(dataTransfer)
+      expect(called).to.equal(true)
+      const entries = await collect(source)
+      expect(entries.map(e => e.path)).to.deep.equal(['root/a.txt'])
     })
 
     it('falls back to the flat file list when no entry is available', async function () {
