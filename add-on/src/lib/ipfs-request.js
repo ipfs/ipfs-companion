@@ -170,11 +170,42 @@ export function createRequestModifier (getState, dnslinkResolver, ipfsPathValida
     }
   }
 
+  // Recover from a redirect miss on a top-level navigation. A service worker
+  // gateway (e.g. inbrowser.link) can answer a navigation from its own cache, so
+  // no network request reaches declarativeNetRequest or the onBeforeRequest
+  // observer, and the tab stays on the public gateway (see the service worker
+  // gateway gotcha in docs/MV3.md). webNavigation.onCommitted still fires, so
+  // when a main-frame navigation commits to public gateway content we would have
+  // redirected, and a local gateway is available, send the tab there with
+  // tabs.update. https://github.com/ipfs/ipfs-companion/issues/1299
+  const recoverRedirectMiss = async ({ url, frameId, tabId, transitionQualifiers }) => {
+    if (frameId !== 0) return // top-level navigation only
+    const state = getState()
+    if (!state.active || !state.redirect) return
+    if (!state.localGwAvailable) return // only reclaim when the local gateway is up
+    // already at the local/custom gateway or API, or a local address: nothing to do
+    if (sameGateway(url, state.gwURL) || sameGateway(url, state.apiURL)) return
+    if (isLocalHost(url)) return
+    // don't fight Back/Forward: tabs.update adds a history entry and would trap Back
+    if (transitionQualifiers?.includes('forward_back')) return
+    if (!state.activeIntegrations(url)) return // per-site opt-out
+    const request = { url, type: 'main_frame', tabId }
+    if (!isSafeToRedirect(request, runtime, state)) return // ?x-ipfs-companion-no-redirect
+    if (!await ipfsPathValidator.publicIpfsOrIpnsResource(url)) return // not serviceable over IPFS
+    const redirectUrl = await ipfsPathValidator.resolveToLocalUrl(url)
+    if (!redirectUrl || redirectUrl === url) return
+    log(`recoverRedirectMiss: reclaiming ${url} to ${redirectUrl}`)
+    await updateTabWithURL(request, redirectUrl, browser)
+  }
+
   // Build RequestModifier
   return {
     // exposed for tests: drive the post-lookup tab redirect directly instead of
     // draining the background lookup queue
     lateDnslinkRedirect,
+    // browser.webNavigation.onCommitted recovery for redirect misses (e.g. a
+    // service worker gateway serving the page from cache); see recoverRedirectMiss
+    recoverRedirectMiss,
     // browser.webRequest.onBeforeRequest
     // This event is triggered when a request is about to be made, and before headers are available.
     // This is a good place to listen if you want to cancel or redirect the request.

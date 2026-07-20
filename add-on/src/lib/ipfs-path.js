@@ -434,9 +434,19 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       return urlOrPath && urlOrPath.startsWith('http') ? urlOrPath : null
     },
 
-    // Version of resolveToPublicUrl that always resolves to URL representing
-    // path gateway at local machine (This is ok, as localhost gw will redirect
-    // to correct subdomain)
+    // Always returns the path form at the local gateway (e.g.
+    // http://localhost:8080/ipfs/<cid>), never a subdomain URL, even though the
+    // local gateway runs as a subdomain gateway by default. The gateway itself
+    // redirects the path to the isolated subdomain origin, and deferring that to
+    // the gateway instead of building the subdomain URL here is deliberate:
+    //   - it honors the gateway's own subdomain configuration rather than
+    //     forcing subdomain mode from the client
+    //   - the gateway can normalize CIDs that this extension's client-side
+    //     subdomain builder cannot, e.g. a CID whose base32 label exceeds the
+    //     63-char DNS label limit (contentPathToSubdomainUrl returns null for
+    //     those, such as a sha2-512 multihash)
+    //   - it stays correct as gateways add future subdomain normalizations for
+    //     long CIDs without needing a matching change here
     resolveToLocalUrl (urlOrPath) {
       const { gwURLString } = getState()
       const ipfsPath = ipfsContentPath(urlOrPath, { keepURIParams: true })

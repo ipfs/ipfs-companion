@@ -408,6 +408,13 @@ export default async function init (inQuickImport = false) {
   }
 
   async function onNavigationCommitted (details) {
+    // Reclaim a top-level navigation that committed to a public gateway without
+    // being redirected (e.g. a service worker gateway served it from cache).
+    try {
+      await modifyRequest.recoverRedirectMiss(details)
+    } catch (err) {
+      log.error('recoverRedirectMiss failed', err)
+    }
     if (!inQuickImport) {
       await contextMenus.update(details.tabId)
     }
