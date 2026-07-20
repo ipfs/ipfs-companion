@@ -47,9 +47,12 @@ export function createIpfsImportHandler (getState, getIpfs, ipfsPathValidator, r
       const ipfs = getIpfs()
       // cp will fail if directory does not exist
       await ipfs.files.mkdir(importDir, { parents: true })
-      // remove directory from files API import files
-      const files = results.filter(file => (file.path !== ''))
-      for (const file of files) {
+      // Copy only the top-level entries. addAll returns an entry for every
+      // file and directory in the tree, but a directory's CID already contains
+      // its whole subtree; copying the top-level nodes pulls nested folders in
+      // and avoids cp'ing a nested file before its parent exists in MFS.
+      const topLevel = results.filter(file => file.path !== '' && !file.path.includes('/'))
+      for (const file of topLevel) {
         await ipfs.files.cp(`/ipfs/${file.cid}`, `${importDir}${file.path}`)
       }
       log(`created import dir at ${importDir}`)

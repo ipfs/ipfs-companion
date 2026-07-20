@@ -4,13 +4,13 @@ import './quick-import.css'
 
 import choo from 'choo'
 import html from 'choo/html/index.js'
-import drop from 'drag-and-drop-files'
 import { filesize } from 'filesize'
 import all from 'it-all'
 import browser from 'webextension-polyfill'
 import * as externalApiClient from '../lib/ipfs-client/external.js'
 import createIpfsCompanion from '../lib/ipfs-companion.js'
 import { formatImportDirectory } from '../lib/ipfs-import.js'
+import { dataTransferSource, fileListSource } from '../lib/quick-import-sources.js'
 import logo from './logo.js'
 import { POSSIBLE_NODE_TYPES } from '../lib/state.js'
 
@@ -60,28 +60,47 @@ function quickImportStore (state, emitter) {
     })
   })
 
-  emitter.on('fileInputChange', event => processFiles(state, emitter, event.target.files))
+  emitter.on('fileInputChange', event => processFiles(state, emitter, fileListSource(event.target.files)))
+  emitter.on('folderInputChange', event => processFiles(state, emitter, fileListSource(event.target.files)))
 
   // update companion preference
   emitter.on('optionChange', ({ key, value }) => {
     browser.storage.local.set({ [key]: value })
   })
 
-  // drag & drop anywhere
-  drop(document.body, files => processFiles(state, emitter, files))
+  // drag & drop anywhere; handle the event ourselves so dropped folders are
+  // walked via FileSystemEntry instead of being flattened to loose files
+  const stop = (event) => { event.stopPropagation(); event.preventDefault() }
+  document.body.addEventListener('dragenter', stop)
+  document.body.addEventListener('dragover', stop)
+  document.body.addEventListener('drop', (event) => {
+    stop(event)
+    processFiles(state, emitter, dataTransferSource(event.dataTransfer))
+  })
 }
 
-async function processFiles (state, emitter, files) {
-  console.log('Processing files', files)
+// Drain an async source of { path, file } entries into an array. Directory
+// walking only reads listings here, not file contents, so this stays cheap
+// even for large folders.
+async function collectEntries (source) {
+  const entries = []
+  for await (const entry of source) {
+    entries.push(entry)
+  }
+  return entries
+}
+
+async function processFiles (state, emitter, source) {
   const ipfsCompanion = await createIpfsCompanion(true)
   try {
-    console.log('importing files', files)
-    if (!files.length) {
-      // File list may be empty in some rare cases
+    const entries = await collectEntries(source)
+    if (!entries.length) {
+      // Source may be empty in some rare cases
       // eg. when user drags something from proprietary browser context
       // We just ignore those UI interactions.
       throw new Error('found no valid sources, try selecting a local file instead')
     }
+    console.log('importing files', entries)
     const {
       copyImportResultsToFiles,
       copyShareLink,
@@ -95,9 +114,9 @@ async function processFiles (state, emitter, files) {
 
     const data = []
     let total = 0
-    for (const file of files) {
+    for (const { path, file } of entries) {
       data.push({
-        path: file.name,
+        path,
         content: (httpStreaming ? file : file.stream())
       })
       total += file.size
@@ -138,7 +157,7 @@ async function processFiles (state, emitter, files) {
     await copyImportResultsToFiles(results, importDir)
     state.progress = 'Completed'
     emitter.emit('render')
-    console.log(`Successfully imported ${files.length} files`)
+    console.log(`Successfully imported ${entries.length} files`)
 
     // copy shareable URL & preload
     copyShareLink(results)
@@ -200,6 +219,7 @@ function quickImportOptions (state, emit) {
 
 function quickImportPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
+  const onFolderInputChange = (e) => emit('folderInputChange', e)
   const { peerCount } = state
 
   return html`
@@ -220,23 +240,27 @@ function quickImportPage (state, emit) {
             </p>
           </div>
         </header>
-        <label for="quickImportInput" class='db relative mt5 hover-inner-shadow pointer' style="border:solid 2px #6ACAD1">
-          <input class="db pointer w-100 h-100 top-0 o-0" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
-          <div class='dt dim' style='padding-left: 100px; height: 300px'>
-            <div class='dtc v-mid'>
-              <span class="f3 dim br1 ph4 pv3 dib navy" style="background: #6ACAD1">
+        <div class='db relative mt5 hover-inner-shadow' style="border:solid 2px #6ACAD1">
+          <div class='dt' style='height: 300px; width: 100%'>
+            <div class='dtc v-mid tc'>
+              <label class="f3 dim br1 ph4 pv3 dib navy pointer" style="background: #6ACAD1">
                 ${browser.i18n.getMessage('quickImport_pick_file_button')}
-              </span>
-              <span class='f3'>
-                <emph class='underline pl3 pr2 moon-gray'>
+                <input class="clip" type="file" id="quickImportInput" multiple onchange=${onFileInputChange} />
+              </label>
+              <label class="f3 dim br1 ph4 pv3 dib navy pointer ml3" style="background: #6ACAD1">
+                ${browser.i18n.getMessage('quickImport_pick_folder_button')}
+                <input class="clip" type="file" id="quickImportFolderInput" webkitdirectory multiple onchange=${onFolderInputChange} />
+              </label>
+              <p class='f3 mt4 mb0'>
+                <emph class='underline pr2 moon-gray'>
                   ${browser.i18n.getMessage('quickImport_or')}
                 </emph>
                 ${browser.i18n.getMessage('quickImport_drop_it_here')}
-              </span>
+              </p>
               <p class='f4 db'>${state.message}<span class='code db absolute fr pv2'>${state.progress}</span></p>
             </div>
           </div>
-        </label>
+        </div>
         ${quickImportOptions(state, emit)}
       </div>
     </div>

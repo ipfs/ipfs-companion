@@ -107,7 +107,6 @@
     "@material/switch": "10.0.0",
     "choo": "7.1.0",
     "debug": "4.4.3",
-    "drag-and-drop-files": "0.0.1",
     "filesize": "11.0.19",
     "ipfs-css": "1.4.0",
     "is-fqdn": "2.0.1",
