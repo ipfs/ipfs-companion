@@ -1,11 +1,14 @@
 'use strict'
 import { expect } from 'chai'
+import { bases } from 'multiformats/basics'
+import { CID } from 'multiformats/cid'
 import { URL } from 'url'
 import { describe, it, beforeEach, afterEach } from 'vitest'
 import {
   DNSLINK_UNDER_IPFS,
   IPNS_KEY_UNDER_IPFS,
   LOWERCASED_CIDV0,
+  UNRECOGNIZED_IDENTIFIER,
   decodeDiagnosis,
   diagnoseAddress,
   encodeDiagnosis
@@ -19,6 +22,8 @@ const cidv1Raw = 'bafkreie7q3iidccmpvszul7kudcvvuavuo7u6gzlbobczuk5nqk3b4akba'
 const cidv1Base58 = 'zdj7WWeQ43G6JJvLWQWZpyHuAMq6uYWRjkBXFad11vE2LHhQ7'
 const ipnsKeyBase36 = 'k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8'
 const ipnsKeyBase32 = 'bafzaajaiaejcbtcmhu5gszgvfxzqhewzuxosjk6ovkbjrjmefiyfnabgutlgkxsc'
+// an Ed25519 peer id: a valid IPNS name that parses as neither CID nor hostname
+const peerIdEd25519 = '12D3KooWBhtnMSDgQqKM6oJn7WgvDPWvVCNTBSHMk4tXHoWDKQyi'
 
 describe('invalid-address.js', function () {
   beforeEach(function () {
@@ -58,6 +63,62 @@ describe('invalid-address.js', function () {
       it('flags a base32 IPNS key', function () {
         expect(diagnoseAddress(`/ipfs/${ipnsKeyBase32}`).reason).to.equal(IPNS_KEY_UNDER_IPFS)
       })
+
+      // parses as neither a CID nor a hostname, so it reaches a later branch
+      // than the other keys do
+      it('flags a bare Ed25519 peer id', function () {
+        expect(diagnoseAddress(`/ipfs/${peerIdEd25519}`)).to.deep.equal({
+          reason: IPNS_KEY_UNDER_IPFS,
+          address: `ipfs://${peerIdEd25519}`,
+          suggestedPath: `/ipns/${peerIdEd25519}`
+        })
+      })
+    })
+
+    // https://github.com/ipfs/ipfs-companion/issues/1133
+    describe('an identifier of no recognizable shape', function () {
+      const unrecognized = {
+        'a bare word under /ipfs/': '/ipfs/example',
+        'a typo in a CIDv0': '/ipfs/QmNotARealCidAtAll',
+        'a truncated CIDv1': `/ipfs/${cidv1DagPb.slice(0, 28)}`,
+        'a word with punctuation': '/ipfs/foo-bar',
+        'a sub-path on nonsense': '/ipfs/example/index.html'
+      }
+
+      for (const [name, path] of Object.entries(unrecognized)) {
+        it(`flags ${name}`, function () {
+          expect(diagnoseAddress(path).reason).to.equal(UNRECOGNIZED_IDENTIFIER)
+        })
+      }
+
+      it('offers no suggestion, because we cannot guess what was meant', function () {
+        expect(diagnoseAddress('/ipfs/example').suggestedPath).to.equal(null)
+      })
+
+      it('shows the address back unchanged', function () {
+        expect(diagnoseAddress('/ipfs/example/a?b=c#d').address).to.equal('ipfs://example/a?b=c#d')
+      })
+
+      // an identifier has no spaces, so anything that does is prose someone
+      // searched for rather than an address they meant to open
+      describe('prose rather than an identifier', function () {
+        const prose = {
+          'a space': '/ipfs/how does it work',
+          'a plus, which is a space in a query string': '/ipfs/+how+does+it+work',
+          'a trailing sentence': '/ipfs/example.com+is+broken',
+          'a tab': '/ipfs/two\twords',
+          // `ipfs:// language:js` in a code search arrives like this, and it
+          // would survive a check that trimmed before looking for whitespace
+          'a leading plus against the scheme': '/ipfs/+language:js',
+          'surrounding spaces': '/ipfs/ example '
+        }
+
+        for (const [name, path] of Object.entries(prose)) {
+          it(`ignores ${name}`, function () {
+            expect(diagnoseAddress(path)).to.equal(null)
+          })
+        }
+      })
     })
 
     describe('a CIDv0 the browser lowercased', function () {
@@ -93,7 +154,20 @@ describe('invalid-address.js', function () {
         'a base58btc CIDv1 with a dotted sub-path': `/ipfs/${cidv1Base58}/a.html`,
         'a DNSLink hostname under /ipns/': '/ipns/example.com',
         'an IPNS key under /ipns/': `/ipns/${ipnsKeyBase36}`,
-        'a CID under /ipns/': `/ipns/${cidv0}`
+        'a CID under /ipns/': `/ipns/${cidv0}`,
+        // valid IPNS names that no CID or hostname check recognizes; flagging
+        // these would break addresses that work today
+        'an Ed25519 peer id under /ipns/': `/ipns/${peerIdEd25519}`,
+        'a base32 IPNS key under /ipns/': `/ipns/${ipnsKeyBase32}`,
+        'a DNSLink hostname with a sub-path under /ipns/': '/ipns/docs.ipfs.tech/some/page.html',
+        // An IPNS name has no rule tight enough to judge it by. DNSLink records
+        // live on all of these, and each resolves at a gateway today, so /ipns/
+        // is left out of the unrecognized check entirely.
+        'an inlined DNSLink label': '/ipns/en-wikipedia--on--ipfs-org',
+        'a single-label intranet name': '/ipns/intranet',
+        'a hostname with an underscore label': '/ipns/my_site.example.com',
+        'a hostname with a trailing dot': '/ipns/example.com.',
+        'an unresolvable word under /ipns/': '/ipns/example'
       }
 
       for (const [name, path] of Object.entries(untouched)) {
@@ -101,25 +175,58 @@ describe('invalid-address.js', function () {
           expect(diagnoseAddress(path)).to.equal(null)
         })
       }
+
+      // A gateway takes a CID in any multibase, so every base multiformats
+      // ships is checked rather than a hand-picked few. Picking favourites is
+      // how base256emoji got missed: its rocket prefix is two UTF-16 units, so
+      // a composed decoder could never dispatch it.
+      describe('a CID in every multibase', function () {
+        for (const [name, base] of Object.entries(bases)) {
+          const cid = CID.parse(cidv1DagPb).toString(base)
+
+          // base64 and base64pad include '/' in their alphabet, so such a CID
+          // is not one path segment and a gateway would not see it either
+          const it_ = /[/?#]/.test(cid) ? it.skip : it
+          it_(`ignores a dag-pb CID in ${name}`, function () {
+            expect(diagnoseAddress(`/ipfs/${cid}`)).to.equal(null)
+          })
+        }
+      })
     })
 
-    describe('anything we cannot classify', function () {
+    // nothing here is an ipfs:// or ipns:// address, so there is no address to
+    // pass judgement on and the caller's normal handling stands
+    describe('input that is not an address at all', function () {
       const ignored = {
         'an empty string': '',
         'a null path': null,
         'an undefined path': undefined,
         'a path in another namespace': '/foo/bar',
-        'a bare word': '/ipfs/notARealIpfsPathWithCid',
         'a namespace with no root': '/ipfs/',
-        // one character short of a CIDv0, so we cannot claim to know what it was
-        'a near-miss on the CIDv0 length': `/ipfs/${cidv0Lowercased.slice(0, -1)}`,
-        // '0' is not in the base58btc alphabet, so this was never a CIDv0
-        'a lowercase string with a character base58btc excludes': `/ipfs/qm0${cidv0Lowercased.slice(3)}`
+        'a bare namespace': '/ipns'
       }
 
       for (const [name, path] of Object.entries(ignored)) {
         it(`ignores ${name}`, function () {
           expect(diagnoseAddress(path)).to.equal(null)
+        })
+      }
+    })
+
+    // these look CIDv0-ish without being a CIDv0 that lost its case, so the
+    // page must not claim lowercasing is what went wrong
+    describe('a near miss on a lowercased CIDv0', function () {
+      const nearMisses = {
+        // one character short of a CIDv0
+        'a length that is one short': `/ipfs/${cidv0Lowercased.slice(0, -1)}`,
+        // '0' is not in the base58btc alphabet, so this was never a CIDv0
+        'a character base58btc excludes': `/ipfs/qm0${cidv0Lowercased.slice(3)}`,
+        'the right length but the wrong prefix': `/ipfs/zz${cidv0Lowercased.slice(2)}`
+      }
+
+      for (const [name, path] of Object.entries(nearMisses)) {
+        it(`reports ${name} as unrecognized, not lowercased`, function () {
+          expect(diagnoseAddress(path).reason).to.equal(UNRECOGNIZED_IDENTIFIER)
         })
       }
     })

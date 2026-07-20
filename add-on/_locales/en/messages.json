@@ -890,5 +890,25 @@
   "invalid_address_page_learn_mutability": {
     "message": "Why changing content needs a mutable pointer",
     "description": "Link to the IPNS mutability docs, shown when an IPNS name was used with ipfs:// (invalid_address_page_learn_mutability)"
+  },
+  "invalid_address_page_unrecognized_header": {
+    "message": "This identifier does not look valid",
+    "description": "Header shown when the identifier matches no known form (invalid_address_page_unrecognized_header)"
+  },
+  "invalid_address_page_unrecognized_message": {
+    "message": "What follows ipfs:// or ipns:// names the thing to fetch: a CID for content that never changes, or a website name or IPNS key for a pointer that can be updated. This one does not match any of those, so it could not be looked up.",
+    "description": "Explanation shown when the identifier matches no known form (invalid_address_page_unrecognized_message)"
+  },
+  "invalid_address_page_unrecognized_advice": {
+    "message": "Check it for a typo first. Identifiers are long and easy to cut short when copied, so make sure you have the whole thing, and compare it against the original if you still have it.",
+    "description": "What to do about an unrecognized identifier (invalid_address_page_unrecognized_advice)"
+  },
+  "invalid_address_page_learn_cid": {
+    "message": "What a content identifier (CID) looks like",
+    "description": "Link to the CID spec (invalid_address_page_learn_cid)"
+  },
+  "invalid_address_page_learn_ipns_record": {
+    "message": "What an IPNS name looks like",
+    "description": "Link to the IPNS record spec (invalid_address_page_learn_ipns_record)"
   }
 }

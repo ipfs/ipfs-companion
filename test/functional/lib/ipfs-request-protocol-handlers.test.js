@@ -493,6 +493,73 @@ describe('modifyRequest.onBeforeRequest:', function () {
           })
         })
 
+        // https://github.com/ipfs/ipfs-companion/issues/1133: this used to be
+        // handed to dweb.link, which leaked the lookup and answered with an
+        // error the reader could do nothing with. Only reported through the
+        // protocol handler, where the URL can only have come from a real
+        // ipfs:// navigation.
+        it('should explain an identifier of no recognizable shape', async function () {
+          const request = url2request('https://dweb.link/ipfs/?uri=ipfs%3A%2F%2Fexample')
+          const page = invalidAddressPage({
+            reason: 'unrecognized-identifier',
+            address: 'ipfs://example'
+          })
+
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
+          })
+        })
+
+        // Typing ipfs://foo in Chromium and searching for the text "ipfs://foo"
+        // produce identical URLs, so shape is the only thing separating an
+        // address from a sentence: an identifier never contains a space. '+' is
+        // a space in a query string. Without this, searching for the scheme
+        // would be answered by a page insisting the query is a broken address.
+        const prose = {
+          'a search containing the scheme': 'https://www.google.com/search?q=ipfs%3A%2F%2F+how+does+it+work',
+          'a code search': 'https://github.com/search?q=ipfs%3A%2F%2F+language%3Ajs&type=code',
+          'a complaint about an address': 'https://duckduckgo.com/?q=ipfs%3A%2F%2Fexample.com+is+broken',
+          'a percent-encoded space': 'https://duckduckgo.com/?q=ipfs%3A%2F%2F%20spaced+out'
+        }
+
+        for (const [name, url] of Object.entries(prose)) {
+          it(`should leave ${name} alone`, async function () {
+            ensureRequestUntouched(await modifyRequest.onBeforeRequest(url2request(url)))
+          })
+        }
+
+        // no whitespace, so this reads as an attempt at an address wherever it
+        // arrived from, including the Chromium address bar
+        it('should explain a spaceless identifier typed at a search engine', async function () {
+          const request = url2request('https://duckduckgo.com/?q=ipfs%3A%2F%2Fexample')
+          const page = invalidAddressPage({
+            reason: 'unrecognized-identifier',
+            address: 'ipfs://example'
+          })
+
+          ensureInvalidAddressPageShown({
+            resp: await modifyRequest.onBeforeRequest(request),
+            page
+          })
+        })
+
+        // a bare Ed25519 peer id is a valid IPNS name that parses as neither a
+        // CID nor a hostname, so it must reach the gateway untouched
+        it('should send a bare peer id under ipns:// to the gateway', async function () {
+          const peerId = '12D3KooWBhtnMSDgQqKM6oJn7WgvDPWvVCNTBSHMk4tXHoWDKQyi'
+          const request = url2request(`https://duckduckgo.com/?q=ipns%3A%2F%2F${peerId}`)
+
+          ensureCallRedirected({
+            modifiedRequestCallResp: await modifyRequest.onBeforeRequest(request),
+            MV2Expectation: `https://ipfs.io/ipns/${peerId}`,
+            MV3Expectation: {
+              origin: '^https?\\:\\/\\/duckduckgo\\.com\\/\\?q\\=ipns%3A%2F%2F',
+              destination: 'https://ipfs.io/ipns/\\1'
+            }
+          })
+        })
+
         it('should not explain anything if disabled in Preferences', async function () {
           state.catchUnhandledProtocols = false
           const request = url2request(`https://duckduckgo.com/?q=ipfs%3A%2F%2F${lowercasedCidv0}`)

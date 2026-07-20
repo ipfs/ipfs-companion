@@ -7,6 +7,7 @@ import {
   DNSLINK_UNDER_IPFS,
   IPNS_KEY_UNDER_IPFS,
   LOWERCASED_CIDV0,
+  UNRECOGNIZED_IDENTIFIER,
   decodeDiagnosis
 } from '../../lib/invalid-address.js'
 import { nodeOffSvg } from '../welcome/page.js'
@@ -52,6 +53,17 @@ const explanations = {
       // original into a CIDv1 (Base32) the browser cannot damage
       { href: 'https://cid.ipfs.tech/', label: 'invalid_address_page_convert_cid' },
       addressingDocs
+    ]
+  },
+  [UNRECOGNIZED_IDENTIFIER]: {
+    header: 'invalid_address_page_unrecognized_header',
+    message: 'invalid_address_page_unrecognized_message',
+    advice: 'invalid_address_page_unrecognized_advice',
+    // we cannot say which form was meant, so show what each valid one looks like
+    links: [
+      { href: 'https://specs.ipfs.tech/cid/', label: 'invalid_address_page_learn_cid' },
+      { href: 'https://specs.ipfs.tech/ipns/ipns-record/', label: 'invalid_address_page_learn_ipns_record' },
+      { href: 'https://docs.ipfs.tech/concepts/dnslink/', label: 'invalid_address_page_learn_dnslink' }
     ]
   }
 }

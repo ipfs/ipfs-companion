@@ -1,7 +1,8 @@
 'use strict'
 
+import { peerIdFromString } from '@libp2p/peer-id'
 import isFQDN from 'is-fqdn'
-import * as isIPFS from 'is-ipfs'
+import { bases } from 'multiformats/basics'
 import { CID } from 'multiformats/cid'
 
 // Why a native ipfs:// or ipns:// address cannot be opened as it was typed.
@@ -22,8 +23,14 @@ import { CID } from 'multiformats/cid'
 export const DNSLINK_UNDER_IPFS = 'dnslink-under-ipfs'
 export const IPNS_KEY_UNDER_IPFS = 'ipns-key-under-ipfs'
 export const LOWERCASED_CIDV0 = 'lowercased-cidv0'
+export const UNRECOGNIZED_IDENTIFIER = 'unrecognized-identifier'
 
-const knownReasons = new Set([DNSLINK_UNDER_IPFS, IPNS_KEY_UNDER_IPFS, LOWERCASED_CIDV0])
+const knownReasons = new Set([
+  DNSLINK_UNDER_IPFS,
+  IPNS_KEY_UNDER_IPFS,
+  LOWERCASED_CIDV0,
+  UNRECOGNIZED_IDENTIFIER
+])
 
 // multicodec code carried by every IPNS name
 const LIBP2P_KEY = 0x72
@@ -54,9 +61,37 @@ const lowercasedCidV0 = /^qm[1-9a-z]{44}$/
 // [\s\S] rather than . so a sub-path containing an encoded newline still parses
 const contentPathRE = /^\/(ipfs|ipns)\/([^/?#]+)([\s\S]*)$/
 
-function isIpnsKey (root) {
+// A gateway accepts a CID in any multibase, so recognising one has to be at
+// least as permissive. CID.parse knows only base32, base36 and base58btc unless
+// it is handed a decoder, which would leave a perfectly good base16, base32hex
+// or base64url CID looking like nonsense and earn its owner a page calling
+// their valid address invalid.
+//
+// Each base is tried on its own rather than composed with `.or()`. A composed
+// decoder dispatches on the first UTF-16 unit of the input, which cannot match
+// a multi-unit prefix, so base256emoji (prefixed with a rocket) never gets
+// picked. Looping costs nothing here: it only runs for a root that failed every
+// other check, on a main_frame navigation.
+function parseCid (root) {
+  for (const base of Object.values(bases)) {
+    try {
+      return CID.parse(root, base.decoder)
+    } catch (err) {
+      // wrong base for this string, try the next one
+    }
+  }
+  return null
+}
+
+// An IPNS name written as a bare peer id. The Ed25519 form (12D3KooW...) parses
+// as neither a CID nor a hostname, so without this it would look like nonsense.
+// Only meaningful for a root that is not already a valid CID: every base58
+// multihash parses as a peer id, including a plain dag-pb Qm... that names
+// content and must be left alone.
+function isPeerId (root) {
   try {
-    return CID.parse(root).code === LIBP2P_KEY
+    peerIdFromString(root)
+    return true
   } catch (err) {
     return false
   }
@@ -82,14 +117,17 @@ export function diagnoseAddress (contentPath) {
   // path.
   const address = `${ns}://${root}${rest}`
 
-  if (isIPFS.cid(root)) {
+  const asIpnsName = { reason: IPNS_KEY_UNDER_IPFS, address, suggestedPath: `/ipns/${root}${rest}` }
+
+  const cid = parseCid(root)
+  if (cid) {
     // A valid CID can still sit under the wrong namespace. An IPNS key names a
     // pointer its owner can update, so it belongs to ipns://, while ipfs://
     // promises content that never changes. So `ipfs://k51qzi5uqu5d...` is
     // INVALID; the same key under `ipns://k51qzi5uqu5d...` is the correct form.
-    if (ns === 'ipfs' && isIpnsKey(root)) {
-      return { reason: IPNS_KEY_UNDER_IPFS, address, suggestedPath: `/ipns/${root}${rest}` }
-    }
+    // Only the libp2p-key codec says so: a plain `Qm...` is dag-pb content and
+    // passes through, even though it also parses as a peer id.
+    if (ns === 'ipfs' && cid.code === LIBP2P_KEY) return asIpnsName
     return null
   }
 
@@ -106,8 +144,42 @@ export function diagnoseAddress (contentPath) {
     return { reason: DNSLINK_UNDER_IPFS, address, suggestedPath: `/ipns/${root}${rest}` }
   }
 
+  // An Ed25519 peer id is an IPNS name that never parses as a CID, so it only
+  // reaches this branch, not the one above.
+  if (ns === 'ipfs' && isPeerId(root)) return asIpnsName
+
   if (lowercasedCidV0.test(root)) {
     return { reason: LOWERCASED_CIDV0, address, suggestedPath: null }
+  }
+
+  // What is left might be an identifier, or it might be prose. Chromium turns a
+  // typed ipfs://foo into the same search URL as a search for the text
+  // "ipfs://foo", so nothing downstream can tell those apart. Shape can: an
+  // identifier never contains whitespace, anywhere. '+' is how a query
+  // parameter encodes a space and decodeURIComponent leaves it alone, so it
+  // counts here too.
+  //
+  // Not trimmed first, deliberately. A leading space is its own tell: a code
+  // search for `ipfs:// language:js` arrives as the root '+language:js', which
+  // trims to something that looks like a plausible identifier. Nobody types an
+  // address with a space against the scheme, so treat any whitespace as prose
+  // and let the request continue to wherever it was going.
+  if (/\s/.test(root.replace(/\+/g, ' '))) return null
+
+  // Nothing recognisable is left under /ipfs/: not a CID, not a website name,
+  // and not a CIDv0 we can see was lowercased. Usually a typo or an identifier
+  // truncated on the way here, so say so rather than handing it to a gateway
+  // that can only answer with an error.
+  // https://github.com/ipfs/ipfs-companion/issues/1133
+  //
+  // Deliberately /ipfs/ only. Under /ipfs/ the rule is exact, since a root is
+  // either a CID or it is wrong. An IPNS name has no such rule: DNSLink records
+  // live on hostnames that isFQDN rejects (an underscore label, a single-label
+  // intranet name) and on inlined DNS labels such as
+  // en-wikipedia--on--ipfs-org, which resolve but parse as neither hostname nor
+  // key. Guessing there would break addresses that work today.
+  if (ns === 'ipfs') {
+    return { reason: UNRECOGNIZED_IDENTIFIER, address, suggestedPath: null }
   }
 
   return null
