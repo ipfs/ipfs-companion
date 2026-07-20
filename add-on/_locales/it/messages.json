@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "Un collegamento condivisibile diretto a questa tab che funziona per tutti, anche per chi non utilizza IPFS.",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "Un collegamento ad uno snapshot, di questa tab, di questo esatto momento; non cambierà, nemmeno se i contenuti cambieranno. Questo collegamento funziona per tutti, anche per chi non utilizza IPFS.",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -259,6 +259,22 @@
     "message": "",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
+  "option_ipfsNodeType_external_explainer": {
+    "message": "",
+    "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
+  },
+  "option_ipfsNodeType_external_installKubo": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
+  },
+  "option_ipfsNodeType_external_installDesktop": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
+  },
+  "option_ipfsNodeType_external_rpcDocs": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
+  },
   "option_ipfsNodeType_brave": {
     "message": "Offerto da Brave",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
@@ -304,11 +320,11 @@
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Carica siti DNSLink dal gateway personalizzato",
+    "message": "",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "Quando il reindirizzamento del gateway globale è abilitato, ciò includerà anche i siti web DNSLink reindirizzandoli ai corrispettivi percorsi /ipns/{fqdn} al tuo gateway personalizzato.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
@@ -340,20 +356,28 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Gateway Pubblico Predefinito",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Imposta l'URL di un gateway pubblico predefinito da usare per i collegamenti condivisibili pubblicamente e come fallback nel caso in cui il tuo gateway locale non sia disponibile.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Gateway di Sottodominio Pubblico Predefinito",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Imposta l'URL di un gateway di sottodominio pubblico predefinito per il recupero di gateway di sottodominio guasti.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
+  "option_usePublicGatewaysForShare_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
+  },
+  "option_usePublicGatewaysForShare_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
     "message": "",
@@ -428,7 +452,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Visualizza le notifiche di sistema quando lo stato dell'API cambia, un collegamento viene copiato, ecc...",
+    "message": "",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
@@ -480,7 +504,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Reindirizza richieste HTTP fallite da risorse IPFS al gateway pubblico.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -750,6 +774,22 @@
   "recovery_page_update_preferences": {
     "message": "",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "recovery_page_publicUrl": {
+    "message": "",
+    "description": "Label before the public gateway URL on the recovery screen (recovery_page_publicUrl)"
+  },
+  "recovery_page_nativeUrl": {
+    "message": "",
+    "description": "Label before the native ipfs:// address on the recovery screen, shown when no public gateway is set (recovery_page_nativeUrl)"
+  },
+  "recovery_page_message_p2_native": {
+    "message": "",
+    "description": "Message on the recovery screen shown when no public gateway is set (recovery_page_message_p2_native)"
+  },
+  "recovery_page_button_installDesktop": {
+    "message": "",
+    "description": "Button on the recovery screen shown when no public gateway is set (recovery_page_button_installDesktop)"
   },
   "request_permissions_page_title": {
     "message": "",

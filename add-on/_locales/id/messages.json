@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "Tautan yang dapat dibagikan ke tab ini yang berfungsi untuk siapa saja, meskipun mereka tidak menggunakan IPFS.",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "Tautan ke cuplikan tab ini saat ini; itu tidak akan berubah, bahkan jika konten berubah nanti. Tautan ini berfungsi untuk siapa saja, bahkan jika mereka tidak menggunakan IPFS.",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -259,6 +259,22 @@
     "message": "Eksternal (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
+  "option_ipfsNodeType_external_explainer": {
+    "message": "",
+    "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
+  },
+  "option_ipfsNodeType_external_installKubo": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
+  },
+  "option_ipfsNodeType_external_installDesktop": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
+  },
+  "option_ipfsNodeType_external_rpcDocs": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
+  },
   "option_ipfsNodeType_brave": {
     "message": "Disediakan oleh Brave",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
@@ -300,15 +316,15 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Pisahkan akar konten dari satu sama lain dengan memuatnya sebagai subdomain (di *.localhost) dan membuat asal unik untuk setiap catatan CID, IPNS, atau DNSLink.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "Muat Situs DNSLink dari Gerbang Kustom",
+    "message": "",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "Saat pengalihan gerbang global diaktifkan, sertakan situs web DNSLink dengan mengalihkannya ke jalur /ipns/{fqdn} masing-masing di gerbang kustom Anda.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
@@ -340,20 +356,28 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Gateway Publik Bawaan",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Setel URL gerbang publik bawaan untuk digunakan dalam tautan yang dapat dibagikan secara publik dan sebagai cadangan jika gerbang lokal Anda tidak tersedia.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Gerbang Subdomain Publik Bawaan",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Tetapkan URL gateway subdomain publik bawaant untuk pemulihan gerbang subdomain yang rusak.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
+  "option_usePublicGatewaysForShare_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
+  },
+  "option_usePublicGatewaysForShare_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
     "message": "API RPC Kubo",
@@ -380,11 +404,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Secara otomatis mengaktifkan pengalihan otomatis ke gerbang lokal Anda ketika titik akhir Kubo RPC dapat diakses, dan menonaktifkannya ketika titik akhir tidak tersedia.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "Catatan: menonaktifkan fitur ini akan mengakibatkan pengalihan statis, terlepas dari ketersediaan titik akhir RPC Kubo, dan mungkin menghasilkan kesalahan saat node Anda sedang offline.",
+    "message": "",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -428,7 +452,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Tampilkan pemberitahuan tingkat OS saat tautan disalin ke papan klip, status API berubah, dll.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
@@ -480,7 +504,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Arahkan ulang permintaan HTTP yang gagal untuk sumber daya IPFS ke gerbang publik.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -750,6 +774,22 @@
   "recovery_page_update_preferences": {
     "message": "Perbarui preferensi IPFS Companion Anda",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "recovery_page_publicUrl": {
+    "message": "",
+    "description": "Label before the public gateway URL on the recovery screen (recovery_page_publicUrl)"
+  },
+  "recovery_page_nativeUrl": {
+    "message": "",
+    "description": "Label before the native ipfs:// address on the recovery screen, shown when no public gateway is set (recovery_page_nativeUrl)"
+  },
+  "recovery_page_message_p2_native": {
+    "message": "",
+    "description": "Message on the recovery screen shown when no public gateway is set (recovery_page_message_p2_native)"
+  },
+  "recovery_page_button_installDesktop": {
+    "message": "",
+    "description": "Button on the recovery screen shown when no public gateway is set (recovery_page_button_installDesktop)"
   },
   "request_permissions_page_title": {
     "message": "Berikan Izin Host | Pendamping IPFS",

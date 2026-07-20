@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "在这个选项卡内的分享链接可以被任何人使用，即使他们根本不使用IPFS。",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "指向此选项卡当前时刻快照的链接；即使内容之后被更改，它也不会改变。这个链接适用于任何人，即使他们根本不使用IPFS。",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -259,6 +259,22 @@
     "message": "外部 (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
+  "option_ipfsNodeType_external_explainer": {
+    "message": "",
+    "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
+  },
+  "option_ipfsNodeType_external_installKubo": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
+  },
+  "option_ipfsNodeType_external_installDesktop": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
+  },
+  "option_ipfsNodeType_external_rpcDocs": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
+  },
   "option_ipfsNodeType_brave": {
     "message": "Brave支持",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
@@ -300,15 +316,15 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "通过在*.localhost使用子域名并针对CID、IPNS或DNSLINK记录创建唯一的Origin,使得内容的根目录互相隔离.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "从自定义网关加载使用DNSLink的网站",
+    "message": "",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "当全局重定向已启用时，包括DNSLink站点在内都会被重定向至您的自定义网关对应的/ipfs/{fqdn}路径",
+    "message": "",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
@@ -340,20 +356,28 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "默认公共网关",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "如果你的本地网关发生故障不可达，请设置一个默认公共网关URL地址来使用公开的分享链接作为一个备选方案",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "默认公用子域名网关",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "当子域名网关遭遇故障时用于恢复的默认公共子域名网关",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
+  "option_usePublicGatewaysForShare_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
+  },
+  "option_usePublicGatewaysForShare_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
     "message": "Kubo RPC API",
@@ -380,11 +404,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "当Kubo RPC 节点可用时自动重定向至您的本地IPFS网关，同时当Kubo RPC节点失效时关闭自动重定向。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "注意：关闭这个功能会导致静态的重定向，即无论您的Kubo RPC节点是否可用都会进行重定向，所以当您的节点失效时，它可能会引起错误。",
+    "message": "",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -428,7 +452,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "当出现状态的变更: 如一个IPFS链接复制到剪贴板或API状态改变等等时，显示操作系统级别的通知。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
@@ -480,7 +504,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "当对IPFS资源的HTTP请求失败时，重定向至公共网关",
+    "message": "",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -750,6 +774,22 @@
   "recovery_page_update_preferences": {
     "message": "更新您的IPFS 伴侣首选项",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "recovery_page_publicUrl": {
+    "message": "",
+    "description": "Label before the public gateway URL on the recovery screen (recovery_page_publicUrl)"
+  },
+  "recovery_page_nativeUrl": {
+    "message": "",
+    "description": "Label before the native ipfs:// address on the recovery screen, shown when no public gateway is set (recovery_page_nativeUrl)"
+  },
+  "recovery_page_message_p2_native": {
+    "message": "",
+    "description": "Message on the recovery screen shown when no public gateway is set (recovery_page_message_p2_native)"
+  },
+  "recovery_page_button_installDesktop": {
+    "message": "",
+    "description": "Button on the recovery screen shown when no public gateway is set (recovery_page_button_installDesktop)"
   },
   "request_permissions_page_title": {
     "message": "授予主机权限 | IPFS 伴侣",

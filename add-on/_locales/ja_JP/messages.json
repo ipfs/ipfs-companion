@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "このタブへの共有可能なリンクは、IPFSを使用していなくても利用可能です。",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "このタブに現時点で表示されるコンテンツへのリンク。コンテンツは後で更新されても、このスナップショットは保存されます。IPFSを使わなくてもこのリンクを訪れることができます。",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -259,6 +259,22 @@
     "message": "外部(Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
+  "option_ipfsNodeType_external_explainer": {
+    "message": "",
+    "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
+  },
+  "option_ipfsNodeType_external_installKubo": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
+  },
+  "option_ipfsNodeType_external_installDesktop": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
+  },
+  "option_ipfsNodeType_external_rpcDocs": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
+  },
   "option_ipfsNodeType_brave": {
     "message": "Braveによって提供",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
@@ -300,15 +316,15 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "サブドメイン（*.localhostにおいて）としてロードし、各CID、IPNS、またはDNSLinkレコードに固有のオリジンを作成することで、コンテンツのルートを互いに分離します。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "カスタムゲートウェイからDNSLinkサイトをロード",
+    "message": "",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "グローバルゲートウェイリダイレクトが有効の場合、カスタムゲートウェイでそれぞれの/ipns/{fqdn} パスにリダイレクトすることで、DNSLink ウェブサイトをインクルードします。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkDataPreload_title": {
@@ -340,20 +356,28 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "デフォルトのパブリックゲートウェイ",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "ローカルゲートウェイを使用できない場合、公的に共有可能リンクにフォールバックとして使用できるデフォルトのパブリックゲートウェイURLを設定する。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "デフォルトのパブリックサブドメインゲートウェイ",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "壊れたサブドメインゲートウェイを回復するためのデフォルトのパブリックサブドメインゲートウェイURLを設定する",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
+  "option_usePublicGatewaysForShare_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
+  },
+  "option_usePublicGatewaysForShare_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
     "message": "Kubo RPC API",
@@ -380,11 +404,11 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Kubo RPCエンドポイントにアクセス可能な場合は自動的にローカルゲートウェイへの自動リダイレクトを有効にし、エンドポイントにアクセスできない場合は無効にします。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "注意：この機能を無効にすると、Kubo RPCエンドポイントの可用性とは無関係に静的なリダイレクトが行われ、ノードがオフラインの場合にエラーが発生する可能性があります。",
+    "message": "",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -428,7 +452,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "リンクはクリップボードにコピーされるとか、API状態変更がありなどの時にOSレベルの通知を表示する",
+    "message": "",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
@@ -480,7 +504,7 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "IPFSリソースの失敗したHTTPリクエストをパブリックゲートウェイにリダイレクトする。",
+    "message": "",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_detectIpfsPathHeader_title": {
@@ -750,6 +774,22 @@
   "recovery_page_update_preferences": {
     "message": "IPFS コンパニオンの環境設定を更新する",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "recovery_page_publicUrl": {
+    "message": "",
+    "description": "Label before the public gateway URL on the recovery screen (recovery_page_publicUrl)"
+  },
+  "recovery_page_nativeUrl": {
+    "message": "",
+    "description": "Label before the native ipfs:// address on the recovery screen, shown when no public gateway is set (recovery_page_nativeUrl)"
+  },
+  "recovery_page_message_p2_native": {
+    "message": "",
+    "description": "Message on the recovery screen shown when no public gateway is set (recovery_page_message_p2_native)"
+  },
+  "recovery_page_button_installDesktop": {
+    "message": "",
+    "description": "Button on the recovery screen shown when no public gateway is set (recovery_page_button_installDesktop)"
   },
   "request_permissions_page_title": {
     "message": "",
