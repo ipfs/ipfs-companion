@@ -4,14 +4,13 @@ import './quick-import.css'
 
 import choo from 'choo'
 import html from 'choo/html/index.js'
-import drop from 'drag-and-drop-files'
 import { filesize } from 'filesize'
 import all from 'it-all'
 import browser from 'webextension-polyfill'
 import * as externalApiClient from '../lib/ipfs-client/external.js'
 import createIpfsCompanion from '../lib/ipfs-companion.js'
 import { formatImportDirectory } from '../lib/ipfs-import.js'
-import { fileListSource } from '../lib/quick-import-sources.js'
+import { dataTransferSource, fileListSource } from '../lib/quick-import-sources.js'
 import logo from './logo.js'
 import { POSSIBLE_NODE_TYPES } from '../lib/state.js'
 
@@ -69,8 +68,15 @@ function quickImportStore (state, emitter) {
     browser.storage.local.set({ [key]: value })
   })
 
-  // drag & drop anywhere
-  drop(document.body, files => processFiles(state, emitter, fileListSource(files)))
+  // drag & drop anywhere; handle the event ourselves so dropped folders are
+  // walked via FileSystemEntry instead of being flattened to loose files
+  const stop = (event) => { event.stopPropagation(); event.preventDefault() }
+  document.body.addEventListener('dragenter', stop)
+  document.body.addEventListener('dragover', stop)
+  document.body.addEventListener('drop', (event) => {
+    stop(event)
+    processFiles(state, emitter, dataTransferSource(event.dataTransfer))
+  })
 }
 
 // Drain an async source of { path, file } entries into an array. Directory
