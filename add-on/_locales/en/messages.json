@@ -607,6 +607,10 @@
     "message": "Pick a file",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
+  "quickImport_pick_folder_button": {
+    "message": "Pick a folder",
+    "description": "Text on the 'pick a folder' button that keeps directory structure (quickImport_pick_folder_button)"
+  },
   "quickImport_or": {
     "message": "or",
     "description": "seperates the pick a file button from the drop message (quickImport_or)"

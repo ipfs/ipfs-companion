@@ -11,6 +11,7 @@ import browser from 'webextension-polyfill'
 import * as externalApiClient from '../lib/ipfs-client/external.js'
 import createIpfsCompanion from '../lib/ipfs-companion.js'
 import { formatImportDirectory } from '../lib/ipfs-import.js'
+import { fileListSource } from '../lib/quick-import-sources.js'
 import logo from './logo.js'
 import { POSSIBLE_NODE_TYPES } from '../lib/state.js'
 
@@ -60,7 +61,8 @@ function quickImportStore (state, emitter) {
     })
   })
 
-  emitter.on('fileInputChange', event => processFiles(state, emitter, event.target.files))
+  emitter.on('fileInputChange', event => processFiles(state, emitter, fileListSource(event.target.files)))
+  emitter.on('folderInputChange', event => processFiles(state, emitter, fileListSource(event.target.files)))
 
   // update companion preference
   emitter.on('optionChange', ({ key, value }) => {
@@ -68,20 +70,31 @@ function quickImportStore (state, emitter) {
   })
 
   // drag & drop anywhere
-  drop(document.body, files => processFiles(state, emitter, files))
+  drop(document.body, files => processFiles(state, emitter, fileListSource(files)))
 }
 
-async function processFiles (state, emitter, files) {
-  console.log('Processing files', files)
+// Drain an async source of { path, file } entries into an array. Directory
+// walking only reads listings here, not file contents, so this stays cheap
+// even for large folders.
+async function collectEntries (source) {
+  const entries = []
+  for await (const entry of source) {
+    entries.push(entry)
+  }
+  return entries
+}
+
+async function processFiles (state, emitter, source) {
   const ipfsCompanion = await createIpfsCompanion(true)
   try {
-    console.log('importing files', files)
-    if (!files.length) {
-      // File list may be empty in some rare cases
+    const entries = await collectEntries(source)
+    if (!entries.length) {
+      // Source may be empty in some rare cases
       // eg. when user drags something from proprietary browser context
       // We just ignore those UI interactions.
       throw new Error('found no valid sources, try selecting a local file instead')
     }
+    console.log('importing files', entries)
     const {
       copyImportResultsToFiles,
       copyShareLink,
@@ -95,9 +108,9 @@ async function processFiles (state, emitter, files) {
 
     const data = []
     let total = 0
-    for (const file of files) {
+    for (const { path, file } of entries) {
       data.push({
-        path: file.name,
+        path,
         content: (httpStreaming ? file : file.stream())
       })
       total += file.size
@@ -138,7 +151,7 @@ async function processFiles (state, emitter, files) {
     await copyImportResultsToFiles(results, importDir)
     state.progress = 'Completed'
     emitter.emit('render')
-    console.log(`Successfully imported ${files.length} files`)
+    console.log(`Successfully imported ${entries.length} files`)
 
     // copy shareable URL & preload
     copyShareLink(results)
@@ -200,6 +213,8 @@ function quickImportOptions (state, emit) {
 
 function quickImportPage (state, emit) {
   const onFileInputChange = (e) => emit('fileInputChange', e)
+  const onFolderInputChange = (e) => emit('folderInputChange', e)
+  const onPickFolder = () => document.getElementById('quickImportFolderInput').click()
   const { peerCount } = state
 
   return html`
@@ -237,6 +252,12 @@ function quickImportPage (state, emit) {
             </div>
           </div>
         </label>
+        <div class='tc mt3'>
+          <input class='dn' type='file' id='quickImportFolderInput' webkitdirectory multiple onchange=${onFolderInputChange} />
+          <button class='f6 lh-copy link bn bg-transparent dib pa0 pointer' style='color: #6ACAD1' onclick=${onPickFolder}>
+            ${browser.i18n.getMessage('quickImport_pick_folder_button')} »
+          </button>
+        </div>
         ${quickImportOptions(state, emit)}
       </div>
     </div>
