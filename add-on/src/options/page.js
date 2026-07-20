@@ -73,6 +73,7 @@ export default function optionsPage (state, emit) {
     customGatewayUrl: state.options.customGatewayUrl,
     useCustomGateway: state.options.useCustomGateway,
     useSubdomains: state.options.useSubdomains,
+    redirectSubresources: state.options.redirectSubresources,
     publicGatewayUrl: state.options.publicGatewayUrl,
     publicSubdomainGatewayUrl: state.options.publicSubdomainGatewayUrl,
     usePublicGatewaysForShare: state.options.usePublicGatewaysForShare,
@@ -87,9 +88,9 @@ export default function optionsPage (state, emit) {
     onOptionChange
   })}
   ${dnslinkForm({
-    dnslinkPolicy: state.options.dnslinkPolicy,
-    dnslinkDataPreload: state.options.dnslinkDataPreload,
+    dnslinkLookup: state.options.dnslinkLookup,
     dnslinkRedirect: state.options.dnslinkRedirect,
+    useSubdomains: state.options.useSubdomains,
     onOptionChange
   })}
   ${experimentsForm({
@@ -99,7 +100,7 @@ export default function optionsPage (state, emit) {
     catchUnhandledProtocols: state.options.catchUnhandledProtocols,
     linkify: state.options.linkify,
     recoverFailedHttpRequests: state.options.recoverFailedHttpRequests,
-    detectIpfsPathHeader: state.options.detectIpfsPathHeader,
+    redirectToXIpfsPathValue: state.options.redirectToXIpfsPathValue,
     logNamespaces: state.options.logNamespaces,
     onOptionChange
   })}

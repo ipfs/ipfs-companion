@@ -7,15 +7,15 @@ export interface CompanionOptions {
   usePublicGatewaysForShare: boolean
   useCustomGateway: boolean
   useSubdomains: boolean
+  redirectSubresources: boolean
   enabledOn: string[]
   disabledOn: string[]
   automaticMode: boolean
   linkify: boolean
-  dnslinkPolicy: boolean | string
-  dnslinkDataPreload: boolean
+  dnslinkLookup: boolean
   dnslinkRedirect: boolean
   recoverFailedHttpRequests: boolean
-  detectIpfsPathHeader: boolean
+  redirectToXIpfsPathValue: boolean
   preloadAtPublicGateway: boolean
   catchUnhandledProtocols: boolean
   displayNotifications: boolean

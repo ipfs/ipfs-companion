@@ -15,6 +15,10 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_api')}</h2>
+        <div class="mb2">
+          ${browser.i18n.getMessage('option_api_sectionIntro')}
+          <a class="link underline hover-aqua" href="https://docs.ipfs.tech/reference/kubo/rpc/" target="_blank">${browser.i18n.getMessage('option_legend_readMore')}</a>
+        </div>
         <div class="flex-row-ns pb0-ns">
           <label for="ipfsApiUrl">
             <dl>
@@ -58,8 +62,10 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
           <label for="automaticMode">
             <dl>
               <dt>${browser.i18n.getMessage('option_automaticMode_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_automaticMode_description')}</dd>
-              <p class="i">${browser.i18n.getMessage('option_automaticMode_description_subtext')}</p>
+              <dd>
+                ${browser.i18n.getMessage('option_automaticMode_description')}
+                ${!automaticMode ? html`<p class="red i">${browser.i18n.getMessage('option_automaticMode_description_subtext')}</p>` : null}
+              </dd>
             </dl>
           </label>
           <div class="self-center-ns">${switchToggle({ id: 'automaticMode', checked: automaticMode, onchange: onAutomaticModeChange })}</div>

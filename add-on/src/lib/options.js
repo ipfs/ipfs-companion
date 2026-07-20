@@ -34,15 +34,29 @@ export const optionDefaults = Object.freeze({
   usePublicGatewaysForShare: DEFAULT_USE_PUBLIC_GATEWAYS_FOR_SHARE,
   useCustomGateway: true,
   useSubdomains: true,
+  // When off (default), only top-level document navigations are redirected to
+  // the local gateway. Redirecting embedded subresources shares the gateway
+  // origin across unrelated sites (a super-cookie vector) and triggers Chrome
+  // Local Network Access prompts, so it is opt-in.
+  redirectSubresources: false,
   enabledOn: [], // hostnames with explicit integration opt-in
   disabledOn: [], // hostnames with explicit integration opt-out
   automaticMode: true,
   linkify: false,
-  dnslinkPolicy: 'best-effort',
-  dnslinkDataPreload: true,
+  // DNSLink is two toggles: dnslinkLookup checks each visited domain for a
+  // DNSLink record (so we know which sites are IPFS-hosted, for browser-action
+  // items and as a prerequisite for redirect); dnslinkRedirect then loads those
+  // sites from the local gateway. Redirect does nothing without lookup.
+  dnslinkLookup: true,
   dnslinkRedirect: true,
   recoverFailedHttpRequests: true,
-  detectIpfsPathHeader: true,
+  // legacy opt-in, off by default: when a site sends the x-ipfs-path response
+  // header, redirect to the exact /ipfs/ path it carries. Unsafe: a site with
+  // this header but no DNSLink is misconfigured hosting and the redirect
+  // strands the user on an immutable snapshot (#1052). DNSLink sites are
+  // upgraded without this; kept only as an escape hatch. A fresh key (renamed
+  // from detectIpfsPathHeader) so every existing profile also starts off.
+  redirectToXIpfsPathValue: false,
   preloadAtPublicGateway: true,
   catchUnhandledProtocols: true,
   displayNotifications: true,
@@ -176,15 +190,23 @@ export async function migrateOptions (storage, debug) {
   log.error = debug('ipfs-companion:migrations:error')
 
   // <= v2.4.4
-  // DNSLINK: convert old on/off 'dnslink' flag to text-based 'dnslinkPolicy'
+  // DNSLINK: convert the ancient on/off 'dnslink' flag to the DNSLink toggles
   const { dnslink } = await storage.get('dnslink')
   if (dnslink) {
-    // migrating old dnslink policy to 'best-effort'
-    await storage.set({
-      dnslinkPolicy: 'best-effort',
-      detectIpfsPathHeader: true
-    })
+    await storage.set({ dnslinkLookup: true, dnslinkRedirect: true })
     await storage.remove('dnslink')
+  }
+
+  // dnslinkPolicy (off | best-effort | enabled) becomes the boolean dnslinkLookup
+  // (on unless it was off); dnslinkRedirect keeps its own stored value. The
+  // preload experiment (dnslinkDataPreload) is removed.
+  {
+    const { dnslinkPolicy } = await storage.get('dnslinkPolicy')
+    if (dnslinkPolicy !== undefined) {
+      log('migrating dnslinkPolicy to dnslinkLookup')
+      await storage.set({ dnslinkLookup: String(dnslinkPolicy) !== 'false' })
+      await storage.remove(['dnslinkPolicy', 'dnslinkDataPreload'])
+    }
   }
 
   // ~ v2.9.x: migrating noRedirectHostnames → noIntegrationsHostnames

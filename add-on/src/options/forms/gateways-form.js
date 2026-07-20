@@ -16,6 +16,7 @@ export default function gatewaysForm ({
   customGatewayUrl,
   useCustomGateway,
   useSubdomains,
+  redirectSubresources,
   disabledOn,
   enabledOn,
   publicGatewayUrl,
@@ -26,6 +27,7 @@ export default function gatewaysForm ({
   const onCustomGatewayUrlChange = onOptionChange('customGatewayUrl', (url) => guiURLString(url, { useLocalhostName: useSubdomains }))
   const onUseCustomGatewayChange = onOptionChange('useCustomGateway')
   const onUseSubdomainProxyChange = onOptionChange('useSubdomains')
+  const onRedirectSubresourcesChange = onOptionChange('redirectSubresources')
   const onPublicGatewayUrlChange = onOptionChange('publicGatewayUrl', guiURLString)
   const onPublicSubdomainGatewayUrlChange = onOptionChange('publicSubdomainGatewayUrl', guiURLString)
   const onUsePublicGatewaysForShareChange = onOptionChange('usePublicGatewaysForShare')
@@ -41,6 +43,10 @@ export default function gatewaysForm ({
     <form>
       <fieldset class="mb3 pa1 pa4-ns pa3 bg-snow-muted charcoal">
         <h2 class="ttu tracked f6 fw4 teal mt0-ns mb3-ns mb1 mt2 ">${browser.i18n.getMessage('option_header_gateways')}</h2>
+        <div class="mb2">
+          ${browser.i18n.getMessage('option_gateways_sectionIntro')}
+          <a class="link underline hover-aqua" href="https://specs.ipfs.tech/http-gateways/" target="_blank">${browser.i18n.getMessage('option_legend_readMore')}</a>
+        </div>
           ${supportRedirectToCustomGateway
             ? html`<div class="flex-row-ns pb0-ns">
               <label for="customGatewayUrl">
@@ -83,6 +89,7 @@ export default function gatewaysForm ({
                   <dt>${browser.i18n.getMessage('option_useSubdomains_title')}</dt>
                   <dd>
                     ${browser.i18n.getMessage('option_useSubdomains_description')}
+                    ${!useSubdomains ? html`<p class="red i">${browser.i18n.getMessage('option_useSubdomains_warning')}</p>` : null}
                     <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway" target="_blank">
                       ${browser.i18n.getMessage('option_legend_readMore')}
                     </a></p>
@@ -90,6 +97,20 @@ export default function gatewaysForm ({
                 </dl>
               </label>
               <div class="self-center-ns">${switchToggle({ id: 'useSubdomains', checked: useSubdomains, onchange: onUseSubdomainProxyChange })}</div>
+            </div>`
+            : null}
+          ${supportRedirectToCustomGateway
+          ? html`<div class="flex-row-ns pb0-ns">
+              <label for="redirectSubresources">
+                <dl>
+                  <dt>${browser.i18n.getMessage('option_redirectSubresources_title')}</dt>
+                  <dd>
+                    ${browser.i18n.getMessage('option_redirectSubresources_description')}
+                    ${redirectSubresources ? html`<p class="red i">${browser.i18n.getMessage('option_redirectSubresources_warning')}</p>` : null}
+                  </dd>
+                </dl>
+              </label>
+              <div class="self-center-ns">${switchToggle({ id: 'redirectSubresources', checked: redirectSubresources, onchange: onRedirectSubresourcesChange })}</div>
             </div>`
             : null}
           <div class="flex-row-ns pb0-ns">

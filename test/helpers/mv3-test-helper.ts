@@ -17,21 +17,28 @@ import { RULE_REGEX_ENDING } from '../../add-on/src/lib/redirect-handler/blockOr
 export function ensureCallRedirected ({
   modifiedRequestCallResp,
   MV2Expectation,
-  MV3Expectation
+  MV3Expectation,
+  resourceTypes
 }: {
   modifiedRequestCallResp: { redirectUrl: string },
   MV2Expectation: string,
   MV3Expectation: {
     origin: string,
     destination: string
-  }
+  },
+  // Expected DNR resourceTypes for the rule; omit to accept the full default
+  // set (generateAddRule's default). Pass ['main_frame'] when subresource
+  // redirects are disabled.
+  resourceTypes?: string[]
 }): void {
   if (isManifestV3) {
     const [args] = browser.declarativeNetRequest.updateDynamicRules.firstCall.args
     expect(args.addRules[0]).to.deep.equal(generateAddRule(
       args.addRules[0].id,
       MV3Expectation.origin + RULE_REGEX_ENDING,
-      MV3Expectation.destination
+      MV3Expectation.destination,
+      [],
+      resourceTypes as any
     ))
   } else {
     expect(modifiedRequestCallResp.redirectUrl).to.equal(MV2Expectation)

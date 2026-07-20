@@ -35,7 +35,6 @@ export function initState (options, overrides) {
   state.gwURL = safeURL(options.customGatewayUrl, { useLocalhostName: state.useSubdomains })
   state.gwURLString = state.gwURL?.toString()
   delete state.customGatewayUrl
-  state.dnslinkPolicy = String(options.dnslinkPolicy) === 'false' ? false : options.dnslinkPolicy
 
   // attach helper functions
   state.activeIntegrations = (url) => {

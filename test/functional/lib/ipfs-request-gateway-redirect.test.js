@@ -32,7 +32,8 @@ describe(`[${manifestVersion}] gateway-redirect:`, function () {
       ipfsNodeType: 'external',
       peerCount: 1,
       redirect: true,
-      dnslinkPolicy: false, // dnslink testi suite is in ipfs-request-dnslink.test.js
+      redirectSubresources: true, // this suite covers subresource redirects; the off-by-default behavior lives in ipfs-request-subresources.test.js
+      dnslinkLookup: false, // dnslink testi suite is in ipfs-request-dnslink.test.js
       catchUnhandledProtocols: true,
       gwURLString: 'http://localhost:8080',
       gwURL: new URL('http://localhost:8080'),

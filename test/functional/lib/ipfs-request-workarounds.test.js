@@ -24,7 +24,7 @@ describe('modifyRequest processing', function () {
 
   beforeEach(async function () {
     browser.runtime.getURL.flush()
-    state = initState(optionDefaults)
+    state = Object.assign(initState(optionDefaults), { redirectSubresources: true })
     getState = () => state
     const getIpfs = () => {}
     dnslinkResolver = createDNSLinkResolver(getState)

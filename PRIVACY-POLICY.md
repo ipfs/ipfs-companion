@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2023-01-27</em> ([change history](https://github.com/ipfs-shipyard/ipfs-companion/commits/main/PRIVACY-POLICY.md))
+Last Update: 2026-07-18</em> ([change history](https://github.com/ipfs/ipfs-companion/commits/main/PRIVACY-POLICY.md))
 
 This Privacy Policy governs the use of the IPFS Companion browser extension
 offered by Protocol Labs, Inc. (“**IPFS Companion**” or the “**Service**”).
@@ -47,7 +47,7 @@ This behavior can be changed on the Preferences screen by disabling mentioned ex
 If you are using DNSLink (its lookup is enabled by default), then the IPFS node
 will be executing DNS queries for all domain names visited during browsing, and
 those queries will use a DNS resolver configured in your operating system. To
-disable this behavior, set "DNSLink lookup" to "Off" in Preferences.
+disable this behavior, turn off "Detect DNSLink Websites" in Preferences.
 
 
 **Contact Us**
@@ -58,7 +58,7 @@ Questions about our Privacy Policy?  Please contact us at
 **Changes to our Privacy Policy**
 
 If we decide to change our Privacy Policy, we will post those changes on this
-page and also at https://ipfs.tech/companion-privacy.
+page.
 
-This document is CC-BY-SA. It was last updated January 24th, 2023.
+This document is CC-BY-SA.
 

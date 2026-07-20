@@ -11,7 +11,7 @@ export default function experimentsForm ({
   catchUnhandledProtocols,
   linkify,
   recoverFailedHttpRequests,
-  detectIpfsPathHeader,
+  redirectToXIpfsPathValue,
   logNamespaces,
   onOptionChange
 }) {
@@ -21,7 +21,7 @@ export default function experimentsForm ({
   const onCatchUnhandledProtocolsChange = onOptionChange('catchUnhandledProtocols')
   const onLinkifyChange = onOptionChange('linkify')
   const onrecoverFailedHttpRequestsChange = onOptionChange('recoverFailedHttpRequests')
-  const onDetectIpfsPathHeaderChange = onOptionChange('detectIpfsPathHeader')
+  const onRedirectToXIpfsPathValueChange = onOptionChange('redirectToXIpfsPathValue')
 
   return html`
     <form>
@@ -83,17 +83,19 @@ export default function experimentsForm ({
           <div class="self-center-ns">${switchToggle({ id: 'linkify', checked: linkify, onchange: onLinkifyChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
-          <label for="detectIpfsPathHeader">
+          <label for="redirectToXIpfsPathValue">
             <dl>
-              <dt>${browser.i18n.getMessage('option_detectIpfsPathHeader_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_detectIpfsPathHeader_description')}
-                <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/how-to/companion-x-ipfs-path-header/" target="_blank">
+              <dt>${browser.i18n.getMessage('option_redirectToXIpfsPathValue_title')}</dt>
+              <dd>
+                ${browser.i18n.getMessage('option_redirectToXIpfsPathValue_description')}
+                ${redirectToXIpfsPathValue ? html`<p class="red i">${browser.i18n.getMessage('option_redirectToXIpfsPathValue_warning')}</p>` : null}
+                <p><a class="link underline hover-aqua" href="https://docs.ipfs.tech/concepts/glossary/#x-ipfs-path" target="_blank">
                   ${browser.i18n.getMessage('option_legend_readMore')}
                 </a></p>
               </dd>
             </dl>
           </label>
-          <div class="self-center-ns">${switchToggle({ id: 'detectIpfsPathHeader', checked: detectIpfsPathHeader, onchange: onDetectIpfsPathHeaderChange })}</div>
+          <div class="self-center-ns">${switchToggle({ id: 'redirectToXIpfsPathValue', checked: redirectToXIpfsPathValue, onchange: onRedirectToXIpfsPathValueChange })}</div>
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="logNamespaces">
