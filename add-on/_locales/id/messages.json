@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "Tautan yang dapat dibagikan ke tab ini yang berfungsi untuk siapa saja, meskipun mereka tidak menggunakan IPFS.",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "Tautan ke cuplikan tab ini saat ini; itu tidak akan berubah, bahkan jika konten berubah nanti. Tautan ini berfungsi untuk siapa saja, bahkan jika mereka tidak menggunakan IPFS.",
+    "message": "",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -259,6 +259,22 @@
     "message": "Eksternal (Kubo RPC)",
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
+  "option_ipfsNodeType_external_explainer": {
+    "message": "",
+    "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
+  },
+  "option_ipfsNodeType_external_installKubo": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
+  },
+  "option_ipfsNodeType_external_installDesktop": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
+  },
+  "option_ipfsNodeType_external_rpcDocs": {
+    "message": "",
+    "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
+  },
   "option_ipfsNodeType_brave": {
     "message": "Disediakan oleh Brave",
     "description": "An option on the Preferences screen (option_ipfsNodeType_brave)"
@@ -274,6 +290,10 @@
   "option_header_gateways": {
     "message": "Gerbang",
     "description": "A section header on the Preferences screen (option_header_gateways)"
+  },
+  "option_gateways_sectionIntro": {
+    "message": "",
+    "description": "A short intro under the Gateways section header on the Preferences screen (option_gateways_sectionIntro)"
   },
   "option_customGatewayUrl_title": {
     "message": "Gerbang Lokal",
@@ -300,24 +320,40 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "Pisahkan akar konten dari satu sama lain dengan memuatnya sebagai subdomain (di *.localhost) dan membuat asal unik untuk setiap catatan CID, IPNS, atau DNSLink.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
+  "option_useSubdomains_warning": {
+    "message": "",
+    "description": "A warning on the Preferences screen, displayed when subdomain isolation is disabled (option_useSubdomains_warning)"
+  },
+  "option_redirectSubresources_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_redirectSubresources_title)"
+  },
+  "option_redirectSubresources_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_redirectSubresources_description)"
+  },
+  "option_redirectSubresources_warning": {
+    "message": "",
+    "description": "A warning on the Preferences screen, displayed when subresource redirects are enabled (option_redirectSubresources_warning)"
+  },
+  "option_dnslinkLookup_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_dnslinkLookup_title)"
+  },
+  "option_dnslinkLookup_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_dnslinkLookup_description)"
+  },
   "option_dnslinkRedirect_title": {
-    "message": "Muat Situs DNSLink dari Gerbang Kustom",
+    "message": "",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "Saat pengalihan gerbang global diaktifkan, sertakan situs web DNSLink dengan mengalihkannya ke jalur /ipns/{fqdn} masing-masing di gerbang kustom Anda.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
-  },
-  "option_dnslinkDataPreload_title": {
-    "message": "Pramuat Halaman yang Dikunjungi",
-    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
-  },
-  "option_dnslinkDataPreload_description": {
-    "message": "Pramuat situs DNSLink ke node IPFS lokal Anda, memungkinkan akses offline dan meningkatkan ketahanan Anda terhadap kegagalan jaringan.",
-    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
     "message": "Jangan gunakan jika node IPFS Anda tidak mendukung *.ipfs.localhost. Pengalihan ke gerbang berbasis-jalur merusak isolasi keamanan berbasis-asal situs web DNSLink, jadi pastikan Anda memahami risiko terkait.",
@@ -340,24 +376,36 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "Gateway Publik Bawaan",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "Setel URL gerbang publik bawaan untuk digunakan dalam tautan yang dapat dibagikan secara publik dan sebagai cadangan jika gerbang lokal Anda tidak tersedia.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "Gerbang Subdomain Publik Bawaan",
+    "message": "",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "Tetapkan URL gateway subdomain publik bawaant untuk pemulihan gerbang subdomain yang rusak.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
+  },
+  "option_usePublicGatewaysForShare_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
+  },
+  "option_usePublicGatewaysForShare_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
     "message": "API RPC Kubo",
     "description": "A section header on the Preferences screen (option_header_api)"
+  },
+  "option_api_sectionIntro": {
+    "message": "",
+    "description": "A short intro under the Kubo RPC API section header on the Preferences screen (option_api_sectionIntro)"
   },
   "option_ipfsApiUrl_title": {
     "message": "URL Kubo RPC",
@@ -380,16 +428,20 @@
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "Secara otomatis mengaktifkan pengalihan otomatis ke gerbang lokal Anda ketika titik akhir Kubo RPC dapat diakses, dan menonaktifkannya ketika titik akhir tidak tersedia.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "Catatan: menonaktifkan fitur ini akan mengakibatkan pengalihan statis, terlepas dari ketersediaan titik akhir RPC Kubo, dan mungkin menghasilkan kesalahan saat node Anda sedang offline.",
+    "message": "",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
     "message": "DNSLink",
     "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
+  "option_dnslink_sectionIntro": {
+    "message": "",
+    "description": "A short intro under the DNSLink section header on the Preferences screen (option_dnslink_sectionIntro)"
   },
   "option_header_experiments": {
     "message": "Percobaan",
@@ -428,7 +480,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "Tampilkan pemberitahuan tingkat OS saat tautan disalin ke papan klip, status API berubah, dll.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
@@ -455,41 +507,33 @@
     "message": "Ubah jalur /ipfs/ yang ditampilkan sebagai teks biasa di halaman web menjadi tautan yang dapat diklik.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
-  "option_dnslinkPolicy_title": {
-    "message": "Kebijakan Pencarian DNSLink",
-    "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
-  },
-  "option_dnslinkPolicy_description": {
-    "message": "Pilih kebijakan Anda untuk mencari dan menampilkan tindakan kontekstual di situs yang mendukung DNSLink.",
-    "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
-  },
-  "option_dnslinkPolicy_disabled": {
-    "message": "Mati",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
-  },
-  "option_dnslinkPolicy_bestEffort": {
-    "message": "Periksa setelah permintaan HTTP",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
-  },
-  "option_dnslinkPolicy_enabled": {
-    "message": "Periksa sebelum permintaan HTTP",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
-  },
   "option_recoverFailedHttpRequests_title": {
     "message": "Pulihkan Permintaan HTTP yang Gagal",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "Arahkan ulang permintaan HTTP yang gagal untuk sumber daya IPFS ke gerbang publik.",
+    "message": "",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
-  "option_detectIpfsPathHeader_title": {
-    "message": "Deteksi Header jalur x-ipfs-path",
-    "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
+  "option_redirectToXIpfsPathValue_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_redirectToXIpfsPathValue_title)"
   },
-  "option_detectIpfsPathHeader_description": {
-    "message": "Muat item dengan header x-ipfs-path melalui IPFS (alih-alih HTTP) jika nilai header adalah jalur IPFS. Untuk mengarahkan ulang jalur IPNS juga, aktifkan dukungan DNSLink.",
-    "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
+  "option_redirectToXIpfsPathValue_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_redirectToXIpfsPathValue_description)"
+  },
+  "option_redirectToXIpfsPathValue_warning": {
+    "message": "",
+    "description": "A warning on the Preferences screen, displayed when redirect to x-ipfs-path value is enabled (option_redirectToXIpfsPathValue_warning)"
+  },
+  "option_honorRedirectOptOutHint_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_honorRedirectOptOutHint_title)"
+  },
+  "option_honorRedirectOptOutHint_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_honorRedirectOptOutHint_description)"
   },
   "option_openViaWebUI_title": {
     "message": "Buka Berkas yang Diimpor di Layar Berkas",
@@ -570,6 +614,10 @@
   "quickImport_pick_file_button": {
     "message": "Pilih berkas",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
+  },
+  "quickImport_pick_folder_button": {
+    "message": "",
+    "description": "Text on the 'pick a folder' button that keeps directory structure (quickImport_pick_folder_button)"
   },
   "quickImport_or": {
     "message": "atau",
@@ -751,6 +799,22 @@
     "message": "Perbarui preferensi IPFS Companion Anda",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   },
+  "recovery_page_publicUrl": {
+    "message": "",
+    "description": "Label before the public gateway URL on the recovery screen (recovery_page_publicUrl)"
+  },
+  "recovery_page_nativeUrl": {
+    "message": "",
+    "description": "Label before the native ipfs:// address on the recovery screen, shown when no public gateway is set (recovery_page_nativeUrl)"
+  },
+  "recovery_page_message_p2_native": {
+    "message": "",
+    "description": "Message on the recovery screen shown when no public gateway is set (recovery_page_message_p2_native)"
+  },
+  "recovery_page_button_installDesktop": {
+    "message": "",
+    "description": "Button on the recovery screen shown when no public gateway is set (recovery_page_button_installDesktop)"
+  },
   "request_permissions_page_title": {
     "message": "Berikan Izin Host | Pendamping IPFS",
     "description": "Title of the recovery page (recovery_page_title)"
@@ -774,5 +838,89 @@
   "request_permissions_page_learn_more": {
     "message": "Pelajari lebih lanjut tentang izin host",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "invalid_address_page_title": {
+    "message": "",
+    "description": "Title of the invalid address page (invalid_address_page_title)"
+  },
+  "invalid_address_page_sub_header": {
+    "message": "",
+    "description": "Sub-header on the invalid address page (invalid_address_page_sub_header)"
+  },
+  "invalid_address_page_opened_label": {
+    "message": "",
+    "description": "Label above the address the user requested (invalid_address_page_opened_label)"
+  },
+  "invalid_address_page_correct_label": {
+    "message": "",
+    "description": "Label above the corrected address (invalid_address_page_correct_label)"
+  },
+  "invalid_address_page_button": {
+    "message": "",
+    "description": "Button that opens the corrected address, $1 is the corrected address (invalid_address_page_button)"
+  },
+  "invalid_address_page_learn_more": {
+    "message": "",
+    "description": "Learn more link on the invalid address page (invalid_address_page_learn_more)"
+  },
+  "invalid_address_page_wrong_namespace_header": {
+    "message": "",
+    "description": "Header shown when ipfs:// was used for a mutable pointer (invalid_address_page_wrong_namespace_header)"
+  },
+  "invalid_address_page_dnslink_message": {
+    "message": "",
+    "description": "Explanation for a DNSLink domain used with ipfs:// (invalid_address_page_dnslink_message)"
+  },
+  "invalid_address_page_ipns_key_message": {
+    "message": "",
+    "description": "Explanation for an IPNS key used with ipfs:// (invalid_address_page_ipns_key_message)"
+  },
+  "invalid_address_page_namespace_advice": {
+    "message": "",
+    "description": "Shared advice about what ipfs:// is for (invalid_address_page_namespace_advice)"
+  },
+  "invalid_address_page_lowercased_header": {
+    "message": "",
+    "description": "Header shown when the browser lowercased a CIDv0 (invalid_address_page_lowercased_header)"
+  },
+  "invalid_address_page_lowercased_message": {
+    "message": "",
+    "description": "Explanation of a lowercased CIDv0 (invalid_address_page_lowercased_message)"
+  },
+  "invalid_address_page_lowercased_advice": {
+    "message": "",
+    "description": "What to do about a lowercased CIDv0 (invalid_address_page_lowercased_advice)"
+  },
+  "invalid_address_page_convert_cid": {
+    "message": "",
+    "description": "Link to the CID inspector, shown when a CIDv0 was damaged by lowercasing (invalid_address_page_convert_cid)"
+  },
+  "invalid_address_page_learn_dnslink": {
+    "message": "",
+    "description": "Link to the DNSLink concept docs, shown when a website name was used with ipfs:// (invalid_address_page_learn_dnslink)"
+  },
+  "invalid_address_page_learn_mutability": {
+    "message": "",
+    "description": "Link to the IPNS mutability docs, shown when an IPNS name was used with ipfs:// (invalid_address_page_learn_mutability)"
+  },
+  "invalid_address_page_unrecognized_header": {
+    "message": "",
+    "description": "Header shown when the identifier matches no known form (invalid_address_page_unrecognized_header)"
+  },
+  "invalid_address_page_unrecognized_message": {
+    "message": "",
+    "description": "Explanation shown when the identifier matches no known form (invalid_address_page_unrecognized_message)"
+  },
+  "invalid_address_page_unrecognized_advice": {
+    "message": "",
+    "description": "What to do about an unrecognized identifier (invalid_address_page_unrecognized_advice)"
+  },
+  "invalid_address_page_learn_cid": {
+    "message": "",
+    "description": "Link to the CID spec (invalid_address_page_learn_cid)"
+  },
+  "invalid_address_page_learn_ipns_record": {
+    "message": "",
+    "description": "Link to the IPNS record spec (invalid_address_page_learn_ipns_record)"
   }
 }
