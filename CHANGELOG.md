@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.4.0 (2026-07-21)
+
+## What's Changed
+* chore: pull new translations by @github-actions[bot] in https://github.com/ipfs/ipfs-companion/pull/1354
+* chore: pull new translations by @github-actions[bot] in https://github.com/ipfs/ipfs-companion/pull/1357
+* chore: pull new translations by @github-actions[bot] in https://github.com/ipfs/ipfs-companion/pull/1359
+* chore: pull new translations by @github-actions[bot] in https://github.com/ipfs/ipfs-companion/pull/1360
+* chore: modernize deps and overhaul build by @lidel in https://github.com/ipfs/ipfs-companion/pull/1365
+* feat: make public gateways optional for sharing by @lidel in https://github.com/ipfs/ipfs-companion/pull/1371
+* chore(deps): take the safe dependabot bumps by @lidel in https://github.com/ipfs/ipfs-companion/pull/1372
+* refactor: modernize DNSLink and redirect handling by @lidel in https://github.com/ipfs/ipfs-companion/pull/1378
+* feat: explain broken ipfs:// addresses by @lidel in https://github.com/ipfs/ipfs-companion/pull/1380
+* feat: upload folders in quick upload by @lidel in https://github.com/ipfs/ipfs-companion/pull/1381
+* fix: mv3 redirect misses (opt-out + sw gateways) by @lidel in https://github.com/ipfs/ipfs-companion/pull/1382
+* fix(ci): repair release-please automation by @lidel in https://github.com/ipfs/ipfs-companion/pull/1383
+* docs: add changelog title by @lidel in https://github.com/ipfs/ipfs-companion/pull/1385
+* docs: refresh outdated content by @lidel in https://github.com/ipfs/ipfs-companion/pull/1386
+* fix: lightweight mv3 status polling by @lidel in https://github.com/ipfs/ipfs-companion/pull/1387
+
+
+**Full Changelog**: https://github.com/ipfs/ipfs-companion/compare/v3.3.0...v3.4.0
+
 ## [3.3.0](https://github.com/ipfs/ipfs-companion/compare/v3.2.0...v3.3.0) (2025-09-27)
 
 ## What's Changed
