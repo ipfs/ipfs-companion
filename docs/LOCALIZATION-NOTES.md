@@ -17,13 +17,13 @@ IPFS Companion supports running in specific locales, with translations provided 
 
 Chrome comes with locales out of the box, so it is enough to set the proper env:
 
-```go
+```bash
 LANGUAGE=pl chromium --user-data-dir=`mktemp -d`
 ```
 
 ### Further resources
 
-- [Language Codes in Chromium Project](https://src.chromium.org/viewvc/chrome/trunk/src/third_party/cld/languages/internal/languages.cc)
+- [Supported locales in Chromium](https://source.chromium.org/chromium/chromium/src/+/main:build/config/locales.gni)
 
 ## Running Firefox with a specific locale
 
@@ -53,7 +53,8 @@ If your language is not present in `add-on/_locales` yet, but is supported by ma
 
 Translations sync automatically from Transifex weekly via `.github/workflows/tx-pull.yml`:
 - Uses `--mode onlytranslated` to pull only translated strings
-- Empty strings fallback to English via browser's i18n API at runtime
-- Creates PR for review
+- Uses `--minimum-perc 40` so only locales that are at least 40% translated are pulled
+- Empty strings fall back to English via the browser's i18n API at runtime
+- Opens a PR for review
 
 **Note:** Edit translations only in Transifex. GitHub changes will be overwritten.

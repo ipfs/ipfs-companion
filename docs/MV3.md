@@ -2,11 +2,11 @@
 
 ## Overview
 
-This document describes the migration process from MV2 to MV3. MV3 is a new version of the extension manifest format that fundamentally changes the way extensions are loaded and run in the browser. A few notable changes have been discussed in this [thread](https://discuss.ipfs.tech/t/announcing-ipfs-companion-mv3-rc-beta/16442) and a detailed plan can be found [here](https://github.com/ipfs/ipfs-companion/issues/1152).
+This document describes the migration process from MV2 to MV3. MV3 is the extension manifest format that changes how extensions intercept and redirect network requests. A few notable changes have been discussed in this [thread](https://discuss.ipfs.tech/t/announcing-ipfs-companion-mv3-rc-beta/16442) and a detailed plan can be found [here](https://github.com/ipfs/ipfs-companion/issues/1152).
 
 ## Implementation
 
-The most important change that lead to this migration was how url request interception model was changed. In MV2, we used `webRequest.onBeforeRequest` to intercept requests and redirect them to the local gateway. That process looked something like:
+The change that drove this migration is how request interception works. In MV2, we used `webRequest.onBeforeRequest` to intercept requests and redirect them to the local gateway. That process looked something like:
 
 ```mermaid
 flowchart TD
@@ -53,7 +53,7 @@ The process is asynchronous, the browser allows "observation" of requests to com
   },
   condition: {
     '<regex filter>',                    // filter to match requests
-    '<filtered domains list>,
+    '<filtered domains list>',
     resourceTypes: [
       'csp_report',
       'font',
@@ -135,4 +135,4 @@ Since the process is asynchronous, there are a few things that we need to keep i
 
 ## Other Thoughts
 
-Not intercepting requests synchronously has its quirks, but implementing a dynamic ruleset of possible redirects is even more complicated. We're expecting drastic improvements in load times from the second request (to the same host) onwards as the browser no longer relies on companion to intercept requests and redirect those. Instead declarative rule set allows for redirection to happen at the browser level, which is much faster in-theory. This also means that companion is no longer a bottleneck for the browser, which is a good thing.
+Not intercepting requests synchronously has its quirks, but maintaining a dynamic ruleset of possible redirects is more complicated. From the second request to a given host onwards, the browser applies the declarative rules itself, so Companion is no longer in the request path. That should cut load times and keep Companion from being a bottleneck.

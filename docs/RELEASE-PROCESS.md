@@ -10,7 +10,7 @@ Releases are cut by [release-please](https://github.com/googleapis/release-pleas
 
 ## Cut the release
 
-release-please watches `main` and keeps an open pull request titled `chore: release ipfs-companion vX.Y.Z`. It bumps the version in `package.json` and `add-on/manifest.common.json` and updates `CHANGELOG.md` from the conventional-commit history.
+release-please watches `main` and keeps an open pull request titled `chore: release vX.Y.Z`. It bumps the version in `package.json` and `add-on/manifest.common.json` and updates `CHANGELOG.md` from the conventional-commit history.
 
 To ship:
 
@@ -48,12 +48,12 @@ If release-please or CI is down and a fix has to ship now, cut the release by ha
 ## Publish on Chrome Web Store
 
 All Chromium-based browsers support install from Chrome Web Store.
-Brave, Opera, and Edge do not require additional publishing step.
+Brave, Opera, and Edge do not require an additional publishing step.
 
 - IPFS Companion Chrome Webstore: https://chrome.google.com/webstore/detail/ipfs-companion/nibjojkomfdiaoajekhjakgkdhaomnch
 - Publishing requires your Google Account to belong to the IPFS Companion Maintainers Google Group (ask IPFS Stewards to be added).
 - Go to Developer Dashboard and select publisher in the top right: `IPFS Shipyard`
-- You should see `IPFS Companion` and `IPFS Companion (Beta @ xxxxxx). If not, select `Items` on the left menu.
+- You should see `IPFS Companion` and `IPFS Companion (Beta @ xxxxxx)`. If not, select `Items` on the left menu.
 - Select the correct extension you want to publish, usually `IPFS Companion`.
 - Select `Package` on the left menu (Under the Build category).
 - Upload the `ipfs_companion-<version>_chromium.zip` attached to the GitHub release.

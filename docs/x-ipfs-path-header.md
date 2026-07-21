@@ -1,1 +1,1 @@
-Moved [here](https://docs.ipfs.io/how-to/companion-x-ipfs-path-header/)
+Moved [here](https://docs.ipfs.tech/how-to/companion-x-ipfs-path-header/)
