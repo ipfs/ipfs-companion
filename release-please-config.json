@@ -1,5 +1,6 @@
 {
   "include-component-in-tag": false,
+  "changelog-type": "github",
   "group-pull-request-title-pattern": "chore${scope}: release${component} v${version}",
   "extra-files": [
     {
@@ -11,7 +12,6 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "plugins": ["node-workspace"],
       "package-name": "ipfs-companion"
     }
   }
