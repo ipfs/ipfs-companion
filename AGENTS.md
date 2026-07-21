@@ -2,6 +2,25 @@
 
 IPFS Companion is a Manifest V3 browser extension for Chromium and Firefox. For build and run details start with the [developer notes](docs/DEVELOPER-NOTES.md); see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the contribution flow and [docs/MV3.md](docs/MV3.md) for the MV3 architecture.
 
+## Values that constrain changes
+
+IPFS Companion gives people local-first, content-addressed access to the web,
+with the user in control of their own machine and browsing. The rules below are
+hard constraints on every change, ahead of passing tests. The user-facing
+version lives in [PRIVACY-POLICY.md](PRIVACY-POLICY.md).
+
+- Never track the user. No analytics, telemetry, or phone-home. Outbound
+  requests belong to a feature the user asked for (a gateway fetch, an RPC call
+  to their own node), never measurement.
+- Never leak browsing activity. The extension sees every URL the user visits;
+  that data stays on the machine and goes to no third party.
+- Preserve user agency. Automatic behavior (redirects, gateway choice, node
+  connection) stays under the user's control with a visible off switch. Removing
+  one is a breaking change.
+- Never weaken security. Do not trust remote input (a site-controlled header, a
+  page's script) to change how traffic is routed or rendered, and keep per-site
+  origin isolation intact.
+
 ## Setup
 
 Node and npm versions come from `.nvmrc` and `engines` in `package.json`. Install with `npm ci`, or use `npm run dev-build` for an all-in-one install plus build.
