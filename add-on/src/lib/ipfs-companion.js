@@ -28,7 +28,39 @@ import { initState, offlinePeerCount } from './state.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
-let browserActionPort // reuse instance for status updates between on/off toggles
+// Open popup / landing-page connections that want live status pushed to them.
+// A Set so an open welcome page and an open popup can coexist, and closing one
+// does not stop the fast poll the other still needs.
+const browserActionPorts = new Set()
+
+// Alarm that wakes a dormant MV3 service worker to refresh RPC status.
+// Registered synchronously in background/background.js so a wake is never missed.
+export const kuboRpcStatusAlarmName = 'kubo-rpc-status'
+
+// Two user options drive status polling, both in seconds (see optionDefaults):
+// ipfsApiPollForegroundSeconds while a Companion window is open, and
+// ipfsApiPollBackgroundSeconds for the heartbeat when none is. While the user is
+// away we poll at a multiple of the background interval; the badge still
+// recovers immediately on any presence event, so no faster offline tier is
+// needed.
+const IDLE_POLL_MULTIPLIER = 5
+
+// browser.alarms schedules in minutes and enforces a 30s floor.
+const STATUS_ALARM_MIN_SECONDS = 30
+const secondsToAlarmMinutes = (s) => Math.max(STATUS_ALARM_MIN_SECONDS, s) / 60
+
+// Time with no keyboard or mouse input before the user counts as "away".
+// browser.idle works in seconds with a 15s floor; this is comfortably above it.
+const IDLE_THRESHOLD_SECONDS = 5 * 60
+
+// Tolerate this many consecutive failed polls before flipping the toolbar icon
+// to "offline", so one slow swarm.peers call or a resume-from-sleep race does
+// not paint it grey and then stick there.
+const API_FAILURE_THRESHOLD = 2
+
+// Focus, navigation and popup-open all request an immediate refresh; this
+// debounce collapses a burst of them into at most one extra poll.
+const FOREGROUND_POLL_DEBOUNCE_MS = 2000
 
 // init happens on addon load in background/background.js
 export default async function init (inQuickImport = false) {
@@ -45,11 +77,12 @@ export default async function init (inQuickImport = false) {
   let inspector
   let runtime
   let contextMenus
-  let apiStatusUpdateInterval
+  let browserActionPollInterval // fast poll kept alive only while the popup is open
+  let fallbackPollInterval // background timer used only when browser.alarms is absent
   let ipfsImportHandler
-  const idleInSecs = 5 * 60
+  let consecutiveApiFailures = 0
+  let lastStatusPollTs = 0
   const browserActionPortName = 'browser-action-port'
-  const kuboRpcStatusAlarmName = 'kubo-rpc-status'
 
   try {
     log('init')
@@ -100,7 +133,7 @@ export default async function init (inQuickImport = false) {
     registerListeners()
     await registerSubdomainProxy(getState, runtime, notify)
     log('init done')
-    setApiStatusUpdateInterval(options.ipfsApiPollMs)
+    await startApiStatusUpdates()
     await runPendingOnInstallTasks()
   } catch (error) {
     log.error('Unable to initialize addon due to error', error)
@@ -141,16 +174,15 @@ export default async function init (inQuickImport = false) {
     browser.runtime.onMessage.addListener(onRuntimeMessage)
     browser.runtime.onConnect.addListener(onRuntimeConnect)
 
-    // Register alarm listener for Manifest V3 compatibility
-    // This ensures API status updates continue even when service worker goes dormant
-    if (browser.alarms) {
-      browser.alarms.onAlarm.addListener((alarm) => {
-        if (alarm.name === kuboRpcStatusAlarmName) {
-          log('Alarm triggered for API status update')
-          runIfNotIdle(apiStatusUpdate)
-        }
-      })
-      log('Registered alarm listener for API status updates')
+    // Note: the kubo-rpc-status alarm listener is registered synchronously in
+    // background/background.js. In MV3 a listener that must wake a dormant
+    // service worker has to be attached in the first tick of the top-level
+    // script, before this async init runs, or the wake event can be dropped.
+
+    // Relax the status heartbeat while idle and snap back on return.
+    if (browser.idle) {
+      browser.idle.setDetectionInterval(IDLE_THRESHOLD_SECONDS)
+      browser.idle.onStateChanged.addListener(onIdleStateChanged)
     }
 
     if (runtime.hasNativeProtocolHandler) {
@@ -217,10 +249,32 @@ export default async function init (inQuickImport = false) {
   function onRuntimeConnect (port) {
     // console.log('onConnect', port)
     if (port.name === browserActionPortName) {
-      browserActionPort = port
-      browserActionPort.onMessage.addListener(handleMessageFromBrowserAction)
-      browserActionPort.onDisconnect.addListener(() => { browserActionPort = null })
+      browserActionPorts.add(port)
+      port.onMessage.addListener(handleMessageFromBrowserAction)
+      port.onDisconnect.addListener(() => onBrowserActionPortDisconnect(port))
       sendStatusUpdateToBrowserAction()
+      // While a popup or the welcome page is open the user is watching live peer
+      // counts, so poll on the fast Status Poll Interval. The open port also
+      // keeps the service worker alive for as long as it stays connected.
+      startBrowserActionPoll()
+    }
+  }
+
+  function onBrowserActionPortDisconnect (port) {
+    browserActionPorts.delete(port)
+    if (browserActionPorts.size === 0) stopBrowserActionPoll()
+  }
+
+  function startBrowserActionPoll () {
+    requestStatusRefresh()
+    if (browserActionPollInterval) return
+    browserActionPollInterval = setInterval(apiStatusUpdate, state.ipfsApiPollForegroundSeconds * 1000)
+  }
+
+  function stopBrowserActionPoll () {
+    if (browserActionPollInterval) {
+      clearInterval(browserActionPollInterval)
+      browserActionPollInterval = null
     }
   }
 
@@ -257,7 +311,7 @@ export default async function init (inQuickImport = false) {
   }
 
   async function sendStatusUpdateToBrowserAction () {
-    if (!browserActionPort) return
+    if (browserActionPorts.size === 0) return
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
     const { version } = browser.runtime.getManifest()
     const info = {
@@ -308,9 +362,13 @@ export default async function init (inQuickImport = false) {
       info.currentTabIntegrationsOptOut = !state.activeIntegrations(info.currentFqdn)
       info.isRedirectContext = info.currentFqdn && ipfsPathValidator.isRedirectPageActionsContext(url)
     }
-    // Still here?
-    if (browserActionPort) {
-      browserActionPort.postMessage({ statusUpdate: info })
+    // Broadcast to every open connection; drop any that closed mid-build.
+    for (const port of browserActionPorts) {
+      try {
+        port.postMessage({ statusUpdate: info })
+      } catch (_) {
+        browserActionPorts.delete(port)
+      }
     }
   }
 
@@ -394,6 +452,7 @@ export default async function init (inQuickImport = false) {
     // Note: On some Linux window managers, WINDOW_ID_NONE will always be sent
     // immediately preceding a switch from one browser window to another.
     if (windowId !== browser.windows.WINDOW_ID_NONE) {
+      requestStatusRefresh()
       const currentTab = await browser.tabs.query({ active: true, windowId }).then(tabs => tabs[0])
       if (!inQuickImport) {
         await contextMenus.update(currentTab.id)
@@ -402,12 +461,18 @@ export default async function init (inQuickImport = false) {
   }
 
   async function onActivatedTab (activeInfo) {
+    requestStatusRefresh()
     if (!inQuickImport) {
       await contextMenus.update(activeInfo.tabId)
     }
   }
 
   async function onNavigationCommitted (details) {
+    if (details.frameId === 0) {
+      // A top-level navigation means the user is here; refresh the badge so it
+      // recovers quickly after idle or resume-from-sleep.
+      requestStatusRefresh()
+    }
     // Reclaim a top-level navigation that committed to a public gateway without
     // being redirected (e.g. a service worker gateway served it from cache).
     try {
@@ -469,55 +534,77 @@ export default async function init (inQuickImport = false) {
 
   // API STATUS UPDATES
   // -------------------------------------------------------------------
-  // API is polled for peer count every ipfsApiPollMs
-  // In Manifest V3 (Chromium), service workers go dormant after ~30 seconds of inactivity,
-  // which stops setInterval. To ensure continuous monitoring, we use a hybrid approach:
-  // - For polling < 30s: Use BOTH setInterval (for precise timing) AND alarms (as backup)
-  // - For polling >= 30s: Use ONLY alarms (avoids duplicate timers, more efficient)
-  // Note: Chrome alarms API has a minimum interval of 30 seconds
+  // The toolbar badge reflects the Kubo RPC peer count. In MV3 the service
+  // worker is torn down after a short idle period, so a setInterval cannot be
+  // relied on for background monitoring. A browser.alarms heartbeat drives the
+  // background poll instead: it survives termination and wakes the worker. Its
+  // cadence has two background tiers derived from the single background poll
+  // interval (a Preferences option): the configured rate normally, and slower
+  // while the user is idle. On top of that, user-presence events (window focus,
+  // navigation, popup open) and returning from idle request an immediate
+  // refresh, and an open Companion window polls on the foreground interval to
+  // show live counts. The idle tier only backs off, never skips, so the badge
+  // can never freeze and then fail to recover the way it did when an idle check
+  // gated the poll entirely.
 
-  async function setApiStatusUpdateInterval (ipfsApiPollMs) {
-    // Clear existing interval if present
-    if (apiStatusUpdateInterval) {
-      clearInterval(apiStatusUpdateInterval)
-      apiStatusUpdateInterval = null
-    }
-
-    // Clear existing alarm if present
-    if (browser.alarms) {
-      await browser.alarms.clear(kuboRpcStatusAlarmName)
-    }
-
-    // Use alarms API if available (for Manifest V3 compatibility)
-    if (browser.alarms) {
-      // Always create an alarm as backup (minimum 30 seconds / 0.5 minutes)
-      const periodInMinutes = Math.max(0.5, Math.floor(ipfsApiPollMs / 1000) / 60)
-      await browser.alarms.create(kuboRpcStatusAlarmName, {
-        periodInMinutes
-      })
-      log(`Created alarm for API status updates every ${periodInMinutes} minutes`)
-
-      // For fast polling (< 30s), also use setInterval for more precise updates
-      // This ensures responsive updates when the service worker is active
-      if (ipfsApiPollMs < 30000) {
-        apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
-        log(`Also using setInterval for fast polling every ${ipfsApiPollMs}ms`)
-      }
-      // For slow polling (>= 30s), rely only on alarms to avoid duplicate timers
-    } else {
-      // Fallback for environments without alarms API
-      apiStatusUpdateInterval = setInterval(() => runIfNotIdle(apiStatusUpdate), ipfsApiPollMs)
-      log(`Using setInterval only (no alarms API available) every ${ipfsApiPollMs}ms`)
-    }
-
-    // Run immediately
+  async function startApiStatusUpdates () {
+    await scheduleStatusAlarm(secondsToAlarmMinutes(state.ipfsApiPollBackgroundSeconds))
+    // Resume the fast poll if a popup or welcome page is already open (e.g. the
+    // extension was toggled back on while its UI was showing).
+    if (browserActionPorts.size > 0) startBrowserActionPoll()
     await apiStatusUpdate()
   }
 
+  // (Re)create the heartbeat alarm at the given period. Falls back to a plain
+  // timer only where the alarms API is unavailable (e.g. unit tests).
+  async function scheduleStatusAlarm (periodInMinutes) {
+    if (browser.alarms) {
+      await browser.alarms.clear(kuboRpcStatusAlarmName)
+      await browser.alarms.create(kuboRpcStatusAlarmName, { periodInMinutes })
+      return
+    }
+    if (fallbackPollInterval) clearInterval(fallbackPollInterval)
+    fallbackPollInterval = setInterval(apiStatusUpdate, Math.round(periodInMinutes * 60000))
+  }
+
+  async function stopApiStatusUpdates () {
+    if (browser.alarms) {
+      await browser.alarms.clear(kuboRpcStatusAlarmName)
+    }
+    if (fallbackPollInterval) {
+      clearInterval(fallbackPollInterval)
+      fallbackPollInterval = null
+    }
+    stopBrowserActionPoll()
+  }
+
+  // Immediate refresh requested by a user-presence event, debounced so a burst
+  // (e.g. focus followed by navigation) still triggers at most one extra poll.
+  function requestStatusRefresh () {
+    if (!state || !state.active) return
+    if (Date.now() - lastStatusPollTs < FOREGROUND_POLL_DEBOUNCE_MS) return
+    apiStatusUpdate()
+  }
+
   async function apiStatusUpdate () {
-    // update peer count
+    lastStatusPollTs = Date.now()
     const oldPeerCount = state.peerCount
-    state.peerCount = await getSwarmPeerCount()
+    const wasOnline = oldPeerCount !== offlinePeerCount
+    const polledPeerCount = await getSwarmPeerCount()
+
+    if (polledPeerCount === offlinePeerCount) {
+      consecutiveApiFailures++
+      // Hold the last known good count through a single transient failure, so one
+      // slow poll or a resume-from-sleep race does not flip the icon to offline.
+      state.peerCount = (consecutiveApiFailures < API_FAILURE_THRESHOLD && wasOnline)
+        ? oldPeerCount
+        : offlinePeerCount
+    } else {
+      consecutiveApiFailures = 0
+      state.peerCount = polledPeerCount
+    }
+
+    await adaptStatusAlarmCadence()
     await Promise.all([
       updateAutomaticModeRedirectState(oldPeerCount, state.peerCount),
       updateBrowserActionBadge(),
@@ -528,6 +615,46 @@ export default async function init (inQuickImport = false) {
         }
       }
     ])
+  }
+
+  // Poll faster while offline to catch recovery, back off once stable, and back
+  // off harder while the user is idle.
+  async function adaptStatusAlarmCadence () {
+    if (!browser.alarms) return
+    const wanted = await desiredAlarmPeriod()
+    const existing = await browser.alarms.get(kuboRpcStatusAlarmName)
+    if (existing && existing.periodInMinutes === wanted) return
+    await scheduleStatusAlarm(wanted)
+  }
+
+  async function desiredAlarmPeriod () {
+    // Poll less often while the user is away; a presence event or the
+    // idle->active transition brings us straight back.
+    const base = state.ipfsApiPollBackgroundSeconds
+    const seconds = (await isBrowserIdle()) ? base * IDLE_POLL_MULTIPLIER : base
+    return secondsToAlarmMinutes(seconds)
+  }
+
+  async function isBrowserIdle () {
+    if (!browser.idle) return false
+    try {
+      // 'idle' after the idle threshold of no input, 'locked' when the screen
+      // is locked; anything other than 'active' counts as idle for backoff.
+      return (await browser.idle.queryState(IDLE_THRESHOLD_SECONDS)) !== 'active'
+    } catch (error) {
+      log.error('idle.queryState failed, assuming active', error)
+      return false
+    }
+  }
+
+  async function onIdleStateChanged (newState) {
+    if (newState === 'active') {
+      // User is back: poll now and let the poll restore the fast cadence.
+      requestStatusRefresh()
+    } else {
+      // Went idle or locked: relax the heartbeat without polling.
+      await adaptStatusAlarmCadence()
+    }
   }
 
   async function getSwarmPeerCount () {
@@ -541,18 +668,6 @@ export default async function init (inQuickImport = false) {
     }
   }
 
-  async function runIfNotIdle (action) {
-    try {
-      const state = await browser.idle.queryState(idleInSecs)
-      if (state === 'active') {
-        return action()
-      }
-    } catch (error) {
-      console.error('Unable to read idle state, executing action without idle check', error)
-      return action()
-    }
-  }
-
   // browserAction
   // -------------------------------------------------------------------
 
@@ -562,22 +677,24 @@ export default async function init (inQuickImport = false) {
       return
     }
 
-    let badgeText, badgeColor, badgeIcon
+    let badgeColor, badgeIcon
 
-    badgeText = ''
+    // Connection state is shown through the toolbar icon only. The peer count is
+    // deliberately not rendered as badge text: between polls it read as a fixed
+    // number and looked broken. The background colour is still set (invisible
+    // without text) as a persisted marker, so online<->offline transitions are
+    // detected across service worker restarts and drive cleanupRules below.
+    const badgeText = ''
     if (state.peerCount > 0) {
-      // All is good (online with peers)
+      // online with peers
       badgeColor = '#418B8E'
       badgeIcon = '/icons/ipfs-logo-on.svg'
-
-      // prevent text overflow when peer count has more than 3 digits
-      badgeText = (state.peerCount > 999) ? (Math.floor(state.peerCount / 1000).toString() + 'k') : state.peerCount.toString()
     } else if (state.peerCount === 0) {
-      // API is online but no peers
+      // online but no peers
       badgeColor = 'red'
       badgeIcon = '/icons/ipfs-logo-on.svg'
     } else {
-      // API is offline
+      // offline
       badgeColor = '#8C8C8C'
       badgeIcon = '/icons/ipfs-logo-off.svg'
     }
@@ -671,8 +788,19 @@ export default async function init (inQuickImport = false) {
           state.apiURLString = state.apiURL.toString()
           shouldRestartIpfsClient = true
           break
-        case 'ipfsApiPollMs':
-          setApiStatusUpdateInterval(change.newValue)
+        case 'ipfsApiPollForegroundSeconds':
+          // Fast poll used while a Companion window is open. Restart it in place
+          // if a window is currently connected.
+          state.ipfsApiPollForegroundSeconds = change.newValue
+          if (browserActionPollInterval) {
+            clearInterval(browserActionPollInterval)
+            browserActionPollInterval = setInterval(apiStatusUpdate, state.ipfsApiPollForegroundSeconds * 1000)
+          }
+          break
+        case 'ipfsApiPollBackgroundSeconds':
+          // Background heartbeat; the offline and idle tiers derive from it.
+          state.ipfsApiPollBackgroundSeconds = change.newValue
+          await adaptStatusAlarmCadence()
           break
         case 'customGatewayUrl':
           state.gwURL = safeURL(change.newValue, { useLocalhostName: state.useSubdomains })
@@ -735,15 +863,10 @@ export default async function init (inQuickImport = false) {
         log('stopping API status updates (extension disabled)')
 
         // Stop monitoring first
-        if (apiStatusUpdateInterval) {
-          clearInterval(apiStatusUpdateInterval)
-          apiStatusUpdateInterval = null
-        }
-        if (browser.alarms) {
-          await browser.alarms.clear(kuboRpcStatusAlarmName)
-        }
+        await stopApiStatusUpdates()
 
         // Set offline state and update badge as the final action
+        consecutiveApiFailures = 0
         state.peerCount = offlinePeerCount
         await updateBrowserActionBadge()
       }
@@ -765,7 +888,8 @@ export default async function init (inQuickImport = false) {
       // Restart API status updates when extension is re-enabled
       if (state.active && ipfs) {
         log('restarting API status updates (extension enabled)')
-        setApiStatusUpdateInterval(state.ipfsApiPollMs)
+        consecutiveApiFailures = 0
+        await startApiStatusUpdates()
       } else {
         apiStatusUpdate()
       }
@@ -807,21 +931,17 @@ export default async function init (inQuickImport = false) {
       return ipfsImportHandler
     },
 
+    // Invoked by the synchronously-registered alarm listener in background.js
+    // so a service-worker wake refreshes status without re-running full init.
+    apiStatusUpdate,
+
     async destroy () {
       if (state) {
         state.active = false
         state.peerCount = -1 // api down
       }
 
-      if (apiStatusUpdateInterval) {
-        clearInterval(apiStatusUpdateInterval)
-        apiStatusUpdateInterval = null
-      }
-
-      // Clear alarm if present
-      if (browser.alarms) {
-        await browser.alarms.clear(kuboRpcStatusAlarmName)
-      }
+      await stopApiStatusUpdates()
 
       if (ipfs) {
         await destroyIpfsClient(browser)

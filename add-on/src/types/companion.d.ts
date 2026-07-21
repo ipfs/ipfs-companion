@@ -23,7 +23,8 @@ export interface CompanionOptions {
   displayReleaseNotes: boolean
   customGatewayUrl: string
   ipfsApiUrl: string
-  ipfsApiPollMs: number
+  ipfsApiPollForegroundSeconds: number
+  ipfsApiPollBackgroundSeconds: number
   logNamespaces: string
   importDir: string
   useLatestWebUI: boolean

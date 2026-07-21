@@ -415,13 +415,21 @@
     "message": "Set the URL of your Kubo RPC. (Hint: this is where https://docs.ipfs.tech/reference/kubo/rpc/ lives.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
-  "option_ipfsApiPollMs_title": {
-    "message": "Status Poll Interval",
-    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  "option_ipfsApiPollForegroundSeconds_title": {
+    "message": "Foreground Poll Interval",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollForegroundSeconds_title)"
   },
-  "option_ipfsApiPollMs_description": {
-    "message": "Specify how frequently (in milliseconds) to refresh your peer count.",
-    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  "option_ipfsApiPollForegroundSeconds_description": {
+    "message": "How often, in seconds, to refresh status while a Companion window is open (the popup, Quick Import, or the welcome page). These windows show live status, so keep this short.",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollForegroundSeconds_description)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_title": {
+    "message": "Background Poll Interval",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollBackgroundSeconds_title)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_description": {
+    "message": "How often, in seconds, to check the node when no Companion window is open. Companion checks less often while you are away, and refreshes right away when you interact. The browser enforces a 30 second minimum.",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollBackgroundSeconds_description)"
   },
   "option_automaticMode_title": {
     "message": "Use Automatic Mode",
