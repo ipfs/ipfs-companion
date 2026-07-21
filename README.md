@@ -7,7 +7,7 @@
   <a href="https://discuss.ipfs.tech"><img alt="Discourse Forum" src="https://img.shields.io/discourse/posts?server=https%3A%2F%2Fdiscuss.ipfs.tech&amp;color=blue"></a>
   <a href="https://matrix.to/#/#ipfs-space:ipfs.io"><img alt="Matrix Chat" src="https://img.shields.io/matrix/ipfs-space%3Aipfs.io?server_fqdn=matrix.org&amp;color=blue"></a>
   <a href="https://github.com/ipfs/ipfs-companion/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/ipfs/ipfs-companion?filter=!*rc*"></a>
-  <a href="https://github.com/ipfs-shipyard/ipfs-companion/blob/main/docs/LOCALIZATION-NOTES.md"><img src="https://img.shields.io/badge/i18n-translated-blue.svg" alt="i18n status"></a>
+  <a href="https://github.com/ipfs/ipfs-companion/blob/main/docs/LOCALIZATION-NOTES.md"><img src="https://img.shields.io/badge/i18n-translated-blue.svg" alt="i18n status"></a>
   <a href="https://github.com/ipfs/ipfs-companion/actions"><img src="https://img.shields.io/github/actions/workflow/status/ipfs/ipfs-companion/ci.yml?branch=main" alt="ci"></a>
 </p>
 
@@ -109,7 +109,7 @@ IPFS Companion enables you to quickly and easily access common actions from your
 - Choose the _Import_ option in the main menu for quick drag-and-drop import from a browser tab
 - Pin or unpin IPFS resources (via API) directly from the main menu
 - Copy shareable public gateway links, IPFS content paths, or CIDs of IPFS resources directly from the main menu
-- Launch the [IPFS Web UI dashboard](https://github.com/ipfs-shipyard/ipfs-webui) from the main menu with a single click
+- Launch the [IPFS Web UI dashboard](https://github.com/ipfs/ipfs-webui) from the main menu with a single click
 - Toggle gateway redirects or switch all IPFS Companion features on/off quickly and easily from the main menu (illustrations below)
 
 #### Toggle gateway redirects on a per-website basis
@@ -143,14 +143,14 @@ IPFS Companion ships with a variety of experimental features. Some are disabled 
 
 **Important!** Make sure you have [IPFS installed](https://docs.ipfs.tech/install/) on your computer as well. IPFS Companion requires a local IPFS [Kubo](https://github.com/ipfs/kubo) node running on your computer to function properly.
 
-It's also possible to grab [vendor-specific packages for each release](https://github.com/ipfs-shipyard/ipfs-companion/releases),
+It's also possible to grab [vendor-specific packages for each release](https://github.com/ipfs/ipfs-companion/releases),
 but these builds are not signed, nor will they automatically update. `.zip` bundles are meant only to be manually loaded via `chrome://extensions` (Chromium) or `about:debugging` (Firefox) for smoke-testing.
 
 ### Development
 
 To work on IPFS Companion's code, you'll need to install it from source. Quick steps are below, but see the full [developer notes](./docs/DEVELOPER-NOTES.md) for more detailed instructions and tips.
 
-1. Clone https://github.com/ipfs-shipyard/ipfs-companion.git
+1. Clone https://github.com/ipfs/ipfs-companion.git
 2. Run this all-in-one dev build to install dependencies, build, and launch in the browser of your choice:
     * Chromium
         ```console
@@ -184,7 +184,7 @@ The release process has been [documented here](./docs/RELEASE-PROCESS.md).
 ### Common troubleshooting steps
 These frequently encountered troubleshooting situations may be helpful:
 - **Import via right-click does not work in Firefox:** See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
-- **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to interfere with HTTP-to-HTTPS redirects, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [allowlist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
+- **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to interfere with HTTP-to-HTTPS redirects, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [allowlist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
 - **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/) first):
 ```
 # Enable IPFS redirect to LOCAL

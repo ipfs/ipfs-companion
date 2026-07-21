@@ -26,10 +26,10 @@ If you're looking to develop on IPFS Companion, you should build the project fro
 
 ### Clone and build
 
-First, clone the `ipfs-shipyard/ipfs-companion` [repository](https://github.com/ipfs-shipyard/ipfs-companion):
+First, clone the `ipfs/ipfs-companion` [repository](https://github.com/ipfs/ipfs-companion):
 
  ```bash
- git clone https://github.com/ipfs-shipyard/ipfs-companion.git
+ git clone https://github.com/ipfs/ipfs-companion.git
  ```
 
 Then, run this all-in-one dev build, which includes installing dependencies into the `node_modules` directory:
@@ -232,7 +232,7 @@ All channels are available at the Google Play Store:
 
 ### Install IPFS Companion
 
-For full installation instructions, see [`README/#install`](https://github.com/ipfs-shipyard/ipfs-companion#install) in the IPFS Companion repo.
+For full installation instructions, see [`README/#install`](https://github.com/ipfs/ipfs-companion#install) in the IPFS Companion repo.
 
 You can also test the latest code locally on an emulator, or via USB on your own device. See below for details.
 
