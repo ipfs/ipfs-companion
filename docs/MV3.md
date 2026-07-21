@@ -2,11 +2,11 @@
 
 ## Overview
 
-This document describes the migration process from MV2 to MV3. MV3 is a new version of the extension manifest format that fundamentally changes the way extensions are loaded and run in the browser. A few notable changes have been discussed in this [thread](https://discuss.ipfs.tech/t/announcing-ipfs-companion-mv3-rc-beta/16442) and a detailed plan can be found [here](https://github.com/ipfs/ipfs-companion/issues/1152).
+This document describes the migration process from MV2 to MV3. MV3 is the extension manifest format that changes how extensions intercept and redirect network requests. A few notable changes have been discussed in this [thread](https://discuss.ipfs.tech/t/announcing-ipfs-companion-mv3-rc-beta/16442) and a detailed plan can be found [here](https://github.com/ipfs/ipfs-companion/issues/1152).
 
 ## Implementation
 
-The most important change that lead to this migration was how url request interception model was changed. In MV2, we used `webRequest.onBeforeRequest` to intercept requests and redirect them to the local gateway. That process looked something like:
+The change that drove this migration is how request interception works. In MV2, we used `webRequest.onBeforeRequest` to intercept requests and redirect them to the local gateway. That process looked something like:
 
 ```mermaid
 flowchart TD
@@ -53,7 +53,7 @@ The process is asynchronous, the browser allows "observation" of requests to com
   },
   condition: {
     '<regex filter>',                    // filter to match requests
-    '<filtered domains list>,
+    '<filtered domains list>',
     resourceTypes: [
       'csp_report',
       'font',

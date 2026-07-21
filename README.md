@@ -163,7 +163,7 @@ To work on IPFS Companion's code, you'll need to install it from source. Quick s
 
 ## Contribute
 
-[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](./docs/CONTRIBUTING.md)
+[![](https://cdn.jsdelivr.net/gh/jbenet/contribute-ipfs-gif@master/img/contribute.gif)](./docs/CONTRIBUTING.md)
 
 All are welcome to help make IPFS Companion even better!
 - Check out the [contribution guide](./docs/CONTRIBUTING.md) for how to get started as a developer
@@ -185,7 +185,7 @@ The release process has been [documented here](./docs/RELEASE-PROCESS.md).
 These frequently encountered troubleshooting situations may be helpful:
 - **Import via right-click does not work in Firefox:** See [this workaround](https://github.com/ipfs/ipfs-companion/issues/227).
 - **HTTP-to-HTTPS redirects fail when using Ghostery:** [Ghostery](https://addons.mozilla.org/en-US/firefox/addon/ghostery/) is known to interfere with HTTP-to-HTTPS redirects, which in some setups breaks websites utilizing public gateways [(more details)](https://github.com/ipfs-shipyard/ipfs-companion/issues/466). Until this is fixed upstream, a workaround is to [allowlist](https://user-images.githubusercontent.com/157609/39089525-5834c104-45c9-11e8-9e17-4459a97e5676.png) affected sites.
-- **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/abe_rules.pdf) first):
+- **NoScript breaks IPFS Companion:** By default, [NoScript](https://addons.mozilla.org/en-US/firefox/addon/noscript/) breaks IPFS Companion by blocking assets loaded from an IPFS gateway running on localhost. To fix this, extend the SYSTEM ruleset and prepend it with IPFS whitelist (feel free to modify this, but get familiar with [ABE rule syntax](https://noscript.net/abe/) first):
 ```
 # Enable IPFS redirect to LOCAL
 Site ^http://127.0.0.1:8080/(ipfs|ipns)*

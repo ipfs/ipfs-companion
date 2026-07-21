@@ -1,1 +1,1 @@
-Moved [here](https://docs.ipfs.io/how-to/dnslink-companion/)
+Moved [here](https://docs.ipfs.tech/how-to/dnslink-companion/)

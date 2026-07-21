@@ -20,7 +20,7 @@ As a courtesy, please add a comment informing  about your intent. That way we wi
 ### Submitting Pull Requests
 
 Just make sure your PR comes with its own tests and does pass CI tests.
-See the [GitHub Flow Guide](https://guides.github.com/introduction/flow/) for details.
+See the [GitHub flow guide](https://docs.github.com/en/get-started/using-github/github-flow) for details.
 
 
 ## Translations
@@ -38,4 +38,4 @@ If you want to download translations from Transifex and run them locally, make s
 
 - https://github.com/ipfs/in-web-browsers
 - https://github.com/ipfs/community/blob/master/CONTRIBUTING.md
-  [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
+  [![](https://cdn.jsdelivr.net/gh/jbenet/contribute-ipfs-gif@master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
