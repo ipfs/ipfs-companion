@@ -11,7 +11,10 @@ version lives in [PRIVACY-POLICY.md](PRIVACY-POLICY.md).
 
 - Never track the user. No analytics, telemetry, or phone-home. Outbound
   requests belong to a feature the user asked for (a gateway fetch, an RPC call
-  to their own node), never measurement.
+  to their own node), never measurement. If this ever changes, the data
+  collected must be spelled out in [PRIVACY-POLICY.md](PRIVACY-POLICY.md) and
+  declared in `data_collection_permissions` under `browser_specific_settings`
+  in `add-on/manifest.firefox.json` (`["none"]` today); keep the two in sync.
 - Never leak browsing activity. The extension sees every URL the user visits;
   that data stays on the machine and goes to no third party.
 - Preserve user agency. Automatic behavior (redirects, gateway choice, node

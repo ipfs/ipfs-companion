@@ -25,6 +25,9 @@ export const renderTranslatedLinks = (message, links, attributes) => {
     matchLink = regexLink.exec(str)
   }
 
+  // innerHTML is safe here: `output` is built only from our own bundled
+  // _locales messages, which deliberately carry markup (the <N> anchor/span
+  // markers and inline tags like <code>). No remote or user input reaches it.
   const template = document.createElement('template')
   template.innerHTML = output
 
@@ -54,6 +57,9 @@ export const renderTranslatedSpans = (message, values, attributes) => {
     matchSpan = regexSpan.exec(str)
   }
 
+  // innerHTML is safe here: `output` is built only from our own bundled
+  // _locales messages, which deliberately carry markup (the <N> anchor/span
+  // markers and inline tags like <code>). No remote or user input reaches it.
   const template = document.createElement('template')
   template.innerHTML = output
 
