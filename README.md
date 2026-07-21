@@ -1,6 +1,6 @@
 <h1 align="center">IPFS Companion Browser Extension</h1>
 
-<p align="center" style="font-size: 1.2rem;">Harness the power of <a href="https://ipfs.tech">IPFS</a> in your browser!</p>
+<p align="center" style="font-size: 1.2rem;">Use <a href="https://ipfs.tech">IPFS</a> directly in your browser</p>
 
 <p align="center">
   <a href="https://ipfs.tech"><img src="https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square" alt="Official Part of IPFS Project"></a>
@@ -43,7 +43,7 @@
 
 ## About IPFS Companion
 
-IPFS Companion harnesses the power of your locally running IPFS [Kubo](https://github.com/ipfs/kubo) node (either through the [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/) app or the [command-line daemon](https://docs.ipfs.tech/install/command-line/)) directly inside your favorite Chromium-based or Firefox browser, enabling support for [`ipfs://` addresses](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#native-urls), redirecting content-addressed websites and file paths to your local [Gateway](https://docs.ipfs.tech/concepts/glossary/#gateway), easy IPFS file import and sharing, and more.
+IPFS Companion connects your browser to your local IPFS [Kubo](https://github.com/ipfs/kubo) node (either through the [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/) app or the [command-line daemon](https://docs.ipfs.tech/install/command-line/)), running inside your Chromium-based or Firefox browser, with support for [`ipfs://` addresses](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#native-urls), redirecting content-addressed websites and file paths to your local [Gateway](https://docs.ipfs.tech/concepts/glossary/#gateway), easy IPFS file import and sharing, and more.
 
 IPFS is a peer-to-peer hypermedia protocol designed to make the web faster, safer, more resilient, and more open. It enables completely distributed sites and applications that don’t rely on centralized hosting and stay true to the original vision of an open, flat web. Visit [the IPFS Project website](https://ipfs.tech) to learn more.
 
@@ -124,7 +124,7 @@ To temporarily suspend all IPFS integrations (redirects, API status content scri
 
 ![Turn IPFS Companion off and on again](https://gateway.ipfs.io/ipfs/QmZqyBnLY1jatj2ppJEbJqyj8oJecZt7chNB62jhhq8f9g)
 
-### Try out experiments!
+### Experiments
 
 IPFS Companion ships with a variety of experimental features. Some are disabled by default, so be sure to check out IPFS Companion's Preferences to see them all.
 
@@ -165,7 +165,7 @@ To work on IPFS Companion's code, you'll need to install it from source. Quick s
 
 [![](https://cdn.jsdelivr.net/gh/jbenet/contribute-ipfs-gif@master/img/contribute.gif)](./docs/CONTRIBUTING.md)
 
-All are welcome to help make IPFS Companion even better!
+Contributions are welcome.
 - Check out the [contribution guide](./docs/CONTRIBUTING.md) for how to get started as a developer
 - Open an [issue](https://github.com/ipfs/ipfs-companion/issues)
 - Make sure you read and abide by the [IPFS Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md)

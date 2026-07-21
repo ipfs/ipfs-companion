@@ -135,4 +135,4 @@ Since the process is asynchronous, there are a few things that we need to keep i
 
 ## Other Thoughts
 
-Not intercepting requests synchronously has its quirks, but implementing a dynamic ruleset of possible redirects is even more complicated. We're expecting drastic improvements in load times from the second request (to the same host) onwards as the browser no longer relies on companion to intercept requests and redirect those. Instead declarative rule set allows for redirection to happen at the browser level, which is much faster in-theory. This also means that companion is no longer a bottleneck for the browser, which is a good thing.
+Not intercepting requests synchronously has its quirks, but maintaining a dynamic ruleset of possible redirects is more complicated. From the second request to a given host onwards, the browser applies the declarative rules itself, so Companion is no longer in the request path. That should cut load times and keep Companion from being a bottleneck.

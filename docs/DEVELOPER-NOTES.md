@@ -97,13 +97,9 @@ npm run watch     # watch for new changes
 
 ## Reproducible build in Docker
 
-Want to ensure prebuilt bundle does not include any additional code?
-Don't want to install JS dependencies such as NodeJS?
+To build without installing the JS toolchain locally, and to confirm the bundle carries no extra code, build inside Docker.
 
-Do an isolated build inside of Docker!
-
-Run the following command for ending up
-with a built extension inside the `build/` directory:
+Run this to produce a built extension in the `build/` directory:
 
 ```sh
 npm run release-build
