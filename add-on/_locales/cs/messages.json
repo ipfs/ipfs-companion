@@ -291,6 +291,10 @@
     "message": "Brány",
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
+  "option_gateways_sectionIntro": {
+    "message": "",
+    "description": "A short intro under the Gateways section header on the Preferences screen (option_gateways_sectionIntro)"
+  },
   "option_customGatewayUrl_title": {
     "message": "Místní brána",
     "description": "An option title on the Preferences screen (option_customGatewayUrl_title)"
@@ -319,6 +323,30 @@
     "message": "",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
+  "option_useSubdomains_warning": {
+    "message": "",
+    "description": "A warning on the Preferences screen, displayed when subdomain isolation is disabled (option_useSubdomains_warning)"
+  },
+  "option_redirectSubresources_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_redirectSubresources_title)"
+  },
+  "option_redirectSubresources_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_redirectSubresources_description)"
+  },
+  "option_redirectSubresources_warning": {
+    "message": "",
+    "description": "A warning on the Preferences screen, displayed when subresource redirects are enabled (option_redirectSubresources_warning)"
+  },
+  "option_dnslinkLookup_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_dnslinkLookup_title)"
+  },
+  "option_dnslinkLookup_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_dnslinkLookup_description)"
+  },
   "option_dnslinkRedirect_title": {
     "message": "",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
@@ -326,14 +354,6 @@
   "option_dnslinkRedirect_description": {
     "message": "",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
-  },
-  "option_dnslinkDataPreload_title": {
-    "message": "Přednačtení navštívených stránek",
-    "description": "An option title on the Preferences screen (option_dnslinkDataPreload_title)"
-  },
-  "option_dnslinkDataPreload_description": {
-    "message": "Předem nahrajte weby DNSLink do místního uzlu IPFS, což umožní offline přístup a zvýší odolnost proti výpadku sítě.",
-    "description": "An option description on the Preferences screen (option_dnslinkDataPreload_description)"
   },
   "option_dnslinkRedirect_warning": {
     "message": "Nepoužívejte, pokud váš uzel IPFS nepodporuje *.ipfs.localhost. Přesměrování na bránu založenou na cestě porušuje bezpečnostní izolaci webů DNSLink založenou na původu, proto se ujistěte, že rozumíte souvisejícím rizikům.",
@@ -383,6 +403,10 @@
     "message": "Kubo RPC API",
     "description": "A section header on the Preferences screen (option_header_api)"
   },
+  "option_api_sectionIntro": {
+    "message": "",
+    "description": "A short intro under the Kubo RPC API section header on the Preferences screen (option_api_sectionIntro)"
+  },
   "option_ipfsApiUrl_title": {
     "message": "Kubo RPC URL",
     "description": "An option title on the Preferences screen (option_ipfsApiUrl_title)"
@@ -414,6 +438,10 @@
   "option_header_dnslink": {
     "message": "DNSLink",
     "description": "A section header on the Preferences screen (option_header_dnslink)"
+  },
+  "option_dnslink_sectionIntro": {
+    "message": "",
+    "description": "A short intro under the DNSLink section header on the Preferences screen (option_dnslink_sectionIntro)"
   },
   "option_header_experiments": {
     "message": "Experimenty",
@@ -479,26 +507,6 @@
     "message": "Přeměna cest /ipfs/ zobrazených na webových stránkách jako prostý text na klikací odkazy.",
     "description": "An option description on the Preferences screen (option_linkify_description)"
   },
-  "option_dnslinkPolicy_title": {
-    "message": "Zásady vyhledávání DNSLink",
-    "description": "An option title on the Preferences screen (option_dnslinkPolicy_title)"
-  },
-  "option_dnslinkPolicy_description": {
-    "message": "Zvolte zásady pro vyhledávání a zobrazování kontextových akcí na webech s povolenou službou DNSLink.",
-    "description": "An option description on the Preferences screen (option_dnslinkPolicy_description)"
-  },
-  "option_dnslinkPolicy_disabled": {
-    "message": "Vypnout",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_disabled)"
-  },
-  "option_dnslinkPolicy_bestEffort": {
-    "message": "Zkontrolovat po HTTP požadavku",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_bestEffort)"
-  },
-  "option_dnslinkPolicy_enabled": {
-    "message": "Zkontrolvat před HTTP požadavkem",
-    "description": "A select field option description on the Preferences screen (option_dnslinkPolicy_enabled)"
-  },
   "option_recoverFailedHttpRequests_title": {
     "message": "Obnovit neúspěšné požadavky HTTP",
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
@@ -507,13 +515,25 @@
     "message": "",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
-  "option_detectIpfsPathHeader_title": {
-    "message": "Detekce záhlaví x-ipfs-path",
-    "description": "An option title on the Preferences screen (option_detectIpfsPathHeader_title)"
+  "option_redirectToXIpfsPathValue_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_redirectToXIpfsPathValue_title)"
   },
-  "option_detectIpfsPathHeader_description": {
-    "message": "Načtení položek s hlavičkami x-ipfs-path přes IPFS (místo HTTP), pokud je hodnotou hlavičky cesta IPFS. Chcete-li přesměrovat i cesty IPNS, povolte podporu DNSLink.",
-    "description": "An option description on the Preferences screen (option_detectIpfsPathHeader_description)"
+  "option_redirectToXIpfsPathValue_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_redirectToXIpfsPathValue_description)"
+  },
+  "option_redirectToXIpfsPathValue_warning": {
+    "message": "",
+    "description": "A warning on the Preferences screen, displayed when redirect to x-ipfs-path value is enabled (option_redirectToXIpfsPathValue_warning)"
+  },
+  "option_honorRedirectOptOutHint_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_honorRedirectOptOutHint_title)"
+  },
+  "option_honorRedirectOptOutHint_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_honorRedirectOptOutHint_description)"
   },
   "option_openViaWebUI_title": {
     "message": "Otevření importovaných souborů na obrazovce Soubory",
@@ -594,6 +614,10 @@
   "quickImport_pick_file_button": {
     "message": "Vybrat soubor",
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
+  },
+  "quickImport_pick_folder_button": {
+    "message": "",
+    "description": "Text on the 'pick a folder' button that keeps directory structure (quickImport_pick_folder_button)"
   },
   "quickImport_or": {
     "message": "nebo",
@@ -814,5 +838,89 @@
   "request_permissions_page_learn_more": {
     "message": "Další informace o oprávněních hostitele",
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
+  },
+  "invalid_address_page_title": {
+    "message": "",
+    "description": "Title of the invalid address page (invalid_address_page_title)"
+  },
+  "invalid_address_page_sub_header": {
+    "message": "",
+    "description": "Sub-header on the invalid address page (invalid_address_page_sub_header)"
+  },
+  "invalid_address_page_opened_label": {
+    "message": "",
+    "description": "Label above the address the user requested (invalid_address_page_opened_label)"
+  },
+  "invalid_address_page_correct_label": {
+    "message": "",
+    "description": "Label above the corrected address (invalid_address_page_correct_label)"
+  },
+  "invalid_address_page_button": {
+    "message": "",
+    "description": "Button that opens the corrected address, $1 is the corrected address (invalid_address_page_button)"
+  },
+  "invalid_address_page_learn_more": {
+    "message": "",
+    "description": "Learn more link on the invalid address page (invalid_address_page_learn_more)"
+  },
+  "invalid_address_page_wrong_namespace_header": {
+    "message": "",
+    "description": "Header shown when ipfs:// was used for a mutable pointer (invalid_address_page_wrong_namespace_header)"
+  },
+  "invalid_address_page_dnslink_message": {
+    "message": "",
+    "description": "Explanation for a DNSLink domain used with ipfs:// (invalid_address_page_dnslink_message)"
+  },
+  "invalid_address_page_ipns_key_message": {
+    "message": "",
+    "description": "Explanation for an IPNS key used with ipfs:// (invalid_address_page_ipns_key_message)"
+  },
+  "invalid_address_page_namespace_advice": {
+    "message": "",
+    "description": "Shared advice about what ipfs:// is for (invalid_address_page_namespace_advice)"
+  },
+  "invalid_address_page_lowercased_header": {
+    "message": "",
+    "description": "Header shown when the browser lowercased a CIDv0 (invalid_address_page_lowercased_header)"
+  },
+  "invalid_address_page_lowercased_message": {
+    "message": "",
+    "description": "Explanation of a lowercased CIDv0 (invalid_address_page_lowercased_message)"
+  },
+  "invalid_address_page_lowercased_advice": {
+    "message": "",
+    "description": "What to do about a lowercased CIDv0 (invalid_address_page_lowercased_advice)"
+  },
+  "invalid_address_page_convert_cid": {
+    "message": "",
+    "description": "Link to the CID inspector, shown when a CIDv0 was damaged by lowercasing (invalid_address_page_convert_cid)"
+  },
+  "invalid_address_page_learn_dnslink": {
+    "message": "",
+    "description": "Link to the DNSLink concept docs, shown when a website name was used with ipfs:// (invalid_address_page_learn_dnslink)"
+  },
+  "invalid_address_page_learn_mutability": {
+    "message": "",
+    "description": "Link to the IPNS mutability docs, shown when an IPNS name was used with ipfs:// (invalid_address_page_learn_mutability)"
+  },
+  "invalid_address_page_unrecognized_header": {
+    "message": "",
+    "description": "Header shown when the identifier matches no known form (invalid_address_page_unrecognized_header)"
+  },
+  "invalid_address_page_unrecognized_message": {
+    "message": "",
+    "description": "Explanation shown when the identifier matches no known form (invalid_address_page_unrecognized_message)"
+  },
+  "invalid_address_page_unrecognized_advice": {
+    "message": "",
+    "description": "What to do about an unrecognized identifier (invalid_address_page_unrecognized_advice)"
+  },
+  "invalid_address_page_learn_cid": {
+    "message": "",
+    "description": "Link to the CID spec (invalid_address_page_learn_cid)"
+  },
+  "invalid_address_page_learn_ipns_record": {
+    "message": "",
+    "description": "Link to the IPNS record spec (invalid_address_page_learn_ipns_record)"
   }
 }
