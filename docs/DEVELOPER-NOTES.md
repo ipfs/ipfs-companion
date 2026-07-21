@@ -73,7 +73,8 @@ npm run dev-build chromium        # all-in-one
 You can also build it to manually install:
 
 ```bash
-npm run build bundle:chromium     # last part is important: it overwrites manifest
+npm run build            # build the extension
+npm run bundle:chromium  # overwrite add-on/manifest.json for Chromium
 ```
 
 Then load the extension manually:
@@ -157,7 +158,7 @@ You can run the tests against either release or dev builds of the extension.
 To download release builds of the extension, run:
 
 ```sh
-./ci/e2e/download-release-builds.sh
+./ci/download-release-artifacts.sh
 ```
 
 _NOTE_: When using release builds, you can control the version of the extension by setting the `IPFS_COMPANION_VERSION` environment variable:
@@ -180,43 +181,22 @@ npm run release-build
 
 ### Preparing the docker environment
 
-You need to pull docker images for [Kubo](https://github.com/ipfs/kubo), [Chromium](https://hub.docker.com/r/selenium/standalone-chrome/) and [Firefox](https://hub.docker.com/r/selenium/standalone-firefox/) before running the tests.
-
-You also need to build the docker image containing the e2e tests.
-
-To do all of this, run:
+The tests run a Kubo node in one container and Playwright with a headless Chromium in another. Pull the Kubo image and build the test image with:
 
 ```sh
 npm run compose:e2e:prepare
 ```
 
-_NOTE_: You can control the versions of Kubo, Chromium and Firefox by setting the following environment variables:
+_NOTE_: Pin the Kubo version with the `KUBO_VERSION` environment variable:
 
 ```sh
 export KUBO_VERSION=x.y.z
-export CHROMIUM_VERSION=x.y.z
-export FIREFOX_VERSION=x.y.z
-```
-
-**IMPORTANT**: If you are running the tests on a ARM machine, you need to use a different Chromium image. To do this, run:
-
-```sh
-export CHROMIUM_IMAGE=seleniarm/standalone-chromium
-export FIREFOX_IMAGE=seleniarm/standalone-firefox
 ```
 
 ### Running the tests
 
-To run the tests, run:
-
 ```sh
 npm run compose:e2e:test
-```
-
-_NOTE_: You can control whether the browsers operate in headless mode as follows:
-
-```sh
-export TEST_HEADLESS=true
 ```
 
 ### Stopping the docker environment
@@ -298,7 +278,7 @@ The remote debug port will be printed to the console right after successful depl
 You can connect to this Android device on TCP port <debug PORT>
 ```
 
-The fastest way to connect is to open `chrome://devtools/content/framework/connect/connect.xhtml` in Firefox on the same machine you run `web-ext` from.
+The fastest way to connect is to open `about:debugging` in Firefox on the same machine you run `web-ext` from, then connect to your device from the "Setup" tab.
 
 ### Further resources
 
