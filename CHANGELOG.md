@@ -1,13 +1,33 @@
-## [2.6.3](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.2...v2.6.3) (2018-12-10)
+## [3.3.0](https://github.com/ipfs/ipfs-companion/compare/v3.2.0...v3.3.0) (2025-09-27)
 
+## What's Changed
+* chore: update RELEASE-PROCESS.md by @SgtPooki in https://github.com/ipfs/ipfs-companion/pull/1330
+* docs(readme): autumn cleaning by @lidel in https://github.com/ipfs/ipfs-companion/pull/1341
+* fix: skip DNSLink resolution when offline, deduplicate inflights by @lidel in https://github.com/ipfs/ipfs-companion/pull/1339
+* fix: manifest v3 offline status detection by @lidel in https://github.com/ipfs/ipfs-companion/pull/1340
+* chore: dependency updates by @lidel in https://github.com/ipfs/ipfs-companion/pull/1321
+* fix: remove disabled telemetry code by @lidel in https://github.com/ipfs/ipfs-companion/pull/1343
+* chore: remove Brave-specific build by @lidel in https://github.com/ipfs/ipfs-companion/pull/1342
+* fix: update welcome page resources and links by @lidel in https://github.com/ipfs/ipfs-companion/pull/1344
+* fix: prevent version span from affecting icon layout by @lidel in https://github.com/ipfs/ipfs-companion/pull/1345
+* feat: add automated translation sync workflow by @lidel in https://github.com/ipfs/ipfs-companion/pull/1346
 
-### Bug Fixes
+**Full Changelog**: https://github.com/ipfs/ipfs-companion/compare/v3.2.0...v3.3.0
 
-* **ci:** switch to nodejs v10.11.0 ([687a4d8](https://github.com/ipfs-shipyard/ipfs-companion/commit/687a4d8))
-* **security:** remove  event-stream/flatmap-stream ([d4db63a](https://github.com/ipfs-shipyard/ipfs-companion/commit/d4db63a))
-* Origin in API requests under Chromium 72 ([#631](https://github.com/ipfs-shipyard/ipfs-companion/issues/631)) ([8866f76](https://github.com/ipfs-shipyard/ipfs-companion/commit/8866f76))
+## [3.2.0](https://github.com/ipfs/ipfs-companion/compare/v3.1.0...v3.2.0) (2025-03-04)
 
+## What's Changed
+* fix: remove countly by @2color in https://github.com/ipfs/ipfs-companion/pull/1327
+* chore: update upload-artifact action to v4 by @galargh in https://github.com/ipfs/ipfs-companion/pull/1325
+* fix: ipfs.dns → ipfs.resolve by @lidel in https://github.com/ipfs/ipfs-companion/pull/1302
+* fix(test): making e2e tests work again by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1308
 
+### New Contributors
+* @2color made their first contribution in https://github.com/ipfs/ipfs-companion/pull/1327
+
+**Full Changelog**: https://github.com/ipfs/ipfs-companion/compare/v3.1.0...v3.2.0
+
+## [3.1.0](https://github.com/ipfs/ipfs-companion/compare/v3.0.1...v3.1.0) (2023-09-25)
 
 ## What's Changed
 * fix(release-automation): :wrench: removing default command and skippi github release by @whizzzkid in https://github.com/ipfs/ipfs-companion/pull/1291
@@ -70,6 +90,15 @@
 * :fire: Allow automation to run from manual triggers. ([#1143](https://github.com/ipfs/ipfs-companion/issues/1143)) ([a61e081](https://github.com/ipfs/ipfs-companion/commit/a61e081a75cee6d2a6c66d1c58819e9d63656a51))
 * **release-automation:** :bug: Semver Path ([7036f6d](https://github.com/ipfs/ipfs-companion/commit/7036f6de0c9876e35d1ea0a9b1a5a25e6364d894))
 * **release-automation:** Release Please Using Manifests ([#1149](https://github.com/ipfs/ipfs-companion/issues/1149)) ([f360ff8](https://github.com/ipfs/ipfs-companion/commit/f360ff8f2b132904e74ad551f32eaf07395c048c))
+
+## [2.6.3](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.2...v2.6.3) (2018-12-10)
+
+
+### Bug Fixes
+
+* **ci:** switch to nodejs v10.11.0 ([687a4d8](https://github.com/ipfs-shipyard/ipfs-companion/commit/687a4d8))
+* **security:** remove  event-stream/flatmap-stream ([d4db63a](https://github.com/ipfs-shipyard/ipfs-companion/commit/d4db63a))
+* Origin in API requests under Chromium 72 ([#631](https://github.com/ipfs-shipyard/ipfs-companion/issues/631)) ([8866f76](https://github.com/ipfs-shipyard/ipfs-companion/commit/8866f76))
 
 ## [2.6.2](https://github.com/ipfs-shipyard/ipfs-companion/compare/v2.6.1...v2.6.2) (2018-11-22)
 
