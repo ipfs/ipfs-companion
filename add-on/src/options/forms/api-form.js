@@ -5,9 +5,10 @@ import html from 'choo/html/index.js'
 import { guiURLString } from '../../lib/options.js'
 import switchToggle from '../../pages/components/switch-toggle.js'
 
-export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, automaticMode, onOptionChange }) {
+export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollForegroundSeconds, ipfsApiPollBackgroundSeconds, automaticMode, onOptionChange }) {
   const onIpfsApiUrlChange = onOptionChange('ipfsApiUrl', (url) => guiURLString(url, { useLocalhostName: false }))
-  const onIpfsApiPollMsChange = onOptionChange('ipfsApiPollMs')
+  const onIpfsApiPollForegroundSecondsChange = onOptionChange('ipfsApiPollForegroundSeconds')
+  const onIpfsApiPollBackgroundSecondsChange = onOptionChange('ipfsApiPollBackgroundSeconds')
   const onAutomaticModeChange = onOptionChange('automaticMode')
   const apiAddresEditable = ipfsNodeType === 'external'
 
@@ -40,23 +41,42 @@ export default function apiForm ({ ipfsNodeType, ipfsApiUrl, ipfsApiPollMs, auto
             value=${ipfsApiUrl} />
         </div>
         <div class="flex-row-ns pb0-ns">
-          <label for="ipfsApiPollMs">
+          <label for="ipfsApiPollForegroundSeconds">
             <dl>
-              <dt>${browser.i18n.getMessage('option_ipfsApiPollMs_title')}</dt>
-              <dd>${browser.i18n.getMessage('option_ipfsApiPollMs_description')}</dd>
+              <dt>${browser.i18n.getMessage('option_ipfsApiPollForegroundSeconds_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_ipfsApiPollForegroundSeconds_description')}</dd>
             </dl>
           </label>
           <input
             class="bg-white navy self-center-ns"
-            id="ipfsApiPollMs"
+            id="ipfsApiPollForegroundSeconds"
             type="number"
             inputmode="numeric"
-            min="1000"
-            max="60000"
-            step="1000"
+            min="1"
+            max="60"
+            step="1"
             required
-            onchange=${onIpfsApiPollMsChange}
-            value=${ipfsApiPollMs} />
+            onchange=${onIpfsApiPollForegroundSecondsChange}
+            value=${ipfsApiPollForegroundSeconds} />
+        </div>
+        <div class="flex-row-ns pb0-ns">
+          <label for="ipfsApiPollBackgroundSeconds">
+            <dl>
+              <dt>${browser.i18n.getMessage('option_ipfsApiPollBackgroundSeconds_title')}</dt>
+              <dd>${browser.i18n.getMessage('option_ipfsApiPollBackgroundSeconds_description')}</dd>
+            </dl>
+          </label>
+          <input
+            class="bg-white navy self-center-ns"
+            id="ipfsApiPollBackgroundSeconds"
+            type="number"
+            inputmode="numeric"
+            min="30"
+            max="3600"
+            step="5"
+            required
+            onchange=${onIpfsApiPollBackgroundSecondsChange}
+            value=${ipfsApiPollBackgroundSeconds} />
         </div>
         <div class="flex-row-ns pb0-ns">
           <label for="automaticMode">

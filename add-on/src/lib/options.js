@@ -68,7 +68,13 @@ export const optionDefaults = Object.freeze({
   displayReleaseNotes: false,
   customGatewayUrl: 'http://localhost:8080',
   ipfsApiUrl: 'http://127.0.0.1:5001',
-  ipfsApiPollMs: 3000,
+  // Status polling, in seconds. Foreground is the fast refresh while a Companion
+  // window is open (popup, Quick Import, welcome page); background is the
+  // heartbeat when none is open. While you are away, ipfs-companion.js polls at a
+  // multiple of the background interval; the badge still recovers immediately on
+  // any interaction.
+  ipfsApiPollForegroundSeconds: 3,
+  ipfsApiPollBackgroundSeconds: 60,
   logNamespaces: '',
   importDir: '/ipfs-companion-imports/%Y-%M-%D_%h%m%s/',
   useLatestWebUI: false,
@@ -273,6 +279,18 @@ export async function migrateOptions (storage, debug) {
     if (!POSSIBLE_NODE_TYPES.includes(ipfsNodeType)) {
       log('migrating ipfsNodeType to "external"')
       await storage.set({ ipfsNodeType: 'external' })
+    }
+  }
+
+  {
+    // Status poll options moved from a single millisecond value to two second
+    // values (foreground and background). Carry a customized ipfsApiPollMs into
+    // the foreground interval; the background interval takes its new default.
+    const { ipfsApiPollMs } = await storage.get('ipfsApiPollMs')
+    if (ipfsApiPollMs !== undefined) {
+      log('migrating ipfsApiPollMs to ipfsApiPollForegroundSeconds')
+      await storage.set({ ipfsApiPollForegroundSeconds: Math.max(1, Math.round(ipfsApiPollMs / 1000)) })
+      await storage.remove('ipfsApiPollMs')
     }
   }
 

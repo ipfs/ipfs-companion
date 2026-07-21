@@ -63,7 +63,8 @@ export default function optionsPage (state, emit) {
   ? apiForm({
     ipfsNodeType: state.options.ipfsNodeType,
     ipfsApiUrl: state.options.ipfsApiUrl,
-    ipfsApiPollMs: state.options.ipfsApiPollMs,
+    ipfsApiPollForegroundSeconds: state.options.ipfsApiPollForegroundSeconds,
+    ipfsApiPollBackgroundSeconds: state.options.ipfsApiPollBackgroundSeconds,
     automaticMode: state.options.automaticMode,
     onOptionChange
   })
