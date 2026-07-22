@@ -28,6 +28,27 @@ import { initState, offlinePeerCount } from './state.js'
 const log = debug('ipfs-companion:main')
 log.error = debug('ipfs-companion:main:error')
 
+// Upper bound for a single popup DAG-data resolution before we give up and show
+// an "unavailable" hint. Kept above resolveToCid's own 5s DHT budget so a normal
+// lookup finishes well within it, while a wedged node cannot hang the UI (#1334).
+const dagResolveTimeout = 15000
+
+// Reject `promise` if it does not settle within `ms`, always clearing the timer.
+async function withTimeout (promise, ms, label) {
+  let timer
+  const timeout = new Promise((resolve, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+  })
+  // if the timeout wins the race, `promise` keeps running; swallow a late
+  // rejection so it does not surface as an unhandled promise rejection
+  promise.catch(() => {})
+  try {
+    return await Promise.race([promise, timeout])
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 // Open popup / landing-page connections that want live status pushed to them.
 // A Set so an open welcome page and an open popup can coexist, and closing one
 // does not stop the fast poll the other still needs.
@@ -340,19 +361,43 @@ export default async function init (inQuickImport = false) {
         info.currentTabPublicUrl = await ipfsPathValidator.resolveToShareableUrl(url)
         info.currentTabContentPath = ipfsPathValidator.resolveToIpfsPath(url)
         if (resolveCache.has(url)) {
-          const [immutableIpfsPath, cid] = resolveCache.get(url)
-          info.currentTabImmutablePath = immutableIpfsPath
-          // resolve the permalink fresh so it tracks the share toggle; the costly
-          // DAG lookup underneath is memoized, so this stays cheap
-          info.currentTabPermalink = await ipfsPathValidator.resolveToPermalink(url)
-          info.currentTabCid = cid
+          const cached = resolveCache.get(url)
+          if (cached.error) {
+            // resolution failed or timed out; show a definite state instead of
+            // leaving the placeholder spinning forever (see #1334)
+            const unavailable = browser.i18n.getMessage('panelCopy_notAvailableHint')
+            info.currentTabImmutablePath = unavailable
+            info.currentTabPermalink = unavailable
+            info.currentTabCid = unavailable
+          } else {
+            info.currentTabImmutablePath = cached.immutableIpfsPath
+            // resolve the permalink fresh so it tracks the share toggle; the costly
+            // DAG lookup underneath is memoized, so this stays cheap
+            info.currentTabPermalink = await ipfsPathValidator.resolveToPermalink(url)
+            info.currentTabCid = cached.cid
+          }
         } else {
-          // run async resolution in the next event loop so it does not block the UI
+          // run async resolution in the next event loop so it does not block the UI.
+          // a timeout guards against an unresponsive node, and any failure is cached
+          // so the popup settles on a definite state instead of the placeholder
           setTimeout(async () => {
-            resolveCache.set(url, [
-              await ipfsPathValidator.resolveToImmutableIpfsPath(url),
-              await ipfsPathValidator.resolveToCid(url)
-            ])
+            try {
+              const [immutableIpfsPath, cid] = await withTimeout(
+                Promise.all([
+                  ipfsPathValidator.resolveToImmutableIpfsPath(url),
+                  ipfsPathValidator.resolveToCid(url)
+                ]),
+                dagResolveTimeout,
+                'DAG data resolution'
+              )
+              resolveCache.set(url, { immutableIpfsPath, cid })
+            } catch (err) {
+              log.error(`failed to resolve DAG data for ${url}`, err)
+              // cache the error only briefly: long enough to show a definite
+              // hint and avoid a hot retry loop, short enough that a recovered
+              // node is picked up on the next poll instead of after the full TTL
+              resolveCache.set(url, { error: true }, { ttl: 3000 })
+            }
             await sendStatusUpdateToBrowserAction()
           }, 0)
         }

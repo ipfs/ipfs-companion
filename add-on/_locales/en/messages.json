@@ -115,6 +115,10 @@
     "message": "(waiting for DAG data)",
     "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
+  "panelCopy_notAvailableHint": {
+    "message": "error, unavailable :(",
+    "description": "A hint in menu item in Browser Action pop-up shown when a value could not be resolved (panelCopy_notAvailableHint)"
+  },
   "panel_copyCurrentPublicGwUrl": {
     "message": "Copy Shareable Link",
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
