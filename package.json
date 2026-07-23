@@ -86,7 +86,7 @@
     "chai": "6.2.2",
     "cross-env": "10.1.0",
     "css-loader": "7.1.4",
-    "eslint": "9.39.4",
+    "eslint": "10.7.0",
     "fast-hash-code": "2.1.0",
     "get-firefox": "8.0.0",
     "ignore-loader": "0.1.2",
@@ -98,7 +98,7 @@
     "shx": "0.4.0",
     "sinon": "22.0.0",
     "sinon-chrome": "3.0.1",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "4.1.9",
     "web-ext": "10.4.0",
     "webpack-merge": "6.0.1"
