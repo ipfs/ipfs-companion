@@ -9,7 +9,7 @@ export default class WebUiReloader extends ReloaderBase {
    */
   validation ({ url }) {
     const bundled = !url.startsWith('http') && url.includes('/webui/index.html#/')
-    const ipns = url.includes('/webui.ipfs.io/#/')
+    const ipns = url.includes('/webui.ipfs.tech/#/')
     return bundled || ipns
   }
 
