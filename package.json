@@ -90,7 +90,7 @@
     "fast-hash-code": "2.1.0",
     "get-firefox": "8.0.0",
     "ignore-loader": "0.1.2",
-    "kubo-rpc-client": "6.1.0",
+    "kubo-rpc-client": "7.1.0",
     "neostandard": "0.13.0",
     "npm-run-all": "4.1.5",
     "process": "0.11.10",
