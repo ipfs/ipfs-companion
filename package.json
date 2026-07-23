@@ -82,7 +82,7 @@
     "@types/chai": "5.2.3",
     "@types/debug": "4.1.13",
     "@types/webextension-polyfill": "0.12.5",
-    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/coverage-v8": "4.1.10",
     "chai": "6.2.2",
     "cross-env": "10.1.0",
     "css-loader": "7.1.4",
@@ -99,7 +99,7 @@
     "sinon": "22.0.0",
     "sinon-chrome": "3.0.1",
     "typescript": "6.0.3",
-    "vitest": "4.1.9",
+    "vitest": "4.1.10",
     "web-ext": "10.4.0",
     "webpack-merge": "6.0.1"
   },
