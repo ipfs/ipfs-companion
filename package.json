@@ -77,8 +77,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.61.1",
-    "@rspack/cli": "2.1.2",
-    "@rspack/core": "2.1.2",
+    "@rspack/cli": "2.1.4",
+    "@rspack/core": "2.1.4",
     "@types/chai": "5.2.3",
     "@types/debug": "4.1.13",
     "@types/webextension-polyfill": "0.12.5",
@@ -100,7 +100,7 @@
     "sinon-chrome": "3.0.1",
     "typescript": "6.0.3",
     "vitest": "4.1.9",
-    "web-ext": "10.4.0",
+    "web-ext": "10.5.0",
     "webpack-merge": "6.0.1"
   },
   "dependencies": {
