@@ -415,13 +415,21 @@
     "message": "Kubo RPCのURLを設定します。(ヒント: https://docs.ipfs.tech/reference/kubo/rpc/)。",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
-  "option_ipfsApiPollMs_title": {
-    "message": "ステータスポーリング間隔",
-    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  "option_ipfsApiPollForegroundSeconds_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollForegroundSeconds_title)"
   },
-  "option_ipfsApiPollMs_description": {
-    "message": "ピアカウントが更新される頻度を指定する（ミリ秒）。",
-    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  "option_ipfsApiPollForegroundSeconds_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollForegroundSeconds_description)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollBackgroundSeconds_title)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollBackgroundSeconds_description)"
   },
   "option_automaticMode_title": {
     "message": "自動モードを使用する",
