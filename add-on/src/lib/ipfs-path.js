@@ -1,6 +1,7 @@
 'use strict'
 
 import pMemoize from 'p-memoize'
+import { LRUCache } from 'lru-cache'
 import * as isIPFS from 'is-ipfs'
 import isFQDN from 'is-fqdn'
 import { CID } from 'multiformats/cid'
@@ -8,8 +9,13 @@ import { base32 } from 'multiformats/bases/base32'
 import { base36 } from 'multiformats/bases/base36'
 import { peerIdFromString } from '@libp2p/peer-id'
 
-// For how long more expensive lookups (DAG traversal etc) should be cached
-const RESULT_TTL_MS = 300000 // 5 minutes
+// Cap on how long a resolved CID / immutable path is memoized. These results
+// come from mutable IPNS/DNSLink lookups whose target can change at any time,
+// and ipfs.resolve() does not surface the record's own TTL, so we keep the
+// cache short. p-memoize has no expiry of its own; the ttl lives on the
+// LRUCache passed as its backing store (a plain Map would never expire).
+const RESULT_TTL_MS = 60000 // 1 minute
+const resultCache = () => new LRUCache({ max: 32, ttl: RESULT_TTL_MS })
 
 export const dropSlash = url => url ? url.replace(/\/$/, '') : url
 
@@ -517,7 +523,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
       }
       // Return /ipfs/ path
       return path
-    }, { maxAge: RESULT_TTL_MS }),
+    }, { cache: resultCache() }),
 
     // Resolve URL or path to a raw CID:
     // - Result is the direct CID
@@ -561,7 +567,7 @@ export function createIpfsPathValidator (getState, getIpfs, dnslinkResolver) {
 
       const directCid = isIPFS.ipfsPath(result) ? result.split('/')[2] : result
       return directCid
-    }, { maxAge: RESULT_TTL_MS })
+    }, { cache: resultCache() })
   }
 
   return ipfsPathValidator
