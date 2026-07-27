@@ -415,13 +415,21 @@
     "message": "Ustaw adres URL swojego Kubo RPC. (Wskazówka: pod tym adresem znajduje się https://docs.ipfs.tech/reference/kubo/rpc/.)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
-  "option_ipfsApiPollMs_title": {
-    "message": "Odświeżanie statusu",
-    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  "option_ipfsApiPollForegroundSeconds_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollForegroundSeconds_title)"
   },
-  "option_ipfsApiPollMs_description": {
-    "message": "Określ jak często (w milisekundach) ma być odświeżany licznik węzłów.",
-    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  "option_ipfsApiPollForegroundSeconds_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollForegroundSeconds_description)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollBackgroundSeconds_title)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollBackgroundSeconds_description)"
   },
   "option_automaticMode_title": {
     "message": "Używaj trybu automatycznego",

@@ -415,13 +415,21 @@
     "message": "Définissez l'URL du RPC de votre Kubo. (Indice: c'est où se trouve https://docs.ipfs.tech/reference/kubo/rpc/ )",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
-  "option_ipfsApiPollMs_title": {
-    "message": "Intervalle entre chaque requête de status",
-    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  "option_ipfsApiPollForegroundSeconds_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollForegroundSeconds_title)"
   },
-  "option_ipfsApiPollMs_description": {
-    "message": "Spécifie à quelle fréquence (en millisecondes) votre décompte de pairs sera rafraîchi.",
-    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  "option_ipfsApiPollForegroundSeconds_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollForegroundSeconds_description)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_title": {
+    "message": "",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollBackgroundSeconds_title)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_description": {
+    "message": "",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollBackgroundSeconds_description)"
   },
   "option_automaticMode_title": {
     "message": "Utiliser le mode automatique",

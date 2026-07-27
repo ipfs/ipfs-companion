@@ -120,7 +120,7 @@
     "description": "A menu item in Browser Action pop-up and right-click context menu (panel_copyCurrentPublicGwUrl)"
   },
   "panel_copyCurrentPublicGwUrlTooltip": {
-    "message": "",
+    "message": "一个任何人都能打开的指向此标签页的分享链接。当在偏好设置中关闭公共网关共享时，会改为复制一个原生的 IPFS 地址。",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPublicGwUrlTooltip)"
   },
   "panel_copyCurrentPermalink": {
@@ -128,7 +128,7 @@
     "description": "A menu item in Browser Action pop-up (panel_copyCurrentPermalink)"
   },
   "panel_copyCurrentPermalinkTooltip": {
-    "message": "",
+    "message": "一个指向此标签页当前状态快照的链接；即使内容以后发生变化，它也不会改变。",
     "description": "A menu item tooltip in Browser Action pop-up (panel_copyCurrentPermalinkTooltip)"
   },
   "panel_contextMenuViewOnGateway": {
@@ -260,19 +260,19 @@
     "description": "An option on the Preferences screen (option_ipfsNodeType_external)"
   },
   "option_ipfsNodeType_external_explainer": {
-    "message": "",
+    "message": "IPFS 伴侣 通过 Kubo RPC API 控制你的节点，这是由标准 IPFS 节点软件 Kubo 提供的 HTTP 接口。还没有节点？可以安装 Kubo（命令行版），或者 IPFS Desktop，这是一个图形化应用，它运行相同的 Kubo 守护进程，并以更友好的界面提供相同的 RPC 和 Web UI。",
     "description": "Explainer under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_explainer)"
   },
   "option_ipfsNodeType_external_installKubo": {
-    "message": "",
+    "message": "安装 Kubo (命令行)",
     "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installKubo)"
   },
   "option_ipfsNodeType_external_installDesktop": {
-    "message": "",
+    "message": "安装 IPFS 桌面",
     "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_installDesktop)"
   },
   "option_ipfsNodeType_external_rpcDocs": {
-    "message": "",
+    "message": "Kubo RPC API 文档",
     "description": "Link under the IPFS Node section on the Preferences screen (option_ipfsNodeType_external_rpcDocs)"
   },
   "option_ipfsNodeType_brave": {
@@ -292,7 +292,7 @@
     "description": "A section header on the Preferences screen (option_header_gateways)"
   },
   "option_gateways_sectionIntro": {
-    "message": "",
+    "message": "网关让 IPFS 内容可以通过 HTTP 访问，这样你的浏览器就能加载它。",
     "description": "A short intro under the Gateways section header on the Preferences screen (option_gateways_sectionIntro)"
   },
   "option_customGatewayUrl_title": {
@@ -320,39 +320,39 @@
     "description": "An option title on the Preferences screen (option_useSubdomains_title)"
   },
   "option_useSubdomains_description": {
-    "message": "",
+    "message": "通过将内容根作为子域（在 *.localhost）加载，并为每个 CID、IPNS 名称或 DNSLink 网站创建唯一的来源，将内容根彼此隔离。",
     "description": "An option description on the Preferences screen (option_useSubdomains_description)"
   },
   "option_useSubdomains_warning": {
-    "message": "",
+    "message": "如果没有子域提供的源隔离，从你的网关加载的每个网站都会共享同一个源，也就共享了相同的存储和 API 权限。在使用敏感的 Web 应用时，比如钱包、秘密和密钥管理，或者任何持有 API 访问令牌的应用时，千万不要关闭这个功能。",
     "description": "A warning on the Preferences screen, displayed when subdomain isolation is disabled (option_useSubdomains_warning)"
   },
   "option_redirectSubresources_title": {
-    "message": "",
+    "message": "重定向嵌入式的子(域)资源",
     "description": "An option title on the Preferences screen (option_redirectSubresources_title)"
   },
   "option_redirectSubresources_description": {
-    "message": "",
+    "message": "也会把嵌入在其他网站里的 IPFS 资源（图片、脚本、iframe）重定向到你本地的网关，而不仅仅是自己打开的顶级页面。",
     "description": "An option description on the Preferences screen (option_redirectSubresources_description)"
   },
   "option_redirectSubresources_warning": {
-    "message": "",
+    "message": "如果你启用这个，公共网站可能会嵌入 IPFS 资源，这些资源会被缓存到你的数据存储中，而且它们共享的网关来源可能会被用来跨网站追踪你（类似超级 Cookie）。最好保持未勾选状态，这样只有顶层导航才会被重定向，从而确保只有完整的 IPFS 原生网站会加载并缓存到你的节点上，清楚地区分 IPFS 内容和普通 HTTPS 内容。只有在你了解风险和不便（比如每个网站都会弹出浏览器请求本地网络访问）时才启用它。",
     "description": "A warning on the Preferences screen, displayed when subresource redirects are enabled (option_redirectSubresources_warning)"
   },
   "option_dnslinkLookup_title": {
-    "message": "",
+    "message": "检测 DNSLink 网站",
     "description": "An option title on the Preferences screen (option_dnslinkLookup_title)"
   },
   "option_dnslinkLookup_description": {
-    "message": "",
+    "message": "检查你访问的每个域名是否有 DNSLink 记录，这样IPFS 伴侣就知道哪些网站在 IPFS 上。这会驱动工具栏菜单中的 DNSLink 功能，并且这是当本地网关加载 DNSLink 网站时是必须的步骤。IPFS内容结果会被缓存，但每有一个新的域名，都会向你的本地 Kubo RPC 发送一个后台请求。",
     "description": "An option description on the Preferences screen (option_dnslinkLookup_description)"
   },
   "option_dnslinkRedirect_title": {
-    "message": "",
+    "message": "从本地网关加载 DNSLink 站点",
     "description": "An option title on the Preferences screen (option_dnslinkRedirect_title)"
   },
   "option_dnslinkRedirect_description": {
-    "message": "",
+    "message": "从你的本地网关（在 /ipns/{domain} 内容路径）加载检测到的 DNSLink 网站，而不是从原始服务器加载。需要上面提到的 DNSLink 检测。",
     "description": "An option description on the Preferences screen (option_dnslinkRedirect_description)"
   },
   "option_dnslinkRedirect_warning": {
@@ -376,27 +376,27 @@
     "description": "An option description on the Preferences screen (option_enabledOn_description)"
   },
   "option_publicGatewayUrl_title": {
-    "message": "",
+    "message": "公共路径网关",
     "description": "An option title on the Preferences screen (option_publicGatewayUrl_title)"
   },
   "option_publicGatewayUrl_description": {
-    "message": "",
+    "message": "一个公共网关，用来访问像 https://example.com/ipfs/CID 这样的链接。所有内容都共享同一个来源，这样可以到处访问，但无法将各个网站隔离开来。当你的本地网关不可用以及下面的子域网关没有填写或无法提供地址时可以作为兜底的网关来生成分享链接",
     "description": "An option description on the Preferences screen (option_publicGatewayUrl_description)"
   },
   "option_publicSubdomainGatewayUrl_title": {
-    "message": "",
+    "message": "公用子域网关",
     "description": "An option title on the Preferences screen (option_publicSubdomainGatewayUrl_title)"
   },
   "option_publicSubdomainGatewayUrl_description": {
-    "message": "",
+    "message": "一个公共网关，用于访问类似 https://CID.ipfs.example.com 的链接。每个 CID、IPNS 名称或 DNSLink 站点都有自己的origin，让网站像浏览器预期那样相互隔离。适合分享链接，也用来修复指向其他子域网关的损坏链接。",
     "description": "An option description on the Preferences screen (option_publicSubdomainGatewayUrl_description)"
   },
   "option_usePublicGatewaysForShare_title": {
-    "message": "",
+    "message": "使用公共网关生成分享链接",
     "description": "An option title on the Preferences screen (option_usePublicGatewaysForShare_title)"
   },
   "option_usePublicGatewaysForShare_description": {
-    "message": "",
+    "message": "开启时，像“复制可分享链接”和“复制快照链接”这样的复制链接会指向上面某个公共网关，并对所有人开放，包括那些不使用 IPFS 的人。关闭时，或者当上面的两个网关 URL 都为空时，则会复制本地的 ipfs:// 或 ipns:// 地址。",
     "description": "An option description on the Preferences screen (option_usePublicGatewaysForShare_description)"
   },
   "option_header_api": {
@@ -404,7 +404,7 @@
     "description": "A section header on the Preferences screen (option_header_api)"
   },
   "option_api_sectionIntro": {
-    "message": "",
+    "message": "IPFS 伴侣 通过它的 Kubo RPC API 控制你的 IPFS 节点。",
     "description": "A short intro under the Kubo RPC API section header on the Preferences screen (option_api_sectionIntro)"
   },
   "option_ipfsApiUrl_title": {
@@ -415,24 +415,32 @@
     "message": "为您的Kubo RPC设置URL. (提示: 请参考 https://docs.ipfs.tech/reference/kubo/rpc/)",
     "description": "An option description on the Preferences screen (option_ipfsApiUrl_description)"
   },
-  "option_ipfsApiPollMs_title": {
-    "message": "轮询间隔状态",
-    "description": "An option title on the Preferences screen (option_ipfsApiPollMs_title)"
+  "option_ipfsApiPollForegroundSeconds_title": {
+    "message": "前台轮询间隔",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollForegroundSeconds_title)"
   },
-  "option_ipfsApiPollMs_description": {
-    "message": "指定刷新节点计数的频率（毫秒）",
-    "description": "An option description on the Preferences screen (option_ipfsApiPollMs_description)"
+  "option_ipfsApiPollForegroundSeconds_description": {
+    "message": "当IPFS 伴侣窗口打开时（弹出窗口、快速导入或欢迎页面），多久刷新一次状态（以秒为单位）。这些窗口会显示实时状态，所以请保持间隔短一些。",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollForegroundSeconds_description)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_title": {
+    "message": "后台轮询间隔",
+    "description": "An option title on the Preferences screen (option_ipfsApiPollBackgroundSeconds_title)"
+  },
+  "option_ipfsApiPollBackgroundSeconds_description": {
+    "message": "当没有打开 IPFS 伴侣窗口时，多久（以秒为单位）检查一次节点。当你离开时，IPFS伴侣会减少检查频率，而当你操作时会立即刷新。浏览器要求最少 30 秒一次。",
+    "description": "An option description on the Preferences screen (option_ipfsApiPollBackgroundSeconds_description)"
   },
   "option_automaticMode_title": {
     "message": "使用自动模式",
     "description": "An option title on the Preferences screen (option_automaticMode_title)"
   },
   "option_automaticMode_description": {
-    "message": "",
+    "message": "当 Kubo RPC 端点可访问时，会自动启用重定向到本地网关；当端点不可用时，会禁用它。",
     "description": "An option description on the Preferences screen (option_automaticMode_description)"
   },
   "option_automaticMode_description_subtext": {
-    "message": "",
+    "message": "注意：关闭此功能会导致静态重定向，不受 Kubo RPC 端点可用性的影响，这会导致当你的节点离线时产生错误。",
     "description": "An automatic mode option description on the Preferences screen (option_automaticMode_description_subtext)"
   },
   "option_header_dnslink": {
@@ -440,7 +448,7 @@
     "description": "A section header on the Preferences screen (option_header_dnslink)"
   },
   "option_dnslink_sectionIntro": {
-    "message": "",
+    "message": "DNSLink 使用 DNS 记录将普通域名指向 IPFS 内容，这样普通网站就可以发布到 IPFS 上。",
     "description": "A short intro under the DNSLink section header on the Preferences screen (option_dnslink_sectionIntro)"
   },
   "option_header_experiments": {
@@ -480,7 +488,7 @@
     "description": "An option title on the Preferences screen (option_displayNotifications_title)"
   },
   "option_displayNotifications_description": {
-    "message": "",
+    "message": "当链接被复制到剪贴板、API 状态改变等时显示操作系统级别的通知。",
     "description": "An option description on the Preferences screen (option_displayNotifications_description)"
   },
   "option_displayReleaseNotes_title": {
@@ -512,27 +520,27 @@
     "description": "An option title on the Preferences screen (option_recoverFailedHttpRequests_title)"
   },
   "option_recoverFailedHttpRequests_description": {
-    "message": "",
+    "message": "将 IPFS 资源的失败请求重定向到另一个网关：如果设置了公共网关就用公共的，否则用你本地的。",
     "description": "An option description on the Preferences screen (option_recoverFailedHttpRequests_description)"
   },
   "option_redirectToXIpfsPathValue_title": {
-    "message": "",
+    "message": "重定向到 x-ipfs-path 头部值（旧版）",
     "description": "An option title on the Preferences screen (option_redirectToXIpfsPathValue_title)"
   },
   "option_redirectToXIpfsPathValue_description": {
-    "message": "",
+    "message": "当网站发送 x-ipfs-path 响应头时，加载它指定的确切 IPFS 路径，而不是网站本身。默认关闭。大多数 IPFS 网站使用 DNSLink，IPFS伴侣已经不在使用它。",
     "description": "An option description on the Preferences screen (option_redirectToXIpfsPathValue_description)"
   },
   "option_redirectToXIpfsPathValue_warning": {
-    "message": "",
+    "message": "旧版本的实验性选项可能会导致网站出现问题。发送此头信息但未设置 DNSLink 的网站会被固定到一个冻结的快照：你无法刷新以获取更新，也不能收藏，可能还会显示错误。除非你特别需要，否则不要开启这个。",
     "description": "A warning on the Preferences screen, displayed when redirect to x-ipfs-path value is enabled (option_redirectToXIpfsPathValue_warning)"
   },
   "option_honorRedirectOptOutHint_title": {
-    "message": "",
+    "message": "遵循?x-ipfs-companion-no-redirect退出选项。",
     "description": "An option title on the Preferences screen (option_honorRedirectOptOutHint_title)"
   },
   "option_honorRedirectOptOutHint_description": {
-    "message": "",
+    "message": "当URL携带?x-ipfs-companion-no-redirect查询参数时，会在原始目的地留下请求，而非重定向至本地网关。此功能便于在特定网关预加载数据。默认开启；关闭则禁用该选项。",
     "description": "An option description on the Preferences screen (option_honorRedirectOptOutHint_description)"
   },
   "option_openViaWebUI_title": {
@@ -616,7 +624,7 @@
     "description": "Text on the 'pick a file' button (quickImport_pick_file_button)"
   },
   "quickImport_pick_folder_button": {
-    "message": "",
+    "message": "选择一个文件夹",
     "description": "Text on the 'pick a folder' button that keeps directory structure (quickImport_pick_folder_button)"
   },
   "quickImport_or": {
@@ -800,19 +808,19 @@
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   },
   "recovery_page_publicUrl": {
-    "message": "",
+    "message": "公共 URL:",
     "description": "Label before the public gateway URL on the recovery screen (recovery_page_publicUrl)"
   },
   "recovery_page_nativeUrl": {
-    "message": "",
+    "message": "本地地址:",
     "description": "Label before the native ipfs:// address on the recovery screen, shown when no public gateway is set (recovery_page_nativeUrl)"
   },
   "recovery_page_message_p2_native": {
-    "message": "",
+    "message": "下面的链接是本机IPFS地址。要打开它，请运行本地IPFS节点，或在首选项中设置公共网关。",
     "description": "Message on the recovery screen shown when no public gateway is set (recovery_page_message_p2_native)"
   },
   "recovery_page_button_installDesktop": {
-    "message": "",
+    "message": "安装 IPFS 桌面",
     "description": "Button on the recovery screen shown when no public gateway is set (recovery_page_button_installDesktop)"
   },
   "request_permissions_page_title": {
@@ -840,87 +848,87 @@
     "description": "Learn more link on the recovery screen (recovery_page_learn_more)"
   },
   "invalid_address_page_title": {
-    "message": "",
+    "message": "无法打开地址 | IPFS 伴侣",
     "description": "Title of the invalid address page (invalid_address_page_title)"
   },
   "invalid_address_page_sub_header": {
-    "message": "",
+    "message": "此地址不合规范",
     "description": "Sub-header on the invalid address page (invalid_address_page_sub_header)"
   },
   "invalid_address_page_opened_label": {
-    "message": "",
+    "message": "你打开的",
     "description": "Label above the address the user requested (invalid_address_page_opened_label)"
   },
   "invalid_address_page_correct_label": {
-    "message": "",
+    "message": "正确的地址",
     "description": "Label above the corrected address (invalid_address_page_correct_label)"
   },
   "invalid_address_page_button": {
-    "message": "",
+    "message": "继续前往$1",
     "description": "Button that opens the corrected address, $1 is the corrected address (invalid_address_page_button)"
   },
   "invalid_address_page_learn_more": {
-    "message": "",
+    "message": "了解有关IPFS地址的更多信息",
     "description": "Learn more link on the invalid address page (invalid_address_page_learn_more)"
   },
   "invalid_address_page_wrong_namespace_header": {
-    "message": "",
+    "message": "此地址需要ipns://",
     "description": "Header shown when ipfs:// was used for a mutable pointer (invalid_address_page_wrong_namespace_header)"
   },
   "invalid_address_page_dnslink_message": {
-    "message": "",
+    "message": "您使用ipfs://打开了一个网站。网站域名通过DNSLink解析，因此所有者可以在地址保持不变的情况下发布新内容。",
     "description": "Explanation for a DNSLink domain used with ipfs:// (invalid_address_page_dnslink_message)"
   },
   "invalid_address_page_ipns_key_message": {
-    "message": "",
+    "message": "您使用ipfs://打开了一个IPNS名称。持有密钥的人可以在地址不变的情况下重新发布新内容。",
     "description": "Explanation for an IPNS key used with ipfs:// (invalid_address_page_ipns_key_message)"
   },
   "invalid_address_page_namespace_advice": {
-    "message": "",
+    "message": "ipfs://命名空间仅用于不可变标识符。CID来自内容本身，因此其背后的数据就像被琥珀包裹的昆虫一样永远不会改变，任何人都可以验证他们是否准确地获得了这些字节。而可被重新指向的地址属于可变标识，这类可变地址应归入ipns://命名空间。",
     "description": "Shared advice about what ipfs:// is for (invalid_address_page_namespace_advice)"
   },
   "invalid_address_page_lowercased_header": {
-    "message": "",
+    "message": "此地址看起来是小写",
     "description": "Header shown when the browser lowercased a CIDv0 (invalid_address_page_lowercased_header)"
   },
   "invalid_address_page_lowercased_message": {
-    "message": "",
+    "message": "该地址看起来像是旧版内容标识符 CIDv0——它以Qm开头，通常大小写混用。但眼前这个地址却全部是小写字母。这种情况通常是由于传输路径中的某个环节将ipfs://之后的部分误当作网站域名来处理，而域名是不区分大小写的。一旦发生这种转换，剩余的信息便再也无法恢复出原始的 CID。",
     "description": "Explanation of a lowercased CIDv0 (invalid_address_page_lowercased_message)"
   },
   "invalid_address_page_lowercased_advice": {
-    "message": "",
+    "message": "请向分享此链接的人索要 Base32 编码的 CIDv1——这类标识符本身已全部为小写字母，因此被统一转成小写后也不会受损。若您仍保留着原始标识符，可将其粘贴到下方的 CID 检查器中，直接使用该工具生成的 CIDv1（Base32 格式）即可。",
     "description": "What to do about a lowercased CIDv0 (invalid_address_page_lowercased_advice)"
   },
   "invalid_address_page_convert_cid": {
-    "message": "",
+    "message": "在cid.ipfs.tech将您的标识符转换为CIDv1（Base32）",
     "description": "Link to the CID inspector, shown when a CIDv0 was damaged by lowercasing (invalid_address_page_convert_cid)"
   },
   "invalid_address_page_learn_dnslink": {
-    "message": "",
+    "message": "DNSLink如何将域名连接到IPFS",
     "description": "Link to the DNSLink concept docs, shown when a website name was used with ipfs:// (invalid_address_page_learn_dnslink)"
   },
   "invalid_address_page_learn_mutability": {
-    "message": "",
+    "message": "为什么更改内容需要可变指针",
     "description": "Link to the IPNS mutability docs, shown when an IPNS name was used with ipfs:// (invalid_address_page_learn_mutability)"
   },
   "invalid_address_page_unrecognized_header": {
-    "message": "",
+    "message": "此标识符看起来无效",
     "description": "Header shown when the identifier matches no known form (invalid_address_page_unrecognized_header)"
   },
   "invalid_address_page_unrecognized_message": {
-    "message": "",
+    "message": "ipfs:// 或 ipns:// 之后的部分，指定了需要获取的对象：如果是 ipfs://，则后面跟的是 CID，对应永不更改的静态内容；如果是 ipns://，则后面可以是网站域名或 IPNS 密钥，对应一个可被更新的可变指针。而当前提供的这个标识符不属于上述任何一种类型，因此无法被解析查找。",
     "description": "Explanation shown when the identifier matches no known form (invalid_address_page_unrecognized_message)"
   },
   "invalid_address_page_unrecognized_advice": {
-    "message": "",
+    "message": "请首先检查是否存在拼写错误。标识符通常较长，复制过程中极易被截断或遗漏部分字符，因此请务必确保获取了完整字符串；若仍保留原始标识符，建议与之一一比对。",
     "description": "What to do about an unrecognized identifier (invalid_address_page_unrecognized_advice)"
   },
   "invalid_address_page_learn_cid": {
-    "message": "",
+    "message": "内容标识符（CID）是什么样子的",
     "description": "Link to the CID spec (invalid_address_page_learn_cid)"
   },
   "invalid_address_page_learn_ipns_record": {
-    "message": "",
+    "message": "IPNS名称是什么样子的",
     "description": "Link to the IPNS record spec (invalid_address_page_learn_ipns_record)"
   }
 }
