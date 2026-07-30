@@ -6,6 +6,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
     groups:
       actions:
         patterns:
@@ -16,6 +18,9 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
     labels:
       - "dependencies"
     # Later @material/switch majors rewrote the component, and the new CSS
