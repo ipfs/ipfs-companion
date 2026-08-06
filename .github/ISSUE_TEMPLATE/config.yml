@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+ - name: Report a security vulnerability
+   url: https://github.com/ipfs/ipfs-companion/security/policy
+   about: Do not open a public issue. Email security@ipfs.io instead.
  - name: Getting Help on IPFS
-   url: https://ipfs.io/help
+   url: https://docs.ipfs.tech/community/#get-technical-support-and-help
    about: All information about how and where to get help on IPFS.
  - name: IPFS Official Forum
-   url: https://discuss.ipfs.io
+   url: https://discuss.ipfs.tech
    about: Please post general questions, support requests, and discussions here.
