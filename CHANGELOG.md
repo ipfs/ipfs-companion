@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.4.1 (2026-08-24)
+
+## What's Changed
+* fix: clear firefox amo submission warnings by @lidel in https://github.com/ipfs/ipfs-companion/pull/1388
+* chore: pull new translations by @github-actions[bot] in https://github.com/ipfs/ipfs-companion/pull/1379
+* chore(deps): bump actions/setup-node from 6 to 7 in the actions group across 1 directory by @dependabot[bot] in https://github.com/ipfs/ipfs-companion/pull/1373
+* chore: pull new translations by @github-actions[bot] in https://github.com/ipfs/ipfs-companion/pull/1391
+* fix: stop popup hang on failed DAG resolution by @lidel in https://github.com/ipfs/ipfs-companion/pull/1390
+* chore: clean up after telemetry removal by @lidel in https://github.com/ipfs/ipfs-companion/pull/1394
+
+
+**Full Changelog**: https://github.com/ipfs/ipfs-companion/compare/v3.4.0...v3.4.1
+
 ## 3.4.0 (2026-07-21)
 
 ## What's Changed
