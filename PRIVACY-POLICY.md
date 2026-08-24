@@ -1,7 +1,7 @@
 # **IPFS Companion Privacy Policy**
 
 <em>First Posted: 2019-02-15<br/>
-Last Update: 2026-07-18</em> ([change history](https://github.com/ipfs/ipfs-companion/commits/main/PRIVACY-POLICY.md))
+Last Update: 2026-08-22</em> ([change history](https://github.com/ipfs/ipfs-companion/commits/main/PRIVACY-POLICY.md))
 
 This Privacy Policy governs the use of the IPFS Companion browser extension
 offered by Protocol Labs, Inc. (“**IPFS Companion**” or the “**Service**”).
@@ -19,9 +19,8 @@ We do not collect personal information from the users of the Service.
 
 **Metrics**
 
-We collect non-user-specific metrics via the Service. For more information on
-how to change your preferences with respect to the metrics, please contact us
-via methods mentioned below.
+We do not collect usage metrics, analytics, or telemetry. The extension sends
+no measurement data anywhere.
 
 **Additional Privacy Considerations**
 
