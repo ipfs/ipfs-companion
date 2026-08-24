@@ -1,1 +1,6 @@
 * @ipfs/gui-dev
+
+# Policy files. Weakening either one takes its own PR with a maintainer on the
+# record, see the "Scope and safety" section in AGENTS.md.
+/AGENTS.md @ipfs/gui-dev
+/PRIVACY-POLICY.md @ipfs/gui-dev

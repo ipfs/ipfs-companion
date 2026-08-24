@@ -66,6 +66,9 @@ jobs:
       - name: Show dist/bundles/*
         run: du -h add-on/dist/bundles/*
 
+      - name: Check bundled endpoints
+        run: npm run check:endpoints
+
       - name: Test
         run: npm run ci:test
         # tests should finish <30s, if it takes longer its a bug - fail fast

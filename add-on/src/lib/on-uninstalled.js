@@ -5,9 +5,11 @@ const stableChannels = new Set([
   'nibjojkomfdiaoajekhjakgkdhaomnch' // chromium (chrome web store)
 ])
 
-const stableChannelFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfLF7uzaxRKiF4XpPL9_DvkdaQHoRnDihRTZ1uVL6ceQwIrtg/viewform'
+const stableChannelForumUrl = 'https://discuss.ipfs.tech/c/help/13'
 
 export function getUninstallURL (browser) {
-  // on uninstall feedback form shown only on stable channel
-  return stableChannels.has(browser.runtime.id) ? stableChannelFormUrl : ''
+  // the browser opens this page after an uninstall, so someone leaving lands
+  // where they can ask for help or say what went wrong. Plain URL, no
+  // identifiers, stable channel only.
+  return stableChannels.has(browser.runtime.id) ? stableChannelForumUrl : ''
 }
