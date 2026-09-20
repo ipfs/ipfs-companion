@@ -19,5 +19,37 @@
     "webNavigation",
     "webRequest"
   ],
-  "incognito": "not_allowed"
+  "incognito": "not_allowed",
+  "protocol_handlers": [
+    {
+      "protocol": "web+dweb",
+      "name": "IPFS Companion: DWEB Protocol Handler",
+      "uriTemplate": "https://dweb.link/ipfs/?uri=%s"
+    },
+    {
+      "protocol": "web+ipns",
+      "name": "IPFS Companion: IPNS Protocol Handler",
+      "uriTemplate": "https://dweb.link/ipns/?uri=%s"
+    },
+    {
+      "protocol": "web+ipfs",
+      "name": "IPFS Companion: IPFS Protocol Handler",
+      "uriTemplate": "https://dweb.link/ipfs/?uri=%s"
+    },
+    {
+      "protocol": "dweb",
+      "name": "IPFS Companion: DWEB Protocol Handler",
+      "uriTemplate": "https://dweb.link/ipfs/?uri=%s"
+    },
+    {
+      "protocol": "ipns",
+      "name": "IPFS Companion: IPNS Protocol Handler",
+      "uriTemplate": "https://dweb.link/ipns/?uri=%s"
+    },
+    {
+      "protocol": "ipfs",
+      "name": "IPFS Companion: IPFS Protocol Handler",
+      "uriTemplate": "https://dweb.link/ipfs/?uri=%s"
+    }
+  ]
 }
