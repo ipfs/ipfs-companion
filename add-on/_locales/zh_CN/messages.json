@@ -116,7 +116,7 @@
     "description": "A hint in menu item in Browser Action pop-up to indicate value is still being resolved (panelCopy_notReadyHint)"
   },
   "panelCopy_notAvailableHint": {
-    "message": "",
+    "message": "错误，不可用：（",
     "description": "A hint in menu item in Browser Action pop-up shown when a value could not be resolved (panelCopy_notAvailableHint)"
   },
   "panel_copyCurrentPublicGwUrl": {
