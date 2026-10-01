@@ -82,7 +82,7 @@
     "@rspack/core": "2.1.2",
     "@types/chai": "5.2.3",
     "@types/debug": "4.1.13",
-    "@types/webextension-polyfill": "0.12.5",
+    "@types/webextension-polyfill": "0.12.6",
     "@vitest/coverage-v8": "4.1.9",
     "chai": "6.2.2",
     "cross-env": "10.1.0",
